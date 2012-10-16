@@ -5,7 +5,13 @@
    ========================================================================== */
 
 
-
+.beat-bar {
+	height: 25px;
+	background: red;
+	text-align: center;
+	border: 1px solid grey;
+	margin: 5px 0;
+}
 
 
 
