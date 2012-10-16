@@ -3,12 +3,12 @@ define([
   'underscore',
   'backbone',
   'models/beatBar'
-], function($, _, Backbone, beatBarModel, dispatch){
+], function($, _, Backbone, beatBarModel){
   var beatBarsCollection = Backbone.Collection.extend({
     model: beatBarModel,
 
     initialize: function(){
-      
+
     }
   });
 
