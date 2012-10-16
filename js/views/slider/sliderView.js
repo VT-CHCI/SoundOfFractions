@@ -13,7 +13,7 @@ define([
     el : $("#beat-pallet #slider"), // Specifies the DOM element which this view handles
 
     events : {
-      "change input" : "updateVal"  
+      "change" : "updateVal"  
     },
 
     updateVal : function() {
