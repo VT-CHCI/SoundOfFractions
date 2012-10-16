@@ -4,6 +4,14 @@
 		"selected_items":
 		[
 			[
+				"beat",
+				"beat-pallet"
+			],
+			[
+				"beats",
+				"beatBarsCollection"
+			],
+			[
 				"measure",
 				"measureDifference"
 			],
@@ -207,23 +215,15 @@
 			"file": "index.html",
 			"settings":
 			{
-				"buffer_size": 4427,
+				"buffer_size": 4195,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "js/models/slider.js",
+			"file": "js/views/beatBars/beatBarsView.js",
 			"settings":
 			{
-				"buffer_size": 175,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "js/views/slider/SliderView.js",
-			"settings":
-			{
-				"buffer_size": 868,
+				"buffer_size": 2873,
 				"line_ending": "Unix"
 			}
 		},
@@ -231,7 +231,7 @@
 			"file": "js/views/home/homeView.js",
 			"settings":
 			{
-				"buffer_size": 349,
+				"buffer_size": 368,
 				"line_ending": "Unix"
 			}
 		},
@@ -255,7 +255,7 @@
 			"file": "js/router.js",
 			"settings":
 			{
-				"buffer_size": 549,
+				"buffer_size": 692,
 				"line_ending": "Unix"
 			}
 		},
@@ -264,6 +264,62 @@
 			"settings":
 			{
 				"buffer_size": 249,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "js/models/projects.js",
+			"settings":
+			{
+				"buffer_size": 221,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "js/views/slider/sliderView.js",
+			"settings":
+			{
+				"buffer_size": 806,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "templates/slider/slider.html",
+			"settings":
+			{
+				"buffer_size": 116,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "js/collections/beatBars.js",
+			"settings":
+			{
+				"buffer_size": 276,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "js/models/beatBar.js",
+			"settings":
+			{
+				"buffer_size": 217,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "css/main.css",
+			"settings":
+			{
+				"buffer_size": 312,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "templates/beatBars/beatBars.html",
+			"settings":
+			{
+				"buffer_size": 157,
 				"line_ending": "Unix"
 			}
 		}
@@ -312,6 +368,16 @@
 	},
 	"file_history":
 	[
+		"/Applications/XAMPP/xamppfiles/htdocs/test/MusicFractions/templates/beatBars/beatBars.html",
+		"/Applications/XAMPP/xamppfiles/htdocs/test/MusicFractions/templates/beatBars/beatBar.html",
+		"/Applications/XAMPP/xamppfiles/htdocs/test/MusicFractions/js/views/beatBars/beatBarView.js",
+		"/Applications/XAMPP/xamppfiles/htdocs/test/MusicFractions/js/collections/beatBars.js",
+		"/Applications/XAMPP/xamppfiles/htdocs/test/MusicFractions/js/models/beat.js",
+		"/Applications/XAMPP/xamppfiles/htdocs/test/MusicFractions/js/app/dispatch.js",
+		"/Applications/XAMPP/xamppfiles/htdocs/test/MusicFractions/js/models/beatBar.js",
+		"/Applications/XAMPP/xamppfiles/htdocs/test/MusicFractions/js/views/slider/sliderView.js",
+		"/Applications/XAMPP/xamppfiles/htdocs/test/MusicFractions/js/models/slider.js",
+		"/Applications/XAMPP/xamppfiles/htdocs/test/MusicFractions/js/models/projects.js",
 		"/Users/scerbos/Documents/2012_04_Fall/Brainstorming Fraction Ideas",
 		"/Users/scerbos/Code/MusicFractions/README.md",
 		"/Users/scerbos/Desktop/Searching and filtering",
@@ -429,17 +495,7 @@
 		"/Applications/XAMPP/xamppfiles/htdocs/vizTest/css/screen.css",
 		"/Applications/XAMPP/xamppfiles/htdocs/test/sigmajs/_data/test.gexf",
 		"/Applications/XAMPP/xamppfiles/htdocs/test/sigmajs/_data/sample.gexf",
-		"/Applications/XAMPP/xamppfiles/htdocs/test/sigmajs/_js/plugins.js",
-		"/Applications/XAMPP/xamppfiles/htdocs/test/moowheel_v02/demo/getCollaborations.php",
-		"/Applications/XAMPP/xamppfiles/htdocs/test/sigmajs/_css/screen.css",
-		"/Applications/XAMPP/xamppfiles/htdocs/test/sigmajs/sample.gexf",
-		"/Applications/XAMPP/xamppfiles/htdocs/moowheel_v02/demo/generate.php",
-		"/Applications/XAMPP/xamppfiles/htdocs/moowheel_v02/demo/large.html",
-		"/Applications/XAMPP/xamppfiles/htdocs/moowheel_v02/demo/collaborations_output.txt",
-		"/Applications/XAMPP/xamppfiles/htdocs/moowheel_v02/demo/Partial List of Faculty",
-		"/Applications/XAMPP/xamppfiles/htdocs/moowheel_v02/demo/macr",
-		"/Applications/XAMPP/xamppfiles/htdocs/moowheel_v02/demo/tor",
-		"/Applications/XAMPP/xamppfiles/htdocs/moowheel_v02/demo/regenmed"
+		"/Applications/XAMPP/xamppfiles/htdocs/test/sigmajs/_js/plugins.js"
 	],
 	"find":
 	{
@@ -458,6 +514,7 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"$('#",
 			"circle_collision",
 			"distance",
 			"size",
@@ -644,6 +701,7 @@
 	"groups":
 	[
 		{
+			"selected": 5,
 			"sheets":
 			[
 				{
@@ -651,15 +709,15 @@
 					"file": "index.html",
 					"settings":
 					{
-						"buffer_size": 4427,
+						"buffer_size": 4195,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3624,
-								3624
+								3411,
+								3411
 							]
 						],
 						"settings":
@@ -669,25 +727,25 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 921.0,
+						"translation.y": 809.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 1,
-					"file": "js/models/slider.js",
+					"file": "js/views/beatBars/beatBarsView.js",
 					"settings":
 					{
-						"buffer_size": 175,
+						"buffer_size": 2873,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								171,
-								171
+								154,
+								154
 							]
 						],
 						"settings":
@@ -704,18 +762,18 @@
 				},
 				{
 					"buffer": 2,
-					"file": "js/views/slider/SliderView.js",
+					"file": "js/views/home/homeView.js",
 					"settings":
 					{
-						"buffer_size": 868,
+						"buffer_size": 368,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								236,
-								236
+								322,
+								322
 							]
 						],
 						"settings":
@@ -732,34 +790,6 @@
 				},
 				{
 					"buffer": 3,
-					"file": "js/views/home/homeView.js",
-					"settings":
-					{
-						"buffer_size": 349,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								28,
-								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 4,
 					"file": "js/main.js",
 					"settings":
 					{
@@ -781,13 +811,13 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 11.0,
+						"translation.y": 25.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 5,
+					"buffer": 4,
 					"file": "js/app.js",
 					"settings":
 					{
@@ -798,8 +828,36 @@
 						"selection":
 						[
 							[
-								171,
-								171
+								134,
+								134
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "js/router.js",
+					"settings":
+					{
+						"buffer_size": 692,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								217,
+								217
 							]
 						],
 						"settings":
@@ -816,34 +874,6 @@
 				},
 				{
 					"buffer": 6,
-					"file": "js/router.js",
-					"settings":
-					{
-						"buffer_size": 549,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								98,
-								98
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 7,
 					"file": "templates/home/main.html",
 					"settings":
 					{
@@ -863,6 +893,200 @@
 							"syntax": "Packages/HTML/HTML.tmLanguage",
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "js/models/projects.js",
+					"settings":
+					{
+						"buffer_size": 221,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								192,
+								192
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "js/views/slider/sliderView.js",
+					"settings":
+					{
+						"buffer_size": 806,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								763,
+								763
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 9,
+					"file": "templates/slider/slider.html",
+					"settings":
+					{
+						"buffer_size": 116,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								62,
+								62
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 10,
+					"file": "js/collections/beatBars.js",
+					"settings":
+					{
+						"buffer_size": 276,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								110,
+								110
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 11,
+					"file": "js/models/beatBar.js",
+					"settings":
+					{
+						"buffer_size": 217,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								140,
+								140
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 12,
+					"file": "css/main.css",
+					"settings":
+					{
+						"buffer_size": 312,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								287,
+								287
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/CSS/CSS.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 13,
+					"file": "templates/beatBars/beatBars.html",
+					"settings":
+					{
+						"buffer_size": 157,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								157,
+								157
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
