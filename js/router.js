@@ -22,7 +22,7 @@ define([
 
   var initialize = function(){
     var app_router = new AppRouter;
-    Backbone.history.start();
+    Backbone.history.start({pushState:true});
   };
   return {
     initialize: initialize
