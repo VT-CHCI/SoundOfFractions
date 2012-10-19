@@ -10,7 +10,8 @@ define([
       mute: false,
       sample: 'shhh',
       tempo: 120,
-      measures: measuresCollection
+      measures: measuresCollection,
+      active: true
     },
     initialize: function(){
     }
