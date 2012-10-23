@@ -43,7 +43,7 @@ define([
       this.collection.reset();
       
       for (var i = 0; i < signature*2; i++) {
-        this.collection = beatsCollection.add();
+        this.collection.add();
       }
 
       this.render();
