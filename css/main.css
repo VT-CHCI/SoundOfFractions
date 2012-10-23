@@ -13,11 +13,24 @@
 	margin: 5px 0;
 }
 
+.OFF {
+	width: 15px;
+	height: 15px;
+	background: red;
+	border: 2px;
+}
 
+.ON {
+	width: 15px;
+	height: 15px;
+	background: blue;
+	border: 2px;
+}
 
-
-
-
+.beat {
+	float: left;
+	margin: 0 5px;
+}
 
 
 

@@ -4,6 +4,18 @@
 		"selected_items":
 		[
 			[
+				"compon",
+				"componentsCollection"
+			],
+			[
+				"meas",
+				"measuresCollection"
+			],
+			[
+				"measu",
+				"measureModel"
+			],
+			[
 				"beat",
 				"beat-pallet"
 			],
@@ -212,42 +224,90 @@
 	"buffers":
 	[
 		{
+			"file": "js/models/beat.js",
+			"settings":
+			{
+				"buffer_size": 218,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "js/collections/beats.js",
+			"settings":
+			{
+				"buffer_size": 283,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "js/models/measure.js",
+			"settings":
+			{
+				"buffer_size": 335,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "js/collections/measures.js",
+			"settings":
+			{
+				"buffer_size": 300,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "js/models/component.js",
+			"settings":
+			{
+				"buffer_size": 411,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "js/collections/components.js",
+			"settings":
+			{
+				"buffer_size": 306,
+				"line_ending": "Unix"
+			}
+		},
+		{
 			"file": "index.html",
 			"settings":
 			{
-				"buffer_size": 4195,
+				"buffer_size": 4255,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "js/views/beatBars/beatBarsView.js",
+			"file": "/Users/scerbos/Documents/2012_04_Fall/Brainstorming Fraction Ideas",
 			"settings":
 			{
-				"buffer_size": 2873,
+				"buffer_size": 3441,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "js/views/home/homeView.js",
+			"file": "templates/components/components.html",
 			"settings":
 			{
-				"buffer_size": 368,
+				"buffer_size": 0,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "js/main.js",
+			"file": "js/views/components/componentsView.js",
 			"settings":
 			{
-				"buffer_size": 1424,
+				"buffer_size": 2099,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "js/app.js",
+			"file": "js/views/beats/beatView.js",
 			"settings":
 			{
-				"buffer_size": 316,
+				"buffer_size": 761,
 				"line_ending": "Unix"
 			}
 		},
@@ -255,55 +315,7 @@
 			"file": "js/router.js",
 			"settings":
 			{
-				"buffer_size": 692,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "templates/home/main.html",
-			"settings":
-			{
-				"buffer_size": 249,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "js/models/projects.js",
-			"settings":
-			{
-				"buffer_size": 221,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "js/views/slider/sliderView.js",
-			"settings":
-			{
-				"buffer_size": 806,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "templates/slider/slider.html",
-			"settings":
-			{
-				"buffer_size": 116,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "js/collections/beatBars.js",
-			"settings":
-			{
-				"buffer_size": 276,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "js/models/beatBar.js",
-			"settings":
-			{
-				"buffer_size": 217,
+				"buffer_size": 769,
 				"line_ending": "Unix"
 			}
 		},
@@ -311,15 +323,7 @@
 			"file": "css/main.css",
 			"settings":
 			{
-				"buffer_size": 312,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "templates/beatBars/beatBars.html",
-			"settings":
-			{
-				"buffer_size": 157,
+				"buffer_size": 450,
 				"line_ending": "Unix"
 			}
 		}
@@ -368,16 +372,26 @@
 	},
 	"file_history":
 	[
+		"/Applications/XAMPP/xamppfiles/htdocs/test/MusicFractions/js/collections/projects.js",
+		"/Applications/XAMPP/xamppfiles/htdocs/test/MusicFractions/js/views/home/homeView.js",
+		"/Applications/XAMPP/xamppfiles/htdocs/test/MusicFractions/js/models/projects.js",
+		"/Applications/XAMPP/xamppfiles/htdocs/test/MusicFractions/index.html",
 		"/Applications/XAMPP/xamppfiles/htdocs/test/MusicFractions/templates/beatBars/beatBars.html",
+		"/Applications/XAMPP/xamppfiles/htdocs/test/MusicFractions/css/main.css",
+		"/Applications/XAMPP/xamppfiles/htdocs/test/MusicFractions/js/models/beatBar.js",
+		"/Applications/XAMPP/xamppfiles/htdocs/test/MusicFractions/js/collections/beatBars.js",
+		"/Applications/XAMPP/xamppfiles/htdocs/test/MusicFractions/templates/slider/slider.html",
+		"/Applications/XAMPP/xamppfiles/htdocs/test/MusicFractions/js/views/slider/sliderView.js",
+		"/Applications/XAMPP/xamppfiles/htdocs/test/MusicFractions/templates/home/main.html",
+		"/Applications/XAMPP/xamppfiles/htdocs/test/MusicFractions/js/router.js",
+		"/Applications/XAMPP/xamppfiles/htdocs/test/MusicFractions/js/app.js",
+		"/Applications/XAMPP/xamppfiles/htdocs/test/MusicFractions/js/main.js",
+		"/Applications/XAMPP/xamppfiles/htdocs/test/MusicFractions/js/views/beatBars/beatBarsView.js",
 		"/Applications/XAMPP/xamppfiles/htdocs/test/MusicFractions/templates/beatBars/beatBar.html",
 		"/Applications/XAMPP/xamppfiles/htdocs/test/MusicFractions/js/views/beatBars/beatBarView.js",
-		"/Applications/XAMPP/xamppfiles/htdocs/test/MusicFractions/js/collections/beatBars.js",
 		"/Applications/XAMPP/xamppfiles/htdocs/test/MusicFractions/js/models/beat.js",
 		"/Applications/XAMPP/xamppfiles/htdocs/test/MusicFractions/js/app/dispatch.js",
-		"/Applications/XAMPP/xamppfiles/htdocs/test/MusicFractions/js/models/beatBar.js",
-		"/Applications/XAMPP/xamppfiles/htdocs/test/MusicFractions/js/views/slider/sliderView.js",
 		"/Applications/XAMPP/xamppfiles/htdocs/test/MusicFractions/js/models/slider.js",
-		"/Applications/XAMPP/xamppfiles/htdocs/test/MusicFractions/js/models/projects.js",
 		"/Users/scerbos/Documents/2012_04_Fall/Brainstorming Fraction Ideas",
 		"/Users/scerbos/Code/MusicFractions/README.md",
 		"/Users/scerbos/Desktop/Searching and filtering",
@@ -485,17 +499,7 @@
 		"/Users/scerbos/Code/knowledgebase/app/models/experiment.rb",
 		"/Users/scerbos/Code/knowledgebase/db/migrate/20120824210857_create_experiments.rb",
 		"/Users/scerbos/Code/knowledgebase/db/migrate/20120824210846_create_papers.rb",
-		"/Users/scerbos/Code/knowledgebase/db/migrate/20120824210913_create_tasks.rb",
-		"/Users/scerbos/Desktop/knowledgebase-6-14-2012/app/views/papers/show.html.erb",
-		"/Applications/XAMPP/xamppfiles/htdocs/vizTest/_js/plugins.js",
-		"/Applications/XAMPP/xamppfiles/htdocs/vizTest/_css/style.css",
-		"/Applications/XAMPP/xamppfiles/htdocs/vizTest/_css/fullcalendar.css",
-		"/Applications/XAMPP/xamppfiles/htdocs/vizTest/_css/screen.css",
-		"/Applications/XAMPP/xamppfiles/htdocs/test/sigmajs/sigmajs.sublime-project",
-		"/Applications/XAMPP/xamppfiles/htdocs/vizTest/css/screen.css",
-		"/Applications/XAMPP/xamppfiles/htdocs/test/sigmajs/_data/test.gexf",
-		"/Applications/XAMPP/xamppfiles/htdocs/test/sigmajs/_data/sample.gexf",
-		"/Applications/XAMPP/xamppfiles/htdocs/test/sigmajs/_js/plugins.js"
+		"/Users/scerbos/Code/knowledgebase/db/migrate/20120824210913_create_tasks.rb"
 	],
 	"find":
 	{
@@ -701,51 +705,23 @@
 	"groups":
 	[
 		{
-			"selected": 5,
+			"selected": 10,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "index.html",
+					"file": "js/models/beat.js",
 					"settings":
 					{
-						"buffer_size": 4195,
+						"buffer_size": 218,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3411,
-								3411
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/HTML/HTML.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 809.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "js/views/beatBars/beatBarsView.js",
-					"settings":
-					{
-						"buffer_size": 2873,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								154,
-								154
+								129,
+								137
 							]
 						],
 						"settings":
@@ -761,19 +737,45 @@
 					"type": "text"
 				},
 				{
-					"buffer": 2,
-					"file": "js/views/home/homeView.js",
+					"buffer": 1,
+					"file": "js/collections/beats.js",
 					"settings":
 					{
-						"buffer_size": 368,
+						"buffer_size": 283,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								322,
-								322
+								265,
+								265
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "js/models/measure.js",
+					"settings":
+					{
+						"buffer_size": 335,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								258,
+								258
 							]
 						],
 						"settings":
@@ -790,18 +792,18 @@
 				},
 				{
 					"buffer": 3,
-					"file": "js/main.js",
+					"file": "js/collections/measures.js",
 					"settings":
 					{
-						"buffer_size": 1424,
+						"buffer_size": 300,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								919,
-								919
+								260,
+								260
 							]
 						],
 						"settings":
@@ -811,25 +813,25 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 25.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 4,
-					"file": "js/app.js",
+					"file": "js/models/component.js",
 					"settings":
 					{
-						"buffer_size": 316,
+						"buffer_size": 411,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								134,
-								134
+								313,
+								313
 							]
 						],
 						"settings":
@@ -846,18 +848,18 @@
 				},
 				{
 					"buffer": 5,
-					"file": "js/router.js",
+					"file": "js/collections/components.js",
 					"settings":
 					{
-						"buffer_size": 692,
+						"buffer_size": 306,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								217,
-								217
+								289,
+								289
 							]
 						],
 						"settings":
@@ -874,18 +876,18 @@
 				},
 				{
 					"buffer": 6,
-					"file": "templates/home/main.html",
+					"file": "index.html",
 					"settings":
 					{
-						"buffer_size": 249,
+						"buffer_size": 4255,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								249,
-								249
+								3197,
+								3197
 							]
 						],
 						"settings":
@@ -895,60 +897,57 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 809.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 7,
-					"file": "js/models/projects.js",
+					"file": "/Users/scerbos/Documents/2012_04_Fall/Brainstorming Fraction Ideas",
 					"settings":
 					{
-						"buffer_size": 221,
+						"buffer_size": 3441,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								192,
-								192
+								3283,
+								3283
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
+							"syntax": "Packages/Text/Plain text.tmLanguage",
+							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 781.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 8,
-					"file": "js/views/slider/sliderView.js",
+					"file": "templates/components/components.html",
 					"settings":
 					{
-						"buffer_size": 806,
+						"buffer_size": 0,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								763,
-								763
+								0,
+								0
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
+							"syntax": "Packages/HTML/HTML.tmLanguage"
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
@@ -958,46 +957,46 @@
 				},
 				{
 					"buffer": 9,
-					"file": "templates/slider/slider.html",
+					"file": "js/views/components/componentsView.js",
 					"settings":
 					{
-						"buffer_size": 116,
+						"buffer_size": 2099,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								62,
-								62
+								1747,
+								1747
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 68.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 10,
-					"file": "js/collections/beatBars.js",
+					"file": "js/views/beats/beatView.js",
 					"settings":
 					{
-						"buffer_size": 276,
+						"buffer_size": 761,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								110,
-								110
+								716,
+								716
 							]
 						],
 						"settings":
@@ -1014,18 +1013,18 @@
 				},
 				{
 					"buffer": 11,
-					"file": "js/models/beatBar.js",
+					"file": "js/router.js",
 					"settings":
 					{
-						"buffer_size": 217,
+						"buffer_size": 769,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								140,
-								140
+								589,
+								589
 							]
 						],
 						"settings":
@@ -1045,48 +1044,20 @@
 					"file": "css/main.css",
 					"settings":
 					{
-						"buffer_size": 312,
+						"buffer_size": 450,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								287,
-								287
+								423,
+								423
 							]
 						],
 						"settings":
 						{
 							"syntax": "Packages/CSS/CSS.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 13,
-					"file": "templates/beatBars/beatBars.html",
-					"settings":
-					{
-						"buffer_size": 157,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								157,
-								157
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/HTML/HTML.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
