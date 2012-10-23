@@ -32,9 +32,18 @@
 	margin: 0 5px;
 }
 
+.measure {
+	border: solid 1px grey;
+	padding: 5px 0;
+	display: inline-block;
+}
 
-
-
+.measure .title {
+	clear: both;
+	display: block;
+	text-align: center;
+	margin: 0 0 5px 0;
+}
 
 
 

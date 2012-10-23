@@ -10,7 +10,7 @@ define([
   'app/dispatch'
 ], function($, _, Backbone, beatsCollection, BeatView, beatsTemplate, dispatch){
   var beatsView = Backbone.View.extend({
-    el: $('#drum-kit'),
+    el: $('.measure'),
 
     initialize: function(){
       this.collection = beatsCollection;
@@ -24,12 +24,13 @@ define([
 
     render: function(){
       $(this.el).html('');
+      $(this.el).append('<span class="title">Measure 1</span>');
       // new BeatView({model:this.collection.at(0), el:'#drum-kit'});
 
       _.each(this.collection.models, function(beat) {
         var compiledTemplate = _.template( beatsTemplate, {beat: beat} );
         $(this.el).append( compiledTemplate );
-        
+
         new BeatView({model:beat, el:'#beat'+beat.cid});
       }, this);
 
