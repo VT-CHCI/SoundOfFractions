@@ -24,7 +24,7 @@ define([
 
     render: function(){
       $(this.el).html('');
-      $(this.el).append('<span class="title">Measure 1</span>');
+      $(this.el).append('<span class="title">Measure <span class="number">1</span> - <span class="delete">[X]</span></span>');
       // new BeatView({model:this.collection.at(0), el:'#drum-kit'});
 
       _.each(this.collection.models, function(beat) {

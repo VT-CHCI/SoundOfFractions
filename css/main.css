@@ -4,6 +4,9 @@
    Author's custom styles
    ========================================================================== */
 
+#slider input {
+	width: 100%;
+}
 
 .beat-bar {
 	height: 25px;
@@ -43,6 +46,10 @@
 	display: block;
 	text-align: center;
 	margin: 0 0 5px 0;
+}
+
+.measure .title .delete {
+	color: red;
 }
 
 
