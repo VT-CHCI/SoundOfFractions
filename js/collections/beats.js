@@ -5,7 +5,7 @@ define([
   'backbone',
   'models/beat'
 ], function($, _, Backbone, beatModel){
-  var beatsCollection = Backbone.Collection.extend({
+  return Backbone.Collection.extend({
     model: beatModel,
 
     initialize: function(){
@@ -13,5 +13,5 @@ define([
     }
   });
 
-  return new beatsCollection();
+  //return new beatsCollection();
 });

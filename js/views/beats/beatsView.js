@@ -9,17 +9,19 @@ define([
   'text!templates/beats/beats.html',
   'app/dispatch'
 ], function($, _, Backbone, beatsCollection, BeatView, beatsTemplate, dispatch){
-  var beatsView = Backbone.View.extend({
+  return Backbone.View.extend({
     el: $('.measure'),
 
-    initialize: function(){
-      this.collection = beatsCollection;
-
-      for (var i = 0; i < 8; i++) {
-        this.collection = beatsCollection.add();
+    initialize: function(options){
+      if (options) {
+        this.collection = options.collection;
+        this.el = options.el;
+      } else {
+        this.collection = new beatsCollection;
       }
 
       dispatch.on('signatureChange.event', this.reconfigure, this);
+      this.render();
     },
 
     render: function(){
@@ -47,6 +49,4 @@ define([
       this.render();
     }
   });
-
-  return new beatsView();
 });

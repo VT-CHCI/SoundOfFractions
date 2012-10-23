@@ -6,8 +6,8 @@ define([
   'views/home/homeView',
   'views/slider/sliderView',
   'views/beatBars/beatBarsView',
-  'views/beats/beatsView'
-], function($, _, Backbone, mainHomeView, sliderView, beatBarsView, beatsView){
+  'views/measures/measuresView'
+], function($, _, Backbone, mainHomeView, sliderView, beatBarsView, measuresView){
   var AppRouter = Backbone.Router.extend({
     routes: {
       // Default
@@ -18,7 +18,7 @@ define([
       mainHomeView.render();
       sliderView.render();
       beatBarsView.render();
-      beatsView.render();
+      measuresView.render();
     }
   });
 
