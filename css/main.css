@@ -69,4 +69,30 @@
 
 .component {
   min-height: 110px;
+  width: 85%;
+}
+
+.component-container {
+  position: relative;
+}
+
+.component-container .count {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 60px;
+  height: 150px;
+  width: 90px;
+  text-align: center;
+}
+
+.component-container .count .numerator {
+  display: block;
+  margin: 25px auto 30px auto;
+  border-bottom: 5px solid;
+  padding-bottom: 32px;
+}
+
+.component-container .count .denominator {
+
 }
