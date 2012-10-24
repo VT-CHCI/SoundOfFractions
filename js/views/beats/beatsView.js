@@ -8,7 +8,7 @@ define([
   'views/beats/beatView',
   'text!templates/beats/beats.html',
   'app/dispatch'
-], function($, _, Backbone, beatsCollection, BeatView, beatsTemplate, dispatch){
+], function($, _, Backbone, BeatsCollection, BeatView, beatsTemplate, dispatch){
   return Backbone.View.extend({
     el: $('.measure'),
 
@@ -17,7 +17,7 @@ define([
         this.collection = options.collection;
         this.el = options.el;
       } else {
-        this.collection = new beatsCollection;
+        this.collection = new BeatsCollection;
       }
 
       dispatch.on('signatureChange.event', this.reconfigure, this);
@@ -40,7 +40,7 @@ define([
         $(this).text(measureCount);
         measureCount++;
       });
-      
+
       return this;
     },
 
