@@ -9,27 +9,24 @@ define([
   'views/beats/beatsView',
   'text!templates/measures/measures.html',
   'app/dispatch',
-], function($, _, Backbone, beatsCollection, measuresCollection, BeatsView, measuresTemplate, dispatch){
+], function($, _, Backbone, BeatsCollection, measuresCollection, BeatsView, measuresTemplate, dispatch){
   var beatsView = Backbone.View.extend({
     el: $('.component'),
 
+    events : {
+      'click .addMeasure' : 'add',
+      'click .delete' : 'remove'
+    },
+
     initialize: function(){
-      this.measure1 = new beatsCollection;
-      this.measure2 = new beatsCollection;
+      this.measure = new BeatsCollection;
 
       for (var i = 0; i < 8; i++) {
-        this.measure1.add();
-        this.measure2.add();
+        this.measure.add();
       }
 
       this.component = measuresCollection;
-
-      console.log(this.measure1, this.measure2);
-      this.component = measuresCollection.add({beats: this.measure1});
-      this.component = measuresCollection.add({beats: this.measure2});
-
-      console.log(this.component);
-    
+      this.component = measuresCollection.add({beats: this.measure});
     },
 
     render: function(){
@@ -39,14 +36,32 @@ define([
         var compiledTemplate = _.template( measuresTemplate, {measure: measure} );
         $(this.el).find('.addMeasure').before( compiledTemplate );
 
-        console.log(measure); 
-
         new BeatsView({collection:measure.get('beats'), el:'#measure'+measure.cid});
       }, this);
 
      return this;
-    }
+    },
 
+    add: function(){
+      console.log('add measure');
+      this.measure = new BeatsCollection;
+
+      for (var i = 0; i < 8; i++) {
+        this.measure.add();
+      }
+
+      this.component = measuresCollection.add({beats: this.measure});
+      this.render();
+    },
+
+    remove: function(ev){
+      console.log('remove measure');
+
+      var model = this.component.getByCid($(ev.target).parents('.measure').attr('id').replace('measure',''));
+      this.component.remove(model);
+
+      this.render();
+    }
   });
 
   return new beatsView();
