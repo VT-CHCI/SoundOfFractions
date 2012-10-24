@@ -39,6 +39,7 @@
 	border: solid 1px grey;
 	padding: 5px 0;
 	display: inline-block;
+  margin-bottom: 5px;
 }
 
 .measure .title {
@@ -60,4 +61,12 @@
 	font-size: 30px;
 }
 
+.temp {
+  width: 100px;
+  float: left;
+  margin: 20px;
+}
 
+.component {
+  min-height: 110px;
+}

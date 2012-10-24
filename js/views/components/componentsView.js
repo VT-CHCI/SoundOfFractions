@@ -7,28 +7,22 @@ define([
   'collections/beats',
   'collections/measures',
   'collections/components',
+  'views/measures/measuresView',
   'text!templates/components/components.html',
   'app/dispatch'
-], function($, _, Backbone, beatsCollection, measuresCollection, componentsCollection, componentsTemplate, dispatch){
+], function($, _, Backbone, BeatsCollection, MeasuresCollection, componentsCollection, MeasuresView, componentsTemplate, dispatch){
   var componentsView = Backbone.View.extend({
-    el: $('#beat-pallet #visual-beats'),
+    el: $('#drum-kit'),
 
     initialize: function(){
-      this.measure = beatsCollection;
+      this.measure = new BeatsCollection;
 
-      this.measure = beatsCollection.add({ selected: false});
-      this.measure = beatsCollection.add({ selected: false});
-      this.measure = beatsCollection.add({ selected: false});
-      this.measure = beatsCollection.add({ selected: false});
+      for (var i = 0; i < 8; i++) {
+        this.measure.add();
+      }
 
-      this.component = measuresCollection;
-
-      this.component = measuresCollection.add({ 
-        label: '0/4', 
-        beats: this.beats,
-        numberOfBeats: 0,
-        divisions: 8
-      });
+      this.component = new MeasuresCollection;
+      this.component.add({beats: this.measure});
 
       this.drumkit = componentsCollection;
 
@@ -36,11 +30,20 @@ define([
         label: 'snare',
         img: 'ofAsnare',
         mute: false,
-        sample: 'chk',
+        sample: '../../../samples/808_chh.ogg',
         tempo: 120,
         measures: this.component,
         active: true
       });
+
+      this.measure = new BeatsCollection;
+
+      for (var i = 0; i < 8; i++) {
+        this.measure.add();
+      }
+
+      this.component = new MeasuresCollection;
+      this.component.add({beats: this.measure});
 
       this.drumkit = componentsCollection.add({
         label: 'highHat',
@@ -52,6 +55,15 @@ define([
         active: true
       });
 
+      this.measure = new BeatsCollection;
+
+      for (var i = 0; i < 8; i++) {
+        this.measure.add();
+      }
+
+      this.component = new MeasuresCollection;
+      this.component.add({beats: this.measure});
+
       this.drumkit = componentsCollection.add({
         label: 'kickDrum',
         img: 'ofAkickDrum',
@@ -61,20 +73,22 @@ define([
         measures: this.component,
         active: false
       });
-
+      
       //dispatch.on('signatureChange.event', this.reconfigure, this);
     },
 
     render: function(){
-      var data = {
-        beatBars: this.collection.models,
-        _: _
-      };
-      var compiledTemplate = _.template( beatBarsTemplate, data );
-      $(this.el).html( compiledTemplate );
+      $(this.el).html('');
 
-      return this;
+      _.each(this.drumkit.models, function(component) {
+        var compiledTemplate = _.template( componentsTemplate, {component: component} );
+        $(this.el).append( compiledTemplate );
+
+        new MeasuresView({collection:component.get('measures'), el:'#component'+component.cid});
+      }, this);
+
+     return this;
     }
   });
-  return new beatBarsView();
+  return new componentsView();
 });
