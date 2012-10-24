@@ -9,7 +9,7 @@ define([
   'views/beats/beatsView',
   'text!templates/measures/measures.html',
   'app/dispatch',
-], function($, _, Backbone, BeatsCollection, measuresCollection, BeatsView, measuresTemplate, dispatch){
+], function($, _, Backbone, BeatsCollection, MeasuresCollection, BeatsView, measuresTemplate, dispatch){
   var beatsView = Backbone.View.extend({
     el: $('.component'),
 
@@ -25,8 +25,8 @@ define([
         this.measure.add();
       }
 
-      this.component = measuresCollection;
-      this.component = measuresCollection.add({beats: this.measure});
+      this.component = new MeasuresCollection;
+      this.component.add({beats: this.measure});
     },
 
     render: function(){
@@ -50,7 +50,7 @@ define([
         this.measure.add();
       }
 
-      this.component = measuresCollection.add({beats: this.measure});
+      this.component.add({beats: this.measure});
       this.render();
     },
 

@@ -5,7 +5,7 @@ define([
   'backbone',
   'models/measure'
 ], function($, _, Backbone, measureModel){
-  var measuresCollection = Backbone.Collection.extend({
+  return Backbone.Collection.extend({
     model: measureModel,
 
     initialize: function(){
@@ -13,5 +13,5 @@ define([
     }
   });
 
-  return new measuresCollection();
+  // return new measuresCollection();
 });
