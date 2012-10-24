@@ -8,7 +8,7 @@ define([
     el: $('.beat'),
 
     events : {
-      "click" : "toggle"  
+      'click' : 'toggle'  
     },
 
     initialize: function(options) {
