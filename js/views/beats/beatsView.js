@@ -26,8 +26,7 @@ define([
 
     render: function(){
       $(this.el).html('');
-      $(this.el).append('<span class="title">Measure <span class="number">1</span> - <span class="delete">[X]</span></span>');
-      // new BeatView({model:this.collection.at(0), el:'#drum-kit'});
+      $(this.el).append('<span class="title">Measure <span class="number"></span> - <span class="delete">[X]</span></span>');
 
       _.each(this.collection.models, function(beat) {
         var compiledTemplate = _.template( beatsTemplate, {beat: beat} );
@@ -36,6 +35,12 @@ define([
         new BeatView({model:beat, el:'#beat'+beat.cid});
       }, this);
 
+      var measureCount = 1;
+      $('.number').each(function() {
+        $(this).text(measureCount);
+        measureCount++;
+      });
+      
       return this;
     },
 
