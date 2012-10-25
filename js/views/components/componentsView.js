@@ -15,13 +15,14 @@ define([
     el: $('#drum-kit'),
 
     events : {
-      'click img' : 'temp',
-      'click img' : 'playSound'
+      'click img' : 'togglePlay'
+      //'click img' : 'playSound'
     },
 
     initialize: function(){
       this.context = new webkitAudioContext();
       this.bufferList = new Array();
+      this.masterGainNode = this.context.createGainNode();
 
       this.measure = new BeatsCollection;
 
@@ -83,6 +84,10 @@ define([
       });
       
       //dispatch.on('signatureChange.event', this.reconfigure, this);
+
+      this.intervalID = setInterval((function(self) {
+        return function() {self.temp(); } } )(this),
+      2000); //time is a function of measures and tempo (4 * 60/tempo * measures)
     },
 
     render: function(){
@@ -106,7 +111,10 @@ define([
       var tempo = 0;
       var numBeats = 0;
       var i = 0;
-      var componentDurations = new Array(this.drumkit.models.length);
+
+      var deadSpace = 0;
+
+      var componentDurations = new Array();
       _.each(this.drumkit.models, function(component) {
         componentDurations[i] = new Array();
         tempo = component.get('tempo');
@@ -115,23 +123,48 @@ define([
           numBeats = measure.get('beats').length;
           var beatDuration = 60 / tempo * 4 / numBeats;
           _.each(measure.get('beats').models, function(beat) {
-            console.log(beatDuration);
+            // console.log(beatDuration);
+
+            if (beat.get('selected')) {
+              componentDurations[i].push(deadSpace);
+              deadSpace = deadSpace + beatDuration;
+              //console.log(deadSpace);
+            } else {
+              deadSpace = deadSpace + beatDuration;
+            }
 
           }, this);
         }, this);
         i++;
+        deadSpace = 0;
       }, this);
+
+      this.playSound(componentDurations);
     },
 
-    playSound: function(){
-      console.log('play sound');
+    playSound: function(durations){
+      //console.log('play sound', durations);
+      var componentToPlay = 0;
+      var startTime = this.context.currentTime; //this is important (check docs for explination)
 
-      for (var i = 0; i < 100; i++) {
-        var source1 = this.context.createBufferSource();
-        source1.buffer = this.bufferList[1];
+      _.each(durations, function(duration) {
+        _.each(duration, function(time) {
+          play(this.context, this.bufferList[componentToPlay], startTime+time, this.masterGainNode);
+        }, this);
+        componentToPlay++;
+      }, this);
 
-        source1.connect(this.context.destination);
-        source1.noteOn(.0625*i);
+      function play(context, buffer, time, gainNode) {
+        //console.log(startTime);
+        //console.log(this.audioSources);
+
+        var source = context.createBufferSource();
+        source.buffer = buffer;
+        //source.connect(context.destination);
+        source.connect(gainNode);
+        gainNode.connect(context.destination);
+
+        source.noteOn(time);
       }
 
     },
@@ -165,6 +198,21 @@ define([
       }
 
       request.send();
+    }, 
+
+    togglePlay: function() {
+      if (this.intervalID) {
+        clearInterval(this.intervalID);
+        this.intervalID = null;
+        this.masterGainNode.gain.value = 0;
+      } else {
+        this.intervalID = setInterval((function(self) {
+        return function() {self.temp(); } } )(this),
+        2000);
+        this.masterGainNode.gain.value = 1;
+      }
+
+
     }
 
   });
