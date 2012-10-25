@@ -14,6 +14,10 @@ define([
   var componentsView = Backbone.View.extend({
     el: $('#drum-kit'),
 
+    events : {
+      'click img' : 'temp'
+    },
+
     initialize: function(){
       this.measure = new BeatsCollection;
 
@@ -30,7 +34,7 @@ define([
         label: 'snare',
         img: 'ofAsnare',
         mute: false,
-        sample: '../../../samples/808_chh.ogg',
+        sample: 'samples/808_chh.ogg',
         tempo: 120,
         measures: this.component,
         active: true
@@ -40,7 +44,7 @@ define([
 
       for (var i = 0; i < 8; i++) {
         this.measure.add();
-      }
+      } 
 
       this.component = new MeasuresCollection;
       this.component.add({beats: this.measure});
@@ -88,6 +92,27 @@ define([
       }, this);
 
      return this;
+    },
+
+    temp: function(){
+      var tempo = 0;
+      var numBeats = 0;
+      var i = 0;
+      var componentDurations = new Array(this.drumkit.models.length);
+      _.each(this.drumkit.models, function(component) {
+        componentDurations[i] = new Array();
+        tempo = component.get('tempo');
+
+        _.each(component.get('measures').models, function(measure) {
+          numBeats = measure.get('beats').length;
+          var beatDuration = 60 / tempo * 4 / numBeats;
+          _.each(measure.get('beats').models, function(beat) {
+            console.log(beatDuration);
+
+          }, this);
+        }, this);
+        i++;
+      }, this);
     }
   });
   return new componentsView();

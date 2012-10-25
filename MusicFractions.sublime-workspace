@@ -4,26 +4,6 @@
 		"selected_items":
 		[
 			[
-				"compon",
-				"componentsCollection"
-			],
-			[
-				"meas",
-				"measuresCollection"
-			],
-			[
-				"measu",
-				"measureModel"
-			],
-			[
-				"beat",
-				"beat-pallet"
-			],
-			[
-				"beats",
-				"beatBarsCollection"
-			],
-			[
 				"measure",
 				"measureDifference"
 			],
@@ -224,107 +204,19 @@
 	"buffers":
 	[
 		{
-			"file": "js/models/beat.js",
-			"settings":
-			{
-				"buffer_size": 218,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "js/collections/beats.js",
-			"settings":
-			{
-				"buffer_size": 283,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "js/models/measure.js",
-			"settings":
-			{
-				"buffer_size": 335,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "js/collections/measures.js",
-			"settings":
-			{
-				"buffer_size": 300,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "js/models/component.js",
-			"settings":
-			{
-				"buffer_size": 411,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "js/collections/components.js",
-			"settings":
-			{
-				"buffer_size": 306,
-				"line_ending": "Unix"
-			}
-		},
-		{
 			"file": "index.html",
 			"settings":
 			{
-				"buffer_size": 4255,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/Users/scerbos/Documents/2012_04_Fall/Brainstorming Fraction Ideas",
-			"settings":
-			{
-				"buffer_size": 3441,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "templates/components/components.html",
-			"settings":
-			{
-				"buffer_size": 0,
-				"line_ending": "Unix"
+				"buffer_size": 4400,
+				"line_ending": "Windows"
 			}
 		},
 		{
 			"file": "js/views/components/componentsView.js",
 			"settings":
 			{
-				"buffer_size": 2099,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "js/views/beats/beatView.js",
-			"settings":
-			{
-				"buffer_size": 761,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "js/router.js",
-			"settings":
-			{
-				"buffer_size": 769,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "css/main.css",
-			"settings":
-			{
-				"buffer_size": 450,
-				"line_ending": "Unix"
+				"buffer_size": 2637,
+				"line_ending": "Windows"
 			}
 		}
 	],
@@ -372,26 +264,18 @@
 	},
 	"file_history":
 	[
-		"/Applications/XAMPP/xamppfiles/htdocs/test/MusicFractions/js/collections/projects.js",
-		"/Applications/XAMPP/xamppfiles/htdocs/test/MusicFractions/js/views/home/homeView.js",
-		"/Applications/XAMPP/xamppfiles/htdocs/test/MusicFractions/js/models/projects.js",
-		"/Applications/XAMPP/xamppfiles/htdocs/test/MusicFractions/index.html",
-		"/Applications/XAMPP/xamppfiles/htdocs/test/MusicFractions/templates/beatBars/beatBars.html",
-		"/Applications/XAMPP/xamppfiles/htdocs/test/MusicFractions/css/main.css",
-		"/Applications/XAMPP/xamppfiles/htdocs/test/MusicFractions/js/models/beatBar.js",
-		"/Applications/XAMPP/xamppfiles/htdocs/test/MusicFractions/js/collections/beatBars.js",
-		"/Applications/XAMPP/xamppfiles/htdocs/test/MusicFractions/templates/slider/slider.html",
-		"/Applications/XAMPP/xamppfiles/htdocs/test/MusicFractions/js/views/slider/sliderView.js",
-		"/Applications/XAMPP/xamppfiles/htdocs/test/MusicFractions/templates/home/main.html",
-		"/Applications/XAMPP/xamppfiles/htdocs/test/MusicFractions/js/router.js",
-		"/Applications/XAMPP/xamppfiles/htdocs/test/MusicFractions/js/app.js",
-		"/Applications/XAMPP/xamppfiles/htdocs/test/MusicFractions/js/main.js",
-		"/Applications/XAMPP/xamppfiles/htdocs/test/MusicFractions/js/views/beatBars/beatBarsView.js",
-		"/Applications/XAMPP/xamppfiles/htdocs/test/MusicFractions/templates/beatBars/beatBar.html",
-		"/Applications/XAMPP/xamppfiles/htdocs/test/MusicFractions/js/views/beatBars/beatBarView.js",
-		"/Applications/XAMPP/xamppfiles/htdocs/test/MusicFractions/js/models/beat.js",
-		"/Applications/XAMPP/xamppfiles/htdocs/test/MusicFractions/js/app/dispatch.js",
-		"/Applications/XAMPP/xamppfiles/htdocs/test/MusicFractions/js/models/slider.js",
+		"/C/Users/Taylor/git/CS3724/submissionNumber",
+		"/C/xampp/htdocs/VT-CHCI/MusicFractions/index.html",
+		"/C/xampp/htdocs/VT-CHCI/MusicFractions/MusicFractions.sublime-project",
+		"/C/xampp/htdocs/VT-CHCI/MusicFractions/js/boilerplate.js",
+		"/C/xampp/htdocs/VT-CHCI/MusicFractions/templates/home/main.html",
+		"/C/xampp/htdocs/VT-CHCI/MusicFractions/js/router.js",
+		"/C/xampp/htdocs/VT-CHCI/MusicFractions/js/app.js",
+		"/C/xampp/htdocs/VT-CHCI/MusicFractions/js/main.js",
+		"/C/xampp/htdocs/VT-CHCI/MusicFractions/js/views/home/homeView.js",
+		"/C/xampp/htdocs/VT-CHCI/MusicFractions/js/views/slider/SliderView.js",
+		"/C/xampp/htdocs/VT-CHCI/MusicFractions/js/models/slider.js",
+		"/C/xampp/htdocs/index.html",
 		"/Users/scerbos/Documents/2012_04_Fall/Brainstorming Fraction Ideas",
 		"/Users/scerbos/Code/MusicFractions/README.md",
 		"/Users/scerbos/Desktop/Searching and filtering",
@@ -499,7 +383,15 @@
 		"/Users/scerbos/Code/knowledgebase/app/models/experiment.rb",
 		"/Users/scerbos/Code/knowledgebase/db/migrate/20120824210857_create_experiments.rb",
 		"/Users/scerbos/Code/knowledgebase/db/migrate/20120824210846_create_papers.rb",
-		"/Users/scerbos/Code/knowledgebase/db/migrate/20120824210913_create_tasks.rb"
+		"/Users/scerbos/Code/knowledgebase/db/migrate/20120824210913_create_tasks.rb",
+		"/Users/scerbos/Desktop/knowledgebase-6-14-2012/app/views/papers/show.html.erb",
+		"/Applications/XAMPP/xamppfiles/htdocs/vizTest/_js/plugins.js",
+		"/Applications/XAMPP/xamppfiles/htdocs/vizTest/_css/style.css",
+		"/Applications/XAMPP/xamppfiles/htdocs/vizTest/_css/fullcalendar.css",
+		"/Applications/XAMPP/xamppfiles/htdocs/vizTest/_css/screen.css",
+		"/Applications/XAMPP/xamppfiles/htdocs/test/sigmajs/sigmajs.sublime-project",
+		"/Applications/XAMPP/xamppfiles/htdocs/vizTest/css/screen.css",
+		"/Applications/XAMPP/xamppfiles/htdocs/test/sigmajs/_data/test.gexf"
 	],
 	"find":
 	{
@@ -518,7 +410,7 @@
 		"case_sensitive": false,
 		"find_history":
 		[
-			"$('#",
+			"input",
 			"circle_collision",
 			"distance",
 			"size",
@@ -705,28 +597,28 @@
 	"groups":
 	[
 		{
-			"selected": 10,
+			"selected": 1,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "js/models/beat.js",
+					"file": "index.html",
 					"settings":
 					{
-						"buffer_size": 218,
+						"buffer_size": 4400,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								129,
-								137
+								1020,
+								1020
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"syntax": "Packages/HTML/HTML.tmLanguage",
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true
 						},
@@ -738,237 +630,18 @@
 				},
 				{
 					"buffer": 1,
-					"file": "js/collections/beats.js",
-					"settings":
-					{
-						"buffer_size": 283,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								265,
-								265
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "js/models/measure.js",
-					"settings":
-					{
-						"buffer_size": 335,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								258,
-								258
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "js/collections/measures.js",
-					"settings":
-					{
-						"buffer_size": 300,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								260,
-								260
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "js/models/component.js",
-					"settings":
-					{
-						"buffer_size": 411,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								313,
-								313
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 5,
-					"file": "js/collections/components.js",
-					"settings":
-					{
-						"buffer_size": 306,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								289,
-								289
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 6,
-					"file": "index.html",
-					"settings":
-					{
-						"buffer_size": 4255,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								3197,
-								3197
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/HTML/HTML.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 809.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 7,
-					"file": "/Users/scerbos/Documents/2012_04_Fall/Brainstorming Fraction Ideas",
-					"settings":
-					{
-						"buffer_size": 3441,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								3283,
-								3283
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Text/Plain text.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 781.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 8,
-					"file": "templates/components/components.html",
-					"settings":
-					{
-						"buffer_size": 0,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/HTML/HTML.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 9,
 					"file": "js/views/components/componentsView.js",
 					"settings":
 					{
-						"buffer_size": 2099,
+						"buffer_size": 2637,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1747,
-								1747
+								259,
+								259
 							]
 						],
 						"settings":
@@ -976,88 +649,6 @@
 							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 68.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 10,
-					"file": "js/views/beats/beatView.js",
-					"settings":
-					{
-						"buffer_size": 761,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								716,
-								716
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 11,
-					"file": "js/router.js",
-					"settings":
-					{
-						"buffer_size": 769,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								589,
-								589
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 12,
-					"file": "css/main.css",
-					"settings":
-					{
-						"buffer_size": 450,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								423,
-								423
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/CSS/CSS.tmLanguage"
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
@@ -1152,6 +743,6 @@
 	"show_open_files": false,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 327.0,
+	"side_bar_width": 268.0,
 	"status_bar_visible": true
 }
