@@ -22,6 +22,9 @@ define([
       sliderModel.set({slidervalue : val});
       $('#sig_val').text(val);
 
+      // var args = { };
+      // args[0] = val;
+
       dispatch.trigger('signatureChange.event', val);
     }, 
 

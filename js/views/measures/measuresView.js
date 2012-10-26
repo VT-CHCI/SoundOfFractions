@@ -32,6 +32,8 @@ define([
         this.component = new MeasuresCollection;
         this.component.add({beats: this.measure});
       }
+
+      dispatch.on('signatureChange.event', this.recalculateFraction, this);
       this.render();
     },
 
@@ -67,6 +69,22 @@ define([
       this.component.remove(model);
 
       this.render();
+    },
+
+
+    recalculateFraction: function(denominator){
+      var numerator = 0;
+       _.each(this.component.models, function(measure){
+        _.each(measure.collection.models, function(beat) {
+          if(beat.get('selceted')) {
+            numerator++;
+          }
+        }, this);
+      }, this);
+      console.log(numerator + "/" + denominator); //prints correct denominator.
+      var found = $(this.el).find('.count').find('.denominator').text(denominator);
+      var hey = $.parent($.parent(this.el));
+      console.log(hey); //this is null or something.
     }
   });
 });

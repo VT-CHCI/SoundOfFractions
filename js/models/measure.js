@@ -10,8 +10,9 @@ define([
       numberOfBeats: 0,
       divisions: 8
     },
-    initialize: function(){
+    initialize: function(){     
     }
+
   });
   
   return measureModel;
