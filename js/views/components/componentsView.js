@@ -16,7 +16,6 @@ define([
 
     events : {
       'click img' : 'togglePlay'
-      //'click img' : 'playSound'
     },
 
     initialize: function(){
@@ -86,8 +85,11 @@ define([
       //dispatch.on('signatureChange.event', this.reconfigure, this);
 
       this.intervalID = setInterval((function(self) {
-        return function() {self.temp(); } } )(this),
-      2000); //time is a function of measures and tempo (4 * 60/tempo * measures)
+        return function() {self.playLoop(); } } )(this),
+      1175); //time is a function of measures and tempo [(4 * 60/tempo * measures) - beat] (so there is no lag between last beat and first)
+
+      dispatch.on('beatClicked.event', this.recalculateFraction, this)
+      dispatch.on('signatureChange.event', this.recalculateFraction, this)
     },
 
     render: function(){
@@ -103,11 +105,13 @@ define([
         counter++;
       }, this);
 
-     return this;
+      this.recalculateFraction();
+
+      return this;
     },
 
 
-    temp: function(){
+    playLoop: function(){
       var tempo = 0;
       var numBeats = 0;
       var i = 0;
@@ -200,21 +204,44 @@ define([
       request.send();
     }, 
 
-    togglePlay: function() {
+    recalculateFraction: function(val){
+      var numerator = 0;
+      var denominator = 0;
+
+      _.each(this.drumkit.models, function(component) {
+        _.each(component.get('measures').models, function(measure) {
+          _.each(measure.get('beats').models, function(beat) {
+            if(beat.get('selected')) {
+              numerator++;
+            }
+          }, this);
+
+          if (val) {
+            denominator = val*2;
+          } else {
+            denominator = measure.get('beats').models.length;
+          }
+        }, this);
+
+        $('#component'+component.cid).next().find('.numerator').text(numerator);
+        $('#component'+component.cid).next().find('.denominator').text(denominator);
+
+        numerator = 0;
+      }, this);
+    },
+
+    togglePlay: function(){
       if (this.intervalID) {
         clearInterval(this.intervalID);
         this.intervalID = null;
         this.masterGainNode.gain.value = 0;
       } else {
         this.intervalID = setInterval((function(self) {
-        return function() {self.temp(); } } )(this),
+        return function() {self.playLoop(); } } )(this),
         2000);
         this.masterGainNode.gain.value = 1;
       }
-
-
     }
-
   });
   return new componentsView();
 });

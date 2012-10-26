@@ -2,8 +2,9 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'models/beat'
-], function($, _, Backbone, BeatModel){
+  'models/beat',
+  'app/dispatch'
+], function($, _, Backbone, BeatModel, dispatch){
   return Backbone.View.extend({
     el: $('.beat'),
 
@@ -38,6 +39,7 @@ define([
       this.render()
 
       console.log("beat toggled!");
+      dispatch.trigger('beatClicked.event');
     }
 
   });
