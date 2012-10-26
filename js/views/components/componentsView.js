@@ -84,9 +84,7 @@ define([
       
       //dispatch.on('signatureChange.event', this.reconfigure, this);
 
-      this.intervalID = setInterval((function(self) {
-        return function() {self.playLoop(); } } )(this),
-      1175); //time is a function of measures and tempo [(4 * 60/tempo * measures) - beat] (so there is no lag between last beat and first)
+      this.intervalID = null; //time is a function of measures and tempo (4 * 60/tempo * measures)
 
       dispatch.on('beatClicked.event', this.recalculateFraction, this)
       dispatch.on('signatureChange.event', this.recalculateFraction, this)
@@ -212,7 +210,11 @@ define([
         _.each(component.get('measures').models, function(measure) {
           _.each(measure.get('beats').models, function(beat) {
             if(beat.get('selected')) {
-              numerator++;
+              if (val) {
+                numerator = 0;
+              } else {
+                numerator++;  
+              }
             }
           }, this);
 

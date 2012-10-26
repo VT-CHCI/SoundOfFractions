@@ -12,7 +12,7 @@ define([
       'click' : 'toggle'  
     },
 
-    initialize: function(options) {
+    initialize: function(options){
       if (options) {
         this.model = options.model;
         this.el = options.el;
@@ -32,7 +32,7 @@ define([
       return this;
     }, 
 
-    toggle: function() {
+    toggle: function(){
       var bool = this.model.get("selected");
       this.model.set("selected", !bool);
 
@@ -41,6 +41,5 @@ define([
       console.log("beat toggled!");
       dispatch.trigger('beatClicked.event');
     }
-
   });
 });

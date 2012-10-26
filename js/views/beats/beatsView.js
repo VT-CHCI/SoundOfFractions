@@ -52,6 +52,13 @@ define([
       }
 
       this.render();
+
+      var px = 100/$('.measure').css('width').replace(/[^-\d\.]/g, '');
+      var beatWidth = (100 - ((signature*2+1)*px))/(signature*2);
+
+      $('.beat').css({
+        'width' : beatWidth+'%'
+      });
     }
   });
 });
