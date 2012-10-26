@@ -212,7 +212,11 @@ define([
         _.each(component.get('measures').models, function(measure) {
           _.each(measure.get('beats').models, function(beat) {
             if(beat.get('selected')) {
-              numerator++;
+              if (val) {
+                numerator = 0;
+              } else {
+                numerator++;  
+              }
             }
           }, this);
 
