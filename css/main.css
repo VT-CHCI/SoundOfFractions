@@ -68,14 +68,14 @@
 	font-size: 30px;
 }
 
-.temp {
-  width: 100px;
+.component-image {
+  width: 70px;
   float: left;
-  margin: 20px;
+  margin: 10px;
 }
 
 .component {
-  min-height: 110px;
+  min-height: 50px;
   width: 85%;
 }
 
@@ -87,17 +87,17 @@
   position: absolute;
   top: 0;
   right: 0;
-  font-size: 60px;
-  height: 150px;
-  width: 10%;
+  font-size: 50px;
+  height: 50px;
+  width: 7%;
   text-align: center;
 }
 
 .component-container .count .numerator {
   display: block;
-  margin: 25px auto 30px auto;
-  border-bottom: 5px solid;
-  padding-bottom: 32px;
+  margin: 15px auto 15px auto;
+  border-bottom: 4px solid;
+  padding-bottom: 12px;
 }
 
 .component-container .count .denominator {
