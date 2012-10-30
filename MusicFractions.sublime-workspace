@@ -207,7 +207,7 @@
 			"file": "index.html",
 			"settings":
 			{
-				"buffer_size": 4400,
+				"buffer_size": 4242,
 				"line_ending": "Windows"
 			}
 		},
@@ -215,7 +215,39 @@
 			"file": "js/views/components/componentsView.js",
 			"settings":
 			{
-				"buffer_size": 2637,
+				"buffer_size": 7038,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "js/views/beatBars/beatBarsView.js",
+			"settings":
+			{
+				"buffer_size": 2873,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "js/views/measures/measuresView.js",
+			"settings":
+			{
+				"buffer_size": 1851,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/Users/Taylor/Documents/VIRGINIA TECH/workspace/Heapsort/testFileAscii",
+			"settings":
+			{
+				"buffer_size": 40960,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "js/views/slider/sliderView.js",
+			"settings":
+			{
+				"buffer_size": 850,
 				"line_ending": "Windows"
 			}
 		}
@@ -264,6 +296,7 @@
 	},
 	"file_history":
 	[
+		"/C/xampp/htdocs/VT-CHCI/MusicFractions/js/models/measure.js",
 		"/C/Users/Taylor/git/CS3724/submissionNumber",
 		"/C/xampp/htdocs/VT-CHCI/MusicFractions/index.html",
 		"/C/xampp/htdocs/VT-CHCI/MusicFractions/MusicFractions.sublime-project",
@@ -390,8 +423,7 @@
 		"/Applications/XAMPP/xamppfiles/htdocs/vizTest/_css/fullcalendar.css",
 		"/Applications/XAMPP/xamppfiles/htdocs/vizTest/_css/screen.css",
 		"/Applications/XAMPP/xamppfiles/htdocs/test/sigmajs/sigmajs.sublime-project",
-		"/Applications/XAMPP/xamppfiles/htdocs/vizTest/css/screen.css",
-		"/Applications/XAMPP/xamppfiles/htdocs/test/sigmajs/_data/test.gexf"
+		"/Applications/XAMPP/xamppfiles/htdocs/vizTest/css/screen.css"
 	],
 	"find":
 	{
@@ -597,7 +629,7 @@
 	"groups":
 	[
 		{
-			"selected": 1,
+			"selected": 4,
 			"sheets":
 			[
 				{
@@ -605,20 +637,48 @@
 					"file": "index.html",
 					"settings":
 					{
-						"buffer_size": 4400,
+						"buffer_size": 4242,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1020,
-								1020
+								2397,
+								2397
 							]
 						],
 						"settings":
 						{
 							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 648.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "js/views/components/componentsView.js",
+					"settings":
+					{
+						"buffer_size": 7038,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true
 						},
@@ -629,19 +689,101 @@
 					"type": "text"
 				},
 				{
-					"buffer": 1,
-					"file": "js/views/components/componentsView.js",
+					"buffer": 2,
+					"file": "js/views/beatBars/beatBarsView.js",
 					"settings":
 					{
-						"buffer_size": 2637,
+						"buffer_size": 2873,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								259,
-								259
+								775,
+								836
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "js/views/measures/measuresView.js",
+					"settings":
+					{
+						"buffer_size": 1851,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1523,
+								1523
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 33.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "/C/Users/Taylor/Documents/VIRGINIA TECH/workspace/Heapsort/testFileAscii",
+					"settings":
+					{
+						"buffer_size": 40960,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								17,
+								14
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "js/views/slider/sliderView.js",
+					"settings":
+					{
+						"buffer_size": 850,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								610,
+								610
 							]
 						],
 						"settings":
