@@ -5,8 +5,9 @@ define([
   'backbone',
   'models/slider',
   'text!templates/slider/slider.html',
-  'app/dispatch'
-], function($, _, Backbone, SliderModel, sliderTemplate, dispatch){
+  'app/dispatch',
+  'app/state'
+], function($, _, Backbone, SliderModel, sliderTemplate, dispatch, state){
   var sliderModel = new SliderModel;
 
   var SliderView = Backbone.View.extend({
@@ -26,6 +27,7 @@ define([
       // args[0] = val;
 
       dispatch.trigger('signatureChange.event', val);
+      state.set({signature : val});
     }, 
 
     render: function() {
