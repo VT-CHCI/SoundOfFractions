@@ -53,7 +53,7 @@ define([
       console.log('add measure');
       this.measure = new BeatsCollection;
 
-      for (var i = 0; i < 4; i++) {
+      for (var i = 0; i < state.get('signature'); i++) {
         this.measure.add();
       }
 
