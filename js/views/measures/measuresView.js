@@ -9,7 +9,8 @@ define([
   'views/beats/beatsView',
   'text!templates/measures/measures.html',
   'app/dispatch',
-], function($, _, Backbone, BeatsCollection, MeasuresCollection, BeatsView, measuresTemplate, dispatch){
+  'app/state'
+], function($, _, Backbone, BeatsCollection, MeasuresCollection, BeatsView, measuresTemplate, dispatch, state){
   return Backbone.View.extend({
     el: $('.component'),
 
@@ -25,7 +26,7 @@ define([
       } else {
         this.measure = new BeatsCollection;
 
-        for (var i = 0; i < 8; i++) {
+        for (var i = 0; i < 4; i++) {
           this.measure.add();
         }
 
@@ -52,7 +53,7 @@ define([
       console.log('add measure');
       this.measure = new BeatsCollection;
 
-      for (var i = 0; i < 8; i++) {
+      for (var i = 0; i < 4; i++) {
         this.measure.add();
       }
 

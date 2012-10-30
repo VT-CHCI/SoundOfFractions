@@ -47,14 +47,14 @@ define([
     reconfigure: function(signature) {
       this.collection.reset();
       
-      for (var i = 0; i < signature*2; i++) {
+      for (var i = 0; i < signature; i++) {
         this.collection.add();
       }
 
       this.render();
 
       var px = 100/$('.measure').css('width').replace(/[^-\d\.]/g, '');
-      var beatWidth = (100 - ((signature*2+1)*px))/(signature*2);
+      var beatWidth = (100 - ((signature*1+1)*px))/signature;
 
       $('.beat').css({
         'width' : beatWidth+'%'

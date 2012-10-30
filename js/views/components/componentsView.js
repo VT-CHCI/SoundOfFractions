@@ -25,7 +25,7 @@ define([
 
       this.measure = new BeatsCollection;
 
-      for (var i = 0; i < 8; i++) {
+      for (var i = 0; i < 4; i++) {
         this.measure.add();
       }
 
@@ -46,7 +46,7 @@ define([
 
       this.measure = new BeatsCollection;
 
-      for (var i = 0; i < 8; i++) {
+      for (var i = 0; i < 4; i++) {
         this.measure.add();
       } 
 
@@ -65,7 +65,7 @@ define([
 
       this.measure = new BeatsCollection;
 
-      for (var i = 0; i < 8; i++) {
+      for (var i = 0; i < 4; i++) {
         this.measure.add();
       }
 
@@ -219,7 +219,7 @@ define([
           }, this);
 
           if (val) {
-            denominator = val*2;
+            denominator = val;
           } else {
             denominator = measure.get('beats').models.length;
           }

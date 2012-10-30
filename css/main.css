@@ -29,7 +29,7 @@
 }
 
 .beat {
-  width: 12.17296511627907%;
+  width: 24.583333333333332%;
   height: 15px;
 	float: left;
 	border-top: 1px solid;
@@ -46,7 +46,7 @@
 	padding: 5px;
 	display: inline-block;
   margin-bottom: 5px;
-  width: 344px;
+  width: 300px;
 }
 
 .measure .title {
