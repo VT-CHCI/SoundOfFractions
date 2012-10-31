@@ -7,8 +7,9 @@ define([
   'collections/beats',
   'views/beats/beatView',
   'text!templates/beats/beats.html',
-  'app/dispatch'
-], function($, _, Backbone, BeatsCollection, BeatView, beatsTemplate, dispatch){
+  'app/dispatch',
+  'app/state'
+], function($, _, Backbone, BeatsCollection, BeatView, beatsTemplate, dispatch, state){
   return Backbone.View.extend({
     el: $('.measure'),
 
@@ -22,6 +23,7 @@ define([
 
       dispatch.on('signatureChange.event', this.reconfigure, this);
       this.render();
+      this.reconfigure(state.get('signature'));
     },
 
     render: function(){
