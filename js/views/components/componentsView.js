@@ -9,8 +9,9 @@ define([
   'collections/components',
   'views/measures/measuresView',
   'text!templates/components/components.html',
-  'app/dispatch'
-], function($, _, Backbone, BeatsCollection, MeasuresCollection, componentsCollection, MeasuresView, componentsTemplate, dispatch){
+  'app/dispatch',
+  'app/state'
+], function($, _, Backbone, BeatsCollection, MeasuresCollection, componentsCollection, MeasuresView, componentsTemplate, dispatch, state){
   var componentsView = Backbone.View.extend({
     el: $('#drum-kit'),
 
@@ -39,7 +40,6 @@ define([
         img: 'ofAsnare',
         mute: false,
         sample: 'samples/808_sd.ogg',
-        tempo: 120,
         measures: this.component,
         active: true
       });
@@ -58,7 +58,6 @@ define([
         img: 'ofAhighHat',
         mute: true,
         sample: 'samples/808_chh.ogg',
-        tempo: 120,
         measures: this.component,
         active: true
       });
@@ -77,7 +76,6 @@ define([
         img: 'ofAkickDrum',
         mute: true,
         sample: 'samples/808_bd.ogg',
-        tempo: 120,
         measures: this.component,
         active: false
       });
@@ -110,7 +108,8 @@ define([
 
 
     playLoop: function(){
-      var tempo = 0;
+      var tempo = state.get('tempo');
+      console.log(tempo);
       var numBeats = 0;
       var i = 0;
 
@@ -119,7 +118,6 @@ define([
       var componentDurations = new Array();
       _.each(this.drumkit.models, function(component) {
         componentDurations[i] = new Array();
-        tempo = component.get('tempo');
 
         _.each(component.get('measures').models, function(measure) {
           numBeats = measure.get('beats').length;
@@ -233,6 +231,16 @@ define([
     },
 
     togglePlay: function(){
+      var maxMeasures = 0;
+      _.each(this.drumkit.models, function(component) {
+        console.log('maxMeasures = ' , component.get('measures').length);
+        if(maxMeasures < component.get('measures').length) {
+          maxMeasures = component.get('measures').length;
+        }
+      }, this);
+
+      var duration = 4 * 60 / state.get('tempo') * maxMeasures * 1000;
+      console.log(duration);
       if (this.intervalID) {
         clearInterval(this.intervalID);
         this.intervalID = null;
@@ -240,7 +248,7 @@ define([
       } else {
         this.intervalID = setInterval((function(self) {
         return function() {self.playLoop(); } } )(this),
-        2000);
+        duration);
         this.masterGainNode.gain.value = 1;
       }
     }

@@ -4,10 +4,11 @@ define([
   'underscore',
   'backbone',
   'views/home/homeView',
-  'views/slider/sliderView',
+  'views/slider/beatSliderView',
   'views/beatBars/beatBarsView',
-  'views/components/componentsView'
-], function($, _, Backbone, mainHomeView, sliderView, beatBarsView, componentsView){
+  'views/components/componentsView',
+  'views/slider/tempoSliderView'
+], function($, _, Backbone, mainHomeView, beatSliderView, beatBarsView, componentsView, tempoSliderView){
   var AppRouter = Backbone.Router.extend({
     routes: {
       // Default
@@ -16,9 +17,10 @@ define([
     defaultAction: function(actions){
       // We have no matching route, lets display the home page
       mainHomeView.render();
-      sliderView.render();
+      beatSliderView.render();
       beatBarsView.render();
       componentsView.render();
+      tempoSliderView.render();
     }
   });
 

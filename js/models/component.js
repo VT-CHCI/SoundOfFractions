@@ -9,7 +9,6 @@ define([
       img: 'ofAsnare',
       mute: false,
       sample: 'shhh',
-      tempo: 120,
       measures: measuresCollection,
       active: true
     },

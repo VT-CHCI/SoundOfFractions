@@ -1,17 +1,17 @@
-// Filename: views/slider/SliderView
+// Filename: views/slider/beatSliderView
 define([
   'jquery',
   'underscore',
   'backbone',
   'models/slider',
-  'text!templates/slider/slider.html',
+  'text!templates/slider/tempoSlider.html',
   'app/dispatch',
   'app/state'
 ], function($, _, Backbone, SliderModel, sliderTemplate, dispatch, state){
   var sliderModel = new SliderModel;
 
-  var SliderView = Backbone.View.extend({
-    el : $("#beat-pallet #slider"), // Specifies the DOM element which this view handles
+  var TempoSliderView = Backbone.View.extend({
+    el : $("#beat-pallet #tempo-slider"), // Specifies the DOM element which this view handles
 
     events : {
       "change" : "updateVal"  
@@ -21,13 +21,10 @@ define([
       var val = $(this.el).find($("input")).val();
 
       sliderModel.set({slidervalue : val});
-      $('#sig_val').text(val);
+      $('#tempo_val').text(val);
 
-      // var args = { };
-      // args[0] = val;
-
-      dispatch.trigger('signatureChange.event', val);
-      state.set({signature : val});
+      dispatch.trigger('tempoChange.event', val);
+      state.set({tempo : val});
     }, 
 
     render: function() {
@@ -35,5 +32,5 @@ define([
       return this;
     }
   });
-  return new SliderView();
+  return new TempoSliderView();
 });
