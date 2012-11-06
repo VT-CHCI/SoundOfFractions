@@ -207,7 +207,11 @@
 			"file": "index.html",
 			"settings":
 			{
+<<<<<<< HEAD
 				"buffer_size": 4266,
+=======
+				"buffer_size": 4242,
+>>>>>>> c56c960e6caab51bd6301b976a08ccf9cf488c52
 				"line_ending": "Windows"
 			}
 		},
@@ -215,7 +219,11 @@
 			"file": "js/views/components/componentsView.js",
 			"settings":
 			{
+<<<<<<< HEAD
 				"buffer_size": 7408,
+=======
+				"buffer_size": 7038,
+>>>>>>> c56c960e6caab51bd6301b976a08ccf9cf488c52
 				"line_ending": "Windows"
 			}
 		},
@@ -223,7 +231,11 @@
 			"file": "js/views/beatBars/beatBarsView.js",
 			"settings":
 			{
+<<<<<<< HEAD
 				"buffer_size": 2885,
+=======
+				"buffer_size": 2873,
+>>>>>>> c56c960e6caab51bd6301b976a08ccf9cf488c52
 				"line_ending": "Windows"
 			}
 		},
@@ -231,19 +243,31 @@
 			"file": "js/views/measures/measuresView.js",
 			"settings":
 			{
+<<<<<<< HEAD
 				"buffer_size": 2019,
+=======
+				"buffer_size": 1851,
+>>>>>>> c56c960e6caab51bd6301b976a08ccf9cf488c52
 				"line_ending": "Windows"
 			}
 		},
 		{
+<<<<<<< HEAD
 			"file": "css/main.css",
 			"settings":
 			{
 				"buffer_size": 1520,
+=======
+			"file": "/C/Users/Taylor/Documents/VIRGINIA TECH/workspace/Heapsort/testFileAscii",
+			"settings":
+			{
+				"buffer_size": 40960,
+>>>>>>> c56c960e6caab51bd6301b976a08ccf9cf488c52
 				"line_ending": "Windows"
 			}
 		},
 		{
+<<<<<<< HEAD
 			"file": "templates/components/components.html",
 			"settings":
 			{
@@ -296,6 +320,12 @@
 			"settings":
 			{
 				"buffer_size": 393,
+=======
+			"file": "js/views/slider/sliderView.js",
+			"settings":
+			{
+				"buffer_size": 850,
+>>>>>>> c56c960e6caab51bd6301b976a08ccf9cf488c52
 				"line_ending": "Windows"
 			}
 		}
@@ -344,9 +374,12 @@
 	},
 	"file_history":
 	[
+<<<<<<< HEAD
 		"/C/xampp/htdocs/VT-CHCI/MusicFractions/js/views/slider/sliderView.js",
 		"/C/Users/Taylor/Documents/VIRGINIA TECH/workspace/Heapsort/testFileAscii",
 		"/I/casper-rw",
+=======
+>>>>>>> c56c960e6caab51bd6301b976a08ccf9cf488c52
 		"/C/xampp/htdocs/VT-CHCI/MusicFractions/js/models/measure.js",
 		"/C/Users/Taylor/git/CS3724/submissionNumber",
 		"/C/xampp/htdocs/VT-CHCI/MusicFractions/index.html",
@@ -471,7 +504,14 @@
 		"/Users/scerbos/Desktop/knowledgebase-6-14-2012/app/views/papers/show.html.erb",
 		"/Applications/XAMPP/xamppfiles/htdocs/vizTest/_js/plugins.js",
 		"/Applications/XAMPP/xamppfiles/htdocs/vizTest/_css/style.css",
+<<<<<<< HEAD
 		"/Applications/XAMPP/xamppfiles/htdocs/vizTest/_css/fullcalendar.css"
+=======
+		"/Applications/XAMPP/xamppfiles/htdocs/vizTest/_css/fullcalendar.css",
+		"/Applications/XAMPP/xamppfiles/htdocs/vizTest/_css/screen.css",
+		"/Applications/XAMPP/xamppfiles/htdocs/test/sigmajs/sigmajs.sublime-project",
+		"/Applications/XAMPP/xamppfiles/htdocs/vizTest/css/screen.css"
+>>>>>>> c56c960e6caab51bd6301b976a08ccf9cf488c52
 	],
 	"find":
 	{
@@ -490,8 +530,11 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+<<<<<<< HEAD
 			"togglePlay",
 			"slider",
+=======
+>>>>>>> c56c960e6caab51bd6301b976a08ccf9cf488c52
 			"input",
 			"circle_collision",
 			"distance",
@@ -679,6 +722,10 @@
 	"groups":
 	[
 		{
+<<<<<<< HEAD
+=======
+			"selected": 4,
+>>>>>>> c56c960e6caab51bd6301b976a08ccf9cf488c52
 			"sheets":
 			[
 				{
@@ -686,15 +733,24 @@
 					"file": "index.html",
 					"settings":
 					{
+<<<<<<< HEAD
 						"buffer_size": 4266,
+=======
+						"buffer_size": 4242,
+>>>>>>> c56c960e6caab51bd6301b976a08ccf9cf488c52
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
+<<<<<<< HEAD
 								3363,
 								3363
+=======
+								2397,
+								2397
+>>>>>>> c56c960e6caab51bd6301b976a08ccf9cf488c52
 							]
 						],
 						"settings":
@@ -704,7 +760,11 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
+<<<<<<< HEAD
 						"translation.y": 1152.0,
+=======
+						"translation.y": 648.0,
+>>>>>>> c56c960e6caab51bd6301b976a08ccf9cf488c52
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -714,15 +774,24 @@
 					"file": "js/views/components/componentsView.js",
 					"settings":
 					{
+<<<<<<< HEAD
 						"buffer_size": 7408,
+=======
+						"buffer_size": 7038,
+>>>>>>> c56c960e6caab51bd6301b976a08ccf9cf488c52
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
+<<<<<<< HEAD
 								6640,
 								6640
+=======
+								0,
+								0
+>>>>>>> c56c960e6caab51bd6301b976a08ccf9cf488c52
 							]
 						],
 						"settings":
@@ -732,7 +801,11 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
+<<<<<<< HEAD
 						"translation.y": 4435.0,
+=======
+						"translation.y": 0.0,
+>>>>>>> c56c960e6caab51bd6301b976a08ccf9cf488c52
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -742,15 +815,24 @@
 					"file": "js/views/beatBars/beatBarsView.js",
 					"settings":
 					{
+<<<<<<< HEAD
 						"buffer_size": 2885,
+=======
+						"buffer_size": 2873,
+>>>>>>> c56c960e6caab51bd6301b976a08ccf9cf488c52
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
+<<<<<<< HEAD
 								385,
 								385
+=======
+								775,
+								836
+>>>>>>> c56c960e6caab51bd6301b976a08ccf9cf488c52
 							]
 						],
 						"settings":
@@ -770,15 +852,24 @@
 					"file": "js/views/measures/measuresView.js",
 					"settings":
 					{
+<<<<<<< HEAD
 						"buffer_size": 2019,
+=======
+						"buffer_size": 1851,
+>>>>>>> c56c960e6caab51bd6301b976a08ccf9cf488c52
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
+<<<<<<< HEAD
 								1347,
 								1347
+=======
+								1523,
+								1523
+>>>>>>> c56c960e6caab51bd6301b976a08ccf9cf488c52
 							]
 						],
 						"settings":
@@ -788,29 +879,46 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
+<<<<<<< HEAD
 						"translation.y": 486.0,
+=======
+						"translation.y": 33.0,
+>>>>>>> c56c960e6caab51bd6301b976a08ccf9cf488c52
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 4,
+<<<<<<< HEAD
 					"file": "css/main.css",
 					"settings":
 					{
 						"buffer_size": 1520,
+=======
+					"file": "/C/Users/Taylor/Documents/VIRGINIA TECH/workspace/Heapsort/testFileAscii",
+					"settings":
+					{
+						"buffer_size": 40960,
+>>>>>>> c56c960e6caab51bd6301b976a08ccf9cf488c52
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
+<<<<<<< HEAD
 								1232,
 								1232
+=======
+								17,
+								14
+>>>>>>> c56c960e6caab51bd6301b976a08ccf9cf488c52
 							]
 						],
 						"settings":
 						{
+<<<<<<< HEAD
 							"syntax": "Packages/CSS/CSS.tmLanguage",
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true
@@ -868,6 +976,9 @@
 							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true
+=======
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+>>>>>>> c56c960e6caab51bd6301b976a08ccf9cf488c52
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
@@ -876,6 +987,7 @@
 					"type": "text"
 				},
 				{
+<<<<<<< HEAD
 					"buffer": 7,
 					"file": "js/router.js",
 					"settings":
@@ -993,14 +1105,26 @@
 					"settings":
 					{
 						"buffer_size": 393,
+=======
+					"buffer": 5,
+					"file": "js/views/slider/sliderView.js",
+					"settings":
+					{
+						"buffer_size": 850,
+>>>>>>> c56c960e6caab51bd6301b976a08ccf9cf488c52
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
+<<<<<<< HEAD
 								259,
 								259
+=======
+								610,
+								610
+>>>>>>> c56c960e6caab51bd6301b976a08ccf9cf488c52
 							]
 						],
 						"settings":
