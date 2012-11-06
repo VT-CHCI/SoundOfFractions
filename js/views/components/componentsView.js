@@ -37,7 +37,7 @@ define([
 
       this.drumkit = componentsCollection.add({
         label: 'snare',
-        img: 'ofAsnare',
+        img: 'img/snare.png',
         mute: false,
         sample: 'samples/808_sd.ogg',
         measures: this.component,
@@ -55,7 +55,7 @@ define([
 
       this.drumkit = componentsCollection.add({
         label: 'highHat',
-        img: 'ofAhighHat',
+        img: 'img/hihat.png',
         mute: true,
         sample: 'samples/808_chh.ogg',
         measures: this.component,
@@ -73,7 +73,7 @@ define([
 
       this.drumkit = componentsCollection.add({
         label: 'kickDrum',
-        img: 'ofAkickDrum',
+        img: 'img/kick.png',
         mute: true,
         sample: 'samples/808_bd.ogg',
         measures: this.component,
