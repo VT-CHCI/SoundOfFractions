@@ -38,9 +38,12 @@ define([
       }, this);
 
       var measureCount = 1;
-      $('.number').each(function() {
-        $(this).text(measureCount);
-        measureCount++;
+      $('.component-container').each(function() {
+        $(this).find('.number').each(function() {
+          $(this).text(measureCount);
+          measureCount++;
+        });
+        measureCount = 1;
       });
 
       return this;

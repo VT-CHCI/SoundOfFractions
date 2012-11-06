@@ -207,7 +207,7 @@
 			"file": "index.html",
 			"settings":
 			{
-				"buffer_size": 4242,
+				"buffer_size": 4266,
 				"line_ending": "Windows"
 			}
 		},
@@ -215,7 +215,7 @@
 			"file": "js/views/components/componentsView.js",
 			"settings":
 			{
-				"buffer_size": 7038,
+				"buffer_size": 7408,
 				"line_ending": "Windows"
 			}
 		},
@@ -223,7 +223,7 @@
 			"file": "js/views/beatBars/beatBarsView.js",
 			"settings":
 			{
-				"buffer_size": 2873,
+				"buffer_size": 2885,
 				"line_ending": "Windows"
 			}
 		},
@@ -231,23 +231,71 @@
 			"file": "js/views/measures/measuresView.js",
 			"settings":
 			{
-				"buffer_size": 1851,
+				"buffer_size": 2019,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "/C/Users/Taylor/Documents/VIRGINIA TECH/workspace/Heapsort/testFileAscii",
+			"file": "css/main.css",
 			"settings":
 			{
-				"buffer_size": 40960,
+				"buffer_size": 1520,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "js/views/slider/sliderView.js",
+			"file": "templates/components/components.html",
 			"settings":
 			{
-				"buffer_size": 850,
+				"buffer_size": 264,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "js/app/state.js",
+			"settings":
+			{
+				"buffer_size": 378,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "js/router.js",
+			"settings":
+			{
+				"buffer_size": 887,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "js/views/slider/tempoSliderView.js",
+			"settings":
+			{
+				"buffer_size": 877,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "js/views/slider/beatSliderView.js",
+			"settings":
+			{
+				"buffer_size": 912,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "templates/slider/tempoSlider.html",
+			"settings":
+			{
+				"buffer_size": 115,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "js/models/component.js",
+			"settings":
+			{
+				"buffer_size": 393,
 				"line_ending": "Windows"
 			}
 		}
@@ -296,6 +344,9 @@
 	},
 	"file_history":
 	[
+		"/C/xampp/htdocs/VT-CHCI/MusicFractions/js/views/slider/sliderView.js",
+		"/C/Users/Taylor/Documents/VIRGINIA TECH/workspace/Heapsort/testFileAscii",
+		"/I/casper-rw",
 		"/C/xampp/htdocs/VT-CHCI/MusicFractions/js/models/measure.js",
 		"/C/Users/Taylor/git/CS3724/submissionNumber",
 		"/C/xampp/htdocs/VT-CHCI/MusicFractions/index.html",
@@ -420,10 +471,7 @@
 		"/Users/scerbos/Desktop/knowledgebase-6-14-2012/app/views/papers/show.html.erb",
 		"/Applications/XAMPP/xamppfiles/htdocs/vizTest/_js/plugins.js",
 		"/Applications/XAMPP/xamppfiles/htdocs/vizTest/_css/style.css",
-		"/Applications/XAMPP/xamppfiles/htdocs/vizTest/_css/fullcalendar.css",
-		"/Applications/XAMPP/xamppfiles/htdocs/vizTest/_css/screen.css",
-		"/Applications/XAMPP/xamppfiles/htdocs/test/sigmajs/sigmajs.sublime-project",
-		"/Applications/XAMPP/xamppfiles/htdocs/vizTest/css/screen.css"
+		"/Applications/XAMPP/xamppfiles/htdocs/vizTest/_css/fullcalendar.css"
 	],
 	"find":
 	{
@@ -442,6 +490,8 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"togglePlay",
+			"slider",
 			"input",
 			"circle_collision",
 			"distance",
@@ -629,7 +679,6 @@
 	"groups":
 	[
 		{
-			"selected": 4,
 			"sheets":
 			[
 				{
@@ -637,15 +686,15 @@
 					"file": "index.html",
 					"settings":
 					{
-						"buffer_size": 4242,
+						"buffer_size": 4266,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2397,
-								2397
+								3363,
+								3363
 							]
 						],
 						"settings":
@@ -655,7 +704,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 648.0,
+						"translation.y": 1152.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -665,15 +714,15 @@
 					"file": "js/views/components/componentsView.js",
 					"settings":
 					{
-						"buffer_size": 7038,
+						"buffer_size": 7408,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								6640,
+								6640
 							]
 						],
 						"settings":
@@ -683,7 +732,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 4435.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -693,15 +742,15 @@
 					"file": "js/views/beatBars/beatBarsView.js",
 					"settings":
 					{
-						"buffer_size": 2873,
+						"buffer_size": 2885,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								775,
-								836
+								385,
+								385
 							]
 						],
 						"settings":
@@ -721,15 +770,15 @@
 					"file": "js/views/measures/measuresView.js",
 					"settings":
 					{
-						"buffer_size": 1851,
+						"buffer_size": 2019,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1523,
-								1523
+								1347,
+								1347
 							]
 						],
 						"settings":
@@ -739,30 +788,58 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 33.0,
+						"translation.y": 486.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 4,
-					"file": "/C/Users/Taylor/Documents/VIRGINIA TECH/workspace/Heapsort/testFileAscii",
+					"file": "css/main.css",
 					"settings":
 					{
-						"buffer_size": 40960,
+						"buffer_size": 1520,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								17,
-								14
+								1232,
+								1232
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/Text/Plain text.tmLanguage"
+							"syntax": "Packages/CSS/CSS.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1332.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "templates/components/components.html",
+					"settings":
+					{
+						"buffer_size": 264,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								57,
+								57
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage"
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
@@ -771,19 +848,159 @@
 					"type": "text"
 				},
 				{
-					"buffer": 5,
-					"file": "js/views/slider/sliderView.js",
+					"buffer": 6,
+					"file": "js/app/state.js",
 					"settings":
 					{
-						"buffer_size": 850,
+						"buffer_size": 378,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								610,
-								610
+								339,
+								339
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "js/router.js",
+					"settings":
+					{
+						"buffer_size": 887,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								201,
+								201
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 72.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "js/views/slider/tempoSliderView.js",
+					"settings":
+					{
+						"buffer_size": 877,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								154,
+								154
+							]
+						],
+						"settings":
+						{
+							"auto_name": "",
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 36.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 9,
+					"file": "js/views/slider/beatSliderView.js",
+					"settings":
+					{
+						"buffer_size": 912,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								302,
+								302
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 72.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 10,
+					"file": "templates/slider/tempoSlider.html",
+					"settings":
+					{
+						"buffer_size": 115,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								111,
+								111
+							]
+						],
+						"settings":
+						{
+							"auto_name": "",
+							"syntax": "Packages/HTML/HTML.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 11,
+					"file": "js/models/component.js",
+					"settings":
+					{
+						"buffer_size": 393,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								259,
+								259
 							]
 						],
 						"settings":
