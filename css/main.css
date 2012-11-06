@@ -1,0 +1,105 @@
+
+
+/* ==========================================================================
+   Author's custom styles
+   ========================================================================== */
+
+#slider input {
+	width: 100%;
+}
+
+.beat-bar {
+	height: 25px;
+	background: red;
+	text-align: center;
+	border: 1px solid grey;
+	margin: 5px 0;
+}
+
+.OFF {
+  width: 100%;
+  height: 100%;
+	background: red;
+}
+
+.ON {
+  width: 100%;
+  height: 100%;
+	background: blue;
+}
+
+.beat {
+  width: 24.583333333333332%;
+  height: 15px;
+	float: left;
+	border-top: 1px solid;
+  border-bottom: 1px solid;
+  border-left: 1px solid;
+}
+
+.beat:last-of-type {
+  border-right: 1px solid;
+}
+
+.measure {
+	border: solid 1px grey;
+	padding: 5px;
+	display: inline-block;
+  margin-bottom: 5px;
+  width: 300px;
+}
+
+.measure .title {
+	clear: both;
+	display: block;
+	text-align: center;
+	margin: 0 0 5px 0;
+}
+
+.measure .title .delete {
+	color: red;
+}
+
+.addMeasure {
+	color: green;
+	display: inline-block;
+	vertical-align: bottom;
+	padding: 0 5px;
+	font-size: 30px;
+}
+
+.component-image {
+  width: 70px;
+  float: left;
+  margin: 10px;
+}
+
+.component {
+  min-height: 50px;
+  width: 85%;
+}
+
+.component-container {
+  position: relative;
+}
+
+.component-container .count {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 50px;
+  height: 50px;
+  width: 7%;
+  text-align: center;
+}
+
+.component-container .count .numerator {
+  display: block;
+  margin: 15px auto 15px auto;
+  border-bottom: 4px solid;
+  padding-bottom: 12px;
+}
+
+.component-container .count .denominator {
+
+}
