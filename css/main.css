@@ -10,7 +10,7 @@
 
 .beat-bar {
 	height: 25px;
-	background: red;
+	background: #FF9700;
 	text-align: center;
 	border: 1px solid grey;
 	margin: 5px 0;
@@ -19,18 +19,18 @@
 .OFF {
   width: 100%;
   height: 100%;
-	background: red;
+	background: #679ED2;
 }
 
 .ON {
   width: 100%;
   height: 100%;
-	background: blue;
+	background: #FF9700;
 }
 
 .beat {
   width: 24.583333333333332%;
-  height: 15px;
+  height: 25px;
 	float: left;
 	border-top: 1px solid;
   border-bottom: 1px solid;
@@ -43,7 +43,8 @@
 
 .measure {
 	border: solid 1px grey;
-	padding: 5px;
+  border-radius: 3px;
+	padding: 0 5px 5px 5px;
 	display: inline-block;
   margin-bottom: 5px;
   width: 300px;
@@ -53,11 +54,16 @@
 	clear: both;
 	display: block;
 	text-align: center;
-	margin: 0 0 5px 0;
 }
 
 .measure .title .delete {
 	color: red;
+  cursor: pointer;
+}
+
+.measure .title .delete:hover {
+  cursor: pointer;
+  font-weight: bold;
 }
 
 .addMeasure {
@@ -66,6 +72,11 @@
 	vertical-align: bottom;
 	padding: 0 5px;
 	font-size: 30px;
+  cursor: pointer;
+}
+
+.addMeasure:hover {
+  font-weight: bold;
 }
 
 .component-image {
@@ -102,4 +113,34 @@
 
 .component-container .count .denominator {
 
+}
+
+.control {
+  position: absolute;
+  top: 50px;
+  font-size: 45px;
+  font-weight: bold;
+  left: 53px;
+  cursor: pointer;
+}
+
+.unmute {
+  color: rgba(5, 5, 5, .25);
+}
+
+.unmute:hover {
+  color: rgba(255, 0, 0, 0.75);
+}
+
+.mute {
+  color: rgba(255, 0, 0, 1);
+  border: 2px solid red;
+  padding: 11px 3px;
+  top: 39px;
+  left: 47px;
+}
+
+.mute:hover {
+  color: rgba(255, 0, 0, 0.5);
+  border: 2px solid rgba(255, 0, 0, 0.5);
 }

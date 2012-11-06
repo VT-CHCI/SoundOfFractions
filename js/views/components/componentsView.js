@@ -7,16 +7,16 @@ define([
   'collections/beats',
   'collections/measures',
   'collections/components',
-  'views/measures/measuresView',
+  'views/components/componentView',
   'text!templates/components/components.html',
   'app/dispatch',
   'app/state'
-], function($, _, Backbone, BeatsCollection, MeasuresCollection, componentsCollection, MeasuresView, componentsTemplate, dispatch, state){
+], function($, _, Backbone, BeatsCollection, MeasuresCollection, componentsCollection, ComponentView, componentsTemplate, dispatch, state){
   var componentsView = Backbone.View.extend({
     el: $('#drum-kit'),
 
     events : {
-      'click img' : 'togglePlay'
+
     },
 
     initialize: function(){
@@ -25,11 +25,11 @@ define([
       this.masterGainNode = this.context.createGainNode();
 
       ///////Create Gain Nodes      /////////////
-      this.snareGainNode = this.context.createGainNode();
-      this.snareGainNode.gain.value = 1;
-      this.hihatGainNode = this.context.createGainNode();
-      this.hihatGainNode.gain.value = 0.5;
-      this.kickGainNode = this.context.createGainNode();
+      this.gainNodeList = new Array();
+
+      for (var i = 0; i < 3; i++) {
+        this.gainNodeList[i] = this.context.createGainNode();
+      };
       //////////////////////////////////////////
 
       this.measure = new BeatsCollection;
@@ -56,7 +56,7 @@ define([
 
       for (var i = 0; i < 4; i++) {
         this.measure.add();
-      } 
+      }
 
       this.component = new MeasuresCollection;
       this.component.add({beats: this.measure});
@@ -87,13 +87,16 @@ define([
         measures: this.component,
         active: false
       });
-      
+
       //dispatch.on('signatureChange.event', this.reconfigure, this);
 
       this.intervalID = null; //time is a function of measures and tempo (4 * 60/tempo * measures)
 
       dispatch.on('beatClicked.event', this.recalculateFraction, this)
       dispatch.on('signatureChange.event', this.recalculateFraction, this)
+
+       _.bindAll(this);
+          $(window).bind('keyup', this.togglePlay);
     },
 
     render: function(){
@@ -105,7 +108,7 @@ define([
         var compiledTemplate = _.template( componentsTemplate, {component: component} );
         $(this.el).append( compiledTemplate );
 
-        new MeasuresView({collection:component.get('measures'), el:'#component'+component.cid});
+        new ComponentView({collection:component, el:'#component-container'+component.cid, gainNode:this.gainNodeList[counter]});
         counter++;
       }, this);
 
@@ -117,7 +120,7 @@ define([
 
     playLoop: function(){
       var tempo = state.get('tempo');
-      console.log(tempo);
+      // console.log(tempo);
       var numBeats = 0;
       var i = 0;
 
@@ -151,21 +154,13 @@ define([
     },
 
     playSound: function(durations){
-      //console.log('play sound', durations);
+      console.log('play sound', durations);
       var componentToPlay = 0;
       var startTime = this.context.currentTime; //this is important (check docs for explination)
 
       _.each(durations, function(duration) {
         _.each(duration, function(time) {
-          if(componentToPlay == 0) {
-            play(this.context, this.bufferList[componentToPlay], startTime+time, this.masterGainNode, this.snareGainNode);
-          }
-          else if(componentToPlay == 1) {
-            play(this.context, this.bufferList[componentToPlay], startTime+time, this.masterGainNode, this.hihatGainNode);            
-          }
-          else if(componentToPlay == 2) {
-            play(this.context, this.bufferList[componentToPlay], startTime+time, this.masterGainNode, this.kickGainNode);                        
-          }
+          play(this.context, this.bufferList[componentToPlay], startTime+time, this.masterGainNode, this.gainNodeList[componentToPlay]);
         }, this);
         componentToPlay++;
       }, this);
@@ -176,6 +171,7 @@ define([
         var source = context.createBufferSource();
         source.buffer = buffer;
         //source.connect(context.destination);
+        console.log(specGainNode.gain.value);
         source.connect(specGainNode);
         specGainNode.connect(gainNode);
         gainNode.connect(context.destination);
@@ -213,7 +209,7 @@ define([
       }
 
       request.send();
-    }, 
+    },
 
     recalculateFraction: function(val){
       var numerator = 0;
@@ -226,7 +222,7 @@ define([
               if (val) {
                 numerator = 0;
               } else {
-                numerator++;  
+                numerator++;
               }
             }
           }, this);
@@ -245,26 +241,28 @@ define([
       }, this);
     },
 
-    togglePlay: function(){
-      var maxMeasures = 0;
-      _.each(this.drumkit.models, function(component) {
-        console.log('maxMeasures = ' , component.get('measures').length);
-        if(maxMeasures < component.get('measures').length) {
-          maxMeasures = component.get('measures').length;
-        }
-      }, this);
+    togglePlay: function(e){
+      if (e.keyCode == 32) {
+        var maxMeasures = 0;
+        _.each(this.drumkit.models, function(component) {
+          // console.log('maxMeasures = ' , component.get('measures').length);
+          if(maxMeasures < component.get('measures').length) {
+            maxMeasures = component.get('measures').length;
+          }
+        }, this);
 
-      var duration = 4 * 60 / state.get('tempo') * maxMeasures * 1000;
-      console.log(duration);
-      if (this.intervalID) {
-        clearInterval(this.intervalID);
-        this.intervalID = null;
-        this.masterGainNode.gain.value = 0;
-      } else {
-        this.intervalID = setInterval((function(self) {
-        return function() {self.playLoop(); } } )(this),
-        duration);
-        this.masterGainNode.gain.value = 1;
+        var duration = 4 * 60 / state.get('tempo') * maxMeasures * 1000;
+        // console.log('duration: ', duration);
+        if (this.intervalID) {
+          clearInterval(this.intervalID);
+          this.intervalID = null;
+          this.masterGainNode.gain.value = 0;
+        } else {
+          this.intervalID = setInterval((function(self) {
+          return function() {self.playLoop(); } } )(this),
+          duration);
+          this.masterGainNode.gain.value = 1;
+        }
       }
     }
   });
