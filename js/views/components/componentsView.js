@@ -24,6 +24,14 @@ define([
       this.bufferList = new Array();
       this.masterGainNode = this.context.createGainNode();
 
+      ///////Create Gain Nodes      /////////////
+      this.snareGainNode = this.context.createGainNode();
+      this.snareGainNode.gain.value = 1;
+      this.hihatGainNode = this.context.createGainNode();
+      this.hihatGainNode.gain.value = 0.5;
+      this.kickGainNode = this.context.createGainNode();
+      //////////////////////////////////////////
+
       this.measure = new BeatsCollection;
 
       for (var i = 0; i < 4; i++) {
@@ -149,21 +157,28 @@ define([
 
       _.each(durations, function(duration) {
         _.each(duration, function(time) {
-          play(this.context, this.bufferList[componentToPlay], startTime+time, this.masterGainNode);
+          if(componentToPlay == 0) {
+            play(this.context, this.bufferList[componentToPlay], startTime+time, this.masterGainNode, this.snareGainNode);
+          }
+          else if(componentToPlay == 1) {
+            play(this.context, this.bufferList[componentToPlay], startTime+time, this.masterGainNode, this.hihatGainNode);            
+          }
+          else if(componentToPlay == 2) {
+            play(this.context, this.bufferList[componentToPlay], startTime+time, this.masterGainNode, this.kickGainNode);                        
+          }
         }, this);
         componentToPlay++;
       }, this);
 
-      function play(context, buffer, time, gainNode) {
+      function play(context, buffer, time, gainNode, specGainNode) {
         //console.log(startTime);
         //console.log(this.audioSources);
-
         var source = context.createBufferSource();
         source.buffer = buffer;
         //source.connect(context.destination);
-        source.connect(gainNode);
+        source.connect(specGainNode);
+        specGainNode.connect(gainNode);
         gainNode.connect(context.destination);
-
         source.noteOn(time);
       }
 
