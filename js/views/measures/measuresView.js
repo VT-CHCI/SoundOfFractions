@@ -56,7 +56,9 @@ define([
       for (var i = 0; i < state.get('signature'); i++) {
         this.measure.add();
       }
-
+      ///////Temporary fix///////
+      $(this.el).parent().find('.numerator').text(0);
+      //////////////////////////////////
       this.component.add({beats: this.measure});
       this.render();
     },
@@ -70,7 +72,9 @@ define([
 
       var model = this.component.getByCid($(ev.target).parents('.measure').attr('id').replace('measure',''));
       this.component.remove(model);
-
+      ///////Temporary fix///////
+      $(this.el).parent().find('.numerator').text(0);
+      /////////////////////////////
       this.render();
     }
   });
