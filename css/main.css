@@ -100,7 +100,7 @@
 
 .component-container .count {
   position: absolute;
-  top: 0;
+  top: 30px;
   right: 0;
   font-size: 50px;
   height: 50px;
@@ -121,7 +121,7 @@
 
 .control {
   position: absolute;
-  top: 50px;
+  top: 90px;
   font-size: 45px;
   font-weight: bold;
   left: 53px;
@@ -140,7 +140,7 @@
   color: rgba(255, 0, 0, 1);
   border: 2px solid red;
   padding: 11px 3px;
-  top: 39px;
+  top: 79px;
   left: 47px;
 }
 
@@ -171,7 +171,7 @@
 }
 
 .pause {
-  background:url("../img/playStop.png") -100px 0 no-repeat;
+  background:url("../img/playStop.png") 100% 0 no-repeat;
 }
 
 #visual-beats {
