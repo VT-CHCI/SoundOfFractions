@@ -9,7 +9,7 @@ define([
     el: $('.beat'),
 
     events : {
-      'click' : 'toggle'  
+      'click' : 'toggle'
     },
 
     initialize: function(options){
@@ -25,12 +25,12 @@ define([
 
     render: function(){
       if (this.model.get("selected"))
-        $(this.el).html('<div class="ON"></div>');
+        $(this.el).html('<div class="ON"><div class="animated-beat"></div></div>');
       else
-        $(this.el).html('<div class="OFF"></div>');
+        $(this.el).html('<div class="OFF"><div class="animated-beat"></div></div>');
 
       return this;
-    }, 
+    },
 
     toggle: function(){
       var bool = this.model.get("selected");
