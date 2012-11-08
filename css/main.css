@@ -157,3 +157,23 @@
   left: 0;
   position: absolute;
 }
+
+#transport {
+  width: 100px;
+  height: 100px;
+  padding-bottom: 15px;
+  margin: 0 auto;
+  cursor: pointer;
+}
+
+.play {
+  background:url("../img/playStop.png") 0 0 no-repeat;
+}
+
+.pause {
+  background:url("../img/playStop.png") -100px 0 no-repeat;
+}
+
+#visual-beats {
+  height: 155px;
+}
