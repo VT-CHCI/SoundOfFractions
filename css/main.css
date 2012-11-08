@@ -41,6 +41,10 @@
   border-right: 1px solid;
 }
 
+.beat > div {
+  position: relative;
+}
+
 .measure {
 	border: solid 1px grey;
   border-radius: 3px;
@@ -143,4 +147,13 @@
 .mute:hover {
   color: rgba(255, 0, 0, 0.5);
   border: 2px solid rgba(255, 0, 0, 0.5);
+}
+
+.animated-beat {
+  height: 100%;
+  width: 100%;
+  background: red;
+  top: 0;
+  left: 0;
+  position: absolute;
 }

@@ -264,6 +264,41 @@ define([
           this.masterGainNode.gain.value = 1;
         }
       }
+
+      if (e.keyCode == 88) {
+        function animate (targetDiv) {
+          targetDiv.css('background-color', targetDiv.parent().css('background-color'));
+          targetDiv.animate({
+            width: '+=5',
+            left: '-=2',
+            height: '+=20',
+            top: '-=10',
+            'border-width':'1px'
+          }, 100, function() {
+            targetDiv.fadeOut();
+            targetDiv.css({'width':'', 'height':'', 'top': '', 'left' : '', 'border' : ''});
+            targetDiv.fadeIn();
+          });
+        };
+
+        // $('.component').each ( function(){
+        //   $(this).find('.beat').each( function() {
+        //     var beat = $(this);
+        //     setTimeout( animate(beat.find('.animated-beat')), 500);
+        //   });
+        // });
+
+        var counter = $('.beat').length-1;
+
+        setInterval(function() {
+          animate($('.beat').eq(counter).find('.animated-beat'));
+          if (counter != 0)
+            counter --;
+          else
+            counter = $('.beat').length-1;
+          console.log(counter);
+        }, 500);
+      }
     }
   });
   return new componentsView();
