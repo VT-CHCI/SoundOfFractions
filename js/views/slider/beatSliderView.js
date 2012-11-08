@@ -14,7 +14,7 @@ define([
     el : $("#beat-pallet #slider"), // Specifies the DOM element which this view handles
 
     events : {
-      "change" : "updateVal"  
+      "change" : "updateVal"
     },
 
     updateVal : function() {
@@ -23,12 +23,9 @@ define([
       sliderModel.set({slidervalue : val});
       $('#sig_val').text(val);
 
-      // var args = { };
-      // args[0] = val;
-
       dispatch.trigger('signatureChange.event', val);
       state.set({signature : val});
-    }, 
+    },
 
     render: function() {
       $(this.el).html(sliderTemplate);
