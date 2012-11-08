@@ -152,8 +152,8 @@
 .animated-beat {
   height: 100%;
   width: 100%;
-  background: red;
   top: 0;
   left: 0;
   position: absolute;
+  border: 0 solid black;
 }

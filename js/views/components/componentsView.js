@@ -88,12 +88,11 @@ define([
         active: false
       });
 
-      //dispatch.on('signatureChange.event', this.reconfigure, this);
-
       this.intervalID = null; //time is a function of measures and tempo (4 * 60/tempo * measures)
 
       dispatch.on('beatClicked.event', this.recalculateFraction, this)
       dispatch.on('signatureChange.event', this.recalculateFraction, this)
+
 
        _.bindAll(this);
           $(window).bind('keyup', this.togglePlay);
@@ -154,7 +153,7 @@ define([
     },
 
     playSound: function(durations){
-      console.log('play sound', durations);
+      console.log('Playing sound!');
       var componentToPlay = 0;
       var startTime = this.context.currentTime; //this is important (check docs for explination)
 
@@ -254,50 +253,21 @@ define([
         var duration = 4 * 60 / state.get('tempo') * maxMeasures * 1000;
         // console.log('duration: ', duration);
         if (this.intervalID) {
+          console.log('togglePlay: off');
+          dispatch.trigger('togglePlay.event', 'off');
+
           clearInterval(this.intervalID);
           this.intervalID = null;
           this.masterGainNode.gain.value = 0;
         } else {
+          console.log('togglePlay: on');
+          dispatch.trigger('togglePlay.event', 'on', duration, state.get('signature'), maxMeasures);
+
           this.intervalID = setInterval((function(self) {
           return function() {self.playLoop(); } } )(this),
           duration);
           this.masterGainNode.gain.value = 1;
         }
-      }
-
-      if (e.keyCode == 88) {
-        function animate (targetDiv) {
-          targetDiv.css('background-color', targetDiv.parent().css('background-color'));
-          targetDiv.animate({
-            width: '+=5',
-            left: '-=2',
-            height: '+=20',
-            top: '-=10',
-            'border-width':'1px'
-          }, 100, function() {
-            targetDiv.fadeOut();
-            targetDiv.css({'width':'', 'height':'', 'top': '', 'left' : '', 'border' : ''});
-            targetDiv.fadeIn();
-          });
-        };
-
-        // $('.component').each ( function(){
-        //   $(this).find('.beat').each( function() {
-        //     var beat = $(this);
-        //     setTimeout( animate(beat.find('.animated-beat')), 500);
-        //   });
-        // });
-
-        var counter = $('.beat').length-1;
-
-        setInterval(function() {
-          animate($('.beat').eq(counter).find('.animated-beat'));
-          if (counter != 0)
-            counter --;
-          else
-            counter = $('.beat').length-1;
-          console.log(counter);
-        }, 500);
       }
     }
   });
