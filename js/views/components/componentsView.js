@@ -47,7 +47,7 @@ define([
         label: 'Snare',
         img: 'img/snare.png',
         mute: false,
-        sample: 'samples/808_sd.ogg',
+        sample: 'samples/808_sd.m4a',
         measures: this.component,
         active: true
       });
@@ -65,7 +65,7 @@ define([
         label: 'Hi Hat',
         img: 'img/hihat.png',
         mute: true,
-        sample: 'samples/808_chh.ogg',
+        sample: 'samples/808_chh.m4a',
         measures: this.component,
         active: true
       });
@@ -83,7 +83,7 @@ define([
         label: 'Kick Drum',
         img: 'img/kick.png',
         mute: true,
-        sample: 'samples/808_bd.ogg',
+        sample: 'samples/808_bd.m4a',
         measures: this.component,
         active: false
       });
