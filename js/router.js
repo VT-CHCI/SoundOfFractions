@@ -7,8 +7,9 @@ define([
   'views/slider/beatSliderView',
   'views/beatBars/beatBarsView',
   'views/components/componentsView',
-  'views/slider/tempoSliderView'
-], function($, _, Backbone, mainHomeView, beatSliderView, beatBarsView, componentsView, tempoSliderView){
+  'views/slider/tempoSliderView',
+  'views/transport/transportView'
+], function($, _, Backbone, mainHomeView, beatSliderView, beatBarsView, componentsView, tempoSliderView, transportView){
   var AppRouter = Backbone.Router.extend({
     routes: {
       // Default
@@ -20,6 +21,7 @@ define([
       beatBarsView.render();
       componentsView.render();
       tempoSliderView.render();
+      transportView.render();
     }
   });
 
