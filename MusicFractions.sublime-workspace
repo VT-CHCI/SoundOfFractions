@@ -207,23 +207,18 @@
 			"file": "index.html",
 			"settings":
 			{
-<<<<<<< HEAD
 				"buffer_size": 4266,
-=======
-				"buffer_size": 4242,
->>>>>>> c56c960e6caab51bd6301b976a08ccf9cf488c52
 				"line_ending": "Windows"
 			}
 		},
 		{
+			"contents": "// Filename: views/beatBars/beatBarsView\ndefine([\n  'jquery',\n  'underscore',\n  'backbone',\n  // Pull in the Collection module from above\n  'collections/beats',\n  'collections/measures',\n  'collections/components',\n  'views/measures/measuresView',\n  'text!templates/components/components.html',\n  'app/dispatch',\n  'app/state'\n], function($, _, Backbone, BeatsCollection, MeasuresCollection, componentsCollection, MeasuresView, componentsTemplate, dispatch, state){\n  var componentsView = Backbone.View.extend({\n    el: $('#drum-kit'),\n\n    events : {\n      'click img' : 'togglePlay'\n    },\n\n    initialize: function(){\n      this.context = new webkitAudioContext();\n      this.bufferList = new Array();\n      this.masterGainNode = this.context.createGainNode();\n\n      ///////Create Gain Nodes      /////////////\n      this.snareGainNode = this.context.createGainNode();\n      this.snareGainNode.gain.value = 1;\n      this.hihatGainNode = this.context.createGainNode();\n      this.hihatGainNode.gain.value = 0.5;\n      this.kickGainNode = this.context.createGainNode();\n      //////////////////////////////////////////\n\n      this.measure = new BeatsCollection;\n\n      for (var i = 0; i < 4; i++) {\n        this.measure.add();\n      }\n\n      this.component = new MeasuresCollection;\n      this.component.add({beats: this.measure});\n\n      this.drumkit = componentsCollection;\n\n      this.drumkit = componentsCollection.add({\n        label: 'snare',\n        img: 'img/snare.png',\n        mute: false,\n        sample: 'samples/808_sd.ogg',\n        measures: this.component,\n        active: true\n      });\n\n      this.measure = new BeatsCollection;\n\n      for (var i = 0; i < 4; i++) {\n        this.measure.add();\n      } \n\n      this.component = new MeasuresCollection;\n      this.component.add({beats: this.measure});\n\n      this.drumkit = componentsCollection.add({\n        label: 'highHat',\n        img: 'img/hihat.png',\n        mute: true,\n        sample: 'samples/808_chh.ogg',\n        measures: this.component,\n        active: true\n      });\n\n      this.measure = new BeatsCollection;\n\n      for (var i = 0; i < 4; i++) {\n        this.measure.add();\n      }\n\n      this.component = new MeasuresCollection;\n      this.component.add({beats: this.measure});\n\n      this.drumkit = componentsCollection.add({\n        label: 'kickDrum',\n        img: 'img/kick.png',\n        mute: true,\n        sample: 'samples/808_bd.ogg',\n        measures: this.component,\n        active: false\n      });\n      \n      //dispatch.on('signatureChange.event', this.reconfigure, this);\n\n      this.intervalID = null; //time is a function of measures and tempo (4 * 60/tempo * measures)\n\n      dispatch.on('beatClicked.event', this.recalculateFraction, this)\n      dispatch.on('signatureChange.event', this.recalculateFraction, this)\n    },\n\n    render: function(){\n      $(this.el).html('');\n\n      var counter = 0;\n      _.each(this.drumkit.models, function(component) {\n        this.loadAudio(this.context, component.get('sample'), this.bufferList, counter );\n        var compiledTemplate = _.template( componentsTemplate, {component: component} );\n        $(this.el).append( compiledTemplate );\n\n        new MeasuresView({collection:component.get('measures'), el:'#component'+component.cid});\n        counter++;\n      }, this);\n\n      this.recalculateFraction();\n\n      return this;\n    },\n\n\n    playLoop: function(){\n      var tempo = state.get('tempo');\n      console.log(tempo);\n      var numBeats = 0;\n      var i = 0;\n\n      var deadSpace = 0;\n\n      var componentDurations = new Array();\n      _.each(this.drumkit.models, function(component) {\n        componentDurations[i] = new Array();\n\n        _.each(component.get('measures').models, function(measure) {\n          numBeats = measure.get('beats').length;\n          var beatDuration = 60 / tempo * 4 / numBeats;\n          _.each(measure.get('beats').models, function(beat) {\n            // console.log(beatDuration);\n\n            if (beat.get('selected')) {\n              componentDurations[i].push(deadSpace);\n              deadSpace = deadSpace + beatDuration;\n              //console.log(deadSpace);\n            } else {\n              deadSpace = deadSpace + beatDuration;\n            }\n\n          }, this);\n        }, this);\n        i++;\n        deadSpace = 0;\n      }, this);\n\n      this.playSound(componentDurations);\n    },\n\n    playSound: function(durations){\n      //console.log('play sound', durations);\n      var componentToPlay = 0;\n      var startTime = this.context.currentTime; //this is important (check docs for explination)\n\n      _.each(durations, function(duration) {\n        _.each(duration, function(time) {\n          if(componentToPlay == 0) {\n            play(this.context, this.bufferList[componentToPlay], startTime+time, this.masterGainNode, this.snareGainNode);\n          }\n          else if(componentToPlay == 1) {\n            play(this.context, this.bufferList[componentToPlay], startTime+time, this.masterGainNode, this.hihatGainNode);            \n          }\n          else if(componentToPlay == 2) {\n            play(this.context, this.bufferList[componentToPlay], startTime+time, this.masterGainNode, this.kickGainNode);                        \n          }\n        }, this);\n        componentToPlay++;\n      }, this);\n\n      function play(context, buffer, time, gainNode, specGainNode) {\n        //console.log(startTime);\n        //console.log(this.audioSources);\n        var source = context.createBufferSource();\n        source.buffer = buffer;\n        //source.connect(context.destination);\n        source.connect(specGainNode);\n        specGainNode.connect(gainNode);\n        gainNode.connect(context.destination);\n        source.noteOn(time);\n      }\n\n    },\n\n    loadAudio: function(context, url, bufferList, index){\n      console.log(\"Loading...\", url);\n      // Load buffer asynchronously\n      var request = new XMLHttpRequest();\n      request.open(\"GET\", url, true);\n      request.responseType = \"arraybuffer\";\n\n      request.onload = function() {\n        // Asynchronously decode the audio file data in request.response\n        context.decodeAudioData(\n          request.response,\n          function(buffer) {\n            if (!buffer) {\n              alert('error decoding file data: ' + url);\n              return;\n            }\n            bufferList[index] = buffer;\n          },\n          function(error) {\n            console.error('decodeAudioData error', error);\n          }\n        );\n      }\n\n      request.onerror = function() {\n        alert('BufferLoader: XHR error');\n      }\n\n      request.send();\n    }, \n\n    recalculateFraction: function(val){\n      var numerator = 0;\n      var denominator = 0;\n\n      _.each(this.drumkit.models, function(component) {\n        _.each(component.get('measures').models, function(measure) {\n          _.each(measure.get('beats').models, function(beat) {\n            if(beat.get('selected')) {\n              if (val) {\n                numerator = 0;\n              } else {\n                numerator++;  \n              }\n            }\n          }, this);\n\n          if (val) {\n            denominator = val;\n          } else {\n            denominator = measure.get('beats').models.length;\n          }\n        }, this);\n\n        $('#component'+component.cid).next().find('.numerator').text(numerator);\n        $('#component'+component.cid).next().find('.denominator').text(denominator);\n\n        numerator = 0;\n      }, this);\n    },\n\n    togglePlay: function(){\n      var maxMeasures = 0;\n      _.each(this.drumkit.models, function(component) {\n        console.log('maxMeasures = ' , component.get('measures').length);\n        if(maxMeasures < component.get('measures').length) {\n          maxMeasures = component.get('measures').length;\n        }\n      }, this);\n\n      var duration = 4 * 60 / state.get('tempo') * maxMeasures * 1000;\n      console.log(duration);\n      if (this.intervalID) {\n        clearInterval(this.intervalID);\n        this.intervalID = null;\n        this.masterGainNode.gain.value = 0;\n      } else {\n        this.intervalID = setInterval((function(self) {\n        return function() {self.playLoop(); } } )(this),\n        duration);\n        this.masterGainNode.gain.value = 1;\n      }\n    }\n  });\n  return new componentsView();\n});\n",
 			"file": "js/views/components/componentsView.js",
+			"file_size": 8562,
+			"file_write_time": 129966448812401919,
 			"settings":
 			{
-<<<<<<< HEAD
-				"buffer_size": 7408,
-=======
-				"buffer_size": 7038,
->>>>>>> c56c960e6caab51bd6301b976a08ccf9cf488c52
+				"buffer_size": 8290,
 				"line_ending": "Windows"
 			}
 		},
@@ -231,11 +226,7 @@
 			"file": "js/views/beatBars/beatBarsView.js",
 			"settings":
 			{
-<<<<<<< HEAD
 				"buffer_size": 2885,
-=======
-				"buffer_size": 2873,
->>>>>>> c56c960e6caab51bd6301b976a08ccf9cf488c52
 				"line_ending": "Windows"
 			}
 		},
@@ -243,35 +234,23 @@
 			"file": "js/views/measures/measuresView.js",
 			"settings":
 			{
-<<<<<<< HEAD
 				"buffer_size": 2019,
-=======
-				"buffer_size": 1851,
->>>>>>> c56c960e6caab51bd6301b976a08ccf9cf488c52
 				"line_ending": "Windows"
 			}
 		},
 		{
-<<<<<<< HEAD
 			"file": "css/main.css",
 			"settings":
 			{
-				"buffer_size": 1520,
-=======
-			"file": "/C/Users/Taylor/Documents/VIRGINIA TECH/workspace/Heapsort/testFileAscii",
-			"settings":
-			{
-				"buffer_size": 40960,
->>>>>>> c56c960e6caab51bd6301b976a08ccf9cf488c52
+				"buffer_size": 2118,
 				"line_ending": "Windows"
 			}
 		},
 		{
-<<<<<<< HEAD
 			"file": "templates/components/components.html",
 			"settings":
 			{
-				"buffer_size": 264,
+				"buffer_size": 356,
 				"line_ending": "Windows"
 			}
 		},
@@ -300,14 +279,6 @@
 			}
 		},
 		{
-			"file": "js/views/slider/beatSliderView.js",
-			"settings":
-			{
-				"buffer_size": 912,
-				"line_ending": "Windows"
-			}
-		},
-		{
 			"file": "templates/slider/tempoSlider.html",
 			"settings":
 			{
@@ -320,12 +291,14 @@
 			"settings":
 			{
 				"buffer_size": 393,
-=======
-			"file": "js/views/slider/sliderView.js",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "js/views/beats/beatsView.js",
 			"settings":
 			{
-				"buffer_size": 850,
->>>>>>> c56c960e6caab51bd6301b976a08ccf9cf488c52
+				"buffer_size": 1837,
 				"line_ending": "Windows"
 			}
 		}
@@ -374,12 +347,10 @@
 	},
 	"file_history":
 	[
-<<<<<<< HEAD
-		"/C/xampp/htdocs/VT-CHCI/MusicFractions/js/views/slider/sliderView.js",
 		"/C/Users/Taylor/Documents/VIRGINIA TECH/workspace/Heapsort/testFileAscii",
+		"/C/xampp/htdocs/VT-CHCI/MusicFractions/js/views/slider/beatSliderView.js",
+		"/C/xampp/htdocs/VT-CHCI/MusicFractions/js/views/slider/sliderView.js",
 		"/I/casper-rw",
-=======
->>>>>>> c56c960e6caab51bd6301b976a08ccf9cf488c52
 		"/C/xampp/htdocs/VT-CHCI/MusicFractions/js/models/measure.js",
 		"/C/Users/Taylor/git/CS3724/submissionNumber",
 		"/C/xampp/htdocs/VT-CHCI/MusicFractions/index.html",
@@ -503,15 +474,7 @@
 		"/Users/scerbos/Code/knowledgebase/db/migrate/20120824210913_create_tasks.rb",
 		"/Users/scerbos/Desktop/knowledgebase-6-14-2012/app/views/papers/show.html.erb",
 		"/Applications/XAMPP/xamppfiles/htdocs/vizTest/_js/plugins.js",
-		"/Applications/XAMPP/xamppfiles/htdocs/vizTest/_css/style.css",
-<<<<<<< HEAD
-		"/Applications/XAMPP/xamppfiles/htdocs/vizTest/_css/fullcalendar.css"
-=======
-		"/Applications/XAMPP/xamppfiles/htdocs/vizTest/_css/fullcalendar.css",
-		"/Applications/XAMPP/xamppfiles/htdocs/vizTest/_css/screen.css",
-		"/Applications/XAMPP/xamppfiles/htdocs/test/sigmajs/sigmajs.sublime-project",
-		"/Applications/XAMPP/xamppfiles/htdocs/vizTest/css/screen.css"
->>>>>>> c56c960e6caab51bd6301b976a08ccf9cf488c52
+		"/Applications/XAMPP/xamppfiles/htdocs/vizTest/_css/style.css"
 	],
 	"find":
 	{
@@ -530,11 +493,8 @@
 		"case_sensitive": false,
 		"find_history":
 		[
-<<<<<<< HEAD
 			"togglePlay",
 			"slider",
-=======
->>>>>>> c56c960e6caab51bd6301b976a08ccf9cf488c52
 			"input",
 			"circle_collision",
 			"distance",
@@ -722,10 +682,6 @@
 	"groups":
 	[
 		{
-<<<<<<< HEAD
-=======
-			"selected": 4,
->>>>>>> c56c960e6caab51bd6301b976a08ccf9cf488c52
 			"sheets":
 			[
 				{
@@ -733,24 +689,15 @@
 					"file": "index.html",
 					"settings":
 					{
-<<<<<<< HEAD
 						"buffer_size": 4266,
-=======
-						"buffer_size": 4242,
->>>>>>> c56c960e6caab51bd6301b976a08ccf9cf488c52
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-<<<<<<< HEAD
 								3363,
 								3363
-=======
-								2397,
-								2397
->>>>>>> c56c960e6caab51bd6301b976a08ccf9cf488c52
 							]
 						],
 						"settings":
@@ -760,11 +707,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-<<<<<<< HEAD
-						"translation.y": 1152.0,
-=======
-						"translation.y": 648.0,
->>>>>>> c56c960e6caab51bd6301b976a08ccf9cf488c52
+						"translation.y": 900.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -774,24 +717,15 @@
 					"file": "js/views/components/componentsView.js",
 					"settings":
 					{
-<<<<<<< HEAD
-						"buffer_size": 7408,
-=======
-						"buffer_size": 7038,
->>>>>>> c56c960e6caab51bd6301b976a08ccf9cf488c52
+						"buffer_size": 8290,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-<<<<<<< HEAD
-								6640,
-								6640
-=======
-								0,
-								0
->>>>>>> c56c960e6caab51bd6301b976a08ccf9cf488c52
+								3206,
+								3252
 							]
 						],
 						"settings":
@@ -801,11 +735,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-<<<<<<< HEAD
-						"translation.y": 4435.0,
-=======
-						"translation.y": 0.0,
->>>>>>> c56c960e6caab51bd6301b976a08ccf9cf488c52
+						"translation.y": 481.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -815,24 +745,15 @@
 					"file": "js/views/beatBars/beatBarsView.js",
 					"settings":
 					{
-<<<<<<< HEAD
 						"buffer_size": 2885,
-=======
-						"buffer_size": 2873,
->>>>>>> c56c960e6caab51bd6301b976a08ccf9cf488c52
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-<<<<<<< HEAD
 								385,
 								385
-=======
-								775,
-								836
->>>>>>> c56c960e6caab51bd6301b976a08ccf9cf488c52
 							]
 						],
 						"settings":
@@ -852,24 +773,15 @@
 					"file": "js/views/measures/measuresView.js",
 					"settings":
 					{
-<<<<<<< HEAD
 						"buffer_size": 2019,
-=======
-						"buffer_size": 1851,
->>>>>>> c56c960e6caab51bd6301b976a08ccf9cf488c52
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-<<<<<<< HEAD
-								1347,
-								1347
-=======
-								1523,
-								1523
->>>>>>> c56c960e6caab51bd6301b976a08ccf9cf488c52
+								548,
+								548
 							]
 						],
 						"settings":
@@ -879,46 +791,29 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-<<<<<<< HEAD
-						"translation.y": 486.0,
-=======
-						"translation.y": 33.0,
->>>>>>> c56c960e6caab51bd6301b976a08ccf9cf488c52
+						"translation.y": 18.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 4,
-<<<<<<< HEAD
 					"file": "css/main.css",
 					"settings":
 					{
-						"buffer_size": 1520,
-=======
-					"file": "/C/Users/Taylor/Documents/VIRGINIA TECH/workspace/Heapsort/testFileAscii",
-					"settings":
-					{
-						"buffer_size": 40960,
->>>>>>> c56c960e6caab51bd6301b976a08ccf9cf488c52
+						"buffer_size": 2118,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-<<<<<<< HEAD
-								1232,
-								1232
-=======
-								17,
-								14
->>>>>>> c56c960e6caab51bd6301b976a08ccf9cf488c52
+								0,
+								0
 							]
 						],
 						"settings":
 						{
-<<<<<<< HEAD
 							"syntax": "Packages/CSS/CSS.tmLanguage",
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true
@@ -934,15 +829,15 @@
 					"file": "templates/components/components.html",
 					"settings":
 					{
-						"buffer_size": 264,
+						"buffer_size": 356,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								57,
-								57
+								0,
+								0
 							]
 						],
 						"settings":
@@ -976,9 +871,6 @@
 							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true
-=======
-							"syntax": "Packages/Text/Plain text.tmLanguage"
->>>>>>> c56c960e6caab51bd6301b976a08ccf9cf488c52
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
@@ -987,7 +879,6 @@
 					"type": "text"
 				},
 				{
-<<<<<<< HEAD
 					"buffer": 7,
 					"file": "js/router.js",
 					"settings":
@@ -1027,8 +918,8 @@
 						"selection":
 						[
 							[
-								154,
-								154
+								110,
+								110
 							]
 						],
 						"settings":
@@ -1046,34 +937,6 @@
 				},
 				{
 					"buffer": 9,
-					"file": "js/views/slider/beatSliderView.js",
-					"settings":
-					{
-						"buffer_size": 912,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								302,
-								302
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 72.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 10,
 					"file": "templates/slider/tempoSlider.html",
 					"settings":
 					{
@@ -1084,8 +947,8 @@
 						"selection":
 						[
 							[
-								111,
-								111
+								115,
+								115
 							]
 						],
 						"settings":
@@ -1100,31 +963,47 @@
 					"type": "text"
 				},
 				{
-					"buffer": 11,
+					"buffer": 10,
 					"file": "js/models/component.js",
 					"settings":
 					{
 						"buffer_size": 393,
-=======
-					"buffer": 5,
-					"file": "js/views/slider/sliderView.js",
-					"settings":
-					{
-						"buffer_size": 850,
->>>>>>> c56c960e6caab51bd6301b976a08ccf9cf488c52
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-<<<<<<< HEAD
 								259,
 								259
-=======
-								610,
-								610
->>>>>>> c56c960e6caab51bd6301b976a08ccf9cf488c52
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 11,
+					"file": "js/views/beats/beatsView.js",
+					"settings":
+					{
+						"buffer_size": 1837,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1197,
+								1197
 							]
 						],
 						"settings":
@@ -1226,6 +1105,6 @@
 	"show_open_files": false,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 268.0,
+	"side_bar_width": 303.0,
 	"status_bar_visible": true
 }

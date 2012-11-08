@@ -27,7 +27,7 @@ define([
       }
 
       this.animationIntervalID = null;
-      dispatch.on('togglePlay.event', this.toggleAnimation, this)
+      dispatch.on('toggleAnimation.event', this.toggleAnimation, this)
 
       this.render();
     },

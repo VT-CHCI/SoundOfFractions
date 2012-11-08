@@ -92,10 +92,8 @@ define([
 
       dispatch.on('beatClicked.event', this.recalculateFraction, this)
       dispatch.on('signatureChange.event', this.recalculateFraction, this)
+      dispatch.on('togglePlay.event', this.togglePlay, this)
 
-
-       _.bindAll(this);
-          $(window).bind('keyup', this.togglePlay);
     },
 
     render: function(){
@@ -167,10 +165,10 @@ define([
       function play(context, buffer, time, gainNode, specGainNode) {
         //console.log(startTime);
         //console.log(this.audioSources);
-        var source = context.createBufferSource();
+        source = context.createBufferSource();
         source.buffer = buffer;
         //source.connect(context.destination);
-        console.log(specGainNode.gain.value);
+        // console.log(specGainNode.gain.value);
         source.connect(specGainNode);
         specGainNode.connect(gainNode);
         gainNode.connect(context.destination);
@@ -240,34 +238,35 @@ define([
       }, this);
     },
 
-    togglePlay: function(e){
-      if (e.keyCode == 32) {
-        var maxMeasures = 0;
-        _.each(this.drumkit.models, function(component) {
-          // console.log('maxMeasures = ' , component.get('measures').length);
-          if(maxMeasures < component.get('measures').length) {
-            maxMeasures = component.get('measures').length;
-          }
-        }, this);
-
-        var duration = 4 * 60 / state.get('tempo') * maxMeasures * 1000;
-        // console.log('duration: ', duration);
-        if (this.intervalID) {
-          console.log('togglePlay: off');
-          dispatch.trigger('togglePlay.event', 'off');
-
-          clearInterval(this.intervalID);
-          this.intervalID = null;
-          this.masterGainNode.gain.value = 0;
-        } else {
-          console.log('togglePlay: on');
-          dispatch.trigger('togglePlay.event', 'on', duration, state.get('signature'), maxMeasures);
-
-          this.intervalID = setInterval((function(self) {
-          return function() {self.playLoop(); } } )(this),
-          duration);
-          this.masterGainNode.gain.value = 1;
+    togglePlay: function(val){
+      // if (e.keyCode == 32) {
+      // }
+      var maxMeasures = 0;
+      _.each(this.drumkit.models, function(component) {
+        // console.log('maxMeasures = ' , component.get('measures').length);
+        if(maxMeasures < component.get('measures').length) {
+          maxMeasures = component.get('measures').length;
         }
+      }, this);
+
+      var duration = 4 * 60 / state.get('tempo') * maxMeasures * 1000;
+      // console.log('duration: ', duration);
+      if (this.intervalID) {
+        console.log('togglePlay: off');
+        dispatch.trigger('toggleAnimation.event', 'off');
+
+        clearInterval(this.intervalID);
+        this.intervalID = null;
+        this.masterGainNode.gain.value = 0;
+        console.log(this.sources);
+      } else {
+        console.log('togglePlay: on');
+        dispatch.trigger('toggleAnimation.event', 'on', duration, state.get('signature'), maxMeasures);
+
+        this.intervalID = setInterval((function(self) {
+        return function() {self.playLoop(); } } )(this),
+        duration);
+        this.masterGainNode.gain.value = 1;
       }
     }
   });
