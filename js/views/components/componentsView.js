@@ -258,7 +258,7 @@ define([
         clearInterval(this.intervalID);
         this.intervalID = null;
         this.masterGainNode.gain.value = 0;
-        console.log(this.sources);
+        // console.log(this.sources);
       } else {
         console.log('togglePlay: on');
         dispatch.trigger('toggleAnimation.event', 'on', duration, state.get('signature'), maxMeasures);
