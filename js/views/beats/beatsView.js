@@ -55,6 +55,7 @@ define([
       for (var i = 0; i < signature; i++) {
         this.collection.add();
       }
+        dispatch.trigger('stopRequest.event', 'off');
 
       this.render();
 
