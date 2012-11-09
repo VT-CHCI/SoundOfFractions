@@ -177,3 +177,7 @@
 #visual-beats {
   height: 155px;
 }
+
+.selected {
+  background-color: #C9D2D4;
+}
