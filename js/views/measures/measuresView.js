@@ -60,6 +60,9 @@ define([
       $(this.el).parent().find('.numerator').text(0);
       //////////////////////////////////
       this.component.add({beats: this.measure});
+
+      dispatch.trigger('stopRequest.event', 'off');
+
       this.render();
     },
 
@@ -75,6 +78,9 @@ define([
       ///////Temporary fix///////
       $(this.el).parent().find('.numerator').text(0);
       /////////////////////////////
+
+      dispatch.trigger('stopRequest.event', 'off');
+
       this.render();
     }
   });
