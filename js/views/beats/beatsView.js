@@ -50,21 +50,24 @@ define([
     },
 
     reconfigure: function(signature) {
-      this.collection.reset();
-      
-      for (var i = 0; i < signature; i++) {
-        this.collection.add();
-      }
+      if ($(this.el).parent().hasClass('selected')) {
         dispatch.trigger('stopRequest.event', 'off');
+        this.collection.reset();
 
-      this.render();
+        for (var i = 0; i < signature; i++) {
+          this.collection.add();
+        }
 
-      var px = 100/$('.measure').css('width').replace(/[^-\d\.]/g, '');
-      var beatWidth = (100 - ((signature*1+1)*px))/signature;
+        this.render();
 
-      $('.beat').css({
-        'width' : beatWidth+'%'
-      });
+        var px = 100/$('.measure').css('width').replace(/[^-\d\.]/g, '');
+        var beatWidth = (100 - ((signature*1+1)*px))/signature;
+
+        $(this.el).children('.beat').css({
+          'width' : beatWidth+'%'
+        });
+      }
+
     }
   });
 });

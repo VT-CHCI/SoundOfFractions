@@ -90,9 +90,9 @@ define([
 
       this.intervalID = null; //time is a function of measures and tempo (4 * 60/tempo * measures)
 
-      dispatch.on('beatClicked.event', this.recalculateFraction, this)
-      dispatch.on('signatureChange.event', this.recalculateFraction, this)
-      dispatch.on('togglePlay.event', this.togglePlay, this)
+      dispatch.on('beatClicked.event', this.recalculateFraction, this);
+      dispatch.on('signatureChange.event', this.recalculateFraction, this);
+      dispatch.on('togglePlay.event', this.togglePlay, this);
 
     },
 

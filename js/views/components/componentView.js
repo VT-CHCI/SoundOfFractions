@@ -13,7 +13,8 @@ define([
     el: $('.component'),
 
     events : {
-      'click .control' : 'toggleMute'
+      'click .control' : 'toggleMute',
+      'click' : 'select'
     },
 
     initialize: function(options){
@@ -51,6 +52,8 @@ define([
     },
 
     toggleAnimation: function(state, duration, signature, maxMeasures){
+      signature = $(this.el).find('.beat').length;
+
       duration = duration/signature/maxMeasures;
 
       function animate (targetDiv) {
@@ -95,6 +98,11 @@ define([
           }
         })(this), duration); //duration should be set to something else
       }
+    },
+
+    select: function(){
+      $('.component').removeClass('selected');
+      $('#component'+this.component.cid).addClass('selected');
     }
   });
 });
