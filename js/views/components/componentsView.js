@@ -225,7 +225,7 @@ define([
             }
           }, this);
 
-          if (val) {
+          if (val && $('#measure'+measure.cid).parent().hasClass('selected')) {
             denominator = val;
           } else {
             denominator = measure.get('beats').models.length;
