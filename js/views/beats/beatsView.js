@@ -24,6 +24,7 @@ define([
       dispatch.on('signatureChange.event', this.reconfigure, this);
       this.render();
       this.reconfigure(state.get('signature'));
+      dispatch.on('sliderChange.event', this.reconfigure, this);
     },
 
     render: function(){
