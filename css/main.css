@@ -123,6 +123,14 @@
 
 }
 
+.component-container .count .percent, .component-container .count .decimal {
+  margin-top: 65%;
+  display: block;
+  margin-left: -25px;
+  font-size: 40px;
+}
+
+
 .control {
   position: absolute;
   top: 90px;
@@ -185,3 +193,5 @@
 .selected {
   background-color: #C9D2D4;
 }
+
+

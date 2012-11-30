@@ -11,7 +11,8 @@ define([
       sample: 'shhh',
       measures: measuresCollection,
       active: true,
-      signature: 4
+      signature: 4,
+      representation: 'fraction'
     },
     initialize: function(){
     }
