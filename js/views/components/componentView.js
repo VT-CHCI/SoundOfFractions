@@ -28,14 +28,16 @@ define([
       }
 
       this.animationIntervalID = null;
-      dispatch.on('toggleAnimation.event', this.toggleAnimation, this)
-
+      dispatch.on('toggleAnimation.event', this.toggleAnimation, this);
+      dispatch.on('representation.event', this.cycleRep, this);
+      dispatch.on('beatClicked.event', this.recalculateFraction, this);
+      dispatch.on('signatureChange.event', this.recalculateFraction, this);
       this.render();
     },
 
     render: function(){
       new MeasuresView({collection:this.component.get('measures'), el:'#component'+this.component.cid});
-
+      this.recalculateFraction();
      return this;
     },
 
@@ -103,6 +105,37 @@ define([
     select: function(){
       $('.component').removeClass('selected');
       $('#component'+this.component.cid).addClass('selected');
+    },
+
+    cycleRep: function() {
+      $('.count')
+    },
+
+    recalculateFraction: function(val){
+      var numerator = 0;
+      var denominator = 0;
+
+      _.each(this.component.get('measures').models, function(measure) {
+        _.each(measure.get('beats').models, function(beat) {
+          if(beat.get('selected')) {
+            if (val) {
+              numerator = 0;
+            } else {
+              numerator++;
+            }
+          }
+        }, this);
+
+        if (val && $('#measure'+measure.cid).parent().hasClass('selected')) {
+          denominator = val;
+        } else {
+          denominator = measure.get('beats').models.length;
+        }
+      }, this);
+
+      $('#component'+this.component.cid).next().find('.numerator').text(numerator);
+      $('#component'+this.component.cid).next().find('.denominator').text(denominator);
+      this.component.set('signature', denominator);
     }
   });
 });

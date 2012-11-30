@@ -109,8 +109,6 @@ define([
 
       this.intervalID = null; //time is a function of measures and tempo (4 * 60/tempo * measures)
 
-      dispatch.on('beatClicked.event', this.recalculateFraction, this);
-      dispatch.on('signatureChange.event', this.recalculateFraction, this);
       dispatch.on('togglePlay.event', this.togglePlay, this);
 
     },
@@ -128,7 +126,6 @@ define([
         counter++;
       }, this);
 
-      this.recalculateFraction();
 
       return this;
     },
@@ -236,35 +233,7 @@ define([
       request.send();
     },
 
-    recalculateFraction: function(val){
-      var numerator = 0;
-      var denominator = 0;
-
-      _.each(this.drumkit.models, function(component) {
-        _.each(component.get('measures').models, function(measure) {
-          _.each(measure.get('beats').models, function(beat) {
-            if(beat.get('selected')) {
-              if (val) {
-                numerator = 0;
-              } else {
-                numerator++;
-              }
-            }
-          }, this);
-
-          if (val && $('#measure'+measure.cid).parent().hasClass('selected')) {
-            denominator = val;
-          } else {
-            denominator = measure.get('beats').models.length;
-          }
-        }, this);
-
-        $('#component'+component.cid).next().find('.numerator').text(numerator);
-        $('#component'+component.cid).next().find('.denominator').text(denominator);
-        component.set('signature', denominator);
-        numerator = 0;
-      }, this);
-    },
+    
 
     togglePlay: function(val){
       // if (e.keyCode == 32) {
