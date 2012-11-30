@@ -29,14 +29,14 @@ define([
 
       this.animationIntervalID = null;
       dispatch.on('toggleAnimation.event', this.toggleAnimation, this);
-      dispatch.on('representation.event', this.cycleRep, this);
+      dispatch.on('representation.event', this.recalculateFraction, this);
       dispatch.on('beatClicked.event', this.recalculateFraction, this);
       dispatch.on('signatureChange.event', this.recalculateFraction, this);
       this.render();
     },
 
     render: function(){
-      new MeasuresView({collection:this.component.get('measures'), el:'#component'+this.component.cid});
+      new MeasuresView({collection:this.component.get('measures'), parent: this.component, el:'#component'+this.component.cid});
       this.recalculateFraction();
      return this;
     },
@@ -56,17 +56,18 @@ define([
     toggleAnimation: function(state, duration, signature, maxMeasures){
       signature = $(this.el).find('.beat').length;
 
-      duration = duration/signature/maxMeasures;
+      duration = duration/signature;
 
       function animate (targetDiv) {
+        targetDiv.css({'width':'+=5', 'height':'+=20', 'top': '-=10', 'left' :'-=2'});
         targetDiv.css('background-color', targetDiv.parent().css('background-color'));
         targetDiv.css('border-width','1px');
         targetDiv.css('z-index','100');
         targetDiv.animate({
-          width: '+=5',
-          left: '-=2',
-          height: '+=20',
-          top: '-=10'
+          width: '-=5',
+          left: '+=2',
+          height: '-=20',
+          top: '+=10'
         }, duration, function() {
           targetDiv.hide();
           targetDiv.css({'width':'', 'height':'', 'top': '', 'left' : ''});
@@ -77,7 +78,7 @@ define([
       };
 
       var beats = $(this.el).find('.beat')
-      var counter = 0-(signature*maxMeasures-2);
+      var counter = 0-(signature-1);
       // var counter = 0;
 
       if (state == 'off') {
@@ -93,7 +94,7 @@ define([
           return function() {
             if (counter >= 0 && counter < beats.length)
               animate(beats.eq(counter).find('.animated-beat'));
-            if (counter < (signature*maxMeasures-1))
+            if (counter < (signature-1))
               counter ++;
             else
               counter = 0;
@@ -107,14 +108,15 @@ define([
       $('#component'+this.component.cid).addClass('selected');
     },
 
-    cycleRep: function() {
-      $('.count')
-    },
-
     recalculateFraction: function(val){
       var numerator = 0;
       var denominator = 0;
-
+      var state = this.component.get('representation');
+      if((val === 'fraction') || (val === 'decimal') || (val === 'percent')) {
+        state = val;
+        this.component.set('representation', state);
+        val = null;
+      }
       _.each(this.component.get('measures').models, function(measure) {
         _.each(measure.get('beats').models, function(beat) {
           if(beat.get('selected')) {
@@ -133,8 +135,26 @@ define([
         }
       }, this);
 
-      $('#component'+this.component.cid).next().find('.numerator').text(numerator);
-      $('#component'+this.component.cid).next().find('.denominator').text(denominator);
+      if(state === 'fraction') {
+        console.log($('#component-container'+this.component.cid + ' .count'));
+        $('#component-container'+this.component.cid + ' .count').html('<span class="numerator">4</span><span class="denominator">6</span>');
+
+
+        $('#component'+this.component.cid).next().find('.numerator').text(numerator);
+        $('#component'+this.component.cid).next().find('.denominator').text(denominator);
+      }
+      else if(state === 'decimal') {
+        $('#component-container'+this.component.cid + ' .count').html('<span class="decimal">0.0</span>');
+        var decimal = numerator / denominator;
+        $('#component'+this.component.cid).next().find('.decimal').text(decimal.toFixed(2));
+      }
+      else if(state === 'percent'){
+        $('#component-container'+this.component.cid + ' .count').html('<span class="percent">0%</span>');
+        var percent = numerator / denominator * 100;
+        $('#component'+this.component.cid).next().find('.percent').text(percent.toFixed(0) + '%');
+
+      }
+
       this.component.set('signature', denominator);
     }
   });

@@ -22,6 +22,7 @@ define([
     initialize: function(options){
       if (options) {
         this.component = options.collection;
+        this.parent = options.parent;
         this.el = options.el;
       } else {
         this.measure = new BeatsCollection;
@@ -57,11 +58,12 @@ define([
         this.measure.add();
       }
       ///////Temporary fix///////
-      $(this.el).parent().find('.numerator').text(0);
+      //$(this.el).parent().find('.numerator').text(0);
       //////////////////////////////////
       this.component.add({beats: this.measure});
 
       dispatch.trigger('stopRequest.event', 'off');
+      dispatch.trigger('signatureChange.event', this.parent.get('signature'));
 
       this.render();
     },
@@ -76,10 +78,11 @@ define([
       var model = this.component.getByCid($(ev.target).parents('.measure').attr('id').replace('measure',''));
       this.component.remove(model);
       ///////Temporary fix///////
-      $(this.el).parent().find('.numerator').text(0);
+      //$(this.el).parent().find('.numerator').text(0);
       /////////////////////////////
 
       dispatch.trigger('stopRequest.event', 'off');
+      dispatch.trigger('signatureChange.event', this.parent.get('signature'));
 
       this.render();
     }

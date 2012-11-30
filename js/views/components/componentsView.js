@@ -258,12 +258,14 @@ define([
         // console.log(this.sources);
       } else {
         console.log('togglePlay: on');
-        dispatch.trigger('toggleAnimation.event', 'on', duration, state.get('signature'), maxMeasures);
 
         this.intervalID = setInterval((function(self) {
         return function() {self.playLoop(); } } )(this),
         duration);
         this.masterGainNode.gain.value = 1;
+        
+        dispatch.trigger('toggleAnimation.event', 'on', duration, state.get('signature'), maxMeasures);
+
       }
     }
   });
