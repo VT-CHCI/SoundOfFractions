@@ -10,7 +10,8 @@ define([
       mute: false,
       sample: 'shhh',
       measures: measuresCollection,
-      active: true
+      active: true,
+      signature: 4
     },
     initialize: function(){
     }
