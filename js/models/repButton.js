@@ -4,7 +4,7 @@ define([
 ], function(_, Backbone) {
   var RepButtonModel = Backbone.Model.extend({
     defaults: {
-      buttonState: 0,
+      buttonState: 'fraction',
       text:'Representation' 
     },
     initialize: function(){
