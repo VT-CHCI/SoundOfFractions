@@ -27,7 +27,7 @@ define([
       ///////Create Gain Nodes      /////////////
       this.gainNodeList = new Array();
 
-      for (var i = 0; i < 3; i++) {
+      for (var i = 0; i < 4; i++) {
         this.gainNodeList[i] = this.context.createGainNode();
       };
       //////////////////////////////////////////
@@ -48,6 +48,7 @@ define([
         img: 'img/snare.png',
         mute: false,
         sample: 'samples/808_sd.m4a',
+        //sample: 'samples/square.wav',
         measures: this.component,
         active: true
       });
@@ -86,6 +87,24 @@ define([
         sample: 'samples/808_bd.m4a',
         measures: this.component,
         active: false
+      });
+
+      this.measure = new BeatsCollection;
+
+      for (var i = 0; i < 4; i++) {
+        this.measure.add();
+      }
+
+      this.component = new MeasuresCollection;
+      this.component.add({beats: this.measure});
+
+      this.drumkit = componentsCollection.add({
+        label: 'Synth',
+        img: 'img/synth.png',
+        mute: true,
+        sample: 'samples/ambass.wav',
+        measures: this.component,
+        active: true
       });
 
       this.intervalID = null; //time is a function of measures and tempo (4 * 60/tempo * measures)
@@ -154,15 +173,15 @@ define([
       console.log('Playing sound!');
       var componentToPlay = 0;
       var startTime = this.context.currentTime; //this is important (check docs for explination)
-
       _.each(durations, function(duration) {
         _.each(duration, function(time) {
-          play(this.context, this.bufferList[componentToPlay], startTime+time, this.masterGainNode, this.gainNodeList[componentToPlay]);
+          play(this, this.context, this.drumkit.at(componentToPlay),
+            this.bufferList[componentToPlay], startTime+time, this.masterGainNode, this.gainNodeList[componentToPlay]);
         }, this);
         componentToPlay++;
       }, this);
 
-      function play(context, buffer, time, gainNode, specGainNode) {
+      function play(self, context, component, buffer, time, gainNode, specGainNode) {
         //console.log(startTime);
         //console.log(this.audioSources);
         source = context.createBufferSource();
@@ -172,7 +191,16 @@ define([
         source.connect(specGainNode);
         specGainNode.connect(gainNode);
         gainNode.connect(context.destination);
+        specGainNode.gain.value = 1;
+        console.log(component.get('signature'));
+        var duration =  (4 * 60 / state.get('tempo')) / component.get('signature');
+        console.log(duration);  
         source.noteOn(time);
+        specGainNode.gain.linearRampToValueAtTime(0, time);
+        specGainNode.gain.linearRampToValueAtTime(1, time + 0.001);
+        specGainNode.gain.linearRampToValueAtTime(1, time + (duration - 0.001));
+        specGainNode.gain.linearRampToValueAtTime(0, time + duration);
+        source.noteOff(time + duration);
       }
 
     },
@@ -233,7 +261,7 @@ define([
 
         $('#component'+component.cid).next().find('.numerator').text(numerator);
         $('#component'+component.cid).next().find('.denominator').text(denominator);
-
+        component.set('signature', denominator);
         numerator = 0;
       }, this);
     },
