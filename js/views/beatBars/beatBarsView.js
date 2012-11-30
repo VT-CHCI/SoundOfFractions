@@ -19,6 +19,7 @@ define([
       // this.collection = beatBarsCollection.add({ width: 0.125, label: '1/8'});
 
       dispatch.on('signatureChange.event', this.reconfigure, this);
+      dispatch.on('sliderChange.event', this.reconfigure, this);
     },
 
     render: function(){

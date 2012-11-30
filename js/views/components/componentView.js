@@ -106,6 +106,8 @@ define([
     select: function(){
       $('.component').removeClass('selected');
       $('#component'+this.component.cid).addClass('selected');
+
+      dispatch.trigger('sliderChange.event', this.component.get('signature'));
     },
 
     recalculateFraction: function(val){
@@ -136,7 +138,6 @@ define([
       }, this);
 
       if(state === 'fraction') {
-        console.log($('#component-container'+this.component.cid + ' .count'));
         $('#component-container'+this.component.cid + ' .count').html('<span class="numerator">4</span><span class="denominator">6</span>');
 
 

@@ -17,6 +17,10 @@ define([
       "change" : "updateVal"
     },
 
+    initialize: function() {
+      dispatch.on('sliderChange.event', this.setVal, this);
+    },
+
     updateVal : function() {
       var val = $(this.el).find($("input")).val();
 
@@ -30,6 +34,14 @@ define([
     render: function() {
       $(this.el).html(sliderTemplate);
       return this;
+    },
+
+    setVal: function(val) {
+      sliderModel.set({slidervalue : val});
+      $('#sig_val').text(val);
+      state.set({signature : val});
+
+      $('#slider input').val(val);
     }
   });
   return new SliderView();
