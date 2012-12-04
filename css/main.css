@@ -130,7 +130,6 @@
   font-size: 40px;
 }
 
-
 .control {
   position: absolute;
   top: 90px;
@@ -197,6 +196,10 @@
 #rep-button {
   margin: 0 auto 10px auto;
   text-align: center;
+  width: 100%;
 }
 
+#rep-button button {
+  width: 25%;
+}
 
