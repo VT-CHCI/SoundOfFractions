@@ -21,7 +21,28 @@ define([
       var val = $(this.el).find($("input")).val();
 
       sliderModel.set({slidervalue : val});
-      $('#tempo_val').text(val);
+      var asMultiplier = val / 120;
+      if(asMultiplier == 1) {
+        $('#tempo_val').text(asMultiplier);
+      }
+      else if(asMultiplier == 0.5) {
+        $('#tempo_val').text('1/2');
+      }
+      else if(asMultiplier == 0.75) {
+        $('#tempo_val').text('3/4');
+      }
+      else if(asMultiplier == 1.25) {
+        $('#tempo_val').text('5/4');
+      }
+      else if(asMultiplier == 1.5) {
+        $('#tempo_val').text('3/2');
+      }
+      else if(asMultiplier == 1.75) {
+        $('#tempo_val').text('7/4');
+      }
+      else if(asMultiplier == 2) {
+        $('#tempo_val').text(2);
+      }
 
       dispatch.trigger('tempoChange.event', val);
       state.set({tempo : val});
