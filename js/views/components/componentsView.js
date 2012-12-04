@@ -102,7 +102,7 @@ define([
         label: 'Synth',
         img: 'img/synth.png',
         mute: true,
-        sample: 'samples/ambass.wav',
+        sample: 'samples/ambass.mp3',
         measures: this.component,
         active: true
       });
