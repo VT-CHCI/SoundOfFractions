@@ -25,7 +25,8 @@ define([
       var val = $(this.el).find($("input")).val();
 
       sliderModel.set({slidervalue : val});
-      $('#sig_val').text(val/4);
+      //$('#sig_val').text(val/4);
+      $('#sig_val').text(this.formatVal(val/4));
 
       dispatch.trigger('signatureChange.event', val);
       state.set({signature : val});
@@ -38,10 +39,28 @@ define([
 
     setVal: function(val) {
       sliderModel.set({slidervalue : val});
-      $('#sig_val').text(val/4);
-      state.set({signature : val});
+      //$('#sig_val').text(val/4);
+      $('#sig_val').text(this.formatVal(val/4));
 
+      state.set({signature : val});
       $('#slider input').val(val);
+    },
+
+    formatVal: function(decimal) {
+      wholeNumber = Math.floor(decimal);
+
+      decimal = (decimal - wholeNumber)/.25;
+
+      if (decimal != 0) {
+        fraction = ' ' + decimal.toString() + '/4';
+      } else {
+        fraction = '';
+      }
+
+      if (wholeNumber == 0)
+        wholeNumber = '';
+
+      return wholeNumber.toString() + fraction;
     }
   });
   return new SliderView();
