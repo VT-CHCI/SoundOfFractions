@@ -21,7 +21,6 @@ define([
     },
 
     cycle: function(button) {
-      console.log($(button.target).data('state'));
       var newState = $(button.target).data('state');
       $('.btn').removeClass('active');
       $(button.target).addClass('active');

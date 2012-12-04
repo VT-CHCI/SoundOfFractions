@@ -114,7 +114,7 @@ define([
       var numerator = 0;
       var denominator = 0;
       var state = this.component.get('representation');
-      if((val === 'fraction') || (val === 'decimal') || (val === 'percent')) {
+      if((val === 'fraction') || (val === 'decimal') || (val === 'percent') || val === 'none') {
         state = val;
         this.component.set('representation', state);
         val = null;
@@ -153,7 +153,10 @@ define([
         $('#component-container'+this.component.cid + ' .count').html('<span class="percent">0%</span>');
         var percent = numerator / denominator * 100;
         $('#component'+this.component.cid).next().find('.percent').text(percent.toFixed(0) + '%');
-
+      }
+      else if(state === 'none') {
+        $('#component-container'+this.component.cid + ' .count').empty();
+        $('#component-container'+this.component.cid + ' .count').trigger('create');
       }
 
       this.component.set('signature', denominator);
