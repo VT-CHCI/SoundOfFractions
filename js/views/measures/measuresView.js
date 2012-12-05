@@ -51,40 +51,45 @@ define([
     },
 
     add: function(){
-      console.log('add measure');
-      this.measure = new BeatsCollection;
+      if ($('#measure'+this.component.models[0].cid).parent().hasClass('selected')) {
+        _.each(this.component.models, function(measure) {
+          _.each(measure.get('beats').models, function(beats) {
+            //console.log(beats.get('selected'));
+          }, this);
+        }, this);
 
-      for (var i = 0; i < state.get('signature'); i++) {
-        this.measure.add();
+        console.log('add measure');
+        this.measure = new BeatsCollection;
+
+        for (var i = 0; i < state.get('signature'); i++) {
+          this.measure.add();
+        }
+
+        this.component.add({beats: this.measure});
+
+        dispatch.trigger('stopRequest.event', 'off');
+        dispatch.trigger('signatureChange.event', this.parent.get('signature'));
+
+        this.render();
       }
-      ///////Temporary fix///////
-      //$(this.el).parent().find('.numerator').text(0);
-      //////////////////////////////////
-      this.component.add({beats: this.measure});
-
-      dispatch.trigger('stopRequest.event', 'off');
-      dispatch.trigger('signatureChange.event', this.parent.get('signature'));
-
-      this.render();
     },
 
     remove: function(ev){
-      if(this.component.models.length == 1) {
-        console.log('Can\'t remove the last measure!');
-        return;
+      if ($('#measure'+this.component.models[0].cid).parent().hasClass('selected')) {
+        if(this.component.models.length == 1) {
+          console.log('Can\'t remove the last measure!');
+          return;
+        }
+        console.log('remove measure');
+
+        var model = this.component.getByCid($(ev.target).parents('.measure').attr('id').replace('measure',''));
+        this.component.remove(model);
+
+        dispatch.trigger('stopRequest.event', 'off');
+        dispatch.trigger('signatureChange.event', this.parent.get('signature'));
+
+        this.render();
       }
-      console.log('remove measure');
-
-      var model = this.component.getByCid($(ev.target).parents('.measure').attr('id').replace('measure',''));
-      this.component.remove(model);
-      ///////Temporary fix///////
-      //$(this.el).parent().find('.numerator').text(0);
-      /////////////////////////////
-
-      dispatch.trigger('stopRequest.event', 'off');
-      dispatch.trigger('signatureChange.event', this.parent.get('signature'));
-
-      this.render();
     }
   });
 });
