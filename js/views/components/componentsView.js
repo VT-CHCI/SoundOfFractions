@@ -194,8 +194,8 @@ define([
         console.log(duration);  
         source.noteOn(time);
         specGainNode.gain.linearRampToValueAtTime(0, time);
-        specGainNode.gain.linearRampToValueAtTime(1, time + 0.001);
-        specGainNode.gain.linearRampToValueAtTime(1, time + (duration - 0.001));
+        specGainNode.gain.linearRampToValueAtTime(1, time + 0.005);
+        specGainNode.gain.linearRampToValueAtTime(1, time + (duration - 0.005));
         specGainNode.gain.linearRampToValueAtTime(0, time + duration);
         source.noteOff(time + duration);
       }
