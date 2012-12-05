@@ -54,9 +54,8 @@ define([
     },
 
     toggleAnimation: function(state, duration, signature, maxMeasures){
-      signature = $(this.el).find('.beat').length;
-
-      duration = duration/signature;
+      signature = $(this.el).find('.measure').eq(0).find('.beat').length;
+      duration = duration/signature/maxMeasures;
 
       function animate (targetDiv) {
         targetDiv.css({'width':'+=5', 'height':'+=20', 'top': '-=10', 'left' :'-=2'});
@@ -78,8 +77,7 @@ define([
       };
 
       var beats = $(this.el).find('.beat')
-      var counter = 0-(signature-1);
-      // var counter = 0;
+      var counter = 0-(signature*maxMeasures-1);
 
       if (state == 'off') {
         clearInterval(this.animationIntervalID);
@@ -94,7 +92,7 @@ define([
           return function() {
             if (counter >= 0 && counter < beats.length)
               animate(beats.eq(counter).find('.animated-beat'));
-            if (counter < (signature-1))
+            if (counter < (signature*maxMeasures-1))
               counter ++;
             else
               counter = 0;

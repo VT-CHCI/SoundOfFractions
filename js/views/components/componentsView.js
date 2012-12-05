@@ -189,9 +189,9 @@ define([
         specGainNode.connect(gainNode);
         gainNode.connect(context.destination);
         specGainNode.gain.value = 1;
-        console.log(component.get('signature'));
+        //console.log(component.get('signature'));
         var duration =  (4 * 60 / state.get('tempo')) / component.get('signature');
-        console.log(duration);  
+        //console.log(duration);
         source.noteOn(time);
         specGainNode.gain.linearRampToValueAtTime(0, time);
         specGainNode.gain.linearRampToValueAtTime(1, time + 0.005);
@@ -233,7 +233,7 @@ define([
       request.send();
     },
 
-    
+
 
     togglePlay: function(val){
       // if (e.keyCode == 32) {
@@ -263,7 +263,7 @@ define([
         return function() {self.playLoop(); } } )(this),
         duration);
         this.masterGainNode.gain.value = 1;
-        
+
         dispatch.trigger('toggleAnimation.event', 'on', duration, state.get('signature'), maxMeasures);
 
       }
