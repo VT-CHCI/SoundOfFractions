@@ -26,9 +26,11 @@ define([
 
       ///////Create Gain Nodes      /////////////
       this.gainNodeList = new Array();
+      this.muteGainNodeList = new Array();
 
       for (var i = 0; i < 4; i++) {
         this.gainNodeList[i] = this.context.createGainNode();
+        this.muteGainNodeList[i] = this.context.createGainNode();
       };
       //////////////////////////////////////////
 
@@ -122,7 +124,7 @@ define([
         var compiledTemplate = _.template( componentsTemplate, {component: component} );
         $(this.el).append( compiledTemplate );
 
-        new ComponentView({collection:component, el:'#component-container'+component.cid, gainNode:this.gainNodeList[counter]});
+        new ComponentView({collection:component, el:'#component-container'+component.cid, gainNode:this.muteGainNodeList[counter]});
         counter++;
       }, this);
 
@@ -173,12 +175,13 @@ define([
       _.each(durations, function(duration) {
         _.each(duration, function(time) {
           play(this, this.context, this.drumkit.at(componentToPlay),
-            this.bufferList[componentToPlay], startTime+time, this.masterGainNode, this.gainNodeList[componentToPlay]);
+            this.bufferList[componentToPlay], startTime+time, this.masterGainNode, 
+            this.gainNodeList[componentToPlay], this.muteGainNodeList[componentToPlay]);
         }, this);
         componentToPlay++;
       }, this);
 
-      function play(self, context, component, buffer, time, gainNode, specGainNode) {
+      function play(self, context, component, buffer, time, gainNode, specGainNode, muteGainNode) {
         //console.log(startTime);
         //console.log(this.audioSources);
         source = context.createBufferSource();
@@ -186,7 +189,8 @@ define([
         //source.connect(context.destination);
         // console.log(specGainNode.gain.value);
         source.connect(specGainNode);
-        specGainNode.connect(gainNode);
+        specGainNode.connect(muteGainNode);
+        muteGainNode.connect(gainNode);
         gainNode.connect(context.destination);
         specGainNode.gain.value = 1;
         //console.log(component.get('signature'));
