@@ -3,11 +3,10 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'bootstrap',
   'models/repButton',
   'text!templates/button/repButton.html',
   'app/dispatch',
-], function($, _, Backbone, Bootstrap, RepButtonModel, repButtonTemplate, dispatch){
+], function($, _, Backbone, RepButtonModel, repButtonTemplate, dispatch){
 
   var RepButtonView = Backbone.View.extend({
     el : $("#rep-button"), // Specifies the DOM element which this view handles
@@ -23,8 +22,11 @@ define([
 
     cycle: function(button) {
       var newState = $(button.target).data('state');
+      $('.btn').removeClass('active');
+      $(button.target).addClass('active');
       this.repButtonModel.set('buttonState', newState);
       dispatch.trigger('representation.event', newState);
+
     },
 
     render: function() {
