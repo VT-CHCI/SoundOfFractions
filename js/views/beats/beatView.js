@@ -3,8 +3,9 @@ define([
   'underscore',
   'backbone',
   'models/beat',
-  'app/dispatch'
-], function($, _, Backbone, BeatModel, dispatch){
+  'app/dispatch',
+  'app/log'
+], function($, _, Backbone, BeatModel, dispatch, log){
   return Backbone.View.extend({
     el: $('.beat'),
 
@@ -39,6 +40,8 @@ define([
       this.render()
 
       console.log("beat toggled!");
+      log.sendLog([[1, "beat" + this.model.cid + " toggled: "+!bool]]);
+
       dispatch.trigger('beatClicked.event');
     }
   });

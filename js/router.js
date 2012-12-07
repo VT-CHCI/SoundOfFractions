@@ -9,8 +9,9 @@ define([
   'views/components/componentsView',
   'views/slider/tempoSliderView',
   'views/transport/transportView',
-  'views/button/repButtonView'
-], function($, _, Backbone, mainHomeView, beatSliderView, beatBarsView, componentsView, tempoSliderView, transportView, repButtonView){
+  'views/button/repButtonView',
+  'app/log'
+], function($, _, Backbone, mainHomeView, beatSliderView, beatBarsView, componentsView, tempoSliderView, transportView, repButtonView, log){
   var AppRouter = Backbone.Router.extend({
     routes: {
       // Default
@@ -18,6 +19,7 @@ define([
     },
     defaultAction: function(actions){
       // We have no matching route, lets display the home page
+      mainHomeView;
       beatSliderView.render();
       beatBarsView.render();
       componentsView.render();
@@ -30,6 +32,23 @@ define([
   var initialize = function(){
     var app_router = new AppRouter;
     Backbone.history.start({pushState:true});
+
+    name = '';
+    $('.component').each( function() {
+      name = name + $(this).attr('id') + '.';
+
+      $(this).children('.measure').each( function() {
+        name = name + $(this).attr('id') + '.';
+
+          $(this).children('.beat').each( function() {
+            name = name + $(this).attr('id') + '.';
+          });
+      });
+
+      log.sendLog([[1, "Component structure: "+name]]);
+      name = '';
+    });
+
   };
   return {
     initialize: initialize
