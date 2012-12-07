@@ -6,15 +6,16 @@ define([
   'models/slider',
   'text!templates/slider/tempoSlider.html',
   'app/dispatch',
-  'app/state'
-], function($, _, Backbone, SliderModel, sliderTemplate, dispatch, state){
+  'app/state',
+  'app/log'
+], function($, _, Backbone, SliderModel, sliderTemplate, dispatch, state, log){
   var sliderModel = new SliderModel;
 
   var TempoSliderView = Backbone.View.extend({
     el : $("#beat-pallet #tempo-slider"), // Specifies the DOM element which this view handles
 
     events : {
-      "change" : "updateVal"  
+      "change" : "updateVal"
     },
 
     updateVal : function() {
@@ -46,8 +47,10 @@ define([
 
       dispatch.trigger('tempoChange.event', val);
       state.set({tempo : val});
-    }, 
       dispatch.trigger('stopRequest.event', 'off');
+
+      log.sendLog([[2, "Changed temo slider: "+val]]);
+    },
 
     render: function() {
       $(this.el).html(sliderTemplate);

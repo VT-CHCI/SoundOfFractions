@@ -7,8 +7,9 @@ define([
   'models/component',
   'views/measures/measuresView',
   'app/dispatch',
-  'app/state'
-], function($, _, Backbone, Component, MeasuresView, dispatch, state){
+  'app/state',
+  'app/log'
+], function($, _, Backbone, Component, MeasuresView, dispatch, state, log){
   return Backbone.View.extend({
     el: $('.component'),
 
@@ -45,9 +46,14 @@ define([
       if (this.gainNode.gain.value == 1) {
         this.gainNode.gain.value = 0;
         $(this.el).find('.control').removeClass('unmute').addClass('mute');
+
+        log.sendLog([[2, "Component muted: "+"component"+this.component.cid]]);
+
       } else {
         this.gainNode.gain.value = 1;
         $(this.el).find('.control').removeClass('mute').addClass('unmute');
+
+        log.sendLog([[2, "Component unmuted: "+"component"+this.component.cid]]);
       }
     },
 

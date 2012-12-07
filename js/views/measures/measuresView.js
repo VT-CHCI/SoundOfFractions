@@ -9,8 +9,9 @@ define([
   'views/beats/beatsView',
   'text!templates/measures/measures.html',
   'app/dispatch',
-  'app/state'
-], function($, _, Backbone, BeatsCollection, MeasuresCollection, BeatsView, measuresTemplate, dispatch, state){
+  'app/state',
+  'app/log'
+], function($, _, Backbone, BeatsCollection, MeasuresCollection, BeatsView, measuresTemplate, dispatch, state, log){
   return Backbone.View.extend({
     el: $('.component'),
 
@@ -52,12 +53,6 @@ define([
 
     add: function(){
       if ($('#measure'+this.component.models[0].cid).parent().hasClass('selected')) {
-        _.each(this.component.models, function(measure) {
-          _.each(measure.get('beats').models, function(beats) {
-            //console.log(beats.get('selected'));
-          }, this);
-        }, this);
-
         console.log('add measure');
         this.measure = new BeatsCollection;
 
@@ -67,10 +62,16 @@ define([
 
         this.component.add({beats: this.measure});
 
+        name = 'measure' + _.last(this.component.models).cid + '.';
+        _.each(this.measure.models, function(beats) {
+          name = name + 'beat'+ beats.cid + '.';
+        }, this);
+
+        log.sendLog([[3, "Added a measure: "+name]]);
+
         this.render();
 
         dispatch.trigger('stopRequest.event', 'off');
-        //dispatch.trigger('signatureChange.event', this.parent.get('signature'));
       }
     },
 
@@ -85,10 +86,11 @@ define([
         var model = this.component.getByCid($(ev.target).parents('.measure').attr('id').replace('measure',''));
         this.component.remove(model);
 
-        dispatch.trigger('stopRequest.event', 'off');
-        //dispatch.trigger('signatureChange.event', this.parent.get('signature'));
+        log.sendLog([[3, "Removed a measure: measure"+model.cid]]);
 
         this.render();
+
+        dispatch.trigger('stopRequest.event', 'off');
       }
     }
   });

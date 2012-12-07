@@ -6,7 +6,8 @@ define([
   'models/transport',
   'text!templates/transport/transport.html',
   'app/dispatch',
-], function($, _, Backbone, TransportModel, transportTemplate, dispatch){
+  'app/log'
+], function($, _, Backbone, TransportModel, transportTemplate, dispatch, log){
 
   var TransportView = Backbone.View.extend({
     el : $("#transport"), // Specifies the DOM element which this view handles
@@ -28,6 +29,20 @@ define([
         $(this.el).removeClass();
         $(this.el).addClass('pause');
         console.log('now playing');
+
+        name = '';
+        $('.component').each(function(index) {
+          name = name + index + ':';
+          $(this).children('.measure').children('.beat').children().each(function() {
+            if ($(this).attr('class') == 'ON')
+              name = name + 1;
+            else
+              name = name + 0;
+          });
+          name = name + ','
+        });
+
+        log.sendLog([[3, "Started playing music: "+name]]);
       }
       else {
         dispatch.trigger('togglePlay.event', 'off');
@@ -35,6 +50,8 @@ define([
         $(this.el).removeClass();
         $(this.el).addClass('play');
         console.log('now paused');
+
+        log.sendLog([[3, "Stop playing music"]]);
       }
 
     },
