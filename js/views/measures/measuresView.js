@@ -67,10 +67,10 @@ define([
 
         this.component.add({beats: this.measure});
 
+        this.render();
+
         dispatch.trigger('stopRequest.event', 'off');
         dispatch.trigger('signatureChange.event', this.parent.get('signature'));
-
-        this.render();
       }
     },
 
