@@ -23,7 +23,7 @@ define([
 
       dispatch.on('signatureChange.event', this.reconfigure, this);
       this.render();
-      this.reconfigure(state.get('signature'));
+      this.calcBeatWidth(state.get('signature'));
     },
 
     render: function(){
@@ -60,6 +60,12 @@ define([
 
         this.render();
 
+        this.calcBeatWidth(signature);
+      }
+    },
+
+    calcBeatWidth: function(signature) {
+      if ($(this.el).parent().hasClass('selected')) {
         var px = 100/$('.measure').css('width').replace(/[^-\d\.]/g, '');
         var beatWidth = (100 - ((signature*1+1)*px))/signature;
 
@@ -67,7 +73,6 @@ define([
           'width' : beatWidth+'%'
         });
       }
-
     }
   });
 });
