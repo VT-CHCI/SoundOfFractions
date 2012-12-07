@@ -70,7 +70,7 @@ define([
         this.render();
 
         dispatch.trigger('stopRequest.event', 'off');
-        dispatch.trigger('signatureChange.event', this.parent.get('signature'));
+        //dispatch.trigger('signatureChange.event', this.parent.get('signature'));
       }
     },
 
@@ -86,7 +86,7 @@ define([
         this.component.remove(model);
 
         dispatch.trigger('stopRequest.event', 'off');
-        dispatch.trigger('signatureChange.event', this.parent.get('signature'));
+        //dispatch.trigger('signatureChange.event', this.parent.get('signature'));
 
         this.render();
       }
