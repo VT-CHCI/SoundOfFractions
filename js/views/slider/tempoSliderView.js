@@ -47,6 +47,7 @@ define([
       dispatch.trigger('tempoChange.event', val);
       state.set({tempo : val});
     }, 
+      dispatch.trigger('stopRequest.event', 'off');
 
     render: function() {
       $(this.el).html(sliderTemplate);
