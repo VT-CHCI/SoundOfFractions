@@ -26,9 +26,11 @@ define([
 
       ///////Create Gain Nodes      /////////////
       this.gainNodeList = new Array();
+      this.muteGainNodeList = new Array();
 
-      for (var i = 0; i < 3; i++) {
+      for (var i = 0; i < 4; i++) {
         this.gainNodeList[i] = this.context.createGainNode();
+        this.muteGainNodeList[i] = this.context.createGainNode();
       };
       //////////////////////////////////////////
 
@@ -48,6 +50,7 @@ define([
         img: 'img/snare.png',
         mute: false,
         sample: 'samples/808_sd.m4a',
+        //sample: 'samples/square.wav',
         measures: this.component,
         active: true
       });
@@ -88,13 +91,28 @@ define([
         active: false
       });
 
-      //dispatch.on('signatureChange.event', this.reconfigure, this);
+      this.measure = new BeatsCollection;
+
+      for (var i = 0; i < 4; i++) {
+        this.measure.add();
+      }
+
+      this.component = new MeasuresCollection;
+      this.component.add({beats: this.measure});
+
+      this.drumkit = componentsCollection.add({
+        label: 'Synth',
+        img: 'img/synth.png',
+        mute: true,
+        sample: 'samples/ambass.mp3',
+        measures: this.component,
+        active: true
+      });
 
       this.intervalID = null; //time is a function of measures and tempo (4 * 60/tempo * measures)
 
-      dispatch.on('beatClicked.event', this.recalculateFraction, this)
-      dispatch.on('signatureChange.event', this.recalculateFraction, this)
-      dispatch.on('togglePlay.event', this.togglePlay, this)
+      dispatch.on('togglePlay.event', this.togglePlay, this);
+
     },
 
     render: function(){
@@ -106,11 +124,10 @@ define([
         var compiledTemplate = _.template( componentsTemplate, {component: component} );
         $(this.el).append( compiledTemplate );
 
-        new ComponentView({collection:component, el:'#component-container'+component.cid, gainNode:this.gainNodeList[counter]});
+        new ComponentView({collection:component, el:'#component-container'+component.cid, gainNode:this.muteGainNodeList[counter]});
         counter++;
       }, this);
 
-      this.recalculateFraction();
 
       return this;
     },
@@ -152,28 +169,39 @@ define([
     },
 
     playSound: function(durations){
-      console.log('play sound', durations);
+      console.log('Playing sound!');
       var componentToPlay = 0;
       var startTime = this.context.currentTime; //this is important (check docs for explination)
-
       _.each(durations, function(duration) {
         _.each(duration, function(time) {
-          play(this.context, this.bufferList[componentToPlay], startTime+time, this.masterGainNode, this.gainNodeList[componentToPlay]);
+          play(this, this.context, this.drumkit.at(componentToPlay),
+            this.bufferList[componentToPlay], startTime+time, this.masterGainNode, 
+            this.gainNodeList[componentToPlay], this.muteGainNodeList[componentToPlay]);
         }, this);
         componentToPlay++;
       }, this);
 
-      function play(context, buffer, time, gainNode, specGainNode) {
+      function play(self, context, component, buffer, time, gainNode, specGainNode, muteGainNode) {
         //console.log(startTime);
         //console.log(this.audioSources);
-        this.source = context.createBufferSource();
-        this.source.buffer = buffer;
+        source = context.createBufferSource();
+        source.buffer = buffer;
         //source.connect(context.destination);
-        console.log(specGainNode.gain.value);
-        this.source.connect(specGainNode);
-        specGainNode.connect(gainNode);
+        // console.log(specGainNode.gain.value);
+        source.connect(specGainNode);
+        specGainNode.connect(muteGainNode);
+        muteGainNode.connect(gainNode);
         gainNode.connect(context.destination);
-        this.source.noteOn(time);
+        specGainNode.gain.value = 1;
+        //console.log(component.get('signature'));
+        var duration =  (4 * 60 / state.get('tempo')) / component.get('signature');
+        //console.log(duration);
+        source.noteOn(time);
+        specGainNode.gain.linearRampToValueAtTime(0, time);
+        specGainNode.gain.linearRampToValueAtTime(1, time + 0.005);
+        specGainNode.gain.linearRampToValueAtTime(1, time + (duration - 0.005));
+        specGainNode.gain.linearRampToValueAtTime(0, time + duration);
+        source.noteOff(time + duration);
       }
 
     },
@@ -209,60 +237,40 @@ define([
       request.send();
     },
 
-    recalculateFraction: function(val){
-      var numerator = 0;
-      var denominator = 0;
 
-      _.each(this.drumkit.models, function(component) {
-        _.each(component.get('measures').models, function(measure) {
-          _.each(measure.get('beats').models, function(beat) {
-            if(beat.get('selected')) {
-              if (val) {
-                numerator = 0;
-              } else {
-                numerator++;
-              }
-            }
-          }, this);
-
-          if (val && $('#measure'+measure.cid).parent().hasClass('selected')) {
-            denominator = val;
-          } else {
-            denominator = measure.get('beats').models.length;
-          }
-        }, this);
-
-        $('#component'+component.cid).next().find('.numerator').text(numerator);
-        $('#component'+component.cid).next().find('.denominator').text(denominator);
-
-        numerator = 0;
-      }, this);
-    },
 
     togglePlay: function(val){
       // if (e.keyCode == 32) {
       // }
-        var maxMeasures = 0;
-        _.each(this.drumkit.models, function(component) {
-          // console.log('maxMeasures = ' , component.get('measures').length);
-          if(maxMeasures < component.get('measures').length) {
-            maxMeasures = component.get('measures').length;
-          }
-        }, this);
-
-        var duration = 4 * 60 / state.get('tempo') * maxMeasures * 1000;
-        // console.log('duration: ', duration);
-        if (this.intervalID) {
-          clearInterval(this.intervalID);
-          this.intervalID = null;
-          this.masterGainNode.gain.value = 0;
-          console.log(this.sources);
-        } else {
-          this.intervalID = setInterval((function(self) {
-          return function() {self.playLoop(); } } )(this),
-          duration);
-          this.masterGainNode.gain.value = 1;
+      var maxMeasures = 0;
+      _.each(this.drumkit.models, function(component) {
+        // console.log('maxMeasures = ' , component.get('measures').length);
+        if(maxMeasures < component.get('measures').length) {
+          maxMeasures = component.get('measures').length;
         }
+      }, this);
+
+      var duration = 4 * 60 / state.get('tempo') * maxMeasures * 1000;
+      // console.log('duration: ', duration);
+      if (this.intervalID) {
+        console.log('togglePlay: off');
+        dispatch.trigger('toggleAnimation.event', 'off');
+
+        clearInterval(this.intervalID);
+        this.intervalID = null;
+        this.masterGainNode.gain.value = 0;
+        // console.log(this.sources);
+      } else {
+        console.log('togglePlay: on');
+
+        this.intervalID = setInterval((function(self) {
+        return function() {self.playLoop(); } } )(this),
+        duration);
+        this.masterGainNode.gain.value = 1;
+
+        dispatch.trigger('toggleAnimation.event', 'on', duration, state.get('signature'), maxMeasures);
+
+      }
     }
   });
   return new componentsView();
