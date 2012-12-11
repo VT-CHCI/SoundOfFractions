@@ -30,7 +30,7 @@ We use a global dispatcher, as explained in the Backbone documentation, to send 
 
     dispatch.trigger('YOUR_EVENT_NAME.event', OPTIONAL_PARAMETERS);
 
-To recieve the event, in the initialize function add:
+To receive the event, in the initialize function add:
 
     dispatch.on('YOUR_EVENT_NAME.event', this.YOUR_EVENT_HANDLER_FUNCTION, this);
 
