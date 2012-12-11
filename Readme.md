@@ -1,10 +1,10 @@
 # Sound of Fractions #
 
-The **Sound of Fractions** is a teaching aid designed to help learn the concept of fractions using a multimodal representation. The main concept is that measures can be dividing into sub-sections and manipulated to produce music. As these changes occur, the mathematical representation of the measures are constructed and updated.  That way, students can see how fractions relate both visually and aurally. This is similar to block manipulative used currently to teach fractions with the addition of sound.
+**Sound of Fractions** is a teaching aid designed to help learn the concept of fractions using a multimodal representation. The main concept is that measures can be dividing into sub-sections and manipulated to produce music. As these changes occur, the mathematical representation of the measures are constructed and updated.  That way, students can see how fractions relate both visually and aurally. This is similar to block manipulative used currently to teach fractions with the addition of sound.
 
 ## Installing ##
 
-This project is a web app that uses Javascript and the Web Audio API. The only thing needed to install the **Sound of Fractions** is placing it on a web server. To use it, simply access the directory using any Web Audio accessible browser (like Chrome for example). For a demo click [here](http://vt-chci.github.com/MusicFractions/).
+This project is a web app that uses Javascript and the Web Audio API. The only thing needed to install **Sound of Fractions** is placing it on a web server. To use it, simply access the directory using any Web Audio accessible browser (like Chrome for example). For a demo click [here](http://vt-chci.github.com/MusicFractions/).
 
 ## Using ##
 
