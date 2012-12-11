@@ -24,15 +24,7 @@ define([
       this.bufferList = new Array();
       this.masterGainNode = this.context.createGainNode();
 
-      ///////Create Gain Nodes      /////////////
-      this.gainNodeList = new Array();
-      this.muteGainNodeList = new Array();
-
-      for (var i = 0; i < 4; i++) {
-        this.gainNodeList[i] = this.context.createGainNode();
-        this.muteGainNodeList[i] = this.context.createGainNode();
-      };
-      //////////////////////////////////////////
+      this.drumkit = componentsCollection;
 
       this.measure = new BeatsCollection;
 
@@ -42,8 +34,6 @@ define([
 
       this.component = new MeasuresCollection;
       this.component.add({beats: this.measure});
-
-      this.drumkit = componentsCollection;
 
       this.drumkit = componentsCollection.add({
         label: 'Snare',
@@ -108,6 +98,16 @@ define([
         measures: this.component,
         active: true
       });
+
+      ///////Create Gain Nodes///////
+      this.gainNodeList = new Array();
+      this.muteGainNodeList = new Array();
+
+      for (var i = 0; i < this.drumkit.models.length; i++) {
+        this.gainNodeList[i] = this.context.createGainNode();
+        this.muteGainNodeList[i] = this.context.createGainNode();
+      };
+      ///////////////////////////////
 
       this.intervalID = null; //time is a function of measures and tempo (4 * 60/tempo * measures)
 
@@ -175,7 +175,7 @@ define([
       _.each(durations, function(duration) {
         _.each(duration, function(time) {
           play(this, this.context, this.drumkit.at(componentToPlay),
-            this.bufferList[componentToPlay], startTime+time, this.masterGainNode, 
+            this.bufferList[componentToPlay], startTime+time, this.masterGainNode,
             this.gainNodeList[componentToPlay], this.muteGainNodeList[componentToPlay]);
         }, this);
         componentToPlay++;
