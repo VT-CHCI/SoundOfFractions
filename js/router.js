@@ -33,6 +33,8 @@ define([
     var app_router = new AppRouter;
     Backbone.history.start({pushState:true});
 
+    sessionStorage.setItem("userId", Math.floor(Math.random()*1001));
+
     name = '';
     $('.component').each( function() {
       name = name + $(this).attr('id') + '.';
