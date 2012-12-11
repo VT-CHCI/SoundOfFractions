@@ -26,32 +26,38 @@ To play music, click the play button (triangle in the circle) under the beat pal
 This web app was written using [JQuery]( http://jquery.com/ JQuery Site), [Backbone](http://backbonejs.org/ Backbone.js Site), [RequireJS]( http://requirejs.org/ Requre.js Site) and [Bootstrap]( http://twitter.github.com/bootstrap/ Bootstrap Site) .  It adheres as closely as possible to a traditional Backbone architecture, with models, collection, views, routes, and functions named fairly logically. This application has no backend, however, we do have logging currently enabled for data analysis purposes.
 
 ### Global Dispatcher and State ###
-We use a global dispatcher, as explained in the Backbone documentation, to send events to multiple views. We also have a global state variable for the temp and signature (beats per measure).
+We use a global dispatcher, as explained in the Backbone documentation, to send events to multiple views. We also have a global state variable for the temp and signature (beats per measure). To use the dispatcher, first pass it through to the function as dispatch. To send an event use:
+
+  dispatch.trigger('YOUR_EVENT_NAME.event', OPTIONAL_PARAMETERS);
+
+To recieve the event, in the initialize function add:
+
+  dispatch.on('YOUR_EVENT_NAME.event', this.YOUR_EVENT_HANDLER_FUNCTION, this);
 
 ### Adding New Instruments ###
 To add a new instrument, first upload the sound sample to /samples and an image to /img. Then, in the initialize function of componentsView (located in /js/views/components) add:
 
-    this.measure = new BeatsCollection;
+  this.measure = new BeatsCollection;
 
-          for (var i = 0; i < 4; i++) {
-            this.measure.add();
-          }
+        for (var i = 0; i < 4; i++) {
+          this.measure.add();
+        }
 
-          this.component = new MeasuresCollection;
-          this.component.add({beats: this.measure});
+        this.component = new MeasuresCollection;
+        this.component.add({beats: this.measure});
 
-          this.drumkit = componentsCollection.add({
-            label: '',
-            img: '',
-            mute: true,
-            sample: '',
-            measures: this.component,
-            active: true
-          });
+        this.drumkit = componentsCollection.add({
+          label: '',
+          img: '',
+          mute: true,
+          sample: '',
+          measures: this.component,
+          active: true
+        });
 
-Make sure to add values for lable, img, and sample that correspond to your instrument. It is preferable you add this block of code right before
+Make sure to add values for lable, img, and sample that correspond to your instrument. It is preferable you add this block of code right before:
 
-    ///////Create Gain Nodes///////
+  ///////Create Gain Nodes///////
 
 ## Future Plans ##
 
