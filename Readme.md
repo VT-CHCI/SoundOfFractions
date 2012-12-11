@@ -23,7 +23,7 @@ To play music, click the play button (triangle in the circle) under the beat pal
 
 ## Program Structure ##
 
-This web app was written using [JQuery]( http://jquery.com/ "JQuery Site"), [Backbone](http://backbonejs.org/ "Backbone.js Site"), [RequireJS]( http://requirejs.org/ "Requre.js Site") and [Bootstrap]( http://twitter.github.com/bootstrap/ "Bootstrap Site") .  It adheres as closely as possible to a traditional Backbone architecture, with models, collection, views, routes, and functions named fairly logically. This application has no backend, however, we do have logging currently enabled for data analysis purposes.
+This web app was written using [JQuery]( http://jquery.com/ "JQuery Homepage"), [Backbone](http://backbonejs.org/ "Backbone.js Homepage"), [RequireJS]( http://requirejs.org/ "Requre.js Homepage") and [Bootstrap]( http://twitter.github.com/bootstrap/ "Bootstrap Homepage") .  It adheres as closely as possible to a traditional Backbone architecture, with models, collection, views, routes, and functions named fairly logically. This application has no backend, however, we do have logging currently enabled for data analysis purposes.
 
 ### Global Dispatcher and State ###
 We use a global dispatcher, as explained in the Backbone documentation, to send events to multiple views. We also have a global state variable for the temp and signature (beats per measure). To use the dispatcher, first pass it through to the function as dispatch. To send an event use:
