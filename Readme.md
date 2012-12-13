@@ -75,7 +75,7 @@ To create custom logs, first pass it through to the function as log. Then, to se
 
     log.sendLog([[LOG_TYPE, DESCRIPTION]]);
 
-DESCRIPTION is a string, and LOG_TYPEs are integers corresponding to:
+DESCRIPTION is a string, and LOG_TYPE is an integer corresponding to:
 
 - id: 1, type: "Begin Interaction"
 - id: 2, type: "Selection"
