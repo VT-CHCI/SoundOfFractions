@@ -77,12 +77,9 @@ To create custom logs, first pass it through to the function as log. Then, to se
 
 Valid LOG_TYPEs are:
 
-- id: 1
-- type: "Begin Interaction"
-- id: 2
-- type: "Selection"
-- id: 3
-- type: "Action"
+- id: 1, type: "Begin Interaction"
+- id: 2, type: "Selection"
+- id: 3, type: "Action"
 
 ## Future Plans ##
 
