@@ -75,11 +75,13 @@ To create custom logs, first pass it through to the function as log. Then, to se
 
     log.sendLog([[LOG_TYPE, DESCRIPTION]]);
 
-Valid LOG_TYPEs are:
+DESCRIPTION is a string, and LOG_TYPEs are integers corresponding to:
 
 - id: 1, type: "Begin Interaction"
 - id: 2, type: "Selection"
 - id: 3, type: "Action"
+
+When adding logs, it is important to check how it affects the user experience.  Since the logs are post requests, excessive logging may slow down the web app. *Note: Since all logging is done via Ajax it is technically asynchronous.  Therefore, if the data being logged is time sensitive you may want to include a time stamp in the description.*
 
 ## Future Plans ##
 
