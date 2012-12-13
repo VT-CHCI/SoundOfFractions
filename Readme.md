@@ -59,6 +59,33 @@ Make sure to add values for lable, img, and sample that correspond to your instr
 
     ///////Create Gain Nodes///////
 
+### Logging ###
+Logging is currently enabled. Initially, a random number is generated and stored into local storage. If you sign in using the navigation bar, the user id will replace the random number. This ensures that even if someone doesn't sign in, the logging info can be differentiated between other users. Currently logged events are:
+
+- On page load and after signing in: all components, measures, and beats
+- Beats that are clicked
+- Representation changes
+- Components muted and unmuted
+- Signature changes
+- Tempo changes
+- Play clicked along with state of components, measures, and beats
+- Play stopped
+
+To create custom logs, first pass it through to the function as log. Then, to send a log event use:
+
+    log.sendLog([[LOG_TYPE, DESCRIPTION]]);
+
+Valid LOG_TYPEs are:
+
+- id: 1
+- type: "Begin Interaction"
+
+- id: 2
+- type: "Selection"
+
+- id: 3
+- type: "Action"
+
 ## Future Plans ##
 
 This project is currently a work in progress.  We have additional features we would like to implement as well as lesson plans we want to develop.  We are currently keeping track of code related bugs and feature requests through github.  If you are interested in developing a lesson plan, or have a lesson plan that could utilize this application please let us know!
