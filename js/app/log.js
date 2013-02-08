@@ -18,7 +18,7 @@ define(['jquery'], function ($) {
       console.log("posting...");
       $.ajax("http://test.astronomicalproportions.org/interaction_logs/service",
         {
-          data: {"logs":logs, "application":"Astronomical Proportions"},
+          data: {"logs":logs, "application":"The Sound of Fractions"},
           type: "POST",
           dataType: "jsonp",
           success: function(data, textStatus, jqXHR){
