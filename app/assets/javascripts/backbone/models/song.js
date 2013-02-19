@@ -2,7 +2,7 @@
 define([
   'underscore',
   'backbone',
-  'collections/components'
+  'backbone/collections/components'
 ], function(_, Backbone, componentCollection) {
   var songModel = Backbone.Model.extend({
     defaults: {

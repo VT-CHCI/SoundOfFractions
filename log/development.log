@@ -60644,3 +60644,668 @@ Served asset /808_bd.m4a - 200 OK (1ms)
 
 Started GET "/assets/synth.png" for 127.0.0.1 at 2013-02-19 17:38:38 -0500
 Served asset /synth.png - 200 OK (2ms)
+
+
+Started GET "/" for 127.0.0.1 at 2013-02-19 18:04:02 -0500
+Processing by HomeController#index as HTML
+  Rendered home/index.html.erb within layouts/application (1.9ms)
+Completed 200 OK in 42ms (Views: 41.4ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/assets/application.css?body=1" for 127.0.0.1 at 2013-02-19 18:04:02 -0500
+Served asset /application.css - 200 OK (18ms)
+
+
+Started GET "/assets/home.css?body=1" for 127.0.0.1 at 2013-02-19 18:04:02 -0500
+Served asset /home.css - 200 OK (2ms)
+
+
+Started GET "/assets/bootstrap.css?body=1" for 127.0.0.1 at 2013-02-19 18:04:02 -0500
+Served asset /bootstrap.css - 200 OK (8ms)
+
+
+Started GET "/assets/main.css?body=1" for 127.0.0.1 at 2013-02-19 18:04:02 -0500
+Served asset /main.css - 200 OK (2ms)
+
+
+Started GET "/assets/scaffolds.css?body=1" for 127.0.0.1 at 2013-02-19 18:04:02 -0500
+Served asset /scaffolds.css - 304 Not Modified (4ms)
+
+
+Started GET "/assets/songs.css?body=1" for 127.0.0.1 at 2013-02-19 18:04:02 -0500
+Served asset /songs.css - 304 Not Modified (4ms)
+
+
+Started GET "/assets/require.js" for 127.0.0.1 at 2013-02-19 18:04:02 -0500
+Served asset /require.js - 304 Not Modified (2ms)
+
+
+Started GET "/assets/assets.js?body=1" for 127.0.0.1 at 2013-02-19 18:04:02 -0500
+Served asset /assets.js - 304 Not Modified (1ms)
+
+
+Started GET "/assets/bootstrap" for 127.0.0.1 at 2013-02-19 18:04:02 -0500
+Served asset /bootstrap - 304 Not Modified (13ms)
+
+
+Started GET "/assets/bootstrap-responsive" for 127.0.0.1 at 2013-02-19 18:04:02 -0500
+Served asset /bootstrap-responsive - 304 Not Modified (4ms)
+
+
+Started GET "/assets/application" for 127.0.0.1 at 2013-02-19 18:04:03 -0500
+Served asset /application - 304 Not Modified (3ms)
+
+
+Started GET "/assets/MusicFractions.js" for 127.0.0.1 at 2013-02-19 18:04:03 -0500
+Served asset /MusicFractions.js - 304 Not Modified (1ms)
+
+
+Started GET "/assets/jquery.js" for 127.0.0.1 at 2013-02-19 18:04:03 -0500
+Served asset /jquery.js - 304 Not Modified (29ms)
+
+
+Started GET "/assets/backbone/routers/router.js" for 127.0.0.1 at 2013-02-19 18:04:03 -0500
+Served asset /backbone/routers/router.js - 304 Not Modified (1ms)
+
+
+Started GET "/assets/underscore.js" for 127.0.0.1 at 2013-02-19 18:04:03 -0500
+Served asset /underscore.js - 304 Not Modified (11ms)
+
+
+Started GET "/assets/backbone/views/home/homeView.js" for 127.0.0.1 at 2013-02-19 18:04:03 -0500
+Served asset /backbone/views/home/homeView.js - 304 Not Modified (4ms)
+
+
+Started GET "/assets/backbone/views/components/componentsView.js" for 127.0.0.1 at 2013-02-19 18:04:03 -0500
+Served asset /backbone/views/components/componentsView.js - 304 Not Modified (5ms)
+
+
+Started GET "/assets/backbone/views/slider/beatSliderView.js" for 127.0.0.1 at 2013-02-19 18:04:03 -0500
+Served asset /backbone/views/slider/beatSliderView.js - 304 Not Modified (2ms)
+
+
+Started GET "/assets/backbone/views/beatBars/beatBarsView.js" for 127.0.0.1 at 2013-02-19 18:04:03 -0500
+Served asset /backbone/views/beatBars/beatBarsView.js - 304 Not Modified (2ms)
+
+
+Started GET "/assets/backbone/views/slider/tempoSliderView.js" for 127.0.0.1 at 2013-02-19 18:04:03 -0500
+Served asset /backbone/views/slider/tempoSliderView.js - 304 Not Modified (6ms)
+
+
+Started GET "/assets/backbone/views/transport/transportView.js" for 127.0.0.1 at 2013-02-19 18:04:03 -0500
+Served asset /backbone/views/transport/transportView.js - 304 Not Modified (1ms)
+
+
+Started GET "/assets/backbone/views/button/repButtonView.js" for 127.0.0.1 at 2013-02-19 18:04:03 -0500
+Served asset /backbone/views/button/repButtonView.js - 304 Not Modified (4ms)
+
+
+Started GET "/assets/app/log.js" for 127.0.0.1 at 2013-02-19 18:04:03 -0500
+Served asset /app/log.js - 304 Not Modified (3ms)
+
+
+Started GET "/assets/backbone.js" for 127.0.0.1 at 2013-02-19 18:04:03 -0500
+Served asset /backbone.js - 304 Not Modified (3ms)
+
+
+Started GET "/assets/bootstrap.js" for 127.0.0.1 at 2013-02-19 18:04:03 -0500
+Served asset /bootstrap.js - 304 Not Modified (13ms)
+
+
+Started GET "/assets/text.js" for 127.0.0.1 at 2013-02-19 18:04:03 -0500
+Served asset /text.js - 304 Not Modified (3ms)
+
+
+Started GET "/assets/backbone/collections/beats.js" for 127.0.0.1 at 2013-02-19 18:04:03 -0500
+Served asset /backbone/collections/beats.js - 304 Not Modified (3ms)
+
+
+Started GET "/assets/backbone/collections/measures.js" for 127.0.0.1 at 2013-02-19 18:04:03 -0500
+Served asset /backbone/collections/measures.js - 304 Not Modified (2ms)
+
+
+Started GET "/assets/backbone/collections/components.js" for 127.0.0.1 at 2013-02-19 18:04:03 -0500
+Served asset /backbone/collections/components.js - 304 Not Modified (3ms)
+
+
+Started GET "/assets/backbone/views/components/componentView.js" for 127.0.0.1 at 2013-02-19 18:04:03 -0500
+Served asset /backbone/views/components/componentView.js - 304 Not Modified (3ms)
+
+
+Started GET "/assets/app/dispatch.js" for 127.0.0.1 at 2013-02-19 18:04:03 -0500
+Served asset /app/dispatch.js - 304 Not Modified (2ms)
+
+
+Started GET "/assets/app/state.js" for 127.0.0.1 at 2013-02-19 18:04:03 -0500
+Served asset /app/state.js - 304 Not Modified (3ms)
+
+
+Started GET "/assets/backbone/models/slider.js" for 127.0.0.1 at 2013-02-19 18:04:03 -0500
+Served asset /backbone/models/slider.js - 304 Not Modified (2ms)
+
+
+Started GET "/assets/backbone/collections/beatBars.js" for 127.0.0.1 at 2013-02-19 18:04:03 -0500
+Served asset /backbone/collections/beatBars.js - 304 Not Modified (2ms)
+
+
+Started GET "/assets/backbone/models/transport.js" for 127.0.0.1 at 2013-02-19 18:04:03 -0500
+Served asset /backbone/models/transport.js - 304 Not Modified (1ms)
+
+
+Started GET "/assets/backbone/models/repButton.js" for 127.0.0.1 at 2013-02-19 18:04:03 -0500
+Served asset /backbone/models/repButton.js - 304 Not Modified (1ms)
+
+
+Started GET "/assets/backbone/models/beat.js" for 127.0.0.1 at 2013-02-19 18:04:03 -0500
+Served asset /backbone/models/beat.js - 304 Not Modified (4ms)
+
+
+Started GET "/assets/backbone/models/measure.js" for 127.0.0.1 at 2013-02-19 18:04:03 -0500
+Served asset /backbone/models/measure.js - 304 Not Modified (3ms)
+
+
+Started GET "/assets/backbone/models/component.js" for 127.0.0.1 at 2013-02-19 18:04:03 -0500
+Served asset /backbone/models/component.js - 304 Not Modified (27ms)
+
+
+Started GET "/assets/backbone/views/measures/measuresView.js" for 127.0.0.1 at 2013-02-19 18:04:03 -0500
+Served asset /backbone/views/measures/measuresView.js - 304 Not Modified (2ms)
+
+
+Started GET "/assets/backbone/models/beatBar.js" for 127.0.0.1 at 2013-02-19 18:04:03 -0500
+Served asset /backbone/models/beatBar.js - 304 Not Modified (3ms)
+
+
+Started GET "/assets/backbone/templates/home/main.html" for 127.0.0.1 at 2013-02-19 18:04:03 -0500
+Served asset /backbone/templates/home/main.html - 304 Not Modified (1ms)
+
+
+Started GET "/assets/backbone/templates/components/components.html" for 127.0.0.1 at 2013-02-19 18:04:03 -0500
+Served asset /backbone/templates/components/components.html - 304 Not Modified (1ms)
+
+
+Started GET "/assets/backbone/templates/slider/slider.html" for 127.0.0.1 at 2013-02-19 18:04:03 -0500
+Served asset /backbone/templates/slider/slider.html - 304 Not Modified (2ms)
+
+
+Started GET "/assets/backbone/templates/beatBars/beatBars.html" for 127.0.0.1 at 2013-02-19 18:04:03 -0500
+Served asset /backbone/templates/beatBars/beatBars.html - 304 Not Modified (1ms)
+
+
+Started GET "/assets/backbone/templates/slider/tempoSlider.html" for 127.0.0.1 at 2013-02-19 18:04:03 -0500
+Served asset /backbone/templates/slider/tempoSlider.html - 304 Not Modified (3ms)
+
+
+Started GET "/assets/backbone/views/beats/beatsView.js" for 127.0.0.1 at 2013-02-19 18:04:03 -0500
+Served asset /backbone/views/beats/beatsView.js - 304 Not Modified (1ms)
+
+
+Started GET "/assets/backbone/templates/transport/transport.html" for 127.0.0.1 at 2013-02-19 18:04:03 -0500
+Served asset /backbone/templates/transport/transport.html - 304 Not Modified (1ms)
+
+
+Started GET "/assets/backbone/templates/button/repButton.html" for 127.0.0.1 at 2013-02-19 18:04:03 -0500
+Served asset /backbone/templates/button/repButton.html - 304 Not Modified (1ms)
+
+
+Started GET "/assets/backbone/templates/measures/measures.html" for 127.0.0.1 at 2013-02-19 18:04:03 -0500
+Served asset /backbone/templates/measures/measures.html - 304 Not Modified (2ms)
+
+
+Started GET "/assets/backbone/views/beats/beatView.js" for 127.0.0.1 at 2013-02-19 18:04:03 -0500
+Served asset /backbone/views/beats/beatView.js - 304 Not Modified (1ms)
+
+
+Started GET "/assets/backbone/templates/beats/beats.html" for 127.0.0.1 at 2013-02-19 18:04:03 -0500
+Served asset /backbone/templates/beats/beats.html - 304 Not Modified (1ms)
+
+
+Started GET "/assets/808_sd.m4a" for 127.0.0.1 at 2013-02-19 18:04:03 -0500
+Served asset /808_sd.m4a - 304 Not Modified (1ms)
+
+
+Started GET "/assets/808_chh.m4a" for 127.0.0.1 at 2013-02-19 18:04:03 -0500
+Served asset /808_chh.m4a - 304 Not Modified (4ms)
+
+
+Started GET "/assets/808_bd.m4a" for 127.0.0.1 at 2013-02-19 18:04:03 -0500
+Served asset /808_bd.m4a - 304 Not Modified (1ms)
+
+
+Started GET "/assets/ambass.mp3" for 127.0.0.1 at 2013-02-19 18:04:03 -0500
+Served asset /ambass.mp3 - 304 Not Modified (3ms)
+
+
+Started GET "/songs" for 127.0.0.1 at 2013-02-19 18:04:04 -0500
+Processing by SongsController#index as HTML
+  [1m[36mSong Load (0.2ms)[0m  [1mSELECT "songs".* FROM "songs" [0m
+  Rendered songs/index.html.erb within layouts/application (0.2ms)
+Completed 200 OK in 10ms (Views: 5.6ms | ActiveRecord: 0.2ms)
+
+
+Started GET "/assets/bootstrap" for 127.0.0.1 at 2013-02-19 18:04:04 -0500
+Served asset /bootstrap - 304 Not Modified (0ms)
+
+
+Started GET "/assets/scaffolds.css?body=1" for 127.0.0.1 at 2013-02-19 18:04:04 -0500
+Served asset /scaffolds.css - 304 Not Modified (2ms)
+
+
+Started GET "/assets/bootstrap-responsive" for 127.0.0.1 at 2013-02-19 18:04:04 -0500
+Served asset /bootstrap-responsive - 304 Not Modified (0ms)
+
+
+Started GET "/assets/songs.css?body=1" for 127.0.0.1 at 2013-02-19 18:04:04 -0500
+Served asset /songs.css - 304 Not Modified (0ms)
+
+
+Started GET "/assets/require.js" for 127.0.0.1 at 2013-02-19 18:04:04 -0500
+Served asset /require.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/assets.js?body=1" for 127.0.0.1 at 2013-02-19 18:04:04 -0500
+Served asset /assets.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/playStop.png" for 127.0.0.1 at 2013-02-19 18:04:04 -0500
+Served asset /playStop.png - 304 Not Modified (1ms)
+
+
+Started GET "/assets/application" for 127.0.0.1 at 2013-02-19 18:04:04 -0500
+Served asset /application - 304 Not Modified (0ms)
+
+
+Started GET "/assets/MusicFractions.js" for 127.0.0.1 at 2013-02-19 18:04:04 -0500
+Served asset /MusicFractions.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/jquery.js" for 127.0.0.1 at 2013-02-19 18:04:04 -0500
+Served asset /jquery.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/routers/router.js" for 127.0.0.1 at 2013-02-19 18:04:04 -0500
+Served asset /backbone/routers/router.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/underscore.js" for 127.0.0.1 at 2013-02-19 18:04:04 -0500
+Served asset /underscore.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/views/slider/beatSliderView.js" for 127.0.0.1 at 2013-02-19 18:04:04 -0500
+Served asset /backbone/views/slider/beatSliderView.js - 304 Not Modified (1ms)
+
+
+Started GET "/assets/backbone/views/home/homeView.js" for 127.0.0.1 at 2013-02-19 18:04:04 -0500
+Served asset /backbone/views/home/homeView.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/views/beatBars/beatBarsView.js" for 127.0.0.1 at 2013-02-19 18:04:04 -0500
+Served asset /backbone/views/beatBars/beatBarsView.js - 304 Not Modified (1ms)
+
+
+Started GET "/assets/backbone/views/components/componentsView.js" for 127.0.0.1 at 2013-02-19 18:04:04 -0500
+Served asset /backbone/views/components/componentsView.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/views/slider/tempoSliderView.js" for 127.0.0.1 at 2013-02-19 18:04:04 -0500
+Served asset /backbone/views/slider/tempoSliderView.js - 304 Not Modified (2ms)
+
+
+Started GET "/assets/backbone/views/transport/transportView.js" for 127.0.0.1 at 2013-02-19 18:04:04 -0500
+Served asset /backbone/views/transport/transportView.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/views/button/repButtonView.js" for 127.0.0.1 at 2013-02-19 18:04:04 -0500
+Served asset /backbone/views/button/repButtonView.js - 304 Not Modified (1ms)
+
+
+Started GET "/assets/app/log.js" for 127.0.0.1 at 2013-02-19 18:04:04 -0500
+Served asset /app/log.js - 304 Not Modified (3ms)
+
+
+Started GET "/assets/backbone.js" for 127.0.0.1 at 2013-02-19 18:04:04 -0500
+Served asset /backbone.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/models/slider.js" for 127.0.0.1 at 2013-02-19 18:04:04 -0500
+Served asset /backbone/models/slider.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/text.js" for 127.0.0.1 at 2013-02-19 18:04:04 -0500
+Served asset /text.js - 304 Not Modified (2ms)
+
+
+Started GET "/assets/app/dispatch.js" for 127.0.0.1 at 2013-02-19 18:04:04 -0500
+Served asset /app/dispatch.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/app/state.js" for 127.0.0.1 at 2013-02-19 18:04:04 -0500
+Served asset /app/state.js - 304 Not Modified (2ms)
+
+
+Started GET "/assets/bootstrap.js" for 127.0.0.1 at 2013-02-19 18:04:04 -0500
+Served asset /bootstrap.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/collections/beatBars.js" for 127.0.0.1 at 2013-02-19 18:04:04 -0500
+Served asset /backbone/collections/beatBars.js - 304 Not Modified (2ms)
+
+
+Started GET "/assets/backbone/collections/beats.js" for 127.0.0.1 at 2013-02-19 18:04:04 -0500
+Served asset /backbone/collections/beats.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/collections/measures.js" for 127.0.0.1 at 2013-02-19 18:04:04 -0500
+Served asset /backbone/collections/measures.js - 304 Not Modified (2ms)
+
+
+Started GET "/assets/backbone/collections/components.js" for 127.0.0.1 at 2013-02-19 18:04:04 -0500
+Served asset /backbone/collections/components.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/views/components/componentView.js" for 127.0.0.1 at 2013-02-19 18:04:04 -0500
+Served asset /backbone/views/components/componentView.js - 304 Not Modified (2ms)
+
+
+Started GET "/assets/backbone/models/transport.js" for 127.0.0.1 at 2013-02-19 18:04:04 -0500
+Served asset /backbone/models/transport.js - 304 Not Modified (2ms)
+
+
+Started GET "/assets/backbone/models/repButton.js" for 127.0.0.1 at 2013-02-19 18:04:04 -0500
+Served asset /backbone/models/repButton.js - 304 Not Modified (1ms)
+
+
+Started GET "/assets/backbone/models/beatBar.js" for 127.0.0.1 at 2013-02-19 18:04:04 -0500
+Served asset /backbone/models/beatBar.js - 304 Not Modified (1ms)
+
+
+Started GET "/assets/backbone/models/beat.js" for 127.0.0.1 at 2013-02-19 18:04:04 -0500
+Served asset /backbone/models/beat.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/models/measure.js" for 127.0.0.1 at 2013-02-19 18:04:04 -0500
+Served asset /backbone/models/measure.js - 304 Not Modified (1ms)
+
+
+Started GET "/assets/backbone/models/component.js" for 127.0.0.1 at 2013-02-19 18:04:04 -0500
+Served asset /backbone/models/component.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/views/measures/measuresView.js" for 127.0.0.1 at 2013-02-19 18:04:04 -0500
+Served asset /backbone/views/measures/measuresView.js - 304 Not Modified (1ms)
+
+
+Started GET "/assets/backbone/templates/home/main.html" for 127.0.0.1 at 2013-02-19 18:04:04 -0500
+Served asset /backbone/templates/home/main.html - 304 Not Modified (1ms)
+
+
+Started GET "/assets/backbone/templates/slider/slider.html" for 127.0.0.1 at 2013-02-19 18:04:04 -0500
+Served asset /backbone/templates/slider/slider.html - 304 Not Modified (1ms)
+
+
+Started GET "/assets/backbone/templates/beatBars/beatBars.html" for 127.0.0.1 at 2013-02-19 18:04:04 -0500
+Served asset /backbone/templates/beatBars/beatBars.html - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/templates/components/components.html" for 127.0.0.1 at 2013-02-19 18:04:04 -0500
+Served asset /backbone/templates/components/components.html - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/templates/slider/tempoSlider.html" for 127.0.0.1 at 2013-02-19 18:04:04 -0500
+Served asset /backbone/templates/slider/tempoSlider.html - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/templates/transport/transport.html" for 127.0.0.1 at 2013-02-19 18:04:04 -0500
+Served asset /backbone/templates/transport/transport.html - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/templates/button/repButton.html" for 127.0.0.1 at 2013-02-19 18:04:04 -0500
+Served asset /backbone/templates/button/repButton.html - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/views/beats/beatsView.js" for 127.0.0.1 at 2013-02-19 18:04:04 -0500
+Served asset /backbone/views/beats/beatsView.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/templates/measures/measures.html" for 127.0.0.1 at 2013-02-19 18:04:04 -0500
+Served asset /backbone/templates/measures/measures.html - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/templates/beats/beats.html" for 127.0.0.1 at 2013-02-19 18:04:04 -0500
+Served asset /backbone/templates/beats/beats.html - 304 Not Modified (1ms)
+
+
+Started GET "/assets/backbone/views/beats/beatView.js" for 127.0.0.1 at 2013-02-19 18:04:04 -0500
+Served asset /backbone/views/beats/beatView.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/808_sd.m4a" for 127.0.0.1 at 2013-02-19 18:04:04 -0500
+Served asset /808_sd.m4a - 304 Not Modified (0ms)
+
+
+Started GET "/assets/808_chh.m4a" for 127.0.0.1 at 2013-02-19 18:04:04 -0500
+Served asset /808_chh.m4a - 304 Not Modified (0ms)
+
+
+Started GET "/assets/808_bd.m4a" for 127.0.0.1 at 2013-02-19 18:04:04 -0500
+Served asset /808_bd.m4a - 304 Not Modified (4ms)
+
+
+Started GET "/assets/ambass.mp3" for 127.0.0.1 at 2013-02-19 18:04:04 -0500
+Served asset /ambass.mp3 - 304 Not Modified (3ms)
+
+
+Started GET "/assets/snare.png" for 127.0.0.1 at 2013-02-19 18:04:04 -0500
+Served asset /snare.png - 304 Not Modified (1ms)
+
+
+Started GET "/assets/kick.png" for 127.0.0.1 at 2013-02-19 18:04:04 -0500
+Served asset /kick.png - 304 Not Modified (1ms)
+
+
+Started GET "/assets/hihat.png" for 127.0.0.1 at 2013-02-19 18:04:04 -0500
+Served asset /hihat.png - 304 Not Modified (0ms)
+
+
+Started GET "/assets/synth.png" for 127.0.0.1 at 2013-02-19 18:04:04 -0500
+Served asset /synth.png - 304 Not Modified (1ms)
+
+
+Started GET "/assets/playStop.png" for 127.0.0.1 at 2013-02-19 18:04:08 -0500
+Served asset /playStop.png - 304 Not Modified (0ms)
+
+
+Started GET "/assets/MusicFractions.js" for 127.0.0.1 at 2013-02-19 18:04:15 -0500
+Served asset /MusicFractions.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/jquery.js" for 127.0.0.1 at 2013-02-19 18:04:15 -0500
+Served asset /jquery.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/routers/router.js" for 127.0.0.1 at 2013-02-19 18:04:15 -0500
+Served asset /backbone/routers/router.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/underscore.js" for 127.0.0.1 at 2013-02-19 18:04:15 -0500
+Served asset /underscore.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/views/slider/beatSliderView.js" for 127.0.0.1 at 2013-02-19 18:04:15 -0500
+Served asset /backbone/views/slider/beatSliderView.js - 304 Not Modified (2ms)
+
+
+Started GET "/assets/backbone/views/home/homeView.js" for 127.0.0.1 at 2013-02-19 18:04:15 -0500
+Served asset /backbone/views/home/homeView.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/views/beatBars/beatBarsView.js" for 127.0.0.1 at 2013-02-19 18:04:15 -0500
+Served asset /backbone/views/beatBars/beatBarsView.js - 304 Not Modified (2ms)
+
+
+Started GET "/assets/backbone/views/components/componentsView.js" for 127.0.0.1 at 2013-02-19 18:04:15 -0500
+Served asset /backbone/views/components/componentsView.js - 304 Not Modified (1ms)
+
+
+Started GET "/assets/backbone/views/transport/transportView.js" for 127.0.0.1 at 2013-02-19 18:04:15 -0500
+Served asset /backbone/views/transport/transportView.js - 304 Not Modified (2ms)
+
+
+Started GET "/assets/backbone/views/slider/tempoSliderView.js" for 127.0.0.1 at 2013-02-19 18:04:15 -0500
+Served asset /backbone/views/slider/tempoSliderView.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/views/button/repButtonView.js" for 127.0.0.1 at 2013-02-19 18:04:15 -0500
+Served asset /backbone/views/button/repButtonView.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/app/log.js" for 127.0.0.1 at 2013-02-19 18:04:15 -0500
+Served asset /app/log.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone.js" for 127.0.0.1 at 2013-02-19 18:04:15 -0500
+Served asset /backbone.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/models/slider.js" for 127.0.0.1 at 2013-02-19 18:04:15 -0500
+Served asset /backbone/models/slider.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/text.js" for 127.0.0.1 at 2013-02-19 18:04:15 -0500
+Served asset /text.js - 304 Not Modified (4ms)
+
+
+Started GET "/assets/app/state.js" for 127.0.0.1 at 2013-02-19 18:04:15 -0500
+Served asset /app/state.js - 304 Not Modified (2ms)
+
+
+Started GET "/assets/bootstrap.js" for 127.0.0.1 at 2013-02-19 18:04:15 -0500
+Served asset /bootstrap.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/app/dispatch.js" for 127.0.0.1 at 2013-02-19 18:04:15 -0500
+Served asset /app/dispatch.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/collections/beats.js" for 127.0.0.1 at 2013-02-19 18:04:15 -0500
+Served asset /backbone/collections/beats.js - 304 Not Modified (1ms)
+
+
+Started GET "/assets/backbone/collections/beatBars.js" for 127.0.0.1 at 2013-02-19 18:04:15 -0500
+Served asset /backbone/collections/beatBars.js - 304 Not Modified (1ms)
+
+
+Started GET "/assets/backbone/collections/measures.js" for 127.0.0.1 at 2013-02-19 18:04:15 -0500
+Served asset /backbone/collections/measures.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/collections/components.js" for 127.0.0.1 at 2013-02-19 18:04:15 -0500
+Served asset /backbone/collections/components.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/views/components/componentView.js" for 127.0.0.1 at 2013-02-19 18:04:15 -0500
+Served asset /backbone/views/components/componentView.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/models/transport.js" for 127.0.0.1 at 2013-02-19 18:04:15 -0500
+Served asset /backbone/models/transport.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/models/repButton.js" for 127.0.0.1 at 2013-02-19 18:04:15 -0500
+Served asset /backbone/models/repButton.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/templates/slider/slider.html" for 127.0.0.1 at 2013-02-19 18:04:15 -0500
+Served asset /backbone/templates/slider/slider.html - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/templates/home/main.html" for 127.0.0.1 at 2013-02-19 18:04:15 -0500
+Served asset /backbone/templates/home/main.html - 304 Not Modified (4ms)
+
+
+Started GET "/assets/backbone/templates/components/components.html" for 127.0.0.1 at 2013-02-19 18:04:15 -0500
+Served asset /backbone/templates/components/components.html - 304 Not Modified (1ms)
+
+
+Started GET "/assets/backbone/templates/beatBars/beatBars.html" for 127.0.0.1 at 2013-02-19 18:04:15 -0500
+Served asset /backbone/templates/beatBars/beatBars.html - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/templates/transport/transport.html" for 127.0.0.1 at 2013-02-19 18:04:15 -0500
+Served asset /backbone/templates/transport/transport.html - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/templates/button/repButton.html" for 127.0.0.1 at 2013-02-19 18:04:15 -0500
+Served asset /backbone/templates/button/repButton.html - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/templates/slider/tempoSlider.html" for 127.0.0.1 at 2013-02-19 18:04:15 -0500
+Served asset /backbone/templates/slider/tempoSlider.html - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/models/beat.js" for 127.0.0.1 at 2013-02-19 18:04:15 -0500
+Served asset /backbone/models/beat.js - 304 Not Modified (1ms)
+
+
+Started GET "/assets/backbone/models/beatBar.js" for 127.0.0.1 at 2013-02-19 18:04:15 -0500
+Served asset /backbone/models/beatBar.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/models/measure.js" for 127.0.0.1 at 2013-02-19 18:04:15 -0500
+Served asset /backbone/models/measure.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/models/component.js" for 127.0.0.1 at 2013-02-19 18:04:15 -0500
+Served asset /backbone/models/component.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/views/measures/measuresView.js" for 127.0.0.1 at 2013-02-19 18:04:15 -0500
+Served asset /backbone/views/measures/measuresView.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/views/beats/beatsView.js" for 127.0.0.1 at 2013-02-19 18:04:15 -0500
+Served asset /backbone/views/beats/beatsView.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/templates/measures/measures.html" for 127.0.0.1 at 2013-02-19 18:04:15 -0500
+Served asset /backbone/templates/measures/measures.html - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/views/beats/beatView.js" for 127.0.0.1 at 2013-02-19 18:04:15 -0500
+Served asset /backbone/views/beats/beatView.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/templates/beats/beats.html" for 127.0.0.1 at 2013-02-19 18:04:15 -0500
+Served asset /backbone/templates/beats/beats.html - 304 Not Modified (0ms)
+
+
+Started GET "/assets/808_sd.m4a" for 127.0.0.1 at 2013-02-19 18:04:15 -0500
+Served asset /808_sd.m4a - 304 Not Modified (0ms)
+
+
+Started GET "/assets/808_chh.m4a" for 127.0.0.1 at 2013-02-19 18:04:15 -0500
+Served asset /808_chh.m4a - 304 Not Modified (0ms)
+
+
+Started GET "/assets/808_bd.m4a" for 127.0.0.1 at 2013-02-19 18:04:15 -0500
+Served asset /808_bd.m4a - 304 Not Modified (0ms)
+
+
+Started GET "/assets/ambass.mp3" for 127.0.0.1 at 2013-02-19 18:04:15 -0500
+Served asset /ambass.mp3 - 304 Not Modified (1ms)
+
+
+Started GET "/assets/snare.png" for 127.0.0.1 at 2013-02-19 18:04:15 -0500
+Served asset /snare.png - 304 Not Modified (3ms)
+
+
+Started GET "/assets/hihat.png" for 127.0.0.1 at 2013-02-19 18:04:15 -0500
+Served asset /hihat.png - 304 Not Modified (0ms)
+
+
+Started GET "/assets/kick.png" for 127.0.0.1 at 2013-02-19 18:04:15 -0500
+Served asset /kick.png - 304 Not Modified (0ms)
+
+
+Started GET "/assets/synth.png" for 127.0.0.1 at 2013-02-19 18:04:15 -0500
+Served asset /synth.png - 304 Not Modified (0ms)

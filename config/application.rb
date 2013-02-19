@@ -59,6 +59,9 @@ module SoundOfFractions
     # REQUIRE.JS Config
     config.requirejs.logical_asset_filter += [/\.html$/]
 
+    # Chris.Devise (for heroku)
+    config.assets.initialize_on_precompile = false
+
   end
 end
 
