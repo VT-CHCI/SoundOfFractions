@@ -1,0 +1,205 @@
+
+
+/* ==========================================================================
+   Author's custom styles
+   ========================================================================== */
+
+#slider input {
+	width: 100%;
+}
+
+#tempo-slider input {
+  width: 100%;
+}
+
+.beat-bar {
+	height: 25px;
+	background: #FF9700;
+	text-align: center;
+	border: 1px solid grey;
+	margin: 5px 0;
+}
+
+.OFF {
+  width: 100%;
+  height: 100%;
+	background: #679ED2;
+}
+
+.ON {
+  width: 100%;
+  height: 100%;
+	background: #FF9700;
+}
+
+.beat {
+  width: 24.583333333333332%;
+  height: 25px;
+	float: left;
+	border-top: 1px solid;
+  border-bottom: 1px solid;
+  border-left: 1px solid;
+}
+
+.beat:last-of-type {
+  border-right: 1px solid;
+}
+
+.beat > div {
+  position: relative;
+}
+
+.measure {
+	border: solid 1px grey;
+  border-radius: 3px;
+	padding: 0 5px 5px 5px;
+	display: inline-block;
+  margin-bottom: 5px;
+  width: 300px;
+}
+
+.measure .title {
+	clear: both;
+	display: block;
+	text-align: center;
+}
+
+.measure .title .delete {
+	color: red;
+  cursor: pointer;
+}
+
+.measure .title .delete:hover {
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.addMeasure {
+	color: green;
+	display: inline-block;
+	vertical-align: bottom;
+	padding: 0 5px;
+	font-size: 30px;
+  cursor: pointer;
+}
+
+.addMeasure:hover {
+  font-weight: bold;
+}
+
+.component-image {
+  width: 70px;
+  float: left;
+  margin: 10px;
+}
+
+.component {
+  min-height: 50px;
+  width: 85%;
+}
+
+.component-container {
+  position: relative;
+}
+
+.component-container .count {
+  position: absolute;
+  top: 30px;
+  right: 0;
+  font-size: 50px;
+  height: 50px;
+  width: 7%;
+  text-align: center;
+}
+
+.component-container .count .numerator {
+  display: block;
+  margin: 15px auto 15px auto;
+  border-bottom: 4px solid;
+  padding-bottom: 12px;
+}
+
+.component-container .count .denominator {
+
+}
+
+.component-container .count .percent, .component-container .count .decimal {
+  margin-top: 65%;
+  display: block;
+  margin-left: -25px;
+  font-size: 40px;
+}
+
+.control {
+  position: absolute;
+  top: 90px;
+  font-size: 45px;
+  font-weight: bold;
+  left: 53px;
+  cursor: pointer;
+}
+
+.unmute {
+  color: rgba(5, 5, 5, .25);
+}
+
+.unmute:hover {
+  color: rgba(255, 0, 0, 0.75);
+}
+
+.mute {
+  color: rgba(255, 0, 0, 1);
+  border: 2px solid red;
+  padding: 11px 3px;
+  top: 79px;
+  left: 47px;
+}
+
+.mute:hover {
+  color: rgba(255, 0, 0, 0.5);
+  border: 2px solid rgba(255, 0, 0, 0.5);
+}
+
+.animated-beat {
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  position: absolute;
+  border: 0 solid black;
+}
+
+#transport {
+  width: 100px;
+  height: 100px;
+  padding-bottom: 15px;
+  margin: 0 auto;
+  cursor: pointer;
+}
+
+.play {
+  background:url(image_path("playStop.png")) 0 0 no-repeat;
+}
+
+.pause {
+  background:url(image_path("playStop.png")) 100% 0 no-repeat;
+}
+
+#visual-beats {
+  height: 155px;
+}
+
+.selected {
+  background-color: #C9D2D4;
+}
+
+#rep-button {
+  margin: 0 auto 10px auto;
+  text-align: center;
+  width: 100%;
+}
+
+#rep-button button {
+  width: 25%;
+}
+

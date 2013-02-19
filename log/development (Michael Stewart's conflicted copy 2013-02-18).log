@@ -1,0 +1,1198 @@
+  [1m[36m (0.2ms)[0m  [1mselect sqlite_version(*)[0m
+  [1m[35m (1.0ms)[0m  CREATE TABLE "schema_migrations" ("version" varchar(255) NOT NULL) 
+  [1m[36m (0.0ms)[0m  [1mPRAGMA index_list("schema_migrations")[0m
+  [1m[35m (0.8ms)[0m  CREATE UNIQUE INDEX "unique_schema_migrations" ON "schema_migrations" ("version")
+  [1m[36m (0.1ms)[0m  [1mSELECT "schema_migrations"."version" FROM "schema_migrations" [0m
+Migrating to CreateSongs (20130218034007)
+  [1m[35m (0.0ms)[0m  begin transaction
+  [1m[36m (0.5ms)[0m  [1mCREATE TABLE "songs" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "title" varchar(255), "content" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) [0m
+  [1m[35m (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ('20130218034007')
+  [1m[36m (0.7ms)[0m  [1mcommit transaction[0m
+  [1m[35m (0.3ms)[0m  select sqlite_version(*)
+  [1m[36m (0.1ms)[0m  [1mSELECT "schema_migrations"."version" FROM "schema_migrations" [0m
+  [1m[35m (0.0ms)[0m  PRAGMA index_list("songs")
+
+
+Started GET "/" for 127.0.0.1 at 2013-02-17 22:41:36 -0500
+Processing by SongsController#index as HTML
+  [1m[36mSong Load (0.2ms)[0m  [1mSELECT "songs".* FROM "songs" [0m
+  Rendered songs/index.html.erb within layouts/application (2.8ms)
+Compiled scaffolds.css  (50ms)  (pid 46947)
+Compiled songs.css  (4ms)  (pid 46947)
+Compiled application.css  (76ms)  (pid 46947)
+Compiled jquery.js  (4ms)  (pid 46947)
+Compiled jquery_ujs.js  (0ms)  (pid 46947)
+Compiled underscore.js  (0ms)  (pid 46947)
+Compiled backbone.js  (0ms)  (pid 46947)
+Compiled backbone_rails_sync.js  (0ms)  (pid 46947)
+Compiled backbone_datalink.js  (0ms)  (pid 46947)
+Compiled backbone/templates/songs/edit.js  (4ms)  (pid 46947)
+Compiled backbone/templates/songs/index.js  (0ms)  (pid 46947)
+Compiled backbone/templates/songs/new.js  (0ms)  (pid 46947)
+Compiled backbone/templates/songs/show.js  (0ms)  (pid 46947)
+Compiled backbone/templates/songs/song.js  (0ms)  (pid 46947)
+Compiled backbone/models/song.js  (216ms)  (pid 46947)
+Compiled backbone/views/songs/edit_view.js  (225ms)  (pid 46947)
+Compiled backbone/views/songs/index_view.js  (203ms)  (pid 46947)
+Compiled backbone/views/songs/new_view.js  (217ms)  (pid 46947)
+Compiled backbone/views/songs/show_view.js  (194ms)  (pid 46947)
+Compiled backbone/views/songs/song_view.js  (248ms)  (pid 46947)
+Compiled backbone/routers/songs_router.js  (206ms)  (pid 46947)
+Compiled backbone/bboneoldfractions.js  (2141ms)  (pid 46947)
+Compiled songs.js  (199ms)  (pid 46947)
+Compiled application.js  (2577ms)  (pid 46947)
+Completed 200 OK in 2781ms (Views: 2779.1ms | ActiveRecord: 0.2ms)
+
+
+Started GET "/assets/jquery.js?body=1" for 127.0.0.1 at 2013-02-17 22:41:40 -0500
+Served asset /jquery.js - 304 Not Modified (12ms)
+
+
+Started GET "/assets/backbone/bboneoldfractions.js?body=1" for 127.0.0.1 at 2013-02-17 22:41:40 -0500
+Served asset /backbone/bboneoldfractions.js - 200 OK (56ms)
+
+
+Started GET "/assets/songs.css?body=1" for 127.0.0.1 at 2013-02-17 22:41:40 -0500
+Served asset /songs.css - 304 Not Modified (3ms)
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 127.0.0.1 at 2013-02-17 22:41:40 -0500
+Served asset /jquery_ujs.js - 304 Not Modified (2ms)
+
+
+Started GET "/assets/scaffolds.css?body=1" for 127.0.0.1 at 2013-02-17 22:41:40 -0500
+Served asset /scaffolds.css - 304 Not Modified (3ms)
+
+
+Started GET "/assets/application.css?body=1" for 127.0.0.1 at 2013-02-17 22:41:40 -0500
+Served asset /application.css - 304 Not Modified (3ms)
+
+
+Started GET "/assets/underscore.js?body=1" for 127.0.0.1 at 2013-02-17 22:41:40 -0500
+Served asset /underscore.js - 304 Not Modified (4ms)
+
+
+Started GET "/assets/backbone_rails_sync.js?body=1" for 127.0.0.1 at 2013-02-17 22:41:40 -0500
+Served asset /backbone_rails_sync.js - 304 Not Modified (2ms)
+
+
+Started GET "/assets/backbone.js?body=1" for 127.0.0.1 at 2013-02-17 22:41:40 -0500
+Served asset /backbone.js - 304 Not Modified (5ms)
+
+
+Started GET "/assets/backbone_datalink.js?body=1" for 127.0.0.1 at 2013-02-17 22:41:40 -0500
+Served asset /backbone_datalink.js - 304 Not Modified (2ms)
+
+
+Started GET "/assets/backbone/templates/songs/edit.js?body=1" for 127.0.0.1 at 2013-02-17 22:41:40 -0500
+Served asset /backbone/templates/songs/edit.js - 304 Not Modified (3ms)
+
+
+Started GET "/assets/backbone/models/song.js?body=1" for 127.0.0.1 at 2013-02-17 22:41:40 -0500
+Served asset /backbone/models/song.js - 200 OK (1ms)
+
+
+Started GET "/assets/backbone/templates/songs/new.js?body=1" for 127.0.0.1 at 2013-02-17 22:41:40 -0500
+Served asset /backbone/templates/songs/new.js - 304 Not Modified (13ms)
+
+
+Started GET "/assets/backbone/templates/songs/show.js?body=1" for 127.0.0.1 at 2013-02-17 22:41:40 -0500
+Served asset /backbone/templates/songs/show.js - 304 Not Modified (52ms)
+
+
+Started GET "/assets/backbone/templates/songs/index.js?body=1" for 127.0.0.1 at 2013-02-17 22:41:40 -0500
+Served asset /backbone/templates/songs/index.js - 304 Not Modified (4ms)
+
+
+Started GET "/assets/backbone/views/songs/edit_view.js?body=1" for 127.0.0.1 at 2013-02-17 22:41:40 -0500
+Served asset /backbone/views/songs/edit_view.js - 200 OK (2ms)
+
+
+Started GET "/assets/backbone/templates/songs/song.js?body=1" for 127.0.0.1 at 2013-02-17 22:41:40 -0500
+Served asset /backbone/templates/songs/song.js - 304 Not Modified (5ms)
+
+
+Started GET "/assets/backbone/views/songs/index_view.js?body=1" for 127.0.0.1 at 2013-02-17 22:41:40 -0500
+Served asset /backbone/views/songs/index_view.js - 200 OK (2ms)
+
+
+Started GET "/assets/backbone/views/songs/show_view.js?body=1" for 127.0.0.1 at 2013-02-17 22:41:40 -0500
+Served asset /backbone/views/songs/show_view.js - 200 OK (4ms)
+
+
+Started GET "/assets/backbone/views/songs/new_view.js?body=1" for 127.0.0.1 at 2013-02-17 22:41:40 -0500
+Served asset /backbone/views/songs/new_view.js - 200 OK (2ms)
+
+
+Started GET "/assets/backbone/views/songs/song_view.js?body=1" for 127.0.0.1 at 2013-02-17 22:41:40 -0500
+Served asset /backbone/views/songs/song_view.js - 200 OK (2ms)
+
+
+Started GET "/assets/backbone/routers/songs_router.js?body=1" for 127.0.0.1 at 2013-02-17 22:41:40 -0500
+Served asset /backbone/routers/songs_router.js - 200 OK (2ms)
+
+
+Started GET "/assets/application.js?body=1" for 127.0.0.1 at 2013-02-17 22:41:40 -0500
+Served asset /application.js - 304 Not Modified (77ms)
+
+
+Started GET "/assets/songs.js?body=1" for 127.0.0.1 at 2013-02-17 22:41:40 -0500
+Served asset /songs.js - 304 Not Modified (1ms)
+
+
+Started GET "/" for 127.0.0.1 at 2013-02-18 09:48:28 -0500
+Processing by SongsController#index as HTML
+  [1m[36mSong Load (1.0ms)[0m  [1mSELECT "songs".* FROM "songs" [0m
+  Rendered songs/index.html.erb within layouts/application (2.9ms)
+Compiled backbone/views/songs/index_view.js  (331ms)  (pid 47617)
+Compiled backbone/bboneoldfractions.js  (210ms)  (pid 47617)
+Compiled application.js  (47ms)  (pid 47617)
+Completed 200 OK in 789ms (Views: 786.1ms | ActiveRecord: 1.0ms)
+
+
+Started GET "/assets/application.css?body=1" for 127.0.0.1 at 2013-02-18 09:48:30 -0500
+Served asset /application.css - 304 Not Modified (4ms)
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 127.0.0.1 at 2013-02-18 09:48:30 -0500
+Served asset /jquery_ujs.js - 304 Not Modified (4ms)
+
+
+Started GET "/assets/jquery.js?body=1" for 127.0.0.1 at 2013-02-18 09:48:30 -0500
+Served asset /jquery.js - 304 Not Modified (5ms)
+
+
+Started GET "/assets/underscore.js?body=1" for 127.0.0.1 at 2013-02-18 09:48:30 -0500
+Served asset /underscore.js - 200 OK (2ms)
+
+
+Started GET "/assets/songs.css?body=1" for 127.0.0.1 at 2013-02-18 09:48:30 -0500
+Served asset /songs.css - 304 Not Modified (2ms)
+
+
+Started GET "/assets/scaffolds.css?body=1" for 127.0.0.1 at 2013-02-18 09:48:30 -0500
+Served asset /scaffolds.css - 304 Not Modified (1ms)
+
+
+Started GET "/assets/backbone/bboneoldfractions.js?body=1" for 127.0.0.1 at 2013-02-18 09:48:30 -0500
+Served asset /backbone/bboneoldfractions.js - 304 Not Modified (19ms)
+
+
+Started GET "/assets/backbone_datalink.js?body=1" for 127.0.0.1 at 2013-02-18 09:48:30 -0500
+Served asset /backbone_datalink.js - 304 Not Modified (2ms)
+
+
+Started GET "/assets/backbone.js?body=1" for 127.0.0.1 at 2013-02-18 09:48:30 -0500
+Served asset /backbone.js - 200 OK (4ms)
+
+
+Started GET "/assets/backbone/templates/songs/edit.js?body=1" for 127.0.0.1 at 2013-02-18 09:48:30 -0500
+Served asset /backbone/templates/songs/edit.js - 304 Not Modified (2ms)
+
+
+Started GET "/assets/backbone/templates/songs/show.js?body=1" for 127.0.0.1 at 2013-02-18 09:48:30 -0500
+Served asset /backbone/templates/songs/show.js - 304 Not Modified (1ms)
+
+
+Started GET "/assets/backbone/templates/songs/index.js?body=1" for 127.0.0.1 at 2013-02-18 09:48:30 -0500
+Served asset /backbone/templates/songs/index.js - 304 Not Modified (4ms)
+
+
+Started GET "/assets/backbone_rails_sync.js?body=1" for 127.0.0.1 at 2013-02-18 09:48:30 -0500
+Served asset /backbone_rails_sync.js - 304 Not Modified (2ms)
+
+
+Started GET "/assets/backbone/templates/songs/song.js?body=1" for 127.0.0.1 at 2013-02-18 09:48:30 -0500
+Served asset /backbone/templates/songs/song.js - 304 Not Modified (1ms)
+
+
+Started GET "/assets/backbone/views/songs/index_view.js?body=1" for 127.0.0.1 at 2013-02-18 09:48:30 -0500
+Served asset /backbone/views/songs/index_view.js - 200 OK (1ms)
+
+
+Started GET "/assets/backbone/templates/songs/new.js?body=1" for 127.0.0.1 at 2013-02-18 09:48:30 -0500
+Served asset /backbone/templates/songs/new.js - 304 Not Modified (2ms)
+
+
+Started GET "/assets/backbone/views/songs/edit_view.js?body=1" for 127.0.0.1 at 2013-02-18 09:48:30 -0500
+Served asset /backbone/views/songs/edit_view.js - 304 Not Modified (1ms)
+
+
+Started GET "/assets/backbone/views/songs/show_view.js?body=1" for 127.0.0.1 at 2013-02-18 09:48:30 -0500
+Served asset /backbone/views/songs/show_view.js - 304 Not Modified (2ms)
+
+
+Started GET "/assets/backbone/views/songs/song_view.js?body=1" for 127.0.0.1 at 2013-02-18 09:48:30 -0500
+Served asset /backbone/views/songs/song_view.js - 304 Not Modified (4ms)
+
+
+Started GET "/assets/backbone/models/song.js?body=1" for 127.0.0.1 at 2013-02-18 09:48:30 -0500
+Served asset /backbone/models/song.js - 304 Not Modified (2ms)
+
+
+Started GET "/assets/songs.js?body=1" for 127.0.0.1 at 2013-02-18 09:48:30 -0500
+Served asset /songs.js - 304 Not Modified (3ms)
+
+
+Started GET "/assets/backbone/views/songs/new_view.js?body=1" for 127.0.0.1 at 2013-02-18 09:48:30 -0500
+Served asset /backbone/views/songs/new_view.js - 304 Not Modified (2ms)
+
+
+Started GET "/assets/backbone/routers/songs_router.js?body=1" for 127.0.0.1 at 2013-02-18 09:48:30 -0500
+Served asset /backbone/routers/songs_router.js - 304 Not Modified (4ms)
+
+
+Started GET "/assets/application.js?body=1" for 127.0.0.1 at 2013-02-18 09:48:30 -0500
+Served asset /application.js - 200 OK (158ms)
+
+
+Started GET "/" for 127.0.0.1 at 2013-02-18 09:50:29 -0500
+Processing by SongsController#index as HTML
+  [1m[35mSong Load (0.2ms)[0m  SELECT "songs".* FROM "songs" 
+  Rendered songs/index.html.erb within layouts/application (0.3ms)
+Compiled backbone/views/songs/index_view.js  (342ms)  (pid 47617)
+Compiled backbone/bboneoldfractions.js  (246ms)  (pid 47617)
+Compiled application.js  (18ms)  (pid 47617)
+Completed 200 OK in 743ms (Views: 741.7ms | ActiveRecord: 0.2ms)
+
+
+Started GET "/assets/application.css?body=1" for 127.0.0.1 at 2013-02-18 09:50:30 -0500
+Served asset /application.css - 200 OK (0ms)
+
+
+Started GET "/assets/backbone.js?body=1" for 127.0.0.1 at 2013-02-18 09:50:30 -0500
+Served asset /backbone.js - 200 OK (0ms)
+
+
+Started GET "/assets/scaffolds.css?body=1" for 127.0.0.1 at 2013-02-18 09:50:30 -0500
+Served asset /scaffolds.css - 200 OK (0ms)
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 127.0.0.1 at 2013-02-18 09:50:30 -0500
+Served asset /jquery_ujs.js - 200 OK (0ms)
+
+
+Started GET "/assets/songs.css?body=1" for 127.0.0.1 at 2013-02-18 09:50:30 -0500
+Served asset /songs.css - 200 OK (0ms)
+
+
+Started GET "/assets/jquery.js?body=1" for 127.0.0.1 at 2013-02-18 09:50:30 -0500
+Served asset /jquery.js - 200 OK (0ms)
+
+
+Started GET "/assets/underscore.js?body=1" for 127.0.0.1 at 2013-02-18 09:50:30 -0500
+Served asset /underscore.js - 200 OK (0ms)
+
+
+Started GET "/assets/backbone/bboneoldfractions.js?body=1" for 127.0.0.1 at 2013-02-18 09:50:30 -0500
+Served asset /backbone/bboneoldfractions.js - 200 OK (18ms)
+
+
+Started GET "/assets/backbone_datalink.js?body=1" for 127.0.0.1 at 2013-02-18 09:50:30 -0500
+Served asset /backbone_datalink.js - 200 OK (0ms)
+
+
+Started GET "/assets/backbone_rails_sync.js?body=1" for 127.0.0.1 at 2013-02-18 09:50:30 -0500
+Served asset /backbone_rails_sync.js - 200 OK (0ms)
+
+
+Started GET "/assets/backbone/templates/songs/index.js?body=1" for 127.0.0.1 at 2013-02-18 09:50:30 -0500
+Served asset /backbone/templates/songs/index.js - 200 OK (0ms)
+
+
+Started GET "/assets/backbone/templates/songs/edit.js?body=1" for 127.0.0.1 at 2013-02-18 09:50:30 -0500
+Served asset /backbone/templates/songs/edit.js - 200 OK (0ms)
+
+
+Started GET "/assets/backbone/templates/songs/new.js?body=1" for 127.0.0.1 at 2013-02-18 09:50:30 -0500
+Served asset /backbone/templates/songs/new.js - 200 OK (0ms)
+
+
+Started GET "/assets/backbone/models/song.js?body=1" for 127.0.0.1 at 2013-02-18 09:50:30 -0500
+Served asset /backbone/models/song.js - 200 OK (0ms)
+
+
+Started GET "/assets/backbone/templates/songs/show.js?body=1" for 127.0.0.1 at 2013-02-18 09:50:30 -0500
+Served asset /backbone/templates/songs/show.js - 200 OK (0ms)
+
+
+Started GET "/assets/backbone/views/songs/index_view.js?body=1" for 127.0.0.1 at 2013-02-18 09:50:30 -0500
+Served asset /backbone/views/songs/index_view.js - 200 OK (5ms)
+
+
+Started GET "/assets/backbone/views/songs/new_view.js?body=1" for 127.0.0.1 at 2013-02-18 09:50:30 -0500
+Served asset /backbone/views/songs/new_view.js - 200 OK (0ms)
+
+
+Started GET "/assets/backbone/views/songs/edit_view.js?body=1" for 127.0.0.1 at 2013-02-18 09:50:30 -0500
+Served asset /backbone/views/songs/edit_view.js - 200 OK (0ms)
+
+
+Started GET "/assets/backbone/views/songs/song_view.js?body=1" for 127.0.0.1 at 2013-02-18 09:50:30 -0500
+Served asset /backbone/views/songs/song_view.js - 200 OK (0ms)
+
+
+Started GET "/assets/backbone/routers/songs_router.js?body=1" for 127.0.0.1 at 2013-02-18 09:50:30 -0500
+Served asset /backbone/routers/songs_router.js - 200 OK (0ms)
+
+
+Started GET "/assets/songs.js?body=1" for 127.0.0.1 at 2013-02-18 09:50:30 -0500
+Served asset /songs.js - 200 OK (0ms)
+
+
+Started GET "/assets/backbone/templates/songs/song.js?body=1" for 127.0.0.1 at 2013-02-18 09:50:30 -0500
+Served asset /backbone/templates/songs/song.js - 200 OK (0ms)
+
+
+Started GET "/assets/application.js?body=1" for 127.0.0.1 at 2013-02-18 09:50:30 -0500
+Served asset /application.js - 200 OK (69ms)
+
+
+Started GET "/assets/backbone/views/songs/show_view.js?body=1" for 127.0.0.1 at 2013-02-18 09:50:30 -0500
+Served asset /backbone/views/songs/show_view.js - 200 OK (0ms)
+
+
+Started POST "/songs" for 127.0.0.1 at 2013-02-18 09:51:21 -0500
+Processing by SongsController#create as JSON
+  Parameters: {"song"=>{"title"=>"electricky noisy garbage", "content"=>"cymbals and more cymbals"}}
+  [1m[36m (0.1ms)[0m  [1mbegin transaction[0m
+  [1m[35mSQL (8.8ms)[0m  INSERT INTO "songs" ("content", "created_at", "title", "updated_at") VALUES (?, ?, ?, ?)  [["content", "cymbals and more cymbals"], ["created_at", Mon, 18 Feb 2013 14:51:21 UTC +00:00], ["title", "electricky noisy garbage"], ["updated_at", Mon, 18 Feb 2013 14:51:21 UTC +00:00]]
+  [1m[36m (1.1ms)[0m  [1mcommit transaction[0m
+Completed 201 Created in 23ms (Views: 2.2ms | ActiveRecord: 10.0ms)
+
+
+Started PUT "/songs/1" for 127.0.0.1 at 2013-02-18 09:51:47 -0500
+Processing by SongsController#update as JSON
+  Parameters: {"song"=>{"title"=>"electricky noisy garbage", "content"=>"chris", "created_at"=>"2013-02-18T14:51:21Z", "id"=>1, "updated_at"=>"2013-02-18T14:51:21Z"}, "id"=>"1"}
+  [1m[35mSong Load (0.3ms)[0m  SELECT "songs".* FROM "songs" WHERE "songs"."id" = ? LIMIT 1  [["id", "1"]]
+  [1m[36m (0.1ms)[0m  [1mbegin transaction[0m
+  [1m[35m (0.4ms)[0m  UPDATE "songs" SET "content" = 'chris', "created_at" = '2013-02-18 14:51:21.000000', "updated_at" = '2013-02-18 14:51:21.000000' WHERE "songs"."id" = 1
+  [1m[36m (0.4ms)[0m  [1mcommit transaction[0m
+Completed 204 No Content in 13ms (ActiveRecord: 1.2ms)
+
+
+Started DELETE "/songs/1" for 127.0.0.1 at 2013-02-18 09:51:50 -0500
+Processing by SongsController#destroy as JSON
+  Parameters: {"id"=>"1"}
+  [1m[35mSong Load (0.2ms)[0m  SELECT "songs".* FROM "songs" WHERE "songs"."id" = ? LIMIT 1  [["id", "1"]]
+  [1m[36m (0.1ms)[0m  [1mbegin transaction[0m
+  [1m[35mSQL (0.4ms)[0m  DELETE FROM "songs" WHERE "songs"."id" = ?  [["id", 1]]
+  [1m[36m (0.5ms)[0m  [1mcommit transaction[0m
+Completed 204 No Content in 4ms (ActiveRecord: 1.2ms)
+
+
+Started POST "/songs" for 127.0.0.1 at 2013-02-18 09:51:58 -0500
+Processing by SongsController#create as JSON
+  Parameters: {"song"=>{"title"=>"pentiums", "content"=>"stuff"}}
+  [1m[35m (0.1ms)[0m  begin transaction
+  [1m[36mSQL (0.5ms)[0m  [1mINSERT INTO "songs" ("content", "created_at", "title", "updated_at") VALUES (?, ?, ?, ?)[0m  [["content", "stuff"], ["created_at", Mon, 18 Feb 2013 14:51:58 UTC +00:00], ["title", "pentiums"], ["updated_at", Mon, 18 Feb 2013 14:51:58 UTC +00:00]]
+  [1m[35m (0.5ms)[0m  commit transaction
+Completed 201 Created in 4ms (Views: 0.9ms | ActiveRecord: 1.1ms)
+
+
+Started GET "/" for 127.0.0.1 at 2013-02-18 10:07:40 -0500
+Processing by SongsController#index as HTML
+  [1m[36mSong Load (0.2ms)[0m  [1mSELECT "songs".* FROM "songs" [0m
+  Rendered songs/index.html.erb within layouts/application (6.0ms)
+Compiled backbone/models/song.js  (0ms)  (pid 47819)
+Compiled backbone/bboneoldfractions.js  (321ms)  (pid 47819)
+Compiled application.js  (147ms)  (pid 47819)
+Completed 200 OK in 712ms (Views: 703.8ms | ActiveRecord: 0.2ms)
+
+
+Started GET "/assets/backbone/views/songs/index_view.js?body=1" for 127.0.0.1 at 2013-02-18 10:07:41 -0500
+Served asset /backbone/views/songs/index_view.js - 304 Not Modified (2ms)
+
+
+Started PUT "/songs/2" for 127.0.0.1 at 2013-02-18 10:08:05 -0500
+Processing by SongsController#update as JSON
+  Parameters: {"song"=>{"title"=>"pentiums", "content"=>"stuffineeeeesss", "created_at"=>"2013-02-18T14:51:58Z", "id"=>2, "updated_at"=>"2013-02-18T14:51:58Z"}, "id"=>"2"}
+  [1m[35mSong Load (0.4ms)[0m  SELECT "songs".* FROM "songs" WHERE "songs"."id" = ? LIMIT 1  [["id", "2"]]
+  [1m[36m (0.1ms)[0m  [1mbegin transaction[0m
+  [1m[35m (0.5ms)[0m  UPDATE "songs" SET "content" = 'stuffineeeeesss', "created_at" = '2013-02-18 14:51:58.000000', "updated_at" = '2013-02-18 14:51:58.000000' WHERE "songs"."id" = 2
+  [1m[36m (0.6ms)[0m  [1mcommit transaction[0m
+Completed 204 No Content in 16ms (ActiveRecord: 1.6ms)
+
+
+Started DELETE "/songs/2" for 127.0.0.1 at 2013-02-18 10:08:09 -0500
+Processing by SongsController#destroy as JSON
+  Parameters: {"id"=>"2"}
+  [1m[35mSong Load (0.2ms)[0m  SELECT "songs".* FROM "songs" WHERE "songs"."id" = ? LIMIT 1  [["id", "2"]]
+  [1m[36m (0.1ms)[0m  [1mbegin transaction[0m
+  [1m[35mSQL (0.4ms)[0m  DELETE FROM "songs" WHERE "songs"."id" = ?  [["id", 2]]
+  [1m[36m (0.6ms)[0m  [1mcommit transaction[0m
+Completed 204 No Content in 4ms (ActiveRecord: 1.2ms)
+
+
+Started GET "/" for 127.0.0.1 at 2013-02-18 10:09:10 -0500
+Processing by SongsController#index as HTML
+  [1m[35mSong Load (0.2ms)[0m  SELECT "songs".* FROM "songs" 
+  Rendered songs/index.html.erb within layouts/application (0.1ms)
+Compiled backbone/models/song.js  (0ms)  (pid 47819)
+Compiled backbone/bboneoldfractions.js  (593ms)  (pid 47819)
+Compiled application.js  (20ms)  (pid 47819)
+Completed 200 OK in 721ms (Views: 719.9ms | ActiveRecord: 0.2ms)
+
+
+Started GET "/assets/scaffolds.css?body=1" for 127.0.0.1 at 2013-02-18 10:09:11 -0500
+Served asset /scaffolds.css - 304 Not Modified (2ms)
+
+
+Started GET "/assets/jquery.js?body=1" for 127.0.0.1 at 2013-02-18 10:09:11 -0500
+Served asset /jquery.js - 304 Not Modified (3ms)
+
+
+Started GET "/assets/songs.css?body=1" for 127.0.0.1 at 2013-02-18 10:09:11 -0500
+Served asset /songs.css - 304 Not Modified (8ms)
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 127.0.0.1 at 2013-02-18 10:09:11 -0500
+Served asset /jquery_ujs.js - 304 Not Modified (3ms)
+
+
+Started GET "/assets/backbone.js?body=1" for 127.0.0.1 at 2013-02-18 10:09:11 -0500
+Served asset /backbone.js - 304 Not Modified (44ms)
+
+
+Started GET "/assets/backbone_rails_sync.js?body=1" for 127.0.0.1 at 2013-02-18 10:09:11 -0500
+Served asset /backbone_rails_sync.js - 304 Not Modified (2ms)
+
+
+Started GET "/assets/underscore.js?body=1" for 127.0.0.1 at 2013-02-18 10:09:11 -0500
+Served asset /underscore.js - 304 Not Modified (2ms)
+
+
+Started GET "/assets/backbone/templates/songs/index.js?body=1" for 127.0.0.1 at 2013-02-18 10:09:11 -0500
+Served asset /backbone/templates/songs/index.js - 304 Not Modified (1ms)
+
+
+Started GET "/assets/backbone/bboneoldfractions.js?body=1" for 127.0.0.1 at 2013-02-18 10:09:11 -0500
+Served asset /backbone/bboneoldfractions.js - 304 Not Modified (23ms)
+
+
+Started GET "/assets/backbone/templates/songs/new.js?body=1" for 127.0.0.1 at 2013-02-18 10:09:11 -0500
+Served asset /backbone/templates/songs/new.js - 304 Not Modified (1ms)
+
+
+Started GET "/assets/backbone_datalink.js?body=1" for 127.0.0.1 at 2013-02-18 10:09:11 -0500
+Served asset /backbone_datalink.js - 304 Not Modified (2ms)
+
+
+Started GET "/assets/application.css?body=1" for 127.0.0.1 at 2013-02-18 10:09:11 -0500
+Served asset /application.css - 304 Not Modified (5ms)
+
+
+Started GET "/assets/backbone/models/song.js?body=1" for 127.0.0.1 at 2013-02-18 10:09:11 -0500
+Served asset /backbone/models/song.js - 200 OK (8ms)
+
+
+Started GET "/assets/backbone/templates/songs/show.js?body=1" for 127.0.0.1 at 2013-02-18 10:09:11 -0500
+Served asset /backbone/templates/songs/show.js - 304 Not Modified (2ms)
+
+
+Started GET "/assets/backbone/views/songs/edit_view.js?body=1" for 127.0.0.1 at 2013-02-18 10:09:11 -0500
+Served asset /backbone/views/songs/edit_view.js - 304 Not Modified (118ms)
+
+
+Started GET "/assets/backbone/templates/songs/song.js?body=1" for 127.0.0.1 at 2013-02-18 10:09:11 -0500
+Served asset /backbone/templates/songs/song.js - 304 Not Modified (1ms)
+
+
+Started GET "/assets/backbone/views/songs/index_view.js?body=1" for 127.0.0.1 at 2013-02-18 10:09:11 -0500
+Served asset /backbone/views/songs/index_view.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/views/songs/show_view.js?body=1" for 127.0.0.1 at 2013-02-18 10:09:11 -0500
+Served asset /backbone/views/songs/show_view.js - 304 Not Modified (1ms)
+
+
+Started GET "/assets/application.js?body=1" for 127.0.0.1 at 2013-02-18 10:09:11 -0500
+Served asset /application.js - 304 Not Modified (24ms)
+
+
+Started GET "/assets/backbone/views/songs/new_view.js?body=1" for 127.0.0.1 at 2013-02-18 10:09:11 -0500
+Served asset /backbone/views/songs/new_view.js - 304 Not Modified (1ms)
+
+
+Started GET "/assets/backbone/templates/songs/edit.js?body=1" for 127.0.0.1 at 2013-02-18 10:09:11 -0500
+Served asset /backbone/templates/songs/edit.js - 304 Not Modified (5ms)
+
+
+Started GET "/assets/songs.js?body=1" for 127.0.0.1 at 2013-02-18 10:09:11 -0500
+Served asset /songs.js - 304 Not Modified (1ms)
+
+
+Started GET "/assets/backbone/routers/songs_router.js?body=1" for 127.0.0.1 at 2013-02-18 10:09:11 -0500
+Served asset /backbone/routers/songs_router.js - 304 Not Modified (1ms)
+
+
+Started GET "/assets/backbone/views/songs/song_view.js?body=1" for 127.0.0.1 at 2013-02-18 10:09:11 -0500
+Served asset /backbone/views/songs/song_view.js - 304 Not Modified (7ms)
+
+
+Started GET "/" for 127.0.0.1 at 2013-02-18 10:10:22 -0500
+Processing by SongsController#index as HTML
+  [1m[36mSong Load (0.2ms)[0m  [1mSELECT "songs".* FROM "songs" [0m
+  Rendered songs/index.html.erb within layouts/application (0.2ms)
+Compiled backbone/models/song.js  (0ms)  (pid 47819)
+Compiled backbone/bboneoldfractions.js  (280ms)  (pid 47819)
+Compiled application.js  (68ms)  (pid 47819)
+Completed 200 OK in 458ms (Views: 456.6ms | ActiveRecord: 0.2ms)
+
+
+Started GET "/assets/songs.css?body=1" for 127.0.0.1 at 2013-02-18 10:10:22 -0500
+Served asset /songs.css - 304 Not Modified (0ms)
+
+
+Started GET "/assets/application.css?body=1" for 127.0.0.1 at 2013-02-18 10:10:22 -0500
+Served asset /application.css - 304 Not Modified (0ms)
+
+
+Started GET "/assets/scaffolds.css?body=1" for 127.0.0.1 at 2013-02-18 10:10:22 -0500
+Served asset /scaffolds.css - 304 Not Modified (7ms)
+
+
+Started GET "/assets/backbone_datalink.js?body=1" for 127.0.0.1 at 2013-02-18 10:10:22 -0500
+Served asset /backbone_datalink.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/underscore.js?body=1" for 127.0.0.1 at 2013-02-18 10:10:22 -0500
+Served asset /underscore.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone_rails_sync.js?body=1" for 127.0.0.1 at 2013-02-18 10:10:22 -0500
+Served asset /backbone_rails_sync.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/jquery.js?body=1" for 127.0.0.1 at 2013-02-18 10:10:22 -0500
+Served asset /jquery.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/bboneoldfractions.js?body=1" for 127.0.0.1 at 2013-02-18 10:10:22 -0500
+Served asset /backbone/bboneoldfractions.js - 304 Not Modified (86ms)
+
+
+Started GET "/assets/backbone/templates/songs/new.js?body=1" for 127.0.0.1 at 2013-02-18 10:10:22 -0500
+Served asset /backbone/templates/songs/new.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/templates/songs/index.js?body=1" for 127.0.0.1 at 2013-02-18 10:10:22 -0500
+Served asset /backbone/templates/songs/index.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone.js?body=1" for 127.0.0.1 at 2013-02-18 10:10:22 -0500
+Served asset /backbone.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/templates/songs/edit.js?body=1" for 127.0.0.1 at 2013-02-18 10:10:22 -0500
+Served asset /backbone/templates/songs/edit.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/views/songs/index_view.js?body=1" for 127.0.0.1 at 2013-02-18 10:10:22 -0500
+Served asset /backbone/views/songs/index_view.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/templates/songs/song.js?body=1" for 127.0.0.1 at 2013-02-18 10:10:22 -0500
+Served asset /backbone/templates/songs/song.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/models/song.js?body=1" for 127.0.0.1 at 2013-02-18 10:10:22 -0500
+Served asset /backbone/models/song.js - 200 OK (1ms)
+
+
+Started GET "/assets/backbone/views/songs/edit_view.js?body=1" for 127.0.0.1 at 2013-02-18 10:10:22 -0500
+Served asset /backbone/views/songs/edit_view.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 127.0.0.1 at 2013-02-18 10:10:22 -0500
+Served asset /jquery_ujs.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/views/songs/new_view.js?body=1" for 127.0.0.1 at 2013-02-18 10:10:22 -0500
+Served asset /backbone/views/songs/new_view.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/views/songs/song_view.js?body=1" for 127.0.0.1 at 2013-02-18 10:10:22 -0500
+Served asset /backbone/views/songs/song_view.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/routers/songs_router.js?body=1" for 127.0.0.1 at 2013-02-18 10:10:22 -0500
+Served asset /backbone/routers/songs_router.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/views/songs/show_view.js?body=1" for 127.0.0.1 at 2013-02-18 10:10:22 -0500
+Served asset /backbone/views/songs/show_view.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/songs.js?body=1" for 127.0.0.1 at 2013-02-18 10:10:22 -0500
+Served asset /songs.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/application.js?body=1" for 127.0.0.1 at 2013-02-18 10:10:22 -0500
+Served asset /application.js - 304 Not Modified (131ms)
+
+
+Started GET "/assets/backbone/templates/songs/show.js?body=1" for 127.0.0.1 at 2013-02-18 10:10:23 -0500
+Served asset /backbone/templates/songs/show.js - 304 Not Modified (0ms)
+
+
+Started GET "/" for 127.0.0.1 at 2013-02-18 10:12:13 -0500
+Processing by SongsController#index as HTML
+  [1m[35mSong Load (0.2ms)[0m  SELECT "songs".* FROM "songs" 
+  Rendered songs/index.html.erb within layouts/application (0.1ms)
+Compiled backbone/models/song.js  (0ms)  (pid 47819)
+Compiled backbone/bboneoldfractions.js  (269ms)  (pid 47819)
+Compiled application.js  (29ms)  (pid 47819)
+Completed 200 OK in 416ms (Views: 415.0ms | ActiveRecord: 0.2ms)
+
+
+Started GET "/assets/songs.css?body=1" for 127.0.0.1 at 2013-02-18 10:12:13 -0500
+Served asset /songs.css - 304 Not Modified (0ms)
+
+
+Started GET "/assets/jquery.js?body=1" for 127.0.0.1 at 2013-02-18 10:12:13 -0500
+Served asset /jquery.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/underscore.js?body=1" for 127.0.0.1 at 2013-02-18 10:12:13 -0500
+Served asset /underscore.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone_rails_sync.js?body=1" for 127.0.0.1 at 2013-02-18 10:12:14 -0500
+Served asset /backbone_rails_sync.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone.js?body=1" for 127.0.0.1 at 2013-02-18 10:12:14 -0500
+Served asset /backbone.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/application.css?body=1" for 127.0.0.1 at 2013-02-18 10:12:14 -0500
+Served asset /application.css - 304 Not Modified (0ms)
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 127.0.0.1 at 2013-02-18 10:12:14 -0500
+Served asset /jquery_ujs.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/scaffolds.css?body=1" for 127.0.0.1 at 2013-02-18 10:12:14 -0500
+Served asset /scaffolds.css - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone_datalink.js?body=1" for 127.0.0.1 at 2013-02-18 10:12:14 -0500
+Served asset /backbone_datalink.js - 304 Not Modified (22ms)
+
+
+Started GET "/assets/backbone/bboneoldfractions.js?body=1" for 127.0.0.1 at 2013-02-18 10:12:14 -0500
+Served asset /backbone/bboneoldfractions.js - 304 Not Modified (52ms)
+
+
+Started GET "/assets/backbone/templates/songs/new.js?body=1" for 127.0.0.1 at 2013-02-18 10:12:14 -0500
+Served asset /backbone/templates/songs/new.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/templates/songs/show.js?body=1" for 127.0.0.1 at 2013-02-18 10:12:14 -0500
+Served asset /backbone/templates/songs/show.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/templates/songs/song.js?body=1" for 127.0.0.1 at 2013-02-18 10:12:14 -0500
+Served asset /backbone/templates/songs/song.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/templates/songs/index.js?body=1" for 127.0.0.1 at 2013-02-18 10:12:14 -0500
+Served asset /backbone/templates/songs/index.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/templates/songs/edit.js?body=1" for 127.0.0.1 at 2013-02-18 10:12:14 -0500
+Served asset /backbone/templates/songs/edit.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/views/songs/edit_view.js?body=1" for 127.0.0.1 at 2013-02-18 10:12:14 -0500
+Served asset /backbone/views/songs/edit_view.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/models/song.js?body=1" for 127.0.0.1 at 2013-02-18 10:12:14 -0500
+Served asset /backbone/models/song.js - 200 OK (3ms)
+
+
+Started GET "/assets/backbone/views/songs/index_view.js?body=1" for 127.0.0.1 at 2013-02-18 10:12:14 -0500
+Served asset /backbone/views/songs/index_view.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/views/songs/new_view.js?body=1" for 127.0.0.1 at 2013-02-18 10:12:14 -0500
+Served asset /backbone/views/songs/new_view.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/views/songs/show_view.js?body=1" for 127.0.0.1 at 2013-02-18 10:12:14 -0500
+Served asset /backbone/views/songs/show_view.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/routers/songs_router.js?body=1" for 127.0.0.1 at 2013-02-18 10:12:14 -0500
+Served asset /backbone/routers/songs_router.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/songs.js?body=1" for 127.0.0.1 at 2013-02-18 10:12:14 -0500
+Served asset /songs.js - 304 Not Modified (75ms)
+
+
+Started GET "/assets/backbone/views/songs/song_view.js?body=1" for 127.0.0.1 at 2013-02-18 10:12:14 -0500
+Served asset /backbone/views/songs/song_view.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/application.js?body=1" for 127.0.0.1 at 2013-02-18 10:12:14 -0500
+Served asset /application.js - 304 Not Modified (101ms)
+
+
+Started GET "/" for 127.0.0.1 at 2013-02-18 10:13:46 -0500
+Processing by SongsController#index as HTML
+  [1m[36mSong Load (0.2ms)[0m  [1mSELECT "songs".* FROM "songs" [0m
+  Rendered songs/index.html.erb within layouts/application (0.1ms)
+Compiled backbone/models/song.js  (0ms)  (pid 47819)
+Compiled backbone/bboneoldfractions.js  (631ms)  (pid 47819)
+Compiled application.js  (30ms)  (pid 47819)
+Completed 200 OK in 830ms (Views: 828.3ms | ActiveRecord: 0.2ms)
+
+
+Started GET "/assets/scaffolds.css?body=1" for 127.0.0.1 at 2013-02-18 10:13:47 -0500
+Served asset /scaffolds.css - 304 Not Modified (0ms)
+
+
+Started GET "/assets/songs.css?body=1" for 127.0.0.1 at 2013-02-18 10:13:47 -0500
+Served asset /songs.css - 304 Not Modified (0ms)
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 127.0.0.1 at 2013-02-18 10:13:47 -0500
+Served asset /jquery_ujs.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/underscore.js?body=1" for 127.0.0.1 at 2013-02-18 10:13:47 -0500
+Served asset /underscore.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/jquery.js?body=1" for 127.0.0.1 at 2013-02-18 10:13:47 -0500
+Served asset /jquery.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone.js?body=1" for 127.0.0.1 at 2013-02-18 10:13:47 -0500
+Served asset /backbone.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/bboneoldfractions.js?body=1" for 127.0.0.1 at 2013-02-18 10:13:47 -0500
+Served asset /backbone/bboneoldfractions.js - 304 Not Modified (33ms)
+
+
+Started GET "/assets/backbone_datalink.js?body=1" for 127.0.0.1 at 2013-02-18 10:13:47 -0500
+Served asset /backbone_datalink.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/templates/songs/edit.js?body=1" for 127.0.0.1 at 2013-02-18 10:13:47 -0500
+Served asset /backbone/templates/songs/edit.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/templates/songs/new.js?body=1" for 127.0.0.1 at 2013-02-18 10:13:47 -0500
+Served asset /backbone/templates/songs/new.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/application.css?body=1" for 127.0.0.1 at 2013-02-18 10:13:47 -0500
+Served asset /application.css - 304 Not Modified (3ms)
+
+
+Started GET "/assets/backbone_rails_sync.js?body=1" for 127.0.0.1 at 2013-02-18 10:13:47 -0500
+Served asset /backbone_rails_sync.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/templates/songs/index.js?body=1" for 127.0.0.1 at 2013-02-18 10:13:47 -0500
+Served asset /backbone/templates/songs/index.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/templates/songs/show.js?body=1" for 127.0.0.1 at 2013-02-18 10:13:47 -0500
+Served asset /backbone/templates/songs/show.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/templates/songs/song.js?body=1" for 127.0.0.1 at 2013-02-18 10:13:47 -0500
+Served asset /backbone/templates/songs/song.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/models/song.js?body=1" for 127.0.0.1 at 2013-02-18 10:13:47 -0500
+Served asset /backbone/models/song.js - 200 OK (1ms)
+
+
+Started GET "/assets/backbone/views/songs/index_view.js?body=1" for 127.0.0.1 at 2013-02-18 10:13:47 -0500
+Served asset /backbone/views/songs/index_view.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/views/songs/new_view.js?body=1" for 127.0.0.1 at 2013-02-18 10:13:47 -0500
+Served asset /backbone/views/songs/new_view.js - 304 Not Modified (4ms)
+
+
+Started GET "/assets/backbone/routers/songs_router.js?body=1" for 127.0.0.1 at 2013-02-18 10:13:47 -0500
+Served asset /backbone/routers/songs_router.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/songs.js?body=1" for 127.0.0.1 at 2013-02-18 10:13:47 -0500
+Served asset /songs.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/views/songs/song_view.js?body=1" for 127.0.0.1 at 2013-02-18 10:13:47 -0500
+Served asset /backbone/views/songs/song_view.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/views/songs/edit_view.js?body=1" for 127.0.0.1 at 2013-02-18 10:13:47 -0500
+Served asset /backbone/views/songs/edit_view.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/views/songs/show_view.js?body=1" for 127.0.0.1 at 2013-02-18 10:13:47 -0500
+Served asset /backbone/views/songs/show_view.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/application.js?body=1" for 127.0.0.1 at 2013-02-18 10:13:47 -0500
+Served asset /application.js - 304 Not Modified (148ms)
+
+
+Started GET "/" for 127.0.0.1 at 2013-02-18 10:14:36 -0500
+Processing by SongsController#index as HTML
+  [1m[35mSong Load (0.2ms)[0m  SELECT "songs".* FROM "songs" 
+  Rendered songs/index.html.erb within layouts/application (0.1ms)
+Compiled backbone/models/song.js  (0ms)  (pid 47819)
+Compiled backbone/bboneoldfractions.js  (305ms)  (pid 47819)
+Compiled application.js  (66ms)  (pid 47819)
+Completed 200 OK in 493ms (Views: 492.3ms | ActiveRecord: 0.2ms)
+
+
+Started GET "/assets/scaffolds.css?body=1" for 127.0.0.1 at 2013-02-18 10:14:37 -0500
+Served asset /scaffolds.css - 304 Not Modified (0ms)
+
+
+Started GET "/assets/songs.css?body=1" for 127.0.0.1 at 2013-02-18 10:14:37 -0500
+Served asset /songs.css - 304 Not Modified (0ms)
+
+
+Started GET "/assets/underscore.js?body=1" for 127.0.0.1 at 2013-02-18 10:14:37 -0500
+Served asset /underscore.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/jquery.js?body=1" for 127.0.0.1 at 2013-02-18 10:14:37 -0500
+Served asset /jquery.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 127.0.0.1 at 2013-02-18 10:14:37 -0500
+Served asset /jquery_ujs.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone.js?body=1" for 127.0.0.1 at 2013-02-18 10:14:37 -0500
+Served asset /backbone.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone_rails_sync.js?body=1" for 127.0.0.1 at 2013-02-18 10:14:37 -0500
+Served asset /backbone_rails_sync.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone_datalink.js?body=1" for 127.0.0.1 at 2013-02-18 10:14:37 -0500
+Served asset /backbone_datalink.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/bboneoldfractions.js?body=1" for 127.0.0.1 at 2013-02-18 10:14:37 -0500
+Served asset /backbone/bboneoldfractions.js - 304 Not Modified (59ms)
+
+
+Started GET "/assets/backbone/templates/songs/edit.js?body=1" for 127.0.0.1 at 2013-02-18 10:14:37 -0500
+Served asset /backbone/templates/songs/edit.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/application.css?body=1" for 127.0.0.1 at 2013-02-18 10:14:37 -0500
+Served asset /application.css - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/templates/songs/index.js?body=1" for 127.0.0.1 at 2013-02-18 10:14:37 -0500
+Served asset /backbone/templates/songs/index.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/templates/songs/new.js?body=1" for 127.0.0.1 at 2013-02-18 10:14:37 -0500
+Served asset /backbone/templates/songs/new.js - 304 Not Modified (1ms)
+
+
+Started GET "/assets/backbone/views/songs/index_view.js?body=1" for 127.0.0.1 at 2013-02-18 10:14:37 -0500
+Served asset /backbone/views/songs/index_view.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/models/song.js?body=1" for 127.0.0.1 at 2013-02-18 10:14:37 -0500
+Served asset /backbone/models/song.js - 200 OK (2ms)
+
+
+Started GET "/assets/backbone/views/songs/song_view.js?body=1" for 127.0.0.1 at 2013-02-18 10:14:37 -0500
+Served asset /backbone/views/songs/song_view.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/views/songs/show_view.js?body=1" for 127.0.0.1 at 2013-02-18 10:14:37 -0500
+Served asset /backbone/views/songs/show_view.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/templates/songs/show.js?body=1" for 127.0.0.1 at 2013-02-18 10:14:37 -0500
+Served asset /backbone/templates/songs/show.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/views/songs/new_view.js?body=1" for 127.0.0.1 at 2013-02-18 10:14:37 -0500
+Served asset /backbone/views/songs/new_view.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/routers/songs_router.js?body=1" for 127.0.0.1 at 2013-02-18 10:14:37 -0500
+Served asset /backbone/routers/songs_router.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/application.js?body=1" for 127.0.0.1 at 2013-02-18 10:14:37 -0500
+Served asset /application.js - 304 Not Modified (188ms)
+
+
+Started GET "/assets/songs.js?body=1" for 127.0.0.1 at 2013-02-18 10:14:37 -0500
+Served asset /songs.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/views/songs/edit_view.js?body=1" for 127.0.0.1 at 2013-02-18 10:14:37 -0500
+Served asset /backbone/views/songs/edit_view.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/templates/songs/song.js?body=1" for 127.0.0.1 at 2013-02-18 10:14:37 -0500
+Served asset /backbone/templates/songs/song.js - 304 Not Modified (0ms)
+
+
+Started POST "/songs" for 127.0.0.1 at 2013-02-18 10:16:21 -0500
+Processing by SongsController#create as JSON
+  Parameters: {"song"=>{"title"=>"idk", "content"=>"last time?"}}
+  [1m[36m (0.1ms)[0m  [1mbegin transaction[0m
+  [1m[35mSQL (1.1ms)[0m  INSERT INTO "songs" ("content", "created_at", "title", "updated_at") VALUES (?, ?, ?, ?)  [["content", "last time?"], ["created_at", Mon, 18 Feb 2013 15:16:21 UTC +00:00], ["title", "idk"], ["updated_at", Mon, 18 Feb 2013 15:16:21 UTC +00:00]]
+  [1m[36m (0.8ms)[0m  [1mcommit transaction[0m
+Completed 201 Created in 8ms (Views: 2.2ms | ActiveRecord: 2.1ms)
+
+
+Started POST "/songs" for 127.0.0.1 at 2013-02-18 10:16:28 -0500
+Processing by SongsController#create as JSON
+  Parameters: {"song"=>{"title"=>"another", "content"=>"one"}}
+  [1m[35m (0.1ms)[0m  begin transaction
+  [1m[36mSQL (0.5ms)[0m  [1mINSERT INTO "songs" ("content", "created_at", "title", "updated_at") VALUES (?, ?, ?, ?)[0m  [["content", "one"], ["created_at", Mon, 18 Feb 2013 15:16:28 UTC +00:00], ["title", "another"], ["updated_at", Mon, 18 Feb 2013 15:16:28 UTC +00:00]]
+  [1m[35m (0.6ms)[0m  commit transaction
+Completed 201 Created in 3ms (Views: 0.7ms | ActiveRecord: 1.2ms)
+
+
+Started PUT "/songs/3" for 127.0.0.1 at 2013-02-18 10:16:35 -0500
+Processing by SongsController#update as JSON
+  Parameters: {"song"=>{"title"=>"idk", "content"=>"last time?longer", "created_at"=>"2013-02-18T15:16:21Z", "id"=>3, "updated_at"=>"2013-02-18T15:16:21Z"}, "id"=>"3"}
+  [1m[36mSong Load (0.1ms)[0m  [1mSELECT "songs".* FROM "songs" WHERE "songs"."id" = ? LIMIT 1[0m  [["id", "3"]]
+  [1m[35m (0.1ms)[0m  begin transaction
+  [1m[36m (0.4ms)[0m  [1mUPDATE "songs" SET "content" = 'last time?longer', "created_at" = '2013-02-18 15:16:21.000000', "updated_at" = '2013-02-18 15:16:21.000000' WHERE "songs"."id" = 3[0m
+  [1m[35m (0.6ms)[0m  commit transaction
+Completed 204 No Content in 6ms (ActiveRecord: 1.2ms)
+
+
+Started DELETE "/songs/3" for 127.0.0.1 at 2013-02-18 10:16:52 -0500
+Processing by SongsController#destroy as JSON
+  Parameters: {"id"=>"3"}
+  [1m[36mSong Load (0.1ms)[0m  [1mSELECT "songs".* FROM "songs" WHERE "songs"."id" = ? LIMIT 1[0m  [["id", "3"]]
+  [1m[35m (0.1ms)[0m  begin transaction
+  [1m[36mSQL (0.2ms)[0m  [1mDELETE FROM "songs" WHERE "songs"."id" = ?[0m  [["id", 3]]
+  [1m[35m (1.0ms)[0m  commit transaction
+Completed 204 No Content in 3ms (ActiveRecord: 1.4ms)
+
+
+Started GET "/" for 127.0.0.1 at 2013-02-18 10:25:05 -0500
+Processing by SongsController#index as HTML
+  [1m[36mSong Load (0.4ms)[0m  [1mSELECT "songs".* FROM "songs" [0m
+  Rendered songs/index.html.erb within layouts/application (0.5ms)
+Completed 200 OK in 20ms (Views: 17.6ms | ActiveRecord: 0.4ms)
+
+
+Started GET "/assets/songs.css?body=1" for 127.0.0.1 at 2013-02-18 10:25:05 -0500
+Served asset /songs.css - 304 Not Modified (0ms)
+
+
+Started GET "/assets/jquery.js?body=1" for 127.0.0.1 at 2013-02-18 10:25:05 -0500
+Served asset /jquery.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 127.0.0.1 at 2013-02-18 10:25:05 -0500
+Served asset /jquery_ujs.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone.js?body=1" for 127.0.0.1 at 2013-02-18 10:25:05 -0500
+Served asset /backbone.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/underscore.js?body=1" for 127.0.0.1 at 2013-02-18 10:25:05 -0500
+Served asset /underscore.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/scaffolds.css?body=1" for 127.0.0.1 at 2013-02-18 10:25:05 -0500
+Served asset /scaffolds.css - 304 Not Modified (0ms)
+
+
+Started GET "/assets/application.css?body=1" for 127.0.0.1 at 2013-02-18 10:25:05 -0500
+Served asset /application.css - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone_rails_sync.js?body=1" for 127.0.0.1 at 2013-02-18 10:25:05 -0500
+Served asset /backbone_rails_sync.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone_datalink.js?body=1" for 127.0.0.1 at 2013-02-18 10:25:05 -0500
+Served asset /backbone_datalink.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/templates/songs/edit.js?body=1" for 127.0.0.1 at 2013-02-18 10:25:05 -0500
+Served asset /backbone/templates/songs/edit.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/templates/songs/show.js?body=1" for 127.0.0.1 at 2013-02-18 10:25:05 -0500
+Served asset /backbone/templates/songs/show.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/templates/songs/new.js?body=1" for 127.0.0.1 at 2013-02-18 10:25:05 -0500
+Served asset /backbone/templates/songs/new.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/views/songs/edit_view.js?body=1" for 127.0.0.1 at 2013-02-18 10:25:05 -0500
+Served asset /backbone/views/songs/edit_view.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/models/song.js?body=1" for 127.0.0.1 at 2013-02-18 10:25:05 -0500
+Served asset /backbone/models/song.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/views/songs/index_view.js?body=1" for 127.0.0.1 at 2013-02-18 10:25:05 -0500
+Served asset /backbone/views/songs/index_view.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/templates/songs/index.js?body=1" for 127.0.0.1 at 2013-02-18 10:25:05 -0500
+Served asset /backbone/templates/songs/index.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/bboneoldfractions.js?body=1" for 127.0.0.1 at 2013-02-18 10:25:05 -0500
+Served asset /backbone/bboneoldfractions.js - 304 Not Modified (1ms)
+
+
+Started GET "/assets/backbone/views/songs/show_view.js?body=1" for 127.0.0.1 at 2013-02-18 10:25:05 -0500
+Served asset /backbone/views/songs/show_view.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/templates/songs/song.js?body=1" for 127.0.0.1 at 2013-02-18 10:25:05 -0500
+Served asset /backbone/templates/songs/song.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/views/songs/new_view.js?body=1" for 127.0.0.1 at 2013-02-18 10:25:05 -0500
+Served asset /backbone/views/songs/new_view.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/views/songs/song_view.js?body=1" for 127.0.0.1 at 2013-02-18 10:25:05 -0500
+Served asset /backbone/views/songs/song_view.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/routers/songs_router.js?body=1" for 127.0.0.1 at 2013-02-18 10:25:05 -0500
+Served asset /backbone/routers/songs_router.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/application.js?body=1" for 127.0.0.1 at 2013-02-18 10:25:05 -0500
+Served asset /application.js - 304 Not Modified (6ms)
+
+
+Started GET "/assets/songs.js?body=1" for 127.0.0.1 at 2013-02-18 10:25:05 -0500
+Served asset /songs.js - 304 Not Modified (0ms)
+
+
+Started GET "/" for 127.0.0.1 at 2013-02-18 10:25:19 -0500
+Processing by SongsController#new as HTML
+  Rendered songs/_form.html.erb (24.6ms)
+  Rendered songs/new.html.erb within layouts/application (31.1ms)
+Completed 200 OK in 59ms (Views: 47.6ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/assets/scaffolds.css?body=1" for 127.0.0.1 at 2013-02-18 10:25:19 -0500
+Served asset /scaffolds.css - 304 Not Modified (0ms)
+
+
+Started GET "/assets/songs.css?body=1" for 127.0.0.1 at 2013-02-18 10:25:19 -0500
+Served asset /songs.css - 304 Not Modified (0ms)
+
+
+Started GET "/assets/jquery.js?body=1" for 127.0.0.1 at 2013-02-18 10:25:19 -0500
+Served asset /jquery.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 127.0.0.1 at 2013-02-18 10:25:19 -0500
+Served asset /jquery_ujs.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/underscore.js?body=1" for 127.0.0.1 at 2013-02-18 10:25:19 -0500
+Served asset /underscore.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone.js?body=1" for 127.0.0.1 at 2013-02-18 10:25:19 -0500
+Served asset /backbone.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/bboneoldfractions.js?body=1" for 127.0.0.1 at 2013-02-18 10:25:19 -0500
+Served asset /backbone/bboneoldfractions.js - 304 Not Modified (7ms)
+
+
+Started GET "/assets/backbone_datalink.js?body=1" for 127.0.0.1 at 2013-02-18 10:25:19 -0500
+Served asset /backbone_datalink.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone_rails_sync.js?body=1" for 127.0.0.1 at 2013-02-18 10:25:19 -0500
+Served asset /backbone_rails_sync.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/templates/songs/index.js?body=1" for 127.0.0.1 at 2013-02-18 10:25:19 -0500
+Served asset /backbone/templates/songs/index.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/templates/songs/new.js?body=1" for 127.0.0.1 at 2013-02-18 10:25:19 -0500
+Served asset /backbone/templates/songs/new.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/templates/songs/show.js?body=1" for 127.0.0.1 at 2013-02-18 10:25:19 -0500
+Served asset /backbone/templates/songs/show.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/application.css?body=1" for 127.0.0.1 at 2013-02-18 10:25:19 -0500
+Served asset /application.css - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/templates/songs/song.js?body=1" for 127.0.0.1 at 2013-02-18 10:25:19 -0500
+Served asset /backbone/templates/songs/song.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/templates/songs/edit.js?body=1" for 127.0.0.1 at 2013-02-18 10:25:19 -0500
+Served asset /backbone/templates/songs/edit.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/models/song.js?body=1" for 127.0.0.1 at 2013-02-18 10:25:19 -0500
+Served asset /backbone/models/song.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/views/songs/edit_view.js?body=1" for 127.0.0.1 at 2013-02-18 10:25:20 -0500
+Served asset /backbone/views/songs/edit_view.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/views/songs/song_view.js?body=1" for 127.0.0.1 at 2013-02-18 10:25:20 -0500
+Served asset /backbone/views/songs/song_view.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/routers/songs_router.js?body=1" for 127.0.0.1 at 2013-02-18 10:25:20 -0500
+Served asset /backbone/routers/songs_router.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/songs.js?body=1" for 127.0.0.1 at 2013-02-18 10:25:20 -0500
+Served asset /songs.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/application.js?body=1" for 127.0.0.1 at 2013-02-18 10:25:20 -0500
+Served asset /application.js - 304 Not Modified (1ms)
+
+
+Started GET "/assets/backbone/views/songs/show_view.js?body=1" for 127.0.0.1 at 2013-02-18 10:25:20 -0500
+Served asset /backbone/views/songs/show_view.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/views/songs/new_view.js?body=1" for 127.0.0.1 at 2013-02-18 10:25:20 -0500
+Served asset /backbone/views/songs/new_view.js - 304 Not Modified (0ms)
+
+
+Started GET "/assets/backbone/views/songs/index_view.js?body=1" for 127.0.0.1 at 2013-02-18 10:25:20 -0500
+Served asset /backbone/views/songs/index_view.js - 304 Not Modified (0ms)
