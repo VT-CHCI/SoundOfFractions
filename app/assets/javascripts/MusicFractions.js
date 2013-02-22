@@ -6,11 +6,10 @@ define([
   'backbone',
   'backbone/routers/router', // Request router.js
 ], function($, _, Backbone, Router){
-  var initialize = function(){
-    console.log("app init _ follows");
-    console.log(_);
+  var initialize = function(options){
+
     // Pass in our Router module and call it's initialize function
-    Router.initialize();
+    Router.initialize(options);
   }
 
   return {

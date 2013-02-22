@@ -37,3 +37,7 @@ App.assets = {
     return '/assets/' + name;
   }
 };
+
+App.songs = {
+  songs: <%= Song.all.to_json.html_safe %>
+};

@@ -1,0 +1,8 @@
+<% if user_signed_in? %>
+  <%= 'User: ' + current_user %>
+<% else %>
+  <form class="navbar-form">
+    <input class="span2" type="text" placeholder="User Id">
+    <button type="submit" class="btn">Sign in</button>
+  </form>
+<% end %>
