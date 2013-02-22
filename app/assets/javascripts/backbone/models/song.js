@@ -9,6 +9,7 @@ define([
     defaults: {
       title: '',
       content: '',
+      user: '',
       components: componentCollection
     },
     initialize: function(){
