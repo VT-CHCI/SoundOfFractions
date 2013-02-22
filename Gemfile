@@ -13,7 +13,6 @@ gem 'sqlite3'
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'
   gem 'coffee-rails', '~> 3.2.1'
-
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
   # gem 'therubyracer'
 
@@ -29,6 +28,11 @@ gem "bootstrap-sass", "~> 2.3.0.0"
 gem 'requirejs-rails'
 gem 'ejs'
 gem 'devise'
+
+gem "better_errors", ">= 0.2.0", :group => :development
+gem "binding_of_caller", ">= 0.6.8", :group => :development
+gem 'color_routes'
+
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'

@@ -1,4 +1,4 @@
-//This is one measure
+//This is a collection of song s
 define([
   'jquery',
   'underscore',
@@ -13,5 +13,5 @@ define([
     }
   });
 
-  return new songsCollection();
+  // return new songsCollection();
 });

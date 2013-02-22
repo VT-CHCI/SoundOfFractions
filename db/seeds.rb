@@ -5,3 +5,17 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
+
+# User
+  puts 'SETTING UP DEFAULT USER LOGIN'
+  testUser = User.create({ :email => "test@test.org", :password => "testtest", :password_confirmation => "testtest" }, :without_protection => true ).save!
+  puts 'test'
+  testerUser = User.create({ :email => "tester@tester.org", :password => "testertester", :password_confirmation => "testertester" }, :without_protection => true ).save!
+  puts 'tester'
+
+# Songs
+  puts 'SETTING UP DEFAULTS SONGS'
+  song1 = Song.create({ :title => "OnE", :content => "JSON String OnE", :user_id => 1 }, :without_protection => true ).save!
+  song2 = Song.create({ :title => "TwO", :content => "JSON String TwO", :user_id => 1 }, :without_protection => true ).save!
+  song3 = Song.create({ :title => "ThreE", :content => "JSON String ThreE", :user_id => 2 }, :without_protection => true ).save!
+  song4 = Song.create({ :title => "FouR", :content => "JSON String FouR", :user_id => 2 }, :without_protection => true ).save

@@ -4,40 +4,12 @@
         <ul class="nav" role="navigation">
           <li>  <%= link_to "Sound of Fractions", root_path, :class => 'brand' %></li>
           <% if user_signed_in? %>
-          <li class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Load</a>
-            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-              <li>placeholder Song 1</li>
-              <li>placeholder Song 2</li>
-              <li>placeholder Song 3</li>
-            </ul>
-          </li>
-          <li class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Save</a>
-            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-              <li>            
-                <form class="navbar-form">
-                  <input class="span2" type="text" placeholder="Song Name">
-                </form>
-              </li>
-                <div>
-                  <div style="float: left">
-                    <button class="btn">Save</button>
-                  </div>
-                  <div style="float: right">
-                    <button class="btn">Cancel</button>
-                  </div>
-                </div>
-              </li>
-            </ul>
-          </li>
+            <%= render 'layouts/shared/loadsavesong' %>
           <% else %>
           <% end %>
         </ul>
-        <ul class="nav pull-right" role="navigation">
-          <li>
-            <%= render 'layouts/shared/login' %>
-          </li>
+        <ul class="nav pull-right login" role="navigation">
+          <%= render 'layouts/shared/login' %>
         </ul>
       </div> <!-- End Container-fluid -->
     </div> <!-- End Navbar-inner -->

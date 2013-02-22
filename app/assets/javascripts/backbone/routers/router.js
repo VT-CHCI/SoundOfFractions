@@ -22,16 +22,23 @@ define([
     routes: {
       // Default
       'new'       : 'newSong',
-      // 'songs/index'     : 'index',
-      // 'songs/:id/edit'  : 'edit',
-      // 'songs/:id'       : 'show',
+      'index'     : 'index',
+      ':id/edit'  : 'edit',
+      ':id'       : 'show',
       '.*'        : 'newSong'
       // '*actions'  : 'defaultAction'
     },
     newSong: function(){
       console.log('bb routes new song');
+      console.log(songs);
       var view = new songsViewNew({collection : songs});
-      $("#songs").html(view.render().el)
+      mainHomeView;
+      beatSliderView.render();
+      beatBarsView.render();
+      componentsView.render();
+      tempoSliderView.render();
+      transportView.render();
+      repButtonView.render();
     },
     index: function(){
       console.log('bb routes index');
@@ -57,9 +64,12 @@ define([
   });
 
   var initialize = function(options){
-
+    console.log("router init");
+    // console.log(options);
     songs = new songsCollection();
+    // BB call API
     songs.reset(options.songs);
+    // console.log(songs);
 
     var app_router = new AppRouter;
     console.log("in init, router follows");

@@ -5,18 +5,19 @@ define([
   'backbone',
   // Pull in the Collection module from above
   'backbone/collections/songsCollection',
-  'backbone/views/songs/new_view',
-  'text!backbone/templates/songs/new.jst.ejs',
+  // 'backbone/views/songs/a_song_view',
+  'text!backbone/templates/songs/new.html',
   'app/dispatch',
   'app/state'
-], function($, _, Backbone, SongsCollection, SongsView, songsTemplate, dispatch, state){
+], function($, _, Backbone, SongsCollection, songsTemplate, dispatch, state){
   return Backbone.View.extend({
-    model: {},
+    // model: {},
     el: $('#songs'),
 
     initialize: function(options){
       // super(options); TODO
       console.log("new_view init");
+      // console.log(options.collection);
       if (options) {
         this.collection = options.collection;
       } else {
@@ -26,9 +27,9 @@ define([
       this.model = new this.collection.model();
 
       this.model.bind("change:errors", function(){
-          return this.render()
-        }
-      );
+        console.log("in change error func for new view");
+        return this.render()
+      });
 
       // TODO
       // dispatch.on('signatureChange.event', this.reconfigure, this);
@@ -43,14 +44,26 @@ define([
     save: function(e){
       e.preventDefault();
       e.stopPropagation();
+      console.log(this.model);
+
+      console.log($('#title').val());
+      console.log($('#content').val());
+
       this.model.unset("errors");
+      this.model.set({
+        title: $('#title').val(),
+        content: $('#content').val()
+      });
+      console.log('saving...');
+      console.log(this.model);
       return this.collection.create(this.model.toJSON(), {
         success: function(song) {
-          _this.model = song;
-          return window.location.hash = "/" + _this.model.id;
+          console.log('saved!');
+          this.model = song;
+          return window.location.hash = "/" + this.model.id;
         },
         error: function(song, jqXHR) {
-          return _this.model.set({
+          return this.model.set({
             errors: $.parseJSON(jqXHR.responseText)
           });
         }
@@ -58,15 +71,24 @@ define([
     },
 
     render: function(){
+      console.log("new view::render");
+      console.log($(this.el));
       $(this.el).html('');
 
-      _.each(this.collection.models, function(beat) {
-        var compiledTemplate = _.template( songsTemplate, {song: song} );
-        $(this.el).append( compiledTemplate );
+      console.log(this.collection);      
 
-        new SongsView({model:song});
-      }, this);
+      // _.each(this.collection.models, function(song) {
+      //   var compiledTemplate = _.template( songsTemplate, {song: song} );
+      //   console.log(compiledTemplate);
+      //   $(this.el).append( compiledTemplate );
 
+      //   // new SongsView({model:this.model});
+      // }, this);
+
+      var compiledTemplate = _.template ( songsTemplate, this.model.toJSON());
+      // console.log(compiledTemplate);
+      $(this.el).html(compiledTemplate);
+      console.log($(this.el).html());
       // var measureCount = 1;
       // $('.component-container').each(function() {
         // $(this).find('.number').each(function() {
