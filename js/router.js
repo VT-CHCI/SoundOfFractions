@@ -1,4 +1,8 @@
 // Filename: router.js
+/*
+  This is the main router for the backbone framework.
+  We are essentially using one route to draw the entire application.
+*/
 define([
   'jquery',
   'underscore',
@@ -18,7 +22,7 @@ define([
       '*actions': 'defaultAction'
     },
     defaultAction: function(actions){
-      // We have no matching route, lets display the home page
+      //This is our main page.
       mainHomeView;
       beatSliderView.render();
       beatBarsView.render();
@@ -31,12 +35,20 @@ define([
 
   var initialize = function(){
     var app_router = new AppRouter;
+
+    //we call this so that backbone will allow the back button
+    //on the browser to go back through state changes.
     Backbone.history.start({pushState:true});
 
+    //If the user does not login we use this to generate a random number
+    //to identify the user.
     if (!sessionStorage.userId) {
       sessionStorage.setItem("userId", Math.floor(Math.random()*1000000001));
     }
 
+    //we create a string representation of the inital state
+    //and send it to the logging system.
+    //(important so that we know the IDs of everything)
     name = '';
     $('.component').each( function() {
       name = name + $(this).attr('id') + '.';

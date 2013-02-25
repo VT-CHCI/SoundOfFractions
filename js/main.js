@@ -1,5 +1,7 @@
 //filename: main.js
 
+//this sets up the paths to our vendor scripts
+//that we use in our require statements.
 require.config({
   paths: {
     jquery: 'vendor/jquery-1.8.2.min',
