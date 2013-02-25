@@ -5,11 +5,12 @@ define([
   'backbone',
   // Pull in the Collection module from above
   'backbone/collections/songsCollection',
+  'backbone/collections/components',
   // 'backbone/views/songs/a_song_view',
   'text!backbone/templates/songs/new.html',
   'app/dispatch',
   'app/state'
-], function($, _, Backbone, SongsCollection, songsTemplate, dispatch, state){
+], function($, _, Backbone, SongsCollection, Components, songsTemplate, dispatch, state){
   return Backbone.View.extend({
     // model: {},
     el: $('#songs'),
@@ -44,18 +45,17 @@ define([
     save: function(e){
       e.preventDefault();
       e.stopPropagation();
-      console.log(this.model);
-
-      console.log($('#title').val());
-      console.log($('#content').val());
-
+      var JSONSong = JSON.stringify(this.model.toJSON());
+      console.log(JSONSong);
       this.model.unset("errors");
       this.model.set({
         title: $('#title').val(),
-        content: $('#content').val()
+        content: JSONSong,
+        user: $('#user').val()
       });
       console.log('saving...');
       console.log(this.model);
+      console.log(this.model.toJSON());
       return this.collection.create(this.model.toJSON(), {
         success: function(song) {
           console.log('saved!');
@@ -88,7 +88,7 @@ define([
       var compiledTemplate = _.template ( songsTemplate, this.model.toJSON());
       // console.log(compiledTemplate);
       $(this.el).html(compiledTemplate);
-      console.log($(this.el).html());
+      // console.log($(this.el).html());
       // var measureCount = 1;
       // $('.component-container').each(function() {
         // $(this).find('.number').each(function() {

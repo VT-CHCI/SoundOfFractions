@@ -1,8 +1,12 @@
 class SongsController < ApplicationController
+
+  before_filter :authenticate_user!
+
   # GET /songs
   # GET /songs.json
   def index
     @songs = Song.all
+    gon.userID = current_user.thisUsersID
 
     respond_to do |format|
       format.html # index.html.erb

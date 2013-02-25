@@ -55,6 +55,9 @@ GEM
     erubis (2.7.0)
     execjs (1.4.0)
       multi_json (~> 1.0)
+    gon (4.0.2)
+      actionpack (>= 2.3.0)
+      json
     hike (1.2.1)
     i18n (0.6.1)
     journey (1.0.4)
@@ -134,6 +137,7 @@ DEPENDENCIES
   color_routes
   devise
   ejs
+  gon
   jquery-rails
   rails (= 3.2.2)
   rails-backbone

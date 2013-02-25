@@ -1,5 +1,5 @@
 //app.js/App
-console.log('MF.js started');
+console.log('SOF.js started');
 define([
   'jquery',
   'underscore',
@@ -8,10 +8,12 @@ define([
 ], function($, _, Backbone, Router){
   var initialize = function(options){
 
-    // Pass in our Router module and call it's initialize function
+    // Pass in the Initialized Router module and call it's
+    // initialize function, giving it the (options) application.js,
+    // which is 'App.songs' from assets.js.erb
     Router.initialize(options);
   }
-
+  console.log('SOF.js finished, initializing Router:');
   return {
     initialize: initialize
   };

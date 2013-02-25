@@ -15,7 +15,6 @@ define([
     },
 
     render: function(){
-
       return this;
     },
 

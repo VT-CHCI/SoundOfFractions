@@ -29,10 +29,11 @@ define([
       // '*actions'  : 'defaultAction'
     },
     newSong: function(){
-      console.log('bb routes new song');
+      console.log('BB routes :: new : newSong');
+      console.log('Songs : ');
       console.log(songs);
       var view = new songsViewNew({collection : songs});
-      mainHomeView;
+      mainHomeView.render();
       beatSliderView.render();
       beatBarsView.render();
       componentsView.render();
@@ -63,14 +64,22 @@ define([
     // }
   });
 
+  // Initialize the Router, with the options, where (options) is declared in SOF.js
+  // and called from application.js
+  //
+  // (options) == 'assest.js.erb' => App.songs{ songs : <%= Song.all.to_json.html_safe %> }
+  // (options) == All the songs in the DB
   var initialize = function(options){
     console.log("router init");
     // console.log(options);
-    songs = new songsCollection();
-    // BB call API
-    songs.reset(options.songs);
+    // console.log(options.songs);
+    songs = new songsCollection();  //TODO HOW IS THIS SONGS COLLECTION GETTING POPULATED?
+    // console.log('SONGS collections created:');
     // console.log(songs);
-
+    // console.log(options.songs);
+    // BB API call
+    songs.reset(options.songs);
+    console.log('options.songs reset');
     var app_router = new AppRouter;
     console.log("in init, router follows");
     console.log(app_router);
@@ -97,6 +106,7 @@ define([
     });
 
   };
+
   return {
     initialize: initialize
   };

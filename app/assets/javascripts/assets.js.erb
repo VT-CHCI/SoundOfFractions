@@ -15,6 +15,11 @@ App.assets = {
   //   document.png: "/assets/document.png"
   // }
   //
+
+  // This hash is because Rails' Asset Pipeline bundles the routes to files
+  // per user session, then hands that to the user's session browser, for security.
+  // So we create in Ruby (erb = embedded ruby) a hash of the images to be accessed
+  // in the JS.
   images: {
     <% AssetsUtil.images.each do |img| %>
       "<%= img %>" : "<%= asset_path(img) %>",
