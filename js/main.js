@@ -1,19 +1,4 @@
-// Author: Thomas Davis <thomasalwyndavis@gmail.com>
-// Filename: main.js
-
-// Require.js allows us to configure shortcut alias
-// Their usage will become more apparent futher along in the tutorial.
-
-// require.config({
-//   baseUrl: 'js',
-//   paths: {
-//     jquery: 'vendor/jquery-1.8.2.min',
-//     underscore: 'vendor/underscore.min',
-//     backbone: 'vendor/backbone.min',
-//     text: 'vendor/text.min',
-//     templates: '../templates'
-//   }
-// });
+//filename: main.js
 
 require.config({
   paths: {

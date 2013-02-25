@@ -1,3 +1,7 @@
+//filename: app/log.js
+/*
+  This is used to handle the sending of Logging information.
+*/
 define(['jquery'], function ($) {
   return {
     sendLog: function (logInfoPairs) {

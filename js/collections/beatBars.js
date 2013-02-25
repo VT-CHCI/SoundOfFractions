@@ -1,3 +1,9 @@
+//filename: collections/beatBars.js
+/*
+  This is the collection of beat bars, which are the
+  bars in the beat pallete on the right side of the
+  main screen.
+*/
 define([
   'jquery',
   'underscore',

@@ -1,4 +1,8 @@
-//This is a drum kit
+//filename: collections/components.js
+/*
+  This is the components collection.
+  It is referred to in componentsView as 'drumkit'
+*/
 define([
   'jquery',
   'underscore',

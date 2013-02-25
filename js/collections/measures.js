@@ -1,4 +1,8 @@
-//This is one component
+//filename collections/measures.js
+/*
+  This is the measures collection.
+  It is a collection of measure models.
+*/
 define([
   'jquery',
   'underscore',
