@@ -7,10 +7,10 @@ define([
   var songModel = Backbone.Model.extend({
     paramRoot: 'song',
     defaults: {
-      title: '',
       content: '',
-      user: '',
-      components: componentCollection
+      user: ''
+      // title: '',                        //move to songTemplate.js
+      // components: componentCollection   //move to songTemplate.js
     },
     initialize: function(){
     }

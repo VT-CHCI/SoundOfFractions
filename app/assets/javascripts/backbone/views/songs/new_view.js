@@ -26,6 +26,7 @@ define([
       }
       
       this.model = new this.collection.model();
+      console.log(this.model);
 
       this.model.bind("change:errors", function(){
         console.log("in change error func for new view");
@@ -50,12 +51,11 @@ define([
       this.model.unset("errors");
       this.model.set({
         title: $('#title').val(),
-        content: JSONSong,
-        user: $('#user').val()
+        components: JSONSong
       });
       console.log('saving...');
       console.log(this.model);
-      console.log(this.model.toJSON());
+      console.log(this.model);
       return this.collection.create(this.model.toJSON(), {
         success: function(song) {
           console.log('saved!');
@@ -76,7 +76,9 @@ define([
       $(this.el).html('');
 
       console.log(this.collection);      
-
+      // console.log(this.model);
+      console.log(this.model.toJSON());
+      // console.log(songsTemplate);
       // _.each(this.collection.models, function(song) {
       //   var compiledTemplate = _.template( songsTemplate, {song: song} );
       //   console.log(compiledTemplate);
