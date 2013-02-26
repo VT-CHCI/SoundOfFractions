@@ -11,7 +11,7 @@ define([
   'backbone/models/unsavedSong',
   'app/dispatch',
   'app/state'
-], function($, _, Backbone, SongsCollection, Components, songsTemplate, unsavedSong, dispatch, state){
+], function($, _, Backbone, SongsCollection, Components, songsNewTemplate, unsavedSong, dispatch, state){
   return Backbone.View.extend({
     // model: {},
     el: $('#songs'),
@@ -67,9 +67,9 @@ define([
       toBeSavedSong.set($("meta[name=csrf-param]").attr('content'), $("meta[name=csrf-token]").attr('content'));
 
       console.log('toBeSavedSong.toJSON()');
-      console.log(toBeSavedSong.toJSON());
-      
-      return this.collection.create(toBeSavedSong.toJSON(), {
+      var a = JSON.stringify(toBeSavedSong);
+      console.log(a);
+      return this.collection.create( a, {
         success: function(song) {
           console.log('saved!');
           this.model = song;
@@ -94,16 +94,16 @@ define([
       console.log(this.collection);      
       // console.log(this.model);
       console.log(this.model.toJSON());
-      // console.log(songsTemplate);
+      // console.log(songsNewTemplate);
       // _.each(this.collection.models, function(song) {
-      //   var compiledTemplate = _.template( songsTemplate, {song: song} );
+      //   var compiledTemplate = _.template( songsNewTemplate, {song: song} );
       //   console.log(compiledTemplate);
       //   $(this.el).append( compiledTemplate );
 
       //   // new SongsView({model:this.model});
       // }, this);
 
-      var compiledTemplate = _.template ( songsTemplate, this.model.toJSON());
+      var compiledTemplate = _.template ( songsNewTemplate, this.model.toJSON());
       // console.log(compiledTemplate);
       $(this.el).html(compiledTemplate);
       // console.log($(this.el).html());
