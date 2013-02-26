@@ -8,9 +8,9 @@
 
 # User
   puts 'SETTING UP DEFAULT USER LOGIN'
-  testUser = User.create({ :email => "test@test.org", :password => "testtest", :password_confirmation => "testtest" }, :without_protection => true ).save!
+  testUser = User.create({ :email => "test@test.org", :password => "asdfasdf", :password_confirmation => "asdfasdf" }, :without_protection => true ).save!
   puts 'test'
-  testerUser = User.create({ :email => "tester@tester.org", :password => "testertester", :password_confirmation => "testertester" }, :without_protection => true ).save!
+  testerUser = User.create({ :email => "tester@tester.org", :password => "asdfasdf", :password_confirmation => "asdfasdf" }, :without_protection => true ).save!
   puts 'tester'
 
 # Songs

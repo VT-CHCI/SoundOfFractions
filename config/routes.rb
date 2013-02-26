@@ -4,7 +4,7 @@ SoundOfFractions::Application.routes.draw do
   # devise_for :users
   # however, for some reason, a known bug, you can't
   # logout without changing to the line below:
-  devise_for :users do get '/users/sign_out' => 'devise/sessions#destroy' end
+  devise_for :users #do get '/users/sign_out' => 'devise/sessions#destroy' end
   # per http://stackoverflow.com/questions/6567863/no-route-matches-get-users-sign-out
 
   resources :songs

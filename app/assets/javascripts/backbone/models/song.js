@@ -8,8 +8,8 @@ define([
     paramRoot: 'song',
     defaults: {
       content: '',
-      user: ''
-      // title: '',                        //move to songTemplate.js
+      user: '',
+      title: ''                        //move to songTemplate.js
       // components: componentCollection   //move to songTemplate.js
     },
     initialize: function(){

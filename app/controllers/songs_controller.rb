@@ -6,7 +6,8 @@ class SongsController < ApplicationController
   # GET /songs.json
   def index
     @songs = Song.all
-    gon.userID = current_user.thisUsersID
+    logger.debug 'index logger \n\n\n\n\n\n'
+    # gon.userID = current_user.thisUsersID
 
     respond_to do |format|
       format.html # index.html.erb
@@ -44,7 +45,13 @@ class SongsController < ApplicationController
   # POST /songs
   # POST /songs.json
   def create
-    @song = Song.new(params[:song])
+    @song = Song.new()
+    @song.content = params[:content]
+    @song.title = params[:title]
+    @song.user_id = current_user.id
+
+    logger.debug '@song:'
+    logger.debug @song
 
     respond_to do |format|
       if @song.save

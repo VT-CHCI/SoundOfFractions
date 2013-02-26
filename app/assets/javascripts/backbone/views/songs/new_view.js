@@ -8,9 +8,10 @@ define([
   'backbone/collections/components',
   // 'backbone/views/songs/a_song_view',
   'text!backbone/templates/songs/new.html',
+  'backbone/models/unsavedSong',
   'app/dispatch',
   'app/state'
-], function($, _, Backbone, SongsCollection, Components, songsTemplate, dispatch, state){
+], function($, _, Backbone, SongsCollection, Components, songsTemplate, unsavedSong, dispatch, state){
   return Backbone.View.extend({
     // model: {},
     el: $('#songs'),
@@ -20,12 +21,14 @@ define([
       console.log("new_view init");
       // console.log(options.collection);
       if (options) {
+        console.log('options');
         this.collection = options.collection;
       } else {
         this.collection = new SongsCollection;
       }
       
-      this.model = new this.collection.model();
+      console.log(this.collection);
+      this.model = new unsavedSong();
       console.log(this.model);
 
       this.model.bind("change:errors", function(){
@@ -46,23 +49,36 @@ define([
     save: function(e){
       e.preventDefault();
       e.stopPropagation();
-      var JSONSong = JSON.stringify(this.model.toJSON());
-      console.log(JSONSong);
-      this.model.unset("errors");
-      this.model.set({
-        title: $('#title').val(),
-        components: JSONSong
+      var toBeSavedSong = new this.collection.model(); 
+      // var JSONSong = JSON.stringify(this.model.toJSON());
+      // console.log(JSONSong);
+      // this.model.unset("errors");
+      // this.model.set({
+      //   title: $('#title').val(),
+      //   content:  
+      // });
+      toBeSavedSong.set({
+        // this.model is a unsavedSong.js model which contains 'title', and 'components'
+        content : this.model.toJSON(),
+        title : $('#title').val()
       });
-      console.log('saving...');
-      console.log(this.model);
-      console.log(this.model);
-      return this.collection.create(this.model.toJSON(), {
+      console.log($("meta[name=csrf-param]").attr('content'));
+      console.log($("meta[name=csrf-token]").attr('content'));
+      toBeSavedSong.set($("meta[name=csrf-param]").attr('content'), $("meta[name=csrf-token]").attr('content'));
+
+      console.log('toBeSavedSong.toJSON()');
+      console.log(toBeSavedSong.toJSON());
+      
+      return this.collection.create(toBeSavedSong.toJSON(), {
         success: function(song) {
           console.log('saved!');
           this.model = song;
+          router.songs.add(song);
           return window.location.hash = "/" + this.model.id;
+
         },
         error: function(song, jqXHR) {
+          console.log('ERROR SAVING SONG!!!!    ERROR SAVING SONG!!!!    ERROR SAVING SONG!!!!    ERROR SAVING SONG!!!!');
           return this.model.set({
             errors: $.parseJSON(jqXHR.responseText)
           });

@@ -17,8 +17,9 @@ define([
   'backbone/views/songs/edit_view'
 ], function($, _, Backbone, mainHomeView, beatSliderView, beatBarsView, componentsView, tempoSliderView, transportView, repButtonView, log, songsCollection, songsViewNew, songsViewIndex, songsViewShow, songsViewEdit){
 
-  var songs = {};
+  // var songs = {};
   var AppRouter = Backbone.Router.extend({
+    songs: {},
     routes: {
       // Default
       'new'       : 'newSong',
@@ -31,8 +32,8 @@ define([
     newSong: function(){
       console.log('BB routes :: new : newSong');
       console.log('Songs : ');
-      console.log(songs);
-      var view = new songsViewNew({collection : songs});
+      console.log(this.songs);
+      var view = new songsViewNew({collection : this.songs});
       mainHomeView.render();
       beatSliderView.render();
       beatBarsView.render();
@@ -45,8 +46,15 @@ define([
       console.log('bb routes index');
     },
     show: function(id){
-      console.log('bb routes show');
+      console.log('BB router : show');
       console.log("id param: "+id);
+
+      console.log('Songs Collection : ');
+      console.log(this.songs);
+      var createdSong = this.songs.get(id);
+      console.log(createdSong);
+      var view = new songsViewShow(createdSong);
+
     },
     edit: function(id){
       console.log('bb routes edit');
@@ -70,20 +78,23 @@ define([
   // (options) == 'assest.js.erb' => App.songs{ songs : <%= Song.all.to_json.html_safe %> }
   // (options) == All the songs in the DB
   var initialize = function(options){
+    
     console.log("router init");
-    // console.log(options);
-    // console.log(options.songs);
-    songs = new songsCollection();  //TODO HOW IS THIS SONGS COLLECTION GETTING POPULATED?
-    // console.log('SONGS collections created:');
-    // console.log(songs);
-    // console.log(options.songs);
-    // BB API call
-    songs.reset(options.songs);
-    console.log('options.songs reset');
+    
     var app_router = new AppRouter;
+
+    console.log("router init 2");
+    app_router.songs = new songsCollection();  //TODO HOW IS THIS SONGS COLLECTION GETTING POPULATED?
+
+    console.log("router init 3");
+    // BB API call    
+    console.log("router init 4");
+
+    app_router.songs.reset(options.songs);
+    console.log(app_router.songs);
+    console.log('options.songs reset');
     console.log("in init, router follows");
     console.log(app_router);
-    Backbone.history.start({pushState:true});
 
     if (!sessionStorage.userId) {
       sessionStorage.setItem("userId", Math.floor(Math.random()*1000000001));
@@ -104,7 +115,8 @@ define([
       log.sendLog([[1, "Component structure: "+name]]);
       name = '';
     });
-
+    Backbone.history.start();
+    return app_router;
   };
 
   return {

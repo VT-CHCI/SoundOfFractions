@@ -3,10 +3,10 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'backbone/models/unsavedSong'
-], function($, _, Backbone, unsavedSong){
+  'backbone/models/song'
+], function($, _, Backbone, song){
   return Backbone.Collection.extend({
-    model: unsavedSong,
+    model: song,
     url: '/songs',
     initialize: function(){
 

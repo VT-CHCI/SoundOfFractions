@@ -1,4 +1,4 @@
-//filename: unsavedSong.js
+//filename: unsavedSong.js  //BB version of an unsaved song 'template'
 define([
   'underscore',
   'backbone',
@@ -7,7 +7,7 @@ define([
   var unsavedSongModel = Backbone.Model.extend({
     // paramRoot: 'song',
     defaults: {
-      title: '',                        //move to unsavedSongTemplate.js
+      // title: '',                        //move to unsavedSongTemplate.js
       components: componentCollection   //move to unsavedSongTemplate.js
     },
     initialize: function(){
