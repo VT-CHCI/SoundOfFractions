@@ -2,9 +2,9 @@
     <div class="navbar-inner">
       <div class="container-fluid">
         <ul class="nav" role="navigation">
+            <%= render 'layouts/shared/loadsavesong' %>
           <li>  <%= link_to "Sound of Fractions", root_path, :class => 'brand' %></li>
           <% if user_signed_in? %>
-            <%= render 'layouts/shared/loadsavesong' %>
           <% else %>
           <% end %>
         </ul>

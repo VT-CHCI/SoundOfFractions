@@ -1,12 +1,10 @@
-<h1>Songs :</h1>
+<h1>Listing songs</h1>
 
-<ul>Title :
-  <% _.each(models, function(model){ %>
-    <!-- <tr> -->
-      <li><a href="#/<%= model.get("id") %>"><%= model.get("title") %></a></li> 
-    <!-- </tr -->
-  <% }); %>
-</ul>
+<table id="songs-table">
+  <tr>
+    <th>Title</th>
+  </tr>
+</table>
 
 <br/>
 

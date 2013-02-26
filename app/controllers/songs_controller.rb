@@ -47,9 +47,6 @@ class SongsController < ApplicationController
   def create
     @song = Song.new()
     @song.content = params[:content]
-    logger.debug "right in here"
-    logger.debug params[:content]
-    logger.debug params[:content].to_s
     @song.title = params[:title]
     @song.user_id = current_user.id
 

@@ -11,10 +11,10 @@ define([
   'text!backbone/templates/songs/show.html',
   'app/dispatch',
   'app/state'
-], function($, _, Backbone, SongsCollection, Components, song, songsShowTemplate, dispatch, state){
+], function($, _, Backbone, SongsCollection, Components, song, songsTemplate, dispatch, state){
   return Backbone.View.extend({
     // model: {},
-    el: $('#song-bucket'),
+    el: $('#show-song'),
 
     initialize: function(options){
       console.log("show_view init");
@@ -34,7 +34,7 @@ define([
     },
 
     events: { 
-      // "submit #new-song": "save"
+      "submit #new-song": "save"
     },
 
     // save: function(e){
@@ -76,24 +76,23 @@ define([
     // },
 
     render: function(){
-      console.log("show view::render");
+      console.log("new view::render");
+      console.log($(this.el));
       $(this.el).html('');
 
-      // console.log(this.collection);      
-      console.log(this.model);
-      // console.log(this.model.toJSON());
-      // console.log(songsShowTemplate);
+      console.log(this.collection);      
+      // console.log(this.model);
+      console.log(this.model.toJSON());
+      // console.log(songsTemplate);
       // _.each(this.collection.models, function(song) {
-      //   var compiledTemplate = _.template( songsShowTemplate, {song: song} );
+      //   var compiledTemplate = _.template( songsTemplate, {song: song} );
       //   console.log(compiledTemplate);
       //   $(this.el).append( compiledTemplate );
 
       //   // new SongsView({model:this.model});
       // }, this);
 
-      var compiledTemplate = _.template ( songsShowTemplate, this.model.toJSON());
-      console.log("modelllllll content");
-      console.log(this.model.get('content'));
+      var compiledTemplate = _.template ( songsTemplate, this.model.toJSON());
       // console.log(compiledTemplate);
       $(this.el).html(compiledTemplate);
       // console.log($(this.el).html());

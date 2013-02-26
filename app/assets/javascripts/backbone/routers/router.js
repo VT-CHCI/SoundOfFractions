@@ -43,22 +43,21 @@ define([
       repButtonView.render();
     },
     index: function(){
-      console.log('BB routes :: index : index');
-      console.log('Songs Collection : ');
-      console.log(this.songs);
-      var view = new songsViewIndex(this.songs);
+      console.log('bb routes index');
     },
     show: function(id){
-      console.log('BB routes :: (:id) : show');
+      console.log('BB router : show');
       console.log("id param: "+id);
-      console.log(this.songs);
-      console.log(this.songs.get(id));
-      var createdSong = this.songs.get(id);
 
+      console.log('Songs Collection : ');
+      console.log(this.songs);
+      var createdSong = this.songs.get(id);
+      console.log(createdSong);
       var view = new songsViewShow(createdSong);
+
     },
     edit: function(id){
-      console.log('BB routes edit');
+      console.log('bb routes edit');
     },
     // defaultAction: function(actions){
     //   // We have no matching route, lets display the home page
@@ -79,8 +78,18 @@ define([
   // (options) == 'assest.js.erb' => App.songs{ songs : <%= Song.all.to_json.html_safe %> }
   // (options) == All the songs in the DB
   var initialize = function(options){
+    
+    console.log("router init");
+    
     var app_router = new AppRouter;
+
+    console.log("router init 2");
     app_router.songs = new songsCollection();  //TODO HOW IS THIS SONGS COLLECTION GETTING POPULATED?
+
+    console.log("router init 3");
+    // BB API call    
+    console.log("router init 4");
+
     app_router.songs.reset(options.songs);
     console.log(app_router.songs);
     console.log('options.songs reset');
@@ -106,11 +115,6 @@ define([
       log.sendLog([[1, "Component structure: "+name]]);
       name = '';
     });
-
-    // BB API call    
-    // TODO:
-    // This has to be at the bottom, and if you call Backbone.history.start({pushState: true})
-    // with the parameter {pushState: true}, it breaks
     Backbone.history.start();
     return app_router;
   };
