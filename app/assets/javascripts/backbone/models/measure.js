@@ -1,3 +1,9 @@
+//filename: models/measure.js
+/*
+  This is the measure model.
+  A component has a collection of these models.
+  these models have a collection of beats.
+*/
 define([
   'underscore',
   'backbone',

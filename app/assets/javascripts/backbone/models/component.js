@@ -1,3 +1,9 @@
+//filename models/component.js
+/*
+  This is the component model.
+  A component represents an individual drum or instrument
+  component models are created in componentsView.js
+*/
 define([
   'underscore',
   'backbone',

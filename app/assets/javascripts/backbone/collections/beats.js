@@ -1,4 +1,8 @@
-//This is one measure
+//Filename: collections/beats.js
+/*
+  This is the beats collection.
+  It is a collection of beat models.
+*/
 define([
   'jquery',
   'underscore',

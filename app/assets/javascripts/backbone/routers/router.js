@@ -1,3 +1,7 @@
+// Filename: router.js
+/*
+  This is the main router for the backbone framework.
+*/
 define([
   'jquery',
   'underscore',
@@ -17,17 +21,15 @@ define([
   'backbone/views/songs/edit_view'
 ], function($, _, Backbone, mainHomeView, beatSliderView, beatBarsView, componentsView, tempoSliderView, transportView, repButtonView, log, songsCollection, songsViewNew, songsViewIndex, songsViewShow, songsViewEdit){
 
-  // var songs = {};
   var AppRouter = Backbone.Router.extend({
     songs: {},
     routes: {
-      // Default
       'new'       : 'newSong',
       'index'     : 'index',
       ':id/edit'  : 'edit',
       ':id'       : 'show',
+      //Catchall
       '.*'        : 'newSong'
-      // '*actions'  : 'defaultAction'
     },
     newSong: function(){
       console.log('BB routes :: new : newSong');
@@ -96,10 +98,15 @@ define([
     console.log("in init, router follows");
     console.log(app_router);
 
+    //If the user does not login we use this to generate a random number
+    //to identify the user.
     if (!sessionStorage.userId) {
       sessionStorage.setItem("userId", Math.floor(Math.random()*1000000001));
     }
 
+    //we create a string representation of the inital state
+    //and send it to the logging system.
+    //(important so that we know the IDs of everything)
     name = '';
     $('.component').each( function() {
       name = name + $(this).attr('id') + '.';
@@ -115,6 +122,10 @@ define([
       log.sendLog([[1, "Component structure: "+name]]);
       name = '';
     });
+
+    //we call this so that backbone will allow the back button
+    //on the browser to go back through state changes.
+    // It has to be at the bottom
     Backbone.history.start();
     return app_router;
   };

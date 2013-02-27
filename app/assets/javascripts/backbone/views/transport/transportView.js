@@ -1,4 +1,8 @@
-// Filename: views/transport/transportView
+// Filename: views/transport/transportView.js
+/*
+    This is the TransportView.
+    It is in charge of the Transport or play/stop button.
+*/
 define([
   'jquery',
   'underscore',
@@ -12,6 +16,7 @@ define([
   var TransportView = Backbone.View.extend({
     el : $("#transport"), // Specifies the DOM element which this view handles
 
+    //registering our toggle() method for backbone click events.
     events : {
       "click" : "toggle"
     },
@@ -19,9 +24,17 @@ define([
     initialize: function() {
       this.transportModel = new TransportModel;
 
+      //registering our stopPlay() method on stopRequest events.
       dispatch.on('stopRequest.event', this.stopPlay, this);
     },
 
+    /*
+      This toggles the imaage of the Transport button
+      and triggers togglePlay events.
+
+      Also, this creates a string representation of
+      the entire song and sends it to the logging system.
+    */
     toggle: function() {
       if(!this.transportModel.get('isPlaying')) {
         dispatch.trigger('togglePlay.event', 'on');
@@ -56,6 +69,12 @@ define([
 
     },
 
+    /*
+      This is triggered by stopRequest events.
+      
+      This is essentially the same as togglePlay, but
+      it always causes stoppage, and does no logging.
+    */
     stopPlay: function(val) {
       if(this.transportModel.get('isPlaying')) {
         dispatch.trigger('togglePlay.event', 'off');

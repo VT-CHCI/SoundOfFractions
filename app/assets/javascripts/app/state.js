@@ -1,3 +1,10 @@
+//filename: app/state.js
+/*
+  This maintains two pieces of information that are
+  global to the song.
+  namely, the time signature (# of beats per measure)
+  and the tempo in beats per minute.
+*/
 define([
   'underscore',
   'backbone',

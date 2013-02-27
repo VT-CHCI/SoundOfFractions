@@ -1,3 +1,8 @@
+//filename: models/slider.js
+/*
+  This is the model for a slider.
+  Used in the tempo and beats per measure sliders.
+*/
 define([
   'underscore',
   'backbone'

@@ -1,3 +1,10 @@
+//filename: models/beatBar.js
+/*
+  This is the beatBar model.
+  It maintains its width.
+  beatBars are the bars in the beat pallete
+  on the right of the main view.
+*/
 define([
   'underscore',
   'backbone'
