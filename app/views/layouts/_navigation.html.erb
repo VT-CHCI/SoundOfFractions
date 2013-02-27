@@ -2,9 +2,9 @@
     <div class="navbar-inner">
       <div class="container-fluid">
         <ul class="nav" role="navigation">
-            <%= render 'layouts/shared/loadsavesong' %>
           <li>  <%= link_to "Sound of Fractions", root_path, :class => 'brand' %></li>
           <% if user_signed_in? %>
+            <%= render 'layouts/shared/loadsavesong' %>
           <% else %>
           <% end %>
         </ul>
@@ -12,5 +12,12 @@
           <%= render 'layouts/shared/login' %>
         </ul>
       </div> <!-- End Container-fluid -->
+
     </div> <!-- End Navbar-inner -->
   </div> <!-- End Navbar -->
+
+<div class="row-fluid">
+  <% flash.each do |name, msg| %>
+    <%= content_tag :div, msg, :class => "row-fluid", :id => "flash_#{name}" %>
+  <% end %>
+</div>

@@ -37,52 +37,12 @@ define([
       "submit #new-song": "save"
     },
 
-    // save: function(e){
-    //   e.preventDefault();
-    //   e.stopPropagation();
-    //   var toBeSavedSong = new this.collection.model(); 
-    //   // var JSONSong = JSON.stringify(this.model.toJSON());
-    //   // console.log(JSONSong);
-    //   // this.model.unset("errors");
-    //   // this.model.set({
-    //   //   title: $('#title').val(),
-    //   //   content:  
-    //   // });
-    //   toBeSavedSong.set({
-    //     // this.model is a unsavedSong.js model which contains 'title', and 'components'
-    //     content : this.model.toJSON(),
-    //     title : $('#title').val()
-    //   });
-    //   console.log($("meta[name=csrf-param]").attr('content'));
-    //   console.log($("meta[name=csrf-token]").attr('content'));
-    //   toBeSavedSong.set($("meta[name=csrf-param]").attr('content'), $("meta[name=csrf-token]").attr('content'));
-
-    //   console.log('toBeSavedSong.toJSON()');
-    //   console.log(toBeSavedSong.toJSON());
-      
-    //   return this.collection.create(toBeSavedSong.toJSON(), {
-    //     success: function(song) {
-    //       console.log('saved!');
-    //       this.model = song;
-    //       return window.location.hash = "/" + this.model.id;
-          
-    //     },
-    //     error: function(song, jqXHR) {
-    //       return this.model.set({
-    //         errors: $.parseJSON(jqXHR.responseText)
-    //       });
-    //     }
-    //   });
-    // },
-
     render: function(){
       console.log("new view::render");
       console.log($(this.el));
-      $(this.el).html('');
-
-      console.log(this.collection);      
-      // console.log(this.model);
-      console.log(this.model.toJSON());
+      $(this.el).html('');      
+      console.log(this.model);
+      // console.log(this.model.toJSON());
       // console.log(songsTemplate);
       // _.each(this.collection.models, function(song) {
       //   var compiledTemplate = _.template( songsTemplate, {song: song} );

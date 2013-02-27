@@ -35,7 +35,7 @@ SoundOfFractions::Application.configure do
   # Expands the lines which load the assets
   config.assets.debug = true
 
-  # Chris.Devise
+  # Chris.Devise  //Prodoction env (production.rb) must be set to domain name
   config.action_mailer.default_url_options = { :host => 'localhost:3000' }
   
   # Chris.RailsLogger

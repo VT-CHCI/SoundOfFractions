@@ -1,4 +1,6 @@
-//Main.js
+//Application.js
+//this sets up the paths to our vendor scripts
+//that we use in our require statements.
 
 // This is a manifest file that'll be compiled into application.js, which will include all the files
 // listed below.
@@ -28,3 +30,4 @@ require([
   Application.initialize(App.songs);
   console.log("Application initialized...");
 });
+
