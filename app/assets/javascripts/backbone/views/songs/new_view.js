@@ -12,25 +12,19 @@ define([
 ], function($, _, Backbone, SongsCollection, Components, songsTemplate, unsavedSong, dispatch, state){
   return Backbone.View.extend({
     // model: {},
-    el: $('#nav-songs'),
+    el: $('#nav-songs-save'),
 
     initialize: function(options){
       // super(options); TODO
-      console.log("new_view init");
-      // console.log(options.collection);
-      // if (options) {
-      //   console.log('options');
-      //   this.collection = options.collection;
-      // } else {
-      //   this.collection = new SongsCollection;
-      // }
+      console.log("New View initializing...");
+      console.warn(window.router);
       
       // console.log(this.collection);
       this.model = new unsavedSong();
-      console.log(this.model);
+      console.warn(this.model);
 
       this.model.bind("change:errors", function(){
-        console.log("in change error func for new view");
+        console.log("In change error func() for new view");
         return this.render()
       });
 
@@ -60,23 +54,25 @@ define([
         content : this.model.toJSON(),
         title : $('#title').val()
       });
-      console.log($("meta[name=csrf-param]").attr('content'));
-      console.log($("meta[name=csrf-token]").attr('content'));
+
+      //To pass the variable safely in from BBone to Rails 3.2, you have to include the csrf param and token
       toBeSavedSong.set($("meta[name=csrf-param]").attr('content'), $("meta[name=csrf-token]").attr('content'));
 
-      console.log('toBeSavedSong.toJSON()');
-      console.log(toBeSavedSong.toJSON());
+      console.log('toBeSavedSong.toJSON() :');
+      console.warn(toBeSavedSong.toJSON());
       
       return window.router.songs.create(toBeSavedSong.toJSON(), {
         success: function(song) {
-          console.log('saved!');
+          console.log('Song saved!');
           this.model = song;
           window.router.songs.add(song);
+          console.log(window.router.songs.get(window.router.songs.length));
+          
           return window.location.hash = "/" + this.model.id;
 
         },
         error: function(song, jqXHR) {
-          console.log('ERROR SAVING SONG!!!!    ERROR SAVING SONG!!!!    ERROR SAVING SONG!!!!    ERROR SAVING SONG!!!!');
+          console.error('ERROR SAVING SONG!!!!    ERROR SAVING SONG!!!!    ERROR SAVING SONG!!!!    ERROR SAVING SONG!!!!');
           return this.model.set({
             errors: $.parseJSON(jqXHR.responseText)
           });
@@ -85,7 +81,7 @@ define([
     },
 
     render: function(){
-      console.log("new view::render");
+      console.log("New View rendering...");
       console.log($(this.el));
       $(this.el).html('');
 
@@ -114,6 +110,7 @@ define([
         // measureCount = 1;
       // });
 
+      console.log("New View rendered");
       return this;
     },
 

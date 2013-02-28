@@ -12,7 +12,7 @@ define([
     // Pass in the Initialized Router module and call it's
     // initialize function, giving it the (options) application.js,
     // which is 'App.songs' from assets.js.erb
-    window.router = Router.initialize(options);
+    Router.initialize(options);
     console.log('SOF.js finished');
   }
   return {

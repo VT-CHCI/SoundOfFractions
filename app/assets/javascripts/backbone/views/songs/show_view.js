@@ -7,14 +7,15 @@ define([
   'backbone/collections/components',
   'backbone/models/song',
   'text!backbone/templates/songs/show.html',
-  'text!backbone/templates/songs/nav.html',
+  'text!backbone/templates/songs/navSave.html',
   'app/dispatch',
   'app/state'
-], function($, _, Backbone, SongsCollection, Components, song, songsBodyTemplate, songNavTemplate, dispatch, state){
+], function($, _, Backbone, SongsCollection, Components, song, songsBodyTemplate, songNavSaveTemplate, dispatch, state){
   return Backbone.View.extend({
     // model: {},
-    navEl: $('#nav-songs'),
-    bodyEl: $('#show-song'),
+    navEl: $('#nav-songs-save'),
+    showBodyEl: $('#show-song'),
+    sofComposerEl: $('#sof-composer'),
 
     initialize: function(options){
       console.log("Show View initializing...");
@@ -34,30 +35,33 @@ define([
       console.log("Show View initialized");
     },
 
-    events: { 
-      "submit #show-song": "save"
-    },
+    // events: { 
+    // },
 
     render: function(){
-      console.log("Show View Rendering");
-      $(this.bodyEl).html('');      
+      console.log("Show View Rendering...");
+      $(this.showBodyEl).html('');      
       console.warn(this.model);
       // console.log(this.model.toJSON());
       // console.log(songsBodyTemplate);
       // _.each(this.collection.models, function(song) {
       //   var compiledTemplate = _.template( songsBodyTemplate, {song: song} );
       //   console.log(compiledTemplate);
-      //   $(this.bodyEl).append( compiledTemplate );
+      //   $(this.showBodyEl).append( compiledTemplate );
 
       //   // show SongsView({model:this.model});
       // }, this);
 
-      var compiledNavTemplate = _.template ( songNavTemplate, this.model.toJSON());
+      var compiledNavTemplate = _.template ( songNavSaveTemplate, this.model.toJSON());
       var compiledBodyTemplate = _.template ( songsBodyTemplate, this.model.toJSON());
-      // console.log(compiledTemplate);
+
+      // change the nav section to the song title name
       $(this.navEl).html(compiledNavTemplate);
-      $(this.bodyEl).html(compiledBodyTemplate);
-      // console.log($(this.bodyEl).html());
+      // remove the sof-composer 
+      $(this.sofComposerEl).html('');
+      // change the body to show the title
+      $(this.showBodyEl).html(compiledBodyTemplate);
+
       // var measureCount = 1;
       // $('.component-container').each(function() {
         // $(this).find('.number').each(function() {
@@ -67,11 +71,12 @@ define([
         // measureCount = 1;
       // });
 
+      console.log("Show View rendered");
       return this;
     },
 
     // reconfigure: function(signature) {
-    //   if ($(this.bodyEl).parent().hasClass('selected')) {
+    //   if ($(this.showBodyEl).parent().hasClass('selected')) {
     //     dispatch.trigger('stopRequest.event', 'off');
     //     this.collection.reset();
 
@@ -86,11 +91,11 @@ define([
     // },
 
     // calcBeatWidth: function(signature) {
-    //   if ($(this.bodyEl).parent().hasClass('selected')) {
+    //   if ($(this.showBodyEl).parent().hasClass('selected')) {
     //     var px = 100/$('.measure').css('width').replace(/[^-\d\.]/g, '');
     //     var beatWidth = (100 - ((signature*1+1)*px))/signature;
 
-    //     $(this.bodyEl).children('.beat').css({
+    //     $(this.showBodyEl).children('.beat').css({
     //       'width' : beatWidth+'%'
     //     });
     //   }

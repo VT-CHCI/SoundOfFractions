@@ -18,12 +18,11 @@ define([
   'backbone/views/songs/new_view',
   'backbone/views/songs/index_view',
   'backbone/views/songs/show_view',
-  'backbone/views/songs/edit_view',
-  'backbone/routers/router'
-], function($, _, Backbone, mainHomeView, beatSliderView, beatBarsView, componentsView, tempoSliderView, transportView, repButtonView, log, songsCollection, songsViewNew, songsViewIndex, songsViewShow, songsViewEdit, BackboneRouter){
+  'backbone/views/songs/edit_view'
+], function($, _, Backbone, mainHomeView, beatSliderView, beatBarsView, componentsView, tempoSliderView, transportView, repButtonView, log, songsCollection, songsViewNew, songsViewIndex, songsViewShow, songsViewEdit ){
 
   var BBRouter = Backbone.Router.extend({
-    songs: {},
+    // songs: {},
     routes: {
       'new'       : 'newSong',
       'index'     : 'index',
@@ -46,17 +45,30 @@ define([
 
     index: function(){
       console.log('BB Router => index : index');
+      var view = new songsViewIndex({collection : this.songs});
     },
 
     show: function(id){
-      console.log('BB Router => :id : show');
+      console.log('BB Router => :' + id + ' : show');
       if (!window.router) {
-        console.log('TODO reset the window.router.songs  !')
+        console.error('TODO THERE IS NO Window.router !')
       } else {
-        console.log('theres is a router');
+        console.log('there is a router, ');
+        if (!window.router.songs) {
+          console.log('but no window.router.songs');
+        } else {
+          console.log('and there is a window.router.songs');
+        }
       }
-      var createdSong = this.songs.get(id);
-      var view = new songsViewShow(createdSong);
+
+      console.log("window.router.songs length => " + window.router.songs.length);
+      console.warn(window.router.songs);
+      console.warn(window.router.songs.get(id));
+
+      // var currentIDSong = window.router.songs.get(parseInt(id,10));
+      var currentIDSong = window.router.songs.get(id);
+      console.warn(currentIDSong);
+      var view = new songsViewShow(currentIDSong);
     },
 
     edit: function(id){
@@ -83,6 +95,8 @@ define([
     //TODO HOW IS THIS SONGS COLLECTION GETTING POPULATED?
     bb_router.songs = new songsCollection();
     bb_router.songs.reset(options.songs);
+    bb_router.songs.fetch();
+    console.warn(bb_router.songs);
 
     //If the user does not login we use this to generate a random number
     //to identify the user.
@@ -109,6 +123,9 @@ define([
       name = '';
     });
 
+    window.router = bb_router;
+    console.log('Router in init');
+    console.warn(window.router);
     console.log('BB Router => Initialized');
 
     // BB API call    
@@ -117,7 +134,6 @@ define([
     // It has to be at the bottom
     // TODO : Cannot call Backbone.history.start({pushState: true}) because it will break
     Backbone.history.start();
-    return bb_router;
   };
 
   return {

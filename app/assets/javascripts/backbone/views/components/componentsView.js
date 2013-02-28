@@ -19,7 +19,7 @@ define([
   'app/state'
 ], function($, _, Backbone, BeatsCollection, MeasuresCollection, componentsCollection, ComponentView, componentsTemplate, dispatch, state){
   var componentsView = Backbone.View.extend({
-    el: $('#drum-kit'),
+    el: $('#sof-composer'),
 
     events : {
 

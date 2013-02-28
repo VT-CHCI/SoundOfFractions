@@ -30,7 +30,7 @@ define([
     */
     saveLogin: function (e) {
       //we trigger an alert thanking the user for logging in.
-      $('#drum-kit').before('<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">×</button><strong>Thanks for logging in!</strong></div>');
+      $('#sof-composer').before('<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">×</button><strong>Thanks for logging in!</strong></div>');
 
       //the user's userId is stored in local storage.
       sessionStorage.setItem("userId", $('.navbar-form input').val());

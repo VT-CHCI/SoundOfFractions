@@ -1,0 +1,9 @@
+<a class="btn btn-inverse dropdown-toggle" data-toggle="dropdown" href="#">Load</a>
+<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+  <% console.warn(window.router.songs.models)%>
+  <% _.each(window.router.songs.models, function(model){ %>
+      <li><a href="#/<%= model.get("id") %>"><%= model.get("title") %></a></li> 
+  <% }); %>
+</ul>
+
+
