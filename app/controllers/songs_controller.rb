@@ -7,7 +7,9 @@ class SongsController < ApplicationController
   def index
     @songs = Song.all
     logger.debug 'index logger \n\n\n\n\n\n'
-    # gon.userID = current_user.thisUsersID
+    if user_signed_in? 
+      gon.userID = current_user.thisUsersID
+    end
 
     respond_to do |format|
       format.html # index.html.erb

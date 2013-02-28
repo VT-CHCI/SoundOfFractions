@@ -18,6 +18,11 @@
 
 <div class="row-fluid">
   <% flash.each do |name, msg| %>
-    <%= content_tag :div, msg, :class => "row-fluid", :id => "flash_#{name}" %>
+    <% if msg.is_a?(String) %>
+      <div class="alert alert-<%= name == :notice ? "success" : "error" %>">
+        <a class="close" data-dismiss="alert">&#215;</a>
+        <%= content_tag :div, msg, :id => "flash_#{name}" %>
+      </div>
+    <% end %>
   <% end %>
 </div>

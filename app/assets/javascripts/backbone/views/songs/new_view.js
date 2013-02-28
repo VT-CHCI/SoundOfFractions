@@ -3,10 +3,8 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  // Pull in the Collection module from above
   'backbone/collections/songsCollection',
   'backbone/collections/components',
-  // 'backbone/views/songs/a_song_view',
   'text!backbone/templates/songs/new.html',
   'backbone/models/unsavedSong',
   'app/dispatch',
@@ -14,20 +12,20 @@ define([
 ], function($, _, Backbone, SongsCollection, Components, songsTemplate, unsavedSong, dispatch, state){
   return Backbone.View.extend({
     // model: {},
-    el: $('#songs'),
+    el: $('#nav-songs'),
 
     initialize: function(options){
       // super(options); TODO
       console.log("new_view init");
       // console.log(options.collection);
-      if (options) {
-        console.log('options');
-        this.collection = options.collection;
-      } else {
-        this.collection = new SongsCollection;
-      }
+      // if (options) {
+      //   console.log('options');
+      //   this.collection = options.collection;
+      // } else {
+      //   this.collection = new SongsCollection;
+      // }
       
-      console.log(this.collection);
+      // console.log(this.collection);
       this.model = new unsavedSong();
       console.log(this.model);
 
@@ -49,7 +47,7 @@ define([
     save: function(e){
       e.preventDefault();
       e.stopPropagation();
-      var toBeSavedSong = new this.collection.model(); 
+      var toBeSavedSong = new window.router.songs.model(); 
       // var JSONSong = JSON.stringify(this.model.toJSON());
       // console.log(JSONSong);
       // this.model.unset("errors");
@@ -69,11 +67,11 @@ define([
       console.log('toBeSavedSong.toJSON()');
       console.log(toBeSavedSong.toJSON());
       
-      return this.collection.create(toBeSavedSong.toJSON(), {
+      return window.router.songs.create(toBeSavedSong.toJSON(), {
         success: function(song) {
           console.log('saved!');
           this.model = song;
-          router.songs.add(song);
+          window.router.songs.add(song);
           return window.location.hash = "/" + this.model.id;
 
         },
@@ -91,7 +89,7 @@ define([
       console.log($(this.el));
       $(this.el).html('');
 
-      console.log(this.collection);      
+      // console.log(this.collection);      
       // console.log(this.model);
       console.log(this.model.toJSON());
       // console.log(songsTemplate);

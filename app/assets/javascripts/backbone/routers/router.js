@@ -18,10 +18,11 @@ define([
   'backbone/views/songs/new_view',
   'backbone/views/songs/index_view',
   'backbone/views/songs/show_view',
-  'backbone/views/songs/edit_view'
-], function($, _, Backbone, mainHomeView, beatSliderView, beatBarsView, componentsView, tempoSliderView, transportView, repButtonView, log, songsCollection, songsViewNew, songsViewIndex, songsViewShow, songsViewEdit){
+  'backbone/views/songs/edit_view',
+  'backbone/routers/router'
+], function($, _, Backbone, mainHomeView, beatSliderView, beatBarsView, componentsView, tempoSliderView, transportView, repButtonView, log, songsCollection, songsViewNew, songsViewIndex, songsViewShow, songsViewEdit, BackboneRouter){
 
-  var AppRouter = Backbone.Router.extend({
+  var BBRouter = Backbone.Router.extend({
     songs: {},
     routes: {
       'new'       : 'newSong',
@@ -32,9 +33,7 @@ define([
       '.*'        : 'newSong'
     },
     newSong: function(){
-      console.log('BB routes :: new : newSong');
-      console.log('Songs : ');
-      console.log(this.songs);
+      console.log('BB routes => new : newSong');
       var view = new songsViewNew({collection : this.songs});
       mainHomeView.render();
       beatSliderView.render();
@@ -44,34 +43,26 @@ define([
       transportView.render();
       repButtonView.render();
     },
+
     index: function(){
-      console.log('bb routes index');
+      console.log('BB Router => index : index');
     },
+
     show: function(id){
-      console.log('BB router : show');
-      console.log("id param: "+id);
-
-      console.log('Songs Collection : ');
-      console.log(this.songs);
+      console.log('BB Router => :id : show');
+      if (!window.router) {
+        console.log('TODO reset the window.router.songs  !')
+      } else {
+        console.log('theres is a router');
+      }
       var createdSong = this.songs.get(id);
-      console.log(createdSong);
       var view = new songsViewShow(createdSong);
+    },
 
-    },
     edit: function(id){
-      console.log('bb routes edit');
+      console.log('BB Router edit');
     },
-    // defaultAction: function(actions){
-    //   // We have no matching route, lets display the home page
-    //   console.log('bb routes DEFAULT');
-    //   mainHomeView;
-    //   beatSliderView.render();
-    //   beatBarsView.render();
-    //   componentsView.render();
-    //   tempoSliderView.render();
-    //   transportView.render();
-    //   repButtonView.render();
-    // }
+
   });
 
   // Initialize the Router, with the options, where (options) is declared in SOF.js
@@ -80,23 +71,18 @@ define([
   // (options) == 'assest.js.erb' => App.songs{ songs : <%= Song.all.to_json.html_safe %> }
   // (options) == All the songs in the DB
   var initialize = function(options){
+    console.log("BB Router => Initializing...");
     
-    console.log("router init");
-    
-    var app_router = new AppRouter;
+    console.log('options:');
+    console.warn(options);
+    console.log('options.songs');
+    console.warn(options.songs);
 
-    console.log("router init 2");
-    app_router.songs = new songsCollection();  //TODO HOW IS THIS SONGS COLLECTION GETTING POPULATED?
+    var bb_router = new BBRouter;
 
-    console.log("router init 3");
-    // BB API call    
-    console.log("router init 4");
-
-    app_router.songs.reset(options.songs);
-    console.log(app_router.songs);
-    console.log('options.songs reset');
-    console.log("in init, router follows");
-    console.log(app_router);
+    //TODO HOW IS THIS SONGS COLLECTION GETTING POPULATED?
+    bb_router.songs = new songsCollection();
+    bb_router.songs.reset(options.songs);
 
     //If the user does not login we use this to generate a random number
     //to identify the user.
@@ -123,11 +109,15 @@ define([
       name = '';
     });
 
-    //we call this so that backbone will allow the back button
-    //on the browser to go back through state changes.
+    console.log('BB Router => Initialized');
+
+    // BB API call    
+    // we call this so that backbone will allow the back button
+    // on the browser to go back through state changes.
     // It has to be at the bottom
+    // TODO : Cannot call Backbone.history.start({pushState: true}) because it will break
     Backbone.history.start();
-    return app_router;
+    return bb_router;
   };
 
   return {

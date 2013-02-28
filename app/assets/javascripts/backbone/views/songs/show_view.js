@@ -3,27 +3,27 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  // Pull in the Collection module from above
   'backbone/collections/songsCollection',
   'backbone/collections/components',
   'backbone/models/song',
-  // 'backbone/views/songs/a_song_view',
   'text!backbone/templates/songs/show.html',
+  'text!backbone/templates/songs/nav.html',
   'app/dispatch',
   'app/state'
-], function($, _, Backbone, SongsCollection, Components, song, songsTemplate, dispatch, state){
+], function($, _, Backbone, SongsCollection, Components, song, songsBodyTemplate, songNavTemplate, dispatch, state){
   return Backbone.View.extend({
     // model: {},
-    el: $('#show-song'),
+    navEl: $('#nav-songs'),
+    bodyEl: $('#show-song'),
 
     initialize: function(options){
-      console.log("show_view init");
-      
+      console.log("Show View initializing...");
+      console.warn(options);
       this.model = options;
-      console.log(this.model);
+      console.warn(this.model);
 
       // this.model.bind("change:errors", function(){
-        // console.log("in change error func for new view");
+        // console.log("in change error func for show view");
         // return this.render()
       // });
 
@@ -31,31 +31,33 @@ define([
       // dispatch.on('signatureChange.event', this.reconfigure, this);
       this.render();
       // this.calcBeatWidth(state.get('signature'));
+      console.log("Show View initialized");
     },
 
     events: { 
-      "submit #new-song": "save"
+      "submit #show-song": "save"
     },
 
     render: function(){
-      console.log("new view::render");
-      console.log($(this.el));
-      $(this.el).html('');      
-      console.log(this.model);
+      console.log("Show View Rendering");
+      $(this.bodyEl).html('');      
+      console.warn(this.model);
       // console.log(this.model.toJSON());
-      // console.log(songsTemplate);
+      // console.log(songsBodyTemplate);
       // _.each(this.collection.models, function(song) {
-      //   var compiledTemplate = _.template( songsTemplate, {song: song} );
+      //   var compiledTemplate = _.template( songsBodyTemplate, {song: song} );
       //   console.log(compiledTemplate);
-      //   $(this.el).append( compiledTemplate );
+      //   $(this.bodyEl).append( compiledTemplate );
 
-      //   // new SongsView({model:this.model});
+      //   // show SongsView({model:this.model});
       // }, this);
 
-      var compiledTemplate = _.template ( songsTemplate, this.model.toJSON());
+      var compiledNavTemplate = _.template ( songNavTemplate, this.model.toJSON());
+      var compiledBodyTemplate = _.template ( songsBodyTemplate, this.model.toJSON());
       // console.log(compiledTemplate);
-      $(this.el).html(compiledTemplate);
-      // console.log($(this.el).html());
+      $(this.navEl).html(compiledNavTemplate);
+      $(this.bodyEl).html(compiledBodyTemplate);
+      // console.log($(this.bodyEl).html());
       // var measureCount = 1;
       // $('.component-container').each(function() {
         // $(this).find('.number').each(function() {
@@ -69,7 +71,7 @@ define([
     },
 
     // reconfigure: function(signature) {
-    //   if ($(this.el).parent().hasClass('selected')) {
+    //   if ($(this.bodyEl).parent().hasClass('selected')) {
     //     dispatch.trigger('stopRequest.event', 'off');
     //     this.collection.reset();
 
@@ -84,11 +86,11 @@ define([
     // },
 
     // calcBeatWidth: function(signature) {
-    //   if ($(this.el).parent().hasClass('selected')) {
+    //   if ($(this.bodyEl).parent().hasClass('selected')) {
     //     var px = 100/$('.measure').css('width').replace(/[^-\d\.]/g, '');
     //     var beatWidth = (100 - ((signature*1+1)*px))/signature;
 
-    //     $(this.el).children('.beat').css({
+    //     $(this.bodyEl).children('.beat').css({
     //       'width' : beatWidth+'%'
     //     });
     //   }
