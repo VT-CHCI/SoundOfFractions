@@ -11,7 +11,7 @@ define([
 ], function($, _, Backbone, componentModel){
   var componentsCollection = Backbone.Collection.extend({
     model: componentModel,
-
+    tempo: 120,
     initialize: function(){
 
     }

@@ -134,6 +134,7 @@ define([
 
       //register the handler for togglePlay events.
       dispatch.on('togglePlay.event', this.togglePlay, this);
+      dispatch.on('tempoChange.event', this.updateTempo, this);
 
     },
 
@@ -368,6 +369,11 @@ define([
         dispatch.trigger('toggleAnimation.event', 'on', duration, state.get('signature'), maxMeasures);
 
       }
+    },
+
+    updateTempo:function(val) {
+      //console.log('tempo changed to ' + val);
+      this.drumkit.tempo = val;
     }
   });
   return new componentsView();
