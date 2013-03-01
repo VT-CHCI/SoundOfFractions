@@ -63,10 +63,10 @@ define([
 
       console.log("window.router.songs length => " + window.router.songs.length);
       console.warn(window.router.songs);
-      console.warn(window.router.songs.get(id));
+      console.warn(window.router.songs.models[id - 1]);
 
       // var currentIDSong = window.router.songs.get(parseInt(id,10));
-      var currentIDSong = window.router.songs.get(id);
+      var currentIDSong = window.router.songs.models[id - 1];
       console.warn(currentIDSong);
       var view = new songsViewShow(currentIDSong);
     },

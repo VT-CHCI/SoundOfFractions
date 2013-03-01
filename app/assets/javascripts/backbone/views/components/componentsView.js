@@ -13,11 +13,15 @@ define([
   'backbone/collections/beats',
   'backbone/collections/measures',
   'backbone/collections/components',
+  'backbone/models/beat',
+  'backbone/models/measure',
+  'backbone/models/component',
   'backbone/views/components/componentView',
   'text!backbone/templates/components/components.html',
   'app/dispatch',
   'app/state'
-], function($, _, Backbone, BeatsCollection, MeasuresCollection, componentsCollection, ComponentView, componentsTemplate, dispatch, state){
+], function($, _, Backbone, BeatsCollection, MeasuresCollection, componentsCollection, 
+    BeatModel, MeasureModel, ComponentModel, ComponentView, componentsTemplate, dispatch, state){
   var componentsView = Backbone.View.extend({
     el: $('#sof-composer'),
 
@@ -26,7 +30,6 @@ define([
     },
 
     initialize: function(){
-
       //this context variable gives us access to all of the
       //web audio api methods/objects.
       this.context = new webkitAudioContext();
@@ -138,6 +141,45 @@ define([
 
     },
 
+    build: function(song) {
+      //debugger;
+      console.log('starting building...');
+      this.drumkit.reset();
+      var components = song.get('content').components;
+      for(var i = 0; i < components.length; i++) {
+        var component = new ComponentModel();
+        component.set('label', components[i].label);
+        component.set('img', components[i].img);
+        component.set('mute', components[i].mute);
+        component.set('sample', components[i].sample);
+        component.set('active', components[i].active);
+        component.set('signature', components[i].signature);
+        component.set('representation', components[i].representation);
+        var mC = new MeasuresCollection();
+        for(var j = 0; j < components[i].measures.length; j++) {
+          var measureObj = components[i].measures[j];
+          var measure = new MeasureModel();
+          measure.set('label', measureObj.label);
+          measure.set('numberOfBeats', measureObj.numberOfBeats);
+          measure.set('divisions', measureObj.divisions);
+          var bC = new BeatsCollection();
+          for(var k = 0; k < measureObj.beats.length; k++) {
+            var beatObj = measureObj.beats[k];
+            var beat = new BeatModel();
+            beat.set('selected', beatObj.selected);
+            bC.add(beat);
+          }
+          measure.set('beats', bC);
+          mC.add(measure);
+        }
+        component.set('measures', mC);
+        console.log(component);
+        this.drumkit.add(component);
+      }
+      this.render();
+      console.log('done building');
+    },
+
     render: function(){
       $(this.el).html('');
 
@@ -153,7 +195,12 @@ define([
         $(this.el).append( compiledTemplate );
 
         //create a component view.
-        new ComponentView({collection:component, el:'#component-container'+component.cid, gainNode:this.muteGainNodeList[counter]});
+        var componentView = new ComponentView({collection:component, el:'#component-container'+component.cid, 
+          gainNode:this.muteGainNodeList[counter]});
+        if(!component.get('active')) {
+          console.log('found a muted one');
+          componentView.toggleMute();
+        }
         counter++;
       }, this);
 

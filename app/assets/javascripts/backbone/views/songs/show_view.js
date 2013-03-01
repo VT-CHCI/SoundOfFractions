@@ -6,11 +6,12 @@ define([
   'backbone/collections/songsCollection',
   'backbone/collections/components',
   'backbone/models/song',
+  'backbone/views/components/componentsView',
   'text!backbone/templates/songs/show.html',
   'text!backbone/templates/songs/navSave.html',
   'app/dispatch',
   'app/state'
-], function($, _, Backbone, SongsCollection, Components, song, songsBodyTemplate, songNavSaveTemplate, dispatch, state){
+], function($, _, Backbone, SongsCollection, Components, song, ComponentsView, songsBodyTemplate, songNavSaveTemplate, dispatch, state){
   return Backbone.View.extend({
     // model: {},
     navEl: $('#nav-songs-save'),
@@ -58,7 +59,7 @@ define([
       // change the nav section to the song title name
       $(this.navEl).html(compiledNavTemplate);
       // remove the sof-composer 
-      $(this.sofComposerEl).html('');
+      //$(this.sofComposerEl).html('');
       // change the body to show the title
       $(this.showBodyEl).html(compiledBodyTemplate);
 
@@ -70,8 +71,9 @@ define([
         // });
         // measureCount = 1;
       // });
-
+      ComponentsView.build(this.model);
       console.log("Show View rendered");
+
       return this;
     },
 

@@ -49,7 +49,6 @@ define([
       dispatch.on('representation.event', this.recalculateFraction, this);
       dispatch.on('beatClicked.event', this.recalculateFraction, this);
       dispatch.on('signatureChange.event', this.recalculateFraction, this);
-      dispatch.on('tempoChange.event', this.updateTempo, this);
       this.render();
     },
 
@@ -226,6 +225,6 @@ define([
       }
 
       this.component.set('signature', denominator);
-    }
+    },
   });
 });
