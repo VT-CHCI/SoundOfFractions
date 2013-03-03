@@ -73,6 +73,7 @@ GEM
     mime-types (1.21)
     multi_json (1.6.1)
     orm_adapter (0.4.0)
+    pg (0.14.1)
     polyglot (0.3.3)
     rack (1.4.5)
     rack-cache (1.2)
@@ -81,6 +82,7 @@ GEM
       rack
     rack-test (0.6.2)
       rack (>= 1.0)
+    railroady (1.1.0)
     rails (3.2.2)
       actionmailer (= 3.2.2)
       actionpack (= 3.2.2)
@@ -144,6 +146,8 @@ DEPENDENCIES
   ejs
   gon
   jquery-rails
+  pg
+  railroady
   rails (= 3.2.2)
   rails-backbone
   requirejs-rails
