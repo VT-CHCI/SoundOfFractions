@@ -96,7 +96,7 @@ define([
         mute: true,
         sample: '808_bd.m4a',
         measures: this.component,
-        active: false
+        active: true
       });
 
 
