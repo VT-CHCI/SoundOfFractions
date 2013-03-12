@@ -96,7 +96,7 @@ define([
         mute: true,
         sample: '808_bd.m4a',
         measures: this.component,
-        active: false
+        active: true
       });
 
 
@@ -144,8 +144,15 @@ define([
     build: function(song) {
       //debugger;
       console.log('starting building...');
+      console.log('song');
+      console.warn(song);
+      song.set('content', JSON.parse(song.get('content')) );
       this.drumkit.reset();
+      // console.log('song.get('content').components');
+      window.csf = song;
       var components = song.get('content').components;
+      console.log('var components');
+      console.warn(components);
       for(var i = 0; i < components.length; i++) {
         var component = new ComponentModel();
         component.set('label', components[i].label);

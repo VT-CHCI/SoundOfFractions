@@ -51,7 +51,7 @@ define([
       // });
       toBeSavedSong.set({
         // this.model is a unsavedSong.js model which contains 'title', and 'components'
-        content : this.model.toJSON(),
+        content : JSON.stringify(this.model.toJSON()),
         title : $('#title').val()
       });
 
@@ -61,7 +61,7 @@ define([
       console.log('toBeSavedSong.toJSON() :');
       console.warn(toBeSavedSong.toJSON());
       
-      return window.router.songs.create(toBeSavedSong.toJSON(), {
+      return window.router.songs.create( toBeSavedSong.toJSON() , {
         success: function(song) {
           console.log('Song saved!');
           this.model = song;

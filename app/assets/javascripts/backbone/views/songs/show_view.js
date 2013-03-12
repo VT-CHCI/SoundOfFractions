@@ -42,6 +42,7 @@ define([
     render: function(){
       console.log("Show View Rendering...");
       $(this.showBodyEl).html('');      
+      console.log('this.model:')
       console.warn(this.model);
       // console.log(this.model.toJSON());
       // console.log(songsBodyTemplate);
