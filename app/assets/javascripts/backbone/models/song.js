@@ -9,7 +9,7 @@ define([
     defaults: {
       content: '',
       user: '',
-      title: ''                        //move to songTemplate.js
+      title: ''
       // components: componentCollection   //move to songTemplate.js
     },
     initialize: function(){
