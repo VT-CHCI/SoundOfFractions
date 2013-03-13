@@ -29,7 +29,7 @@ define([
       ':id/edit'  : 'edit',
       ':id'       : 'show',
       //Catchall
-      '.*'        : 'newSong'
+      '.*'        : 'index'
     },
     newSong: function(){
       console.log('BB routes => new : newSong');

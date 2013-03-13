@@ -15,7 +15,6 @@ define([
     el: $('#nav-songs-save'),
 
     initialize: function(options){
-      // super(options); TODO
       console.log("New View initializing...");
       console.warn(window.router);
       
