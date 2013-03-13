@@ -10,12 +10,14 @@ define([
   'text!backbone/templates/songs/show.html',
   'text!backbone/templates/tiny/navSave.html',
   'text!backbone/templates/tiny/navLoad.html',
+  'text!backbone/templates/tiny/navUpdate.html',
   'app/dispatch',
   'app/state'
-], function($, _, Backbone, SongsCollection, Components, song, ComponentsView, songsBodyTemplate, songNavSaveTemplate, songNavLoadTemplate, dispatch, state){
+], function($, _, Backbone, SongsCollection, Components, song, ComponentsView, songsBodyTemplate, songNavSaveTemplate, songNavLoadTemplate, songNavUpdateTemplate, dispatch, state){
   return Backbone.View.extend({
     // model: {},
     navLoadEl: $('#nav-songs-load'),
+    navUpdateEl: $('#nav-songs-update'),
     navSaveEl: $('#nav-songs-save'),
     showBodyEl: $('#show-song'),
     sofComposerEl: $('#sof-composer'),
@@ -56,10 +58,13 @@ define([
       //   // show SongsView({model:this.model});
       // }, this);
 
+      var compiledNavUpdateTemplate = _.template ( songNavUpdateTemplate, this.collection.toJSON());
       var compiledNavLoadTemplate = _.template ( songNavLoadTemplate, this.collection.toJSON());
       var compiledNavTemplate = _.template ( songNavSaveTemplate, this.model.toJSON());
       var compiledBodyTemplate = _.template ( songsBodyTemplate, this.model.toJSON());
 
+      // load the update button
+      $(this.navUpdateEl).html(compiledNavUpdateTemplate);
       // load the songs into the load button
       $(this.navLoadEl).html(compiledNavLoadTemplate);
       // change the nav section to the song title name

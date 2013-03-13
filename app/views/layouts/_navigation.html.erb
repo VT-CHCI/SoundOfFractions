@@ -4,7 +4,7 @@
         <ul class="nav" role="navigation">
           <li>  <%= link_to "Sound of Fractions", root_path, :class => 'brand' %></li>
           <% if user_signed_in? %>
-            <%= render 'layouts/shared/loadsavesong' %>
+            <%= render 'layouts/shared/loadOrSaveSong' %>
           <% else %>
           <% end %>
         </ul>
