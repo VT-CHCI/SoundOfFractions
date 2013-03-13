@@ -85,6 +85,15 @@ define([
       ComponentsView.build(this.model);
       console.log("Show View rendered");
 
+      // Update song
+      var self = this;
+      this.navUpdateEl.click(function(){
+        console.warn(self.model.toJSON());
+        console.warn(self.model.get('content').components[0].measures[0].beats[0]);
+        window.router.songs.update(self.model, {remove: false});
+        console.log('Update occurred');
+      });
+
       return this;
     },
 
