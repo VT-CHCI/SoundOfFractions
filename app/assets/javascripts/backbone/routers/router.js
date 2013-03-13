@@ -63,10 +63,10 @@ define([
 
       console.log("window.router.songs length => " + window.router.songs.length);
       console.warn(window.router.songs);
-      console.warn(window.router.songs.models[id - 1]);
+      console.warn(window.router.songs.get(id));
 
       // var currentIDSong = window.router.songs.get(parseInt(id,10));
-      var currentIDSong = window.router.songs.models[id - 1];
+      var currentIDSong = window.router.songs.get(id);
       console.warn(currentIDSong);
       var view = new songsViewShow(currentIDSong);
     },
@@ -84,7 +84,17 @@ define([
   // (options) == All the songs in the DB
   var initialize = function(options){
     console.log("BB Router => Initializing...");
-    
+    var filteredOptions = [];
+
+    console.log('filtering');
+    for (var i = 0 ; i < options.songs.length ; i++){
+      if (options.songs[i].user_id == gon.userID ){
+        filteredOptions.push(options.songs[i]);
+      }
+    }
+    console.log(filteredOptions);
+    options.songs = filteredOptions;
+
     console.log('options:');
     console.warn(options);
     console.log('options.songs');

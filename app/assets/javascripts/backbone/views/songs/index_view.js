@@ -31,7 +31,7 @@ define([
 
     render: function(){
       console.log("Index View Rendering...");
-      $(this.showBodyEl).html('');      
+      $(this.showBodyEl).html('');
 
       // var compiledNavTemplate = _.template ( songNavSaveTemplate, this.collection.toJSON());
       var compiledNavLoadTemplate = _.template ( songsNavLoadTemplate, this.collection.toJSON());

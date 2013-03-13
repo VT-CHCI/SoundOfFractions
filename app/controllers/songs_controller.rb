@@ -5,11 +5,12 @@ class SongsController < ApplicationController
   # GET /songs
   # GET /songs.json
   def index
-    @songs = Song.all
+    @user = current_user
+    @songs = @user.songs
     logger.debug 'index logger \n\n\n\n\n\n'
-    if user_signed_in? 
-      gon.userID = current_user.thisUsersID
-    end
+  if user_signed_in? 
+    gon.userID = current_user.thisUsersID
+  end
 
     respond_to do |format|
       format.html # index.html.erb
