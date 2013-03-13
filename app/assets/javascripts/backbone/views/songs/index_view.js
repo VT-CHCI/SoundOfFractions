@@ -7,8 +7,8 @@ define([
   'backbone/collections/components',
   'backbone/models/song',
   'text!backbone/templates/songs/index.html',
-  'text!backbone/templates/songs/navSave.html',
-  'text!backbone/templates/songs/navLoad.html',
+  'text!backbone/templates/tiny/navSave.html',
+  'text!backbone/templates/tiny/navLoad.html',
   'app/dispatch',
   'app/state'
 ], function($, _, Backbone, SongsCollection, Components, song, songsBodyTemplate, songNavSaveTemplate, songsNavLoadTemplate, dispatch, state){
