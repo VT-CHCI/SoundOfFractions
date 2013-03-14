@@ -18,7 +18,7 @@ define([
     // model: {},
     navLoadEl: $('#nav-songs-load'),
     navUpdateEl: $('#nav-songs-update'),
-    navSaveEl: $('#nav-songs-save'),
+    navSaveEl: $('#nav-songs-info'),
     showBodyEl: $('#show-song'),
     sofComposerEl: $('#sof-composer'),
 
