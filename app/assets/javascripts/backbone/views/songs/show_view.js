@@ -11,9 +11,10 @@ define([
   'text!backbone/templates/tiny/navSave.html',
   'text!backbone/templates/tiny/navLoad.html',
   'text!backbone/templates/tiny/navUpdate.html',
+  'text!backbone/templates/tiny/navInfo.html',
   'app/dispatch',
   'app/state'
-], function($, _, Backbone, SongsCollection, Components, song, ComponentsView, songsBodyTemplate, songNavSaveTemplate, songNavLoadTemplate, songNavUpdateTemplate, dispatch, state){
+], function($, _, Backbone, SongsCollection, Components, song, ComponentsView, songsBodyTemplate, songNavSaveTemplate, songNavLoadTemplate, songNavUpdateTemplate, songNavInfoTemplate, dispatch, state){
   return Backbone.View.extend({
     // model: {},
     navLoadEl: $('#nav-songs-load'),
@@ -61,7 +62,7 @@ define([
 
       var compiledNavUpdateTemplate = _.template ( songNavUpdateTemplate, this.collection.toJSON());
       var compiledNavLoadTemplate = _.template ( songNavLoadTemplate, this.collection.toJSON());
-      var compiledNavTemplate = _.template ( songNavSaveTemplate, this.model.toJSON());
+      var compiledNavTemplate = _.template ( songNavInfoTemplate, this.model.toJSON());
       var compiledBodyTemplate = _.template ( songsBodyTemplate, this.model.toJSON());
 
       // load the update button

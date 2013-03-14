@@ -5,17 +5,18 @@ define([
   'backbone',
   'backbone/collections/songsCollection',
   'backbone/collections/components',
-  'text!backbone/templates/songs/new.html',
+  'text!backbone/templates/tiny/navSave.html',
   'backbone/models/unsavedSong',
   'app/dispatch',
   'app/state'
-], function($, _, Backbone, SongsCollection, Components, songsTemplate, unsavedSong, dispatch, state){
+], function($, _, Backbone, SongsCollection, Components, songsNewTemplate, unsavedSong, dispatch, state){
   return Backbone.View.extend({
     //WORKING
     el: $('#nav-songs-save'),
     // Want to change to
     // navEl: $('#nav-songs-info'),
     
+    navLoadEl: $('#nav-songs-load'),
     navNewEl: $('#nav-songs-new'),
     bodyInfoEl: $('#show-song'),
     navUpdateEl: $('#nav-songs-update'),
@@ -88,12 +89,14 @@ define([
       console.log(this.model.toJSON());
 
       //Working
-      var compiledTemplate = _.template ( songsTemplate, this.model.toJSON());
+      var compiledTemplate = _.template ( songsNewTemplate, this.model.toJSON());
       $(this.el).html(compiledTemplate);
       //Want to change to
-      // var compiledTemplate = _.template ( songsTemplate, this.model.toJSON());
+      // var compiledTemplate = _.template ( songsNewTemplate, this.model.toJSON());
       // $(this.navEl).html(compiledTemplate);
       
+      //Clear the nav Load button
+      $(this.navLoadEl).html('');
       //Clear the body info section if it is there
       $(this.bodyInfoEl).html('');
       //Clear the newSong nav button
