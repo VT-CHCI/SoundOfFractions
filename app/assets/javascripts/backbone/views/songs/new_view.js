@@ -12,8 +12,7 @@ define([
 ], function($, _, Backbone, SongsCollection, Components, songsTemplate, unsavedSong, dispatch, state){
   return Backbone.View.extend({
     // model: {},
-    bodyInfoEl: $('#show-song'),
-    navEl: $('#nav-songs-save'),
+    el: $('#nav-songs-save'),
 
     initialize: function(options){
       console.log("New View initializing...");
@@ -85,14 +84,21 @@ define([
       console.log($(this.el));
       $(this.el).html('');
 
-      console.log('this.model.toJSON() :');
-      console.warn(this.model.toJSON());
+      // console.log(this.collection);      
+      // console.log(this.model);
+      console.log(this.model.toJSON());
+      // console.log(songsTemplate);
+      // _.each(this.collection.models, function(song) {
+      //   var compiledTemplate = _.template( songsTemplate, {song: song} );
+      //   console.log(compiledTemplate);
+      //   $(this.el).append( compiledTemplate );
 
-      //Clear the body info section if it is there
-      $(this.bodyInfoEl).html('');
+      //   // new SongsView({model:this.model});
+      // }, this);
 
       var compiledTemplate = _.template ( songsTemplate, this.model.toJSON());
-      $(this.navEl).html(compiledTemplate);
+      // console.log(compiledTemplate);
+      $(this.el).html(compiledTemplate);
       // console.log($(this.el).html());
       // var measureCount = 1;
       // $('.component-container').each(function() {
