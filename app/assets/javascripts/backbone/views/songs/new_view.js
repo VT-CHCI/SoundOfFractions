@@ -12,8 +12,10 @@ define([
 ], function($, _, Backbone, SongsCollection, Components, songsTemplate, unsavedSong, dispatch, state){
   return Backbone.View.extend({
     // model: {},
+    navNewEl: $('#nav-songs-new'),
     bodyInfoEl: $('#show-song'),
-    navEl: $('#nav-songs-save'),
+    navUpdateEl: $('#nav-songs-update'),
+    navEl: $('#nav-songs-info'),
 
     initialize: function(options){
       console.log("New View initializing...");
@@ -90,18 +92,14 @@ define([
 
       //Clear the body info section if it is there
       $(this.bodyInfoEl).html('');
+      //Clear the newSong nav button
+      $(this.navNewEl).html('');
+      //Clear the update nav button
+      $(this.navUpdateEl).html('');
 
       var compiledTemplate = _.template ( songsTemplate, this.model.toJSON());
       $(this.navEl).html(compiledTemplate);
-      // console.log($(this.el).html());
-      // var measureCount = 1;
-      // $('.component-container').each(function() {
-        // $(this).find('.number').each(function() {
-          // $(this).text(measureCount);
-          // measureCount++;
-        // });
-        // measureCount = 1;
-      // });
+
 
       console.log("New View rendered");
       return this;

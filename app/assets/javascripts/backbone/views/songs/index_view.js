@@ -9,12 +9,14 @@ define([
   'text!backbone/templates/songs/index.html',
   'text!backbone/templates/tiny/navSave.html',
   'text!backbone/templates/tiny/navLoad.html',
+  'text!backbone/templates/tiny/navNew.html',
   'app/dispatch',
   'app/state'
-], function($, _, Backbone, SongsCollection, Components, song, songsBodyTemplate, songNavSaveTemplate, songsNavLoadTemplate, dispatch, state){
+], function($, _, Backbone, SongsCollection, Components, song, songsBodyTemplate, songNavSaveTemplate, songsNavLoadTemplate, songsNavNewTemplate, dispatch, state){
   return Backbone.View.extend({
     navLoadEl: $('#nav-songs-load'),
-    // navEl: $('#nav-songs-save'),
+    navNewEl: $('#nav-songs-new'),
+    navSaveEl: $('#nav-songs-info'),
     showBodyEl: $('#show-song'),
     sofComposerEl: $('#sof-composer'),
 
@@ -35,10 +37,15 @@ define([
 
       // var compiledNavTemplate = _.template ( songNavSaveTemplate, this.collection.toJSON());
       var compiledNavLoadTemplate = _.template ( songsNavLoadTemplate, this.collection.toJSON());
+      var compiledNavNewTemplate = _.template ( songsNavNewTemplate, this.collection.toJSON());
       var compiledBodyTemplate = _.template ( songsBodyTemplate, this.collection.toJSON());
 
       // load the songs into the load button
       $(this.navLoadEl).html(compiledNavLoadTemplate);
+      //show the new song button
+      $(this.navNewEl).html(compiledNavNewTemplate);
+      //clear the save song button
+      $(this.navSaveEl).html('');
       // remove the sof-composer 
       $(this.sofComposerEl).html('');
       // change the body to show the title

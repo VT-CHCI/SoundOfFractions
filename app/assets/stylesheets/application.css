@@ -19,3 +19,8 @@
 @import "bootstrap-responsive";
 
 body { padding-top: 75px; height: 100%; }
+
+/*for development only*/
+.navbar .nav > li > a {
+  float: left!important;
+}
