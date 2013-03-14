@@ -29,7 +29,7 @@ define([
 
     },
 
-    initialize: function(){
+    initialize: function(predefinedCollection){
       //this context variable gives us access to all of the
       //web audio api methods/objects.
       this.context = new webkitAudioContext();
@@ -39,85 +39,92 @@ define([
       //we use it to toggle play/stop.
       this.masterGainNode = this.context.createGainNode();
 
-      this.drumkit = componentsCollection;
-
-      //this is creating the snare component.
-      this.measure = new BeatsCollection;
-
-      for (var i = 0; i < 4; i++) {
-        this.measure.add();
+      if (predefinedCollection) {
+        console.log('predefinedCollection :');
+        console.warn(predefinedCollection);
+        this.drumkit.reset();
       }
+      // else {
+        this.drumkit = componentsCollection;
 
-      this.component = new MeasuresCollection;
-      this.component.add({beats: this.measure});
+        //this is creating the snare component.
+        this.measure = new BeatsCollection;
 
-      this.drumkit = componentsCollection.add({
-        label: 'Snare',
-        img: 'snare.png',
-        mute: false,
-        sample: '808_sd.m4a',
-        //sample: 'square.wav',
-        measures: this.component,
-        active: true
-      });
+        for (var i = 0; i < 4; i++) {
+          this.measure.add();
+        }
 
-      //this is creating the hi-hat component.
-      this.measure = new BeatsCollection;
+        this.component = new MeasuresCollection;
+        this.component.add({beats: this.measure});
 
-      for (var i = 0; i < 4; i++) {
-        this.measure.add();
-      }
+        this.drumkit = componentsCollection.add({  // TODO: consider changing lines like these to this.drumkit = componentsCollection.add({
+          label: 'Snare',
+          img: 'snare.png',
+          mute: false,
+          sample: '808_sd.m4a',
+          //sample: 'square.wav',
+          measures: this.component,
+          active: true
+        });
 
-      this.component = new MeasuresCollection;
-      this.component.add({beats: this.measure});
+        //this is creating the hi-hat component.
+        this.measure = new BeatsCollection;
 
-      this.drumkit = componentsCollection.add({
-        label: 'Hi Hat',
-        img: 'hihat.png',
-        mute: true,
-        sample: '808_chh.m4a',
-        measures: this.component,
-        active: true
-      });
+        for (var i = 0; i < 4; i++) {
+          this.measure.add();
+        }
 
-      //this is creating the kick drum component.
-      this.measure = new BeatsCollection;
+        this.component = new MeasuresCollection;
+        this.component.add({beats: this.measure});
 
-      for (var i = 0; i < 4; i++) {
-        this.measure.add();
-      }
+        this.drumkit = componentsCollection.add({
+          label: 'Hi Hat',
+          img: 'hihat.png',
+          mute: true,
+          sample: '808_chh.m4a',
+          measures: this.component,
+          active: true
+        });
 
-      this.component = new MeasuresCollection;
-      this.component.add({beats: this.measure});
+        //this is creating the kick drum component.
+        this.measure = new BeatsCollection;
 
-      this.drumkit = componentsCollection.add({
-        label: 'Kick Drum',
-        img: 'kick.png',
-        mute: true,
-        sample: '808_bd.m4a',
-        measures: this.component,
-        active: true
-      });
+        for (var i = 0; i < 4; i++) {
+          this.measure.add();
+        }
+
+        this.component = new MeasuresCollection;
+        this.component.add({beats: this.measure});
+
+        this.drumkit = componentsCollection.add({
+          label: 'Kick Drum',
+          img: 'kick.png',
+          mute: true,
+          sample: '808_bd.m4a',
+          measures: this.component,
+          active: true
+        });
 
 
-      //this is creating the synth component.
-      this.measure = new BeatsCollection;
+        //this is creating the synth component.
+        this.measure = new BeatsCollection;
 
-      for (var i = 0; i < 4; i++) {
-        this.measure.add();
-      }
+        for (var i = 0; i < 4; i++) {
+          this.measure.add();
+        }
 
-      this.component = new MeasuresCollection;
-      this.component.add({beats: this.measure});
+        this.component = new MeasuresCollection;
+        this.component.add({beats: this.measure});
 
-      this.drumkit = componentsCollection.add({
-        label: 'Synth',
-        img: 'synth.png',
-        mute: true,
-        sample: 'ambass.mp3',
-        measures: this.component,
-        active: true
-      });
+        this.drumkit = componentsCollection.add({
+          label: 'Synth',
+          img: 'synth.png',
+          mute: true,
+          sample: 'ambass.mp3',
+          measures: this.component,
+          active: true
+        });
+      // }
 
       //creating two arrays to hold our gain nodes.
       //the first is for sustained-note sounds,
@@ -146,11 +153,12 @@ define([
       console.log('starting building...');
       console.log('song');
       console.warn(song);
-      song.set('content', JSON.parse(song.get('content')) );
+      // song.set('content', JSON.parse(song.get('content')) );
+      console.log('Component View : Build() drumkit cleared');
       this.drumkit.reset();
       // console.log('song.get('content').components');
       window.csf = song;
-      var components = song.get('content').components;
+      var components = song.get('components');
       console.log('var components');
       console.warn(components);
       for(var i = 0; i < components.length; i++) {
@@ -187,8 +195,19 @@ define([
       console.log('done building');
     },
 
-    render: function(){
+    render: function(predefinedCollection){
+      
+      if (predefinedCollection) {
+        this.drumkit = predefinedCollection;
+        console.log('predefinedCollection :');
+        console.warn(predefinedCollection);
+      }
+
+      // ..Clearing the sof-container
+      console.log('Clearing the sof-container');
       $(this.el).html('');
+      console.log('drumkit(s)');
+      console.warn(this.drumkit);
 
       var counter = 0;
 

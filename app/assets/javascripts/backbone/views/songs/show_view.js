@@ -6,6 +6,7 @@ define([
   'backbone/collections/songsCollection',
   'backbone/collections/components',
   'backbone/models/song',
+  'backbone/models/unsavedSong',
   'backbone/views/components/componentsView',
   'text!backbone/templates/songs/show.html',
   'text!backbone/templates/tiny/navSave.html',
@@ -13,7 +14,7 @@ define([
   'text!backbone/templates/tiny/navUpdate.html',
   'app/dispatch',
   'app/state'
-], function($, _, Backbone, SongsCollection, Components, song, ComponentsView, songsBodyTemplate, songNavSaveTemplate, songNavLoadTemplate, songNavUpdateTemplate, dispatch, state){
+], function($, _, Backbone, SongsCollection, Components, song, unsavedSong, ComponentsView, songsBodyTemplate, songNavSaveTemplate, songNavLoadTemplate, songNavUpdateTemplate, dispatch, state){
   return Backbone.View.extend({
     // model: {},
     navLoadEl: $('#nav-songs-load'),
@@ -25,7 +26,11 @@ define([
     initialize: function(options){
       console.log("Show View initializing...");
       console.warn(options);
-      this.model = options;
+
+      var unsavedVersion = new unsavedSong(JSON.parse(options.get('content')).components);
+
+      this.fullModel = options;
+      this.model = unsavedVersion;
       console.warn(this.model);
 
       // this.model.bind("change:errors", function(){
@@ -40,14 +45,19 @@ define([
       console.log("Show View initialized");
     },
 
-    // events: { 
+    // events: {
+    //   click: 'clicked' 
+    // },
+
+    // clicked: function(){
+    //   console.log('clicked the UPDATE Button');
     // },
 
     render: function(){
       console.log("Show View Rendering...");
       $(this.showBodyEl).html('');      
       console.log('this.model:')
-      console.warn(this.model);
+      console.warn(this.model.toJSON());
       // console.log(this.model.toJSON());
       // console.log(songsBodyTemplate);
       // _.each(this.collection.models, function(song) {
@@ -60,8 +70,8 @@ define([
 
       var compiledNavUpdateTemplate = _.template ( songNavUpdateTemplate, this.collection.toJSON());
       var compiledNavLoadTemplate = _.template ( songNavLoadTemplate, this.collection.toJSON());
-      var compiledNavTemplate = _.template ( songNavSaveTemplate, this.model.toJSON());
-      var compiledBodyTemplate = _.template ( songsBodyTemplate, this.model.toJSON());
+      var compiledNavTemplate = _.template ( songNavSaveTemplate, this.fullModel.toJSON());
+      var compiledBodyTemplate = _.template ( songsBodyTemplate, this.fullModel.toJSON());
 
       // load the update button
       $(this.navUpdateEl).html(compiledNavUpdateTemplate);
@@ -82,14 +92,20 @@ define([
         // });
         // measureCount = 1;
       // });
-      ComponentsView.build(this.model);
+      // ComponentsView.build(this.model);
+      console.log('this.model :');
+      console.log(this.model);
+      console.log('Passing this.model.get(\'components\') to ComponentsView.render');
+      console.warn(this.model.get('components'));
+      ComponentsView.render(this.model.get('components'));
+
       console.log("Show View rendered");
 
       // Update song
       var self = this;
       this.navUpdateEl.click(function(){
         console.warn(self.model.toJSON());
-        console.warn(self.model.get('content').components[0].measures[0].beats[0]);
+        console.warn(self.model.get('components')[0].get('measures')[0].get('beats')[0]);
         window.router.songs.update(self.model, {remove: false});
         console.log('Update occurred');
       });

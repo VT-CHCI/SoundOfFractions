@@ -40,6 +40,9 @@ define([
     save: function(e){
       e.preventDefault();
       e.stopPropagation();
+
+      console.log('saving the following');
+      console.log(this.model.toJSON());
       var toBeSavedSong = new window.router.songs.model(); 
       // var JSONSong = JSON.stringify(this.model.toJSON());
       // console.log(JSONSong);
