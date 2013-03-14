@@ -16,7 +16,9 @@ define([
   return Backbone.View.extend({
     navLoadEl: $('#nav-songs-load'),
     navNewEl: $('#nav-songs-new'),
-    navSaveEl: $('#nav-songs-info'),
+    navUpdateEl: $('#nav-songs-update'),
+    navInfoEl: $('#nav-songs-info'),
+    navSaveEl: $('#nav-songs-save'),
     showBodyEl: $('#show-song'),
     sofComposerEl: $('#sof-composer'),
 
@@ -44,8 +46,12 @@ define([
       $(this.navLoadEl).html(compiledNavLoadTemplate);
       //show the new song button
       $(this.navNewEl).html(compiledNavNewTemplate);
-      //clear the save song button
+      //clear the song info
+      $(this.navInfoEl).html('');
+      //clear the save song input and button
       $(this.navSaveEl).html('');
+      //Clear the update button
+      $(this.navUpdateEl).html('');
       // remove the sof-composer 
       $(this.sofComposerEl).html('');
       // change the body to show the title
