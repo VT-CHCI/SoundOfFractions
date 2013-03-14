@@ -18,9 +18,10 @@ define([
     // model: {},
     navLoadEl: $('#nav-songs-load'),
     navUpdateEl: $('#nav-songs-update'),
-    navSaveEl: $('#nav-songs-info'),
+    navInfoEl: $('#nav-songs-info'),
+    navSaveEl: $('#nav-songs-save'),
     showBodyEl: $('#show-song'),
-    sofComposerEl: $('#sof-composer'),
+    sofSaveoserEl: $('#sof-composer'),
 
     initialize: function(options){
       console.log("Show View initializing...");
@@ -68,7 +69,9 @@ define([
       // load the songs into the load button
       $(this.navLoadEl).html(compiledNavLoadTemplate);
       // change the nav section to the song title name
-      $(this.navSaveEl).html(compiledNavTemplate);
+      $(this.navInfoEl).html(compiledNavTemplate);
+      //remove the save button
+      $(this.navSaveEl).html('');
       // remove the sof-composer 
       //$(this.sofComposerEl).html('');
       // change the body to show the title

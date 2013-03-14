@@ -11,13 +11,14 @@ define([
   'app/state'
 ], function($, _, Backbone, SongsCollection, Components, songsTemplate, unsavedSong, dispatch, state){
   return Backbone.View.extend({
-    // model: {},
     //WORKING
-    // el: $('#nav-songs-save'),
+    el: $('#nav-songs-save'),
+    // Want to change to
+    // navEl: $('#nav-songs-info'),
+    
     navNewEl: $('#nav-songs-new'),
     bodyInfoEl: $('#show-song'),
     navUpdateEl: $('#nav-songs-update'),
-    navEl: $('#nav-songs-info'),
 
     initialize: function(options){
       console.log("New View initializing...");
@@ -46,13 +47,6 @@ define([
       e.preventDefault();
       e.stopPropagation();
       var toBeSavedSong = new window.router.songs.model(); 
-      // var JSONSong = JSON.stringify(this.model.toJSON());
-      // console.log(JSONSong);
-      // this.model.unset("errors");
-      // this.model.set({
-      //   title: $('#title').val(),
-      //   content:  
-      // });
       toBeSavedSong.set({
         // this.model is a unsavedSong.js model which contains 'title', and 'components'
         content : JSON.stringify(this.model.toJSON()),
@@ -92,15 +86,13 @@ define([
       // console.log(this.collection);      
       // console.log(this.model);
       console.log(this.model.toJSON());
-      // console.log(songsTemplate);
-      // _.each(this.collection.models, function(song) {
-      //   var compiledTemplate = _.template( songsTemplate, {song: song} );
-      //   console.log(compiledTemplate);
-      //   $(this.el).append( compiledTemplate );
 
       //Working
+      var compiledTemplate = _.template ( songsTemplate, this.model.toJSON());
+      $(this.el).html(compiledTemplate);
+      //Want to change to
       // var compiledTemplate = _.template ( songsTemplate, this.model.toJSON());
-      // $(this.el).html(compiledTemplate);
+      // $(this.navEl).html(compiledTemplate);
       
       //Clear the body info section if it is there
       $(this.bodyInfoEl).html('');
@@ -109,37 +101,9 @@ define([
       //Clear the update nav button
       $(this.navUpdateEl).html('');
 
-      var compiledTemplate = _.template ( songsTemplate, this.model.toJSON());
-      $(this.navEl).html(compiledTemplate);
 
       console.log("New View rendered");
       return this;
     },
-
-    // reconfigure: function(signature) {
-    //   if ($(this.el).parent().hasClass('selected')) {
-    //     dispatch.trigger('stopRequest.event', 'off');
-    //     this.collection.reset();
-
-    //     for (var i = 0; i < signature; i++) {
-    //       this.collection.add();
-    //     }
-
-    //     this.render();
-
-    //     this.calcBeatWidth(signature);
-    //   }
-    // },
-
-    // calcBeatWidth: function(signature) {
-    //   if ($(this.el).parent().hasClass('selected')) {
-    //     var px = 100/$('.measure').css('width').replace(/[^-\d\.]/g, '');
-    //     var beatWidth = (100 - ((signature*1+1)*px))/signature;
-
-    //     $(this.el).children('.beat').css({
-    //       'width' : beatWidth+'%'
-    //     });
-    //   }
-    // }
   });
 });
