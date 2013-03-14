@@ -12,7 +12,12 @@ define([
 ], function($, _, Backbone, SongsCollection, Components, songsTemplate, unsavedSong, dispatch, state){
   return Backbone.View.extend({
     // model: {},
-    el: $('#nav-songs-save'),
+    //WORKING
+    // el: $('#nav-songs-save'),
+    navNewEl: $('#nav-songs-new'),
+    bodyInfoEl: $('#show-song'),
+    navUpdateEl: $('#nav-songs-update'),
+    navEl: $('#nav-songs-info'),
 
     initialize: function(options){
       console.log("New View initializing...");
@@ -93,21 +98,19 @@ define([
       //   console.log(compiledTemplate);
       //   $(this.el).append( compiledTemplate );
 
-      //   // new SongsView({model:this.model});
-      // }, this);
+      //Working
+      // var compiledTemplate = _.template ( songsTemplate, this.model.toJSON());
+      // $(this.el).html(compiledTemplate);
+      
+      //Clear the body info section if it is there
+      $(this.bodyInfoEl).html('');
+      //Clear the newSong nav button
+      $(this.navNewEl).html('');
+      //Clear the update nav button
+      $(this.navUpdateEl).html('');
 
       var compiledTemplate = _.template ( songsTemplate, this.model.toJSON());
-      // console.log(compiledTemplate);
-      $(this.el).html(compiledTemplate);
-      // console.log($(this.el).html());
-      // var measureCount = 1;
-      // $('.component-container').each(function() {
-        // $(this).find('.number').each(function() {
-          // $(this).text(measureCount);
-          // measureCount++;
-        // });
-        // measureCount = 1;
-      // });
+      $(this.navEl).html(compiledTemplate);
 
       console.log("New View rendered");
       return this;
