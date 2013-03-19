@@ -43,7 +43,6 @@ App.assets = {
   }
 };
 
-console.log(gon);
 // Currently this is ALL the songs in the DB, not just the current_user 's songs 
 App.songs = {
   songs: <%= Song.all.to_json.html_safe %>

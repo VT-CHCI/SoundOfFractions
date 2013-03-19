@@ -1,16 +1,17 @@
 class SongsController < ApplicationController
 
-  before_filter :authenticate_user!, :except => [:index]
+  before_filter :authenticate_user!
 
   # GET /songs
   # GET /songs.json
   def index
-    @user = current_user
-    @songs = @user.songs
-    logger.debug 'index logger \n\n\n\n\n\n'
-  if user_signed_in? 
-    gon.userID = current_user.thisUsersID
-  end
+
+    if user_signed_in? 
+      gon.userID = current_user.thisUsersID
+      @user = current_user
+      @songs = @user.songs
+      logger.debug 'index logger \n\n\n\n\n\n'
+    end
 
     respond_to do |format|
       format.html # index.html.erb

@@ -4,7 +4,9 @@
 
 ## Installing ##
 
-This project is a web app that uses Javascript and the Web Audio API. The only thing needed to install **Sound of Fractions** is placing it on a web server. To use it, simply access the directory using any Web Audio accessible browser (like Chrome for example). For a demo click [here](http://vt-chci.github.com/MusicFractions/).
+This project is a web app that uses Javascript and the Web Audio API. The only thing needed to install **Sound of Fractions** is placing it on a web server. To use it, simply access the directory using any Web Audio accessible browser (like Chrome for example). For a demo click [here](http://vt-chci.github.com/SoundOfFractions/).
+
+The Ruby on Rails version with persistence, requires a server that can accept the Rails framework.
 
 ## Using ##
 
@@ -23,7 +25,9 @@ To play music, click the play button (triangle in the circle) under the beat pal
 
 ## Program Structure ##
 
-This web app was written using [JQuery]( http://jquery.com/ "JQuery Homepage"), [Backbone](http://backbonejs.org/ "Backbone.js Homepage"), [RequireJS]( http://requirejs.org/ "Requre.js Homepage") and [Bootstrap]( http://twitter.github.com/bootstrap/ "Bootstrap Homepage") .  It adheres as closely as possible to a traditional Backbone architecture, with models, collection, views, routes, and functions named fairly logically. This application has no backend, however, we do have logging currently enabled for data analysis purposes.
+This web app was written using [JQuery]( http://jquery.com/ "JQuery Homepage"), [Backbone](http://backbonejs.org/ "Backbone.js Homepage"), [RequireJS]( http://requirejs.org/ "Requre.js Homepage") and [Bootstrap]( http://twitter.github.com/bootstrap/ "Bootstrap Homepage") .  It adheres as closely as possible to a traditional Backbone architecture, with models, collection, views, routes, and functions named fairly logically. The JS application has no backend, however, we do have logging currently enabled for data analysis purposes.
+
+The Rails version is an attempt to merge both client side and server side MVC frameworks.   While most of the heavy lifting is done client side, the "song(s)" that are created are stored in one model on the server, as a Song.rb model, with a User.rb reference, with the User.rb model being managed predominately by the User manager gem `devise`.
 
 ### Global Dispatcher and State ###
 We use a global dispatcher, as explained in the Backbone documentation, to send events to multiple views. We also have a global state variable for the temp and signature (beats per measure). To use the dispatcher, first pass it through to the function as dispatch. To send an event use:
@@ -89,4 +93,4 @@ This project is currently a work in progress.  We have additional features we wo
 
 ## Deployment
 
-It is hosted on a VM at [http://compthink.cs.vt.edu:3000](http://compthink.cs.vt.edu:3000) .  It is persistence is maintained by upstart.   Once logged in, type $ `sudo start sof` to start the server and `sudo stop sof` to stop it.
+It is hosted on a VM at [http://compthink.cs.vt.edu:3000](http://compthink.cs.vt.edu:3000) .  It is persistence is maintained by Ubuntu's upstart.   Once you are logged in by `ssh `user`@compthink.cs.vt.edu`, type $ `sudo start sof` to start the server and $ `sudo stop sof` to stop it.  RVM, Bash are default and working.

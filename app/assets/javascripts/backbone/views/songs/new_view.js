@@ -19,6 +19,7 @@ define([
     navLoadEl: $('#nav-songs-load'),
     navNewEl: $('#nav-songs-new'),
     bodyInfoEl: $('#show-song'),
+    sofComposerEl: $('#sof-composer'),
     navUpdateEl: $('#nav-songs-update'),
 
     initialize: function(options){
@@ -82,6 +83,7 @@ define([
     render: function(){
       console.log("New View rendering...");
       console.log($(this.el));
+      $(this.sofComposerEl).html('');
       $(this.el).html('');
 
       // console.log(this.collection);      
@@ -92,8 +94,8 @@ define([
       var compiledTemplate = _.template ( songsNewTemplate, this.model.toJSON());
       $(this.el).html(compiledTemplate);
       //Want to change to
-      // var compiledTemplate = _.template ( songsNewTemplate, this.model.toJSON());
-      // $(this.navEl).html(compiledTemplate);
+      // var compiledNavTemplate = _.template ( songsNewTemplate, this.model.toJSON());
+      // $(this.navEl).html(compiledNavTemplate);
       
       //Clear the nav Load button
       $(this.navLoadEl).html('');

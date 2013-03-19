@@ -26,7 +26,6 @@ define([
     el: $('#sof-composer'),
 
     events : {
-
     },
 
     initialize: function(){
@@ -56,7 +55,6 @@ define([
         img: 'snare.png',
         mute: false,
         sample: '808_sd.m4a',
-        //sample: 'square.wav',
         measures: this.component,
         active: true
       });

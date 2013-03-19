@@ -22,7 +22,7 @@ define([
     navInfoEl: $('#nav-songs-info'),
     navSaveEl: $('#nav-songs-save'),
     showBodyEl: $('#show-song'),
-    sofSaveoserEl: $('#sof-composer'),
+    sofComposerEl: $('#sof-composer'),
 
     initialize: function(options){
       console.log("Show View initializing...");
@@ -87,6 +87,7 @@ define([
         // measureCount = 1;
       // });
       ComponentsView.build(this.model);
+      //TODO calcBeatWidth;
       console.log("Show View rendered");
 
       // Update song
@@ -116,15 +117,15 @@ define([
     //   }
     // },
 
-    // calcBeatWidth: function(signature) {
-    //   if ($(this.showBodyEl).parent().hasClass('selected')) {
-    //     var px = 100/$('.measure').css('width').replace(/[^-\d\.]/g, '');
-    //     var beatWidth = (100 - ((signature*1+1)*px))/signature;
+    calcBeatWidth: function(signature) {
+      if ($(this.showBodyEl).parent().hasClass('selected')) {
+        var px = 100/$('.measure').css('width').replace(/[^-\d\.]/g, '');
+        var beatWidth = (100 - ((signature*1+1)*px))/signature;
 
-    //     $(this.showBodyEl).children('.beat').css({
-    //       'width' : beatWidth+'%'
-    //     });
-    //   }
-    // }
+        $(this.showBodyEl).children('.beat').css({
+          'width' : beatWidth+'%'
+        });
+      }
+    }
   });
 });

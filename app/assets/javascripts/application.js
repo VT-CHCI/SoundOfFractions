@@ -14,7 +14,7 @@
 // WARNING: THE FIRST BLANK LINE MARKS THE END OF WHAT'S TO BE PROCESSED, ANY BLANK LINE SHOULD
 // GO AFTER THE REQUIRES BELOW.
 //
-console.log('first');
+console.log('Application.js Started');
 require([
 
   // Load our "app" module and pass it to our definition function

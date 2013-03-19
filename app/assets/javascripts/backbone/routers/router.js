@@ -114,7 +114,7 @@ define([
       sessionStorage.setItem("userId", Math.floor(Math.random()*1000000001));
     }
 
-    //we create a string representation of the inital state
+    //we create a string representation of the initial state
     //and send it to the logging system.
     //(important so that we know the IDs of everything)
     name = '';
@@ -133,6 +133,7 @@ define([
       name = '';
     });
 
+    // attach the router to the window to make access of the songs easier throughout the app
     window.router = bb_router;
     console.log('Router in init');
     console.warn(window.router);
