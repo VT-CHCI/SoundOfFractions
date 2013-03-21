@@ -99,7 +99,7 @@ define([
     //number of beats per measure or 'signature'.
     calcBeatWidth: function(signature) {
       if ($(this.el).parent().hasClass('selected')) {
-        var px = 100/$('.measure').css('width').replace(/[^-\d\.]/g, '');
+        var px = 100/$('.linear-bars-measure').css('width').replace(/[^-\d\.]/g, '');
         var beatWidth = (100 - ((signature*1+1)*px))/signature;
 
         $(this.el).children('.beat').css({
