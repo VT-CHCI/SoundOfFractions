@@ -43,7 +43,6 @@ define([
       this.repButtonModel.set('buttonState', newState);
       dispatch.trigger('fractionRepresentation.event', newState);
 
-
       log.sendLog([[2, "representation changed to: "+newState]]);
     },
 

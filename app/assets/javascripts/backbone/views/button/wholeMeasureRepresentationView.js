@@ -1,4 +1,4 @@
-// Filename: views/button/repButtonView.js
+// Filename: views/button/wholeMeasureRepresentationView.js
 /*
   This is the RepButtonView.
   This renders the four-state radio button
@@ -41,8 +41,10 @@ define([
     cycle: function(button) {
       var newState = $(button.target).data('state');
       this.repButtonModel.set('buttonState', newState);
+      //trigger the Measure representation change
       dispatch.trigger('measureRepresentation.event', newState);
-
+      //trigger the Beat representation change
+      dispatch.trigger('beatRepresentation.event', newState);
 
       log.sendLog([[2, "representation changed to: "+newState]]);
     },

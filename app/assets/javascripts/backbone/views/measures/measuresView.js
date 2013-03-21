@@ -12,22 +12,22 @@ define([
   'backbone/collections/beats',
   'backbone/collections/measures',
   'backbone/views/beats/beatsView',
-  'text!backbone/templates/measures/measures.html',
-  'text!backbone/templates/measures/circularPie.html',
+  'text!backbone/templates/measures/linearBarMeasures.html',
+  'text!backbone/templates/measures/circularPieMeasures.html',
   'app/dispatch',
   'app/state',
   'app/log'
-], function($, _, Backbone, BeatsCollection, MeasuresCollection, BeatsView, measuresTemplate, circularPieTemplate, dispatch, state, log){
+], function($, _, Backbone, BeatsCollection, MeasuresCollection, BeatsView, linearBarMeasuresTemplate, circularPieMeasuresTemplate, dispatch, state, log){
   return Backbone.View.extend({
     el: $('.component'),
     
     // The different representations
     representations: {
-      "linear-bar": measuresTemplate,
-      "circular-pie": circularPieTemplate
+      "linear-bar": linearBarMeasuresTemplate,
+      "circular-pie": circularPieMeasuresTemplate
     },
 
-    currentFractionRepresentation: 'linear-bar',
+    currentMeasureRepresentation: 'linear-bar',
 
     //registering click events to add and remove measures.
     events : {
@@ -55,15 +55,15 @@ define([
       }
 
       //Dispatch listeners
-      dispatch.on('measureRepresentation.event', this.changeRepresentation, this);
+      dispatch.on('measureRepresentation.event', this.changeMeasureRepresentation, this);
 
       this.render();
     },
 
-    changeRepresentation: function(representation) {
-      console.log('Rep change clicked ......................');
+    changeMeasureRepresentation: function(representation) {
+      console.log('Measure representation changed');
       console.log(representation);
-      this.currentFractionRepresentation = representation;
+      this.currentMeasureRepresentation = representation;
       this.render();      
     },
 
@@ -72,8 +72,8 @@ define([
 
       //we create a BeatsView for each measure.
       _.each(this.component.models, function(measure) { // measuresTemplate should get updated when representation button changes
-        // var compiledTemplate = _.template( this.currentFractionRepresentation, {measure: measure} );
-        var compiledTemplate = _.template( this.representations[this.currentFractionRepresentation], {measure: measure} );
+        // var compiledTemplate = _.template( this.currentMeasureRepresentation, {measure: measure} );
+        var compiledTemplate = _.template( this.representations[this.currentMeasureRepresentation], {measure: measure, measureAngle: 360.0/this.collection.length} );
         $(this.el).find('.addMeasure').before( compiledTemplate );
 
         new BeatsView({collection:measure.get('beats'), el:'#measure'+measure.cid});

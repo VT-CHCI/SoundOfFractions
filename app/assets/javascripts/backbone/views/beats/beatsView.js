@@ -12,12 +12,20 @@ define([
   // Pull in the Collection module from above
   'backbone/collections/beats',
   'backbone/views/beats/beatView',
-  'text!backbone/templates/beats/beats.html',
+  'text!backbone/templates/beats/linearBarBeats.html',
+  'text!backbone/templates/beats/circularPieBeats.html',
   'app/dispatch',
   'app/state'
-], function($, _, Backbone, BeatsCollection, BeatView, beatsTemplate, dispatch, state){
+], function($, _, Backbone, BeatsCollection, BeatView, linearBarBeatsTemplate, circularPieBeatsTemplate, dispatch, state){
   return Backbone.View.extend({
     el: $('.measure'),
+
+    // The different representations
+    representations: {
+      "linear-bar": linearBarBeatsTemplate,
+      "circular-pie": circularPieBeatsTemplate
+    },
+    currentBeatRepresentation: 'linear-bar',
 
     /* BeatsView objects get instantiated by a MeasuresView object,
        which passes in the options.
@@ -31,12 +39,19 @@ define([
       }
       //registering a callback for signatureChange events.
       dispatch.on('signatureChange.event', this.reconfigure, this);
+      dispatch.on('beatRepresentation.event', this.changeBeatRepresentation, this);
 
       //rendering this view.
       this.render();
 
       //Determines the intial beat width based on the global signature.
       this.calcBeatWidth(state.get('signature'));
+    },
+
+    changeBeatRepresentation: function(representation) {
+      console.log('BEAT representation changed to : ' + representation);
+      this.currentBeatRepresentation = representation;
+      this.render();      
     },
 
     render: function(){
@@ -49,9 +64,9 @@ define([
       //on the cid.  Then, creating a new BeatView for each,
       //passing in the beat model and the 'el' container for it.
       _.each(this.collection.models, function(beat) {
-        var compiledTemplate = _.template( beatsTemplate, {beat: beat} );
+        // var compiledTemplate = _.template( linearBarBeatsTemplate, {beat: beat, angle: 360.0/this.collection.length} );
+        var compiledTemplate = _.template( this.representations[this.currentBeatRepresentation], {beat: beat, beatAngle:360.0/this.collection.length} );
         $(this.el).append( compiledTemplate );
-
         new BeatView({model:beat, el:'#beat'+beat.cid});
       }, this);
 

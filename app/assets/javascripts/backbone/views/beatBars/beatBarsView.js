@@ -10,9 +10,9 @@ define([
   'backbone',
   // Pull in the Collection module from above
   'backbone/collections/beatBars',
-  'text!backbone/templates/beatBars/beatBars.html',
+  'text!backbone/templates/beatBars/linearBarBeatBars.html',
   'app/dispatch'
-], function($, _, Backbone, beatBarsCollection, beatBarsTemplate, dispatch){
+], function($, _, Backbone, beatBarsCollection, linearBarBeatBarsTemplate, dispatch){
   var beatBarsView = Backbone.View.extend({
     el: $('#beat-pallet #visual-beats'),
 
@@ -36,7 +36,7 @@ define([
       };
       console.log("render beatbars");
       console.log(data);
-      var compiledTemplate = _.template( beatBarsTemplate, data );
+      var compiledTemplate = _.template( linearBarBeatBarsTemplate, data );
       $(this.el).html( compiledTemplate );
 
       return this;
