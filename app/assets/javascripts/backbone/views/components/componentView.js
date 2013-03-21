@@ -46,7 +46,7 @@ define([
 
       //registering our handlers for serveral events.
       dispatch.on('toggleAnimation.event', this.toggleAnimation, this);
-      dispatch.on('representation.event', this.recalculateFraction, this);
+      dispatch.on('fractionRepresentation.event', this.recalculateFraction, this);
       dispatch.on('beatClicked.event', this.recalculateFraction, this);
       dispatch.on('signatureChange.event', this.recalculateFraction, this);
       this.render();

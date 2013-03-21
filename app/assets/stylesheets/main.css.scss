@@ -55,7 +55,7 @@
 }
 
 .measure {
-	border: solid 1px grey;
+	border: solid 1px gray;
   border-radius: 3px;
 	padding: 0 5px 5px 5px;
 	display: inline-block;
@@ -206,4 +206,10 @@
 
 #rep-button button {
   width: 25%;
+}
+
+#fraction-representation {
+  margin: 0 auto 10px auto;
+  text-align: center;
+  width: 100%;
 }

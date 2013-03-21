@@ -11,13 +11,13 @@ define([
   'backbone',
   'bootstrap',
   'backbone/models/repButton',
-  'text!backbone/templates/button/repButton.html',
+  'text!backbone/templates/button/wholeMeasureRepresentation.html',
   'app/dispatch',
   'app/log'
-], function($, _, Backbone, Bootstrap, RepButtonModel, repButtonTemplate, dispatch, log){
+], function($, _, Backbone, Bootstrap, RepButtonModel, wholeMeasureRepresentationTemplate, dispatch, log){
 
-  var RepButtonView = Backbone.View.extend({
-    el : $("#rep-button"), // Specifies the DOM element which this view handles
+  var FractionRepresentationView = Backbone.View.extend({
+    el : $("#fraction-representation"), // Specifies the DOM element which this view handles
 
     //registering backbone's click event to our cycle() method.
     events : {
@@ -41,7 +41,7 @@ define([
     cycle: function(button) {
       var newState = $(button.target).data('state');
       this.repButtonModel.set('buttonState', newState);
-      dispatch.trigger('fractionRepresentation.event', newState);
+      dispatch.trigger('measureRepresentation.event', newState);
 
 
       log.sendLog([[2, "representation changed to: "+newState]]);
@@ -49,9 +49,9 @@ define([
 
     //no need to compile the template for this one.
     render: function() {
-      $(this.el).html(repButtonTemplate);
+      $(this.el).html(wholeMeasureRepresentationTemplate);
       return this;
     }
   });
-  return new RepButtonView();
+  return new FractionRepresentationView();
 });

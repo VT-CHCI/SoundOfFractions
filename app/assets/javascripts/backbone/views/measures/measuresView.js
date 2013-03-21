@@ -13,12 +13,21 @@ define([
   'backbone/collections/measures',
   'backbone/views/beats/beatsView',
   'text!backbone/templates/measures/measures.html',
+  'text!backbone/templates/measures/circularPie.html',
   'app/dispatch',
   'app/state',
   'app/log'
-], function($, _, Backbone, BeatsCollection, MeasuresCollection, BeatsView, measuresTemplate, dispatch, state, log){
+], function($, _, Backbone, BeatsCollection, MeasuresCollection, BeatsView, measuresTemplate, circularPieTemplate, dispatch, state, log){
   return Backbone.View.extend({
     el: $('.component'),
+    
+    // The different representations
+    representations: {
+      "linear-bar": measuresTemplate,
+      "circular-pie": circularPieTemplate
+    },
+
+    currentFractionRepresentation: 'linear-bar',
 
     //registering click events to add and remove measures.
     events : {
@@ -44,19 +53,33 @@ define([
         this.component = new MeasuresCollection;
         this.component.add({beats: this.measure});
       }
+
+      //Dispatch listeners
+      dispatch.on('measureRepresentation.event', this.changeRepresentation, this);
+
       this.render();
+    },
+
+    changeRepresentation: function(representation) {
+      console.log('Rep change clicked ......................');
+      console.log(representation);
+      this.currentFractionRepresentation = representation;
+      this.render();      
     },
 
     render: function(){
       $(this.el).html('<div class="addMeasure">+</div>');
 
       //we create a BeatsView for each measure.
-      _.each(this.component.models, function(measure) {
-        var compiledTemplate = _.template( measuresTemplate, {measure: measure} );
+      _.each(this.component.models, function(measure) { // measuresTemplate should get updated when representation button changes
+        // var compiledTemplate = _.template( this.currentFractionRepresentation, {measure: measure} );
+        var compiledTemplate = _.template( this.representations[this.currentFractionRepresentation], {measure: measure} );
         $(this.el).find('.addMeasure').before( compiledTemplate );
 
         new BeatsView({collection:measure.get('beats'), el:'#measure'+measure.cid});
       }, this);
+
+      // 
 
      return this;
     },

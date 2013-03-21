@@ -73,7 +73,6 @@ define([
           }
         }
       }
-
       this.render();
     },
 
