@@ -16,8 +16,8 @@ define([
   'app/log'
 ], function($, _, Backbone, Bootstrap, RepButtonModel, wholeMeasureRepresentationTemplate, dispatch, log){
 
-  var FractionRepresentationView = Backbone.View.extend({
-    el : $("#fraction-representation"), // Specifies the DOM element which this view handles
+  var WholeMeasureRepresentationView = Backbone.View.extend({
+    el : $("#measure-representation"), // Specifies the DOM element which this view handles
 
     //registering backbone's click event to our cycle() method.
     events : {
@@ -55,5 +55,5 @@ define([
       return this;
     }
   });
-  return new FractionRepresentationView();
+  return new WholeMeasureRepresentationView();
 });

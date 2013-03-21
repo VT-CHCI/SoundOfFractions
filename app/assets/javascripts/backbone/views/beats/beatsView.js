@@ -37,9 +37,14 @@ define([
       } else {
         this.collection = new BeatsCollection;
       }
+
+      if (options["template-key"]) {
+        this.currentBeatRepresentation = options["template-key"];
+      }
+
       //registering a callback for signatureChange events.
       dispatch.on('signatureChange.event', this.reconfigure, this);
-      dispatch.on('beatRepresentation.event', this.changeBeatRepresentation, this);
+      // dispatch.on('beatRepresentation.event', this.changeBeatRepresentation, this);
 
       //rendering this view.
       this.render();
@@ -66,8 +71,10 @@ define([
       _.each(this.collection.models, function(beat) {
         // var compiledTemplate = _.template( linearBarBeatsTemplate, {beat: beat, angle: 360.0/this.collection.length} );
         var compiledTemplate = _.template( this.representations[this.currentBeatRepresentation], {beat: beat, beatAngle:360.0/this.collection.length} );
+        // console.warn('compiledTemplate : X' + compiledTemplate);
         $(this.el).append( compiledTemplate );
-        new BeatView({model:beat, el:'#beat'+beat.cid});
+
+        new BeatView({model:beat, el:$(compiledTemplate).attr('id'), beatAngle:360.0/this.collection.length, "template-key": this.currentBeatRepresentation});
       }, this);
 
       //This determines which number this measure is.

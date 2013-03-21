@@ -147,7 +147,6 @@ define([
       song.set('content', JSON.parse(song.get('content')) );
       this.drumkit.reset();
       // console.log('song.get('content').components');
-      window.csf = song;
       var components = song.get('content').components;
       console.log('var components');
       console.warn(components);

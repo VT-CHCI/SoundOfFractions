@@ -17,7 +17,7 @@ define([
 ], function($, _, Backbone, Bootstrap, RepButtonModel, repButtonTemplate, dispatch, log){
 
   var RepButtonView = Backbone.View.extend({
-    el : $("#rep-button"), // Specifies the DOM element which this view handles
+    el : $("#fraction-representation"), // Specifies the DOM element which this view handles
 
     //registering backbone's click event to our cycle() method.
     events : {

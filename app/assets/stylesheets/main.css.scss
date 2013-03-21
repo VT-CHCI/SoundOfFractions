@@ -54,7 +54,7 @@
   position: relative;
 }
 
-.linear-bars-measure {
+.measure {
 	border: solid 1px gray;
   border-radius: 3px;
 	padding: 0 5px 5px 5px;
@@ -63,18 +63,18 @@
   width: 300px;
 }
 
-.linear-bars-measure .title {
+.measure .title {
 	clear: both;
 	display: block;
 	text-align: center;
 }
 
-.linear-bars-measure .title .delete {
+.measure .title .delete {
 	color: red;
   cursor: pointer;
 }
 
-.linear-bars-measure .title .delete:hover {
+.measure .title .delete:hover {
   cursor: pointer;
   font-weight: bold;
 }
@@ -198,17 +198,17 @@
   background-color: #C9D2D4;
 }
 
-#rep-button {
+#fraction-representation {
   margin: 0 auto 10px auto;
   text-align: center;
   width: 100%;
 }
 
-#rep-button button {
+#fraction-representation button {
   width: 25%;
 }
 
-#fraction-representation {
+#measure-representation {
   margin: 0 auto 10px auto;
   text-align: center;
   width: 100%;

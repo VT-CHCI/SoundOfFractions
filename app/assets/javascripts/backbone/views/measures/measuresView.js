@@ -74,9 +74,11 @@ define([
       _.each(this.component.models, function(measure) { // measuresTemplate should get updated when representation button changes
         // var compiledTemplate = _.template( this.currentMeasureRepresentation, {measure: measure} );
         var compiledTemplate = _.template( this.representations[this.currentMeasureRepresentation], {measure: measure, measureAngle: 360.0/this.collection.length} );
+        console.warn(compiledTemplate);
+        console.warn($(this.el).find('.addMeasure'));
         $(this.el).find('.addMeasure').before( compiledTemplate );
 
-        new BeatsView({collection:measure.get('beats'), el:'#measure'+measure.cid});
+        new BeatsView({collection:measure.get('beats'), el:'#measure'+measure.cid, "template-key":this.currentMeasureRepresentation});
       }, this);
 
       // 
