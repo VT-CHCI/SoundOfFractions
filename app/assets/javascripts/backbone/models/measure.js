@@ -14,7 +14,9 @@ define([
       label: '0/4',
       beats: beatsCollection,
       numberOfBeats: 0,
-      divisions: 8
+      divisions: 8,
+      x: 0,
+      y: 0
     },
     initialize: function(){     
     }

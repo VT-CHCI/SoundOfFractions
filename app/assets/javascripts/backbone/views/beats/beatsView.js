@@ -22,8 +22,9 @@ define([
     /* BeatsView objects get instantiated by a MeasuresView object,
        which passes in the options.
     */
-    initialize: function(options){
+    initialize: function(options, measure){
       if (options) {
+        this.measure = measure,
         this.collection = options.collection;
         this.el = options.el;
       } else {
@@ -42,18 +43,20 @@ define([
     render: function(){
       //Sets up the spans needed for a measure.
       $(this.el).html('');
+      var compiledTemplate = _.template( beatsTemplate, this.measure);
       $(this.el).append('<span class="title">Measure <span class="number"></span> - <span class="delete">[X]</span></span>');
+      $(this.el).append(compiledTemplate);
 
       //iterationg through our collection of beats
       //and creating a div for the beat with a unique ID based
       //on the cid.  Then, creating a new BeatView for each,
       //passing in the beat model and the 'el' container for it.
-      _.each(this.collection.models, function(beat) {
-        var compiledTemplate = _.template( beatsTemplate, {beat: beat} );
-        $(this.el).append( compiledTemplate );
+      // _.each(this.collection.models, function(beat) {
+      //   var compiledTemplate = _.template( beatsTemplate, {beat: beat} );
+      //   $(this.el).append( compiledTemplate );
 
-        new BeatView({model:beat, el:'#beat'+beat.cid});
-      }, this);
+      //   new BeatView({model:beat, el:'#beat'+beat.cid});
+      // }, this);
 
       //This determines which number this measure is.
       var measureCount = 1;
@@ -102,9 +105,9 @@ define([
         var px = 100/$('.measure').css('width').replace(/[^-\d\.]/g, '');
         var beatWidth = (100 - ((signature*1+1)*px))/signature;
 
-        $(this.el).children('.beat').css({
-          'width' : beatWidth+'%'
-        });
+        // $(this.el).children('.beat').css({
+        //   'width' : beatWidth+'%'
+        // });
       }
     }
   });

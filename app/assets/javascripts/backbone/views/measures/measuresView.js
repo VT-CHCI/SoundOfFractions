@@ -48,14 +48,16 @@ define([
     },
 
     render: function(){
+
       $(this.el).html('<div class="addMeasure">+</div>');
+
 
       //we create a BeatsView for each measure.
       _.each(this.component.models, function(measure) {
         var compiledTemplate = _.template( measuresTemplate, {measure: measure} );
         $(this.el).find('.addMeasure').before( compiledTemplate );
 
-        new BeatsView({collection:measure.get('beats'), el:'#measure'+measure.cid});
+        new BeatsView({collection:measure.get('beats'), el:'#measure'+measure.cid}, measure);
       }, this);
 
      return this;
