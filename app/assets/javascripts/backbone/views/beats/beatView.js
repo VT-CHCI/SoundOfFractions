@@ -66,7 +66,8 @@ define([
       // else {
       //   $(this.el).html('<div class="OFF"><div class="animated-beat"></div></div>');
       // }
-
+      var compiledTemplate = _.template(this.model);
+      $(this.el).html(compiledTemplate);
       return this;
     },
 
