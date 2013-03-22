@@ -97,7 +97,7 @@ define([
       all the durations get recalculated to reflect this new measure.
     */
     add: function(){
-      if ($('#measure'+this.component.models[0].cid).parent().hasClass('selected')) {
+      if ($('#measure'+this.component.models[0].cid).parent()) {
         console.log('add measure');
         this.measure = new BeatsCollection;
 
@@ -124,7 +124,7 @@ define([
       This is called when the user clicks on the minus to remove a measure.
     */
     remove: function(ev){
-      if ($('#measure'+this.component.models[0].cid).parent().hasClass('selected')) {
+      if ($('#measure'+this.component.models[0].cid).parent()) {
         //removing the last measure isn't allowed.
         if(this.component.models.length == 1) {
           console.log('Can\'t remove the last measure!');
