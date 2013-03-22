@@ -133,7 +133,8 @@ define([
         console.log('remove measure');
 
         //we remove the measure and get its model.
-        var model = this.component.getByCid($(ev.target).parents('.measure').attr('id').replace('measure',''));
+        console.log($(ev.target).parents('.measure').attr('id').replace('measure',''));
+        var model = this.component.get($(ev.target).parents('.measure').attr('id').replace('measure',''));
         this.component.remove(model);
 
         //send a log event showing the removal.
