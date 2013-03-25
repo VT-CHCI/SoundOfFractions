@@ -13,17 +13,19 @@ define([
   'backbone/collections/measures',
   'backbone/views/beats/beatsView',
   'text!backbone/templates/measures/linearBarMeasures.html',
+  'text!backbone/templates/measures/linearBarSVGMeasures.html',
   'text!backbone/templates/measures/circularPieMeasures.html',
   'app/dispatch',
   'app/state',
   'app/log'
-], function($, _, Backbone, BeatsCollection, MeasuresCollection, BeatsView, linearBarMeasuresTemplate, circularPieMeasuresTemplate, dispatch, state, log){
+], function($, _, Backbone, BeatsCollection, MeasuresCollection, BeatsView, linearBarMeasuresTemplate, linearBarSVGMeasuresTemplate, circularPieMeasuresTemplate, dispatch, state, log){
   return Backbone.View.extend({
     el: $('.component'),
     
     // The different representations
     representations: {
       "linear-bar": linearBarMeasuresTemplate,
+      "linear-bar-svg": linearBarSVGMeasuresTemplate,
       "circular-pie": circularPieMeasuresTemplate
     },
 

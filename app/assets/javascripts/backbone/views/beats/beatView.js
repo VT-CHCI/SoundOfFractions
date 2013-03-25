@@ -9,16 +9,18 @@ define([
   'backbone',
   'backbone/models/beat',
   'text!backbone/templates/beats/linearBarBeats.html',
+  'text!backbone/templates/beats/linearBarSVGBeats.html',
   'text!backbone/templates/beats/circularPieBeats.html',
   'app/dispatch',
   'app/log'
-], function($, _, Backbone, BeatModel, linearBarBeatsTemplate, circularPieBeatsTemplate, dispatch, log){
+], function($, _, Backbone, BeatModel, linearBarBeatsTemplate, linearBarSVGBeatsTemplate, circularPieBeatsTemplate, dispatch, log){
   return Backbone.View.extend({
     el: $('.beat'),
 
     // The different representations
     representations: {
       "linear-bar": linearBarBeatsTemplate,
+      "linear-bar-svg": linearBarSVGBeatsTemplate,
       "circular-pie": circularPieBeatsTemplate
     },
     currentBeatRepresentation: 'linear-bar',
@@ -81,12 +83,12 @@ define([
       5. triggers a beatClicked event.
     */
     toggle: function(){
+      console.log("beat toggled!");
       var bool = this.model.get("selected");
       this.model.set("selected", !bool);
 
       this.render()
 
-      console.log("beat toggled!");
       log.sendLog([[1, "beat" + this.model.cid + " toggled: "+!bool]]);
 
       dispatch.trigger('beatClicked.event');
