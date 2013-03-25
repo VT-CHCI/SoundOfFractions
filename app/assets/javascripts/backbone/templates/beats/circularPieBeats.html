@@ -1,5 +1,29 @@
 <div id="beat<%= beat.cid %>" class="beat">
   <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
-     <circle cx="300" cy="50" r="20" stroke="black" stroke-width="2" fill="red" />
+    <!-- <circle cx="300" cy="50" r="20" stroke="black" stroke-width="2" fill="red" /> -->
+<!--  M = moveto   X, Y point
+      L = lineto   X, Y point
+      H = horizontal lineto
+      V = vertical lineto
+      C = curveto
+      S = smooth curveto
+      Q = quadratic Bézier curve
+      T = smooth quadratic Bézier curveto
+      A = elliptical Arc
+         A rx ry x-axis-rotation large-arc-flag sweep-flag x y
+            rx = I think rx should match ry, with 0 or a high number (>100) will result in a straight line
+            ry = I think rx should match rx, with 0 or a high number (>100) will result in a straight line
+            x-axis-rotation = 
+            large-arc-flag = 
+            sweep-flag = concave(1) or convex(0)
+            x = ending point (x)
+            y = ending point (y)
+         a rx ry x-axis-rotation large-arc-flag sweep-flag dx dy
+      Z = closepath -->
+    <path style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);" fill="#a6cc32" stroke="#000000" d="
+    M 100, 100
+    L 150, 100
+    A 65, 65, 0, 0, 1, 100,150
+    Z"></path>
   </svg> 
 </div>

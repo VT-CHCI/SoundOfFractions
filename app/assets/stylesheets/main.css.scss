@@ -17,7 +17,7 @@
   width: 100%;
 }
 
-.beat-bar {
+.beat-bar {  //beat palette right side
 	height: 25px;
 	background: #FF9700;
 	text-align: center;
@@ -37,18 +37,18 @@
 	background: #FF9700;
 }
 
-.beat {
-  width: 24.583333333333332%;
-  height: 25px;
-	float: left;
-	border-top: 1px solid;
-  border-bottom: 1px solid;
-  border-left: 1px solid;
-}
+// .beat {
+//   width: 24.583333333333332%;
+//   height: 25px;
+// 	float: left;
+// 	border-top: 1px solid;
+//   border-bottom: 1px solid;
+//   border-left: 1px solid;
+// }
 
-.beat:last-of-type {
-  border-right: 1px solid;
-}
+// .beat:last-of-type {
+//   border-right: 1px solid;
+// }
 
 .beat > div {
   position: relative;
