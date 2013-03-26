@@ -50,15 +50,6 @@ define([
       $(this.showBodyEl).html('');      
       console.log('this.model:')
       console.warn(this.model);
-      // console.log(this.model.toJSON());
-      // console.log(songsBodyTemplate);
-      // _.each(this.collection.models, function(song) {
-      //   var compiledTemplate = _.template( songsBodyTemplate, {song: song} );
-      //   console.log(compiledTemplate);
-      //   $(this.showBodyEl).append( compiledTemplate );
-
-      //   // show SongsView({model:this.model});
-      // }, this);
 
       var compiledNavUpdateTemplate = _.template ( songNavUpdateTemplate, this.collection.toJSON());
       var compiledNavLoadTemplate = _.template ( songNavLoadTemplate, this.collection.toJSON());
@@ -93,9 +84,20 @@ define([
       // Update song
       var self = this;
       this.navUpdateEl.click(function(){
+        var toBeSavedSong = self.model;
+        //TODO potentially update the content for the current song
+  
+        //To pass the variable safely in from BBone to Rails 3.2, you have to include the csrf param and token
+        toBeSavedSong.set($("meta[name=csrf-param]").attr('content'), $("meta[name=csrf-token]").attr('content'));
+
+        console.log('toBeSavedSong.toJSON() :');
         console.warn(self.model.toJSON());
-        console.warn(self.model.get('content').components[0].measures[0].beats[0]);
-        window.router.songs.update(self.model, {remove: false});
+        console.warn(self.model.get('components').at(0).get('measures').at(0).get('beats').at(0).get('selected'));
+ 
+        // console.log('toBeSavedSong.toJSON() :');
+        // console.warn(toBeSavedSong.toJSON());
+        // console.warn(toBeSavedSong.get('content').components[0].measures[0].beats[0]);
+        // window.router.songs.update([toBeSavedSong.toJSON()], {remove: false});
         console.log('Update occurred');
       });
 

@@ -37,9 +37,16 @@ define([
 
       //Determines the intial beat width based on the global signature.
       this.calcBeatWidth(state.get('signature'));
+
+      var self = this;
+      dispatch.on('beatClicked.event', function(){
+        console.log('beats :');
+        console.log(self.collection);
+      });
     },
 
     render: function(){
+      console.log('render: beatsView.js');
       //Sets up the spans needed for a measure.
       $(this.el).html('');
       $(this.el).append('<span class="title">Measure <span class="number"></span> - <span class="delete">[X]</span></span>');

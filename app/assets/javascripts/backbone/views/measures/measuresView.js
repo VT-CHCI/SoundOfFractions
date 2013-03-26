@@ -44,10 +44,17 @@ define([
         this.component = new MeasuresCollection;
         this.component.add({beats: this.measure});
       }
+
+      var self = this;
+      dispatch.on('beatClicked.event', function(){
+        console.log('measures :');
+        console.log(self.component);
+      });
       this.render();
     },
 
     render: function(){
+      console.log('render: measuresView.js');
       $(this.el).html('<div class="addMeasure">+</div>');
 
       //we create a BeatsView for each measure.

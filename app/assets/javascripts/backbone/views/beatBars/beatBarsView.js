@@ -25,21 +25,21 @@ define([
       // this.collection = beatBarsCollection.add({ width: 0.125, label: '1/8'});
 
       //registering event handlers.
-      dispatch.on('signatureChange.event', this.reconfigure, this);
-      dispatch.on('sliderChange.event', this.reconfigure, this);
+      // dispatch.on('signatureChange.event', this.reconfigure, this);
+      // dispatch.on('sliderChange.event', this.reconfigure, this);
     },
 
     render: function(){
-      var data = {
-        beatBars: this.collection.models,
-        _: _
-      };
-      console.log("render beatbars");
-      console.log(data);
-      var compiledTemplate = _.template( beatBarsTemplate, data );
-      $(this.el).html( compiledTemplate );
+      // console.log("render: beatBarsView.js");
+      // var data = {
+      //   beatBars: this.collection.models,
+      //   _: _
+      // };
+      // console.log(data);
+      // var compiledTemplate = _.template( beatBarsTemplate, data );
+      // $(this.el).html( compiledTemplate );
 
-      return this;
+      // return this;
     },
 
     /*

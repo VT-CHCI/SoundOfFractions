@@ -49,6 +49,13 @@ define([
       dispatch.on('representation.event', this.recalculateFraction, this);
       dispatch.on('beatClicked.event', this.recalculateFraction, this);
       dispatch.on('signatureChange.event', this.recalculateFraction, this);
+
+      var self = this;
+      dispatch.on('beatClicked.event', function(){
+        console.log('component :');
+        console.log(self.component);
+      });
+
       this.render();
     },
 
@@ -57,6 +64,7 @@ define([
       a new MeasuresView which gets rendered instead.
     */
     render: function(){
+      console.log('render: componentView.js');
       new MeasuresView({collection:this.component.get('measures'), parent: this.component, el:'#component'+this.component.cid});
       this.recalculateFraction();
      return this;

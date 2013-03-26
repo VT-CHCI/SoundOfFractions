@@ -60,6 +60,7 @@ define([
 
       console.log('toBeSavedSong.toJSON() :');
       console.warn(toBeSavedSong.toJSON());
+      console.warn(this.model.get('components').at(0).get('measures').at(0).get('beats').at(0).get('selected'));
       
       return window.router.songs.create( toBeSavedSong.toJSON() , {
         success: function(song) {

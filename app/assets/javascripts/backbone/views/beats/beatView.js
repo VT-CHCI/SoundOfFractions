@@ -29,12 +29,20 @@ define([
         this.model = new BeatModel;
       }
 
+      var self = this;
+      dispatch.on('beatClicked.event', function(){
+        console.log('beat :');
+        console.log(self.model.get('selected'));
+      });
+
+
       this.render();
     },
 
     //We use css classes to control the color of the beat.
     //A beat is essentially an empty div.
     render: function(){
+      console.log('render: beatView.js');
       if (this.model.get("selected"))
         $(this.el).html('<div class="ON"><div class="animated-beat"></div></div>');
       else
@@ -55,10 +63,10 @@ define([
     toggle: function(){
       var bool = this.model.get("selected");
       this.model.set("selected", !bool);
-
-      this.render()
-
       console.log("beat toggled!");
+
+      this.render();
+
       log.sendLog([[1, "beat" + this.model.cid + " toggled: "+!bool]]);
 
       dispatch.trigger('beatClicked.event');
