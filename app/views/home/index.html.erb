@@ -1,4 +1,7 @@
-<h1>RAILS Home#index</h1>
-<p>Find me in app/views/home/index.html.erb</p>
-<p>GO TO Songs index page <%= link_to "here", songs_path + '#/index' %>.</p>
-<p>GO TO Songs new page <%= link_to "here", songs_path + '#/new' %>.</p>
+<% if user_signed_in? %>
+  <p>Rails Index</p>
+  <p>GO TO Songs index page <%= link_to "here", songs_path + '#/index' %>.</p>
+  <p>GO TO Songs new page <%= link_to "here", songs_path + '#/new' %>.</p>
+<% else %>
+  <p>Sound of Fractions</p>
+<% end %>
