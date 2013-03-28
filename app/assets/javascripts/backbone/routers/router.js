@@ -69,6 +69,12 @@ define([
       var currentIDSong = window.router.songs.get(id);
       console.warn(currentIDSong);
       var view = new songsViewShow(currentIDSong);
+      beatSliderView.render();
+      beatBarsView.render();
+      // componentsView.render();
+      tempoSliderView.render();
+      transportView.render();
+      repButtonView.render();
     },
 
     edit: function(id){

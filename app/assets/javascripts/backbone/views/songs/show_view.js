@@ -6,6 +6,7 @@ define([
   'backbone/collections/songsCollection',
   'backbone/collections/components',
   'backbone/models/song',
+  'backbone/models/unsavedSong',
   'backbone/views/components/componentsView',
   'text!backbone/templates/songs/show.html',
   'text!backbone/templates/tiny/navSave.html',
@@ -14,9 +15,8 @@ define([
   'text!backbone/templates/tiny/navInfo.html',
   'app/dispatch',
   'app/state'
-], function($, _, Backbone, SongsCollection, Components, song, ComponentsView, songsBodyTemplate, songNavSaveTemplate, songNavLoadTemplate, songNavUpdateTemplate, songNavInfoTemplate, dispatch, state){
+], function($, _, Backbone, SongsCollection, Components, songModel, unsavedSongModel, ComponentsView, songsBodyTemplate, songNavSaveTemplate, songNavLoadTemplate, songNavUpdateTemplate, songNavInfoTemplate, dispatch, state){
   return Backbone.View.extend({
-    // model: {},
     navLoadEl: $('#nav-songs-load'),
     navUpdateEl: $('#nav-songs-update'),
     navInfoEl: $('#nav-songs-info'),
@@ -30,11 +30,6 @@ define([
       this.model = options;
       console.warn(this.model);
 
-      // this.model.bind("change:errors", function(){
-        // console.log("in change error func for show view");
-        // return this.render()
-      // });
-
       // TODO
       // dispatch.on('signatureChange.event', this.reconfigure, this);
       this.render();
@@ -42,23 +37,49 @@ define([
       console.log("Show View initialized");
     },
 
-    // events: { 
-    // },
+    update: function(e){
+      console.log('Show View Save function starting');      
+      var unupdatedSong = new unsavedSongModel();
+      unupdatedSong.set('components', e.data.context.drumkit);
+      var toBeUpdatedSong = e.data.context.model;
+      //TODO potentially update the content for the current song
+      toBeUpdatedSong.set({
+        // unupdatedSong is a unsavedSong.js model which contains and 'components'
+        content : JSON.stringify(unupdatedSong.toJSON()),
+        title: $('#song-title').val()
+      });
+
+      //To pass the variable safely in from BBone to Rails 3.2, you have to include the csrf param and token
+      toBeUpdatedSong.set($("meta[name=csrf-param]").attr('content'), $("meta[name=csrf-token]").attr('content'));
+
+      window.router.songs.create( toBeUpdatedSong.toJSON() , {
+        success: function(song) {
+          console.log('Song updated!');
+          this.model = song;
+          window.router.songs.add(song);
+          console.log(window.router.songs.get(window.router.songs.length));
+          
+          return window.location.hash = "/" + this.model.id;
+
+        },
+        error: function(song, jqXHR) {
+          console.error('ERROR UPDATING SONG!!!!    ERROR UPDATING SONG!!!!    ERROR UPDATING SONG!!!!    ERROR UPDATING SONG!!!!');
+          return this.model.set({
+            errors: $.parseJSON(jqXHR.responseText)
+          });
+        }
+      });
+
+      console.log('Update occurred');
+
+      console.log('Show View Save function completed');      
+    },
 
     render: function(){
       console.log("Show View Rendering...");
       $(this.showBodyEl).html('');      
       console.log('this.model:')
       console.warn(this.model);
-      // console.log(this.model.toJSON());
-      // console.log(songsBodyTemplate);
-      // _.each(this.collection.models, function(song) {
-      //   var compiledTemplate = _.template( songsBodyTemplate, {song: song} );
-      //   console.log(compiledTemplate);
-      //   $(this.showBodyEl).append( compiledTemplate );
-
-      //   // show SongsView({model:this.model});
-      // }, this);
 
       var compiledNavUpdateTemplate = _.template ( songNavUpdateTemplate, this.collection.toJSON());
       var compiledNavLoadTemplate = _.template ( songNavLoadTemplate, this.collection.toJSON());
@@ -78,44 +99,15 @@ define([
       // change the body to show the title
       $(this.showBodyEl).html(compiledBodyTemplate);
 
-      // var measureCount = 1;
-      // $('.component-container').each(function() {
-        // $(this).find('.number').each(function() {
-          // $(this).text(measureCount);
-          // measureCount++;
-        // });
-        // measureCount = 1;
-      // });
-      ComponentsView.build(this.model);
+      // Update song
+      // context:this => pass the show_view.js back to itself
+      this.navUpdateEl.click({context:this},this.update);
+
+      this.drumkit = ComponentsView.build(this.model);
       //TODO calcBeatWidth;
       console.log("Show View rendered");
-
-      // Update song
-      var self = this;
-      this.navUpdateEl.click(function(){
-        console.warn(self.model.toJSON());
-        console.warn(self.model.get('content').components[0].measures[0].beats[0]);
-        window.router.songs.update(self.model, {remove: false});
-        console.log('Update occurred');
-      });
-
       return this;
     },
-
-    // reconfigure: function(signature) {
-    //   if ($(this.showBodyEl).parent().hasClass('selected')) {
-    //     dispatch.trigger('stopRequest.event', 'off');
-    //     this.collection.reset();
-
-    //     for (var i = 0; i < signature; i++) {
-    //       this.collection.add();
-    //     }
-
-    //     this.render();
-
-    //     this.calcBeatWidth(signature);
-    //   }
-    // },
 
     calcBeatWidth: function(signature) {
       if ($(this.showBodyEl).parent().hasClass('selected')) {

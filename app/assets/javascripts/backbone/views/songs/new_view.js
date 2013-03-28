@@ -38,7 +38,6 @@ define([
       // TODO
       // dispatch.on('signatureChange.event', this.reconfigure, this);
       this.render();
-      // this.calcBeatWidth(state.get('signature'));
     },
 
     events: { 
@@ -50,7 +49,7 @@ define([
       e.stopPropagation();
       var toBeSavedSong = new window.router.songs.model(); 
       toBeSavedSong.set({
-        // this.model is a unsavedSong.js model which contains 'title', and 'components'
+        // this.model is a unsavedSong.js model which contains and 'components'
         content : JSON.stringify(this.model.toJSON()),
         title : $('#title').val()
       });
@@ -60,6 +59,7 @@ define([
 
       console.log('toBeSavedSong.toJSON() :');
       console.warn(toBeSavedSong.toJSON());
+      console.warn(this.model.get('components').at(0).get('measures').at(0).get('beats').at(0).get('selected'));
       
       return window.router.songs.create( toBeSavedSong.toJSON() , {
         success: function(song) {
@@ -85,9 +85,6 @@ define([
       console.log($(this.el));
       $(this.sofComposerEl).html('');
       $(this.el).html('');
-
-      // console.log(this.collection);      
-      // console.log(this.model);
       console.log(this.model.toJSON());
 
       //Working

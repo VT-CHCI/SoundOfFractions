@@ -48,6 +48,7 @@ define([
     },
 
     render: function(){
+      console.log('render: measuresView.js');
       $(this.el).html('<div class="addMeasure">+</div>');
 
       //we create a BeatsView for each measure.
