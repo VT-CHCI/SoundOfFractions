@@ -13,6 +13,14 @@ define([
       selected: false
     },
     initialize: function(){
+    },
+    getStyleClass: function() {
+      if (this.selected) {
+        return "ON";
+      }
+      else {
+        return "OFF";
+      }
     }
   });
   

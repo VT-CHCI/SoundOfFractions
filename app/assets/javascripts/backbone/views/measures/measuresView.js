@@ -12,11 +12,11 @@ define([
   'backbone/collections/beats',
   'backbone/collections/measures',
   'backbone/views/beats/beatsView',
-  'text!backbone/templates/measures/measures.html',
+  'text!backbone/templates/measures/linearBarMeasures.html',
   'app/dispatch',
   'app/state',
   'app/log'
-], function($, _, Backbone, BeatsCollection, MeasuresCollection, BeatsView, measuresTemplate, dispatch, state, log){
+], function($, _, Backbone, BeatsCollection, MeasuresCollection, BeatsView, linearBarMeasuresTemplate, dispatch, state, log){
   return Backbone.View.extend({
     el: $('.component'),
 
@@ -53,7 +53,7 @@ define([
 
       //we create a BeatsView for each measure.
       _.each(this.component.models, function(measure) {
-        var compiledTemplate = _.template( measuresTemplate, {measure: measure} );
+        var compiledTemplate = _.template( linearBarMeasuresTemplate, {measure: measure} );
         $(this.el).find('.addMeasure').before( compiledTemplate );
 
         new BeatsView({collection:measure.get('beats'), el:'#measure'+measure.cid});

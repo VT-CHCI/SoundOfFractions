@@ -12,10 +12,10 @@ define([
   // Pull in the Collection module from above
   'backbone/collections/beats',
   'backbone/views/beats/beatView',
-  'text!backbone/templates/beats/beats.html',
+  'text!backbone/templates/beats/linearBarBeats.html',
   'app/dispatch',
   'app/state'
-], function($, _, Backbone, BeatsCollection, BeatView, beatsTemplate, dispatch, state){
+], function($, _, Backbone, BeatsCollection, BeatView, linearBarBeatsTemplate, dispatch, state){
   return Backbone.View.extend({
     el: $('.measure'),
 
@@ -50,7 +50,7 @@ define([
       //on the cid.  Then, creating a new BeatView for each,
       //passing in the beat model and the 'el' container for it.
       _.each(this.collection.models, function(beat) {
-        var compiledTemplate = _.template( beatsTemplate, {beat: beat} );
+        var compiledTemplate = _.template( linearBarBeatsTemplate, {beat: beat} );
         $(this.el).append( compiledTemplate );
 
         new BeatView({model:beat, el:'#beat'+beat.cid});

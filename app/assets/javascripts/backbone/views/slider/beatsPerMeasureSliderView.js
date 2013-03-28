@@ -1,4 +1,4 @@
-// Filename: views/slider/beatSliderView.js
+// Filename: views/slider/beatsPerMeasureSliderView.js
 /*
   This is the beatSliderView
 

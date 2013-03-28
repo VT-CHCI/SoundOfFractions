@@ -198,12 +198,22 @@
   background-color: #C9D2D4;
 }
 
-#rep-button {
+#fraction-representation {
   margin: 0 auto 10px auto;
   text-align: center;
   width: 100%;
 }
 
-#rep-button button {
+#fraction-representation button {
   width: 25%;
+}
+
+#measure-representation {
+  margin: 0 auto 10px auto;
+  text-align: center;
+  width: 100%;
+}
+
+#measure-representation button {
+  width: 33%;
 }
