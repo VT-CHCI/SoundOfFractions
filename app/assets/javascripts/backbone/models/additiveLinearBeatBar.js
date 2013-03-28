@@ -2,7 +2,7 @@
 /*
   This is the additiveLinearBeatBar model.
   It maintains its width.
-  additiveLinearBeatBars are the bars in the beat pallete
+  additiveLinearBeatBars are the bars in the beat palette
   on the right of the main view.
 */
 define([

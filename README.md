@@ -10,18 +10,18 @@ The Ruby on Rails version with persistence, requires a server that can accept th
 
 ## Using ##
 
-The interface is dividing into two sections, the musical components and the beat pallet toolbar.
+The interface is dividing into two sections, the musical components and the beat palette toolbar.
 
 ### Musical Components ###
 In the main workspace, there is a list of each musical component and their individual measures. For each component, there is also a mathematical representation of its current state. To enable a beat, simply click a subsection of the measure. It will turn orange to show that has been enabled. As beats are enabled or disabled, the mathematical representation of the component changes. To add new measures, click the green plus button, and to remove, click the red [X] above the measure. *Note: there must always be at least one measure; therefore the application will not allow you to remove all of them. Also, as more measures are added the fraction denominator will not change. This is because a measure represents one whole. Instead, as more than a measures worth of beats are selected, improper fractions will be made.*
 
-### Beat Pallet ###
+### Beat Palette ###
 
-The beat pallet on the right provides different tools to modify the musical components. The first set of button on the top, change the mathematical representations to either hidden, fraction, percent, or decimal. The next set of sliders change the tempo of the music and the number of beats per division. The Tempo Slider ranges from 1/2 (slower) to 2 (faster) and affects the playback globally. The Beats per Measure slider changes a selected components’ measure division. *Note: Tempo is represented as a fraction rather than a number so that it can be used to explain how it mathematically affects the components’ sound. Also, when changing the number of division, all the beats will be reset.* There is also a visualization under the beat slider which shows common fractions of the measure based on the number of divisions selected.*
+The beat palette on the right provides different tools to modify the musical components. The first set of button on the top, change the mathematical representations to either hidden, fraction, percent, or decimal. The next set of sliders change the tempo of the music and the number of beats per division. The Tempo Slider ranges from 1/2 (slower) to 2 (faster) and affects the playback globally. The Beats per Measure slider changes a selected components’ measure division. *Note: Tempo is represented as a fraction rather than a number so that it can be used to explain how it mathematically affects the components’ sound. Also, when changing the number of division, all the beats will be reset.* There is also a visualization under the beat slider which shows common fractions of the measure based on the number of divisions selected.*
 
 ### Music Playback ###
 
-To play music, click the play button (triangle in the circle) under the beat pallet. When playing, the play button will change into the stop button and an animation will begin showing what beats are currently playing.
+To play music, click the play button (triangle in the circle) under the beat palette. When playing, the play button will change into the stop button and an animation will begin showing what beats are currently playing.
 
 ## Program Structure ##
 

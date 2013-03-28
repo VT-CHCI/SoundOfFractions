@@ -1,7 +1,7 @@
-//filename: collections/additiveBeatPallete.js
+//filename: collections/additiveBeatPalette.js
 /*
   This is the collection of beat bars, which are the
-  bars in the beat pallete on the right side of the
+  bars in the beat palette on the right side of the
   main screen.
 */
 define([
@@ -10,7 +10,7 @@ define([
   'backbone',
   'backbone/models/additiveLinearBeatBar'
 ], function($, _, Backbone, additiveLinearBeatBarModel){
-  var additiveBeatPalleteCollection = Backbone.Collection.extend({
+  var additiveBeatPaletteCollection = Backbone.Collection.extend({
     model: additiveLinearBeatBarModel,
 
     initialize: function(){
@@ -18,5 +18,5 @@ define([
     }
   });
 
-  return new additiveBeatPalleteCollection();
+  return new additiveBeatPaletteCollection();
 });

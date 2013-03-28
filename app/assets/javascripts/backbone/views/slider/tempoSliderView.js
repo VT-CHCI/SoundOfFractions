@@ -17,7 +17,7 @@ define([
   var sliderModel = new SliderModel;
 
   var TempoSliderView = Backbone.View.extend({
-    el : $("#beat-pallet #tempo-slider"), // Specifies the DOM element which this view handles
+    el : $("#beat-palette #tempo-slider"), // Specifies the DOM element which this view handles
 
     //registering updateVal() as the handler for backbone change events.
     events : {

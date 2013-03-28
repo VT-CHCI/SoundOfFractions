@@ -8,7 +8,7 @@ define([
   'backbone',
   'backbone/views/home/homeView',
   'backbone/views/slider/beatsPerMeasureSliderView',
-  'backbone/views/additiveBeatPallete/additiveLinearBeatPalleteView',
+  'backbone/views/additiveBeatPalette/additiveLinearBeatPaletteView',
   'backbone/views/components/componentsView',
   'backbone/views/slider/tempoSliderView',
   'backbone/views/transport/transportView',
@@ -20,7 +20,7 @@ define([
   'backbone/views/songs/index_view',
   'backbone/views/songs/show_view',
   'backbone/views/songs/edit_view'
-], function($, _, Backbone, mainHomeView, beatsPerMeasureSliderView, additiveLinearBeatPalleteView, componentsView, tempoSliderView, transportView, fractionRepresentionView, wholeMeasureRepresentationView, log, songsCollection, songsViewNew, songsViewIndex, songsViewShow, songsViewEdit ){
+], function($, _, Backbone, mainHomeView, beatsPerMeasureSliderView, additiveLinearBeatPaletteView, componentsView, tempoSliderView, transportView, fractionRepresentionView, wholeMeasureRepresentationView, log, songsCollection, songsViewNew, songsViewIndex, songsViewShow, songsViewEdit ){
 
   var BBRouter = Backbone.Router.extend({
     // songs: {},
@@ -37,7 +37,7 @@ define([
       var view = new songsViewNew({collection : this.songs});
       mainHomeView.render();
       beatsPerMeasureSliderView.render();
-      additiveLinearBeatPalleteView.render();
+      additiveLinearBeatPaletteView.render();
       componentsView.render();
       tempoSliderView.render();
       transportView.render();
@@ -72,7 +72,7 @@ define([
       console.warn(currentIDSong);
       var view = new songsViewShow(currentIDSong);
       beatsPerMeasureSliderView.render();
-      additiveLinearBeatPalleteView.render();
+      additiveLinearBeatPaletteView.render();
       // componentsView.render();
       tempoSliderView.render();
       transportView.render();
