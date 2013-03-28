@@ -29,13 +29,6 @@ define([
         this.model = new BeatModel;
       }
 
-      var self = this;
-      dispatch.on('beatClicked.event', function(){
-        console.log('beat :');
-        console.log(self.model.get('selected'));
-      });
-
-
       this.render();
     },
 
@@ -64,7 +57,6 @@ define([
       var bool = this.model.get("selected");
       this.model.set("selected", !bool);
       console.log("beat toggled!");
-
       this.render();
 
       log.sendLog([[1, "beat" + this.model.cid + " toggled: "+!bool]]);

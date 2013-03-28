@@ -44,12 +44,6 @@ define([
         this.component = new MeasuresCollection;
         this.component.add({beats: this.measure});
       }
-
-      var self = this;
-      dispatch.on('beatClicked.event', function(){
-        console.log('measures :');
-        console.log(self.component);
-      });
       this.render();
     },
 

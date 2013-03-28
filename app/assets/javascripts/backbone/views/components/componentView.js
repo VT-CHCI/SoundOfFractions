@@ -50,12 +50,6 @@ define([
       dispatch.on('beatClicked.event', this.recalculateFraction, this);
       dispatch.on('signatureChange.event', this.recalculateFraction, this);
 
-      var self = this;
-      dispatch.on('beatClicked.event', function(){
-        console.log('component :');
-        console.log(self.component);
-      });
-
       this.render();
     },
 

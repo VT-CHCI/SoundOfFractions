@@ -25,9 +25,6 @@ define([
   var componentsView = Backbone.View.extend({
     el: $('#sof-composer'),
 
-    events : {
-    },
-
     initialize: function(){
       //this context variable gives us access to all of the
       //web audio api methods/objects.
@@ -181,6 +178,7 @@ define([
       }
       this.render();
       console.log('done building');
+      return this.drumkit;
     },
 
     render: function(){

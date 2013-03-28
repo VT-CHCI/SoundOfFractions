@@ -37,12 +37,6 @@ define([
 
       //Determines the intial beat width based on the global signature.
       this.calcBeatWidth(state.get('signature'));
-
-      var self = this;
-      dispatch.on('beatClicked.event', function(){
-        console.log('beats :');
-        console.log(self.collection);
-      });
     },
 
     render: function(){
