@@ -35,7 +35,6 @@ define([
     //We use css classes to control the color of the beat.
     //A beat is essentially an empty div.
     render: function(){
-      console.log('render: beatView.js');
       if (this.model.get("selected"))
         $(this.el).html('<div class="ON"><div class="animated-beat"></div></div>');
       else

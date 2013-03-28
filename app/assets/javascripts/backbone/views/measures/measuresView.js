@@ -13,12 +13,24 @@ define([
   'backbone/collections/measures',
   'backbone/views/beats/beatsView',
   'text!backbone/templates/measures/linearBarMeasures.html',
+  'text!backbone/templates/measures/linearBarSVGMeasures.html',
+  'text!backbone/templates/measures/circularPieMeasures.html',
   'app/dispatch',
   'app/state',
   'app/log'
-], function($, _, Backbone, BeatsCollection, MeasuresCollection, BeatsView, linearBarMeasuresTemplate, dispatch, state, log){
+], function($, _, Backbone, BeatsCollection, MeasuresCollection, BeatsView, linearBarMeasuresTemplate, linearBarSVGMeasuresTemplate, circularPieMeasuresTemplate, dispatch, state, log){
   return Backbone.View.extend({
     el: $('.component'),
+
+    // The different representations
+    representations: {
+      "audio": linearBarMeasuresTemplate,
+      "linear-bar": linearBarMeasuresTemplate,
+      "linear-bar-svg": linearBarSVGMeasuresTemplate,
+      "circular-pie": circularPieMeasuresTemplate
+    },
+
+    currentMeasureRepresentation: 'linear-bar',
 
     //registering click events to add and remove measures.
     events : {
@@ -44,16 +56,25 @@ define([
         this.component = new MeasuresCollection;
         this.component.add({beats: this.measure});
       }
+
+      //Dispatch listeners
+      dispatch.on('measureRepresentation.event', this.changeMeasureRepresentation, this);
+
       this.render();
     },
 
+    changeMeasureRepresentation: function(representation) {
+      this.currentMeasureRepresentation = representation;
+      this.render();      
+    },
+
     render: function(){
-      console.log('render: measuresView.js');
       $(this.el).html('<div class="addMeasure">+</div>');
 
       //we create a BeatsView for each measure.
       _.each(this.component.models, function(measure) {
-        var compiledTemplate = _.template( linearBarMeasuresTemplate, {measure: measure} );
+        // when representation button changes, the current representation template will get updated
+        var compiledTemplate = _.template( this.representations[this.currentMeasureRepresentation], {measure: measure, measureAngle: 360.0/this.collection.length} );
         $(this.el).find('.addMeasure').before( compiledTemplate );
 
         new BeatsView({collection:measure.get('beats'), el:'#measure'+measure.cid});

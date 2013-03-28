@@ -40,7 +40,6 @@ define([
     },
 
     render: function(){
-      console.log('render: beatsView.js');
       //Sets up the spans needed for a measure.
       $(this.el).html('');
       $(this.el).append('<span class="title">Measure <span class="number"></span> - <span class="delete">[X]</span></span>');
