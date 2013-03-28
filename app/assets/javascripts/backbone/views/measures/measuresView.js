@@ -12,19 +12,20 @@ define([
   'backbone/collections/beats',
   'backbone/collections/measures',
   'backbone/views/beats/beatsView',
+  'text!backbone/templates/measures/audioMeasures.html',
   'text!backbone/templates/measures/linearBarMeasures.html',
   'text!backbone/templates/measures/linearBarSVGMeasures.html',
   'text!backbone/templates/measures/circularPieMeasures.html',
   'app/dispatch',
   'app/state',
   'app/log'
-], function($, _, Backbone, BeatsCollection, MeasuresCollection, BeatsView, linearBarMeasuresTemplate, linearBarSVGMeasuresTemplate, circularPieMeasuresTemplate, dispatch, state, log){
+], function($, _, Backbone, BeatsCollection, MeasuresCollection, BeatsView, audioMeasuresTemplate, linearBarMeasuresTemplate, linearBarSVGMeasuresTemplate, circularPieMeasuresTemplate, dispatch, state, log){
   return Backbone.View.extend({
     el: $('.component'),
 
     // The different representations
     representations: {
-      "audio": linearBarMeasuresTemplate,
+      "audio": audioMeasuresTemplate,
       "linear-bar": linearBarMeasuresTemplate,
       "linear-bar-svg": linearBarSVGMeasuresTemplate,
       "circular-pie": circularPieMeasuresTemplate
@@ -94,7 +95,7 @@ define([
       all the durations get recalculated to reflect this new measure.
     */
     add: function(){
-      if ($('#measure'+this.component.models[0].cid).parent().hasClass('selected')) {
+      if ($('#measure'+this.component.models[0].cid).parent()) {
         console.log('add measure');
         this.measure = new BeatsCollection;
 
@@ -121,7 +122,7 @@ define([
       This is called when the user clicks on the minus to remove a measure.
     */
     remove: function(ev){
-      if ($('#measure'+this.component.models[0].cid).parent().hasClass('selected')) {
+      if ($('#measure'+this.component.models[0].cid).parent()) {
         //removing the last measure isn't allowed.
         if(this.component.models.length == 1) {
           console.log('Can\'t remove the last measure!');
@@ -129,8 +130,10 @@ define([
         }
         console.log('remove measure');
 
+        window.csf = this.component;
+        window.csfev = $(ev.target).parents('.measure').attr('id').replace('measure','');
         //we remove the measure and get its model.
-        var model = this.component.getByCid($(ev.target).parents('.measure').attr('id').replace('measure',''));
+        var model = this.component.get($(ev.target).parents('.measure').attr('id').replace('measure',''));
         this.component.remove(model);
 
         //send a log event showing the removal.
