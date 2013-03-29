@@ -10,16 +10,17 @@ define([
 ], function(_, Backbone) {
   var beatModel = Backbone.Model.extend({
     defaults: {
-      selected: false
+      selected: false,
+      state: 'OFF'
     },
     initialize: function(){
     },
     getStyleClass: function() {
       if (this.selected) {
-        return "ON";
+        return 'ON';
       }
       else {
-        return "OFF";
+        return 'OFF';
       }
     }
   });

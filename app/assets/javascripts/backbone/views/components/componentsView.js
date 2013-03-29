@@ -140,7 +140,7 @@ define([
       console.log('starting building...');
       console.log('song');
       console.warn(song);
-      song.set('content', JSON.parse(song.get('content')) );
+      song.set('content', JSON.parse(song.get('content')));
       this.drumkit.reset();
       // console.log('song.get('content').components');
       var components = song.get('content').components;

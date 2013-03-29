@@ -11,7 +11,7 @@ define([
   // Pull in the Collection module from above
   'backbone/collections/beats',
   'backbone/collections/measures',
-  'backbone/views/beats/beatsView',
+  'backbone/views/beats/beatView',
   'text!backbone/templates/measures/audioMeasures.html',
   'text!backbone/templates/measures/linearBarMeasures.html',
   'text!backbone/templates/measures/linearBarSVGMeasures.html',
@@ -19,7 +19,7 @@ define([
   'app/dispatch',
   'app/state',
   'app/log'
-], function($, _, Backbone, BeatsCollection, MeasuresCollection, BeatsView, audioMeasuresTemplate, linearBarMeasuresTemplate, linearBarSVGMeasuresTemplate, circularPieMeasuresTemplate, dispatch, state, log){
+], function($, _, Backbone, BeatsCollection, MeasuresCollection, BeatView, audioMeasuresTemplate, linearBarMeasuresTemplate, linearBarSVGMeasuresTemplate, circularPieMeasuresTemplate, dispatch, state, log){
   return Backbone.View.extend({
     el: $('.component'),
 
@@ -58,10 +58,20 @@ define([
         this.component.add({beats: this.measure});
       }
 
+      if (options["template-key"]) {
+        this.currentBeatRepresentation = options["template-key"];
+      }
+
+      //registering a callback for signatureChange events.
+      dispatch.on('signatureChange.event', this.reconfigure, this);
+
       //Dispatch listeners
       dispatch.on('measureRepresentation.event', this.changeMeasureRepresentation, this);
 
       this.render();
+
+      //Determines the intial beat width based on the global signature. Has to be below this.render()
+      this.calcBeatWidth(state.get('signature'));
     },
 
     changeMeasureRepresentation: function(representation) {
@@ -72,14 +82,26 @@ define([
     render: function(){
       $(this.el).html('<div class="addMeasure">+</div>');
 
+      new BeatView({model:this.component.models[0].get('beats').models[0], el:this.el});
       //we create a BeatsView for each measure.
       _.each(this.component.models, function(measure) {
         // when representation button changes, the current representation template will get updated
-        var compiledTemplate = _.template( this.representations[this.currentMeasureRepresentation], {measure: measure, measureAngle: 360.0/this.collection.length, beatCount:this.collection.length } );
+        var compiledTemplate = _.template( this.representations[this.currentMeasureRepresentation], {measure: measure, measureAngle: 360.0 } );
         $(this.el).find('.addMeasure').before( compiledTemplate );
 
-        new BeatsView({collection:measure.get('beats'), el:'#measure'+measure.cid, beatCount:this.collection.length});
+          console.log('measure beats: ');
+          console.warn(measure.get('beats').models);
+            // the old beastsView
+            _.each(measure.get('beats').models, function(beat) {
+              //  el:'#beat'+beat.cid
+              // console.warn(that);
+              console.warn(beat);
+              // new BeatView({model:beat, el:this.el});
+              // console.log(checker);
+            }, this);
       }, this);
+
+
 
      return this;
     },
@@ -130,8 +152,6 @@ define([
         }
         console.log('remove measure');
 
-        window.csf = this.component;
-        window.csfev = $(ev.target).parents('.measure').attr('id').replace('measure','');
         //we remove the measure and get its model.
         var model = this.component.get($(ev.target).parents('.measure').attr('id').replace('measure',''));
         this.component.remove(model);
@@ -145,6 +165,46 @@ define([
         //trigger a stop request to stop playback.
         dispatch.trigger('stopRequest.event', 'off');
       }
+    },
+    /*
+      This is triggered by signatureChange events.
+
+    */
+    reconfigure: function(signature) {
+      /* if the containing component is selected, this
+         triggers a request event to stop the sound.
+         
+         Then this destroys the beat collection and creates
+         a new collection with the number of beats specified
+         by the signature parameter.
+      */
+      if ($(this.el).hasClass('selected')) {
+        dispatch.trigger('stopRequest.event', 'off');
+        this.measure.reset();
+
+        for (var i = 0; i < signature; i++) {
+          this.measure.add();
+        }
+        //re-render the view.
+        this.render();
+
+        //recalculate the widths for each beat.
+        this.calcBeatWidth(signature);
+      }
+    },
+
+    //This determines the width of each beat based on the
+    //number of beats per measure or 'signature'.
+    calcBeatWidth: function(signature) {
+      if ($(this.el).hasClass('selected')) {
+        var px = 100/$('.measure').css('width').replace(/[^-\d\.]/g, '');
+        var beatWidth = (100 - ((signature*1+1)*px))/signature;
+
+        $(this.el).children('.beat').css({
+          'width' : beatWidth+'%'
+        });
+      }
     }
+
   });
 });

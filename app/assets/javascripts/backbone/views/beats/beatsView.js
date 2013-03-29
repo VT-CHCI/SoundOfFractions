@@ -12,17 +12,19 @@ define([
   // Pull in the Collection module from above
   'backbone/collections/beats',
   'backbone/views/beats/beatView',
+  'text!backbone/templates/measures/audioMeasures.html',
   'text!backbone/templates/beats/linearBarBeats.html',
   'text!backbone/templates/beats/linearBarSVGBeats.html',
   'text!backbone/templates/beats/circularPieBeats.html',
   'app/dispatch',
   'app/state'
-], function($, _, Backbone, BeatsCollection, BeatView, linearBarBeatsTemplate, linearBarSVGBeatsTemplate, circularPieBeatsTemplate, dispatch, state){
+], function($, _, Backbone, BeatsCollection, BeatView, audioMeasuresTemplate, linearBarBeatsTemplate, linearBarSVGBeatsTemplate, circularPieBeatsTemplate, dispatch, state){
   return Backbone.View.extend({
     el: $('.measure'),
 
     // The different representations
     representations: {
+      "audio": audioMeasuresTemplate,
       "linear-bar": linearBarBeatsTemplate,
       "linear-bar-svg": linearBarSVGBeatsTemplate,
       "circular-pie": circularPieBeatsTemplate
@@ -73,8 +75,8 @@ define([
         var compiledTemplate = _.template( this.representations[this.currentBeatRepresentation], {beat: beat, beatAngle:360.0/this.collection.length} );
         $(this.el).append( compiledTemplate );
 
-        // new BeatView({model:beat, el:'#beat'+beat.cid});
-        new BeatView({model:beat, el:'#beat'+beat.cid, beatAngle:360.0/this.collection.length, "template-key": this.currentBeatRepresentation});
+        new BeatView({model:beat, el:'#beat'+beat.cid});
+        // new BeatView({model:beat, el:'#beat'+beat.cid, beatAngle:360.0/this.collection.length, "template-key": this.currentBeatRepresentation});
 
       }, this);
 
@@ -91,44 +93,5 @@ define([
       return this;
     },
 
-    /*
-      This is triggered by signatureChange events.
-
-    */
-    reconfigure: function(signature) {
-      /* if the containing component is selected, this
-         triggers a request event to stop the sound.
-         
-         Then this destroys the beat collection and creates
-         a new collection with the number of beats specified
-         by the signature parameter.
-      */
-      if ($(this.el).parent().hasClass('selected')) {
-        dispatch.trigger('stopRequest.event', 'off');
-        this.collection.reset();
-
-        for (var i = 0; i < signature; i++) {
-          this.collection.add();
-        }
-        //re-render the view.
-        this.render();
-
-        //recalculate the widths for each beat.
-        this.calcBeatWidth(signature);
-      }
-    },
-
-    //This determines the width of each beat based on the
-    //number of beats per measure or 'signature'.
-    calcBeatWidth: function(signature) {
-      if ($(this.el).parent().hasClass('selected')) {
-        var px = 100/$('.measure').css('width').replace(/[^-\d\.]/g, '');
-        var beatWidth = (100 - ((signature*1+1)*px))/signature;
-
-        $(this.el).children('.beat').css({
-          'width' : beatWidth+'%'
-        });
-      }
-    }
   });
 });
