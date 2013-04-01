@@ -8,8 +8,6 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  // Pull in the Collection module from above
-  'backbone/collections/beats',
   'backbone/collections/measures',
   'backbone/views/beats/beatView',
   'text!backbone/templates/measures/audioMeasures.html',
@@ -19,7 +17,7 @@ define([
   'app/dispatch',
   'app/state',
   'app/log'
-], function($, _, Backbone, BeatsCollection, MeasuresCollection, BeatView, audioMeasuresTemplate, linearBarMeasuresTemplate, linearBarSVGMeasuresTemplate, circularPieMeasuresTemplate, dispatch, state, log){
+], function($, _, Backbone, MeasuresCollection, beatView, audioMeasuresTemplate, linearBarMeasuresTemplate, linearBarSVGMeasuresTemplate, circularPieMeasuresTemplate, dispatch, state, log){
   return Backbone.View.extend({
     el: $('.component'),
 
@@ -64,7 +62,6 @@ define([
 
       //registering a callback for signatureChange events.
       dispatch.on('signatureChange.event', this.reconfigure, this);
-
       //Dispatch listeners
       dispatch.on('measureRepresentation.event', this.changeMeasureRepresentation, this);
 
@@ -82,11 +79,12 @@ define([
     render: function(){
       $(this.el).html('<div class="addMeasure">+</div>');
 
-      new BeatView({model:this.component.models[0].get('beats').models[0], el:this.el});
+      // new beatView({model:this.component.models[0].get('beats').models[0], el:this.el});
       //we create a BeatsView for each measure.
       _.each(this.component.models, function(measure) {
         // when representation button changes, the current representation template will get updated
         var compiledTemplate = _.template( this.representations[this.currentMeasureRepresentation], {measure: measure, measureAngle: 360.0 } );
+        window.csf = ($(this.el));
         $(this.el).find('.addMeasure').before( compiledTemplate );
 
           console.log('measure beats: ');
@@ -96,14 +94,12 @@ define([
               //  el:'#beat'+beat.cid
               // console.warn(that);
               console.warn(beat);
-              // new BeatView({model:beat, el:this.el});
+              new beatView({model:beat, el:this.el});
               // console.log(checker);
             }, this);
       }, this);
 
-
-
-     return this;
+      return this;
     },
 
     /*
@@ -119,7 +115,7 @@ define([
     add: function(){
       if ($('#measure'+this.component.models[0].cid).parent()) {
         console.log('add measure');
-        this.measure = new BeatsCollection;
+        this.measure = new MeasuresCollection;
 
         for (var i = 0; i < state.get('signature'); i++) {
           this.measure.add();
@@ -166,11 +162,9 @@ define([
         dispatch.trigger('stopRequest.event', 'off');
       }
     },
-    /*
-      This is triggered by signatureChange events.
-
-    */
+    // This is triggered by signatureChange events.
     reconfigure: function(signature) {
+      console.log('MeasureView.reconfigure(signature) : signature=' +signature);
       /* if the containing component is selected, this
          triggers a request event to stop the sound.
          

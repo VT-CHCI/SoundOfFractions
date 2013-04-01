@@ -23,7 +23,7 @@ define([
       'click' : 'toggle'
     },
 
-    that: this;
+    that: this,
     // The different representations
     representations: {
       "audio": audioMeasuresTemplate,
@@ -33,7 +33,6 @@ define([
     },
     currentBeatRepresentation: 'linear-bar',
     beatAngle: 90,
-
 
     //The constructor takes options because these views are created
     //by measuresView objects.
@@ -53,30 +52,19 @@ define([
     //We use css classes to control the color of the beat.
     //A beat is essentially an empty div.
     render: function(){
-      // if (this.model.get("selected")){
-      //   $(this.el).html('<div class="ON"><div class="animated-beat"></div></div>');
-      // } else {
-      //   $(this.el).html('<div class="OFF"><div class="animated-beat"></div></div>');
-      // }
-
-
-      
-      // var beatState = $(that);
-      // window.csf = beatState;
       var state = this.bool();
-      // window.csf = $(this.el).children(0).attr('class');
-      // console.log(beatState);
 
-      var compiledTemplate = _.template(this.representations[this.currentBeatRepresentation], {beat: this.model, beatAngle: this.beatAngle});
+      var compiledTemplate = _.template(this.representations[this.currentBeatRepresentation], {beat: this.model, beatAngle: this.beatAngle, state: state});
       console.log(compiledTemplate)
-      $(this.el).append(compiledTemplate);
+      $(this.el).children(0).first().append( compiledTemplate );
 
+      // $(this.el).append(compiledTemplate);
 
       return this;
     },
 
     bool: function(){
-      if (that.model.get("selected")) {
+      if (this.model.get("selected")) {
         return "ON";
       } else {
         return "OFF";
@@ -96,12 +84,10 @@ define([
       var bool = this.model.get("selected");
       this.model.set("selected", !bool);
       var newBool = this.model.get("selected");
-      console.log("beat toggled! : " + newBool);
+      console.log("beat" + this.model.cid + " toggled! : " + newBool);
 
       this.render();
-
-      log.sendLog([[1, "beat" + this.model.cid + " toggled: "+!bool]]);
-
+      // log.sendLog([[1, "beat" + this.model.cid + " toggled: "+!bool]]);
       dispatch.trigger('beatClicked.event');
     }
   });
