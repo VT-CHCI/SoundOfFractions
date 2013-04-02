@@ -9,6 +9,8 @@ define([
   'underscore',
   'backbone',
   'backbone/collections/measures',
+  'backbone/collections/beats',
+  'backbone/models/measure',
   'backbone/views/beats/beatView',
   'text!backbone/templates/measures/audioMeasures.html',
   'text!backbone/templates/measures/linearBarMeasures.html',
@@ -17,9 +19,9 @@ define([
   'app/dispatch',
   'app/state',
   'app/log'
-], function($, _, Backbone, MeasuresCollection, beatView, audioMeasuresTemplate, linearBarMeasuresTemplate, linearBarSVGMeasuresTemplate, circularPieMeasuresTemplate, dispatch, state, log){
+], function($, _, Backbone, MeasureModel, BeatsCollection, MeasuresCollection, beatView, audioMeasuresTemplate, linearBarMeasuresTemplate, linearBarSVGMeasuresTemplate, circularPieMeasuresTemplate, dispatch, state, log){
   return Backbone.View.extend({
-    el: $('.component'),
+    // el: $('.component'),
 
     // The different representations
     representations: {
@@ -42,19 +44,20 @@ define([
       //passed in options. Otherwise we create a single
       //measure and add it to our collection.
       if (options) {
-        this.component = options.collection;
+        this.measuresCollection = options.collection;
         this.parent = options.parent;
         this.el = options.el;
-      } else {
-        this.measure = new BeatsCollection;
-
-        for (var i = 0; i < 4; i++) {
-          this.measure.add();
-        }
-
-        this.component = new MeasuresCollection;
-        this.component.add({beats: this.measure});
       }
+      // else {
+      //   this.measure = new BeatsCollection;
+
+      //   for (var i = 0; i < 4; i++) {
+      //     this.measure.add();
+      //   }
+
+      //   this.measuresCollection = new MeasuresCollection;
+      //   this.measuresCollection.add({beats: this.measure});
+      // }
 
       if (options["template-key"]) {
         this.currentBeatRepresentation = options["template-key"];
@@ -68,7 +71,7 @@ define([
       this.render();
 
       //Determines the intial beat width based on the global signature. Has to be below this.render()
-      this.calcBeatWidth(state.get('signature'));
+      this.calcBeatWidth(this.parent.get('signature'));
     },
 
     changeMeasureRepresentation: function(representation) {
@@ -78,27 +81,19 @@ define([
 
     render: function(){
       $(this.el).html('<div class="addMeasure">+</div>');
-
-      // new beatView({model:this.component.models[0].get('beats').models[0], el:this.el});
+      var measureCount = 1;
       //we create a BeatsView for each measure.
-      _.each(this.component.models, function(measure) {
+      _.each(this.measuresCollection.models, function(measure) {
         // when representation button changes, the current representation template will get updated
-        var compiledTemplate = _.template( this.representations[this.currentMeasureRepresentation], {measure: measure, measureAngle: 360.0 } );
-        window.csf = ($(this.el));
+        var compiledTemplate = _.template( this.representations[this.currentMeasureRepresentation], {measure: measure, beatHolder:"beatHolder"+measure.cid, measureCount:measureCount, measureAngle: 360.0 } );
         $(this.el).find('.addMeasure').before( compiledTemplate );
-
           console.log('measure beats: ');
           console.warn(measure.get('beats').models);
-            // the old beastsView
             _.each(measure.get('beats').models, function(beat) {
-              //  el:'#beat'+beat.cid
-              // console.warn(that);
-              console.warn(beat);
-              new beatView({model:beat, el:this.el});
-              // console.log(checker);
+              new beatView({model:beat, parentElHolder:'#beatHolder'+measure.cid, parentCID:measure.cid});
             }, this);
+        measureCount ++;
       }, this);
-
       return this;
     },
 
@@ -113,44 +108,43 @@ define([
       all the durations get recalculated to reflect this new measure.
     */
     add: function(){
-      if ($('#measure'+this.component.models[0].cid).parent()) {
         console.log('add measure');
-        this.measure = new MeasuresCollection;
+        var newMeasure = new BeatsCollection;
 
-        for (var i = 0; i < state.get('signature'); i++) {
-          this.measure.add();
+        for (var i = 0; i < this.parent.get('signature'); i++) {
+          newMeasure.add();
         }
 
-        this.component.add({beats: this.measure});
+        this.measuresCollection.add({beats: newMeasure});
 
-        name = 'measure' + _.last(this.component.models).cid + '.';
-        _.each(this.measure.models, function(beats) {
+        //Logging
+        name = 'measure' + _.last(this.measuresCollection.models).cid + '.';
+        _.each(newMeasure.models, function(beats) {
           name = name + 'beat'+ beats.cid + '.';
         }, this);
-
         log.sendLog([[3, "Added a measure: "+name]]);
 
+        //Render
         this.render();
-
+        //Dispatch
         dispatch.trigger('stopRequest.event', 'off');
-      }
     },
 
     /*
       This is called when the user clicks on the minus to remove a measure.
     */
     remove: function(ev){
-      if ($('#measure'+this.component.models[0].cid).parent()) {
+      if ($('#measure'+this.measuresCollection.models[0].cid).parent()) {
         //removing the last measure isn't allowed.
-        if(this.component.models.length == 1) {
+        if(this.measuresCollection.models.length == 1) {
           console.log('Can\'t remove the last measure!');
           return;
         }
         console.log('remove measure');
 
         //we remove the measure and get its model.
-        var model = this.component.get($(ev.target).parents('.measure').attr('id').replace('measure',''));
-        this.component.remove(model);
+        var model = this.measuresCollection.get($(ev.target).parents('.measure').attr('id').replace('measure',''));
+        this.measuresCollection.remove(model);
 
         //send a log event showing the removal.
         log.sendLog([[3, "Removed a measure: measure"+model.cid]]);
@@ -160,6 +154,7 @@ define([
 
         //trigger a stop request to stop playback.
         dispatch.trigger('stopRequest.event', 'off');
+        dispatch.trigger('signatureChange.event', this.parent.get('signature'));
       }
     },
     // This is triggered by signatureChange events.
@@ -184,6 +179,8 @@ define([
 
         //recalculate the widths for each beat.
         this.calcBeatWidth(signature);
+        dispatch.trigger('signatureChange.event', this.parent.get('signature'));
+
       }
     },
 
@@ -199,6 +196,5 @@ define([
         });
       }
     }
-
   });
 });
