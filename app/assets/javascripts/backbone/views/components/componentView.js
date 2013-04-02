@@ -14,8 +14,6 @@ define([
   'app/log'
 ], function($, _, Backbone, Component, MeasuresView, dispatch, state, log){
   return Backbone.View.extend({
-    el: $('.component'),
-
     //registering two handlers for backbone's click events.
     //the first is for toggling the component's muted state.
     //the second is for setting this component in focus (or selected).
