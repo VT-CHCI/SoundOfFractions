@@ -16,14 +16,15 @@ define([
   'app/log'
 ], function($, _, Backbone, BeatModel, audioMeasuresTemplate, linearBarBeatsTemplate, linearBarSVGBeatsTemplate, circularPieBeatsTemplate, dispatch, log){
   return Backbone.View.extend({
-    el: $('.beat'),
 
-    //registering backbone's click event to our toggle() function.
-    events : {
-      'click' : 'toggle'
-    },
+    /* TODO still issues with this
+      el: '.beat',
+      registering backbone's click event to our toggle() function.
+       events : {
+         'click' : 'toggle'
+       },
+    */
 
-    that: this,
     // The different representations
     representations: {
       "audio": audioMeasuresTemplate,
@@ -37,33 +38,50 @@ define([
     //The constructor takes options because these views are created
     //by measuresView objects.
     initialize: function(options){
-      console.log('options :');
-      console.log(options);
       if (options) {
+        // TODO: need to take in an option about currentBeatRep
+        // TODO: maybe need to respond to a representation changed event (change this.currentBeatRepresentation and rerender)
+
+        console.log('options :');
+        console.warn(options);
         this.model = options.model;
-        this.el = options.el;
+
+        // this is the html element into which this class should render its template
+        this.measureBeatHolder = options.parentElHolder;
+        this.el = options.singleBeat;
+        this.parent = options.parent;
       } else {
+        console.error('should not be in here!');
         this.model = new BeatModel;
       }
-
       this.render();
     },
 
     //We use css classes to control the color of the beat.
     //A beat is essentially an empty div.
-    render: function(){
-      var state = this.bool();
+    render: function(toggle){
+      // the current state of the beat (is it ON or OFF?)
+      var state = this.getSelectionBooleanCSS();
 
-      var compiledTemplate = _.template(this.representations[this.currentBeatRepresentation], {beat: this.model, beatAngle: this.beatAngle, state: state});
-      console.log(compiledTemplate)
-      $(this.el).children(0).first().append( compiledTemplate );
+      // if render is being called from the toggle function, we may want to do something different
+      if (toggle) {
+        $('#beat'+toggle).toggleClass("ON");
+        $('#beat'+toggle).toggleClass("OFF");
+      } else {
+        // this is reached during the initial rendering of the page
 
-      // $(this.el).append(compiledTemplate);
-
-      return this;
+        // compile the template for this beat (respect the current representation)
+        var compiledTemplate = _.template(this.representations[this.currentBeatRepresentation], {beat: this.model, beatAngle: this.beatAngle, state: state});
+        // append the compiled template to the measureBeatHolder
+        $(this.measureBeatHolder).append( compiledTemplate );
+        // add click handler to this beat
+        $("#beat"+this.model.cid).click($.proxy(this.toggle, this));
+        // $(this.parentEl).append(compiledTemplate);
+        return this;
+      }
     },
 
-    bool: function(){
+    getSelectionBooleanCSS: function(){
       if (this.model.get("selected")) {
         return "ON";
       } else {
@@ -81,12 +99,10 @@ define([
       5. triggers a beatClicked event.
     */
     toggle: function(){
-      var bool = this.model.get("selected");
-      this.model.set("selected", !bool);
-      var newBool = this.model.get("selected");
-      console.log("beat" + this.model.cid + " toggled! : " + newBool);
-
-      this.render();
+      //switch the selected boolean value on the model
+      this.model.set('selected', !this.model.get('selected'));
+      //re-render it, passing the clicked beat to render()
+      this.render(this.model.cid);
       // log.sendLog([[1, "beat" + this.model.cid + " toggled: "+!bool]]);
       dispatch.trigger('beatClicked.event');
     }
