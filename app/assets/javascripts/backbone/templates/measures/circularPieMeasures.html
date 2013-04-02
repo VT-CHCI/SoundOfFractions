@@ -1,8 +1,8 @@
-<div>
-  <p>o: pie Measure | degrees : <%= measureAngle %></p>
-</div>
 <div id="measure<%= measure.cid %>" class="measure">
-  <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
-     <circle cx="150" cy="50" r="40" stroke="black" stroke-width="2" fill="#FF9700" />
+  <span class="title">o: pie Measure degrees : <%= measureAngle %> <span class="number"><%= measureCount %></span> - <span class="delete">[X]</span></span>
+  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" class="svg">
+    <circle cx="150" cy="50" r="40" stroke="black" stroke-width="2" fill="#FF9700" />
+    <g id="<%= beatHolder %>">
+    </g>
   </svg> 
 </div>
