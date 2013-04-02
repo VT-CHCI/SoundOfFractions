@@ -8,13 +8,13 @@ define([
   'underscore',
   'backbone',
   'backbone/models/beat',
-  'text!backbone/templates/measures/audioMeasures.html',
+  'text!backbone/templates/beats/audioBeats.html',
   'text!backbone/templates/beats/linearBarBeats.html',
   'text!backbone/templates/beats/linearBarSVGBeats.html',
   'text!backbone/templates/beats/circularPieBeats.html',
   'app/dispatch',
   'app/log'
-], function($, _, Backbone, BeatModel, audioMeasuresTemplate, linearBarBeatsTemplate, linearBarSVGBeatsTemplate, circularPieBeatsTemplate, dispatch, log){
+], function($, _, Backbone, BeatModel, audioBeatsTemplate, linearBarBeatsTemplate, linearBarSVGBeatsTemplate, circularPieBeatsTemplate, dispatch, log){
   return Backbone.View.extend({
 
     /* TODO still issues with this
@@ -27,7 +27,7 @@ define([
 
     // The different representations
     representations: {
-      "audio": audioMeasuresTemplate,
+      "audio": audioBeatsTemplate,
       "linear-bar": linearBarBeatsTemplate,
       "linear-bar-svg": linearBarSVGBeatsTemplate,
       "circular-pie": circularPieBeatsTemplate
@@ -50,16 +50,22 @@ define([
         this.measureBeatHolder = options.parentElHolder;
         this.el = options.singleBeat;
         this.parent = options.parent;
+        this.currentBeatRepresentation = options.measureRepresentation;
       } else {
         console.error('should not be in here!');
         this.model = new BeatModel;
       }
+
       this.render();
     },
 
     //We use css classes to control the color of the beat.
     //A beat is essentially an empty div.
     render: function(toggle){
+
+      console.log(this.currentBeatRepresentation);
+      console.log(this.representations[this.currentBeatRepresentation]);
+
       // the current state of the beat (is it ON or OFF?)
       var state = this.getSelectionBooleanCSS();
 
@@ -72,13 +78,30 @@ define([
 
         // compile the template for this beat (respect the current representation)
         var compiledTemplate = _.template(this.representations[this.currentBeatRepresentation], {beat: this.model, beatAngle: this.beatAngle, state: state});
-        // append the compiled template to the measureBeatHolder
-        $(this.measureBeatHolder).append( compiledTemplate );
+        
+        if (this.currentBeatRepresentation == 'linear-bar') {
+          // append the compiled template to the measureBeatHolder
+          $(this.measureBeatHolder).append(compiledTemplate);          
+        } else {
+          // Notes
+          // Rather than appending to the beatHolder directly, we are going to append to a blank <svg> in the $('body') directly, then move into the beatHolder, then add the click handler
+
+          // make the fake svg using the appropriate svg template
+          $('body').append('<svg id="dummy" style="display:none">'+ compiledTemplate +'</svg>');
+          // append to beatHolder
+          $(this.measureBeatHolder).append($('#dummy .beat'));
+          $('#dummy').remove();
+        }
+
         // add click handler to this beat
         $("#beat"+this.model.cid).click($.proxy(this.toggle, this));
-        // $(this.parentEl).append(compiledTemplate);
         return this;
       }
+    },
+
+    changeBeatRepresentation: function(representation) {
+      // console.log(representation);
+      this.currentBeatRepresentation = representation;
     },
 
     getSelectionBooleanCSS: function(){

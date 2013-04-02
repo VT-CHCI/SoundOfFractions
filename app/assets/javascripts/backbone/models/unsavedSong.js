@@ -9,6 +9,7 @@ define([
     defaults: {
       // title: '',                        //move to unsavedSongTemplate.js
       components: componentCollection   //move to unsavedSongTemplate.js
+      // TODO : add current representation
     },
     initialize: function(){
     }

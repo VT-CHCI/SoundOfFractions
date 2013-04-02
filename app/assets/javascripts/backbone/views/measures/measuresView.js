@@ -86,6 +86,8 @@ define([
       //default to rendering a single measure
       var measureCount = 1;
 
+      // console.log(this.representations[this.currentMeasureRepresentation]);
+
       // for each measure in measuresCollection
       _.each(this.measuresCollection.models, function(measure) {
         // (when representation button changes, the current representation template will get updated)
@@ -103,11 +105,15 @@ define([
           console.warn("#beat"+beat.cid);
 
           // create a beatview
-          new beatView({model:beat, parentElHolder:'#beatHolder'+measure.cid, parent:measure, parentCID:measure.cid, singleBeat:"#beat"+beat.cid});
+          new beatView({model:beat, parentElHolder:'#beatHolder'+measure.cid, parent:measure, parentCID:measure.cid, singleBeat:"#beat"+beat.cid, measureRepresentation:this.currentMeasureRepresentation });
         }, this);
-
         measureCount ++;
       }, this);
+
+      // TODO, we need to refresh the svg
+      // $('#component'+this.parent.cid).html($('#component'+this.parent.cid).html());
+
+
       return this;
     },
 
