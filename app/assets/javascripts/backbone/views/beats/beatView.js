@@ -33,7 +33,24 @@ define([
       "circular-pie": circularPieBeatsTemplate
     },
     currentBeatRepresentation: 'linear-bar',
-    beatAngle: 90,
+    onColor: {
+      1: "#FF0000",   //red
+      2: "#802A2A",  //brown
+      3: "#FFA500",   //orange
+      4: "#FFD700",  //gold
+      5: "#FFD700",   //yellow
+      6: "#808000",  //olive
+      7: "#80ff00",   //light green
+      8: "#00ff00",   //bright green
+      9: "#00ff80",   //Turquoise
+      10: "#00ffff",   //light blue
+      11: "#0080ff",   //med blue
+      12: "#0000ff",   //blue
+      13: "#8000ff",  //purple
+      14: "#ff00ff",  //magenta
+      15: "#ff0080",  //hot pink
+      16: "#4B0082",  //indigo
+    },
 
     //The constructor takes options because these views are created
     //by measuresView objects.
@@ -85,6 +102,7 @@ define([
         var endAngle = 210;
         var radius = this.r;
         beatTemplateParameters.r = radius;
+        beatTemplateParameters.opacity = 1;
 
         var x1 = centerX + radius * Math.cos(Math.PI * startAngle/180); 
         beatTemplateParameters.x1 = x1;
@@ -94,6 +112,7 @@ define([
         beatTemplateParameters.x2 = x2;
         var y2 = centerY + radius * Math.sin(Math.PI * endAngle/180);
         beatTemplateParameters.y2 = y2;
+        beatTemplateParameters.color = this.onColor[16];
 
         console.log('M200,200 L' + x1 + ',' + y1 + ' A' + x1 + ',' + y1 + ' 0 0,1 ' + x2 + ',' + y2 + ' z');
         console.log(beatTemplateParameters);
