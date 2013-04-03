@@ -30,8 +30,25 @@ define([
       "linear-bar-svg": linearBarSVGMeasuresTemplate,
       "circular-pie": circularPieMeasuresTemplate
     },
-
     currentMeasureRepresentation: 'linear-bar',
+    measureColors: {
+      1: "#FF0000",   //red
+      2: "#802A2A",  //brown
+      3: "#FFA500",   //orange
+      4: "#FFD700",  //gold
+      5: "#FFD700",   //yellow
+      6: "#808000",  //olive
+      7: "#80ff00",   //light green
+      8: "#00ff00",   //bright green
+      9: "#00ff80",   //Turquoise
+      10: "#00ffff",   //light blue
+      11: "#0080ff",   //med blue
+      12: "#0000ff",   //blue
+      13: "#8000ff",  //purple
+      14: "#ff00ff",  //magenta
+      15: "#ff0080",  //hot pink
+      16: "#4B0082",  //indigo
+    },
 
     //registering click events to add and remove measures.
     events : {
@@ -98,7 +115,7 @@ define([
       _.each(this.measuresCollection.models, function(measure) {
         // (when representation button changes, the current representation template will get updated)
         // compile the template for a measure
-        var measureTemplateParamaters = {measure: measure, beatHolder:"beatHolder"+measure.cid, measureCount:measureCount, measureAngle: 360.0, cx: centerX, cy: centerY, r: radius };
+        var measureTemplateParamaters = {measure: measure, beatHolder:"beatHolder"+measure.cid, measureCount:measureCount, measureAngle: 360.0, cx: centerX, cy: centerY, r: radius, measureColor:this.measureColors[11] };
 
         var compiledTemplate = _.template( this.representations[this.currentMeasureRepresentation], measureTemplateParamaters );
 
