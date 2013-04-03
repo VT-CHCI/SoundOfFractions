@@ -47,7 +47,7 @@ define([
       13: "#8000ff",  //purple
       14: "#ff00ff",  //magenta
       15: "#ff0080",  //hot pink
-      16: "#4B0082",  //indigo
+      16: "#4B0082"  //indigo
     },
 
     //registering click events to add and remove measures.

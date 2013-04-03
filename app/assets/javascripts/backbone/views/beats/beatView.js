@@ -49,7 +49,7 @@ define([
       13: "#8000ff",  //purple
       14: "#ff00ff",  //magenta
       15: "#ff0080",  //hot pink
-      16: "#4B0082",  //indigo
+      16: "#4B0082"  //indigo
     },
 
     //The constructor takes options because these views are created
@@ -90,7 +90,7 @@ define([
         $('#beat'+toggle).toggleClass("ON");
         $('#beat'+toggle).toggleClass("OFF");
       } else {
-        // this is reached during the initial rendering of the pageor transition
+        // this is reached during the initial rendering of the page or transition
 
         var beatTemplateParameters = {beat: this.model, beatAngle: this.beatAngle, state: state};
 
