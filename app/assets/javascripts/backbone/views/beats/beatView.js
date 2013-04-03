@@ -42,7 +42,7 @@ define([
         // TODO: need to take in an option about currentBeatRep
         // TODO: maybe need to respond to a representation changed event (change this.currentBeatRepresentation and rerender)
 
-        console.log('options :');
+        console.log('beatView options :');
         console.warn(options);
         this.model = options.model;
 
@@ -51,6 +51,9 @@ define([
         this.el = options.singleBeat;
         this.parent = options.parent;
         this.currentBeatRepresentation = options.measureRepresentation;
+        this.cx = options.cx;
+        this.cy = options.cy;
+        this.r = options.r;
       } else {
         console.error('should not be in here!');
         this.model = new BeatModel;
@@ -62,10 +65,6 @@ define([
     //We use css classes to control the color of the beat.
     //A beat is essentially an empty div.
     render: function(toggle){
-
-      console.log(this.currentBeatRepresentation);
-      console.log(this.representations[this.currentBeatRepresentation]);
-
       // the current state of the beat (is it ON or OFF?)
       var state = this.getSelectionBooleanCSS();
 
@@ -74,21 +73,48 @@ define([
         $('#beat'+toggle).toggleClass("ON");
         $('#beat'+toggle).toggleClass("OFF");
       } else {
-        // this is reached during the initial rendering of the page
+        // this is reached during the initial rendering of the pageor transition
 
+        var beatTemplateParameters = {beat: this.model, beatAngle: this.beatAngle, state: state};
+
+        var centerX = this.cx;
+        beatTemplateParameters.cx = centerX;
+        var centerY = this.cy;
+        beatTemplateParameters.cy = centerY;
+        var startAngle = 180;
+        var endAngle = 210;
+        var radius = this.r;
+        beatTemplateParameters.r = radius;
+
+        var x1 = centerX + radius * Math.cos(Math.PI * startAngle/180); 
+        beatTemplateParameters.x1 = x1;
+        var y1 = centerY + radius * Math.sin(Math.PI * startAngle/180);     
+        beatTemplateParameters.y1 = y1;
+        var x2 = centerX + radius * Math.cos(Math.PI * endAngle/180);
+        beatTemplateParameters.x2 = x2;
+        var y2 = centerY + radius * Math.sin(Math.PI * endAngle/180);
+        beatTemplateParameters.y2 = y2;
+
+        console.log('M200,200 L' + x1 + ',' + y1 + ' A' + x1 + ',' + y1 + ' 0 0,1 ' + x2 + ',' + y2 + ' z');
+        console.log(beatTemplateParameters);
         // compile the template for this beat (respect the current representation)
-        var compiledTemplate = _.template(this.representations[this.currentBeatRepresentation], {beat: this.model, beatAngle: this.beatAngle, state: state});
+        var compiledTemplate = _.template(this.representations[this.currentBeatRepresentation], beatTemplateParameters);
         
         if (this.currentBeatRepresentation == 'linear-bar') {
           // append the compiled template to the measureBeatHolder
           $(this.measureBeatHolder).append(compiledTemplate);          
+        // SVG rendering
         } else {
           // Notes
-          // Rather than appending to the beatHolder directly, we are going to append to a blank <svg> in the $('body') directly, then move into the beatHolder, then add the click handler
+          // Rather than appending to the beatHolder directly, we are going to append to a blank <svg>
+          // in the $('body') directly, then move into the beatHolder, then add the click handler
+          // Kind of hacky, but unaware of other way to do so.   Per SO?:
+          // http://stackoverflow.com/questions/3642035/jquerys-append-not-working-with-svg-element/#13654655
 
           // make the fake svg using the appropriate svg template
           $('body').append('<svg id="dummy" style="display:none">'+ compiledTemplate +'</svg>');
           // append to beatHolder
+          console.log($(this.measureBeatHolder));
           $(this.measureBeatHolder).append($('#dummy .beat'));
           $('#dummy').remove();
         }
@@ -100,7 +126,6 @@ define([
     },
 
     changeBeatRepresentation: function(representation) {
-      // console.log(representation);
       this.currentBeatRepresentation = representation;
     },
 

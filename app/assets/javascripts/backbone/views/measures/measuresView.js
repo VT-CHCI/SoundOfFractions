@@ -86,26 +86,34 @@ define([
       //default to rendering a single measure
       var measureCount = 1;
 
+      var centerX = 150;
+      var centerY = 50;
+      var startAngle = 180;
+      var endAngle = 210;
+      var radius = 40;
+
       // console.log(this.representations[this.currentMeasureRepresentation]);
 
       // for each measure in measuresCollection
       _.each(this.measuresCollection.models, function(measure) {
         // (when representation button changes, the current representation template will get updated)
         // compile the template for a measure
-        var compiledTemplate = _.template( this.representations[this.currentMeasureRepresentation], {measure: measure, beatHolder:"beatHolder"+measure.cid, measureCount:measureCount, measureAngle: 360.0 } );
+        var measureTemplateParamaters = {measure: measure, beatHolder:"beatHolder"+measure.cid, measureCount:measureCount, measureAngle: 360.0, cx: centerX, cy: centerY, r: radius };
+
+        var compiledTemplate = _.template( this.representations[this.currentMeasureRepresentation], measureTemplateParamaters );
 
         // find the plus sign we put in there, and right before it, put in the rendered template
         $(this.el).find('.addMeasure').before( compiledTemplate );
 
-        console.log('measure beats: ');
-        console.warn(measure.get('beats').models);
-
         // for each beat in this measure
         _.each(measure.get('beats').models, function(beat) {
-          console.warn("#beat"+beat.cid);
-
           // create a beatview
-          new beatView({model:beat, parentElHolder:'#beatHolder'+measure.cid, parent:measure, parentCID:measure.cid, singleBeat:"#beat"+beat.cid, measureRepresentation:this.currentMeasureRepresentation });
+          var measurePassingToBeatViewParamaters = {model:beat, parentElHolder:'#beatHolder'+measure.cid, parent:measure, parentCID:measure.cid, singleBeat:"#beat"+beat.cid, measureRepresentation:this.currentMeasureRepresentation };
+          measurePassingToBeatViewParamaters.cx = centerX;
+          measurePassingToBeatViewParamaters.cy = centerY;
+          measurePassingToBeatViewParamaters.r = radius;
+
+          new beatView(measurePassingToBeatViewParamaters);
         }, this);
         measureCount ++;
       }, this);
