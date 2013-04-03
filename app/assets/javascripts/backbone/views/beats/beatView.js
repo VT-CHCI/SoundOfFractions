@@ -33,7 +33,7 @@ define([
       "circular-pie": circularPieBeatsTemplate
     },
     currentBeatRepresentation: 'linear-bar',
-    onColor: {
+    beatColors: {
       1: "#FF0000",   //red
       2: "#802A2A",  //brown
       3: "#FFA500",   //orange
@@ -112,7 +112,7 @@ define([
         beatTemplateParameters.x2 = x2;
         var y2 = centerY + radius * Math.sin(Math.PI * endAngle/180);
         beatTemplateParameters.y2 = y2;
-        beatTemplateParameters.color = this.onColor[16];
+        beatTemplateParameters.color = this.beatColors[16];
 
         console.log('M200,200 L' + x1 + ',' + y1 + ' A' + x1 + ',' + y1 + ' 0 0,1 ' + x2 + ',' + y2 + ' z');
         console.log(beatTemplateParameters);
