@@ -71,9 +71,10 @@ define([
         this.cx = options.cx;
         this.cy = options.cy;
         this.r = options.r;
-        this.bbx = options.bbx;
-        this.bby = options.bby;
-        this.width = options.width;
+        this.beatBBX = options.beatBBX;
+        this.beatBBY = options.beatBBY;
+        this.beatWidth = options.beatWidth;
+        this.beatHeight = options.beatHeight;
       } else {
         console.error('should not be in here!');
         this.model = new BeatModel;
@@ -101,12 +102,14 @@ define([
           state: state };
 
         //Linear
-        var bbx = this.bbx;
-        beatTemplateParameters.bbx = bbx;
-        var bby = this.bby;
-        beatTemplateParameters.bby = bby;
-        var width = this.width;
-        beatTemplateParameters.width = width;
+        var beatBBX = this.beatBBX;
+        beatTemplateParameters.beatBBX = beatBBX;
+        var beatBBY = this.beatBBY;
+        beatTemplateParameters.beatBBY = beatBBY;
+        var beatWidth = this.beatWidth;
+        beatTemplateParameters.beatWidth = beatWidth;
+        var beatHeight = this.beatHeight;
+        beatTemplateParameters.beatHeight = beatHeight;
 
         //Circle
         var centerX = this.cx;

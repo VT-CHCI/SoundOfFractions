@@ -108,9 +108,10 @@ define([
       var startAngle = 180;
       var endAngle = 210;
       var radius = 40;
-      var bbx = 35;
-      var bby = 15;
-      var width = 25;
+      var beatBBX = 35;
+      var beatBBY = 15;
+      var beatWidth = 40;
+      var beatHeight = 15;
 
       // console.log(this.representations[this.currentMeasureRepresentation]);
 
@@ -126,7 +127,8 @@ define([
         $(this.el).find('.addMeasure').before( compiledTemplate );
 
         // for each beat in this measure
-        _.each(measure.get('beats').models, function(beat) {
+        _.each(measure.get('beats').models, function(beat, index) {
+          // manipulate linear-bar-svg parameters
           // create a beatview
           var measurePassingToBeatViewParamaters = {
             model:beat,
@@ -138,9 +140,10 @@ define([
             cx: centerX,
             cy: centerY,
             r: radius,
-            bbx: bbx,
-            bby: bby,
-            width: width,
+            beatBBX: beatBBX*(index+1),
+            beatBBY: beatBBY,
+            beatWidth: beatWidth,
+            beatHeight: beatHeight,
             beatsInMeasure: this.measuresCollection.models[0].attributes.beats.length };
 
           new beatView(measurePassingToBeatViewParamaters);
