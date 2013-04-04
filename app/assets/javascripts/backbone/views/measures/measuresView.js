@@ -100,9 +100,6 @@ define([
       // REPLACE whatever's already in the measure container with: a plus sign in the measure rendering
       $(this.el).html('<div class="addMeasure">+</div>');
 
-      //default to rendering a single measure
-      var measureCount = 1;
-
       var centerX = 150;
       var centerY = 50;
       var startAngle = 180;
@@ -116,10 +113,10 @@ define([
       // console.log(this.representations[this.currentMeasureRepresentation]);
 
       // for each measure in measuresCollection
-      _.each(this.measuresCollection.models, function(measure) {
+      _.each(this.measuresCollection.models, function(measure, index) {
         // (when representation button changes, the current representation template will get updated)
         // compile the template for a measure
-        var measureTemplateParamaters = {measure: measure, beatHolder:"beatHolder"+measure.cid, measureCount:measureCount, measureAngle: 360.0, cx: centerX, cy: centerY, r: radius, measureColor:this.measureColors[11] };
+        var measureTemplateParamaters = {measure: measure, beatHolder:"beatHolder"+measure.cid, measureCount:index+1, measureAngle: 360.0, cx: centerX, cy: centerY, r: radius, measureColor:this.measureColors[11] };
 
         var compiledTemplate = _.template( this.representations[this.currentMeasureRepresentation], measureTemplateParamaters );
 
@@ -154,7 +151,6 @@ define([
 
           new beatView(measurePassingToBeatViewParamaters);
         }, this);
-        measureCount ++;
       }, this);
 
       // TODO, we need to refresh the svg
