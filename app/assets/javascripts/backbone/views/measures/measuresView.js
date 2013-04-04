@@ -128,7 +128,7 @@ define([
 
         // for each beat in this measure
         _.each(measure.get('beats').models, function(beat, index) {
-          // manipulate linear-bar-svg parameters
+
           // create a beatview
           var measurePassingToBeatViewParamaters = {
             model:beat,
@@ -140,13 +140,18 @@ define([
             cx: centerX,
             cy: centerY,
             r: radius,
-            beatBBX: beatBBX*(index+1),
             beatBBY: beatBBY,
             beatWidth: beatWidth,
             beatHeight: beatHeight,
             beatsInMeasure: this.measuresCollection.models[0].attributes.beats.length };
 
+          // manipulate linear-bar-svg beat parameters
           measurePassingToBeatViewParamaters.beatBBX = beatBBX+(beatWidth*index);
+          measurePassingToBeatViewParamaters.opacity = beat.get('selected');
+
+          // manipulate circular-pie beat parameters
+          // 
+
           new beatView(measurePassingToBeatViewParamaters);
         }, this);
         measureCount ++;

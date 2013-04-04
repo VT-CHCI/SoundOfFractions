@@ -59,7 +59,7 @@ define([
         // TODO: need to take in an option about currentBeatRep
         // TODO: maybe need to respond to a representation changed event (change this.currentBeatRepresentation and rerender)
 
-        console.log('beatView options :');
+        console.log('beatView \'options\' passed in :');
         console.warn(options);
         this.model = options.model;
 
@@ -75,6 +75,7 @@ define([
         this.beatBBY = options.beatBBY;
         this.beatWidth = options.beatWidth;
         this.beatHeight = options.beatHeight;
+        this.opacity = this.getOpacityNumber(options.opacity);
       } else {
         console.error('should not be in here!');
         this.model = new BeatModel;
@@ -85,14 +86,18 @@ define([
 
     //We use css classes to control the color of the beat.
     //A beat is essentially an empty div.
-    render: function(toggle){
+    render: function(toggledBeat){
       // the current state of the beat (is it ON or OFF?)
       var state = this.getSelectionBooleanCSS();
 
       // if render is being called from the toggle function, we may want to do something different
-      if (toggle) {
-        $('#beat'+toggle).toggleClass("ON");
-        $('#beat'+toggle).toggleClass("OFF");
+      if (toggledBeat) {
+        //DIV
+        $('#beat'+toggledBeat.cid).toggleClass("ON");
+        $('#beat'+toggledBeat.cid).toggleClass("OFF");
+        //SVG
+        window.csf = $('#beat'+toggledBeat.cid);
+        $('#beat'+toggledBeat.cid)[0].setAttribute('opacity', this.getOpacityNumber(toggledBeat.get('selected')));
       } else {
         // this is reached during the initial rendering of the page or transition
 
@@ -100,6 +105,9 @@ define([
           beat: this.model,
           beatAngle: this.beatAngle,
           state: state };
+
+        //Opacity
+        beatTemplateParameters.opacity = this.opacity;        
 
         //Linear
         var beatBBX = this.beatBBX;
@@ -120,7 +128,6 @@ define([
         var endAngle = 210;
         var radius = this.r;
         beatTemplateParameters.r = radius;
-        beatTemplateParameters.opacity = 1;
 
         var x1 = centerX + radius * Math.cos(Math.PI * startAngle/180); 
         beatTemplateParameters.x1 = x1;
@@ -132,8 +139,8 @@ define([
         beatTemplateParameters.y2 = y2;
         beatTemplateParameters.color = this.beatColors[16];
 
-        console.log('M200,200 L' + x1 + ',' + y1 + ' A' + x1 + ',' + y1 + ' 0 0,1 ' + x2 + ',' + y2 + ' z');
-        console.log(beatTemplateParameters);
+        console.log('beatTemplateParameters :');
+        console.warn(beatTemplateParameters);
         // compile the template for this beat (respect the current representation)
         var compiledTemplate = _.template(this.representations[this.currentBeatRepresentation], beatTemplateParameters);
         
@@ -151,7 +158,6 @@ define([
           // make the fake svg using the appropriate svg template
           $('body').append('<svg id="dummy" style="display:none">'+ compiledTemplate +'</svg>');
           // append to beatHolder
-          console.log($(this.measureBeatHolder));
           $(this.measureBeatHolder).append($('#dummy .beat'));
           $('#dummy').remove();
         }
@@ -174,6 +180,14 @@ define([
       }
     },
 
+    getOpacityNumber : function(bool) {
+      if (bool == true) {
+        return 1;
+      } else {
+        return 0.5;
+      }      
+    },
+
     /*
       This is called when a beat is clicked.
       It does a number of things:
@@ -187,7 +201,7 @@ define([
       //switch the selected boolean value on the model
       this.model.set('selected', !this.model.get('selected'));
       //re-render it, passing the clicked beat to render()
-      this.render(this.model.cid);
+      this.render(this.model);
       // log.sendLog([[1, "beat" + this.model.cid + " toggled: "+!bool]]);
       dispatch.trigger('beatClicked.event');
     }
