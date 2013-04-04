@@ -108,6 +108,9 @@ define([
       var startAngle = 180;
       var endAngle = 210;
       var radius = 40;
+      var bbx = 35;
+      var bby = 15;
+      var width = 25;
 
       // console.log(this.representations[this.currentMeasureRepresentation]);
 
@@ -125,10 +128,20 @@ define([
         // for each beat in this measure
         _.each(measure.get('beats').models, function(beat) {
           // create a beatview
-          var measurePassingToBeatViewParamaters = {model:beat, parentElHolder:'#beatHolder'+measure.cid, parent:measure, parentCID:measure.cid, singleBeat:"#beat"+beat.cid, measureRepresentation:this.currentMeasureRepresentation };
-          measurePassingToBeatViewParamaters.cx = centerX;
-          measurePassingToBeatViewParamaters.cy = centerY;
-          measurePassingToBeatViewParamaters.r = radius;
+          var measurePassingToBeatViewParamaters = {
+            model:beat,
+            parentElHolder:'#beatHolder'+measure.cid,
+            parent:measure,
+            parentCID:measure.cid,
+            singleBeat:"#beat"+beat.cid,
+            measureRepresentation:this.currentMeasureRepresentation,
+            cx: centerX,
+            cy: centerY,
+            r: radius,
+            bbx: bbx,
+            bby: bby,
+            width: width,
+            beatsInMeasure: this.measuresCollection.models[0].attributes.beats.length };
 
           new beatView(measurePassingToBeatViewParamaters);
         }, this);

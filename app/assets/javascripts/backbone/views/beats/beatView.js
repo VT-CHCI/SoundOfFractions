@@ -71,6 +71,9 @@ define([
         this.cx = options.cx;
         this.cy = options.cy;
         this.r = options.r;
+        this.bbx = options.bbx;
+        this.bby = options.bby;
+        this.width = options.width;
       } else {
         console.error('should not be in here!');
         this.model = new BeatModel;
@@ -92,8 +95,20 @@ define([
       } else {
         // this is reached during the initial rendering of the page or transition
 
-        var beatTemplateParameters = {beat: this.model, beatAngle: this.beatAngle, state: state};
+        var beatTemplateParameters = {
+          beat: this.model,
+          beatAngle: this.beatAngle,
+          state: state };
 
+        //Linear
+        var bbx = this.bbx;
+        beatTemplateParameters.bbx = bbx;
+        var bby = this.bby;
+        beatTemplateParameters.bby = bby;
+        var width = this.width;
+        beatTemplateParameters.width = width;
+
+        //Circle
         var centerX = this.cx;
         beatTemplateParameters.cx = centerX;
         var centerY = this.cy;
