@@ -80,6 +80,8 @@ define([
         this.beatAngle = options.beatAngle;
         this.beatStartAngle = options.beatStartAngle;
         this.color = options.color;
+        this.beatStartTime = options.beatStartTime;
+        this.timeIncrement = options.timeIncrement;
       } else {
         console.error('should not be in here!');
         this.model = new BeatModel;
@@ -109,7 +111,10 @@ define([
           beat: this.model,
           beatAngle: this.beatAngle,
           state: state,
-          color: this.beatColors[this.color] };
+          color: this.beatColors[this.color],
+          beatStartTime: this.beatStartTime,
+          timeIncrement: this.timeIncrement
+        };
 
         //Opacity
         beatTemplateParameters.opacity = this.opacity;        
@@ -150,7 +155,7 @@ define([
         console.log('beatTemplateParameters :');
         console.warn(beatTemplateParameters);
         // compile the template for this beat (respect the current representation)
-        var compiledTemplate = _.template(this.representations[this.currentBeatRepresentation], beatTemplateParameters);
+        var compiledTemplate = _.template(this.representations[this.currentBeatRepresentation], beatTemplateParameters );
         
         if (this.currentBeatRepresentation == 'linear-bar') {
           // append the compiled template to the measureBeatHolder

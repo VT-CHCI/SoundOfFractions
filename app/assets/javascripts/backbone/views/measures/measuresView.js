@@ -110,6 +110,8 @@ define([
       var beatBBY = 15;
       var beatWidth = 40;
       var beatHeight = 15;
+      var firstBeatStart = 0; //in s
+      var timeIncrement = 1000; //in ms
 
       // console.log(this.representations[this.currentMeasureRepresentation]);
 
@@ -117,7 +119,16 @@ define([
       _.each(this.measuresCollection.models, function(measure, index) {
         // (when representation button changes, the current representation template will get updated)
         // compile the template for a measure
-        var measureTemplateParamaters = {measure: measure, beatHolder:"beatHolder"+measure.cid, measureCount:index+1, measureAngle: 360.0, cx: centerX, cy: centerY, r: radius, measureColor:this.measureColors[11] };
+        var measureTemplateParamaters = {
+          measure: measure,
+          beatHolder:"beatHolder"+measure.cid,
+          measureCount:index+1,
+          measureAngle: 360.0,
+          cx: centerX,
+          cy: centerY,
+          r: radius,
+          measureColor:this.measureColors[11]
+        };
 
         var compiledTemplate = _.template( this.representations[this.currentMeasureRepresentation], measureTemplateParamaters );
 
@@ -137,7 +148,7 @@ define([
             singleBeat:"#beat"+beat.cid,
             measureRepresentation:this.currentMeasureRepresentation,
             beatsInMeasure: this.measuresCollection.models[0].attributes.beats.length,
-            color: index,
+            color: index+1,
             //Linear
             beatBBY: beatBBY,
             beatWidth: beatWidth,
@@ -147,7 +158,10 @@ define([
             cy: centerY,
             r: radius,
             beatAngle: 360/this.measuresCollection.models[0].attributes.beats.length,
-            beatStartAngle: -90+((360/this.measuresCollection.models[0].attributes.beats.length)*index) };
+            beatStartAngle: -90+((360/this.measuresCollection.models[0].attributes.beats.length)*index),
+            beatStartTime: firstBeatStart+(index)*(timeIncrement/1000),
+            timeIncrement: timeIncrement
+          };
 
           // manipulate linear-bar-svg beat parameters
           measurePassingToBeatViewParamaters.beatBBX = beatBBX+(beatWidth*index);
