@@ -76,6 +76,10 @@ define([
         this.beatWidth = options.beatWidth;
         this.beatHeight = options.beatHeight;
         this.opacity = this.getOpacityNumber(options.opacity);
+        this.beatsInMeasure = options.beatsInMeasure;
+        this.beatAngle = options.beatAngle;
+        this.beatStartAngle = options.beatStartAngle;
+        this.color = options.color;
       } else {
         console.error('should not be in here!');
         this.model = new BeatModel;
@@ -104,7 +108,8 @@ define([
         var beatTemplateParameters = {
           beat: this.model,
           beatAngle: this.beatAngle,
-          state: state };
+          state: state,
+          color: this.beatColors[this.color] };
 
         //Opacity
         beatTemplateParameters.opacity = this.opacity;        
@@ -124,20 +129,23 @@ define([
         beatTemplateParameters.cx = centerX;
         var centerY = this.cy;
         beatTemplateParameters.cy = centerY;
-        var startAngle = 180;
-        var endAngle = 210;
+        var measureStartAngle = -90;
+        beatTemplateParameters.measureStartAngle = measureStartAngle;
+        var beatStartAngle = this.beatStartAngle;
+        beatTemplateParameters.beatStartAngle = beatStartAngle;
+        var beatEndAngle = beatStartAngle+this.beatAngle;
+        beatTemplateParameters.beatEndAngle = beatEndAngle;
         var radius = this.r;
         beatTemplateParameters.r = radius;
 
-        var x1 = centerX + radius * Math.cos(Math.PI * startAngle/180); 
+        var x1 = centerX + radius * Math.cos(Math.PI * beatStartAngle/180); 
         beatTemplateParameters.x1 = x1;
-        var y1 = centerY + radius * Math.sin(Math.PI * startAngle/180);     
+        var y1 = centerY + radius * Math.sin(Math.PI * beatStartAngle/180);     
         beatTemplateParameters.y1 = y1;
-        var x2 = centerX + radius * Math.cos(Math.PI * endAngle/180);
+        var x2 = centerX + radius * Math.cos(Math.PI * beatEndAngle/180);
         beatTemplateParameters.x2 = x2;
-        var y2 = centerY + radius * Math.sin(Math.PI * endAngle/180);
+        var y2 = centerY + radius * Math.sin(Math.PI * beatEndAngle/180);
         beatTemplateParameters.y2 = y2;
-        beatTemplateParameters.color = this.beatColors[16];
 
         console.log('beatTemplateParameters :');
         console.warn(beatTemplateParameters);

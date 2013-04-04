@@ -102,8 +102,9 @@ define([
 
       var centerX = 150;
       var centerY = 50;
-      var startAngle = 180;
-      var endAngle = 210;
+      var measureStartAngle = 0;
+      var beatStartAngle;
+      var beatEndAngle;
       var radius = 40;
       var beatBBX = 35;
       var beatBBY = 15;
@@ -128,19 +129,25 @@ define([
 
           // create a beatview
           var measurePassingToBeatViewParamaters = {
+            //General
             model:beat,
             parentElHolder:'#beatHolder'+measure.cid,
             parent:measure,
             parentCID:measure.cid,
             singleBeat:"#beat"+beat.cid,
             measureRepresentation:this.currentMeasureRepresentation,
-            cx: centerX,
-            cy: centerY,
-            r: radius,
+            beatsInMeasure: this.measuresCollection.models[0].attributes.beats.length,
+            color: index,
+            //Linear
             beatBBY: beatBBY,
             beatWidth: beatWidth,
             beatHeight: beatHeight,
-            beatsInMeasure: this.measuresCollection.models[0].attributes.beats.length };
+            // Circular
+            cx: centerX,
+            cy: centerY,
+            r: radius,
+            beatAngle: 360/this.measuresCollection.models[0].attributes.beats.length,
+            beatStartAngle: -90+((360/this.measuresCollection.models[0].attributes.beats.length)*index) };
 
           // manipulate linear-bar-svg beat parameters
           measurePassingToBeatViewParamaters.beatBBX = beatBBX+(beatWidth*index);
