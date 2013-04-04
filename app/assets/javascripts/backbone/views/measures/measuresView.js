@@ -146,6 +146,7 @@ define([
             beatHeight: beatHeight,
             beatsInMeasure: this.measuresCollection.models[0].attributes.beats.length };
 
+          measurePassingToBeatViewParamaters.beatBBX = beatBBX+(beatWidth*index);
           new beatView(measurePassingToBeatViewParamaters);
         }, this);
         measureCount ++;
