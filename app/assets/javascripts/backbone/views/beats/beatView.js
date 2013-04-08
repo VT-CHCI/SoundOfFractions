@@ -72,7 +72,7 @@ define([
         this.currentBeatRepresentation = options.measureRepresentation;
         this.cx = options.cx;
         this.cy = options.cy;
-        this.r = options.r;
+        this.measureR = options.measureR;
         this.beatBBX = options.beatBBX;
         this.beatBBY = options.beatBBY;
         this.beatWidth = options.beatWidth;
@@ -84,6 +84,7 @@ define([
         this.color = options.color;
         this.beatStartTime = options.beatStartTime;
         this.timeIncrement = options.timeIncrement;
+        this.beatR = options.beatR;
       } else {
         console.error('should not be in here!');
         this.model = new BeatModel;
@@ -130,7 +131,7 @@ define([
         var beatHeight = this.beatHeight;
         beatTemplateParameters.beatHeight = beatHeight;
 
-        //Circle
+        //Circlular Pie
         var centerX = this.cx;
         beatTemplateParameters.cx = centerX;
         var centerY = this.cy;
@@ -141,17 +142,21 @@ define([
         beatTemplateParameters.beatStartAngle = beatStartAngle;
         var beatEndAngle = beatStartAngle+this.beatAngle;
         beatTemplateParameters.beatEndAngle = beatEndAngle;
-        var radius = this.r;
-        beatTemplateParameters.r = radius;
+        var measureR = this.measureR;
+        beatTemplateParameters.measureR = measureR;
 
-        var x1 = centerX + radius * Math.cos(Math.PI * beatStartAngle/180); 
+        var x1 = centerX + measureR * Math.cos(Math.PI * beatStartAngle/180); 
         beatTemplateParameters.x1 = x1;
-        var y1 = centerY + radius * Math.sin(Math.PI * beatStartAngle/180);     
+        var y1 = centerY + measureR * Math.sin(Math.PI * beatStartAngle/180);     
         beatTemplateParameters.y1 = y1;
-        var x2 = centerX + radius * Math.cos(Math.PI * beatEndAngle/180);
+        var x2 = centerX + measureR * Math.cos(Math.PI * beatEndAngle/180);
         beatTemplateParameters.x2 = x2;
-        var y2 = centerY + radius * Math.sin(Math.PI * beatEndAngle/180);
+        var y2 = centerY + measureR * Math.sin(Math.PI * beatEndAngle/180);
         beatTemplateParameters.y2 = y2;
+
+        //Circular Bead
+        var beatR = this.beatR;
+        beatTemplateParameters.beatR = beatR;
 
         console.log('beatTemplateParameters :');
         console.warn(beatTemplateParameters);

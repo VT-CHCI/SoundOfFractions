@@ -33,7 +33,7 @@ define([
       "circular-bead": circularBeadMeasuresTemplate,
     },
     currentMeasureRepresentation: 'linear-bar',
-    measureColors: {
+      measureColors: {
       0: "#FF0000",   //red
       1: "#802A2A",   //brown
       2: "#EE4000",   //dark orange
@@ -164,19 +164,21 @@ define([
               color: index,
               // To use one color
               // color: x,
+            timeIncrement: timeIncrement,
             //Linear
             beatBBX: beatBBX,
             beatBBY: beatBBY,
             beatWidth: beatHolderWidth/this.measuresCollection.models[0].attributes.beats.length,
             beatHeight: beatHeight,
-            // Circular
+            // Circular Pie
             cx: centerX,
             cy: centerY,
-            r: radius,
+            measureR: radius,
             beatAngle: 360/this.measuresCollection.models[0].attributes.beats.length,
             beatStartAngle: -90+((360/this.measuresCollection.models[0].attributes.beats.length)*index),
             beatStartTime: firstBeatStart+(index)*(timeIncrement/1000),
-            timeIncrement: timeIncrement
+            // Circular Pie
+            beatR: 5
           };
 
           // manipulate linear-bar-svg beat parameters
