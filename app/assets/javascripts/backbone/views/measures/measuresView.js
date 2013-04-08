@@ -111,7 +111,7 @@ define([
       var beatWidth = 40;
       var beatHeight = 15;
       var firstBeatStart = 0; //in s
-      var timeIncrement = 1000; //in ms
+      var timeIncrement = 500; //in ms
 
       // console.log(this.representations[this.currentMeasureRepresentation]);
 
@@ -251,12 +251,14 @@ define([
          a new collection with the number of beats specified
          by the signature parameter.
       */
-      if ($(this.parent).hasClass('selected')) {
+
+      window.csf = this;
+      if ($(this.el).hasClass('selected')) {
         dispatch.trigger('stopRequest.event', 'off');
-        this.measure.reset();
+        this.measuresCollection.models[0].get('beats').reset();
 
         for (var i = 0; i < signature; i++) {
-          this.measure.add();
+          this.measuresCollection.models[0].add();
         }
         //re-render the view.
         this.render();

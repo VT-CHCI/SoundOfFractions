@@ -102,7 +102,6 @@ define([
         $('#beat'+toggledBeat.cid).toggleClass("ON");
         $('#beat'+toggledBeat.cid).toggleClass("OFF");
         //SVG
-        window.csf = $('#beat'+toggledBeat.cid);
         $('#beat'+toggledBeat.cid)[0].setAttribute('opacity', this.getOpacityNumber(toggledBeat.get('selected')));
       } else {
         // this is reached during the initial rendering of the page or transition

@@ -1,5 +1,5 @@
 <!-- A should  be set to A<%= x1 %>,<%= y1 %>-->
 <path id="beat<%= beat.cid %>" class="beat" d="M<%= cx %>,<%= cy %> L<%= x1 %>,<%= y1 %> A0,0 0 0,1 <%= x2 %>,<%= y2 %> z" style="fill:<%= color %>; fill-opacity:<%= opacity %>; stroke:black; stroke-width: 1" >
-  <animateTransform attributeName="transform" type="scale" dur=".5s" values="1,1;1.1,1.1;0,0;" repeatCount="indefinite"/>
+  <animateTransform attributeName="transform" type="scale" begin="<%= beatStartTime %>s" dur=".5s" values="1,1;1.1,1.1;0,0;" />
   <!-- <animateTransform attributeName="transform" type="scale" dur=".5s" values=".5;1.1;1" repeatCount="indefinite"/> -->
 </path>
