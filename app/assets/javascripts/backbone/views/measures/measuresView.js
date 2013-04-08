@@ -16,10 +16,11 @@ define([
   'text!backbone/templates/measures/linearBarMeasures.html',
   'text!backbone/templates/measures/linearBarSVGMeasures.html',
   'text!backbone/templates/measures/circularPieMeasures.html',
+  'text!backbone/templates/measures/circularBeadMeasures.html',
   'app/dispatch',
   'app/state',
   'app/log'
-], function($, _, Backbone, MeasureModel, BeatsCollection, MeasuresCollection, beatView, audioMeasuresTemplate, linearBarMeasuresTemplate, linearBarSVGMeasuresTemplate, circularPieMeasuresTemplate, dispatch, state, log){
+], function($, _, Backbone, MeasureModel, BeatsCollection, MeasuresCollection, beatView, audioMeasuresTemplate, linearBarMeasuresTemplate, linearBarSVGMeasuresTemplate, circularPieMeasuresTemplate, circularBeadMeasuresTemplate, dispatch, state, log){
   return Backbone.View.extend({
     // el: $('.component'),
 
@@ -28,7 +29,8 @@ define([
       "audio": audioMeasuresTemplate,
       "linear-bar": linearBarMeasuresTemplate,
       "linear-bar-svg": linearBarSVGMeasuresTemplate,
-      "circular-pie": circularPieMeasuresTemplate
+      "circular-pie": circularPieMeasuresTemplate,
+      "circular-bead": circularBeadMeasuresTemplate,
     },
     currentMeasureRepresentation: 'linear-bar',
     measureColors: {

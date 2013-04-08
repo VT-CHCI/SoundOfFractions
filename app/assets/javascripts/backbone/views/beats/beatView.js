@@ -12,9 +12,10 @@ define([
   'text!backbone/templates/beats/linearBarBeats.html',
   'text!backbone/templates/beats/linearBarSVGBeats.html',
   'text!backbone/templates/beats/circularPieBeats.html',
+  'text!backbone/templates/beats/circularBeadBeats.html',
   'app/dispatch',
   'app/log'
-], function($, _, Backbone, BeatModel, audioBeatsTemplate, linearBarBeatsTemplate, linearBarSVGBeatsTemplate, circularPieBeatsTemplate, dispatch, log){
+], function($, _, Backbone, BeatModel, audioBeatsTemplate, linearBarBeatsTemplate, linearBarSVGBeatsTemplate, circularPieBeatsTemplate, circularBeadBeatsTemplate, dispatch, log){
   return Backbone.View.extend({
 
     /* TODO still issues with this
@@ -30,7 +31,8 @@ define([
       "audio": audioBeatsTemplate,
       "linear-bar": linearBarBeatsTemplate,
       "linear-bar-svg": linearBarSVGBeatsTemplate,
-      "circular-pie": circularPieBeatsTemplate
+      "circular-pie": circularPieBeatsTemplate,
+      "circular-bead": circularBeadBeatsTemplate
     },
     currentBeatRepresentation: 'linear-bar',
     beatColors: {
