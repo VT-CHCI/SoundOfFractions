@@ -34,22 +34,22 @@ define([
     },
     currentBeatRepresentation: 'linear-bar',
     beatColors: {
-      1: "#FF0000",   //red
-      2: "#802A2A",   //brown
-      3: "#FFA500",   //orange
-      4: "#FFD700",   //gold
-      5: "#FFD700",   //yellow
-      6: "#808000",   //olive
-      7: "#80ff00",   //light green
-      8: "#00ff00",   //bright green
-      9: "#00ff80",   //Turquoise
-      10: "#00ffff",  //light blue
-      11: "#0080ff",  //med blue
-      12: "#0000ff",  //blue
-      13: "#8000ff",  //purple
-      14: "#ff00ff",  //magenta
-      15: "#ff0080",  //hot pink
-      16: "#4B0082"   //indigo
+      0: "#FF0000",   //red
+      1: "#802A2A",   //brown
+      2: "#EE4000",   //dark orange
+      3: "#FF7722",   //light orange
+      4: "#FFD700",   //yellow
+      5: "#808000",   //olive
+      6: "#80ff00",   //light green
+      7: "#00ff00",   //bright green
+      8: "#00ff80",   //Turquoise
+      9:  "#00ffff",  //light blue
+      10: "#0080ff",  //med blue
+      11: "#0000ff",  //blue
+      12: "#8000ff",  //purple
+      13: "#ff00ff",  //magenta
+      14: "#ff0080",  //hot pink
+      15: "#4B0082"   //indigo
     },
 
     //The constructor takes options because these views are created

@@ -1,7 +1,7 @@
 <div id="measure<%= measure.cid %>" class="measure">
   <span class="title">SVG Bar Measure <span class="number"><%= measureCount %></span> - <span class="delete">[X]</span></span>
   <svg xmlns="http://www.w3.org/2000/svg" version="1.1" class="linear-bar">
-    <rect x="25" y="10" width="250" height="25" style="stroke:black; stroke-width:2; fill:<%= measureColor %>;" />
+    <rect x="<%= xMeasureLocation %>" y="<%= yMeasureLocation %>" width="<%= measureWidth %>" height="<%= measureHeight %>" style="stroke:black; stroke-width:2; fill:<%= measureColor %>;" />
     <g id="<%= beatHolder %>">
     </g>
   </svg> 
