@@ -51,33 +51,17 @@ define([
     },
 
     show: function(id){
-      console.log('BB Router => :' + id + ' : show');
-      if (!window.router) {
-        console.error('TODO THERE IS NO Window.router !')
-      } else {
-        console.log('there is a router, ');
-        if (!window.router.songs) {
-          console.log('but no window.router.songs');
-        } else {
-          console.log('and there is a window.router.songs');
-        }
-      }
-
-      console.log("window.router.songs length => " + window.router.songs.length);
-      console.warn(window.router.songs);
-      console.warn(window.router.songs.get(id));
-
-      // var currentIDSong = window.router.songs.get(parseInt(id,10));
       var currentIDSong = window.router.songs.get(id);
       console.warn(currentIDSong);
-      var view = new songsViewShow(currentIDSong);
-      beatsPerMeasureSliderView.render();
-      additiveLinearBeatPaletteView.render();
-      // componentsView.render();
-      tempoSliderView.render();
-      transportView.render();
+      //right side
       fractionRepresentionView.render();
       wholeMeasureRepresentationView.render();
+      beatsPerMeasureSliderView.render();
+      additiveLinearBeatPaletteView.render();
+      tempoSliderView.render();
+      transportView.render();
+      //left side
+      var view = new songsViewShow(currentIDSong);
     },
 
     edit: function(id){

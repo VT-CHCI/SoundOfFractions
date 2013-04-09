@@ -32,7 +32,8 @@ define([
       "circular-pie": circularPieMeasuresTemplate,
       "circular-bead": circularBeadMeasuresTemplate,
     },
-    currentMeasureRepresentation: 'linear-bar',
+    //grab the current measure representation's data-state
+    currentMeasureRepresentation: "", //temp-holder
       measureColors: {
       0: "#FF0000",   //red
       1: "#802A2A",   //brown
@@ -43,7 +44,7 @@ define([
       6: "#80ff00",   //light green
       7: "#00ff00",   //bright green
       8: "#00ff80",   //Turquoise
-      9: "#00ffff",  //light blue
+      9: "#00ffff",   //light blue
       10: "#0080ff",  //med blue
       11: "#0000ff",  //blue
       12: "#8000ff",  //purple
@@ -63,6 +64,9 @@ define([
       //passed in options. Otherwise we create a single
       //measure and add it to our collection.
       if (options) {
+        if (options.defaultMeasureRepresentation) {
+          this.currentMeasureRepresentation = options.defaultMeasureRepresentation;
+        }
         this.measuresCollection = options.collection;
         this.parent = options.parent;
         this.el = options.el;
@@ -102,24 +106,31 @@ define([
       // REPLACE whatever's already in the measure container with: a plus sign in the measure rendering
       $(this.el).html('<div class="addMeasure">+</div>');
 
+      // Circle
       var centerX = 150;
       var centerY = 50;
       var measureStartAngle = 0;
       var beatStartAngle;
       var beatEndAngle;
-      var radius = 40;
-      var beatBBX = 35;
+      var measureRadius = 40;
+      // Bead
+      var circularBeadBeatRadius = 8;
+      // Linear
+      var beatBBX;
       var beatBBY = 15;
-      var beatWidth = 40;
+      // var beatWidth = 40;
       var beatHeight = 15;
+      var xMeasureLocation = 15; //5%
+      var yMeasureLocation = 10;
+      var lbbMeasureWidth = 272; //90%
+      var lbbMeasureHeight = 25;
+      var linearBeatXPadding = 14; //5%
+      var linearBeatYPadding = 10;
+      var beatHolderWidth = lbbMeasureWidth-(2*linearBeatXPadding);
+      console.warn(beatHolderWidth);
+      // Time
       var firstBeatStart = 0; //in s
       var timeIncrement = 500; //in ms
-      var lbbMeasureWidth = 250;
-      var lbbMeasureHeight = 25;
-      var xPadding = 25;
-      var yPadding = 10;
-      var beatHolderWidth = lbbMeasureWidth-(2*xPadding);
-
       // console.log(this.representations[this.currentMeasureRepresentation]);
 
       // for each measure in measuresCollection
@@ -131,15 +142,17 @@ define([
           beatHolder:"beatHolder"+measure.cid,
           measureCount:index+1,
           measureAngle: 360.0,
+          beatHolderWidth: beatHolderWidth,
+          // SVG Properties
           measureWidth: lbbMeasureWidth,
           measureHeight: lbbMeasureHeight,
-          xMeasureLocation: xPadding,
-          yMeasureLocation: yPadding,
-          beatHolderWidth: beatHolderWidth,
+          measureColor:this.measureColors[11],
+          // SVG Locations
           cx: centerX,
           cy: centerY,
-          r: radius,
-          measureColor:this.measureColors[11]
+          xMeasureLocation: xMeasureLocation,
+          yMeasureLocation: yMeasureLocation,
+          measureR: measureRadius
         };
 
         var compiledTemplate = _.template( this.representations[this.currentMeasureRepresentation], measureTemplateParamaters );
@@ -166,23 +179,25 @@ define([
               // color: x,
             timeIncrement: timeIncrement,
             //Linear
-            beatBBX: beatBBX,
+            // beatBBX: xMeasureLocation + linearBeatXPadding+(this.beatWidth*(index)),
             beatBBY: beatBBY,
+            beatHolderWidth: beatHolderWidth,
+            linearBeatXPadding: linearBeatXPadding,
             beatWidth: beatHolderWidth/this.measuresCollection.models[0].attributes.beats.length,
             beatHeight: beatHeight,
             // Circular Pie
             cx: centerX,
             cy: centerY,
-            measureR: radius,
+            measureR: measureRadius,
             beatAngle: 360/this.measuresCollection.models[0].attributes.beats.length,
             beatStartAngle: -90+((360/this.measuresCollection.models[0].attributes.beats.length)*index),
             beatStartTime: firstBeatStart+(index)*(timeIncrement/1000),
             // Circular Pie
-            beatR: 5
+            beatR: circularBeadBeatRadius
           };
 
           // manipulate linear-bar-svg beat parameters
-          measurePassingToBeatViewParamaters.beatBBX = beatBBX+(beatWidth*index);
+          measurePassingToBeatViewParamaters.beatBBX = xMeasureLocation + linearBeatXPadding+(measurePassingToBeatViewParamaters.beatWidth*(index));
           measurePassingToBeatViewParamaters.opacity = beat.get('selected');
 
           // manipulate circular-pie beat parameters

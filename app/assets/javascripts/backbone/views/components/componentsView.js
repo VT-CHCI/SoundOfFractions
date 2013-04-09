@@ -26,6 +26,9 @@ define([
     el: $('#sof-composer'),
 
     initialize: function(){
+      // Default Measure representation state - also set "active" class in wholeMeasureRepresentation.html
+      this.defaultMeasureRepresentation = 'linear-bar-svg';
+
       //this context variable gives us access to all of the
       //web audio api methods/objects.
       this.context = new webkitAudioContext();
@@ -198,7 +201,7 @@ define([
 
         //create a component view.
         var componentView = new ComponentView({collection:component, el:'#component-container'+component.cid, 
-          gainNode:this.muteGainNodeList[counter]});
+          gainNode:this.muteGainNodeList[counter], defaultMeasureRepresentation: this.defaultMeasureRepresentation });
         if(!component.get('active')) {
           console.log('found a muted one');
           componentView.toggleMute();

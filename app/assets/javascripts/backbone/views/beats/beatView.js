@@ -34,7 +34,8 @@ define([
       "circular-pie": circularPieBeatsTemplate,
       "circular-bead": circularBeadBeatsTemplate
     },
-    currentBeatRepresentation: 'linear-bar',
+    //grab the current measure representation's data-state
+    currentBeatRepresentation: $('#measure-representation-buttons').children('.active').attr('data-state'),
     beatColors: {
       0: "#FF0000",   //red
       1: "#802A2A",   //brown
@@ -45,7 +46,7 @@ define([
       6: "#80ff00",   //light green
       7: "#00ff00",   //bright green
       8: "#00ff80",   //Turquoise
-      9:  "#00ffff",  //light blue
+      9: "#00ffff",   //light blue
       10: "#0080ff",  //med blue
       11: "#0000ff",  //blue
       12: "#8000ff",  //purple
@@ -85,6 +86,8 @@ define([
         this.beatStartTime = options.beatStartTime;
         this.timeIncrement = options.timeIncrement;
         this.beatR = options.beatR;
+        this.beatHolderWidth = options.beatHolderWidth;
+        this.linearBeatXPadding = options.linearBeatXPadding;
       } else {
         console.error('should not be in here!');
         this.model = new BeatModel;
@@ -115,7 +118,8 @@ define([
           state: state,
           color: this.beatColors[this.color],
           beatStartTime: this.beatStartTime,
-          timeIncrement: this.timeIncrement
+          timeIncrement: this.timeIncrement,
+          beatHolderWidth: this.beatHolderWidth
         };
 
         //Opacity

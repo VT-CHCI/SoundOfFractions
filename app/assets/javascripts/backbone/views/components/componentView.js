@@ -35,6 +35,9 @@ define([
     */
     initialize: function(options){
       if (options) {
+        if (options.defaultMeasureRepresentation) {
+          this.defaultMeasureRepresentation = options.defaultMeasureRepresentation;
+        }
         this.component = options.collection;
         this.el = options.el;
 
@@ -60,7 +63,7 @@ define([
     */
     render: function(){
       console.log('render: componentView.js');
-      new MeasuresView({collection:this.component.get('measures'), parent: this.component, el:'#component'+this.component.cid});
+      new MeasuresView({collection:this.component.get('measures'), parent: this.component, el:'#component'+this.component.cid, defaultMeasureRepresentation: this.defaultMeasureRepresentation });
       this.recalculateFraction();
      return this;
     },
