@@ -50,7 +50,9 @@ define([
       12: "#8000ff",  //purple
       13: "#ff00ff",  //magenta
       14: "#ff0080",  //hot pink
-      15: "#4B0082"   //indigo
+      15: "#4B0082",  //indigo
+      16: "#000000",  //black
+      17: "#ffffff"   //white
     },
 
     //registering click events to add and remove measures.
@@ -146,7 +148,7 @@ define([
           // SVG Properties
           measureWidth: lbbMeasureWidth,
           measureHeight: lbbMeasureHeight,
-          measureColor:this.measureColors[11],
+          measureColor:this.measureColors[17],
           // SVG Locations
           cx: centerX,
           cy: centerY,
