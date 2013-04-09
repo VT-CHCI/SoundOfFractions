@@ -280,25 +280,28 @@ define([
       /* if the containing component is selected, this
          triggers a request event to stop the sound.
          
-         Then this destroys the beat collection and creates
-         a new collection with the number of beats specified
+         Then this destroys the beats and creates
+         new beats with the number of beats specified
          by the signature parameter.
       */
 
       window.csf = this;
       if ($(this.el).hasClass('selected')) {
         dispatch.trigger('stopRequest.event', 'off');
-        this.measuresCollection.models[0].get('beats').reset();
-
-        for (var i = 0; i < signature; i++) {
-          this.measuresCollection.models[0].add();
+        var that = this;
+        // this.measuresCollection.models[0].get('beats').reset();
+        for (var i = 0; i < this.measuresCollection.models.length; i++) {
+          this.measuresCollection.models[i].get('beats').reset();
+          for (var j = 0; j < signature; j++) {
+            this.measuresCollection.models[i].get('beats').add();
+          }
         }
         //re-render the view.
         this.render();
 
         //recalculate the widths for each beat.
         this.calcBeatWidth(signature);
-        dispatch.trigger('signatureChange.event', this.parent.get('signature'));
+        // dispatch.trigger('signatureChange.event', this.parent.get('signature'));
 
       }
     },
