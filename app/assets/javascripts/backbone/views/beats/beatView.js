@@ -36,6 +36,7 @@ define([
     },
     //grab the current measure representation's data-state
     currentBeatRepresentation: $('#measure-representation-buttons').children('.active').attr('data-state'),
+    previousBeatRepresentation: $('#measure-representation-buttons').children('.active').attr('data-state'),
     beatColors: {
       0: "#FF0000",   //red
       1: "#802A2A",   //brown
@@ -194,6 +195,7 @@ define([
     },
 
     changeBeatRepresentation: function(representation) {
+      this.previousBeatRepresentation = this.currentBeatRepresentation;
       this.currentBeatRepresentation = representation;
     },
 

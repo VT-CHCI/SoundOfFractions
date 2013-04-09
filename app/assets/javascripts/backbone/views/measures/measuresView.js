@@ -34,7 +34,8 @@ define([
     },
     //grab the current measure representation's data-state
     currentMeasureRepresentation: "", //temp-holder
-      measureColors: {
+    previousMeasureRepresentation: "", //temp-holder
+    measureColors: {
       0: "#FF0000",   //red
       1: "#802A2A",   //brown
       2: "#EE4000",   //dark orange
@@ -100,6 +101,7 @@ define([
     },
 
     changeMeasureRepresentation: function(representation) {
+      this.previousMeasureRepresentation = this.currentMeasureRepresentation;
       this.currentMeasureRepresentation = representation;
       this.render();      
     },
