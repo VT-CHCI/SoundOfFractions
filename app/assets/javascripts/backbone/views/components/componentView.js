@@ -190,12 +190,7 @@ define([
       _.each(this.component.get('measures').models, function(measure) {
         _.each(measure.get('beats').models, function(beat) {
           if(beat.get('selected')) {
-            if (val) {
-              numerator++;
-            } else {
-              // TODO : unsure of this old code
-              numerator++;
-            }
+            numerator++;
           }
         }, this);
         //then we determine the denominator

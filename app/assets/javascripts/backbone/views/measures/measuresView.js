@@ -294,7 +294,11 @@ define([
             this.measuresCollection.models[i].get('beats').add();
           }
           while (this.measuresCollection.models[i].get('beats').length > signature) {
+            // silent:true means to not call another event
             this.measuresCollection.models[i].get('beats').pop({silent:true});
+            // when selected beats equals the denominator, and we remove a beat, we need to recalculate
+            // the fraction with the new selected beats
+            dispatch.trigger('signatureChange.event', this.measuresCollection.models[i].get('beats').length)
           } 
         }
         //re-render the view.
