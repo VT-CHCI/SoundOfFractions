@@ -54,7 +54,7 @@ define([
     render: function(options) {
       console.log(options);
       $(this.el).html();
-      var compiledTemplate = _.template(sliderTemplate, {name:options.name} );
+      var compiledTemplate = _.template(sliderTemplate, {name:options.name, signature: options.signature} );
       $(this.el).html(compiledTemplate);
       return this;
     },
