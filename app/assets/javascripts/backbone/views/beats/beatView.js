@@ -108,8 +108,8 @@ define([
       // if render is being called from the toggle function, we may want to do something different
       if (toggledBeat) {
         //DIV
-        $('#beat'+toggledBeat.cid).toggleClass("ON");
-        $('#beat'+toggledBeat.cid).toggleClass("OFF");
+        $('#beat'+toggledBeat.cid).toggleClass('ON');
+        $('#beat'+toggledBeat.cid).toggleClass('OFF');
         //SVG
         $('#beat'+toggledBeat.cid)[0].setAttribute('opacity', this.getOpacityNumber(toggledBeat.get('selected')));
       } else {
@@ -189,7 +189,7 @@ define([
         }
 
         // add click handler to this beat
-        $("#beat"+this.model.cid).click($.proxy(this.toggle, this));
+        $('#beat'+this.model.cid).click($.proxy(this.toggle, this));
         return this;
       }
     },
@@ -200,10 +200,10 @@ define([
     },
 
     getSelectionBooleanCSS: function(){
-      if (this.model.get("selected")) {
-        return "ON";
+      if (this.model.get('selected')) {
+        return 'ON';
       } else {
-        return "OFF";
+        return 'OFF';
       }
     },
 

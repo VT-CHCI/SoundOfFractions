@@ -51,7 +51,7 @@ define([
 
       //registering our handlers for serveral events.
       dispatch.on('toggleAnimation.event', this.toggleAnimation, this);
-      dispatch.on('representation.event', this.recalculateFraction, this);
+      dispatch.on('fractionRepresentation.event', this.recalculateFraction, this);
       dispatch.on('beatClicked.event', this.recalculateFraction, this);
       dispatch.on('signatureChange.event', this.recalculateFraction, this);
 
@@ -176,8 +176,9 @@ define([
       beats and the number of measures.
     */
     recalculateFraction: function(val){
+      console.warn('rf val:' + val);
       var numerator = 0;
-      var denominator = 0;
+      var denominator = val;
 
       //first we determine which representation we are using.
       var state = this.component.get('representation');
@@ -191,8 +192,10 @@ define([
         _.each(measure.get('beats').models, function(beat) {
           if(beat.get('selected')) {
             if (val) {
-              numerator = 0;
+              console.log('val exists');
+              numerator++;
             } else {
+              console.log('val DOESNT exist');
               numerator++;
             }
           }

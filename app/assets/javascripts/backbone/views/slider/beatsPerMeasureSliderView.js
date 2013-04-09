@@ -34,7 +34,6 @@ define([
     updateVal : function() {
       //get our current value.
       var val = $(this.el).find($("input")).val();
-
       //set the change in the model.
       sliderModel.set({slidervalue : val});
       $('#sig_val').text(val);
@@ -52,7 +51,6 @@ define([
     },
 
     render: function(options) {
-      console.log(options);
       $(this.el).html();
       var compiledTemplate = _.template(sliderTemplate, {name:options.name, signature: options.signature} );
       $(this.el).html(compiledTemplate);

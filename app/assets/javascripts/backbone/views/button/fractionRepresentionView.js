@@ -41,7 +41,7 @@ define([
     cycle: function(button) {
       var newState = $(button.target).data('state');
       this.repButtonModel.set('buttonState', newState);
-      dispatch.trigger('representation.event', newState);
+      dispatch.trigger('fractionRepresentation.event', newState);
 
 
       log.sendLog([[2, "representation changed to: "+newState]]);
