@@ -280,7 +280,6 @@ define([
     },
     // This is triggered by signatureChange events.
     reconfigure: function(signature) {
-      console.log('MeasureView.reconfigure(signature) : signature=' +signature);
       /* if the containing component is selected, this
          triggers a request event to stop the sound.
          
@@ -288,7 +287,6 @@ define([
          new beats with the number of beats specified
          by the signature parameter.
       */
-
       if ($(this.el).hasClass('selected')) {
         dispatch.trigger('stopRequest.event', 'off');
         for (var i = 0; i < this.measuresCollection.models.length; i++) {
@@ -299,7 +297,6 @@ define([
             this.measuresCollection.models[i].get('beats').pop({silent:true});
           } 
         }
-
         //re-render the view.
         this.render();
 

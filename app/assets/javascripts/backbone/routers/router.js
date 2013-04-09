@@ -35,9 +35,9 @@ define([
     newSong: function(){
       console.log('BB routes => new : newSong');
       var view = new songsViewNew({collection : this.songs});
+      //left side
       mainHomeView.render();
-      beatsPerMeasureSliderView.render();
-      additiveLinearBeatPaletteView.render();
+      //right side
       componentsView.render();
       tempoSliderView.render();
       transportView.render();
@@ -53,15 +53,14 @@ define([
     show: function(id){
       var currentIDSong = window.router.songs.get(id);
       console.warn(currentIDSong);
+      //left side
+      var view = new songsViewShow(currentIDSong);
       //right side
       fractionRepresentionView.render();
       wholeMeasureRepresentationView.render();
-      // beatsPerMeasureSliderView.render();
       additiveLinearBeatPaletteView.render();
       tempoSliderView.render();
       transportView.render();
-      //left side
-      var view = new songsViewShow(currentIDSong);
     },
 
     edit: function(id){

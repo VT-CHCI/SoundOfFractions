@@ -176,7 +176,6 @@ define([
       beats and the number of measures.
     */
     recalculateFraction: function(val){
-      console.warn('rf val:' + val);
       var numerator = 0;
       var denominator = val;
 
@@ -192,10 +191,9 @@ define([
         _.each(measure.get('beats').models, function(beat) {
           if(beat.get('selected')) {
             if (val) {
-              console.log('val exists');
               numerator++;
             } else {
-              console.log('val DOESNT exist');
+              // TODO : unsure of this old code
               numerator++;
             }
           }
