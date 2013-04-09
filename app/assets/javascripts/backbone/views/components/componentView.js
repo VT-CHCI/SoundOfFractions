@@ -9,10 +9,11 @@ define([
   // Pull in the Collection module from above,
   'backbone/models/component',
   'backbone/views/measures/measuresView',
+  'backbone/views/slider/beatsPerMeasureSliderView',
   'app/dispatch',
   'app/state',
   'app/log'
-], function($, _, Backbone, Component, MeasuresView, dispatch, state, log){
+], function($, _, Backbone, Component, MeasuresView, BPMSliderView, dispatch, state, log){
   return Backbone.View.extend({
     // this is needed to recalculate a beat's size
     el: $('.component'),
@@ -163,7 +164,7 @@ define([
 
       //we trigger this event to cause the beats per measure slider and
       //beat bars to update based on which component is selected.
-      dispatch.trigger('sliderChange.event', this.component.get('signature'));
+      dispatch.trigger('sliderChange.event', {signature: this.component.get('signature'), name: this.component.get('label') } );
     },
 
     /*

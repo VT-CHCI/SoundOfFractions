@@ -88,7 +88,7 @@ define([
       console.log(this.model.toJSON());
 
       //Working
-      var compiledTemplate = _.template ( songsNewTemplate, this.model.toJSON());
+      var compiledTemplate = _.template ( songsNewTemplate, this.model.toJSON() );
       $(this.el).html(compiledTemplate);
       //Want to change to
       // var compiledNavTemplate = _.template ( songsNewTemplate, this.model.toJSON());

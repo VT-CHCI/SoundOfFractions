@@ -56,7 +56,7 @@ define([
       //right side
       fractionRepresentionView.render();
       wholeMeasureRepresentationView.render();
-      beatsPerMeasureSliderView.render();
+      // beatsPerMeasureSliderView.render();
       additiveLinearBeatPaletteView.render();
       tempoSliderView.render();
       transportView.render();

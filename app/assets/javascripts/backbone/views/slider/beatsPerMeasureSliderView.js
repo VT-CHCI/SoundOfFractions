@@ -51,18 +51,22 @@ define([
 
     },
 
-    render: function() {
-      $(this.el).html(sliderTemplate);
+    render: function(options) {
+      console.log(options);
+      $(this.el).html();
+      var compiledTemplate = _.template(sliderTemplate, {name:options.name} );
+      $(this.el).html(compiledTemplate);
       return this;
     },
 
     //This is called when a sliderChange event occurs.
-    setVal: function(val) {
-      sliderModel.set({slidervalue : val});
-      $('#sig_val').text(val);
+    setVal: function(values) {
+      sliderModel.set({slidervalue : values.signature});
+      $('#sig_val').text(values.signature);
 
-      state.set({signature : val});
-      $('#slider input').val(val);
+      state.set({signature : values.signature});
+      $('#slider input').val(values.signature);
+      this.render(values);
     },
 
     //This formats the label of the value to be displayed
