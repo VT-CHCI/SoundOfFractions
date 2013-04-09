@@ -9,7 +9,7 @@ define([
   'underscore',
   'backbone',
   'backbone/models/slider',
-  'text!backbone/templates/slider/slider.html',
+  'text!backbone/templates/slider/bPMSlider.html',
   'app/dispatch',
   'app/state',
   'app/log'
@@ -60,7 +60,6 @@ define([
     setVal: function(val) {
       sliderModel.set({slidervalue : val});
       $('#sig_val').text(val);
-      //$('#sig_val').text(this.formatVal(val/4));
 
       state.set({signature : val});
       $('#slider input').val(val);

@@ -287,17 +287,17 @@ define([
          by the signature parameter.
       */
 
-      window.csf = this;
       if ($(this.el).hasClass('selected')) {
         dispatch.trigger('stopRequest.event', 'off');
-        var that = this;
-        // this.measuresCollection.models[0].get('beats').reset();
         for (var i = 0; i < this.measuresCollection.models.length; i++) {
-          this.measuresCollection.models[i].get('beats').reset();
-          for (var j = 0; j < signature; j++) {
+          while (this.measuresCollection.models[i].get('beats').length < signature) {
             this.measuresCollection.models[i].get('beats').add();
           }
+          while (this.measuresCollection.models[i].get('beats').length > signature) {
+            this.measuresCollection.models[i].get('beats').pop({silent:true});
+          } 
         }
+
         //re-render the view.
         this.render();
 
