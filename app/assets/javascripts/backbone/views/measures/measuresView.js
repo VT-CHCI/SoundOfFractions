@@ -36,8 +36,8 @@ define([
     currentMeasureRepresentation: "", //temp-holder
     previousMeasureRepresentation: "", //temp-holder
     measureColors: {
-      0: "#FF0000",   //red
-      1: "#802A2A",   //brown
+      0: "#660000",   //maroon
+      1: "#FF0000",   //red
       2: "#EE4000",   //dark orange
       3: "#FF7722",   //light orange
       4: "#FFD700",   //yellow
