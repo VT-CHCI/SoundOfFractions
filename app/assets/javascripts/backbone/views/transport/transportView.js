@@ -25,6 +25,7 @@ define([
       this.transportModel = new TransportModel;
 
       //registering our stopPlay() method on stopRequest events.
+      dispatch.on('measureRepresentation.event', this.stopPlay, this);
       dispatch.on('stopRequest.event', this.stopPlay, this);
     },
 
