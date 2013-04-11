@@ -104,30 +104,36 @@ define([
       This controls the css animation of each beat.
     */
     toggleAnimation: function(state, duration, signature, maxMeasures){
+      // TODO why bring in signature to have it reset
       signature = $(this.el).find('.measure').eq(0).find('.beat').length;
       duration = duration/signature/maxMeasures;
 
       //this is the css animation of a beat being played.
-      function animate (targetDiv) {
-        targetDiv.css({'width':'+=5', 'height':'+=20', 'top': '-=10', 'left' :'-=2'});
-        targetDiv.css('background-color', targetDiv.parent().css('background-color'));
-        targetDiv.css('border-width','1px');
-        targetDiv.css('z-index','100');
-        targetDiv.animate({
-          width: '-=5',
-          left: '+=2',
-          height: '-=20',
-          top: '+=10'
-        }, duration, function() {
-          targetDiv.hide();
-          targetDiv.css({'width':'', 'height':'', 'top': '', 'left' : ''});
-          targetDiv.css('border-width','0');
-          targetDiv.css('z-index','-1');
-          targetDiv.show();
-        });
+      function animate (target) {
+        console.log(target);
+        // target.addEventListener('mySpecialEvent',function(){
+        //   target.beginElement();
+        // },false);
+        target.beginElement();
+        // target.css({'width':'+=5', 'height':'+=20', 'top': '-=10', 'left' :'-=2'});
+        // target.css('background-color', target.parent().css('background-color'));
+        // target.css('border-width','1px');
+        // target.css('z-index','100');
+        // target.animate({
+        //   width: '-=5',
+        //   left: '+=2',
+        //   height: '-=20',
+        //   top: '+=10'
+        // }, duration, function() {
+        //   target.hide();
+        //   target.css({'width':'', 'height':'', 'top': '', 'left' : ''});
+        //   target.css('border-width','0');
+        //   target.css('z-index','-1');
+        //   target.show();
+        // });
       };
 
-      var beats = $(this.el).find('.beat')
+      var beats = $(this.el).find('.beat');
       var counter = 0-(signature*maxMeasures-1);
 
       //when playing is stoped we stop the animation.
@@ -146,7 +152,7 @@ define([
         this.animationIntervalID = setInterval((function(self) {
           return function() {
             if (counter >= 0 && counter < beats.length)
-              animate(beats.eq(counter).find('.animated-beat'));
+              animate(beats.eq(counter).children().first()[0]);
             if (counter < (signature*maxMeasures-1))
               counter ++;
             else

@@ -43,7 +43,7 @@ define([
       //this is creating the snare component.
       this.measure = new BeatsCollection;
 
-      for (var i = 0; i < 4; i++) {
+      for (var i = 0; i < 6; i++) {
         this.measure.add();
       }
 
@@ -62,7 +62,7 @@ define([
       //this is creating the hi-hat component.
       this.measure = new BeatsCollection;
 
-      for (var i = 0; i < 4; i++) {
+      for (var i = 0; i < 5; i++) {
         this.measure.add();
       }
 
@@ -101,7 +101,7 @@ define([
       //this is creating the synth component.
       this.measure = new BeatsCollection;
 
-      for (var i = 0; i < 4; i++) {
+      for (var i = 0; i < 3; i++) {
         this.measure.add();
       }
 
@@ -220,7 +220,7 @@ define([
     */
     playLoop: function(){
       var tempo = state.get('tempo');
-      // console.log(tempo);
+
       var numBeats = 0;
       var i = 0;
 
@@ -273,19 +273,19 @@ define([
     */
     playSound: function(durations){
       console.log('Playing sound!');
-      var componentToPlay = 0;
-      var startTime = this.context.currentTime; //this is important (check docs for explination)
+      var componentToPlayIterator = 0;
+      var startTime = this.context.currentTime; //this is important (check docs for explanation)
       _.each(durations, function(duration) {
         _.each(duration, function(time) {
           //we call play on each component, passing in a lot of information.
           //this is called for each 'duration' in the duration array,
           //which is every activated beat and its associated duration between
           //it and the next activated beat.
-          play(this, this.context, this.drumkit.at(componentToPlay),
-            this.bufferList[componentToPlay], startTime+time, this.masterGainNode,
-            this.gainNodeList[componentToPlay], this.muteGainNodeList[componentToPlay]);
+          play(this, this.context, this.drumkit.at(componentToPlayIterator),
+            this.bufferList[componentToPlayIterator], startTime+time, this.masterGainNode,
+            this.gainNodeList[componentToPlayIterator], this.muteGainNodeList[componentToPlayIterator]);
         }, this);
-        componentToPlay++;
+        componentToPlayIterator++;
       }, this);
 
       /*
@@ -392,7 +392,7 @@ define([
       }, this);
 
       //we use the maximum number of measures, and the global tempo
-      //to determine the duration of one loop of the sequencer.
+      //to determine the duration (in ms) of one loop of the sequencer.
       var duration = 4 * 60 / state.get('tempo') * maxMeasures * 1000;
       if (this.intervalID) {
         //if we are already playing, we stop and trigger the
@@ -424,7 +424,7 @@ define([
     },
 
     updateTempo:function(val) {
-      //console.log('tempo changed to ' + val);
+      console.log('tempo changed to ' + val);
       this.drumkit.tempo = val;
     }
   });

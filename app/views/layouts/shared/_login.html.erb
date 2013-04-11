@@ -4,7 +4,7 @@
   <li><%= link_to('Edit account', edit_user_registration_path, :class => 'btn btn-inverse') %></li>
   <li><%= link_to('Logout', destroy_user_session_path, :class => 'btn btn-inverse') %></li>
 <% else %>
-  <li class="btn-inverse">If you want to Load or Save a Song, please login --></li>
+  <li><p>If you want to Load or Save a Song, please login --></p></li>
   <li><%= link_to('Login', new_user_session_path, :class => 'btn btn-inverse')  %></li>
   <li><%= link_to('Sign up', new_user_registration_path, :class => 'btn btn-inverse')  %></li>
 <% end %>
