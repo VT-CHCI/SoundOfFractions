@@ -110,10 +110,12 @@ define([
 
       //this is the css animation of a beat being played.
       function animate (target) {
-        console.log(target);
         // target.addEventListener('mySpecialEvent',function(){
         //   target.beginElement();
         // },false);
+        console.log(duration+'s');
+        target.setAttributeNS(null, 'dur', (duration/1000)+'s');
+        // console.log(target);
         target.beginElement();
         // target.css({'width':'+=5', 'height':'+=20', 'top': '-=10', 'left' :'-=2'});
         // target.css('background-color', target.parent().css('background-color'));

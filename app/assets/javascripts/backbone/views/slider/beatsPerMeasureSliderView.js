@@ -17,7 +17,7 @@ define([
   var sliderModel = new SliderModel;
 
   var SliderView = Backbone.View.extend({
-    el : $("#beat-palette #slider"), // Specifies the DOM element which this view handles
+    el : $("#bpm-slider"), // Specifies the DOM element which this view handles
 
     //register backbone's change event to call our updateVal() function.
     events : {

@@ -1,7 +1,7 @@
 <!-- begin="<%= beatStartTime %>s" -->
 <rect id="beat<%= beat.cid %>" x="<%= beatBBX %>" y="<%= beatBBY %>" width="<%= beatWidth %>" height="<%= beatHeight %>" class="beat" style="stroke:black; stroke-width:1; fill:<%= color %>;" opacity="<%= opacity %>" >
-  <animateTransform id="animate<%= beat.cid %>" attributeName="transform" type="translate" begin="indefinite" dur=".5s" values="<%= -(beatBBX+(beatWidth/2))*(1-1) %>,<%= -(beatBBY+(beatHeight/2))*(1-1) %>;<%= -(beatBBX+(beatWidth/2))*(1.1-1) %>,<%= -(beatBBY+(beatHeight/2))*(1.1-1) %>;<%= -(beatBBX+(beatWidth/2))*(1-1) %>,<%= -(beatBBY+(beatHeight/2))*(1-1) %>;" />
-  <animateTransform id="animate<%= beat.cid %>" attributeName="transform" type="scale" begin="indefinite" dur=".5s" values="1,1;.9,1.1;1,1;" />
+  <animateTransform id="animate<%= beat.cid %>" attributeName="transform" type="translate" begin="indefinite" dur="" values="<%= -(beatBBX+(beatWidth/2))*(1-1) %>,<%= -(beatBBY+(beatHeight/2))*(1-1) %>;<%= -(beatBBX+(beatWidth/2))*(1.1-1) %>,<%= -(beatBBY+(beatHeight/2))*(1.1-1) %>;<%= -(beatBBX+(beatWidth/2))*(1-1) %>,<%= -(beatBBY+(beatHeight/2))*(1-1) %>;" />
+  <animateTransform id="animate<%= beat.cid %>" attributeName="transform" type="scale" begin="indefinite" dur="" values="1,1;.9,1.1;1,1;" />
   
     <!-- repeatCount="indefinite" -->
     <!-- translate(-centerX*(factor-1), -centerY*(factor-1))
