@@ -1,11 +1,10 @@
 class SongsController < ApplicationController
 
-  before_filter :authenticate_user!
+  # before_filter :authenticate_user!
 
   # GET /songs
   # GET /songs.json
   def index
-
     if user_signed_in? 
       gon.userID = current_user.thisUsersID
       @user = current_user

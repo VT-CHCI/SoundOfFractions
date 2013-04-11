@@ -30,7 +30,7 @@ define([
       ':id/edit'  : 'edit',
       ':id'       : 'show',
       //Catchall
-      '.*'        : 'index'
+      '.*'        : 'newSong'
     },
     newSong: function(){
       console.log('BB routes => new : newSong');
@@ -79,26 +79,20 @@ define([
     var filteredOptions = [];
 
     console.log('filtering');
-    for (var i = 0 ; i < options.songs.length ; i++){
-      if (options.songs[i].user_id == gon.userID ){
-        filteredOptions.push(options.songs[i]);
+    if (window.gon) {
+      for (var i = 0 ; i < options.songs.length ; i++){
+          if (options.songs[i].user_id == gon.userID ){
+            filteredOptions.push(options.songs[i]);
+          }
       }
     }
-    console.log(filteredOptions);
     options.songs = filteredOptions;
-
-    console.log('options:');
-    console.warn(options);
-    console.log('options.songs');
-    console.warn(options.songs);
 
     var bb_router = new BBRouter;
 
-    //TODO HOW IS THIS SONGS COLLECTION GETTING POPULATED?
     bb_router.songs = new songsCollection();
     bb_router.songs.reset(options.songs);
     bb_router.songs.fetch();
-    console.warn(bb_router.songs);
 
     //If the user does not login we use this to generate a random number
     //to identify the user.
@@ -127,8 +121,6 @@ define([
 
     // attach the router to the window to make access of the songs easier throughout the app
     window.router = bb_router;
-    console.log('Router in init');
-    console.warn(window.router);
     console.log('BB Router => Initialized');
 
     // BB API call    
@@ -136,7 +128,7 @@ define([
     // on the browser to go back through state changes.
     // It has to be at the bottom
     // TODO : Cannot call Backbone.history.start({pushState: true}) because it will break
-    Backbone.history.start();
+    Backbone.history.start({root: '/songs/#new'});
   };
 
   return {

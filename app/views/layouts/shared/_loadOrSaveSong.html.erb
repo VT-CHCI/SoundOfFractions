@@ -1,18 +1,21 @@
-<li class="">
-  <div id="nav-songs-load">
-  </div>
-</li>
-<li class="">
-  <div id="nav-songs-new">
-  </div>
-</li>
-<li class="">
-  <div id="nav-songs-save">
-  </div>
-</li>
-<li class="">
-  <div id="nav-songs-update">
-  </div>
-</li>
-<!-- Moved to _login.html.erb -->
-<!--   <li id="nav-songs-info"></li> -->
+<% if user_signed_in? %>
+  <li class="">
+    <div id="nav-songs-load">
+    </div>
+  </li>
+  <li class="">
+    <div id="nav-songs-new">
+    </div>
+  </li>
+  <li class="">
+    <div id="nav-songs-save">
+    </div>
+  </li>
+  <li class="">
+    <div id="nav-songs-update">
+    </div>
+  </li>
+  <!-- Moved to _login.html.erb -->
+  <!--   <li id="nav-songs-info"></li> -->
+<% else %>
+<% end %>
