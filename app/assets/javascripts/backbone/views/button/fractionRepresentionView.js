@@ -27,7 +27,6 @@ define([
     //simply creates the model.
     initialize: function() {
       this.repButtonModel = new RepButtonModel;
-
     },
 
     /*

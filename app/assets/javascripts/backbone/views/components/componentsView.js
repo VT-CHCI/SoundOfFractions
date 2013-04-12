@@ -249,6 +249,7 @@ define([
               which will make subsequent durations longer.
             */
             if (beat.get('selected')) {
+              //deadspace is a beat that is not getting played
               componentDurations[i].push(deadSpace);
               deadSpace = deadSpace + beatDuration;
 
@@ -259,6 +260,7 @@ define([
           }, this);
         }, this);
         i++;
+        // Reset the deadspace for the next component
         deadSpace = 0;
       }, this);
       
@@ -275,15 +277,21 @@ define([
       console.log('Playing sound!');
       var componentToPlayIterator = 0;
       var startTime = this.context.currentTime; //this is important (check docs for explanation)
-      _.each(durations, function(duration) {
-        _.each(duration, function(time) {
+      _.each(durations, function(duration) { // component array
+        _.each(duration, function(time) { // beats or deadspace start times
           //we call play on each component, passing in a lot of information.
           //this is called for each 'duration' in the duration array,
           //which is every activated beat and its associated duration between
           //it and the next activated beat.
-          play(this, this.context, this.drumkit.at(componentToPlayIterator),
-            this.bufferList[componentToPlayIterator], startTime+time, this.masterGainNode,
-            this.gainNodeList[componentToPlayIterator], this.muteGainNodeList[componentToPlayIterator]);
+          play(
+            this,
+            this.context,
+            this.drumkit.at(componentToPlayIterator),
+            this.bufferList[componentToPlayIterator],
+            startTime+time, //startTime is the current time you request to play + the beat start time
+            this.masterGainNode,
+            this.gainNodeList[componentToPlayIterator],
+            this.muteGainNodeList[componentToPlayIterator]);
         }, this);
         componentToPlayIterator++;
       }, this);

@@ -20,7 +20,7 @@ svg.circular-pie {
   padding: 5px 5px 5px;
 }
 
-#slider input {
+#bpm-slider input {
 	width: 100%;
 }
 
@@ -128,6 +128,7 @@ svg.circular-pie {
   text-align: center;
 }
 
+// TODO figure out CSS
 .component-container .count .numerator {
   display: block;
   margin: 15px auto 15px auto;
@@ -135,8 +136,19 @@ svg.circular-pie {
   padding-bottom: 12px;
 }
 
-.component-container .count .denominator {
+.component-container .count .mixedNumerator {
+  display: block;
+  margin: 15px auto 15px auto;
+  border-bottom: 4px solid;
+  padding-bottom: 12px;
+}
 
+.component-container .count .whole {
+  display: block;
+  margin: 15px auto 15px auto;
+}
+
+.component-container .count .denominator {
 }
 
 .component-container .count .percent, .component-container .count .decimal {
@@ -216,7 +228,7 @@ svg.circular-pie {
 }
 
 #fraction-representation button {
-  width: 25%;
+  width: 20%;
 }
 
 #measure-representation {

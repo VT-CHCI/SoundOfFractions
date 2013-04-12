@@ -24,7 +24,6 @@ define([
 ], function($, _, Backbone, MeasureModel, BeatsCollection, MeasuresCollection, beatView, audioMeasuresTemplate, linearBarMeasuresTemplate, linearBarSVGMeasuresTemplate, circularPieMeasuresTemplate, circularBeadMeasuresTemplate, COLORS, dispatch, state, log){
   return Backbone.View.extend({
     // el: $('.component'),
-    WHITE: 18,
 
     // The different representations
     representations: {
@@ -37,27 +36,6 @@ define([
     //grab the current measure representation's data-state
     currentMeasureRepresentation: "", //temp-holder
     previousMeasureRepresentation: "", //temp-holder
-    // measureColors: {
-    //   0: "#660000",   //maroon
-    //   1: "#FF0000",   //red
-    //   2: "#EE4000",   //dark orange
-    //   3: "#FF7722",   //light orange
-    //   4: "#FFD700",   //yellow
-    //   5: "#808000",   //olive
-    //   6: "#80ff00",   //light green
-    //   7: "#00ff00",   //bright green
-    //   8: "#00ff80",   //Turquoise
-    //   9: "#00ffff",   //light blue
-    //   10: "#0080ff",  //med blue
-    //   11: "#0000ff",  //blue
-    //   12: "#8000ff",  //purple
-    //   13: "#ff00ff",  //magenta
-    //   14: "#ff0080",  //hot pink
-    //   15: "#4B0082",  //indigo
-    //   16: "#006600",  //michaels green
-    //   17: "#000000",  //black
-    //   this.WHITE: "#ffffff"   //white
-    // },
 
     //registering click events to add and remove measures.
     events : {
@@ -181,10 +159,10 @@ define([
             singleBeat:"#beat"+beat.cid,
             measureRepresentation:this.currentMeasureRepresentation,
             beatsInMeasure: this.measuresCollection.models[0].attributes.beats.length,
-              // To use the range of colors
-              color: index,
-              // To use one color
-              // color: x,
+            // To use the range of colors
+            color: index,
+            // To use one color
+            // color: x,
             timeIncrement: timeIncrement,
             //Linear
             // beatBBX: xMeasureLocation + linearBeatXPadding+(this.beatWidth*(index)),

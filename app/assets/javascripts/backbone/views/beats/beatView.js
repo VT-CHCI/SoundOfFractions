@@ -13,9 +13,10 @@ define([
   'text!backbone/templates/beats/linearBarSVGBeats.html',
   'text!backbone/templates/beats/circularPieBeats.html',
   'text!backbone/templates/beats/circularBeadBeats.html',
+  'colors',
   'app/dispatch',
   'app/log'
-], function($, _, Backbone, BeatModel, audioBeatsTemplate, linearBarBeatsTemplate, linearBarSVGBeatsTemplate, circularPieBeatsTemplate, circularBeadBeatsTemplate, dispatch, log){
+], function($, _, Backbone, BeatModel, audioBeatsTemplate, linearBarBeatsTemplate, linearBarSVGBeatsTemplate, circularPieBeatsTemplate, circularBeadBeatsTemplate, COLORS, dispatch, log){
   return Backbone.View.extend({
 
     /* TODO still issues with this
@@ -37,27 +38,6 @@ define([
     //grab the current measure representation's data-state
     currentBeatRepresentation: $('#measure-representation-buttons').children('.active').attr('data-state'),
     previousBeatRepresentation: $('#measure-representation-buttons').children('.active').attr('data-state'),
-    beatColors: {
-      0: "#FF0000",   //red
-      1: "#00ff00",   //bright green
-      2:  "#0000ff",  //blue
-      3:  "#ff0080",  //hot pink
-      4: "#00ffff",   //light blue
-      5: "#80ff00",   //light green
-      6: "#660000",   //maroon
-      7:  "#0080ff",  //med blue
-      8: "#FF7722",   //light orange
-      9: "#808000",   //olive
-      10:"#00ff80",   //Turquoise
-      11:"#EE4000",   //dark orange
-      12:"#FFD700",   //yellow
-      13:"#006600",    //michaels green
-      14: "#8000ff",  //purple
-      15: "#ff00ff",  //magenta
-      16: "#4B0082",  //indigo
-      17: "#000000",  //black
-      18: "#ffffff"   //white
-    },
 
     //The constructor takes options because these views are created
     //by measuresView objects.
@@ -86,7 +66,7 @@ define([
         this.beatsInMeasure = options.beatsInMeasure;
         this.beatAngle = options.beatAngle;
         this.beatStartAngle = options.beatStartAngle;
-        this.color = options.color;
+        this.color = options.color;                             //index number
         this.beatStartTime = options.beatStartTime;
         this.timeIncrement = options.timeIncrement;
         this.beatR = options.beatR;
@@ -120,7 +100,7 @@ define([
           beat: this.model,
           beatAngle: this.beatAngle,
           state: state,
-          color: this.beatColors[this.color],
+          color: COLORS.hexColors[this.color],
           beatStartTime: this.beatStartTime,
           timeIncrement: this.timeIncrement,
           beatHolderWidth: this.beatHolderWidth

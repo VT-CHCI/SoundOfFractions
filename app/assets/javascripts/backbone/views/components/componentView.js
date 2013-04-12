@@ -110,29 +110,8 @@ define([
 
       //this is the css animation of a beat being played.
       function animate (target) {
-        // target.addEventListener('mySpecialEvent',function(){
-        //   target.beginElement();
-        // },false);
-        console.log(duration+'s');
         target.setAttributeNS(null, 'dur', (duration/1000)+'s');
-        // console.log(target);
         target.beginElement();
-        // target.css({'width':'+=5', 'height':'+=20', 'top': '-=10', 'left' :'-=2'});
-        // target.css('background-color', target.parent().css('background-color'));
-        // target.css('border-width','1px');
-        // target.css('z-index','100');
-        // target.animate({
-        //   width: '-=5',
-        //   left: '+=2',
-        //   height: '-=20',
-        //   top: '+=10'
-        // }, duration, function() {
-        //   target.hide();
-        //   target.css({'width':'', 'height':'', 'top': '', 'left' : ''});
-        //   target.css('border-width','0');
-        //   target.css('z-index','-1');
-        //   target.show();
-        // });
       };
 
       var beats = $(this.el).find('.beat');
@@ -186,10 +165,12 @@ define([
     recalculateFraction: function(val){
       var numerator = 0;
       var denominator = val;
+      var whole = 0;
+      var mixedNumerator = 0;
 
       //first we determine which representation we are using.
       var state = this.component.get('representation');
-      if((val === 'fraction') || (val === 'decimal') || (val === 'percent') || val === 'none') {
+      if((val === 'fraction') || (val === 'decimal') || (val === 'percent') || val === 'none' || val === 'mixed') {
         state = val;
         this.component.set('representation', state);
         val = null;
@@ -209,9 +190,13 @@ define([
         }
       }, this);
       
+      //Then we convert to mixed numbers
+      whole = Math.floor(numerator/denominator);
+      mixedNumerator = numerator-(whole*denominator);
+
       /*
         This next section renders the correct representation of the
-        fraction/decimal/percent for this component.
+        fraction/decimal/percent/none/mixed for this component.
       */
       if(state === 'fraction') {
         $('#component-container'+this.component.cid + ' .count').html('<span class="numerator">4</span><span class="denominator">6</span>');
@@ -229,6 +214,12 @@ define([
         $('#component-container'+this.component.cid + ' .count').html('<span class="percent">0%</span>');
         var percent = numerator / denominator * 100;
         $('#component'+this.component.cid).next().find('.percent').text(percent.toFixed(0) + '%');
+      }
+      else if(state === 'mixed'){
+        $('#component-container'+this.component.cid + ' .count').html('<span class="whole">0</span><span class="mixedNumerator"><sup>0</sup></span><span class="denominator"<sub>0</sub>');
+        $('#component'+this.component.cid).next().find('.whole').text(whole);
+        $('#component'+this.component.cid).next().find('.mixedNumerator').text(mixedNumerator);
+        $('#component'+this.component.cid).next().find('.denominator').text(denominator);
       }
       else if(state === 'none') {
         $('#component-container'+this.component.cid + ' .count').empty();
