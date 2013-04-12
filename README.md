@@ -4,7 +4,9 @@
 
 ## Installing ##
 
-This project is a web app that uses Javascript and the Web Audio API. The only thing needed to install **Sound of Fractions** is placing it on a web server. To use it, simply access the directory using any Web Audio accessible browser (like Chrome for example). For a demo click [here](http://vt-chci.github.com/SoundOfFractions/).
+This project is a web app that uses Javascript and the Web Audio API. The only thing needed to install **Sound of Fractions** is placing it on a web server. To use it, simply access the directory using any Web Audio accessible browser (like Chrome for example).
+For a single page demo click [here](http://vt-chci.github.com/SoundOfFractions/).
+For the latest demo, with RoR, and multiple representations, click [here](http://compthink.cs.vt.edu:3000).
 
 The Ruby on Rails version with persistence, requires a server that can accept the Rails framework.
 
