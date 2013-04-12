@@ -17,12 +17,14 @@ define([
   'text!backbone/templates/measures/linearBarSVGMeasures.html',
   'text!backbone/templates/measures/circularPieMeasures.html',
   'text!backbone/templates/measures/circularBeadMeasures.html',
+  'colors',
   'app/dispatch',
   'app/state',
   'app/log'
-], function($, _, Backbone, MeasureModel, BeatsCollection, MeasuresCollection, beatView, audioMeasuresTemplate, linearBarMeasuresTemplate, linearBarSVGMeasuresTemplate, circularPieMeasuresTemplate, circularBeadMeasuresTemplate, dispatch, state, log){
+], function($, _, Backbone, MeasureModel, BeatsCollection, MeasuresCollection, beatView, audioMeasuresTemplate, linearBarMeasuresTemplate, linearBarSVGMeasuresTemplate, circularPieMeasuresTemplate, circularBeadMeasuresTemplate, COLORS, dispatch, state, log){
   return Backbone.View.extend({
     // el: $('.component'),
+    WHITE: 18,
 
     // The different representations
     representations: {
@@ -35,26 +37,27 @@ define([
     //grab the current measure representation's data-state
     currentMeasureRepresentation: "", //temp-holder
     previousMeasureRepresentation: "", //temp-holder
-    measureColors: {
-      0: "#660000",   //maroon
-      1: "#FF0000",   //red
-      2: "#EE4000",   //dark orange
-      3: "#FF7722",   //light orange
-      4: "#FFD700",   //yellow
-      5: "#808000",   //olive
-      6: "#80ff00",   //light green
-      7: "#00ff00",   //bright green
-      8: "#00ff80",   //Turquoise
-      9: "#00ffff",   //light blue
-      10: "#0080ff",  //med blue
-      11: "#0000ff",  //blue
-      12: "#8000ff",  //purple
-      13: "#ff00ff",  //magenta
-      14: "#ff0080",  //hot pink
-      15: "#4B0082",  //indigo
-      16: "#000000",  //black
-      17: "#ffffff"   //white
-    },
+    // measureColors: {
+    //   0: "#660000",   //maroon
+    //   1: "#FF0000",   //red
+    //   2: "#EE4000",   //dark orange
+    //   3: "#FF7722",   //light orange
+    //   4: "#FFD700",   //yellow
+    //   5: "#808000",   //olive
+    //   6: "#80ff00",   //light green
+    //   7: "#00ff00",   //bright green
+    //   8: "#00ff80",   //Turquoise
+    //   9: "#00ffff",   //light blue
+    //   10: "#0080ff",  //med blue
+    //   11: "#0000ff",  //blue
+    //   12: "#8000ff",  //purple
+    //   13: "#ff00ff",  //magenta
+    //   14: "#ff0080",  //hot pink
+    //   15: "#4B0082",  //indigo
+    //   16: "#006600",  //michaels green
+    //   17: "#000000",  //black
+    //   this.WHITE: "#ffffff"   //white
+    // },
 
     //registering click events to add and remove measures.
     events : {
@@ -66,6 +69,7 @@ define([
       //if we're being created by a componentView, we are
       //passed in options. Otherwise we create a single
       //measure and add it to our collection.
+      console.warn(COLORS);
       if (options) {
         if (options.defaultMeasureRepresentation) {
           this.currentMeasureRepresentation = options.defaultMeasureRepresentation;
@@ -150,7 +154,7 @@ define([
           // SVG Properties
           measureWidth: lbbMeasureWidth,
           measureHeight: lbbMeasureHeight,
-          measureColor:this.measureColors[17],
+          measureColor: COLORS.hexColors[COLORS.colorIndices.WHITE],
           // SVG Locations
           cx: centerX,
           cy: centerY,
