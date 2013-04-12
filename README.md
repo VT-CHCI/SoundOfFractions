@@ -8,6 +8,7 @@ This project is a web app that uses Javascript and the Web Audio API. The only t
 
 For a single page demo click [here](http://vt-chci.github.com/SoundOfFractions/).
 
+For a single page demo click [here](http://vt-chci.github.com/SoundOfFractions/).
 For the latest demo, with RoR, and multiple representations, click [here](http://compthink.cs.vt.edu:3000).
 
 The Ruby on Rails version with persistence, requires a server that can accept the Rails framework.
