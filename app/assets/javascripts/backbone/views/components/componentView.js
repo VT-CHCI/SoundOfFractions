@@ -108,7 +108,7 @@ define([
       signature = $(this.el).find('.measure').eq(0).find('.beat').length;
       duration = duration/signature/maxMeasures;
 
-      //this is the css animation of a beat being played.
+      //this is the SVG animation of a beat being played.
       function animate (target) {
         target.setAttributeNS(null, 'dur', (duration/1000)+'s');
         target.beginElement();
