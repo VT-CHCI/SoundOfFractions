@@ -26,7 +26,7 @@ define([
 
       //registering event handlers.
       // dispatch.on('signatureChange.event', this.reconfigure, this);
-      // dispatch.on('sliderChange.event', this.reconfigure, this);
+      // dispatch.on('bPMSlider.event', this.reconfigure, this);
     },
 
     render: function(){

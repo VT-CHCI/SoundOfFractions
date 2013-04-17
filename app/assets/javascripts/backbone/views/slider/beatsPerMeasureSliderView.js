@@ -26,7 +26,7 @@ define([
 
     initialize: function() {
       //register a handler for sliderChange events.
-      dispatch.on('sliderChange.event', this.setVal, this);
+      dispatch.on('bPMSlider.event', this.setVal, this);
     },
 
     //this is called when the slider is changed
@@ -47,18 +47,18 @@ define([
 
       //sending a log to the logging system of the change.
       log.sendLog([[2, "signature changed to: "+val]]);
-
     },
 
-    render: function(options) {
+    render: function(values) {
       $(this.el).html();
-      var compiledTemplate = _.template(sliderTemplate, {name:options.name, signature: options.signature} );
+      var compiledTemplate = _.template(sliderTemplate, {name:values.name, signature: values.signature} );
       $(this.el).html(compiledTemplate);
       return this;
     },
 
     //This is called when a sliderChange event occurs.
     setVal: function(values) {
+      console.warn(values);
       sliderModel.set({slidervalue : values.signature});
       $('#sig_val').text(values.signature);
 

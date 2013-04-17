@@ -6,14 +6,14 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  // Pull in the Collection module from above,
   'backbone/models/component',
   'backbone/views/measures/measuresView',
+  'backbone/views/fraction/fractionView',
   'backbone/views/slider/beatsPerMeasureSliderView',
   'app/dispatch',
   'app/state',
   'app/log'
-], function($, _, Backbone, Component, MeasuresView, BPMSliderView, dispatch, state, log){
+], function($, _, Backbone, Component, MeasuresView, FractionRepresentationView, BPMSliderView, dispatch, state, log){
   return Backbone.View.extend({
     // this is needed to recalculate a beat's size
     el: $('.component'),
@@ -36,13 +36,15 @@ define([
     */
     initialize: function(options){
       if (options) {
+        this.component = options.collection;
+        this.el = options.el;
+        this.gainNode = options.gainNode;
         if (options.defaultMeasureRepresentation) {
           this.defaultMeasureRepresentation = options.defaultMeasureRepresentation;
         }
-        this.component = options.collection;
-        this.el = options.el;
-
-        this.gainNode = options.gainNode;
+        if (options.defaultFractionRepresentation) {
+          this.defaultFractionRepresentation = options.defaultFractionRepresentation;
+        }
       } else {
         this.component = new Component;
       }
@@ -51,9 +53,9 @@ define([
 
       //registering our handlers for serveral events.
       dispatch.on('toggleAnimation.event', this.toggleAnimation, this);
-      dispatch.on('fractionRepresentation.event', this.recalculateFraction, this);
-      dispatch.on('beatClicked.event', this.recalculateFraction, this);
-      dispatch.on('signatureChange.event', this.recalculateFraction, this);
+      dispatch.on('signatureChange.event', this.updateModelSignature, this);
+      // dispatch.on('fractionRepresentation.event', this.recalculateFraction, this);
+      // dispatch.on('beatClicked.event', this.recalculateFraction, this);
 
       this.render();
     },
@@ -64,11 +66,26 @@ define([
     */
     render: function(){
       console.log('render: componentView.js');
-      new MeasuresView({collection:this.component.get('measures'), parent: this.component, el:'#component'+this.component.cid, defaultMeasureRepresentation: this.defaultMeasureRepresentation });
-      this.recalculateFraction();
+      new MeasuresView({
+        collection:this.component.get('measures'),
+        parent: this.component,
+        el:'#component'+this.component.cid,
+        defaultMeasureRepresentation: this.defaultMeasureRepresentation
+      });
+
+      new FractionRepresentationView({
+        collection:this.component.get('measures'),
+        parent: this.component,
+        el:'#fraction'+this.component.cid,
+        defaultFractionRepresentation: this.defaultFractionRepresentation
+      });
+
      return this;
     },
 
+    updateModelSignature: function(val){
+      this.component.set('signature', val);
+    },
     /*
       This is called when the user clicks on the icon of this component
       which has the css class 'control'
@@ -151,7 +168,7 @@ define([
 
       //we trigger this event to cause the beats per measure slider and
       //beat bars to update based on which component is selected.
-      dispatch.trigger('sliderChange.event', {signature: this.component.get('signature'), name: this.component.get('label') } );
+      dispatch.trigger('bPMSlider.event', {signature: this.component.get('signature'), name: this.component.get('label') } );
     },
 
     /*
@@ -162,71 +179,71 @@ define([
       on the selected representation and the number of 'selected' or activated
       beats and the number of measures.
     */
-    recalculateFraction: function(val){
-      var numerator = 0;
-      var denominator = val;
-      var whole = 0;
-      var mixedNumerator = 0;
+    // recalculateFraction: function(val){
+    //   var numerator = 0;
+    //   var denominator = val;
+    //   var whole = 0;
+    //   var mixedNumerator = 0;
 
-      //first we determine which representation we are using.
-      var state = this.component.get('representation');
-      if((val === 'fraction') || (val === 'decimal') || (val === 'percent') || val === 'none' || val === 'mixed') {
-        state = val;
-        this.component.set('representation', state);
-        val = null;
-      }
-      //then, we calculate the numerator by counting selected beats.
-      _.each(this.component.get('measures').models, function(measure) {
-        _.each(measure.get('beats').models, function(beat) {
-          if(beat.get('selected')) {
-            numerator++;
-          }
-        }, this);
-        //then we determine the denominator
-        if (val && $('#measure'+measure.cid).parent().hasClass('selected')) {
-          denominator = val;
-        } else {
-          denominator = measure.get('beats').models.length;
-        }
-      }, this);
+    //   //first we determine which representation we are using.
+    //   var state = this.component.get('representation');
+    //   if((val === 'fraction') || (val === 'decimal') || (val === 'percent') || val === 'none' || val === 'mixed') {
+    //     state = val;
+    //     this.component.set('representation', state);
+    //     val = null;
+    //   }
+    //   //then, we calculate the numerator by counting selected beats.
+    //   _.each(this.component.get('measures').models, function(measure) {
+    //     _.each(measure.get('beats').models, function(beat) {
+    //       if(beat.get('selected')) {
+    //         numerator++;
+    //       }
+    //     }, this);
+    //     //then we determine the denominator
+    //     if (val && $('#measure'+measure.cid).parent().hasClass('selected')) {
+    //       denominator = val;
+    //     } else {
+    //       denominator = measure.get('beats').models.length;
+    //     }
+    //   }, this);
       
-      //Then we convert to mixed numbers
-      whole = Math.floor(numerator/denominator);
-      mixedNumerator = numerator-(whole*denominator);
+    //   //Then we convert to mixed numbers
+    //   whole = Math.floor(numerator/denominator);
+    //   mixedNumerator = numerator-(whole*denominator);
 
-      /*
-        This next section renders the correct representation of the
-        fraction/decimal/percent/none/mixed for this component.
-      */
-      if(state === 'fraction') {
-        $('#component-container'+this.component.cid + ' .count').html('<span class="numerator">4</span><span class="denominator">6</span>');
+    //   /*
+    //     This next section renders the correct representation of the
+    //     fraction/decimal/percent/none/mixed for this component.
+    //   */
+    //   if(state === 'fraction') {
+    //     $('#component-container'+this.component.cid + ' .count').html('<span class="numerator">4</span><span class="denominator">6</span>');
 
 
-        $('#component'+this.component.cid).next().find('.numerator').text(numerator);
-        $('#component'+this.component.cid).next().find('.denominator').text(denominator);
-      }
-      else if(state === 'decimal') {
-        $('#component-container'+this.component.cid + ' .count').html('<span class="decimal">0.0</span>');
-        var decimal = numerator / denominator;
-        $('#component'+this.component.cid).next().find('.decimal').text(decimal.toFixed(2));
-      }
-      else if(state === 'percent'){
-        $('#component-container'+this.component.cid + ' .count').html('<span class="percent">0%</span>');
-        var percent = numerator / denominator * 100;
-        $('#component'+this.component.cid).next().find('.percent').text(percent.toFixed(0) + '%');
-      }
-      else if(state === 'mixed'){
-        $('#component-container'+this.component.cid + ' .count').html('<span class="whole">0</span><span class="mixedNumerator"><sup>0</sup></span><span class="denominator"<sub>0</sub>');
-        $('#component'+this.component.cid).next().find('.whole').text(whole);
-        $('#component'+this.component.cid).next().find('.mixedNumerator').text(mixedNumerator);
-        $('#component'+this.component.cid).next().find('.denominator').text(denominator);
-      }
-      else if(state === 'none') {
-        $('#component-container'+this.component.cid + ' .count').empty();
-        $('#component-container'+this.component.cid + ' .count').trigger('create');
-      }
+    //     $('#component'+this.component.cid).next().find('.numerator').text(numerator);
+    //     $('#component'+this.component.cid).next().find('.denominator').text(denominator);
+    //   }
+    //   else if(state === 'decimal') {
+    //     $('#component-container'+this.component.cid + ' .count').html('<span class="decimal">0.0</span>');
+    //     var decimal = numerator / denominator;
+    //     $('#component'+this.component.cid).next().find('.decimal').text(decimal.toFixed(2));
+    //   }
+    //   else if(state === 'percent'){
+    //     $('#component-container'+this.component.cid + ' .count').html('<span class="percent">0%</span>');
+    //     var percent = numerator / denominator * 100;
+    //     $('#component'+this.component.cid).next().find('.percent').text(percent.toFixed(0) + '%');
+    //   }
+    //   else if(state === 'mixed'){
+    //     $('#component-container'+this.component.cid + ' .count').html('<span class="whole">0</span><span class="mixedNumerator"><sup>0</sup></span><span class="denominator"<sub>0</sub>');
+    //     $('#component'+this.component.cid).next().find('.whole').text(whole);
+    //     $('#component'+this.component.cid).next().find('.mixedNumerator').text(mixedNumerator);
+    //     $('#component'+this.component.cid).next().find('.denominator').text(denominator);
+    //   }
+    //   else if(state === 'none') {
+    //     $('#component-container'+this.component.cid + ' .count').empty();
+    //     $('#component-container'+this.component.cid + ' .count').trigger('create');
+    //   }
 
-      this.component.set('signature', denominator);
-    },
+    //   this.component.set('signature', denominator);
+    // },
   });
 });

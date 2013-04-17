@@ -17,7 +17,7 @@ define([
       sample: 'shhh',
       measures: measuresCollection,
       active: true,
-      signature: 4,
+      signature: 0, //initially set to zero, but set in the init of componentsView
       representation: 'fraction'
     },
     initialize: function(){

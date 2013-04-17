@@ -1,3 +1,7 @@
+.mixed-number-fraction {
+  display: inline-block;
+}
+
 hr {
   border-top: 1px solid rgb(0, 0, 0)!important;
 }
@@ -124,7 +128,7 @@ svg.circular-pie {
   right: 0;
   font-size: 50px;
   height: 50px;
-  width: 7%;
+  // width: 7%;
   text-align: center;
 }
 
@@ -145,7 +149,9 @@ svg.circular-pie {
 
 .component-container .count .whole {
   display: block;
-  margin: 15px auto 15px auto;
+  margin: 15px auto 25px auto;
+  font-size: 80px;
+  // margin-bottom: 12px;
 }
 
 .component-container .count .denominator {

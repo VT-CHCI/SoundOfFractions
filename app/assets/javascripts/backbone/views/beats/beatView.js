@@ -46,8 +46,6 @@ define([
         // TODO: need to take in an option about currentBeatRep
         // TODO: maybe need to respond to a representation changed event (change this.currentBeatRepresentation and rerender)
 
-        console.log('beatView \'options\' passed in :');
-        console.warn(options);
         this.model = options.model;
 
         // this is the html element into which this class should render its template
@@ -146,8 +144,6 @@ define([
         var beatR = this.beatR;
         beatTemplateParameters.beatR = beatR;
 
-        console.log('beatTemplateParameters :');
-        console.warn(beatTemplateParameters);
         // compile the template for this beat (respect the current representation)
         var compiledTemplate = _.template(this.representations[this.currentBeatRepresentation], beatTemplateParameters );
         

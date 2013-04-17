@@ -1,5 +1,10 @@
 <div id="measure<%= measure.cid %>" class="measure">
-  <span class="title"> Bar Measure <span class="number"><%= measureCount %></span> - <span class="delete">[X]</span></span>
+  <span class="title"> Bar Measure <span class="number"><%= measureCount %></span>
+  <% if(measureCount == 1) { %>
+  <% } else { %>
+   - <span class="delete">[X]</span>
+  <% } %>
+  </span>
   <!-- Beats should go here -->
   <div id="<%= beatHolder %>">
   </div>

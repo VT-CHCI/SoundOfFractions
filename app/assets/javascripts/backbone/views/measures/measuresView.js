@@ -47,7 +47,6 @@ define([
       //if we're being created by a componentView, we are
       //passed in options. Otherwise we create a single
       //measure and add it to our collection.
-      console.warn(COLORS);
       if (options) {
         if (options.defaultMeasureRepresentation) {
           this.currentMeasureRepresentation = options.defaultMeasureRepresentation;
@@ -89,7 +88,7 @@ define([
     },
 
     render: function(){
-      // REPLACE whatever's already in the measure container with: a plus sign in the measure rendering
+      // REPLACE whatever is already in the measure container with: a plus sign in the measure rendering
       $(this.el).html('<div class="addMeasure">+</div>');
 
       // Circle
@@ -113,7 +112,6 @@ define([
       var linearBeatXPadding = 14; //5%
       var linearBeatYPadding = 10;
       var beatHolderWidth = lbbMeasureWidth-(2*linearBeatXPadding);
-      console.warn(beatHolderWidth);
       // Time
       var firstBeatStart = 0; //in s
       var timeIncrement = 500; //in ms

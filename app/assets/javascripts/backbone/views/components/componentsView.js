@@ -26,8 +26,9 @@ define([
     el: $('#sof-composer'),
 
     initialize: function(){
-      // Default Measure representation state - also set "active" class in wholeMeasureRepresentation.html
+      // Default Measure representation state - also set "active" class in fractionRepresentation.html AND wholeMeasureRepresentation.html
       this.defaultMeasureRepresentation = 'linear-bar-svg';
+      this.defaultFractionRepresentation = 'fraction';
 
       //this context variable gives us access to all of the
       //web audio api methods/objects.
@@ -43,6 +44,7 @@ define([
       //this is creating the snare component.
       this.measure = new BeatsCollection;
 
+      //for each beat - also change signature below
       for (var i = 0; i < 6; i++) {
         this.measure.add();
       }
@@ -56,12 +58,14 @@ define([
         mute: false,
         sample: '808_sd.m4a',
         measures: this.component,
+        signature: 6,
         active: true
       });
 
       //this is creating the hi-hat component.
       this.measure = new BeatsCollection;
 
+      //for each beat - also change signature below
       for (var i = 0; i < 5; i++) {
         this.measure.add();
       }
@@ -75,12 +79,14 @@ define([
         mute: true,
         sample: '808_chh.m4a',
         measures: this.component,
+        signature: 5,
         active: true
       });
 
       //this is creating the kick drum component.
       this.measure = new BeatsCollection;
 
+      //for each beat - also change signature below
       for (var i = 0; i < 4; i++) {
         this.measure.add();
       }
@@ -94,6 +100,7 @@ define([
         mute: true,
         sample: '808_bd.m4a',
         measures: this.component,
+        signature: 4,
         active: true
       });
 
@@ -101,6 +108,7 @@ define([
       //this is creating the synth component.
       this.measure = new BeatsCollection;
 
+      //for each beat - also change signature below
       for (var i = 0; i < 3; i++) {
         this.measure.add();
       }
@@ -114,6 +122,7 @@ define([
         mute: true,
         sample: 'ambass.mp3',
         measures: this.component,
+        signature: 3,
         active: true
       });
 
@@ -200,8 +209,13 @@ define([
         $(this.el).append( compiledTemplate );
 
         //create a component view.
-        var componentView = new ComponentView({collection:component, el:'#component-container'+component.cid, 
-          gainNode:this.muteGainNodeList[counter], defaultMeasureRepresentation: this.defaultMeasureRepresentation });
+        var componentView = new ComponentView({
+          collection:component,
+          el:'#component-container'+component.cid, 
+          gainNode:this.muteGainNodeList[counter],
+          defaultMeasureRepresentation: this.defaultMeasureRepresentation,
+          defaultFractionRepresentation: this.defaultFractionRepresentation
+        });
         if(!component.get('active')) {
           console.log('found a muted one');
           componentView.toggleMute();

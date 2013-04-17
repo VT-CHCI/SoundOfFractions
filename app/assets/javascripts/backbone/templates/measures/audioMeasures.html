@@ -1,3 +1,8 @@
 <div>
-  <span class="title">Audio Representation Measure <span class="number"><%= measureCount %></span> - <span class="delete">[X]</span></span>
+  <span class="title">Audio Representation Measure <span class="number"><%= measureCount %></span>
+  <% if(measureCount == 1) { %>
+  <% } else { %>
+   - <span class="delete">[X]</span>
+  <% } %>
+  </span>
 </div>
