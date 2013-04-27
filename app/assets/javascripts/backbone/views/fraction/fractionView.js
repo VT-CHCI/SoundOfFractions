@@ -108,7 +108,10 @@ define([
     },
 
     updateFractionValues: function(denominator){
-      this.render(denominator);
+      window.csf = $(this.el);
+      if ($(this.el).prev().hasClass('selected')) {
+        this.render(denominator);
+      }
     }
   });
 });

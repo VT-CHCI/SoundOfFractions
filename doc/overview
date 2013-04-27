@@ -1,0 +1,109 @@
+What constitutes a whole?
+
+additive palette
+  beats
+  measures
+
+entities
+  component / sheet/tab?
+    measure (¿defined by beats with certain properties?)
+    instrument
+    name
+    icon
+    sound/sample
+  assignment
+    goal
+    assessment
+  beat
+  song
+  measure representation
+  beat representation
+  fraction representation
+  beats per measure
+  tempo
+  play
+  pause
+  stop
+  box? an element that contains other entities that can be moved as one collection
+    {mold/cast/window/template/view/perspective/perception/viewport/movement/module/section}
+  navbar
+    menu
+    login
+    list of songs
+    list of participants in class
+
+fraction representations
+  none
+  calculation?
+  percentage
+  Decimal
+  Mixed Number
+
+measure/beat representations
+  audio
+  tapping
+  vertical bar
+  linear bar
+  linear number line
+  pie
+  bead
+  group
+
+attributes
+  count
+  labels 
+    counting numbers
+    fractions
+
+functions
+  add         measure/beat/instrument
+  delete      song/measure/instrument/beat
+  edit        song/beat/assignment
+  create      song/assignment
+  record      song
+  save/update song/assignment
+  load/open   song/assignment
+  mute        instrument/beat
+  unmute      instrument/beat
+  animate     beat/representation transformation
+  play(sound) song{beats}
+  move        measure/beat/instrument
+  pick up     beat/measure/instrument
+  place       beat/measure/instrument
+  orient      beat(radial representations)
+  focus       component/instrument/measure/¿box?
+  share       song
+  auto-space  equidistant beats
+  download    song
+  select      state on
+  deselect    state off
+  sign in     application
+  sign out    application
+  sign up     application
+  unfurl      measure(bead)
+  extend      measure/beat
+  shrink      measure/beat
+  compare     representations
+  sort (beats in pallet) by size/length/color/
+  logging     representation changes/ 
+  information measure/instrument/song/button
+
+general features
+  metrics     most beats in a song
+              longest song (time)
+              most worked on (diff between created and updated? or sessions?)
+  awards      completed assignments
+  teaching    give awards for completing simple tasks used to introduce the program
+
+outside of the program
+  tapping     fingers/drumsticks/clapping/slapping    
+  counting    internal / outloud / paper
+  student     intended user
+              completes assignments made by the teacher
+              has a playground with full functionality
+  class       all students in one class(~15-35 students in one meeting)
+  school      all students/classes in a school
+  district    all schools in an area
+  teacher     can make assignments and program states
+  partner     another student, that completes the task(s) together
+  group       other students that complete the task(s) together

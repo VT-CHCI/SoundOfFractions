@@ -143,6 +143,7 @@ define([
         //Circular Bead
         var beatR = this.beatR;
         beatTemplateParameters.beatR = beatR;
+        console.log(x1 + ',' + y1);
 
         // compile the template for this beat (respect the current representation)
         var compiledTemplate = _.template(this.representations[this.currentBeatRepresentation], beatTemplateParameters );

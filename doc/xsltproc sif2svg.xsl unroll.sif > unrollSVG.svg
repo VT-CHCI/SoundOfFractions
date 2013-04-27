@@ -1,0 +1,35 @@
+xsltproc sif2svg.xsl unroll.sif > unrollSVG.svg
+
+xsltproc /Users/special/Desktop/sif2svg.xsl /Users/special/Desktop/unroll.sifz > /Users/special/Desktop/unrollSVG.svg
+
+100       , 20
+178.5398  , 20
+257.0796  , 20
+335.6194  , 20
+414.1592  , 20
+
+257       , 20
+335.5398  , 20
+414.0796  , 20
+492.6194  , 20
+571.1592  , 20
+
+257       , 20
+307       , 70
+257       , 120
+207       , 70
+257       , 20
+
+
+var circleData2 = circleData1;
+circleData2[1].x = 335.5398;
+circleData2[1].y = 20;
+var circleData3 = circleData2;
+circleData3[2].x = 414.0796;
+circleData3[2].y = 20;
+var circleData4 = circleData3;
+circleData4[3].x = 492.6194;
+circleData4[3].y = 20;
+var circleData5 = circleData4;
+circleData5[4].x = 571.1592;
+circleData5[4].y = 20;

@@ -89,7 +89,7 @@ define([
 
     render: function(){
       // REPLACE whatever is already in the measure container with: a plus sign in the measure rendering
-      $(this.el).html('<div class="addMeasure">+</div>');
+      $(this.el).html('<div class="addMeasure pull-right">+</div>');
 
       // Circle
       var centerX = 150;
@@ -176,8 +176,8 @@ define([
             beatAngle: 360/this.measuresCollection.models[0].attributes.beats.length,
             beatStartAngle: -90+((360/this.measuresCollection.models[0].attributes.beats.length)*index),
             beatStartTime: firstBeatStart+(index)*(timeIncrement/1000),
-            // Circular Pie
             beatR: circularBeadBeatRadius
+            // Circular Bead
           };
 
           // manipulate linear-bar-svg beat parameters
@@ -283,11 +283,6 @@ define([
         }
         //re-render the view.
         this.render();
-
-        //recalculate the widths for each beat.
-        this.calcBeatWidth(signature);
-        // dispatch.trigger('signatureChange.event', this.parent.get('signature'));
-
       }
     },
 
