@@ -5,4 +5,10 @@
    - <span class="delete">[X]</span>
   <% } %>
   </span>
+   <svg xmlns="http://www.w3.org/2000/svg" version="1.1" class="audio">
+   	<circle cx="<%= cx %>" cy="<%= cy %>" r="<%= beatRForAudio %>" stroke="black" stroke-width="1" fill="<%= colorForAudio %>"  opacity="0.25"></circle>
+    <g id="<%= beatHolder %>">
+    </g>
+    <circle cx="<%= cx%>" cy="<%= cy %>" r="<%= beatRForAudio + 2%>" fill="white"  opacity="0.1"></circle>
+  </svg> 
 </div>

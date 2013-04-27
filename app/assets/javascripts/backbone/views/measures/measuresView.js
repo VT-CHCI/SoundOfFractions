@@ -115,6 +115,9 @@ define([
       // Time
       var firstBeatStart = 0; //in s
       var timeIncrement = 500; //in ms
+      // Audio
+      var beatRForAudio = 24;
+      var colorForAudio = COLORS.hexColors[5];
       // console.log(this.representations[this.currentMeasureRepresentation]);
 
       // for each measure in measuresCollection
@@ -136,14 +139,18 @@ define([
           cy: centerY,
           xMeasureLocation: xMeasureLocation,
           yMeasureLocation: yMeasureLocation,
-          measureR: measureRadius
+          measureR: measureRadius,
+
+          //Audio
+          beatRForAudio: beatRForAudio,
+          colorForAudio: colorForAudio
         };
 
         var compiledTemplate = _.template( this.representations[this.currentMeasureRepresentation], measureTemplateParamaters );
 
         // find the plus sign we put in there, and right before it, put in the rendered template
         $(this.el).find('.addMeasure').before( compiledTemplate );
-
+        console.log(this.currentMeasureRepresentation);
         // for each beat in this measure
         _.each(measure.get('beats').models, function(beat, index) {
 
@@ -176,8 +183,12 @@ define([
             beatAngle: 360/this.measuresCollection.models[0].attributes.beats.length,
             beatStartAngle: -90+((360/this.measuresCollection.models[0].attributes.beats.length)*index),
             beatStartTime: firstBeatStart+(index)*(timeIncrement/1000),
-            beatR: circularBeadBeatRadius
             // Circular Bead
+            beatR: circularBeadBeatRadius,
+
+            //Audio
+            beatRForAudio: beatRForAudio,
+            colorForAudio: colorForAudio
           };
 
           // manipulate linear-bar-svg beat parameters

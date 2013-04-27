@@ -45,7 +45,7 @@ define([
       if (options) {
         // TODO: need to take in an option about currentBeatRep
         // TODO: maybe need to respond to a representation changed event (change this.currentBeatRepresentation and rerender)
-
+        console.log(options);
         this.model = options.model;
 
         // this is the html element into which this class should render its template
@@ -65,9 +65,11 @@ define([
         this.beatAngle = options.beatAngle;
         this.beatStartAngle = options.beatStartAngle;
         this.color = options.color;                             //index number
+        this.colorForAudio = options.colorForAudio;
         this.beatStartTime = options.beatStartTime;
         this.timeIncrement = options.timeIncrement;
         this.beatR = options.beatR;
+        this.beatRForAudio = options.beatRForAudio;
         this.beatHolderWidth = options.beatHolderWidth;
         this.linearBeatXPadding = options.linearBeatXPadding;
       } else {
@@ -143,8 +145,13 @@ define([
         //Circular Bead
         var beatR = this.beatR;
         beatTemplateParameters.beatR = beatR;
-        console.log(x1 + ',' + y1);
+        //console.log(x1 + ',' + y1);
 
+        //Audio
+        var beatRForAudio = this.beatRForAudio;
+        beatTemplateParameters.beatRForAudio = beatRForAudio;
+        var colorForAudio = this.colorForAudio;
+        beatTemplateParameters.colorForAudio = colorForAudio;
         // compile the template for this beat (respect the current representation)
         var compiledTemplate = _.template(this.representations[this.currentBeatRepresentation], beatTemplateParameters );
         

@@ -62,7 +62,7 @@ define([
       sliderModel.set({slidervalue : values.signature});
       $('#sig_val').text(values.signature);
 
-      state.set({signature : values.signature});
+      //state.set({signature : values.signature});
       $('#slider input').val(values.signature);
       this.render(values);
     },

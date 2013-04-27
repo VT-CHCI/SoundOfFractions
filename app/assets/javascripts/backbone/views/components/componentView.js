@@ -122,7 +122,11 @@ define([
     */
     toggleAnimation: function(state, duration, signature, maxMeasures){
       // TODO why bring in signature to have it reset
-      signature = $(this.el).find('.measure').eq(0).find('.beat').length;
+      //signature = $(this.el).find('.measure').eq(0).find('.beat').length;
+      signature = this.component.get('signature');
+      console.log(signature);
+      console.log(maxMeasures);
+      console.log(duration);
       duration = duration/signature/maxMeasures;
 
       //this is the SVG animation of a beat being played.

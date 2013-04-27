@@ -33,7 +33,7 @@ define([
     previousFractionRepresentation: "", //temp-holder
 
     initialize: function(options){
-      console.warn(options.el);
+      //console.warn(options.el);
       //if we're being created by a componentView, we are
       //passed in options. Otherwise we create a single
       //measure and add it to our collection.
@@ -99,7 +99,7 @@ define([
       var compiledTemplate = _.template( this.representations[this.currentFractionRepresentation], fractionTemplateParamaters );
 
       // find the plus sign we put in there, and right before it, put in the rendered template
-      console.log(compiledTemplate);
+      //console.log(compiledTemplate);
       $(this.el).html( compiledTemplate );
 
       // TODO, we need to refresh the svg
