@@ -56,38 +56,38 @@ attributes
     fractions
 
 functions
-  add         measure/beat/instrument
-  delete      song/measure/instrument/beat
-  edit        song/beat/assignment
-  create      song/assignment
-  record      song
-  save/update song/assignment
-  load/open   song/assignment
-  mute        instrument/beat
-  unmute      instrument/beat
-  animate     beat/representation transformation
-  play(sound) song{beats}
-  move        measure/beat/instrument
-  pick up     beat/measure/instrument
-  place       beat/measure/instrument
-  orient      beat(radial representations)
-  focus       component/instrument/measure/¿box?
-  share       song
-  auto-space  equidistant beats
-  download    song
-  select      state on
-  deselect    state off
-  sign in     application
-  sign out    application
-  sign up     application
-  unfurl      measure(bead)
-  extend      measure/beat
-  shrink      measure/beat
-  compare     representations
-  sort (beats in pallet) by size/length/color/
-  logging     representation changes/ 
-  information measure/instrument/song/button
-
+  add                     measure/beat/instrument
+  delete                  song/measure/instrument/beat
+  edit                    song/beat/assignment
+  create                  song/assignment
+  record                  song
+  save/update             song/assignment
+  load/open               song/assignment
+  mute                    instrument/beat
+  unmute                  instrument/beat
+  animate                 beat/representation transformation
+  play(sound)             song{beats}
+  move                    measure/beat/instrument
+  pick up                 beat/measure/instrument
+  place                   beat/measure/instrument
+  orient                  beat(radial representations)
+  focus                   component/instrument/measure/¿box?
+  share                   song
+  auto-space              equidistant beats
+  download                song
+  select                  state on
+  deselect                state off
+  sign in                 application
+  sign out                application
+  sign up                 application
+  unfurl                  measure(bead)
+  extend                  measure/beat
+  shrink                  measure/beat
+  compare                 representations
+  sort (beats in pallet)  by size/length/color/
+  logging                 representation changes/ 
+  look at information     measure/instrument/song/button
+  compare                 song/measure/beat/fraction
 math
   add
   subtract

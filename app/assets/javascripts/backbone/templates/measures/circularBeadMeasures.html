@@ -7,8 +7,9 @@
    - <span class="delete">[X]</span>
   <% } %>
   </span>
-  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" class="circular-pie">
-    <circle cx="<%= cx %>" cy="<%= cy %>" r="<%= measureR %>" stroke="black" stroke-dasharray="1,3" stroke-width="1" fill="none" />
+  <svg id="svg<%= measure.cid %>" xmlns="http://www.w3.org/2000/svg" version="1.1" class="circular-pie">
+    <path d="<%= pathFunction %>" />
+    <!-- <circle cx="<%= cx %>" cy="<%= cy %>" r="<%= measureR %>" stroke="black" stroke-dasharray="1,3" stroke-width="1" fill="none" /> -->
     <g id="<%= beatHolder %>">
     </g>
   </svg> 
