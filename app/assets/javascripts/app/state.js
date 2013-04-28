@@ -62,41 +62,47 @@ define([
         if(window.waitIntervalID) {
           window.clearInterval(window.waitIntervalID);
         }
+        var that = this;
         window.waitIntervalID = window.setInterval(function() {
-          if(this.waitCount == 1) {
-            this.isWaiting = false;
-            this.waitCount = 0;
+          console.log('waitCount = ' + that.waitCount);
+          if(that.waitCount == 2) {
+            that.isWaiting = false;
+            that.waitCount = 0;
 
-            this.mainCounter = 0;
-            this.isRecording = true;
-            for(var i = 0; i < this.signature; i++) {
-              this.beatArray[i] = 0;
+            that.mainCounter = 0;
+            that.isRecording = true;
+            for(var i = 0; i < that.signature; i++) {
+              that.beatArray[i] = 0;
             }
             window.tapIntervalID = window.setInterval(function() {
-              this.count = this.mainCounter + 1;
+              that.count = that.mainCounter + 1;
               
-              this.mainCounterTime = new Date().getTime();
-              console.log(this.beatArray);
-              this.mainCounter = (this.mainCounter + 1) % this.signature;
-            }, this.average);
-            this.isTapping = false;
-            this.countIn = 1;
+              that.mainCounterTime = new Date().getTime();
+              console.log(that.beatArray + " " + that.count);
+              that.mainCounter = (that.mainCounter + 1) % that.signature;
+            }, that.average);
+            that.isTapping = false;
+            that.countIn = 1;
             //show the BPM
-            var bpm = 1000 / this.average * 60;
+            var bpm = 1000 / that.average * 60;
+            console.log('BPM = ' + bpm);
+            that.set('tempo', bpm);
+            dispatch.trigger('tempoChange.event', bpm);
+            dispatch.trigger('togglePlay.event', 'on');
             ///set bpm slider here ! ! ! ! !
             window.clearInterval(waitIntervalID);
           }
-          this.waitCount++;
+          that.waitCount++;
         }, this.average);
         this.countIn++;
       }
         
       console.log(this.timeIntervals);
     }
-    else if(keyEvent.keyCode == 32 && isRecording) {
+    else if(keyEvent.keyCode == 32 && this.isRecording) {
       var keyTime = new Date().getTime();
-      if(Math.abs(keyTime - mainCounterTime) < (this.average / 3)) {
-        beatArray[count - 1] = 1;
+      if(Math.abs(keyTime - this.mainCounterTime) < (this.average / 3)) {
+        this.beatArray[this.count - 1] = 1;
         console.log("beat activated!!!");
       }
     }

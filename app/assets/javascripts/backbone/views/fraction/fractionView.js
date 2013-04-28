@@ -8,6 +8,7 @@ define([
   'jquery',
   'underscore',
   'backbone',
+  'backbone/models/component',
   'text!backbone/templates/fraction/decimal.html',
   'text!backbone/templates/fraction/fraction.html',
   'text!backbone/templates/fraction/mixedNumber.html',
@@ -16,7 +17,7 @@ define([
   'app/dispatch',
   'app/state',
   'app/log'
-], function($, _, Backbone, decimalTemplate, fractionTemplate, mixedNumberTemplate, percentTemplate, blankTemplate, dispatch, state, log){
+], function($, _, Backbone, ComponentModel, decimalTemplate, fractionTemplate, mixedNumberTemplate, percentTemplate, blankTemplate, dispatch, state, log){
   return Backbone.View.extend({
     // el: $('.count'),
 
@@ -108,6 +109,9 @@ define([
     },
 
     updateFractionValues: function(denominator){
+      if(!denominator) {
+        var denominator = this.parent.get('signature');
+      }
       window.csf = $(this.el);
       if ($(this.el).prev().hasClass('selected')) {
         this.render(denominator);

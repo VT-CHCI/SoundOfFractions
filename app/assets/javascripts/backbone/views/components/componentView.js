@@ -84,7 +84,9 @@ define([
     },
 
     updateModelSignature: function(val){
-      this.component.set('signature', val);
+      if($('#component'+this.component.cid).hasClass('selected')) {
+        this.component.set('signature', val);
+      }
     },
     /*
       This is called when the user clicks on the icon of this component
@@ -127,10 +129,12 @@ define([
       console.log(signature);
       console.log(maxMeasures);
       console.log(duration);
+
+      //duration is of one beat.
       duration = duration/signature/maxMeasures;
 
       //this is the SVG animation of a beat being played.
-      function animate (target) {
+      this.animate = function(target) {
         target.setAttributeNS(null, 'dur', (duration/1000)+'s');
         target.beginElement();
       };
@@ -148,20 +152,33 @@ define([
       else {
         console.log('starting animation', duration);
 
-        //this sets the time interval that each animation should take,
-        //and then calls animate on each beat with the appropriate
-        //timing interval.
+        // this sets the time interval that each animation should take,
+        // and then calls animate on each beat with the appropriate
+        // timing interval.
         this.animationIntervalID = setInterval((function(self) {
           return function() {
             if (counter >= 0 && counter < beats.length)
-              animate(beats.eq(counter).children().first()[0]);
+              self.animate(beats.eq(counter).children().first()[0]);
             if (counter < (signature*maxMeasures-1))
               counter ++;
             else
               counter = 0;
           }
         })(this), duration); //duration should be set to something else
+        //this.animationWrapper(counter, beats, signature, maxMeasures, duration);
       }
+    },
+
+    animationWrapper: function(counter, beats, signature, maxMeasures, duration) {
+      console.warn('ANIMATION WRAPPER CALLED');
+      if (counter >= 0 && counter < beats.length)
+        this.animate(beats.eq(counter).children().first()[0]);
+      if (counter < (signature*maxMeasures-1))
+        counter ++;
+      else {
+        counter = 0;
+      }
+      this.animationIntervalID = setTimeout(this.animationWrapper, duration);
     },
 
     //This is called when the component is clicked anywhere to bring
