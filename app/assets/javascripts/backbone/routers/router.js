@@ -14,13 +14,14 @@ define([
   'backbone/views/transport/transportView',
   'backbone/views/button/fractionRepresentionView',
   'backbone/views/button/wholeMeasureRepresentationView',
+  'backbone/views/recorder/recorderView',
   'app/log',
   'backbone/collections/songsCollection',
   'backbone/views/songs/new_view',
   'backbone/views/songs/index_view',
   'backbone/views/songs/show_view',
   'backbone/views/songs/edit_view'
-], function($, _, Backbone, mainHomeView, beatsPerMeasureSliderView, additiveLinearBeatPaletteView, componentsView, tempoSliderView, transportView, fractionRepresentionView, wholeMeasureRepresentationView, log, songsCollection, songsViewNew, songsViewIndex, songsViewShow, songsViewEdit ){
+], function($, _, Backbone, mainHomeView, beatsPerMeasureSliderView, additiveLinearBeatPaletteView, componentsView, tempoSliderView, transportView, fractionRepresentionView, wholeMeasureRepresentationView, recorderView, log, songsCollection, songsViewNew, songsViewIndex, songsViewShow, songsViewEdit ){
 
   var BBRouter = Backbone.Router.extend({
     // songs: {},
@@ -43,6 +44,7 @@ define([
       transportView.render();
       fractionRepresentionView.render();
       wholeMeasureRepresentationView.render();
+      recorderView.render();
     },
 
     index: function(){
@@ -61,6 +63,7 @@ define([
       additiveLinearBeatPaletteView.render();
       tempoSliderView.render();
       transportView.render();
+      recorderView.render();
     },
 
     edit: function(id){
