@@ -4,8 +4,10 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'backbone/routers/router', // Request router.js
-], function($, _, Backbone, Router){
+  'backbone/routers/router',  // Request router.js
+  'app/d3.v3.min',             // d3 library
+  'app/d3.superformula'       // d3.superformula library  
+], function($, _, Backbone, Router, D3, Superformula){
   var initialize = function(options){
 
     console.log('SOF => In Initialize, initializing Router:');
