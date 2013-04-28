@@ -234,7 +234,7 @@ define([
     */
     playLoop: function(){
       var tempo = state.get('tempo');
-
+      console.log('TEMPO IN PLAYLOOP' + tempo);
       var numBeats = 0;
       var i = 0;
 
@@ -434,6 +434,7 @@ define([
 
         //we call playLoop() with our calculated duration to initialize
         //and play the audio.
+        //this.playLoop();
         this.intervalID = setInterval((function(self) {
         return function() {self.playLoop(); } } )(this),
         duration);
