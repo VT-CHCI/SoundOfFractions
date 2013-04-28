@@ -91,6 +91,13 @@ define([
       // REPLACE whatever is already in the measure container with: a plus sign in the measure rendering
       $(this.el).html('<div class="addMeasure pull-right">+</div>');
 
+      // Transition
+      var totalPoints = 181;
+      var margin = {top: 20, left: 60};
+      var lineLength = 2 * radius * Math.PI;
+      var lineDivision = lineLength/totalPoints;
+      var animationDuration = 3000/numberOfPoints;
+
       // Circle
       var centerX = 150;
       var centerY = 50;

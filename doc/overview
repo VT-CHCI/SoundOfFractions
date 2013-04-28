@@ -88,6 +88,16 @@ functions
   logging     representation changes/ 
   information measure/instrument/song/button
 
+math
+  add
+  subtract
+  divide
+  multiply
+
+music
+  compare
+  compose
+
 general features
   metrics     most beats in a song
               longest song (time)
