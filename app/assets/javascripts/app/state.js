@@ -9,8 +9,9 @@
 define([
   'underscore',
   'backbone',
-  'app/dispatch'
-], function(_, Backbone, dispatch) {
+  'app/dispatch',
+  'backbone/models/transport'
+], function(_, Backbone, dispatch, transport) {
   var state = Backbone.Model.extend({
     defaults: {
       signature: 4,
@@ -29,8 +30,9 @@ define([
       this.beatArray = new Array();
       this.waitCount = 0;
       this.isWaiting = true;
-
+      this.transport = transport;
       dispatch.on('recordClicked.event', this.recordButtonClicked, this);
+      dispatch.on('stopRecording.event', this.stopRecording, this);
       var that = this;
       $(window).keypress(function(event) {
         that.keyPressed(event);
@@ -93,6 +95,7 @@ define([
             that.set('tempo', bpm);
             $('#transport').removeClass();
             $('#transport').addClass('pause');
+            that.transport.isPlaying = true;
             dispatch.trigger('tempoChange.event', bpm);
             dispatch.trigger('togglePlay.event', 'on');
             ///set bpm slider here ! ! ! ! !
@@ -132,6 +135,9 @@ define([
     },
 
     recordButtonClicked: function() {
+      if(transport.isPlaying) {
+        dispatch.trigger('togglePlay.event');
+      }
       this.isTapping = true;
       if(window.tapIntervalID) {
         window.clearInterval(tapIntervalID);
@@ -141,6 +147,27 @@ define([
       }
       this.isWaiting = true;
       this.signature = 0;
+    },
+
+    stopRecording: function() {
+      this.signature = 0;
+      this.countIn = 1;
+      this.globalDate = new Date();
+      this.previousTime = 0;
+      this.timeIntervals = new Array();
+      this.isTapping = false;
+      this.isRecording = false;
+      this.beatArray = new Array();
+      this.waitCount = 0;
+      this.isWaiting = true;
+
+      if(window.waitIntervalID) {
+        window.clearInterval(window.waitIntervalID);
+      }
+
+      if(window.tapIntervalID) {
+        window.clearInterval(tapIntervalID);
+      }
     }
   });
   return new state;
