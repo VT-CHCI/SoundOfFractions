@@ -53,6 +53,9 @@ define([
         if (options.defaultMeasureRepresentation) {
           this.currentMeasureRepresentation = options.defaultMeasureRepresentation;
         }
+        if(options.newMeasureRepresentation) {
+          this.currentMeasureRepresentation = options.newMeasureRepresentation;
+        }
         this.measuresCollection = options.collection;
         this.parent = options.parent;
         this.el = options.el;

@@ -66,21 +66,38 @@ define([
       This View does not have its own html rendering, but instead creates
       a new MeasuresView which gets rendered instead.
     */
-    render: function(){
+    render: function(options){
       console.log('render: componentView.js');
-      new MeasuresView({
-        collection:this.component.get('measures'),
-        parent: this.component,
-        el:'#component'+this.component.cid,
-        defaultMeasureRepresentation: this.defaultMeasureRepresentation
-      });
+      if(options) {
+        new MeasuresView({
+          collection:this.component.get('measures'),
+          parent: this.component,
+          el:'#component'+this.component.cid,
+          newMeasureRepresentation: options.representation
+        });
 
-      new FractionRepresentationView({
-        collection:this.component.get('measures'),
-        parent: this.component,
-        el:'#fraction'+this.component.cid,
-        defaultFractionRepresentation: this.defaultFractionRepresentation
-      });
+        new FractionRepresentationView({
+          collection:this.component.get('measures'),
+          parent: this.component,
+          el:'#fraction'+this.component.cid,
+          defaultFractionRepresentation: this.defaultFractionRepresentation
+        }); 
+      }
+      else {
+        new MeasuresView({
+          collection:this.component.get('measures'),
+          parent: this.component,
+          el:'#component'+this.component.cid,
+          defaultMeasureRepresentation: this.defaultMeasureRepresentation
+        });
+
+        new FractionRepresentationView({
+          collection:this.component.get('measures'),
+          parent: this.component,
+          el:'#fraction'+this.component.cid,
+          defaultFractionRepresentation: this.defaultFractionRepresentation
+        });
+      }
 
      return this;
     },
@@ -89,7 +106,11 @@ define([
       if($('#component'+this.component.cid).hasClass('selected')) {
         this.component.set('signature', val);
       }
-      this.render();
+      
+      var rep = $('#measure-representation-buttons').find('.active').data('state')
+
+      var options = {representation: rep};
+      this.render(options);
     },
     /*
       This is called when the user clicks on the icon of this component
