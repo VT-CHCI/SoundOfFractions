@@ -112,7 +112,6 @@ define([
       if(!denominator) {
         var denominator = this.parent.get('signature');
       }
-      window.csf = $(this.el);
       if ($(this.el).prev().hasClass('selected')) {
         this.render(denominator);
       }

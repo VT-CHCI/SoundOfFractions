@@ -45,7 +45,7 @@ define([
       if (options) {
         // TODO: need to take in an option about currentBeatRep
         // TODO: maybe need to respond to a representation changed event (change this.currentBeatRepresentation and rerender)
-        console.log(options);
+
         this.model = options.model;
 
         // this is the html element into which this class should render its template

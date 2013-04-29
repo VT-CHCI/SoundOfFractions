@@ -58,7 +58,6 @@ define([
 
     //This is called when a sliderChange event occurs.
     setVal: function(values) {
-      console.warn(values);
       sliderModel.set({slidervalue : values.signature});
       $('#sig_val').text(values.signature);
 

@@ -89,7 +89,7 @@ define([
             that.set('tempo', bpm);
             dispatch.trigger('tempoChange.event', bpm);
             dispatch.trigger('togglePlay.event', 'on');
-            ///set bpm slider here ! ! ! ! !
+            // set bpm slider here ! ! ! ! !
             window.clearInterval(waitIntervalID);
           }
           that.waitCount++;

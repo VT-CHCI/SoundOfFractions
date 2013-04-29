@@ -31,6 +31,12 @@ entities
     login
     list of songs
     list of participants in class
+  question area
+    question
+    answer area
+  construction sandbox
+  performance review / grades
+
 
 fraction representations
   none
@@ -38,6 +44,7 @@ fraction representations
   percentage
   Decimal
   Mixed Number
+  Manual entry with verification
 
 measure/beat representations
   audio
@@ -88,6 +95,9 @@ functions
   logging                 representation changes/ 
   look at information     measure/instrument/song/button
   compare                 song/measure/beat/fraction
+  export                  song/student performance
+  review                  student performance
+
 math
   add
   subtract

@@ -8,9 +8,7 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'backbone/collections/measures',
   'backbone/collections/beats',
-  'backbone/models/measure',
   'backbone/views/beats/beatView',
   'text!backbone/templates/measures/audioMeasures.html',
   'text!backbone/templates/measures/linearBarMeasures.html',
@@ -22,7 +20,7 @@ define([
   'app/dispatch',
   'app/state',
   'app/log'
-], function($, _, Backbone, MeasureModel, BeatsCollection, MeasuresCollection, beatView, audioMeasuresTemplate, linearBarMeasuresTemplate, linearBarSVGMeasuresTemplate, circularPieMeasuresTemplate, circularBeadMeasuresTemplate, COLORS, dthree, dispatch, state, log){
+], function($, _, Backbone, BeatsCollection, beatView, audioMeasuresTemplate, linearBarMeasuresTemplate, linearBarSVGMeasuresTemplate, circularPieMeasuresTemplate, circularBeadMeasuresTemplate, COLORS, dthree, dispatch, state, log){
   //dthree can be referenced by d3, NOT dthree, and dthree CANNOT be renamed to d3
   return Backbone.View.extend({
     // el: $('.component'),
@@ -50,12 +48,17 @@ define([
       //passed in options. Otherwise we create a single
       //measure and add it to our collection.
       if (options) {
+        console.warn(options);
         if (options.defaultMeasureRepresentation) {
           this.currentMeasureRepresentation = options.defaultMeasureRepresentation;
         }
         this.measuresCollection = options.collection;
         this.parent = options.parent;
         this.el = options.el;
+        this.vis = {};
+        this.vis.svg = d3.select(this.el).append("svg");
+        this.vis.svg.attr("class", this.currentMeasureRepresentation);
+        this.d3 = {};
       }
       // else {
       //   this.measure = new BeatsCollection;
@@ -78,9 +81,6 @@ define([
       dispatch.on('measureRepresentation.event', this.changeMeasureRepresentation, this);
 
       this.render();
-
-      //Determines the intial beat width based on the global signature. Has to be below this.render()
-      this.calcBeatWidth(this.parent.get('signature'));
     },
 
     changeMeasureRepresentation: function(representation) {
@@ -111,19 +111,18 @@ define([
       var animationDuration = 3000/numberOfPoints;
       // Linear
       var beatBBX;
-      var beatBBY = 15;
-      // var beatWidth = 40;
-      var beatHeight = 15;
-      var xMeasureLocation = 15; //5%
+      var xMeasureLocation = 15; // 5%
       var yMeasureLocation = 10;
-      var lbbMeasureWidth = 272; //90%
+      var lbbMeasureWidth = 272; // 90%
       var lbbMeasureHeight = 25;
-      var linearBeatXPadding = 14; //5%
-      var linearBeatYPadding = 10;
+      var linearBeatXPadding = 0; // 5% left AND right
+      var linearBeatYPadding = 0;  // tiny sliver
+      var beatHeight = 25 - 2*linearBeatYPadding;
+      var beatBBY = 10 + linearBeatYPadding;
       var beatHolderWidth = lbbMeasureWidth-(2*linearBeatXPadding);
       // Time
-      var firstBeatStart = 0; //in s
-      var timeIncrement = 500; //in ms
+      var firstBeatStart = 0; // in s
+      var timeIncrement = 500; // in ms
       // Audio
       var beatRForAudio = 24;
       var colorForAudio = COLORS.hexColors[5];
@@ -134,7 +133,7 @@ define([
 
         var circleStates = [];
         for (i=0; i<numberOfPoints; i++){
-            //circle portion
+            // circle portion
             var circleState = $.map(Array(numberOfPoints), function (d, j) {
               var x = margin.left + measureRadius + lineDivision*i + measureRadius * Math.sin(2 * j * Math.PI / (numberOfPoints - 1));
               var y =  margin.top + measureRadius - measureRadius * Math.cos(2 * j * Math.PI / (numberOfPoints - 1));
@@ -163,12 +162,14 @@ define([
             .interpolate("basis"); // bundle | basis | linear | cardinal are also options
         //The Circle SVG Path we draw
         var svgContainer = d3.select('#measure'+measure.cid);
+        window.csf = svgContainer;
         var circle = svgContainer.append("g")
             .append("path")
             .data([circleStates[0]])
             .attr("d", pathFunction)
             .attr("class", "circle");
         function all() {
+          console.log('unroll clicked');
             for(i=0; i<numberOfPoints; i++){
                 circle.data([circleStates[i]])
                     .transition()
@@ -223,7 +224,7 @@ define([
 
         // find the plus sign we put in there, and right before it, put in the rendered template
         $(this.el).find('.addMeasure').before( compiledTemplate );
-        console.log(this.currentMeasureRepresentation);
+        // console.log(this.currentMeasureRepresentation);
         // for each beat in this measure
         _.each(measure.get('beats').models, function(beat, index) {
 
@@ -274,10 +275,6 @@ define([
           new beatView(measurePassingToBeatViewParamaters);
         }, this);
       }, this);
-
-      // TODO, we need to refresh the svg
-      // $('#component'+this.parent.cid).html($('#component'+this.parent.cid).html());
-
 
       return this;
     },
@@ -367,19 +364,6 @@ define([
         }
         //re-render the view.
         this.render();
-      }
-    },
-
-    //This determines the width of each beat based on the
-    //number of beats per measure or 'signature'.
-    calcBeatWidth: function(signature) {
-      if ($(this.el).hasClass('selected')) {
-        var px = 100/$('.measure').css('width').replace(/[^-\d\.]/g, '');
-        var beatWidth = (100 - ((signature*1+1)*px))/signature;
-
-        $(this.el).children('.beat').css({
-          'width' : beatWidth+'%'
-        });
       }
     }
   });
