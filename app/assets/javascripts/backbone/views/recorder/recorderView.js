@@ -29,7 +29,6 @@ define([
     },
 
     render: function() {
-      console.warn("RECORD RENDERED");
       //console.log(recorderTemplate);
       $(this.el).html(recorderTemplate);
 

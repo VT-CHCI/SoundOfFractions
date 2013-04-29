@@ -51,6 +51,8 @@ define([
 
       this.animationIntervalID = null;
 
+      this.component.set('currentBeat',0);
+
       //registering our handlers for serveral events.
       dispatch.on('toggleAnimation.event', this.toggleAnimation, this);
       dispatch.on('signatureChange.event', this.updateModelSignature, this);
@@ -87,6 +89,7 @@ define([
       if($('#component'+this.component.cid).hasClass('selected')) {
         this.component.set('signature', val);
       }
+      this.render();
     },
     /*
       This is called when the user clicks on the icon of this component
@@ -158,6 +161,7 @@ define([
         this.animationIntervalID = setInterval((function(self) {
           return function() {
             if (counter >= 0 && counter < beats.length)
+              self.component.set('currentBeat',counter);
               self.animate(beats.eq(counter).children().first()[0]);
             if (counter < (signature*maxMeasures-1))
               counter ++;

@@ -14,7 +14,8 @@ define([
   var state = Backbone.Model.extend({
     defaults: {
       signature: 4,
-      tempo: 120
+      tempo: 120,
+      components: null
     },
 
     initialize: function() {
@@ -39,6 +40,7 @@ define([
     keyPressed: function(keyEvent) {
     console.log(this.signature);
     if(keyEvent.keyCode == 32 && this.isTapping && this.isWaiting) {
+      keyEvent.preventDefault();
       if(this.countIn == 1) {
         this.previousTime = new Date().getTime();
         console.log("Start time: " + this.previousTime);
@@ -74,19 +76,23 @@ define([
             for(var i = 0; i < that.signature; i++) {
               that.beatArray[i] = 0;
             }
-            window.tapIntervalID = window.setInterval(function() {
-              that.count = that.mainCounter + 1;
+            
+            dispatch.trigger('signatureChange.event', that.signature);
+            // window.tapIntervalID = window.setInterval(function() {
+            //   that.count = that.mainCounter + 1;
               
-              that.mainCounterTime = new Date().getTime();
-              console.log(that.beatArray + " " + that.count);
-              that.mainCounter = (that.mainCounter + 1) % that.signature;
-            }, that.average);
+            //   that.mainCounterTime = new Date().getTime();
+            //   console.log(that.beatArray + " " + that.count);
+            //   that.mainCounter = (that.mainCounter + 1) % that.signature;
+            // }, that.average);
             that.isTapping = false;
             that.countIn = 1;
             //show the BPM
             var bpm = 1000 / that.average * 60;
             console.log('BPM = ' + bpm);
             that.set('tempo', bpm);
+            $('#transport').removeClass();
+            $('#transport').addClass('pause');
             dispatch.trigger('tempoChange.event', bpm);
             dispatch.trigger('togglePlay.event', 'on');
             ///set bpm slider here ! ! ! ! !
@@ -100,11 +106,27 @@ define([
       console.log(this.timeIntervals);
     }
     else if(keyEvent.keyCode == 32 && this.isRecording) {
-      var keyTime = new Date().getTime();
-      if(Math.abs(keyTime - this.mainCounterTime) < (this.average / 3)) {
-        this.beatArray[this.count - 1] = 1;
-        console.log("beat activated!!!");
-      }
+      keyEvent.preventDefault();
+      // var keyTime = new Date().getTime();
+      // if(Math.abs(keyTime - this.mainCounterTime) < (this.average / 3)) {
+      //   this.beatArray[this.count - 1] = 1;
+      //   console.log("beat activated!!!");
+      // }
+      _.each(this.get('components').models, function(component) {
+        if($('#component'+component.cid).hasClass('selected')) {
+          console.log(component.get('currentBeat'));
+          var measuresCollection = component.get('measures');
+          _.each(measuresCollection.models, function(measure) {
+            var beatsCollection = measure.get('beats');
+            var beat = beatsCollection.at(component.get('currentBeat'));
+            console.log(beat);
+            if(!beat.get('selected')) {
+              $('#beat'+beat.cid).click();
+            }
+            console.log($('#beat'+beat.cid));
+          }, this);
+        }
+      }, this);
     }
 
     },
