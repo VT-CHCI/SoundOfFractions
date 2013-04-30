@@ -27,15 +27,15 @@ define([
 
     // The different representations
     representations: {
-      "audio": audioMeasuresTemplate,
-      "linear-bar": linearBarMeasuresTemplate,
-      "linear-bar-svg": linearBarSVGMeasuresTemplate,
-      "circular-pie": circularPieMeasuresTemplate,
-      "circular-bead": circularBeadMeasuresTemplate,
+      'audio': audioMeasuresTemplate,
+      'linear-bar': linearBarMeasuresTemplate,
+      'linear-bar-svg': linearBarSVGMeasuresTemplate,
+      'circular-pie': circularPieMeasuresTemplate,
+      'circular-bead': circularBeadMeasuresTemplate,
     },
     //grab the current measure representation's data-state
-    currentMeasureRepresentation: "", //temp-holder
-    previousMeasureRepresentation: "", //temp-holder
+    currentMeasureRepresentation: '', //temp-holder
+    previousMeasureRepresentation: '', //temp-holder
 
     //registering click events to add and remove measures.
     events : {
@@ -56,8 +56,8 @@ define([
         this.parent = options.parent;
         this.el = options.el;
         this.vis = {};
-        this.vis.svg = d3.select(this.el).append("svg");
-        this.vis.svg.attr("class", this.currentMeasureRepresentation);
+        this.vis.svg = d3.select(this.el).append('svg');
+        this.vis.svg.attr('class', this.currentMeasureRepresentation);
         this.d3 = {};
       }
       // else {
@@ -71,8 +71,8 @@ define([
       //   this.measuresCollection.add({beats: this.measure});
       // }
 
-      if (options["template-key"]) {
-        this.currentBeatRepresentation = options["template-key"];
+      if (options['template-key']) {
+        this.currentBeatRepresentation = options['template-key'];
       }
 
       //registering a callback for signatureChange events.
@@ -159,15 +159,15 @@ define([
         var pathFunction = d3.svg.line()
             .x(function (d) {return d.x;})
             .y(function (d) {return d.y;})
-            .interpolate("basis"); // bundle | basis | linear | cardinal are also options
+            .interpolate('basis'); // bundle | basis | linear | cardinal are also options
         //The Circle SVG Path we draw
         var svgContainer = d3.select('#measure'+measure.cid);
         window.csf = svgContainer;
-        var circle = svgContainer.append("g")
-            .append("path")
+        var circle = svgContainer.append('g')
+            .append('path')
             .data([circleStates[0]])
-            .attr("d", pathFunction)
-            .attr("class", "circle");
+            .attr('d', pathFunction)
+            .attr('class', 'circle');
         function all() {
           console.log('unroll clicked');
             for(i=0; i<numberOfPoints; i++){
@@ -175,7 +175,7 @@ define([
                     .transition()
                     .delay(animationDuration*i)
                     .duration(animationDuration)
-                    .ease("linear")
+                    .ease('linear')
                     .attr('d', pathFunction)            
             }
         }
@@ -185,18 +185,18 @@ define([
                     .transition()
                     .delay(animationDuration*i)
                     .duration(animationDuration)
-                    .ease("linear")
+                    .ease('linear')
                     .attr('d', pathFunction)            
             }
         }
-        $('#a').on("click", all);
-        $('#b').on("click", reverse);
+        $('#a').on('click', all);
+        $('#b').on('click', reverse);
 
         // (when representation button changes, the current representation template will get updated)
         // compile the template for a measure
         var measureTemplateParamaters = {
           measure: measure,
-          beatHolder:"beatHolder"+measure.cid,
+          beatHolder:'beatHolder'+measure.cid,
           measureCount:index+1,
           measureAngle: 360.0,
           beatHolderWidth: beatHolderWidth,
@@ -235,7 +235,7 @@ define([
             parentElHolder:'#beatHolder'+measure.cid,
             parent:measure,
             parentCID:measure.cid,
-            singleBeat:"#beat"+beat.cid,
+            singleBeat:'#beat'+beat.cid,
             measureRepresentation:this.currentMeasureRepresentation,
             beatsInMeasure: this.measuresCollection.models[0].attributes.beats.length,
             // To use the range of colors
@@ -304,7 +304,7 @@ define([
         _.each(newMeasure.models, function(beats) {
           name = name + 'beat'+ beats.cid + '.';
         }, this);
-        log.sendLog([[3, "Added a measure: "+name]]);
+        log.sendLog([[3, 'Added a measure: ' + name]]);
 
         //Render
         this.render();
@@ -329,7 +329,7 @@ define([
         this.measuresCollection.remove(model);
 
         //send a log event showing the removal.
-        log.sendLog([[3, "Removed a measure: measure"+model.cid]]);
+        log.sendLog([[3, 'Removed a measure: measure' + model.cid]]);
 
         //re-render the view.
         this.render();
