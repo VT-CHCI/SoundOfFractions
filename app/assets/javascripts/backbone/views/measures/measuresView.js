@@ -79,6 +79,7 @@ define([
       dispatch.on('signatureChange.event', this.reconfigure, this);
       //Dispatch listeners
       dispatch.on('measureRepresentation.event', this.changeMeasureRepresentation, this);
+      dispatch.on('unroll.event', this.unroll, this);
 
       this.render();
     },
@@ -87,6 +88,28 @@ define([
       this.previousMeasureRepresentation = this.currentMeasureRepresentation;
       this.currentMeasureRepresentation = representation;
       this.render();      
+    },
+    unroll: function() {
+      console.log('unroll clicked');
+      for(i=0; i<this.numberOfPoints; i++){
+          circlePath.data([this.circleStates[i]])
+              .transition()
+              .delay(this.animationDuration*i)
+              .duration(this.animationDuration)
+              .ease('linear')
+              .attr('d', this.pathFunction);
+      }
+    },
+
+    rollup: function() {
+      for(i=0; i<this.numberOfPoints; i++){
+          circlePath.data([this.circleStates[this.numberOfPoints-1-i]])
+              .transition()
+              .delay(this.animationDuration*i)
+              .duration(this.animationDuration)
+              .ease('linear')
+              .attr('d', this.pathFunction);
+      }
     },
 
     render: function(){
@@ -103,12 +126,12 @@ define([
       var measureRadius = 40;
       // Bead
       var circularBeadBeatRadius = 8;
-      // Transition
       var numberOfPoints = 181;
-      var margin = {top: 20, left: 60};
-      var lineLength = 2 * measureRadius * Math.PI;
-      var lineDivision = lineLength/numberOfPoints;
-      var animationDuration = 3000/numberOfPoints;
+        // Transition
+        var margin = {top: 20, left: 60};
+        var lineLength = 2 * measureRadius * Math.PI;
+        var lineDivision = lineLength/numberOfPoints;
+        var animationDuration = 3000/numberOfPoints;
       // Linear
       var beatBBX;
       var xMeasureLocation = 15; // 5%
@@ -135,15 +158,19 @@ define([
         for (i=0; i<numberOfPoints; i++){
             // circle portion
             var circleState = $.map(Array(numberOfPoints), function (d, j) {
-              var x = margin.left + measureRadius + lineDivision*i + measureRadius * Math.sin(2 * j * Math.PI / (numberOfPoints - 1));
-              var y =  margin.top + measureRadius - measureRadius * Math.cos(2 * j * Math.PI / (numberOfPoints - 1));
+              // margin.left + measureRadius
+              var x = centerX + lineDivision*i + measureRadius * Math.sin(2 * j * Math.PI / (numberOfPoints - 1));
+              // margin.top + measureRadius
+              var y =  centerY - measureRadius * Math.cos(2 * j * Math.PI / (numberOfPoints - 1));
               return { x: x, y: y};
             })
             circleState.splice(numberOfPoints-i);
             //line portion
             var lineState = $.map(Array(numberOfPoints), function (d, j) {
-              var x = margin.left + measureRadius + lineDivision*j;
-              var y =  margin.top;
+               // margin.left + measureRadius
+              var x = centerX + lineDivision*j;
+              // margin.top
+              var y =  centerY - measureRadius;
               return { x: x, y: y};
             })
             lineState.splice(i);
@@ -151,46 +178,6 @@ define([
             var individualState = lineState.concat(circleState);
             circleStates.push(individualState);
         }
-        var lineData = $.map(Array(numberOfPoints), function (d, i) {
-            var y = margin.top;
-            var x = margin.left + i * lineLength / (numberOfPoints - 1)
-            return {x: x, y: y}
-        });
-        var pathFunction = d3.svg.line()
-            .x(function (d) {return d.x;})
-            .y(function (d) {return d.y;})
-            .interpolate('basis'); // bundle | basis | linear | cardinal are also options
-        //The Circle SVG Path we draw
-        var svgContainer = d3.select('#measure'+measure.cid);
-        window.csf = svgContainer;
-        var circle = svgContainer.append('g')
-            .append('path')
-            .data([circleStates[0]])
-            .attr('d', pathFunction)
-            .attr('class', 'circle');
-        function all() {
-          console.log('unroll clicked');
-            for(i=0; i<numberOfPoints; i++){
-                circle.data([circleStates[i]])
-                    .transition()
-                    .delay(animationDuration*i)
-                    .duration(animationDuration)
-                    .ease('linear')
-                    .attr('d', pathFunction)            
-            }
-        }
-        function reverse() {
-            for(i=0; i<numberOfPoints; i++){
-                circle.data([circleStates[numberOfPoints-1-i]])
-                    .transition()
-                    .delay(animationDuration*i)
-                    .duration(animationDuration)
-                    .ease('linear')
-                    .attr('d', pathFunction)            
-            }
-        }
-        $('#a').on('click', all);
-        $('#b').on('click', reverse);
 
         // (when representation button changes, the current representation template will get updated)
         // compile the template for a measure
@@ -217,13 +204,38 @@ define([
           // Transition
           circleStates: circleStates,
           lineData: lineData,
-          pathFunction: pathFunction
+          pathFunction: circlePath
         };
 
         var compiledTemplate = _.template( this.representations[this.currentMeasureRepresentation], measureTemplateParamaters );
 
+        var lineData = $.map(Array(numberOfPoints), function (d, i) {
+            var y = margin.top;
+            var x = margin.left + i * lineLength / (numberOfPoints - 1)
+            return {x: x, y: y}
+        });
+        var pathFunction = d3.svg.line()
+            .x(function (d) {return d.x;})
+            .y(function (d) {return d.y;})
+            .interpolate('basis'); // bundle | basis | linear | cardinal are also options
+
         // find the plus sign we put in there, and right before it, put in the rendered template
-        $(this.el).find('.addMeasure').before( compiledTemplate );
+        $(this.el).find('.addMeasure').before( compiledTemplate )
+
+        //The Circle SVG Path we draw MUST BE AFTER THE COMPILED TEMPLATE
+        var svgContainer = d3.select('#svg'+measure.cid);
+        var circlePath = svgContainer //.append('g')
+            .append('path')
+            .data([circleStates[0]])
+            .attr('d', pathFunction)
+            // .attr('stroke-dasharray', '5, 10')
+            .attr('opacity', .2)
+            .attr('class', 'circle')
+            .attr('class', 'circle-path')
+            .on('click', this.unroll);
+
+        $('#a'+measure.cid).on('click', dispatch.trigger('unroll.event', this));
+
         // console.log(this.currentMeasureRepresentation);
         // for each beat in this measure
         _.each(measure.get('beats').models, function(beat, index) {
