@@ -9,6 +9,7 @@ define([
   'underscore',
   'backbone',
   'backbone/collections/beats',
+  'backbone/models/measure',
   'backbone/views/beats/beatView',
   'text!backbone/templates/measures/audioMeasures.html',
   'text!backbone/templates/measures/linearBarMeasures.html',
@@ -20,7 +21,7 @@ define([
   'app/dispatch',
   'app/state',
   'app/log'
-], function($, _, Backbone, BeatsCollection, beatView, audioMeasuresTemplate, linearBarMeasuresTemplate, linearBarSVGMeasuresTemplate, circularPieMeasuresTemplate, circularBeadMeasuresTemplate, COLORS, dthree, dispatch, state, log){
+], function($, _, Backbone, BeatsCollection, MeasureModel, beatView, audioMeasuresTemplate, linearBarMeasuresTemplate, linearBarSVGMeasuresTemplate, circularPieMeasuresTemplate, circularBeadMeasuresTemplate, COLORS, dthree, dispatch, state, log){
   //dthree can be referenced by d3, NOT dthree, and dthree CANNOT be renamed to d3
   return Backbone.View.extend({
     // el: $('.component'),
@@ -59,6 +60,8 @@ define([
         this.vis.svg = d3.select(this.el).append('svg');
         this.vis.svg.attr('class', this.currentMeasureRepresentation);
         this.d3 = {};
+        this.circlePath = '';
+        this.unrolled = MeasureModel.unrolled;
       }
       // else {
       //   this.measure = new BeatsCollection;
@@ -89,16 +92,30 @@ define([
       this.currentMeasureRepresentation = representation;
       this.render();      
     },
-    unroll: function() {
-      console.log('unroll clicked');
-      for(i=0; i<this.numberOfPoints; i++){
-          circlePath.data([this.circleStates[i]])
-              .transition()
-              .delay(this.animationDuration*i)
-              .duration(this.animationDuration)
-              .ease('linear')
-              .attr('d', this.pathFunction);
+    transitionRoll: function(options) {
+      if (this.unrolled == false){
+        for(i=0; i<this.numberOfPoints; i++){
+            options.circlePath.data([this.circleStates[this.numberOfPoints-1-i]])
+                .transition()
+                .delay(this.animationDuration*i)
+                .duration(this.animationDuration)
+                .ease('linear')
+                .attr('d', this.pathFunction);
+        }
+      } else {
+        console.log('unroll clicked');
+        console.warn(options);
+        var _this = this;
+        for(i=0; i<this.numberOfPoints; i++){
+            options.circlePath.data([this.circleStates[i]])
+                .transition()
+                .delay(this.animationDuration*i)
+                .duration(this.animationDuration)
+                .ease('linear')
+                .attr('d', this.pathFunction);
+        }
       }
+      this.unrolled = !this.unrolled;
     },
 
     rollup: function() {
@@ -151,9 +168,34 @@ define([
       var colorForAudio = COLORS.hexColors[5];
       // console.log(this.representations[this.currentMeasureRepresentation]);
 
+      function all() {
+        console.log('there');
+        // if (this.unrolled == false){
+          for(i=0; i<this.numberOfPoints; i++){
+              this.circlePath.data([this.circleStates[this.numberOfPoints-1-i]])
+                  .transition()
+                  .delay(this.animationDuration*i)
+                  .duration(this.animationDuration)
+                  .ease('linear')
+                  .attr('d', pathFunction);
+          }
+        // } else {
+        //   for(i=0; i<this.numberOfPoints; i++){
+        //       this.circlePath.data([this.circleStates[i]])
+        //           .transition()
+        //           .delay(this.animationDuration*i)
+        //           .duration(this.animationDuration)
+        //           .ease('linear')
+        //           .attr('d', this.pathFunction);
+        //   }
+        // }
+        // this.unrolled = !this.unrolled;
+      };
+
       // for each measure in measuresCollection
       _.each(this.measuresCollection.models, function(measure, index) {
 
+        var ƒthis = this;
         var circleStates = [];
         for (i=0; i<numberOfPoints; i++){
             // circle portion
@@ -204,10 +246,14 @@ define([
           // Transition
           circleStates: circleStates,
           lineData: lineData,
-          pathFunction: circlePath
+          pathFunction: this.circlePath
         };
 
         var compiledTemplate = _.template( this.representations[this.currentMeasureRepresentation], measureTemplateParamaters );
+
+        // find the plus sign we put in there, and right before it, put in the rendered template
+        $(this.el).find('.addMeasure').before( compiledTemplate )
+
 
         var lineData = $.map(Array(numberOfPoints), function (d, i) {
             var y = margin.top;
@@ -219,22 +265,43 @@ define([
             .y(function (d) {return d.y;})
             .interpolate('basis'); // bundle | basis | linear | cardinal are also options
 
-        // find the plus sign we put in there, and right before it, put in the rendered template
-        $(this.el).find('.addMeasure').before( compiledTemplate )
-
         //The Circle SVG Path we draw MUST BE AFTER THE COMPILED TEMPLATE
         var svgContainer = d3.select('#svg'+measure.cid);
         var circlePath = svgContainer //.append('g')
-            .append('path')
+            // .append('path')
+            .insert('path', ':first-child')
             .data([circleStates[0]])
             .attr('d', pathFunction)
+            .attr('stroke', 'orange')
             // .attr('stroke-dasharray', '5, 10')
             .attr('opacity', .2)
             .attr('class', 'circle')
             .attr('class', 'circle-path')
-            .on('click', this.unroll);
+            .on('click', all);
 
-        $('#a'+measure.cid).on('click', dispatch.trigger('unroll.event', this));
+        function all() {
+          for(i=0; i<numberOfPoints; i++){
+              circlePath.data([circleStates[i]])
+                  .transition()
+                  .delay(animationDuration*i)
+                  .duration(animationDuration)
+                  .ease('linear')
+                  .attr('d', pathFunction);
+          }
+        };
+        function reverse() {
+          for(i=0; i<numberOfPoints; i++){
+              circlePath.data([circleStates[numberOfPoints-1-i]])
+                  .transition()
+                  .delay(animationDuration*i)
+                  .duration(animationDuration)
+                  .ease('linear')
+                  .attr('d', pathFunction)            
+          }
+        };
+
+        $('#a'+measure.cid).on('click', all);
+        $('#b'+measure.cid).on('click', reverse);
 
         // console.log(this.currentMeasureRepresentation);
         // for each beat in this measure

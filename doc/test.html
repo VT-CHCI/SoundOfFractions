@@ -1,0 +1,641 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Ideas about the future of d3 and related technologies - Until the thought is gone</title>
+  <meta name="author" content="Zack Maril">
+
+  
+  <meta name="description" content="Lately, I&#8217;ve been working with d3.js a good deal. I&#8217;ve created
+several open source d3.js projects,
+participated in the d3.js mailing list &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://zmaril.github.com/blog/2012/07/10/ideas-about-future-of-d3/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Until the thought is gone" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-11943276-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Ideas About the Future of D3 and Related Technologies</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+
+<time datetime="2012-07-10T23:31:00+04:00" pubdate data-updated="true">Jul 10<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Lately, I&#8217;ve been working with <a href="http://d3js.org/">d3.js</a> a good deal. I&#8217;ve created
+several <a href="https://github.com/zmaril/d3.js-boilerplate">open source</a> <a href="https://github.com/zmaril/d3-bootstrap-plugins">d3.js projects</a>,
+participated in the <a href="https://groups.google.com/forum/?fromgroups#!searchin/d3-js/zack$20maril">d3.js mailing list</a>, and
+<a href="https://www.odesk.com/blog/2012/07/visualizations-of-odesk-oconomy/">successfully released</a> a rather large
+<a href="http://research.odesk.com/visualizations/country-dashboard/">d3.js project</a>. I have at least as much perspective as a
+self taught college kid can have at this point. Here are some ideas
+that I&#8217;ve had about moving d3.js and related technologies
+forward. They&#8217;ve been broken into the more general ideas first and the
+backbone related ideas last. My hope is that this will cause one of
+three things to happen:</p>
+
+<ul>
+<li>I&#8217;ll get motivated and make some of this happen.</li>
+<li>Somebody else will get motivated and make some of this happen.</li>
+<li>Somebody will point out that these things have been done and
+everyone can be lazy.</li>
+</ul>
+
+
+<h1>General Ideas</h1>
+
+<h2>Encourage and use coffeescript</h2>
+
+<p>The function syntax, fat arrow, and object creation sugar are the
+features that saved me the most time in aggregate. With d3.js you are
+writing a lot of functions that are just object property retrievers,
+so the terse syntax comes in handy (<code>(ob)-&gt; ob.x</code>). Debugging is a
+slight pain in that line numbers don&#8217;t typically match up. For me, it
+has been a net win. As I get better with coffeescript and d3.js,
+debugging time will hopefully go down while I learn more useful
+features.</p>
+
+<h2>Use grunt</h2>
+
+<p><a href="http://ireneros.com/">Irene Ros</a> pointed out
+<a href="https://github.com/cowboy/grunt">grunt</a> to me and it was love at
+first sight. I&#8217;ve been using it with the
+<a href="https://github.com/zmaril/d3-bootstrap-plugins">d3-bootstrap-plugin</a>
+project and it has
+<a href="https://github.com/zmaril/d3-bootstrap-plugins">helped immensely</a>
+with development. It&#8217;s really amazing how freeing <code>grunt</code> and <code>grunt
+build</code> can be. I am looking to learn more about the system. If I could
+automatically run <code>python -m SimpleHTTPServer</code> when I do <code>grunt
+watch</code>, I would be way happy. I&#8217;ll try and do a post on using grunt
+and d3, but it isn&#8217;t too hard to <a href="http://net.tutsplus.com/tutorials/javascript-ajax/meeting-grunt-the-build-tool-for-javascript/">figure out in an afternoon</a>.</p>
+
+<h2>Testing visualizations with saved images</h2>
+
+<p>A problem I&#8217;ve had is that I really want to start writing tests for my
+visualizations. They have started to get sufficiently complex in some
+cases and things have broken down for several hours/days before I was
+able to notice them again. Stressful.There aren&#8217;t too many solutions
+to this that I know of. You can test the DOM pretty easily with the
+various testing libraries out there. But that&#8217;s almost a direct test
+of d3.js itself in most cases. Not incredibly useful given that d3.js
+already has
+<a href="https://github.com/mbostock/d3/tree/master/test">pretty good test coverage</a>.</p>
+
+<p>A possible solution for this is to create a collection of saved images
+that represent what the visualization should look like. You could pair
+<a href="http://seleniumhq.org/">the selenium webdriver</a> with a framework like
+<a href="http://docs.jquery.com/QUnit">qunit</a> or
+<a href="http://pivotal.github.com/jasmine/">jasmine</a> to create a image driven
+test suite. You would have a program that walks you through the tests
+one by one, displays the image, and asks &#8220;Is this what you expected?&#8221;
+It then saves all of the reference images. Each time you run the
+tests, it would go back through and recapture all of the pictures. A
+test would fail if the picture wasn&#8217;t within a set threshold for
+deviation of pixels. You could get really fancy with this and take
+snapshots of images as things get interacted with randomly, as well as
+have UI exploration based on the state of the javascript
+environment (Clojure/script would probably be a pretty good tool for
+this sort of thing). The main point is that I want to write tests that
+use saved images as the method for evaluating whether or not the test
+passes. No speculation on difficulty, prior art, implementation, and
+performance from me at this point. I currently don&#8217;t have plans to do
+anything related to this.</p>
+
+<h1>Combining d3.js and backbone</h1>
+
+<p>Let&#8217;s get some context for the upcoming ideas. From what I can tell,
+the two major frameworks for d3.js right now are
+<a href="http://nvd3.com/">nvd3</a> and
+<a href="https://github.com/michael/dance">dance.js</a>.</p>
+
+<p>nvd3 is a general charting library that has gotten a fair bit of press
+lately. I watch it on github and I&#8217;ve seen a marked increase in terms
+of rate of commits and issues added to the project day after
+day. People are excited about the idea of a general framework with
+d3. nvd3 is a good idea with a smart/motivated developer behind it and
+could end up displacing highcharts.</p>
+
+<p>dance.js is a project that I have admired from afar at this point. I
+view it as one of those projects that is fun and will teach the
+developer a ton. It might not ever end up use in production, but it
+doesn&#8217;t matter. The developer will write better code all around
+because of it. Really, go take a look a look at it. It&#8217;s fun to read
+through and think about the abstractions that are being created. It&#8217;s
+got some obscure libraries as dependencies and purposefully
+reimplements half of backbone.</p>
+
+<p>So, as far as I know, that is the current state of the major open source d3
+frameworks. There is
+<a href="https://github.com/shutterstock/rickshaw">Rickshaw</a> for time series,
+but it isn&#8217;t
+<a href="https://github.com/shutterstock/rickshaw/commits/master">actively being developed further beyond maintenance</a>
+as far as I can tell. There has been some excellent talk about
+<a href="http://corner.squareup.com/2012/04/building-analytics.html">combining ember.js and d3</a>,
+but not much open source has come out of it. This is the most active
+<a href="http://cmeiklejohn.github.com/ember-visualizations/">ember+d3</a> work
+I&#8217;ve been able to find. As far as backbone and d3 goes, there is <a href="http://drsm79.github.com/Backbone-d3/">a
+project</a> silently gathering
+dust on github and <a href="https://github.com/jondot/graphene">graphene</a>,
+which is <a href="https://github.com/jondot/graphene">semiactive</a>.</p>
+
+<p><strong>tl;dr Try to use nvd3 if you want free/pretty d3 charts now.</strong></p>
+
+<p>(Note: As of December 2012, much of this information is no longer
+correct. Rickshaw is getting love, ember and d3 are being combined
+together well, and, well, open source is moving forward.)</p>
+
+<h2>Eidetic backbone</h2>
+
+<p>Moving towards new ideas, a month or so back, I noticed that backbone
+and ember allowed you to manage the URL in neat ways with
+<a href="http://backbonetutorials.com/what-is-a-router/">javascript based routers</a>. At
+the time, backbone had better documentation about getting started, so
+I choose backbone and got started using the routes to encode the state
+of the interface of the oDesk country dashboard. This meant I could
+link directly to the project bubbles of
+<a href="http://research.odesk.com/visualizations/country-dashboard/#/bubble/Russia">Russia</a>
+and
+<a href="http://research.odesk.com/visualizations/country-dashboard/#/bubble/Canada">Canada</a>
+with very little effort.  This was way cool and set me down the path
+of thinking through how to combine backbone and d3.js to produce
+excellent visualizations with very little developer effort.</p>
+
+<p>The basic abstraction was encoding the state of an interface within
+the URL. This allowed people to directly link to pieces of a
+visualization as well as making the backbone much more useful (trying
+messing around with the oDesk visualization and then hitting the back
+button). I
+<a href="https://github.com/johnjosephhorton/gg2d3/blob/master/country-dashboard/js/index.coffee">implemented this in a messy way</a>,
+with a ton of calls to router.navigate littered throughout the
+code. It got the job done.</p>
+
+<p>Generalizing away from this, we can start thinking in terms of the
+state of the interface. For the oDesk visualization, the state of the
+interface depended on the section being displayed. For the
+<a href="http://research.odesk.com/visualizations/country-dashboard/#/compare">compare section</a>,
+we encoded the selected countries within the URL as well as whether
+the top graph was being displayed in absolute or log scale. For the
+<a href="http://research.odesk.com/visualizations/country-dashboard/#/watch/false/42">watch section</a>,
+we encoded the hour being displayed as well as whether we are using a
+relative or absolute scale. The
+<a href="http://research.odesk.com/visualizations/country-dashboard/#/bubble">bubble section</a>
+recorded only the country within the URL. If you crawl through the
+github repo hard enough, you can probably find all the instances
+across the multiple files where I reference variables like
+selectedCountries and what not.</p>
+
+<p>Here&#8217;s what I wish I could have written (in coffeescript):</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+</pre></td><td class='code'><pre><code class='coffeescript'><span class='line'><span class="nv">CompareState = </span><span class="nx">Backbone</span><span class="p">.</span><span class="nx">Model</span>
+</span><span class='line'>    <span class="nv">countries: </span><span class="p">[</span><span class="s">&quot;India&quot;</span><span class="p">,</span><span class="s">&quot;Denial&quot;</span><span class="p">,</span><span class="s">&quot;`Murica&quot;</span><span class="p">]</span>
+</span><span class='line'>    <span class="nv">log: </span><span class="kc">true</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">WatchState = </span><span class="nx">Backbone</span><span class="p">.</span><span class="nx">Model</span>
+</span><span class='line'>    <span class="nv">time: </span><span class="mi">42</span>
+</span><span class='line'>    <span class="nv">log: </span><span class="kc">true</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">BubbleState = </span><span class="nx">Backbone</span><span class="p">.</span><span class="nx">Model</span>
+</span><span class='line'>    <span class="nv">country: </span><span class="s">&quot;Canananada&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">Eidetic</span><span class="p">.</span><span class="nx">Router</span><span class="p">.</span><span class="nx">extend</span>
+</span><span class='line'>    <span class="nv">routes:</span>
+</span><span class='line'>        <span class="nv">compare:</span>
+</span><span class='line'>            <span class="nv">model: </span><span class="nx">CompareState</span>
+</span><span class='line'>
+</span><span class='line'>            <span class="nv">toUrl: </span><span class="nf">()-&gt;</span>
+</span><span class='line'>                <span class="nv">countries = </span><span class="nb">encodeURI</span><span class="p">(</span><span class="nx">@countries</span><span class="p">.</span><span class="nx">join</span><span class="p">[</span><span class="s">&quot;/&quot;</span><span class="p">])</span>
+</span><span class='line'>                <span class="s">&quot;/</span><span class="si">#{</span><span class="nx">@log</span><span class="si">}</span><span class="s">/</span><span class="si">#{</span><span class="nx">countries</span><span class="si">}</span><span class="s">&quot;</span>
+</span><span class='line'>
+</span><span class='line'>            <span class="nv">fromURL: </span><span class="nf">(url)-&gt;</span>
+</span><span class='line'>               <span class="nv">sections = </span><span class="nx">url</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s">&#39;/&#39;</span><span class="p">)</span>
+</span><span class='line'>               <span class="nv">log = </span><span class="nx">sections</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">is</span> <span class="s">&quot;true&quot;</span>
+</span><span class='line'>               <span class="nv">countries = </span><span class="p">(</span><span class="nb">decodeURI</span><span class="p">(</span><span class="nx">c</span><span class="p">)</span> <span class="k">for</span> <span class="nx">c</span> <span class="k">in</span> <span class="nx">sections</span><span class="p">[</span><span class="mi">1</span><span class="p">..])</span>
+</span><span class='line'>               <span class="nx">@model</span><span class="p">.</span><span class="nx">set</span>
+</span><span class='line'>                   <span class="nv">log: </span><span class="nx">log</span>
+</span><span class='line'>                   <span class="nv">countries: </span><span class="nx">countries</span>
+</span><span class='line'>
+</span><span class='line'>            <span class="nv">callback: </span><span class="s">&quot;compare&quot;</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="nv">watch:</span>
+</span><span class='line'>            <span class="nv">model: </span><span class="nx">WatchState</span>
+</span><span class='line'>
+</span><span class='line'>            <span class="nv">toUrl: </span><span class="nf">()-&gt;</span> <span class="s">&quot;/</span><span class="si">#{</span><span class="nx">@attributes</span><span class="p">.</span><span class="nx">log</span><span class="si">}</span><span class="s">/</span><span class="si">#{</span><span class="nx">@attributes</span><span class="p">.</span><span class="nx">time</span><span class="si">}</span><span class="s">&quot;</span>
+</span><span class='line'>
+</span><span class='line'>            <span class="nv">fromURL: </span><span class="nf">(url)-&gt;</span>
+</span><span class='line'>               <span class="nv">sections = </span><span class="nx">url</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s">&#39;/&#39;</span><span class="p">)</span>
+</span><span class='line'>               <span class="nv">log = </span><span class="nx">sections</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">is</span> <span class="s">&quot;true&quot;</span>
+</span><span class='line'>               <span class="nv">time = </span><span class="o">+</span><span class="nx">sections</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+</span><span class='line'>               <span class="nx">@model</span><span class="p">.</span><span class="nx">set</span>
+</span><span class='line'>                   <span class="nv">log: </span><span class="nx">log</span>
+</span><span class='line'>                   <span class="nv">time: </span><span class="nx">time</span>
+</span><span class='line'>
+</span><span class='line'>           <span class="nv">callback: </span><span class="s">&quot;watch&quot;</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="nv">bubble:</span>
+</span><span class='line'>            <span class="nv">model: </span><span class="nx">BubbleState</span>
+</span><span class='line'>
+</span><span class='line'>            <span class="nv">toUrl: </span><span class="nf">(model)-&gt;</span> <span class="s">&quot;/</span><span class="si">#{</span><span class="nx">model</span><span class="p">.</span><span class="nx">country</span><span class="si">}</span><span class="s">&quot;</span>
+</span><span class='line'>
+</span><span class='line'>            <span class="nv">fromURL: </span><span class="nf">(url)-&gt;</span>
+</span><span class='line'>               <span class="nx">@model</span><span class="p">.</span><span class="nx">set</span>
+</span><span class='line'>                   <span class="nv">country: </span><span class="nx">url</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="s">&#39;/&#39;</span><span class="p">,</span><span class="s">&quot;&quot;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>            <span class="nv">callback: </span><span class="s">&quot;watch&quot;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nv">compare: </span><span class="nf">()-&gt;</span> <span class="c1">#display compare html. No updating of url&#39;s here.</span>
+</span><span class='line'>        <span class="nx">compareView</span><span class="p">.</span><span class="nx">update</span><span class="p">()</span>
+</span><span class='line'>    <span class="nv">watch: </span><span class="nf">()-&gt;</span> <span class="c1">#display watch html. No updating of url&#39;s here either.</span>
+</span><span class='line'>        <span class="nx">watchView</span><span class="p">.</span><span class="nx">update</span><span class="p">()</span>
+</span><span class='line'>    <span class="nv">bubble: </span><span class="nf">()-&gt;</span> <span class="c1">#You know what is up by now.</span>
+</span><span class='line'>        <span class="nx">bubbleView</span><span class="p">.</span><span class="nx">update</span><span class="p">()</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>What would ideally happen is that the
+<a href="http://en.wikipedia.org/wiki/Eidetic_memory">Eidetic</a> router would
+hook up the model such that whenever the model changed the router
+would change as well. In addition, the Eidetic router would take the
+inbound url and set up the State model correctly. The design behind
+the API is still pretty rough honestly. I&#8217;ve spent most of my time so
+far just playing around with how to structure this idea of storing the
+state of the interface within the URL. I have a
+<a href="https://github.com/zmaril/Eidetic">repo set up for development</a>, but
+only within the past few days have I gotten an idea about where to
+take the design of the API. I suspect within the next month I will
+have something usable up there.</p>
+
+<p>Why does this matter for d3.js though? This would be developed purely
+as an extension of backbone. As I got better with d3.js, my sights
+start to soar. I wanted to create the next big dashboard. And
+&#8220;Wouldn&#8217;t it be cool if state crossed over between those two charts?
+Woah! That&#8217;s awesome! Let&#8217;s do it again! Three charts! Four charts and
+legend! Wait. Why is it broken? Where is my state?&#8221;  It&#8217;s part of
+solution to the puzzle of managing a complex interface that has
+multiple interactive and connected charts.</p>
+
+<p>I want to put all of my important state in one place and I want the
+URL to denote and remember the state of the interface. I don&#8217;t want to
+have to design a complex framework each time I set out to design a
+complex dashboard. backbone would handle the state abstractions and d3
+handles the svg. The Eidetic router is not a hard hack to do, but I
+really want to nail the API design from the get go. Looking at it now,
+I will probably move the callbacks straight into the route
+definition. Maybe.</p>
+
+<h2>d3.js charts as backbone views</h2>
+
+<p>Now that we have gotten into the spirit of thinking with backbone,
+let&#8217;s start thinking about collections and reusable charts. Here&#8217;s an
+example of what I mean:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+</pre></td><td class='code'><pre><code class='coffeescript'><span class='line'><span class="nv">Book = </span><span class="nx">Backbone</span><span class="p">.</span><span class="nx">Model</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">Books = </span><span class="nx">Backbone</span><span class="p">.</span><span class="nx">Collection</span><span class="p">.</span><span class="nx">extend</span>
+</span><span class='line'>    <span class="nv">model: </span><span class="nx">Book</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">Books</span><span class="p">.</span><span class="nx">add</span><span class="p">({</span><span class="nv">pages: </span><span class="nb">Math</span><span class="p">.</span><span class="nx">round</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span><span class="o">*</span><span class="mi">250</span><span class="p">)}</span> <span class="k">for</span> <span class="nx">i</span> <span class="k">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">..</span><span class="mi">100</span><span class="p">])</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">Histogram = </span><span class="nx">Backbone</span><span class="p">.</span><span class="nx">view</span><span class="p">.</span><span class="nx">extend</span>
+</span><span class='line'>    <span class="nv">initialize: </span><span class="nf">()-&gt;</span>
+</span><span class='line'>        <span class="vi">@svg = </span><span class="p">{}</span>
+</span><span class='line'>        <span class="vi">@svg.svg = </span><span class="nx">d3</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="nx">@el</span><span class="p">).</span><span class="nx">apppend</span><span class="p">(</span><span class="s">&quot;svg&quot;</span><span class="p">)</span>
+</span><span class='line'>            <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s">&quot;height&quot;</span><span class="p">,</span><span class="nx">@options</span><span class="p">.</span><span class="nx">height</span><span class="p">)</span>
+</span><span class='line'>            <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s">&quot;width&quot;</span><span class="p">,</span><span class="nx">@options</span><span class="p">.</span><span class="nx">width</span><span class="p">)</span>
+</span><span class='line'>            <span class="p">.</span><span class="nx">classed</span><span class="p">(</span><span class="s">&quot;histogram&quot;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="vi">@svg.bars = </span><span class="nx">@svg</span><span class="p">.</span><span class="nx">svg</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s">&quot;g&quot;</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s">&quot;id&quot;</span><span class="p">,</span><span class="s">&quot;bars&quot;</span><span class="p">)</span>
+</span><span class='line'>        <span class="vi">@svg.axis = </span><span class="nx">@svg</span><span class="p">.</span><span class="nx">svg</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s">&quot;g&quot;</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s">&quot;id&quot;</span><span class="p">,</span><span class="s">&quot;axis&quot;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="vi">@d3 = </span><span class="p">{}</span>
+</span><span class='line'>        <span class="vi">@d3.hist = </span> <span class="nx">d3</span><span class="p">.</span><span class="nx">layout</span><span class="p">.</span><span class="nx">histogram</span><span class="p">()</span>
+</span><span class='line'>            <span class="p">.</span><span class="nx">value</span><span class="p">(</span><span class="nx">@options</span><span class="p">.</span><span class="nx">value</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nv">render: </span><span class="nf">()-&gt;</span>
+</span><span class='line'>        <span class="nv">bins = </span><span class="nx">@d3</span><span class="p">.</span><span class="nx">hist</span><span class="p">(</span><span class="nx">@collection</span><span class="p">)</span>
+</span><span class='line'>        <span class="c1">#Make all of this actually work</span>
+</span><span class='line'>        <span class="vi">@d3.x = </span><span class="nx">d3</span><span class="p">.</span><span class="nx">scale</span><span class="p">().</span><span class="nx">range</span>
+</span><span class='line'>        <span class="nx">@svg</span><span class="p">.</span><span class="nx">bars</span><span class="p">.</span><span class="nx">selectAll</span><span class="p">(</span><span class="s">&quot;rect&quot;</span><span class="p">).</span><span class="nx">data</span><span class="p">(</span><span class="nx">bins</span><span class="p">).</span><span class="nx">enter</span><span class="p">()</span>
+</span><span class='line'>            <span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s">&quot;rect&quot;</span><span class="p">)</span>
+</span><span class='line'>            <span class="p">.</span><span class="nx">scale</span>
+</span><span class='line'>        <span class="c1">#If I wasn&#39;t lazy, code for the axis would be here</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nv">remove: </span><span class="nf">()-&gt;</span>
+</span><span class='line'>        <span class="nx">@svg</span><span class="p">.</span><span class="nx">svg</span><span class="p">.</span><span class="nx">remove</span><span class="p">()</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">BooksHistogram = </span><span class="nx">Histogram</span>
+</span><span class='line'>    <span class="nv">collection: </span><span class="nx">Books</span>
+</span><span class='line'>    <span class="nv">element: </span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s">&quot;</span><span class="err">#</span><span class="s">booksHistogram&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="nv">value: </span><span class="nf">(d)-&gt;</span> <span class="nx">d</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s">&quot;pages&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="nv">height: </span><span class="mi">200</span>
+</span><span class='line'>    <span class="nv">width: </span><span class="mi">200</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<p>And bam! You have a histogram of the books! That updates dynamically
+as your backbone data does! And the implementation is reusable for other
+models. This is what I see coming from combining backbone and d3
+together.</p>
+
+<p>That is most of what I was thinking about while working on the oDesk project.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      <div>
+  <h4> About Zack Maril </h4>
+<p>
+  I'm a mathematician at large.
+  <a href="https://twitter.com/zackmaril">Follow me on Twitter</a>;
+  it's like this blog modulo 140. I'll help you maintain a balanced
+  distribution of math, cats, and paranoia.
+</p>
+
+<p>
+  All of these thoughts are my own and do not reflect those of my
+  friends, family, or employers.
+</p>
+<a href="http://twitter.com/share" class="twitter-share-button" data-count="none" data-via="ZackMaril">Tweet</a>
+<a href="http://twitter.com/zackmaril" class="twitter-follow-button" data-show-count="false">Follow @zackmaril</a>
+<script src="http://platform.twitter.com/widgets.js"
+        type="text/javascript"></script>
+</div>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+
+<time datetime="2012-07-10T23:31:00+04:00" pubdate data-updated="true">Jul 10<span>th</span>, 2012</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://zmaril.github.com/blog/2012/07/10/ideas-about-future-of-d3/" data-via="" data-counturl="http://zmaril.github.com/blog/2012/07/10/ideas-about-future-of-d3/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+      
+        <a class="basic-alignment right" href="/blog/2012/12/12/left/" title="Next Post: Left">Left &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1> <a href="/">Omphaloskepsis.</a></h1>
+  <p>
+    Zack likes math, salsa dancing, rock climbing, and
+    you. <a href="/about.html">More info</a>.
+    <section class="meta">
+      <a href="https://github.com/zmaril"><img src="/images/github.png"/></a>
+      <a href="https://twitter.com/zackmaril"><img src="/images/twitter.png"></a>
+      <a href="/atom.xml"><img src="/images/rss.png" /></a>
+    </section>
+  </p>
+
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/01/14/how-i-went-about-introducing-high-schoolers-to-c/">How I went about introducing High Schoolers to C</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/12/27/Why-I-dont-have-a-Facebook/">Why I don't have a Facebook account</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/12/12/left/">Left</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/07/10/ideas-about-future-of-d3/">Ideas about the future of d3 and related technologies</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Zack Maril -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

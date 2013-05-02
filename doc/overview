@@ -1,36 +1,68 @@
 What constitutes a whole?
 
 additive palette
+// This is a factory that has beats that are readily available to be placed into a song
   beats
-  measures
+  //There should be beats of different sizes/lengths
 
 entities
-  component / sheet/tab?
-    measure (¿defined by beats with certain properties?)
+  component / sheet/tab/track?
     instrument
-    name
-    icon
-    sound/sample
+      name
+      icon
+      //an image that symbolizes the instrument
+      sound/sample
+      // a unique sound, that sounds the length of a beat, and has other attentuation properties based on the ordered number of the beat
+    music section
+      measure (¿defined by beats with certain properties?)
+      //Comprised of a one or more beats
+    fraction
   assignment
+  //created by a teacher, is a series of steps/questions/activities that should help teach, test, and assess a student to a new idea or thought
     goal
+    //the activities purpose or end state as described by the teacher
+    questions
+    //The appropriate questions being asked to the students at the appropriate times during their interaction
     assessment
+    //an auto checking function() that checks if the student completed the task, and to what degree, and reports the results to the appropriate places {db tables/views/logs}
   beat
+  //a visual and audio represented portion of a measure/song, that can be played, rested, 
   song
+  //A sample of beats played at a specific temp0 created by the student
   measure representation
+  //A step higher than a beat, but still a graphical way of representing the properties of a measure of a song
   beat representation
+  //A graphical way of representing the audio song's beats {audio/h-bar/v-bar/pie/bead/numberLine}
   fraction representation
+  //One of the standard ways of representing a fraction {fraction/percentage/decimal/mixedNumber}
   beats per measure
+  //This can be set manually, or calculated automatically, or even questioned to the student user
   tempo
+  //Tempo, a rate, should be defined in distance/time so that it is consistent across representations
   play
+  //toggle the animations and the sounds ON
   pause
+  // Pause the Music and the animation, allowing for resuming at the same point upon clicking pause again
+  factory 
+  // a place where you can always retrieve something
   stop
-  box? an element that contains other entities that can be moved as one collection
-    {mold/cast/window/template/view/perspective/perception/viewport/movement/module/section}
+  //Stop the music and the animation, and reset the play position to the beginning
+  box? {mold/cast/window/template/view/perspective/perception/viewport/movement/module/section}
+  //an element that contains other entities that can be moved as one collection
   navbar
+  // asimple navigation bar, specific to the type of user
     menu
+    //a menu that is based on the type of user
+      student
+      // this should have assignments
+      teacher
+      //this should have students, progress, CRUD assignments
     login
+
     list of songs
+    //a list of songs that the user has saved
     list of participants in class
+    //a list of other users in proximity set by class
   question area
     question
     answer area
@@ -87,9 +119,14 @@ functions
   sign in                 application
   sign out                application
   sign up                 application
-  unfurl                  measure(bead)
+  unroll                  measure(bead)
+  //transition from radial to linear forms
+  roll                  measure(bead)
+  //transition from linear to radial forms
   extend                  measure/beat
+  //increase the radius/diameter of the measure in a circular form, or the length in a linear form
   shrink                  measure/beat
+  //shirnk the radius/diameter of the measure in a circular form, or the length in a linear form
   compare                 representations
   sort (beats in pallet)  by size/length/color/
   logging                 representation changes/ 
@@ -116,7 +153,10 @@ general features
   teaching    give awards for completing simple tasks used to introduce the program
 
 outside of the program
-  tapping     fingers/drumsticks/clapping/slapping    
+  users {student/teacher/admin}
+  //the people using the program
+  tapping     fingers/drumsticks/clapping/slapping
+  //an embodied interaction by the student to compose their own music song, with 
   counting    internal / outloud / paper
   student     intended user
               completes assignments made by the teacher
