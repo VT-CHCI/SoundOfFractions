@@ -255,7 +255,7 @@ define([
           numBeats = measure.get('beats').length;
 
           //determining the duration for each beat.
-          var beatDuration = 60 / tempo * 4 / numBeats;
+          var beatDuration = 60 / tempo * component.get('signature') / numBeats;
           _.each(measure.get('beats').models, function(beat) {
 
             /* if we need to trigger a sound at this beat
@@ -344,7 +344,7 @@ define([
         specGainNode.gain.value = 1;
 
         //calulating the duration of one beat.
-        var duration =  (4 * 60 / state.get('tempo')) / component.get('signature');
+        var duration =  (state.get('signature') * 60 / state.get('tempo')) / component.get('signature');
 
         //note on causes the playback to start.
         source.noteOn(time);
@@ -417,7 +417,7 @@ define([
 
       //we use the maximum number of measures, and the global tempo
       //to determine the duration (in ms) of one loop of the sequencer.
-      var duration = 4 * 60 / state.get('tempo') * maxMeasures * 1000;
+      var duration = state.get('signature') * 60 / state.get('tempo') * maxMeasures * 1000;
       if (this.intervalID) {
         //if we are already playing, we stop and trigger the
         //animation to stop.
