@@ -13,10 +13,11 @@ define([
   'text!backbone/templates/beats/linearBarSVGBeats.html',
   'text!backbone/templates/beats/circularPieBeats.html',
   'text!backbone/templates/beats/circularBeadBeats.html',
+  'text!backbone/templates/beats/numberLineBeats.html',
   'colors',
   'app/dispatch',
   'app/log'
-], function($, _, Backbone, BeatModel, audioBeatsTemplate, linearBarBeatsTemplate, linearBarSVGBeatsTemplate, circularPieBeatsTemplate, circularBeadBeatsTemplate, COLORS, dispatch, log){
+], function($, _, Backbone, BeatModel, audioBeatsTemplate, linearBarBeatsTemplate, linearBarSVGBeatsTemplate, circularPieBeatsTemplate, circularBeadBeatsTemplate, numberLineBeatsTemplate, COLORS, dispatch, log){
   return Backbone.View.extend({
 
     /* TODO still issues with this
@@ -33,7 +34,8 @@ define([
       "linear-bar": linearBarBeatsTemplate,
       "linear-bar-svg": linearBarSVGBeatsTemplate,
       "circular-pie": circularPieBeatsTemplate,
-      "circular-bead": circularBeadBeatsTemplate
+      "circular-bead": circularBeadBeatsTemplate,
+      "number-line": numberLineBeatsTemplate
     },
     //grab the current measure representation's data-state
     currentBeatRepresentation: $('#measure-representation-buttons').children('.active').attr('data-state'),
@@ -91,7 +93,12 @@ define([
         $('#beat'+toggledBeat.cid).toggleClass('ON');
         $('#beat'+toggledBeat.cid).toggleClass('OFF');
         //SVG
-        $('#beat'+toggledBeat.cid)[0].setAttribute('opacity', this.getOpacityNumber(toggledBeat.get('selected')));
+        if(this.currentBeatRepresentation == 'number-line') {
+          $('#beat'+toggledBeat.cid)[0].setAttribute('fill-opacity', this.getOpacityNumber(toggledBeat.get('selected')));
+        }
+        else {
+          $('#beat'+toggledBeat.cid)[0].setAttribute('opacity', this.getOpacityNumber(toggledBeat.get('selected')));
+        }
       } else {
         // this is reached during the initial rendering of the page or transition
 

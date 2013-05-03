@@ -16,12 +16,13 @@ define([
   'text!backbone/templates/measures/linearBarSVGMeasures.html',
   'text!backbone/templates/measures/circularPieMeasures.html',
   'text!backbone/templates/measures/circularBeadMeasures.html',
+  'text!backbone/templates/measures/numberLineMeasures.html',
   'colors',
   'app/d3',
   'app/dispatch',
   'app/state',
   'app/log'
-], function($, _, Backbone, BeatsCollection, MeasureModel, beatView, audioMeasuresTemplate, linearBarMeasuresTemplate, linearBarSVGMeasuresTemplate, circularPieMeasuresTemplate, circularBeadMeasuresTemplate, COLORS, dthree, dispatch, state, log){
+], function($, _, Backbone, BeatsCollection, MeasureModel, beatView, audioMeasuresTemplate, linearBarMeasuresTemplate, linearBarSVGMeasuresTemplate, circularPieMeasuresTemplate, circularBeadMeasuresTemplate, numberLineMeasuresTemplate, COLORS, dthree, dispatch, state, log){
   //dthree can be referenced by d3, NOT dthree, and dthree CANNOT be renamed to d3
   return Backbone.View.extend({
     // el: $('.component'),
@@ -33,6 +34,7 @@ define([
       'linear-bar-svg': linearBarSVGMeasuresTemplate,
       'circular-pie': circularPieMeasuresTemplate,
       'circular-bead': circularBeadMeasuresTemplate,
+      'number-line': numberLineMeasuresTemplate
     },
     //grab the current measure representation's data-state
     currentMeasureRepresentation: '', //temp-holder
@@ -249,7 +251,11 @@ define([
           // Transition
           circleStates: circleStates,
           lineData: lineData,
-          pathFunction: this.circlePath
+          pathFunction: this.circlePath,
+
+          //Number Line
+          xOffset: beatHolderWidth/this.measuresCollection.models[0].attributes.beats.length / 2,
+          yOffset: lbbMeasureHeight / 2
         };
 
         var compiledTemplate = _.template( this.representations[this.currentMeasureRepresentation], measureTemplateParamaters );
@@ -326,7 +332,7 @@ define([
             // color: x,
             timeIncrement: timeIncrement,
             //Linear
-            // beatBBX: xMeasureLocation + linearBeatXPadding+(this.beatWidth*(index)),
+           // beatBBX: xMeasureLocation + linearBeatXPadding+(this.beatWidth*(index)),
             beatBBY: beatBBY,
             beatHolderWidth: beatHolderWidth,
             linearBeatXPadding: linearBeatXPadding,
@@ -344,7 +350,8 @@ define([
 
             //Audio
             beatRForAudio: beatRForAudio,
-            colorForAudio: colorForAudio
+            colorForAudio: colorForAudio,
+
           };
 
           // manipulate linear-bar-svg beat parameters
