@@ -24,6 +24,10 @@ svg.linear-bar {
 svg.circular-pie {
   height: 100px;
 }
+
+#record {
+  float: left;
+}
 /* ==========================================================================
    Author's custom styles
    ========================================================================== */
@@ -220,12 +224,29 @@ svg.circular-pie {
   cursor: pointer;
 }
 
+#record {
+  width: 100px;
+  height: 100px;
+  padding-bottom: 15px;
+  margin-left: 15%;
+  margin-right: 2%;
+  cursor: pointer;
+}
+
 .play {
   background:url(image_path("playStop.png")) 0 0 no-repeat;
 }
 
 .pause {
   background:url(image_path("playStop.png")) 100% 0 no-repeat;
+}
+
+.record {
+  background:url(image_path("recStop.png")) 0 0 no-repeat;
+}
+
+.recordPause {
+  background:url(image_path("recStop.png")) 100% 0 no-repeat;
 }
 
 #visual-beats {

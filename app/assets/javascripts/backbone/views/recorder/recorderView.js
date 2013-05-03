@@ -25,13 +25,23 @@ define([
     },
 
     triggerRecord: function() {
-      dispatch.trigger('recordClicked.event');
+      if($(this.el).hasClass('record')) {
+        $(this.el).removeClass('record');
+        $(this.el).addClass('recordPause');
+        dispatch.trigger('recordClicked.event');
+      }
+      else {
+        $(this.el).removeClass('recordPause');
+        $(this.el).addClass('record');
+        dispatch.trigger('stopRecording.event');
+      }
+      this.render();
     },
 
     render: function() {
       //console.log(recorderTemplate);
-      $(this.el).html(recorderTemplate);
 
+      $(this.el).html(recorderTemplate);
       return this;
     }
   });

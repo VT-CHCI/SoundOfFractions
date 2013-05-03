@@ -146,6 +146,8 @@ define([
       dispatch.on('togglePlay.event', this.togglePlay, this);
       dispatch.on('tempoChange.event', this.updateTempo, this);
 
+      state.set('components', this.drumkit);
+
     },
 
     build: function(song) {
