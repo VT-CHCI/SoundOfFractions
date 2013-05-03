@@ -12,17 +12,20 @@
   <!-- Navigation -->
   <%= render 'layouts/navigation' %>
 
+<% if !browser.chrome? %>
+  <p class="disclaimer">Due to the technologies used for this project, please use <a href="https://www.google.com/intl/en/chrome/">Google Chrome</a>.</p>
+  <script type="text/javascript">alert('Due to the technologies used for this project, please use Google Chrome')</script>
+<% else %>
   <div class="container-fluid">
 
     <div class="row-fluid">
       <!--Body content-->
       <%= yield %>  
 
-    <hr>
-
+    </div>
 
   <footer>
   </footer>
-
+<% end %>
 </body>
 </html>
