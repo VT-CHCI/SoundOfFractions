@@ -146,7 +146,7 @@ define([
       var measureRadius = 40;
       // Bead
       var circularBeadBeatRadius = 8;
-      var numberOfPoints = 181;
+      var numberOfPoints = 181; //always add 1 to close the circle
         // Transition
         var margin = {top: 20, left: 60};
         var lineLength = 2 * measureRadius * Math.PI;
@@ -170,30 +170,6 @@ define([
       var beatRForAudio = 24;
       var colorForAudio = COLORS.hexColors[5];
       // console.log(this.representations[this.currentMeasureRepresentation]);
-
-      function all() {
-        console.log('there');
-        // if (this.unrolled == false){
-          for(i=0; i<this.numberOfPoints; i++){
-              this.circlePath.data([this.circleStates[this.numberOfPoints-1-i]])
-                  .transition()
-                  .delay(this.animationDuration*i)
-                  .duration(this.animationDuration)
-                  .ease('linear')
-                  .attr('d', pathFunction);
-          }
-        // } else {
-        //   for(i=0; i<this.numberOfPoints; i++){
-        //       this.circlePath.data([this.circleStates[i]])
-        //           .transition()
-        //           .delay(this.animationDuration*i)
-        //           .duration(this.animationDuration)
-        //           .ease('linear')
-        //           .attr('d', this.pathFunction);
-        //   }
-        // }
-        // this.unrolled = !this.unrolled;
-      };
 
       // for each measure in measuresCollection
       _.each(this.measuresCollection.models, function(measure, index) {

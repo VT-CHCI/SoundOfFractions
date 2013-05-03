@@ -36,12 +36,17 @@ gem "bootstrap-sass", "~> 2.3.0.0"
 gem 'requirejs-rails'
 gem 'ejs'
 gem 'devise'
-gem "d3_rails"
-
 gem "better_errors", ">= 0.2.0", :group => :development
 gem "binding_of_caller", ">= 0.6.8", :group => :development
+# not sure if this is working well with require, but installed nonetheless
+gem "d3_rails"
+
+# for a better way of looking at the rake routes by calling rake color_routes
 gem 'color_routes'
+# lets us know which user is logged in, and store ins a gloabel variable gon{}
 gem 'gon'
+#browser detection
+gem 'browser'
 
 # Deploy with Capistrano
 # gem 'capistrano'

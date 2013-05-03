@@ -2,7 +2,6 @@
   // stroke:red;
   stroke-width:15;
   fill:none;
-
 }
 
 .mixed-number-fraction {
@@ -34,9 +33,11 @@ svg.circular-pie {
 .login li {
   color: white;
   font-size: 20px;
-  padding: 5px 5px 5px;
+  padding: 0px 5px 0px;
 }
-
+.login li a{
+  // margin: 0px 0px 0px;
+}
 #bpm-slider input {
 	width: 100%;
 }
