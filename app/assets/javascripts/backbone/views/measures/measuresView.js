@@ -258,7 +258,7 @@ define([
             .data([circleStates[0]])
             .attr('d', pathFunction)
             .attr('stroke', 'black')
-            .attr('stroke-dasharray', '5, 10')
+            // .attr('stroke-dasharray', '5, 10')
             .attr('opacity', .2)
             .attr('class', 'circle')
             .attr('class', 'circle-path')

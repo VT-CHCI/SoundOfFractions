@@ -105,26 +105,26 @@ define([
       });
 
 
-      //this is creating the synth component.
-      this.measure = new BeatsCollection;
+      // //this is creating the synth component.
+      // this.measure = new BeatsCollection;
 
-      //for each beat - also change signature below
-      for (var i = 0; i < 3; i++) {
-        this.measure.add();
-      }
+      // //for each beat - also change signature below
+      // for (var i = 0; i < 3; i++) {
+      //   this.measure.add();
+      // }
 
-      this.component = new MeasuresCollection;
-      this.component.add({beats: this.measure});
+      // this.component = new MeasuresCollection;
+      // this.component.add({beats: this.measure});
 
-      this.drumkit = componentsCollection.add({
-        label: 'Synth',
-        img: 'synth.png',
-        mute: true,
-        sample: 'ambass.mp3',
-        measures: this.component,
-        signature: 3,
-        active: true
-      });
+      // this.drumkit = componentsCollection.add({
+      //   label: 'Synth',
+      //   img: 'synth.png',
+      //   mute: true,
+      //   sample: 'ambass.mp3',
+      //   measures: this.component,
+      //   signature: 3,
+      //   active: true
+      // });
 
       //creating two arrays to hold our gain nodes.
       //the first is for sustained-note sounds,
