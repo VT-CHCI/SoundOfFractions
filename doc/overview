@@ -9,6 +9,7 @@ entities
   component / sheet/tab/track?
     instrument
       name
+      // a name of the instrument
       icon
       //an image that symbolizes the instrument
       sound/sample
@@ -16,7 +17,9 @@ entities
     music section
       measure (¿defined by beats with certain properties?)
       //Comprised of a one or more beats
-    fraction
+    fraction represntation section
+    //this is where the fraction representation area is placed
+
   assignment
   //created by a teacher, is a series of steps/questions/activities that should help teach, test, and assess a student to a new idea or thought
     goal
@@ -50,43 +53,92 @@ entities
   box? {mold/cast/window/template/view/perspective/perception/viewport/movement/module/section}
   //an element that contains other entities that can be moved as one collection
   navbar
-  // asimple navigation bar, specific to the type of user
+  // a simple navigation bar, specific to the type of user
     menu
-    //a menu that is based on the type of user
+    // a menu that is based on the type of user
       student
       // this should have assignments
       teacher
-      //this should have students, progress, CRUD assignments
+      // this should have students, progress, CRUD assignments
     login
-
+    // an area to login and logout and access profile info
     list of songs
     //a list of songs that the user has saved
     list of participants in class
     //a list of other users in proximity set by class
   question area
+  // a place where questions can be asked to the students
     question
+    // questions from the teacher's preset scenario, and in revolving access so the student can build on and come back to
     answer area
+    // a place where the student will type their answer
   construction sandbox
+  // where the teacher makes thge different 
   performance review / grades
-
+  // an overview of each student that the teacher teaches and their metrics within the program
 
 fraction representations
-  none
-  calculation?
-  percentage
-  Decimal
-  Mixed Number
-  Manual entry with verification
+  type
+  // {none/proper,improper fraction/mixed number/decimal/percentage/query challenge }
+    none
+    //blank area
+    proper/improper
+    // y/z
+    mixed number
+    // X y/z
+    decimal
+    // *.**
+    // degree of precision?
+    percentage
+    // **%
+    // degree of precision?
+    query challenge
+    //the student is asked to enter the amount in a particular form
+  auto calculation?
+    // the auto calculation should be 
 
 measure/beat representations
   audio
+  // a single circle that pulses at each beat
   tapping
   vertical bar
-  linear bar
-  linear number line
+  bar
+  number line
   pie
   bead
   group
+  transition
+  // an animation that is triggered to show what is conserved in each representation
+    from
+      to
+    audio
+      number line
+      // move the single beat along a linear path, and as each beat pulses, have it remain in the place it started pulsing
+      // the line is drawn as the single beat moves along its path
+      // then add the markers
+      bead
+      // move the single beat along a circular path, and as each beat pulses, have it remain in the place it started pulsing
+      // the circular line is drawn as the single beat moves along its path
+    bar
+      number line
+      // transition the beats to whatever number line representation is
+      // add the markers
+    number line
+      bar
+      // remove the markers
+      // transition the beats into the bar representation
+    pie
+      // 
+    radial
+    bead
+      number line
+      // unroll to straight line, then add markers
+      bar
+      // unroll to straight line, then stretch the beat beads into the squares
+      pie
+      // stretch the beads to the pie slices
+      audio
+      // unroll to straight line, the overlap the beats into one circle
 
 attributes
   count
