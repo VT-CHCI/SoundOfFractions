@@ -66,6 +66,7 @@ define([
         this.vis.svg.attr('class', this.currentMeasureRepresentation);
         this.d3 = {};
         this.circlePath = '';
+        this.measureRadius = 40;
         this.unrolled = MeasureModel.unrolled;
       }
       // else {
@@ -88,6 +89,7 @@ define([
       //Dispatch listeners
       dispatch.on('measureRepresentation.event', this.changeMeasureRepresentation, this);
       dispatch.on('unroll.event', this.unroll, this);
+      dispatch.on('tempoChange.event', this.adjustRadius, this);
 
       this.render();
     },
@@ -95,10 +97,10 @@ define([
     changeMeasureRepresentation: function(representation) {
       this.previousMeasureRepresentation = this.currentMeasureRepresentation;
       this.currentMeasureRepresentation = representation;
-      this.render();      
+      this.render();
     },
     transitionRoll: function(options) {
-      if (this.unrolled == false){
+      if (this.unrolled == false) {
         for(i=0; i<this.numberOfPoints; i++){
             options.circlePath.data([this.circleStates[this.numberOfPoints-1-i]])
                 .transition()
@@ -145,7 +147,7 @@ define([
       var measureStartAngle = 0;
       var beatStartAngle;
       var beatEndAngle;
-      var measureRadius = 40;
+      var measureRadius = this.measureRadius;
       // Bead
       var circularBeadBeatRadius = 8;
       var numberOfPoints = 181; //always add 1 to close the circle
@@ -430,6 +432,15 @@ define([
         //re-render the view.
         this.render();
       }
+    },
+    adjustRadius: function(tempo) {
+      if ($(this.el).hasClass('selected')) {
+        console.log('here');
+        this.measureRadius = (tempo/120)*40;
+        //re-render the view
+        this.render();
+      }
     }
+
   });
 });
