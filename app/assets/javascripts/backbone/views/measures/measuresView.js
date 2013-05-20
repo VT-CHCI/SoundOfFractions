@@ -37,8 +37,8 @@ define([
       'number-line': numberLineMeasuresTemplate
     },
     //grab the current measure representation's data-state
-    currentMeasureRepresentation: '', //temp-holder
-    previousMeasureRepresentation: '', //temp-holder
+    currentMeasureRepresentation: '', //temp-holder until init
+    previousMeasureRepresentation: '', //temp-holder until init
 
     //registering click events to add and remove measures.
     events : {
@@ -101,8 +101,8 @@ define([
     },
     transitionRoll: function(options) {
       if (this.unrolled == false) {
-        for(i=0; i<this.numberOfPoints; i++){
-            options.circlePath.data([this.circleStates[this.numberOfPoints-1-i]])
+        for(i=0; i<this.measureNumberOfPoints; i++){
+            options.circlePath.data([this.circleStates[this.measureNumberOfPoints-1-i]])
                 .transition()
                 .delay(this.animationDuration*i)
                 .duration(this.animationDuration)
@@ -112,8 +112,7 @@ define([
       } else {
         console.log('unroll clicked');
         console.warn(options);
-        var _this = this;
-        for(i=0; i<this.numberOfPoints; i++){
+        for(i=0; i<this.measureNumberOfPoints; i++){
             options.circlePath.data([this.circleStates[i]])
                 .transition()
                 .delay(this.animationDuration*i)
@@ -126,8 +125,8 @@ define([
     },
 
     rollup: function() {
-      for(i=0; i<this.numberOfPoints; i++){
-          circlePath.data([this.circleStates[this.numberOfPoints-1-i]])
+      for(i=0; i<this.measureNumberOfPoints; i++){
+          circlePath.data([this.circleStates[this.measureNumberOfPoints-1-i]])
               .transition()
               .delay(this.animationDuration*i)
               .duration(this.animationDuration)
@@ -150,12 +149,14 @@ define([
       var measureRadius = this.measureRadius;
       // Bead
       var circularBeadBeatRadius = 8;
-      var numberOfPoints = 181; //always add 1 to close the circle
+      var measureNumberOfPoints = 181; //always add 1 to close the circle
+      var beadBeatRadious = 15;
+      this.measureNumberOfPoints = measureNumberOfPoints;
         // Transition
         var margin = {top: 20, left: 60};
         var lineLength = 2 * measureRadius * Math.PI;
-        var lineDivision = lineLength/numberOfPoints;
-        var animationDuration = 3000/numberOfPoints;
+        var lineDivision = lineLength/measureNumberOfPoints;
+        var animationDuration = 3000/measureNumberOfPoints;
       // Linear
       var beatBBX;
       var xMeasureLocation = 15; // 5%
@@ -180,18 +181,18 @@ define([
 
         var ƒthis = this;
         var circleStates = [];
-        for (i=0; i<numberOfPoints; i++){
+        for (i=0; i<measureNumberOfPoints; i++){
             // circle portion
-            var circleState = $.map(Array(numberOfPoints), function (d, j) {
+            var circleState = $.map(Array(measureNumberOfPoints), function (d, j) {
               // margin.left + measureRadius
-              var x = centerX + lineDivision*i + measureRadius * Math.sin(2 * j * Math.PI / (numberOfPoints - 1));
+              var x = centerX + lineDivision*i + measureRadius * Math.sin(2 * j * Math.PI / (measureNumberOfPoints - 1));
               // margin.top + measureRadius
-              var y =  centerY - measureRadius * Math.cos(2 * j * Math.PI / (numberOfPoints - 1));
+              var y =  centerY - measureRadius * Math.cos(2 * j * Math.PI / (measureNumberOfPoints - 1));
               return { x: x, y: y};
             })
-            circleState.splice(numberOfPoints-i);
+            circleState.splice(measureNumberOfPoints-i);
             //line portion
-            var lineState = $.map(Array(numberOfPoints), function (d, j) {
+            var lineState = $.map(Array(measureNumberOfPoints), function (d, j) {
                // margin.left + measureRadius
               var x = centerX + lineDivision*j;
               // margin.top
@@ -203,6 +204,7 @@ define([
             var individualState = lineState.concat(circleState);
             circleStates.push(individualState);
         }
+        this.circleStates = circleStates;
 
         // (when representation button changes, the current representation template will get updated)
         // compile the template for a measure
@@ -222,7 +224,8 @@ define([
           xMeasureLocation: xMeasureLocation,
           yMeasureLocation: yMeasureLocation,
           measureR: measureRadius,
-
+          // Bead
+          measureNumberOfPoints: measureNumberOfPoints,
           //Audio
           beatRForAudio: beatRForAudio,
           colorForAudio: colorForAudio,
@@ -242,9 +245,9 @@ define([
         $(this.el).find('.addMeasure').before( compiledTemplate )
 
 
-        var lineData = $.map(Array(numberOfPoints), function (d, i) {
+        var lineData = $.map(Array(measureNumberOfPoints), function (d, i) {
             var y = margin.top;
-            var x = margin.left + i * lineLength / (numberOfPoints - 1)
+            var x = margin.left + i * lineLength / (measureNumberOfPoints - 1)
             return {x: x, y: y}
         });
         var pathFunction = d3.svg.line()
@@ -264,10 +267,35 @@ define([
             .attr('opacity', .2)
             .attr('class', 'circle')
             .attr('class', 'circle-path')
-            .on('click', all);
+            .on('click', unroll);
 
-        function all() {
-          for(i=0; i<numberOfPoints; i++){
+        function transitionRoll(options) {
+          if (this.unrolled == false) {
+            for(i=0; i<this.measureNumberOfPoints; i++){
+                options.circlePath.data([this.circleStates[this.measureNumberOfPoints-1-i]])
+                    .transition()
+                    .delay(this.animationDuration*i)
+                    .duration(this.animationDuration)
+                    .ease('linear')
+                    .attr('d', this.pathFunction);
+            }
+          } else {
+            console.log('unroll clicked');
+            console.warn(options);
+            for(i=0; i<this.measureNumberOfPoints; i++){
+                options.circlePath.data([this.circleStates[i]])
+                    .transition()
+                    .delay(this.animationDuration*i)
+                    .duration(this.animationDuration)
+                    .ease('linear')
+                    .attr('d', this.pathFunction);
+            }
+          }
+          this.unrolled = !this.unrolled;
+        }
+
+        function unroll() {
+          for(i=0; i<measureNumberOfPoints; i++){
               circlePath.data([circleStates[i]])
                   .transition()
                   .delay(animationDuration*i)
@@ -277,18 +305,20 @@ define([
           }
         };
         function reverse() {
-          for(i=0; i<numberOfPoints; i++){
-              circlePath.data([circleStates[numberOfPoints-1-i]])
+          for(i=0; i<measureNumberOfPoints; i++){
+              circlePath.data([circleStates[measureNumberOfPoints-1-i]])
                   .transition()
                   .delay(animationDuration*i)
                   .duration(animationDuration)
                   .ease('linear')
-                  .attr('d', pathFunction)            
+                  .attr('d', pathFunction);
           }
         };
 
-        $('#a'+measure.cid).on('click', all);
-        $('#b'+measure.cid).on('click', reverse);
+        // $('#a'+measure.cid).on('click', dispatch.trigger('unroll.event'), circlePath);
+        $('#a'+measure.cid).on('click', unroll);
+        // dispatch.trigger('signatureChange.event', that.signature)
+        $('#b'+measure.cid).on('click', ƒthis.reverse);
 
         // console.log(this.currentMeasureRepresentation);
         // for each beat in this measure
@@ -302,6 +332,8 @@ define([
             parent:measure,
             parentCID:measure.cid,
             singleBeat:'#beat'+beat.cid,
+            beatIndex: index,
+            margin : margin,
             measureRepresentation:this.currentMeasureRepresentation,
             beatsInMeasure: this.measuresCollection.models[0].attributes.beats.length,
             // To use the range of colors
@@ -323,13 +355,18 @@ define([
             beatAngle: 360/this.measuresCollection.models[0].attributes.beats.length,
             beatStartAngle: -90+((360/this.measuresCollection.models[0].attributes.beats.length)*index),
             beatStartTime: firstBeatStart+(index)*(timeIncrement/1000),
+            
             // Circular Bead
-            beatR: circularBeadBeatRadius,
+            beatRadius: circularBeadBeatRadius,
+            circleStates: circleStates,
+            measureNumberOfPoints: measureNumberOfPoints,
+
+            // Transition
+            animationDuration: animationDuration,
 
             //Audio
             beatRForAudio: beatRForAudio,
-            colorForAudio: colorForAudio,
-
+            colorForAudio: colorForAudio
           };
 
           // manipulate linear-bar-svg beat parameters

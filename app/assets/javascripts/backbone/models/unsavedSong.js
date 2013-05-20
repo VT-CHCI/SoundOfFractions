@@ -8,8 +8,11 @@ define([
     // paramRoot: 'song',
     defaults: {
       // title: '',                        //move to unsavedSongTemplate.js
-      components: componentCollection   //move to unsavedSongTemplate.js
+      components: componentCollection,   //move to unsavedSongTemplate.js
       // TODO : add current representation
+      currentFractionRepresentation: '',
+      currentMeasureRepresentation: '',
+      tempo: ''
     },
     initialize: function(){
     }

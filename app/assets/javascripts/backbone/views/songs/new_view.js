@@ -49,9 +49,12 @@ define([
       e.stopPropagation();
       var toBeSavedSong = new window.router.songs.model(); 
       toBeSavedSong.set({
-        // this.model is a unsavedSong.js model which contains and 'components'
-        content : JSON.stringify(this.model.toJSON()),
-        title : $('#title').val()
+        // this.model is a song.js model which contains the following
+        content : JSON.stringify(this.model.toJSON()), //this.model is an unsavedSong.js model
+        title : $('#title').val(),
+        currentFractionRepresentation: $('#fraction-representation-buttons').children('.active').attr('data-state'),
+        currentMeasureRepresentation: $('#measure-representation-buttons').children('.active').attr('data-state'),
+        tempo: $('#tempo-slider input').val()
       });
 
       //To pass the variable safely in from BBone to Rails 3.2, you have to include the csrf param and token
@@ -59,17 +62,14 @@ define([
 
       console.log('toBeSavedSong.toJSON() :');
       console.warn(toBeSavedSong.toJSON());
-      console.warn(this.model.get('components').at(0).get('measures').at(0).get('beats').at(0).get('selected'));
       
       return window.router.songs.create( toBeSavedSong.toJSON() , {
         success: function(song) {
           console.log('Song saved!');
           this.model = song;
           window.router.songs.add(song);
-          console.log(window.router.songs.get(window.router.songs.length));
           
           return window.location.hash = "/" + this.model.id;
-
         },
         error: function(song, jqXHR) {
           console.error('ERROR SAVING SONG!!!!    ERROR SAVING SONG!!!!    ERROR SAVING SONG!!!!    ERROR SAVING SONG!!!!');

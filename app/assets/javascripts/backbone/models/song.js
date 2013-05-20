@@ -9,7 +9,10 @@ define([
     defaults: {
       content: '',
       user: '',
-      title: ''
+      title: '',
+      currentFractionRepresentation: '',
+      currentMeasureRepresentation: '',
+      tempo: ''
       // components: componentCollection   //move to songTemplate.js
     },
     initialize: function(){

@@ -13,8 +13,8 @@ entities
       icon
       //an image that symbolizes the instrument
       sound/sample
-      // a unique sound, that sounds the length of a beat, and has other attentuation properties based on the ordered number of the beat
-    music section
+      // a unique sound, that sounds the length of a beat, and has other attenuation properties based on the ordered number of the beat
+    music sections
       measure (¿defined by beats with certain properties?)
       //Comprised of a one or more beats
     fraction represntation section
@@ -44,6 +44,8 @@ entities
   //Tempo, a rate, should be defined in distance/time so that it is consistent across representations
   play
   //toggle the animations and the sounds ON
+  auto-rotate/play
+  // whether or not to loop
   pause
   // Pause the Music and the animation, allowing for resuming at the same point upon clicking pause again
   factory 
@@ -72,8 +74,10 @@ entities
     // questions from the teacher's preset scenario, and in revolving access so the student can build on and come back to
     answer area
     // a place where the student will type their answer
+  live interactive feedback
+  // an alert or area that shows live information, such as a when a beat is tapped by the student, which count the song is on, or other immediate feedback needed of attributes
   construction sandbox
-  // where the teacher makes thge different 
+  // where the teacher makes the different assignments/tasks by allowing certain entities or representations visible, and certain functions possible
   performance review / grades
   // an overview of each student that the teacher teaches and their metrics within the program
 
@@ -100,13 +104,14 @@ fraction representations
 measure/beat representations
   audio
   // a single circle that pulses at each beat
-  tapping
   vertical bar
   bar
   number line
   pie
   bead
   group
+  // 3 x 3 matrix for 9 beats per measure
+  // 9 randomly presented beats (non-overlaying)
   transition
   // an animation that is triggered to show what is conserved in each representation
     from
@@ -133,6 +138,8 @@ measure/beat representations
     bead
       number line
       // unroll to straight line, then add markers
+      // The circumference is equal to the length of the line
+
       bar
       // unroll to straight line, then stretch the beat beads into the squares
       pie
@@ -142,17 +149,26 @@ measure/beat representations
 
 attributes
   count
+  // current beat in song
   labels 
     counting numbers
+    // count beats within the measure
     fractions
+    // auto calc area
 
 functions
   add                     measure/beat/instrument
   delete                  song/measure/instrument/beat
   edit                    song/beat/assignment
   create                  song/assignment
+  capture
+  // by tapping space bar for one instrument
+  // tapping a specific key for a specific instrument
+  // tapping the desk and capturing beats
+  set                     tempo
   record                  song
   save/update             song/assignment
+  // Fork or auto-save?
   load/open               song/assignment
   mute                    instrument/beat
   unmute                  instrument/beat
@@ -160,20 +176,24 @@ functions
   play(sound)             song{beats}
   move                    measure/beat/instrument
   pick up                 beat/measure/instrument
+  drag                    beat/measure/instrument/panel-box
   place                   beat/measure/instrument
   orient                  beat(radial representations)
   focus                   component/instrument/measure/¿box?
   share                   song
   auto-space              equidistant beats
   download                song
+  phoropter               beat/measure/properties of
+  // look at the same thing but with multiple images of the same thing, but in different format/representation.
   select                  state on
   deselect                state off
+  // the ability to not select anything on the page
   sign in                 application
   sign out                application
   sign up                 application
   unroll                  measure(bead)
   //transition from radial to linear forms
-  roll                  measure(bead)
+  roll                    measure(bead)
   //transition from linear to radial forms
   extend                  measure/beat
   //increase the radius/diameter of the measure in a circular form, or the length in a linear form
@@ -183,32 +203,42 @@ functions
   sort (beats in pallet)  by size/length/color/
   logging                 representation changes/ 
   look at information     measure/instrument/song/button
-  compare                 song/measure/beat/fraction
+  compare                 {other students/teacher prepared}song/measure/beat/fraction/attributes
   export                  song/student performance
   review                  student performance
 
 math
   add
+  // beat
+  // beat after the {third position}
+  // beat {20%, 40%, 50% after the {first, second, third beat}
   subtract
+  // beat
+  // first {half, quarter, fifth}
   divide
+  // half time
   multiply
-
+  // double time
 music
   compare
+  // song {a, b} from yourself
+  // song a from yourself to song a of a classmate
   compose
+  // song yourself
+  // song with a classmate
 
 general features
-  metrics     most beats in a song
-              longest song (time)
-              most worked on (diff between created and updated? or sessions?)
-  awards      completed assignments
-  teaching    give awards for completing simple tasks used to introduce the program
+  metrics                  most beats in a song
+                           longest song (time)
+                           most worked on (diff between created and updated? or sessions?)
+  awards                   completed assignments
+  teaching                 give awards for completing simple tasks used to introduce the program
 
 outside of the program
   users {student/teacher/admin}
   //the people using the program
   tapping     fingers/drumsticks/clapping/slapping
-  //an embodied interaction by the student to compose their own music song, with 
+  //an embodied interaction by the student to compose their own music song, with tapping the desk or a key
   counting    internal / outloud / paper
   student     intended user
               completes assignments made by the teacher
@@ -217,5 +247,7 @@ outside of the program
   school      all students/classes in a school
   district    all schools in an area
   teacher     can make assignments and program states
-  partner     another student, that completes the task(s) together
-  group       other students that complete the task(s) together
+  partner     another student, that completes the task(s) with the student
+  group       students that complete the task(s) together
+
+conserved

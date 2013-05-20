@@ -69,10 +69,16 @@ define([
         this.colorForAudio = options.colorForAudio;
         this.beatStartTime = options.beatStartTime;
         this.timeIncrement = options.timeIncrement;
-        this.beatR = options.beatR;
+        this.beatR = options.beatRadius;
         this.beatRForAudio = options.beatRForAudio;
         this.beatHolderWidth = options.beatHolderWidth;
         this.linearBeatXPadding = options.linearBeatXPadding;
+        this.circleStates = options.circleStates;
+        this.beatNumberOfPoints = 9;
+        this.beatIndex = options.beatIndex;
+        this.margin = options.margin;
+        this.measureNumberOfPoints = options.measureNumberOfPoints;
+        this.animationDuration = options.animationDuration;
       } else {
         console.error('should not be in here!');
         this.model = new BeatModel;
@@ -86,6 +92,7 @@ define([
     render: function(toggledBeat){
       // the current state of the beat (is it ON or OFF?)
       var state = this.getSelectionBooleanCSS();
+      var ƒthis = this;
 
       // if render is being called from the toggle function, we may want to do something different
       if (toggledBeat) {
@@ -139,12 +146,24 @@ define([
         var measureR = this.measureR;
         beatTemplateParameters.measureR = measureR;
 
-        var x1 = centerX + measureR * Math.cos(Math.PI * beatStartAngle/180); 
-        beatTemplateParameters.x1 = x1;
-        var y1 = centerY + measureR * Math.sin(Math.PI * beatStartAngle/180);     
-        beatTemplateParameters.y1 = y1;
+        // x center of a bead or first x of pie piece
+        if (this.currentBeatRepresentation == 'circular-pie') {
+          var x1 = centerX + measureR * Math.cos(Math.PI * beatStartAngle/180); 
+          beatTemplateParameters.x1 = x1;
+        } else if (this.currentBeatRepresentation == 'circular-bead') {
+          beatTemplateParameters.x1 = this.circleStates[0][Math.floor((this.beatIndex/this.beatsInMeasure)*(this.measureNumberOfPoints))].x;
+        }
+        // y center of a bead
+        if (this.currentBeatRepresentation == 'circular-pie') {
+          var y1 = centerY + measureR * Math.sin(Math.PI * beatStartAngle/180);     
+          beatTemplateParameters.y1 = y1;
+        } else if (this.currentBeatRepresentation == 'circular-bead') {
+          beatTemplateParameters.y1 = this.circleStates[0][Math.floor((this.beatIndex/this.beatsInMeasure)*(this.measureNumberOfPoints))].y;
+        }
+        // the second x point of a pie piece
         var x2 = centerX + measureR * Math.cos(Math.PI * beatEndAngle/180);
         beatTemplateParameters.x2 = x2;
+        // the second y point of a pie piece
         var y2 = centerY + measureR * Math.sin(Math.PI * beatEndAngle/180);
         beatTemplateParameters.y2 = y2;
 
@@ -153,6 +172,28 @@ define([
         beatTemplateParameters.beatR = beatR;
         //console.log(x1 + ',' + y1);
 
+        var beatUnwindingPaths = [];
+        for (i=0; i<ƒthis.circleStates.length; i++){
+          // circle portion of unroll
+          var computedBeatBeadPath = $.map(Array(this.beatNumberOfPoints), function (d, j) {
+            var x = (ƒthis.circleStates[i][Math.floor((ƒthis.beatIndex/ƒthis.beatsInMeasure)*(ƒthis.measureNumberOfPoints))].x) + beatR * Math.sin(2 * j * Math.PI / (ƒthis.beatNumberOfPoints - 1));
+            // margin.top + beatR
+            var y = (ƒthis.circleStates[i][Math.floor((ƒthis.beatIndex/ƒthis.beatsInMeasure)*(ƒthis.measureNumberOfPoints))].y) - beatR * Math.cos(2 * j * Math.PI / (ƒthis.beatNumberOfPoints - 1));
+            return { x: x, y: y };
+          });
+          beatUnwindingPaths.push(computedBeatBeadPath);
+        };
+        this.beatUnwindingPaths = beatUnwindingPaths;
+        window.csf = beatUnwindingPaths;
+
+        // var computedBeatBeadPath = $.map(Array(this.beatNumberOfPoints), function (d, j) {
+        //   var x = beatTemplateParameters.x1 + beatR * Math.sin(2 * j * Math.PI / (ƒthis.beatNumberOfPoints - 1));
+        //   // margin.top + beatR
+        //   var y = beatTemplateParameters.y1 - beatR * Math.cos(2 * j * Math.PI / (ƒthis.beatNumberOfPoints - 1));
+        //   return { x: x, y: y };
+        // });
+        // console.warn(computedBeatBeadPath);
+
         //Audio
         var beatRForAudio = this.beatRForAudio;
         beatTemplateParameters.beatRForAudio = beatRForAudio;
@@ -160,6 +201,47 @@ define([
         beatTemplateParameters.colorForAudio = colorForAudio;
         // compile the template for this beat (respect the current representation)
         var compiledTemplate = _.template(this.representations[this.currentBeatRepresentation], beatTemplateParameters );
+
+        var margin = this.margin;
+        var lineData = $.map(Array(this.measureNumberOfPoints), function (d, i) {
+            var y = margin.top;
+            var x = margin.left + i * this.lineLength / (this.measureNumberOfPoints - 1)
+            return {x: x, y: y}
+        });
+        var pathFunction = d3.svg.line()
+            .x(function (d) {return d.x;})
+            .y(function (d) {return d.y;})
+            .interpolate('basis'); // bundle | basis | linear | cardinal are also options
+
+        //The Circle SVG Path we draw MUST BE AFTER THE COMPILED TEMPLATE
+        var beatContainer = d3.select('#beatHolder'+this.parent.cid);
+        var beatPath = beatContainer //.append('g')
+            // .append('path')
+            .insert('path', ':first-child')
+            // .data([computedBeatBeadPath])
+            .data([beatUnwindingPaths[0]])
+            .attr('d', pathFunction)
+            .attr('stroke', 'red')
+            // .attr('stroke-dasharray', '5, 10')
+            .attr('opacity', 1)
+            .attr('class', 'beat')
+            .attr('class', 'circle-path')
+            // .on('click', unroll);
+
+        function unroll() {
+          console.log('INNER UNROLL');
+          for(i=0; i<ƒthis.measureNumberOfPoints; i++){
+              beatPath.data([beatUnwindingPaths[i]])
+                  .transition()
+                  .delay(ƒthis.animationDuration*i)
+                  .duration(ƒthis.animationDuration)
+                  .ease('linear')
+                  .attr('d', pathFunction);
+          }
+        };
+
+        $('#c'+this.parent.cid).on('click', unroll);
+
         
         if (this.currentBeatRepresentation == 'linear-bar') {
           // append the compiled template to the measureBeatHolder
