@@ -13,6 +13,8 @@ class User < ActiveRecord::Base
 
   has_many :songs
 
+  has_one :setting
+
   def thisUsersID
     self.id
   end

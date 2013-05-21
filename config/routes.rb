@@ -1,5 +1,7 @@
 SoundOfFractions::Application.routes.draw do
 
+  resources :settings
+
   # Normally you only have this:
   # devise_for :users
   # however, for some reason, a known bug, you can't
