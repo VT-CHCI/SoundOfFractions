@@ -51,7 +51,7 @@ define([
       //passed in options. Otherwise we create a single
       //measure and add it to our collection.
       if (options) {
-        console.warn(options);
+        // console.warn(options);
         if (options.defaultMeasureRepresentation) {
           this.currentMeasureRepresentation = options.defaultMeasureRepresentation;
         }
@@ -318,7 +318,7 @@ define([
         // $('#a'+measure.cid).on('click', dispatch.trigger('unroll.event'), circlePath);
         $('#a'+measure.cid).on('click', unroll);
         // dispatch.trigger('signatureChange.event', that.signature)
-        $('#b'+measure.cid).on('click', ƒthis.reverse);
+        $('#b'+measure.cid).on('click', reverse);
 
         // console.log(this.currentMeasureRepresentation);
         // for each beat in this measure

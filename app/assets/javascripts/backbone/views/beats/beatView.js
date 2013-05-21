@@ -221,11 +221,12 @@ define([
             // .data([computedBeatBeadPath])
             .data([beatUnwindingPaths[0]])
             .attr('d', pathFunction)
-            .attr('stroke', 'red')
+            .attr('fill', COLORS.hexColors[this.color])
+            .attr('stroke', 'black')
             // .attr('stroke-dasharray', '5, 10')
             .attr('opacity', 1)
             .attr('class', 'beat')
-            .attr('class', 'circle-path')
+            // .attr('class', 'circle-path')
             // .on('click', unroll);
 
         function unroll() {
@@ -239,9 +240,19 @@ define([
                   .attr('d', pathFunction);
           }
         };
+        function reverse() {
+          for(i=0; i<ƒthis.measureNumberOfPoints; i++){
+              beatPath.data([beatUnwindingPaths[ƒthis.measureNumberOfPoints-1-i]])
+                  .transition()
+                  .delay(ƒthis.animationDuration*i)
+                  .duration(ƒthis.animationDuration)
+                  .ease('linear')
+                  .attr('d', pathFunction);
+          }
+        };
 
-        $('#c'+this.parent.cid).on('click', unroll);
-
+        $('#a'+this.parent.cid).on('click', unroll);
+        $('#b'+this.parent.cid).on('click', reverse);
         
         if (this.currentBeatRepresentation == 'linear-bar') {
           // append the compiled template to the measureBeatHolder
