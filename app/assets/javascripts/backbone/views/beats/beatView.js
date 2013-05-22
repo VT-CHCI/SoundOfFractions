@@ -79,6 +79,9 @@ define([
         this.margin = options.margin;
         this.measureNumberOfPoints = options.measureNumberOfPoints;
         this.animationDuration = options.animationDuration;
+        // To allow the toggle function to be accesable outside of the nested d3 functions inside render
+        // per http://stackoverflow.com/questions/16672862/reference-backbone-functions-from-within-a-nested-d3-function?noredirect=1#comment24003171_16672862
+        _.bindAll(this, 'toggle');
       } else {
         console.error('should not be in here!');
         this.model = new BeatModel;
@@ -96,15 +99,13 @@ define([
 
       // if render is being called from the toggle function, we may want to do something different
       if (toggledBeat) {
-        //DIV
-        $('#beat'+toggledBeat.cid).toggleClass('ON');
-        $('#beat'+toggledBeat.cid).toggleClass('OFF');
         //SVG
         if(this.currentBeatRepresentation == 'number-line') {
-          $('#beat'+toggledBeat.cid)[0].setAttribute('fill-opacity', this.getOpacityNumber(toggledBeat.get('selected')));
+          // $('#beat'+toggledBeat.cid)[0].setAttribute('fill-opacity', this.getOpacityNumber(toggledBeat.get('selected')));
         }
         else {
-          $('#beat'+toggledBeat.cid)[0].setAttribute('opacity', this.getOpacityNumber(toggledBeat.get('selected')));
+          var toggled = d3.select($('#beat'+this.cid));
+          toggled[0][0].attr('style', 'opacity: '+this.getOpacityNumber(toggledBeat.get('selected')));
         }
       } else {
         // this is reached during the initial rendering of the page or transition
@@ -219,15 +220,18 @@ define([
             // .append('path')
             .insert('path', ':first-child')
             // .data([computedBeatBeadPath])
+            .attr('class', 'beat')
+            .attr('id', 'beat'+this.cid)
             .data([beatUnwindingPaths[0]])
             .attr('d', pathFunction)
             .attr('fill', COLORS.hexColors[this.color])
             .attr('stroke', 'black')
             // .attr('stroke-dasharray', '5, 10')
-            .attr('opacity', 1)
-            .attr('class', 'beat')
+            .style('opacity', .2)
             // .attr('class', 'circle-path')
-            // .on('click', unroll);
+            .on('click', ƒthis.toggle);
+
+        this.beatPath = beatPath;
 
         function unroll() {
           console.log('INNER UNROLL');

@@ -149,7 +149,7 @@ define([
       var measureRadius = this.measureRadius;
       // Bead
       var circularBeadBeatRadius = 8;
-      var measureNumberOfPoints = 181; //always add 1 to close the circle
+      var measureNumberOfPoints = 21; //always add 1 to close the circle AND keep under 91 to avoid computational and animation delay
       var beadBeatRadious = 15;
       this.measureNumberOfPoints = measureNumberOfPoints;
         // Transition
@@ -267,7 +267,7 @@ define([
             .attr('opacity', .2)
             .attr('class', 'circle')
             .attr('class', 'circle-path')
-            .on('click', unroll);
+            // .on('click', unroll);
 
         function transitionRoll(options) {
           if (this.unrolled == false) {
