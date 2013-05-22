@@ -101,6 +101,7 @@ define([
               $('#tap-tempo').click();
               $('#tempo-slider-input').val(1);
               dispatch.trigger('tempoChange.event', bpm);
+              dispatch.trigger('stopRecording.event');
               window.clearInterval(waitIntervalID);
             }
             that.waitCount++;
@@ -176,10 +177,7 @@ define([
      if(this.transport.isPlaying) {
         dispatch.trigger('togglePlay.event');
       }
-      $('#transport').removeClass();
-      $('#transport').addClass('pause');
-      this.transport.isPlaying = true;
-      dispatch.trigger('togglePlay.event', 'on');
+      $('#transport').click();
       this.isTapping = true;
       if(window.tapIntervalID) {
         window.clearInterval(tapIntervalID);
