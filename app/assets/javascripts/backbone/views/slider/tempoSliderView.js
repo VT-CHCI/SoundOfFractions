@@ -31,38 +31,14 @@ define([
       var val = $(this.el).find($("input")).val();
 
       sliderModel.set({slidervalue : val});
-
-      //we're currently treating the tempo as a multiplier.
-      //120 BPM is what we're considering 1. and the range
-      //of possible values is from 60 to 240.
-      var asMultiplier = val / 120;
-      if(asMultiplier == 1) {
-        $('#tempo_val').text(asMultiplier);
-      }
-      else if(asMultiplier == 0.5) {
-        $('#tempo_val').text('1/2');
-      }
-      else if(asMultiplier == 0.75) {
-        $('#tempo_val').text('3/4');
-      }
-      else if(asMultiplier == 1.25) {
-        $('#tempo_val').text('5/4');
-      }
-      else if(asMultiplier == 1.5) {
-        $('#tempo_val').text('3/2');
-      }
-      else if(asMultiplier == 1.75) {
-        $('#tempo_val').text('7/4');
-      }
-      else if(asMultiplier == 2) {
-        $('#tempo_val').text(2);
-      }
+      var tempo = val * state.get('baseTempo');
+      $('#tempo-val').text(val);
 
       //triggering an event to notify everyone of a tempo change.
-      dispatch.trigger('tempoChange.event', val);
+      dispatch.trigger('tempoChange.event', tempo);
 
       //setting the tempo in the global state.
-      state.set({tempo : val});
+      state.set({tempo : tempo});
 
       //triggering a request to stop playback.
       //tempo changes during playback cause odd timings to happen.

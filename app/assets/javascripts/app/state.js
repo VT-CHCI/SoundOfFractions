@@ -16,6 +16,7 @@ define([
     defaults: {
       signature: 4,
       tempo: 120,
+      baseTempo: 120,
       components: null,
       micLevel: 1
     },
@@ -94,10 +95,10 @@ define([
               that.countIn = 1;
               //show the BPM
               var bpm = 1000 / that.average * 60;
-
+              that.set('baseTempo', bpm);
               that.set('tempo', bpm);
               $('#tap-tempo').click();
-              // set bpm slider here ! ! ! ! !
+              $('#tempo-slider-input').val(1);
               dispatch.trigger('tempoChange.event', bpm);
               window.clearInterval(waitIntervalID);
             }
