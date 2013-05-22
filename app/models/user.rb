@@ -18,4 +18,6 @@ class User < ActiveRecord::Base
   def thisUsersID
     self.id
   end
+
+  
 end

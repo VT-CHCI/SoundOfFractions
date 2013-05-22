@@ -7,6 +7,7 @@ class SongsController < ApplicationController
   def index
     if user_signed_in? 
       gon.userID = current_user.thisUsersID
+      gon.micLevel = Setting.find(current_user.thisUsersID).mic_level
       @user = current_user
       @songs = @user.songs
       logger.debug 'index logger \n\n\n\n\n\n'
