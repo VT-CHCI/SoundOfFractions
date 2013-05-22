@@ -15,13 +15,14 @@ define([
   'backbone/views/button/fractionRepresentionView',
   'backbone/views/button/wholeMeasureRepresentationView',
   'backbone/views/recorder/recorderView',
+  'backbone/views/button/tapTempoView',
   'app/log',
   'backbone/collections/songsCollection',
   'backbone/views/songs/new_view',
   'backbone/views/songs/index_view',
   'backbone/views/songs/show_view',
   'backbone/views/songs/edit_view'
-], function($, _, Backbone, mainHomeView, beatsPerMeasureSliderView, additiveLinearBeatPaletteView, componentsView, tempoSliderView, transportView, fractionRepresentionView, wholeMeasureRepresentationView, recorderView, log, songsCollection, songsViewNew, songsViewIndex, songsViewShow, songsViewEdit ){
+], function($, _, Backbone, mainHomeView, beatsPerMeasureSliderView, additiveLinearBeatPaletteView, componentsView, tempoSliderView, transportView, fractionRepresentionView, wholeMeasureRepresentationView, recorderView, tapTempoView, log, songsCollection, songsViewNew, songsViewIndex, songsViewShow, songsViewEdit ){
 
   var BBRouter = Backbone.Router.extend({
     // songs: {},
@@ -45,6 +46,7 @@ define([
       fractionRepresentionView.render();
       wholeMeasureRepresentationView.render();
       recorderView.render();
+      tapTempoView.render();
     },
 
     index: function(){

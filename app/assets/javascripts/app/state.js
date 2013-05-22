@@ -16,7 +16,8 @@ define([
     defaults: {
       signature: 4,
       tempo: 120,
-      components: null
+      components: null,
+      micLevel: 1
     },
 
     initialize: function() {
@@ -31,7 +32,12 @@ define([
       this.waitCount = 0;
       this.isWaiting = true;
       this.transport = transport;
+      if(window.gon) {
+        this.micLevel = gon.micLevel;
+        console.warn('Mic Level = ' + this.micLevel);
+      }
       dispatch.on('recordClicked.event', this.recordButtonClicked, this);
+      dispatch.on('tappingTempo.event', this.tapTempoClicked, this);
       dispatch.on('stopRecording.event', this.stopRecording, this);
     },
 
@@ -72,7 +78,7 @@ define([
           }
           var that = this;
           window.waitIntervalID = window.setInterval(function() {
-            if(that.waitCount == 1) {
+            if(that.waitCount == 2) {
               that.isWaiting = false;
               that.waitCount = 0;
 
@@ -90,12 +96,9 @@ define([
               var bpm = 1000 / that.average * 60;
 
               that.set('tempo', bpm);
-              $('#transport').removeClass();
-              $('#transport').addClass('pause');
-              that.transport.isPlaying = true;
-              dispatch.trigger('tempoChange.event', bpm);
-              dispatch.trigger('togglePlay.event', 'on');
+              $('#tap-tempo').click();
               // set bpm slider here ! ! ! ! !
+              dispatch.trigger('tempoChange.event', bpm);
               window.clearInterval(waitIntervalID);
             }
             that.waitCount++;
@@ -126,7 +129,8 @@ define([
       }
     },
 
-    recordButtonClicked: function() {
+    tapTempoClicked: function() {
+      console.log('Tap Tempo Clicked');
       if(transport.isPlaying) {
         dispatch.trigger('togglePlay.event');
       }
@@ -146,11 +150,13 @@ define([
         var that = this;
         navigator.webkitGetUserMedia({audio: true}, function(stream) {
           var microphone = context.createMediaStreamSource(stream);
-          that.microphone = microphone;   
+          that.microphone = microphone;
+          that.micGain = context.createGainNode();
+          that.micGain.gain = that.micLevel;
           that.jsNode = context.createScriptProcessor(512, 2, 2);
-          that.microphone.connect(that.jsNode);
+          that.microphone.connect(that.micGain);   
+          that.micGain.connect(that.jsNode);
           that.jsNode.connect(context.destination);
-          that.microphone.connect(context.destination);
           that.prevTime = new Date().getTime();
           that.jsNode.onaudioprocess = (function() {
             return function(e) {
@@ -163,6 +169,51 @@ define([
       else {
         alert('getUserMedia() is not supported in your browser');
       }
+    },
+
+    recordButtonClicked: function() {
+     if(this.transport.isPlaying) {
+        dispatch.trigger('togglePlay.event');
+      }
+      $('#transport').removeClass();
+      $('#transport').addClass('pause');
+      this.transport.isPlaying = true;
+      dispatch.trigger('togglePlay.event', 'on');
+      this.isTapping = true;
+      if(window.tapIntervalID) {
+        window.clearInterval(tapIntervalID);
+      }
+      for(var i = 0; i < window.signature; i++) {
+        window.beatArray[i] = 0;
+      }
+      this.isWaiting = false;
+      this.isRecording = true;
+
+      if (this.hasGetUserMedia()) {
+        console.log("we do have user media access.");
+        var context = new window.webkitAudioContext();
+        var that = this;
+        navigator.webkitGetUserMedia({audio: true}, function(stream) {
+          var microphone = context.createMediaStreamSource(stream);
+          that.microphone = microphone;
+          that.micGain = context.createGainNode();
+          that.micGain.gain = that.micLevel;
+          that.jsNode = context.createScriptProcessor(512, 2, 2);
+          that.microphone.connect(that.micGain);   
+          that.micGain.connect(that.jsNode);
+          that.jsNode.connect(context.destination);
+          that.prevTime = new Date().getTime();
+          that.jsNode.onaudioprocess = (function() {
+            return function(e) {
+              that.analyze(e);
+            };
+          }());
+          that.waveform = new Float32Array(that.jsNode.bufferSize);   
+        }, this.onFailSoHard);
+      } 
+      else {
+        alert('getUserMedia() is not supported in your browser');
+      } 
     },
 
     analyze: function(e){
@@ -183,6 +234,9 @@ define([
       this.beatArray = new Array();
       this.waitCount = 0;
       this.isWaiting = true;
+      this.microphone.disconnect();
+      this.jsNode.disconnect();
+      this.micGain.disconnect();
 
       if(window.waitIntervalID) {
         window.clearInterval(window.waitIntervalID);
