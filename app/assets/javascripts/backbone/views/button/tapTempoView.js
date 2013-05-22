@@ -47,6 +47,7 @@ define([
         this.isTapping = true;
       }
       else {
+        dispatch.trigger('tempoDetected.event');
         this.isTapping = false;
       }
     },

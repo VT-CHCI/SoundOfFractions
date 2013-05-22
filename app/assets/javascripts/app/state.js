@@ -40,6 +40,7 @@ define([
       dispatch.on('recordClicked.event', this.recordButtonClicked, this);
       dispatch.on('tappingTempo.event', this.tapTempoClicked, this);
       dispatch.on('stopRecording.event', this.stopRecording, this);
+      dispatch.on('tempoDetected.event', this.stopRecording, this);
     },
 
     processWaveform: function(time, waveform) {
@@ -110,23 +111,21 @@ define([
         console.log(this.timeIntervals);
       }
       else if(RMS > 0.05 && this.isRecording) {
-        if(Math.abs(time - this.mainCounterTime) < (this.average / 3)) {
-          _.each(this.get('components').models, function(component) {
-            if($('#component'+component.cid).hasClass('selected')) {
-              console.log(component.get('currentBeat'));
-              var measuresCollection = component.get('measures');
-              _.each(measuresCollection.models, function(measure) {
-                var beatsCollection = measure.get('beats');
-                var beat = beatsCollection.at(component.get('currentBeat'));
-                console.log(beat);
-                if(!beat.get('selected')) {
-                  $('#beat'+beat.cid).click();
-                }
-                console.log($('#beat'+beat.cid));
-              }, this);
-            }
-          }, this);
-        }
+        _.each(this.get('components').models, function(component) {
+          if($('#component'+component.cid).hasClass('selected')) {
+            console.log(component.get('currentBeat'));
+            var measuresCollection = component.get('measures');
+            _.each(measuresCollection.models, function(measure) {
+              var beatsCollection = measure.get('beats');
+              var beat = beatsCollection.at(component.get('currentBeat'));
+              console.log(beat);
+              if(!beat.get('selected')) {
+                $('#beat'+beat.cid).click();
+              }
+              console.log($('#beat'+beat.cid));
+            }, this);
+          }
+        }, this);
       }
     },
 
@@ -155,7 +154,8 @@ define([
           that.micGain = context.createGainNode();
           that.micGain.gain = that.micLevel;
           that.jsNode = context.createScriptProcessor(512, 2, 2);
-          that.microphone.connect(that.micGain);   
+          that.microphone.connect(that.micGain);
+          that.microphone.connect(context.destination);   
           that.micGain.connect(that.jsNode);
           that.jsNode.connect(context.destination);
           that.prevTime = new Date().getTime();
@@ -200,7 +200,8 @@ define([
           that.micGain = context.createGainNode();
           that.micGain.gain = that.micLevel;
           that.jsNode = context.createScriptProcessor(512, 2, 2);
-          that.microphone.connect(that.micGain);   
+          that.microphone.connect(that.micGain);
+          that.microphone.connect(context.destination);
           that.micGain.connect(that.jsNode);
           that.jsNode.connect(context.destination);
           that.prevTime = new Date().getTime();

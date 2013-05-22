@@ -226,6 +226,7 @@ define([
             // .attr('stroke-dasharray', '5, 10')
             .attr('opacity', 1)
             .attr('class', 'beat')
+            .attr('class', 'd3')
             // .attr('class', 'circle-path')
             // .on('click', unroll);
 
