@@ -67,7 +67,6 @@ define([
       a new MeasuresView which gets rendered instead.
     */
     render: function(options){
-      console.log('render: componentView.js');
       if(options) {
         new MeasuresView({
           collection:this.component.get('measures'),
@@ -150,9 +149,6 @@ define([
       // TODO why bring in signature to have it reset
       //signature = $(this.el).find('.measure').eq(0).find('.beat').length;
       signature = this.component.get('signature');
-      console.log(signature);
-      console.log(maxMeasures);
-      console.log(duration);
 
       //duration is of one beat.
       duration = duration/signature/maxMeasures;
@@ -161,6 +157,16 @@ define([
       this.animate = function(target) {
         target.setAttributeNS(null, 'dur', (duration/1000)+'s');
         target.beginElement();
+      };
+
+      this.d3animate = function() {
+        var target = d3.select('.d3');
+        console.log(target);
+        target.transition()
+              // .delay(duration)
+              // .ease('linear')
+              .attr("x", 10)
+              .duration(1000)
       };
 
       var beats = $(this.el).find('.beat');
@@ -183,7 +189,13 @@ define([
           return function() {
             if (counter >= 0 && counter < beats.length)
               self.component.set('currentBeat',counter);
-              self.animate(beats.eq(counter).children().first()[0]);
+              if (self.defaultMeasureRepresentation == 'circular-bead'){
+                window.csf = $('.d3');
+                // console.log(self.component.get('currentBeat'));
+                self.d3animate();
+              } else {
+                self.animate(beats.eq(counter).children().first()[0]);
+              }
             if (counter < (signature*maxMeasures-1))
               counter ++;
             else

@@ -1,0 +1,60 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @assignment.name %>
+</p>
+
+<p>
+  <b>Fractionrepresentations:</b>
+  <%= @assignment.fractionRepresentations %>
+</p>
+
+<p>
+  <b>Measurerepresentations:</b>
+  <%= @assignment.measureRepresentations %>
+</p>
+
+<p>
+  <b>Visiblewindows:</b>
+  <%= @assignment.visibleWindows %>
+</p>
+
+<p>
+  <b>Visiblewindowitems:</b>
+  <%= @assignment.visibleWindowItems %>
+</p>
+
+<p>
+  <b>Tempoeditable:</b>
+  <%= @assignment.tempoEditable %>
+</p>
+
+<p>
+  <b>Lowerrangeoftempo:</b>
+  <%= @assignment.lowerRangeOfTempo %>
+</p>
+
+<p>
+  <b>Upperrangeoftempo:</b>
+  <%= @assignment.upperRangeOfTempo %>
+</p>
+
+<p>
+  <b>Lowerrangeofbeatspermeasure:</b>
+  <%= @assignment.lowerRangeOfBeatsPerMeasure %>
+</p>
+
+<p>
+  <b>Upperrangeofbeatspermeasure:</b>
+  <%= @assignment.upperRangeOfBeatsPerMeasure %>
+</p>
+
+<p>
+  <b>Looping:</b>
+  <%= @assignment.looping %>
+</p>
+
+
+<%= link_to 'Edit', edit_assignment_path(@assignment) %> |
+<%= link_to 'Back', assignments_path %>

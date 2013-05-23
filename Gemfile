@@ -36,7 +36,7 @@ gem "bootstrap-sass", "~> 2.3.0.0"
 gem 'requirejs-rails'
 gem 'ejs'
 gem 'devise'
-gem "better_errors", ">= 0.2.0", :group => :development
+# gem "better_errors", ">= 0.2.0", :group => :development
 gem "binding_of_caller", ">= 0.6.8", :group => :development
 # not sure if this is working well with require, but installed nonetheless
 gem "d3_rails"

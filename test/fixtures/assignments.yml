@@ -1,0 +1,27 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  name: MyString
+  fractionRepresentations: MyString
+  measureRepresentations: MyString
+  visibleWindows: MyString
+  visibleWindowItems: MyString
+  tempoEditable: false
+  lowerRangeOfTempo: 1
+  upperRangeOfTempo: 1
+  lowerRangeOfBeatsPerMeasure: 1
+  upperRangeOfBeatsPerMeasure: 1
+  looping: false
+
+two:
+  name: MyString
+  fractionRepresentations: MyString
+  measureRepresentations: MyString
+  visibleWindows: MyString
+  visibleWindowItems: MyString
+  tempoEditable: false
+  lowerRangeOfTempo: 1
+  upperRangeOfTempo: 1
+  lowerRangeOfBeatsPerMeasure: 1
+  upperRangeOfBeatsPerMeasure: 1
+  looping: false

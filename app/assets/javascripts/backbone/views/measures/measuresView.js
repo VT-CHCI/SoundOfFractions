@@ -90,13 +90,14 @@ define([
       dispatch.on('measureRepresentation.event', this.changeMeasureRepresentation, this);
       dispatch.on('unroll.event', this.unroll, this);
       dispatch.on('tempoChange.event', this.adjustRadius, this);
-
       this.render();
     },
 
     changeMeasureRepresentation: function(representation) {
       this.previousMeasureRepresentation = this.currentMeasureRepresentation;
       this.currentMeasureRepresentation = representation;
+      var d3Els = d3.selectAll($('.d3'));
+      d3Els.remove();
       this.render();
     },
     transitionRoll: function(options) {
@@ -149,7 +150,7 @@ define([
       var measureRadius = this.measureRadius;
       // Bead
       var circularBeadBeatRadius = 8;
-      var measureNumberOfPoints = 181; //always add 1 to close the circle
+      var measureNumberOfPoints = 60; //always add 1 to close the circle AND keep under 91 to avoid computational and animation delay
       var beadBeatRadious = 15;
       this.measureNumberOfPoints = measureNumberOfPoints;
         // Transition

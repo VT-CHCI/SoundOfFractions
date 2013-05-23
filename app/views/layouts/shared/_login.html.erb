@@ -1,10 +1,11 @@
 <% if user_signed_in? %>
   <li id="nav-songs-info"></li>
-  <li><%= 'User: ' + current_user.email %></li>
-  <li><%= link_to('Edit account', edit_user_registration_path, :class => 'btn btn-inverse') %></li>
-  <li><%= link_to('Logout', destroy_user_session_path, :class => 'btn btn-inverse') %></li>
+  <li id="nav-user-label"><%= 'User: ' + current_user.email %></li>
+  <li><%= link_to('Settings', edit_setting_path(current_user.thisUsersID), :class => 'btn btn-inverse btn-small') %></li>
+  <li><%= link_to('Edit account', edit_user_registration_path, :class => 'btn btn-inverse btn-small') %></li>
+  <li><%= link_to('Logout', destroy_user_session_path, :class => 'btn btn-inverse btn-small') %></li>
 <% else %>
   <li><p>If you want to Load or Save a Song, please login --></p></li>
-  <li><%= link_to('Login', new_user_session_path, :class => 'btn btn-inverse')  %></li>
-  <li><%= link_to('Sign up', new_user_registration_path, :class => 'btn btn-inverse')  %></li>
+  <li><%= link_to('Login', new_user_session_path, :class => 'btn btn-inverse btn-small')  %></li>
+  <li><%= link_to('Sign up', new_user_registration_path, :class => 'btn btn-inverse btn-small')  %></li>
 <% end %>
