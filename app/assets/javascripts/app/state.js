@@ -66,7 +66,6 @@ define([
           var currentTime = new Date().getTime();
           this.signature++;
           console.log("Beats per Measure = " + this.signature);
-          console.log("Current time: " + currentTime);
           this.timeIntervals[(this.countIn - 2)] = currentTime - this.previousTime;
           this.previousTime = currentTime;
           var total = 0;
@@ -98,6 +97,7 @@ define([
               var bpm = 1000 / that.average * 60;
               that.set('baseTempo', bpm);
               that.set('tempo', bpm);
+              that.set('signature', that.signature);
               $('#tap-tempo').click();
               $('#tempo-slider-input').val(1);
               dispatch.trigger('tempoChange.event', bpm);
