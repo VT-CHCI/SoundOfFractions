@@ -216,18 +216,19 @@ define([
         //The Circle SVG Path we draw MUST BE AFTER THE COMPILED TEMPLATE
         var beatContainer = d3.select('#beatHolder'+this.parent.cid);
         var beatPath = beatContainer //.append('g')
-            // .append('path')
             .insert('path', ':first-child')
+            // .append('path')
+            .attr('class', 'beat')
+            .attr('id', 'beat'+ƒthis.cid)
             // .data([computedBeatBeadPath])
             .data([beatUnwindingPaths[0]])
             .attr('d', pathFunction)
             .attr('fill', COLORS.hexColors[this.color])
             .attr('stroke', 'black')
             // .attr('stroke-dasharray', '5, 10')
-            .attr('opacity', 1)
-            .attr('class', 'beat')
+            .attr('opacity', .2)
             // .attr('class', 'circle-path')
-            // .on('click', unroll);
+            .on('click', ƒthis.toggle);
 
         function unroll() {
           console.log('INNER UNROLL');
@@ -253,7 +254,12 @@ define([
 
         $('#a'+this.parent.cid).on('click', unroll);
         $('#b'+this.parent.cid).on('click', reverse);
-        
+     
+
+        function now() {
+          $( "#beat"+this.cid ).draggable();
+        };
+
         if (this.currentBeatRepresentation == 'linear-bar') {
           // append the compiled template to the measureBeatHolder
           $(this.measureBeatHolder).append(compiledTemplate);          
