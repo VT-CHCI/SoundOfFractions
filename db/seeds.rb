@@ -59,6 +59,16 @@
 # Assignments
   assignment1 = Assignment.create({ :name => 'Assignment 1', :fractionRepresentations => 'fraction,percent', :measureRepresentations => 'circular-bead,circular-pie', :visibleWindows => '', :visibleWindowItems => '', :tempoEditable => true, :lowerRangeOfTempo => 30, :upperRangeOfTempo => 400, :lowerRangeOfBeatsPerMeasure => 2, :upperRangeOfBeatsPerMeasure => 14, :looping => true }, :without_protection => true ).save!
 
+# Settings
+  settings1 = Setting.create({ user_id: 1, mic_level: 1 }, :without_protection => true).save!
+  settings2 = Setting.create({ user_id: 2, mic_level: 1 }, :without_protection => true).save!
+  settings3 = Setting.create({ user_id: 3, mic_level: 1 }, :without_protection => true).save!
+  settings4 = Setting.create({ user_id: 4, mic_level: 1 }, :without_protection => true).save!
+  settings5 = Setting.create({ user_id: 5, mic_level: 1 }, :without_protection => true).save!
+  settings6 = Setting.create({ user_id: 6, mic_level: 1 }, :without_protection => true).save!
+  settings7 = Setting.create({ user_id: 7, mic_level: 1 }, :without_protection => true).save!
+
+
 # ClassInstruction Assignment
   # cia1 = 
 

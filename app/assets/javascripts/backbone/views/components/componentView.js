@@ -159,6 +159,16 @@ define([
         target.beginElement();
       };
 
+      this.d3animate = function() {
+        var target = d3.select('.d3');
+        console.log(target);
+        target.transition()
+              // .delay(duration)
+              // .ease('linear')
+              .attr("x", 10)
+              .duration(1000)
+      };
+
       var beats = $(this.el).find('.beat');
       var counter = 0-(signature*maxMeasures-1);
 
@@ -179,7 +189,13 @@ define([
           return function() {
             if (counter >= 0 && counter < beats.length)
               self.component.set('currentBeat',counter);
-              self.animate(beats.eq(counter).children().first()[0]);
+              if (self.defaultMeasureRepresentation == 'circular-bead'){
+                window.csf = $('.d3');
+                // console.log(self.component.get('currentBeat'));
+                self.d3animate();
+              } else {
+                self.animate(beats.eq(counter).children().first()[0]);
+              }
             if (counter < (signature*maxMeasures-1))
               counter ++;
             else
