@@ -67,7 +67,6 @@ define([
       a new MeasuresView which gets rendered instead.
     */
     render: function(options){
-      console.log('render: componentView.js');
       if(options) {
         new MeasuresView({
           collection:this.component.get('measures'),

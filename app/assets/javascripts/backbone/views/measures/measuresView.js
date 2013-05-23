@@ -97,7 +97,6 @@ define([
       this.previousMeasureRepresentation = this.currentMeasureRepresentation;
       this.currentMeasureRepresentation = representation;
       var d3Els = d3.selectAll($('.d3'));
-      console.log(d3Els);
       d3Els.remove();
       this.render();
     },
