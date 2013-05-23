@@ -90,13 +90,14 @@ define([
       dispatch.on('measureRepresentation.event', this.changeMeasureRepresentation, this);
       dispatch.on('unroll.event', this.unroll, this);
       dispatch.on('tempoChange.event', this.adjustRadius, this);
-
       this.render();
     },
 
     changeMeasureRepresentation: function(representation) {
       this.previousMeasureRepresentation = this.currentMeasureRepresentation;
       this.currentMeasureRepresentation = representation;
+      var d3Els = d3.selectAll($('.d3'));
+      d3Els.remove();
       this.render();
     },
     transitionRoll: function(options) {

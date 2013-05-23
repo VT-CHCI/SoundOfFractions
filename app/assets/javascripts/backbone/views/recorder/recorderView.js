@@ -21,7 +21,7 @@ define([
     },
 
     initialize: function() {
-
+      dispatch.on('togglePlay.event', this.playToggled, this);
     },
 
     triggerRecord: function() {
@@ -36,6 +36,14 @@ define([
         dispatch.trigger('stopRecording.event');
       }
       this.render();
+    },
+
+    playToggled: function(val) {
+      if(val == 'off' && (!$(this.el).hasClass('record'))) {
+        $(this.el).removeClass('recordPause');
+        $(this.el).addClass('record');
+        dispatch.trigger('stopRecording.event');
+      }
     },
 
     render: function() {

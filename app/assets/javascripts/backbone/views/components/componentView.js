@@ -67,7 +67,6 @@ define([
       a new MeasuresView which gets rendered instead.
     */
     render: function(options){
-      console.log('render: componentView.js');
       if(options) {
         new MeasuresView({
           collection:this.component.get('measures'),
@@ -150,9 +149,6 @@ define([
       // TODO why bring in signature to have it reset
       //signature = $(this.el).find('.measure').eq(0).find('.beat').length;
       signature = this.component.get('signature');
-      console.log(signature);
-      console.log(maxMeasures);
-      console.log(duration);
 
       //duration is of one beat.
       duration = duration/signature/maxMeasures;

@@ -16,9 +16,10 @@ class User < ActiveRecord::Base
   has_many :roles, :through => :user_roles
 
   has_many :songs
-
+  has_one :setting
 
   #== Instance Methods
+
   def thisUsersID
     self.id
   end
@@ -41,5 +42,4 @@ class User < ActiveRecord::Base
      .where("roles.name = ?", type) \
      .where("class_instructions.name = ?", class_instruction_name)
   end
-
 end
