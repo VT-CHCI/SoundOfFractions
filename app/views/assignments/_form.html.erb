@@ -1,0 +1,61 @@
+<%= form_for(@assignment) do |f| %>
+  <% if @assignment.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@assignment.errors.count, "error") %> prohibited this assignment from being saved:</h2>
+
+      <ul>
+      <% @assignment.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :fractionRepresentations %><br />
+    <%= f.text_field :fractionRepresentations %>
+  </div>
+  <div class="field">
+    <%= f.label :measureRepresentations %><br />
+    <%= f.text_field :measureRepresentations %>
+  </div>
+  <div class="field">
+    <%= f.label :visibleWindows %><br />
+    <%= f.text_field :visibleWindows %>
+  </div>
+  <div class="field">
+    <%= f.label :visibleWindowItems %><br />
+    <%= f.text_field :visibleWindowItems %>
+  </div>
+  <div class="field">
+    <%= f.label :tempoEditable %><br />
+    <%= f.check_box :tempoEditable %>
+  </div>
+  <div class="field">
+    <%= f.label :lowerRangeOfTempo %><br />
+    <%= f.number_field :lowerRangeOfTempo %>
+  </div>
+  <div class="field">
+    <%= f.label :upperRangeOfTempo %><br />
+    <%= f.number_field :upperRangeOfTempo %>
+  </div>
+  <div class="field">
+    <%= f.label :lowerRangeOfBeatsPerMeasure %><br />
+    <%= f.number_field :lowerRangeOfBeatsPerMeasure %>
+  </div>
+  <div class="field">
+    <%= f.label :upperRangeOfBeatsPerMeasure %><br />
+    <%= f.number_field :upperRangeOfBeatsPerMeasure %>
+  </div>
+  <div class="field">
+    <%= f.label :looping %><br />
+    <%= f.check_box :looping %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

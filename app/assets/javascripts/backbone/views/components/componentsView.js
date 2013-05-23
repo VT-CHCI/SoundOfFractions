@@ -62,69 +62,69 @@ define([
         active: true
       });
 
-      //this is creating the hi-hat component.
-      this.measure = new BeatsCollection;
+      // //this is creating the hi-hat component.
+      // this.measure = new BeatsCollection;
 
-      //for each beat - also change signature below
-      for (var i = 0; i < 5; i++) {
-        this.measure.add();
-      }
+      // //for each beat - also change signature below
+      // for (var i = 0; i < 5; i++) {
+      //   this.measure.add();
+      // }
 
-      this.component = new MeasuresCollection;
-      this.component.add({beats: this.measure});
+      // this.component = new MeasuresCollection;
+      // this.component.add({beats: this.measure});
 
-      this.drumkit = componentsCollection.add({
-        label: 'Hi Hat',
-        img: 'hihat.png',
-        mute: true,
-        sample: '808_chh.m4a',
-        measures: this.component,
-        signature: 5,
-        active: true
-      });
+      // this.drumkit = componentsCollection.add({
+      //   label: 'Hi Hat',
+      //   img: 'hihat.png',
+      //   mute: true,
+      //   sample: '808_chh.m4a',
+      //   measures: this.component,
+      //   signature: 5,
+      //   active: true
+      // });
 
-      //this is creating the kick drum component.
-      this.measure = new BeatsCollection;
+      // //this is creating the kick drum component.
+      // this.measure = new BeatsCollection;
 
-      //for each beat - also change signature below
-      for (var i = 0; i < 4; i++) {
-        this.measure.add();
-      }
+      // //for each beat - also change signature below
+      // for (var i = 0; i < 4; i++) {
+      //   this.measure.add();
+      // }
 
-      this.component = new MeasuresCollection;
-      this.component.add({beats: this.measure});
+      // this.component = new MeasuresCollection;
+      // this.component.add({beats: this.measure});
 
-      this.drumkit = componentsCollection.add({
-        label: 'Kick Drum',
-        img: 'kick.png',
-        mute: true,
-        sample: '808_bd.m4a',
-        measures: this.component,
-        signature: 4,
-        active: true
-      });
+      // this.drumkit = componentsCollection.add({
+      //   label: 'Kick Drum',
+      //   img: 'kick.png',
+      //   mute: true,
+      //   sample: '808_bd.m4a',
+      //   measures: this.component,
+      //   signature: 4,
+      //   active: true
+      // });
 
 
-      //this is creating the synth component.
-      this.measure = new BeatsCollection;
+      // //this is creating the synth component.
+      // this.measure = new BeatsCollection;
 
-      //for each beat - also change signature below
-      for (var i = 0; i < 3; i++) {
-        this.measure.add();
-      }
+      // //for each beat - also change signature below
+      // for (var i = 0; i < 3; i++) {
+      //   this.measure.add();
+      // }
 
-      this.component = new MeasuresCollection;
-      this.component.add({beats: this.measure});
+      // this.component = new MeasuresCollection;
+      // this.component.add({beats: this.measure});
 
-      this.drumkit = componentsCollection.add({
-        label: 'Synth',
-        img: 'synth.png',
-        mute: true,
-        sample: 'ambass.mp3',
-        measures: this.component,
-        signature: 3,
-        active: true
-      });
+      // this.drumkit = componentsCollection.add({
+      //   label: 'Synth',
+      //   img: 'synth.png',
+      //   mute: true,
+      //   sample: 'ambass.mp3',
+      //   measures: this.component,
+      //   signature: 3,
+      //   active: true
+      // });
 
       //creating two arrays to hold our gain nodes.
       //the first is for sustained-note sounds,
