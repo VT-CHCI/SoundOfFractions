@@ -201,61 +201,61 @@ define([
         beatTemplateParameters.colorForAudio = colorForAudio;
         // compile the template for this beat (respect the current representation)
         var compiledTemplate = _.template(this.representations[this.currentBeatRepresentation], beatTemplateParameters );
+          if (this.currentBeatRepresentation == 'circular-bead') {
+          var margin = this.margin;
+          var lineData = $.map(Array(this.measureNumberOfPoints), function (d, i) {
+              var y = margin.top;
+              var x = margin.left + i * this.lineLength / (this.measureNumberOfPoints - 1)
+              return {x: x, y: y}
+          });
+          var pathFunction = d3.svg.line()
+              .x(function (d) {return d.x;})
+              .y(function (d) {return d.y;})
+              .interpolate('basis'); // bundle | basis | linear | cardinal are also options
 
-        var margin = this.margin;
-        var lineData = $.map(Array(this.measureNumberOfPoints), function (d, i) {
-            var y = margin.top;
-            var x = margin.left + i * this.lineLength / (this.measureNumberOfPoints - 1)
-            return {x: x, y: y}
-        });
-        var pathFunction = d3.svg.line()
-            .x(function (d) {return d.x;})
-            .y(function (d) {return d.y;})
-            .interpolate('basis'); // bundle | basis | linear | cardinal are also options
+          //The Circle SVG Path we draw MUST BE AFTER THE COMPILED TEMPLATE
+          var beatContainer = d3.select('#beatHolder'+this.parent.cid);
+          var beatPath = beatContainer //.append('g')
+              // .append('path')
+              .insert('path', ':first-child')
+              // .data([computedBeatBeadPath])
+              .data([beatUnwindingPaths[0]])
+              .attr('d', pathFunction)
+              .attr('fill', COLORS.hexColors[this.color])
+              .attr('stroke', 'black')
+              // .attr('stroke-dasharray', '5, 10')
+              .attr('opacity', 1)
+              .attr('class', 'beat')
+              .attr('class', 'd3')
+              // .attr('class', 'circle-path')
+              // .on('click', unroll);
 
-        //The Circle SVG Path we draw MUST BE AFTER THE COMPILED TEMPLATE
-        var beatContainer = d3.select('#beatHolder'+this.parent.cid);
-        var beatPath = beatContainer //.append('g')
-            // .append('path')
-            .insert('path', ':first-child')
-            // .data([computedBeatBeadPath])
-            .data([beatUnwindingPaths[0]])
-            .attr('d', pathFunction)
-            .attr('fill', COLORS.hexColors[this.color])
-            .attr('stroke', 'black')
-            // .attr('stroke-dasharray', '5, 10')
-            .attr('opacity', 1)
-            .attr('class', 'beat')
-            .attr('class', 'd3')
-            // .attr('class', 'circle-path')
-            // .on('click', unroll);
+          function unroll() {
+            console.log('INNER UNROLL');
+            for(i=0; i<ƒthis.measureNumberOfPoints; i++){
+                beatPath.data([beatUnwindingPaths[i]])
+                    .transition()
+                    .delay(ƒthis.animationDuration*i)
+                    .duration(ƒthis.animationDuration)
+                    .ease('linear')
+                    .attr('d', pathFunction);
+            }
+          };
+          function reverse() {
+            for(i=0; i<ƒthis.measureNumberOfPoints; i++){
+                beatPath.data([beatUnwindingPaths[ƒthis.measureNumberOfPoints-1-i]])
+                    .transition()
+                    .delay(ƒthis.animationDuration*i)
+                    .duration(ƒthis.animationDuration)
+                    .ease('linear')
+                    .attr('d', pathFunction);
+            }
+          };
 
-        function unroll() {
-          console.log('INNER UNROLL');
-          for(i=0; i<ƒthis.measureNumberOfPoints; i++){
-              beatPath.data([beatUnwindingPaths[i]])
-                  .transition()
-                  .delay(ƒthis.animationDuration*i)
-                  .duration(ƒthis.animationDuration)
-                  .ease('linear')
-                  .attr('d', pathFunction);
-          }
-        };
-        function reverse() {
-          for(i=0; i<ƒthis.measureNumberOfPoints; i++){
-              beatPath.data([beatUnwindingPaths[ƒthis.measureNumberOfPoints-1-i]])
-                  .transition()
-                  .delay(ƒthis.animationDuration*i)
-                  .duration(ƒthis.animationDuration)
-                  .ease('linear')
-                  .attr('d', pathFunction);
-          }
-        };
-
-        $('#a'+this.parent.cid).on('click', unroll);
-        $('#b'+this.parent.cid).on('click', reverse);
-        
-        if (this.currentBeatRepresentation == 'linear-bar') {
+          $('#a'+this.parent.cid).on('click', unroll);
+          $('#b'+this.parent.cid).on('click', reverse);
+        }
+        else if (this.currentBeatRepresentation == 'linear-bar') {
           // append the compiled template to the measureBeatHolder
           $(this.measureBeatHolder).append(compiledTemplate);          
         // SVG rendering
