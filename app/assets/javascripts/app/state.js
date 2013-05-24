@@ -37,6 +37,9 @@ define([
         this.micLevel = gon.micLevel;
         console.warn('Mic Level = ' + this.micLevel);
       }
+
+      this.context = new window.webkitAudioContext();
+
       dispatch.on('recordClicked.event', this.recordButtonClicked, this);
       dispatch.on('tappingTempo.event', this.tapTempoClicked, this);
       dispatch.on('stopRecording.event', this.stopRecording, this);
@@ -147,18 +150,17 @@ define([
 
       if (this.hasGetUserMedia()) {
         console.log("we do have user media access.");
-        var context = new window.webkitAudioContext();
         var that = this;
         navigator.webkitGetUserMedia({audio: true}, function(stream) {
-          var microphone = context.createMediaStreamSource(stream);
+          var microphone = that.context.createMediaStreamSource(stream);
           that.microphone = microphone;
-          that.micGain = context.createGainNode();
+          that.micGain = that.context.createGainNode();
           that.micGain.gain = that.micLevel;
-          that.jsNode = context.createScriptProcessor(512, 2, 2);
+          that.jsNode = that.context.createScriptProcessor(512, 2, 2);
           that.microphone.connect(that.micGain);
-          that.microphone.connect(context.destination);   
+          that.microphone.connect(that.context.destination);   
           that.micGain.connect(that.jsNode);
-          that.jsNode.connect(context.destination);
+          that.jsNode.connect(that.context.destination);
           that.prevTime = new Date().getTime();
           that.jsNode.onaudioprocess = (function() {
             return function(e) {
@@ -190,18 +192,17 @@ define([
 
       if (this.hasGetUserMedia()) {
         console.log("we do have user media access.");
-        var context = new window.webkitAudioContext();
         var that = this;
         navigator.webkitGetUserMedia({audio: true}, function(stream) {
-          var microphone = context.createMediaStreamSource(stream);
+          var microphone = that.context.createMediaStreamSource(stream);
           that.microphone = microphone;
-          that.micGain = context.createGainNode();
+          that.micGain = that.context.createGainNode();
           that.micGain.gain = that.micLevel;
-          that.jsNode = context.createScriptProcessor(512, 2, 2);
+          that.jsNode = that.context.createScriptProcessor(512, 2, 2);
           that.microphone.connect(that.micGain);
-          that.microphone.connect(context.destination);
+          that.microphone.connect(that.context.destination);
           that.micGain.connect(that.jsNode);
-          that.jsNode.connect(context.destination);
+          that.jsNode.connect(that.context.destination);
           that.prevTime = new Date().getTime();
           that.jsNode.onaudioprocess = (function() {
             return function(e) {
