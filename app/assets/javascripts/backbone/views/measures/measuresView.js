@@ -1,8 +1,8 @@
 // Filename: views/measures/measuresView.js
 /*
   This is the MeasuresView.
-
   This is contained in a ComponentsView.
+  //dthree can be referenced by d3, NOT ignore, and ignore CANNOT be renamed to d3
 */
 define([
   'jquery',
@@ -18,12 +18,10 @@ define([
   'text!backbone/templates/measures/circularBeadMeasures.html',
   'text!backbone/templates/measures/numberLineMeasures.html',
   'colors',
-  'app/d3',
   'app/dispatch',
   'app/state',
   'app/log'
-], function($, _, Backbone, BeatsCollection, MeasureModel, beatView, audioMeasuresTemplate, linearBarMeasuresTemplate, linearBarSVGMeasuresTemplate, circularPieMeasuresTemplate, circularBeadMeasuresTemplate, numberLineMeasuresTemplate, COLORS, dthree, dispatch, state, log){
-  //dthree can be referenced by d3, NOT dthree, and dthree CANNOT be renamed to d3
+], function($, _, Backbone, BeatsCollection, MeasureModel, beatView, audioMeasuresTemplate, linearBarMeasuresTemplate, linearBarSVGMeasuresTemplate, circularPieMeasuresTemplate, circularBeadMeasuresTemplate, numberLineMeasuresTemplate, COLORS, dispatch, state, log){
   return Backbone.View.extend({
     // el: $('.component'),
 
@@ -256,53 +254,55 @@ define([
             .y(function (d) {return d.y;})
             .interpolate('basis'); // bundle | basis | linear | cardinal are also options
 
-        (function(){d3.experiments = {};
+        (function(){
+          d3.experiments = {};
+          d3.experiments.dragAll = function() {
+              this.on("mousedown", function(){grab(this, event)})
+                  .on("mousemove", function(){drag(this, event)})
+                  .on("mouseup", function(){drop(this, event)});
+          };
 
-        d3.experiments.dragAll = function() {
-            this.on("mousedown", function(){grab(this, event)})
-                .on("mousemove", function(){drag(this, event)})
-                .on("mouseup", function(){drop(this, event)});
-        };
+          var trueCoordX = null,
+              trueCoordY = null,
+              grabPointX = null,
+              grabPointY = null,
+              newX       = null,
+              newY       = null,
+              dragTarget = null;
 
-        var trueCoordX = null,
-            trueCoordY = null,
-            grabPointX = null,
-            grabPointY = null,
-            dragTarget = null;
+          function grab(element, event){
+              dragTarget = event.target;
+              //// send the grabbed element to top
+              dragTarget.parentNode.appendChild( dragTarget );
+              d3.select(dragTarget).attr("pointer-events", "none");
+              //// find the coordinates
+              var transMatrix = dragTarget.getCTM();
+              grabPointX = trueCoordX - Number(transMatrix.e);
+              grabPointY = trueCoordY - Number(transMatrix.f);
+          };
 
-        function grab(element, event){
-            dragTarget = event.target;
-            //// send the grabbed element to top
-            dragTarget.parentNode.appendChild( dragTarget );
-            d3.select(dragTarget).attr("pointer-events", "none");
-            //// find the coordinates
-            var transMatrix = dragTarget.getCTM();
-            grabPointX = trueCoordX - Number(transMatrix.e);
-            grabPointY = trueCoordY - Number(transMatrix.f);
-        };
+          function drag(element, event){
+              var newScale = 1; //svgContainer.node().currentScale;
+              var translation = svgContainer.node().currentTranslate;
+              trueCoordX = (event.clientX - translation.x)/newScale;
+              trueCoordY = (event.clientY - translation.y)/newScale;
+              if (dragTarget){
+                  newX = trueCoordX - grabPointX;
+                  newY = trueCoordY - grabPointY;
+                  d3.select(dragTarget).attr("transform", "translate(" + newX + "," + newY + ")");
+              }
+          };
 
-        function drag(element, event){
-            var newScale = svgContainer.node().currentScale;
-            var translation = svgContainer.node().currentTranslate;
-            trueCoordX = (event.clientX - translation.x)/newScale;
-            trueCoordY = (event.clientY - translation.y)/newScale;
-            if (dragTarget){
-                var newX = trueCoordX - grabPointX;
-                var newY = trueCoordY - grabPointY;
-                d3.select(dragTarget).attr("transform", "translate(" + newX + "," + newY + ")");
-            }
-        };
-
-        function drop(element, event){
-            if (dragTarget){
-                d3.select(dragTarget).attr("pointer-events", "all");
-                var targetElement = event.target;
-                if(targetElement != svgContainer.node()){
-                    console.log(dragTarget.id + ' has been dropped on top of ' + targetElement.id);
-                }
-                dragTarget = null;
-            }
-        };
+          function drop(element, event){
+              if (dragTarget){
+                  d3.select(dragTarget).attr("pointer-events", "all");
+                  var targetElement = event.target;
+                  if(targetElement != svgContainer.node()){
+                      console.log(dragTarget.id + ' has been dropped on top of ' + targetElement.id);
+                  }
+                  dragTarget = null;
+              }
+          };
         })();
 
 

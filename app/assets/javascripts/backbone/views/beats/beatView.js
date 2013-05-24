@@ -185,7 +185,6 @@ define([
           beatUnwindingPaths.push(computedBeatBeadPath);
         };
         this.beatUnwindingPaths = beatUnwindingPaths;
-        window.csf = beatUnwindingPaths;
 
         // var computedBeatBeadPath = $.map(Array(this.beatNumberOfPoints), function (d, j) {
         //   var x = beatTemplateParameters.x1 + beatR * Math.sin(2 * j * Math.PI / (ƒthis.beatNumberOfPoints - 1));
@@ -217,8 +216,8 @@ define([
         //The Circle SVG Path we draw MUST BE AFTER THE COMPILED TEMPLATE
         var beatContainer = d3.select('#beatHolder'+this.parent.cid);
         var beatPath = beatContainer //.append('g')
-            .insert('path', ':first-child')
-            // .append('path')
+            // .insert('path', ':first-child')
+            .append('path')
             .attr('class', 'beat')
             .attr('id', 'beat'+ƒthis.cid)
             // .data([computedBeatBeadPath])
@@ -262,11 +261,6 @@ define([
         $('#a'+this.parent.cid).on('click', unroll);
         $('#b'+this.parent.cid).on('click', reverse);
      
-
-        function now() {
-          $( "#beat"+this.cid ).draggable();
-        };
-
         if (this.currentBeatRepresentation == 'linear-bar') {
           // append the compiled template to the measureBeatHolder
           $(this.measureBeatHolder).append(compiledTemplate);          
