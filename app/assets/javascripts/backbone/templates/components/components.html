@@ -1,6 +1,8 @@
 <div id="component-container<%= component.cid %>" class="component-container">
   <h4><%= component.get('label') %></h4>
   <img src="<%= App.assets.path(component.get('img'))%>" class="img-circle component-image"><span class="control unmute">X</span>
-  <div id="component<%= component.cid %>" class="component well"></div>
+  <div id="component<%= component.cid %>" class="component well">
+  </div>
+
   <div class="count" id="fraction<%= component.cid %>"></div>
 </div>

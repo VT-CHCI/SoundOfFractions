@@ -142,6 +142,16 @@ svg.circular-pie {
   cursor: pointer;
 }
 
+.addComponent {
+  color: green;
+  display: inline-block;
+  vertical-align: bottom;
+  padding: 0 5px;
+  font-size: 30px;
+  cursor: pointer;
+  float: left;
+}
+
 .addMeasure:hover {
   font-weight: bold;
 }

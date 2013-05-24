@@ -20,8 +20,11 @@ define([
   'colors',
   'app/dispatch',
   'app/state',
-  'app/log'
-], function($, _, Backbone, BeatsCollection, MeasureModel, beatView, audioMeasuresTemplate, linearBarMeasuresTemplate, linearBarSVGMeasuresTemplate, circularPieMeasuresTemplate, circularBeadMeasuresTemplate, numberLineMeasuresTemplate, COLORS, dispatch, state, log){
+  'app/log',
+], function($, _, Backbone, BeatsCollection, MeasureModel, beatView, 
+    audioMeasuresTemplate, linearBarMeasuresTemplate, linearBarSVGMeasuresTemplate, 
+    circularPieMeasuresTemplate, circularBeadMeasuresTemplate, numberLineMeasuresTemplate, 
+    COLORS, dispatch, state, log, jqueryui){
   return Backbone.View.extend({
     // el: $('.component'),
 
@@ -66,6 +69,10 @@ define([
         this.circlePath = '';
         this.measureRadius = 40;
         this.unrolled = MeasureModel.unrolled;
+
+        if(options.slaveNo) {
+          this.slaveNo = options.slaveNo;
+        }
       }
       // else {
       //   this.measure = new BeatsCollection;
@@ -92,11 +99,13 @@ define([
     },
 
     changeMeasureRepresentation: function(representation) {
-      this.previousMeasureRepresentation = this.currentMeasureRepresentation;
-      this.currentMeasureRepresentation = representation;
-      var d3Els = d3.selectAll($('.d3'));
-      d3Els.remove();
-      this.render();
+      if($(this.el).hasClass('selected')) {
+        this.previousMeasureRepresentation = this.currentMeasureRepresentation;
+        this.currentMeasureRepresentation = representation;
+        var d3Els = d3.selectAll($('.d3'));
+        d3Els.remove();
+        this.render();
+      }
     },
     transitionRoll: function(options) {
       if (this.unrolled == false) {
@@ -136,9 +145,7 @@ define([
 
     render: function(){
       // REPLACE whatever is already in the measure container with: a plus sign in the measure rendering
-      $(this.el).html('<div class="addMeasure pull-right">+</div>');
-
-
+      $(this.el).html('<div class="addMeasure pull-right">+</div><div id="add-component" class="addComponent pull-right">+</div>');
       // Circle
       var centerX = 150;
       var centerY = 50;
@@ -207,36 +214,72 @@ define([
 
         // (when representation button changes, the current representation template will get updated)
         // compile the template for a measure
-        var measureTemplateParamaters = {
-          measure: measure,
-          beatHolder:'beatHolder'+measure.cid,
-          measureCount:index+1,
-          measureAngle: 360.0,
-          beatHolderWidth: beatHolderWidth,
-          // SVG Properties
-          measureWidth: lbbMeasureWidth,
-          measureHeight: lbbMeasureHeight,
-          measureColor: COLORS.hexColors[COLORS.colorIndices.WHITE],
-          // SVG Locations
-          cx: centerX,
-          cy: centerY,
-          xMeasureLocation: xMeasureLocation,
-          yMeasureLocation: yMeasureLocation,
-          measureR: measureRadius,
-          // Bead
-          measureNumberOfPoints: measureNumberOfPoints,
-          //Audio
-          beatRForAudio: beatRForAudio,
-          colorForAudio: colorForAudio,
-          // Transition
-          circleStates: circleStates,
-          lineData: lineData,
-          pathFunction: this.circlePath,
+        if(this.slaveNo) {
+          var measureTemplateParamaters = {
+            measure: measure,
+            beatHolder:'beatHolder'+measure.cid + this.slaveNo,
+            measureId: 'measure' + measure.cid + this.slaveNo,
+            measureCount:index+1,
+            measureAngle: 360.0,
+            beatHolderWidth: beatHolderWidth,
+            // SVG Properties
+            measureWidth: lbbMeasureWidth,
+            measureHeight: lbbMeasureHeight,
+            measureColor: COLORS.hexColors[COLORS.colorIndices.WHITE],
+            // SVG Locations
+            cx: centerX,
+            cy: centerY,
+            xMeasureLocation: xMeasureLocation,
+            yMeasureLocation: yMeasureLocation,
+            measureR: measureRadius,
+            // Bead
+            measureNumberOfPoints: measureNumberOfPoints,
+            //Audio
+            beatRForAudio: beatRForAudio,
+            colorForAudio: colorForAudio,
+            // Transition
+            circleStates: circleStates,
+            lineData: lineData,
+            pathFunction: this.circlePath,
 
-          //Number Line
-          xOffset: beatHolderWidth/this.measuresCollection.models[0].attributes.beats.length / 2,
-          yOffset: lbbMeasureHeight / 2
-        };
+            //Number Line
+            xOffset: beatHolderWidth/this.measuresCollection.models[0].attributes.beats.length / 2,
+            yOffset: lbbMeasureHeight / 2
+          };
+        }
+        else {
+          var measureTemplateParamaters = {
+            measure: measure,
+            beatHolder:'beatHolder'+measure.cid,
+            measureId: 'measure'+measure.cid,
+            measureCount:index+1,
+            measureAngle: 360.0,
+            beatHolderWidth: beatHolderWidth,
+            // SVG Properties
+            measureWidth: lbbMeasureWidth,
+            measureHeight: lbbMeasureHeight,
+            measureColor: COLORS.hexColors[COLORS.colorIndices.WHITE],
+            // SVG Locations
+            cx: centerX,
+            cy: centerY,
+            xMeasureLocation: xMeasureLocation,
+            yMeasureLocation: yMeasureLocation,
+            measureR: measureRadius,
+            // Bead
+            measureNumberOfPoints: measureNumberOfPoints,
+            //Audio
+            beatRForAudio: beatRForAudio,
+            colorForAudio: colorForAudio,
+            // Transition
+            circleStates: circleStates,
+            lineData: lineData,
+            pathFunction: this.circlePath,
+
+            //Number Line
+            xOffset: beatHolderWidth/this.measuresCollection.models[0].attributes.beats.length / 2,
+            yOffset: lbbMeasureHeight / 2
+          };
+        }
 
         var compiledTemplate = _.template( this.representations[this.currentMeasureRepresentation], measureTemplateParamaters );
 

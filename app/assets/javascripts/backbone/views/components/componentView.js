@@ -23,7 +23,7 @@ define([
     //the second is for setting this component in focus (or selected).
     events : {
       'click .control' : 'toggleMute',
-      'click' : 'select'
+      'click' : 'select',
     },
 
     /*

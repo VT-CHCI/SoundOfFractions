@@ -17,17 +17,24 @@ define([
   'backbone/models/measure',
   'backbone/models/component',
   'backbone/views/components/componentView',
+  'backbone/views/components/componentSlaveView',
   'text!backbone/templates/components/components.html',
+  'text!backbone/templates/components/slave.html',
   'app/dispatch',
   'app/state'
 ], function($, _, Backbone, BeatsCollection, MeasuresCollection, componentsCollection, 
-    BeatModel, MeasureModel, ComponentModel, ComponentView, componentsTemplate, dispatch, state){
+    BeatModel, MeasureModel, ComponentModel, ComponentView, ComponentSlaveView, 
+    componentsTemplate, slaveTemplate, dispatch, state){
   var componentsView = Backbone.View.extend({
     el: $('#sof-composer'),
 
+    events : {
+      'click .addComponent' : 'addComponentClicked'
+    },
+
     initialize: function(){
       // Default Measure representation state - also set "active" class in fractionRepresentation.html AND wholeMeasureRepresentation.html
-      this.defaultMeasureRepresentation = 'circular-bead';
+      this.defaultMeasureRepresentation = 'linear-bar-svg';
       this.defaultFractionRepresentation = 'fraction';
 
       //this context variable gives us access to all of the
@@ -48,6 +55,8 @@ define([
       for (var i = 0; i < 6; i++) {
         this.measure.add();
       }
+
+      this.slaves = new Array();
 
       this.component = new MeasuresCollection;
       this.component.add({beats: this.measure});
@@ -224,6 +233,14 @@ define([
         }
         counter++;
       }, this);
+
+      for(var i = 0; i < this.slaves.length; i++) {
+        var slave = this.slaves[i];
+        var compiledTemplate = _.template( slaveTemplate, {component: slave.component, slaveNo: this.slaves.length} );
+        $(this.el).append( compiledTemplate );
+        debugger;
+        slave.render();
+      }
 
 
       return this;
@@ -452,6 +469,18 @@ define([
     updateTempo:function(val) {
       console.log('tempo changed to ' + val);
       this.drumkit.tempo = val;
+    },
+
+    addComponentClicked: function() {
+      var component = this.drumkit.at(0);
+      this.slaves.push(new ComponentSlaveView({
+          collection: component,
+          el:'#component-container'+ (component.cid) + (this.slaves.length + 1), 
+          defaultMeasureRepresentation: this.defaultMeasureRepresentation,
+          defaultFractionRepresentation: this.defaultFractionRepresentation,
+          slaveNo: this.slaves.length + 1}));
+
+      this.render();
     }
   });
   return new componentsView();

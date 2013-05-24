@@ -9,3 +9,7 @@ shim:
   'backbone':
     deps: ['underscore', 'jquery']
     exports: 'Backbone'
+  'jqueryui':
+    deps: ['jquery']
+    path: 'assets/javascripts/app/jquery-ui-custom.min'
+    exports: 'jqueryui'
