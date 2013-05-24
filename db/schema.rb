@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130523135335) do
+ActiveRecord::Schema.define(:version => 20130524122443) do
 
   create_table "assignments", :force => true do |t|
     t.string   "name"
@@ -42,12 +42,22 @@ ActiveRecord::Schema.define(:version => 20130523135335) do
   create_table "class_instructions", :force => true do |t|
     t.string   "name"
     t.datetime "time"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+    t.integer  "person_id"
+  end
+
+  add_index "class_instructions", ["person_id"], :name => "index_class_instructions_on_person_id"
+
+  create_table "people", :force => true do |t|
+    t.string   "firstName"
+    t.string   "lastName"
     t.integer  "user_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
 
-  add_index "class_instructions", ["user_id"], :name => "index_class_instructions_on_user_id"
+  add_index "people", ["user_id"], :name => "index_people_on_user_id"
 
   create_table "roles", :force => true do |t|
     t.string   "name"

@@ -17,6 +17,7 @@ class User < ActiveRecord::Base
 
   has_many :songs
   has_one :setting
+  has_one :person
 
   #== Instance Methods
 
@@ -24,22 +25,22 @@ class User < ActiveRecord::Base
     self.id
   end
 
-  def student_classes(class_instruction_name)
-    member_classes(class_instruction_name, 'Student')
-  end
+  # def student_classes(class_instruction_name)
+  #   member_classes(class_instruction_name, 'Student')
+  # end
 
-  def teacher_classes(class_instruction_name)
-    member_classes(class_instruction_name, Role::TEACHER)
-  end
+  # def teacher_classes(class_instruction_name)
+  #   member_classes(class_instruction_name, Role::TEACHER)
+  # end
 
-  private
+  # private
 
-  def member_classes(class_instruction_name, type)
-   ClassInstruction \
-     .joins(:user_role) \
-     .where(["user_role.user_id = ?", id]) \
-     .joins("INNER JOIN roles ON roles.id = user_roles.role_id") \
-     .where("roles.name = ?", type) \
-     .where("class_instructions.name = ?", class_instruction_name)
-  end
+  # def member_classes(class_instruction_name, type)
+  #  ClassInstruction \
+  #    .joins(:user_role) \
+  #    .where(["user_role.user_id = ?", id]) \
+  #    .joins("INNER JOIN roles ON roles.id = user_roles.role_id") \
+  #    .where("roles.name = ?", type) \
+  #    .where("class_instructions.name = ?", class_instruction_name)
+  # end
 end

@@ -17,6 +17,16 @@
   studentUser4 = User.create({ :email => "stu4@test.org", :password => "asdfasdf", :password_confirmation => "asdfasdf" }, :without_protection => true ).save!
   teacherUser3 = User.create({ :email => "tea3@test.org", :password => "asdfasdf", :password_confirmation => "asdfasdf" }, :without_protection => true ).save!
 
+# Person
+  p1 = Person.create({ firstName: "Admin", lastName: "All", user_id: 1}, without_protection: true).save!
+  p2 = Person.create({ firstName: "Teacher", lastName: "1", user_id: 2}, without_protection: true).save!
+  p3 = Person.create({ firstName: "Student", lastName: "1", user_id: 3}, without_protection: true).save!
+  p4 = Person.create({ firstName: "Student", lastName: "2", user_id: 4}, without_protection: true).save!
+  p5 = Person.create({ firstName: "Teacher", lastName: "2", user_id: 5}, without_protection: true).save!
+  p6 = Person.create({ firstName: "Student", lastName: "3", user_id: 6}, without_protection: true).save!
+  p7 = Person.create({ firstName: "Student", lastName: "4", user_id: 7}, without_protection: true).save!
+  p8 = Person.create({ firstName: "Teacher", lastName: "3", user_id: 8}, without_protection: true).save!
+
 # Roles
   puts 'SETTING UP DEFAULT ROLES'
   role1 = Role.create({ :name => "Admin" }, :without_protection => true ).save!
@@ -34,16 +44,16 @@
   ur8 = UserRole.create({ :user_id => 8, :role_id => 2 }, :without_protection => true ).save!
 
 # Class Instruction
-  classA1 = ClassInstruction.create({ :name => "math-101", :time => "Sun, 9 Dec 2012 12:00:00 -0500".to_datetime, :user_id =>1 }, :without_protection => true ).save!
-  classA2 = ClassInstruction.create({ :name => "ss", :time => "Sun, 9 Dec 2012 12:00:00 -0500".to_datetime, :user_id =>1 }, :without_protection => true ).save!
+  classA1 = ClassInstruction.create({ :name => "math-101", :time => "Sun, 9 Dec 2012 12:00:00 -0500".to_datetime, :person_id =>1 }, :without_protection => true ).save!
+  classA2 = ClassInstruction.create({ :name => "ss", :time => "Sun, 9 Dec 2012 12:00:00 -0500".to_datetime, :person_id =>1 }, :without_protection => true ).save!
 
-  class1 = ClassInstruction.create({ :name => "math-101", :time => "Sun, 9 Dec 2012 12:00:00 -0500".to_datetime, :user_id =>2 }, :without_protection => true ).save!
-  class2 = ClassInstruction.create({ :name => "math-101", :time => "Sun, 9 Dec 2012 12:00:00 -0500".to_datetime, :user_id =>3 }, :without_protection => true ).save!
-  class3 = ClassInstruction.create({ :name => "math-101", :time => "Sun, 9 Dec 2012 12:00:00 -0500".to_datetime, :user_id =>4 }, :without_protection => true ).save!
-  class4 = ClassInstruction.create({ :name => "ss", :time => "Sun, 9 Dec 2012 12:00:00 -0500".to_datetime, :user_id =>5 }, :without_protection => true ).save!
-  class5 = ClassInstruction.create({ :name => "ss", :time => "Sun, 9 Dec 2012 12:00:00 -0500".to_datetime, :user_id =>6 }, :without_protection => true ).save!
-  class6 = ClassInstruction.create({ :name => "ss", :time => "Sun, 9 Dec 2012 12:00:00 -0500".to_datetime, :user_id =>7 }, :without_protection => true ).save!
-  class7 = ClassInstruction.create({ :name => "ss", :time => "Sun, 9 Dec 2012 12:00:00 -0500".to_datetime, :user_id =>8 }, :without_protection => true ).save!
+  class1 = ClassInstruction.create({ :name => "math-101", :time => "Sun, 9 Dec 2012 12:00:00 -0500".to_datetime, :person_id =>2 }, :without_protection => true ).save!
+  class2 = ClassInstruction.create({ :name => "math-101", :time => "Sun, 9 Dec 2012 12:00:00 -0500".to_datetime, :person_id =>3 }, :without_protection => true ).save!
+  class3 = ClassInstruction.create({ :name => "math-101", :time => "Sun, 9 Dec 2012 12:00:00 -0500".to_datetime, :person_id =>4 }, :without_protection => true ).save!
+  class4 = ClassInstruction.create({ :name => "ss", :time => "Sun, 9 Dec 2012 12:00:00 -0500".to_datetime, :person_id =>5 }, :without_protection => true ).save!
+  class5 = ClassInstruction.create({ :name => "ss", :time => "Sun, 9 Dec 2012 12:00:00 -0500".to_datetime, :person_id =>6 }, :without_protection => true ).save!
+  class6 = ClassInstruction.create({ :name => "ss", :time => "Sun, 9 Dec 2012 12:00:00 -0500".to_datetime, :person_id =>7 }, :without_protection => true ).save!
+  class7 = ClassInstruction.create({ :name => "ss", :time => "Sun, 9 Dec 2012 12:00:00 -0500".to_datetime, :person_id =>8 }, :without_protection => true ).save!
 
 # Songs
   puts 'SETTING UP DEFAULTS SONGS'

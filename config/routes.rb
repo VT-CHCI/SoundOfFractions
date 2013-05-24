@@ -1,5 +1,7 @@
 SoundOfFractions::Application.routes.draw do
 
+  resources :people
+
   resources :assignments
 
   resources :class_instructions
