@@ -44,6 +44,7 @@ GEM
       execjs
     coffee-script-source (1.6.2)
     color_routes (1.0.0)
+    colorize (0.5.8)
     d3_rails (3.1.6)
       railties (>= 3.1.0)
     daemons (1.1.9)
@@ -153,6 +154,7 @@ DEPENDENCIES
   browser
   coffee-rails (~> 3.2.1)
   color_routes
+  colorize
   d3_rails
   devise
   ejs
