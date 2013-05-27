@@ -34,6 +34,7 @@
   role3 = Role.create({ :name => "Student" }, :without_protection => true ).save!
 
 # UserRole
+  puts 'SETTING UP DEFAULT USER-ROLES'
   ur1 = UserRole.create({ :user_id => 1, :role_id => role1 }, :without_protection => true ).save!
   ur2 = UserRole.create({ :user_id => 2, :role_id => 2 }, :without_protection => true ).save!
   ur3 = UserRole.create({ :user_id => 3, :role_id => 3 }, :without_protection => true ).save!
@@ -44,16 +45,9 @@
   ur8 = UserRole.create({ :user_id => 8, :role_id => 2 }, :without_protection => true ).save!
 
 # Class Instruction
-  classA1 = ClassInstruction.create({ :name => "math-101", :time => "Sun, 9 Dec 2012 12:00:00 -0500".to_datetime, :person_id =>1 }, :without_protection => true ).save!
-  classA2 = ClassInstruction.create({ :name => "ss", :time => "Sun, 9 Dec 2012 12:00:00 -0500".to_datetime, :person_id =>1 }, :without_protection => true ).save!
-
-  class1 = ClassInstruction.create({ :name => "math-101", :time => "Sun, 9 Dec 2012 12:00:00 -0500".to_datetime, :person_id =>2 }, :without_protection => true ).save!
-  class2 = ClassInstruction.create({ :name => "math-101", :time => "Sun, 9 Dec 2012 12:00:00 -0500".to_datetime, :person_id =>3 }, :without_protection => true ).save!
-  class3 = ClassInstruction.create({ :name => "math-101", :time => "Sun, 9 Dec 2012 12:00:00 -0500".to_datetime, :person_id =>4 }, :without_protection => true ).save!
-  class4 = ClassInstruction.create({ :name => "ss", :time => "Sun, 9 Dec 2012 12:00:00 -0500".to_datetime, :person_id =>5 }, :without_protection => true ).save!
-  class5 = ClassInstruction.create({ :name => "ss", :time => "Sun, 9 Dec 2012 12:00:00 -0500".to_datetime, :person_id =>6 }, :without_protection => true ).save!
-  class6 = ClassInstruction.create({ :name => "ss", :time => "Sun, 9 Dec 2012 12:00:00 -0500".to_datetime, :person_id =>7 }, :without_protection => true ).save!
-  class7 = ClassInstruction.create({ :name => "ss", :time => "Sun, 9 Dec 2012 12:00:00 -0500".to_datetime, :person_id =>8 }, :without_protection => true ).save!
+  puts 'SETTING UP DEFAULT CLASSES'
+  class1 = ClassInstruction.create({ :name => "math-101", :time => "Sun, 9 Dec 2012 12:00:00 -0500".to_datetime }, :without_protection => true ).save!
+  class2 = ClassInstruction.create({ :name => "ss", :time => "Sun, 9 Dec 2012 12:00:00 -0500".to_datetime }, :without_protection => true ).save!
 
 # Songs
   puts 'SETTING UP DEFAULTS SONGS'
@@ -67,9 +61,12 @@
   song8 = Song.create({ :title => "Synth - 2", :content => '{"components":[{"label":"Snare","img":"snare.png","mute":false,"sample":"808_sd.m4a","measures":[{"beats":[{"selected":false},{"selected":false},{"selected":false},{"selected":false}],"label":"0/4","numberOfBeats":0,"divisions":8}],"active":true,"signature":4,"representation":"fraction"},{"label":"Hi Hat","img":"hihat.png","mute":true,"sample":"808_chh.m4a","measures":[{"beats":[{"selected":false},{"selected":false},{"selected":false},{"selected":false}],"label":"0/4","numberOfBeats":0,"divisions":8}],"active":true,"signature":4,"representation":"fraction"},{"label":"Kick Drum","img":"kick.png","mute":true,"sample":"808_bd.m4a","measures":[{"beats":[{"selected":false},{"selected":false},{"selected":false},{"selected":false}],"label":"0/4","numberOfBeats":0,"divisions":8}],"active":true,"signature":4,"representation":"fraction"},{"label":"Synth","img":"synth.png","mute":true,"sample":"ambass.mp3","measures":[{"beats":[{"selected":true},{"selected":true},{"selected":true},{"selected":true}],"label":"0/4","numberOfBeats":0,"divisions":8}],"active":true,"signature":4,"representation":"fraction"}]}', :user_id => 2 }, :without_protection => true ).save
 
 # Assignments
-  assignment1 = Assignment.create({ :name => 'Assignment 1', :fractionRepresentations => 'fraction,percent', :measureRepresentations => 'circular-bead,circular-pie', :visibleWindows => '', :visibleWindowItems => '', :tempoEditable => true, :lowerRangeOfTempo => 30, :upperRangeOfTempo => 400, :lowerRangeOfBeatsPerMeasure => 2, :upperRangeOfBeatsPerMeasure => 14, :looping => true }, :without_protection => true ).save!
+  puts 'SETTING UP DEFAULT ASSIGNMENTS'
+  assignment1 = Assignment.create({ :name => 'Assignment 1', :fractionRepresentations => 'fraction', :measureRepresentations => 'circular-pie', :visibleWindows => '', :visibleWindowItems => '', :tempoEditable => true, :lowerRangeOfTempo => 30, :upperRangeOfTempo => 400, :lowerRangeOfBeatsPerMeasure => 2, :upperRangeOfBeatsPerMeasure => 14, :looping => false }, :without_protection => true ).save!
+  assignment2 = Assignment.create({ :name => 'Assignment 1', :fractionRepresentations => 'fraction,percent', :measureRepresentations => 'circular-bead,circular-pie', :visibleWindows => '', :visibleWindowItems => '', :tempoEditable => true, :lowerRangeOfTempo => 30, :upperRangeOfTempo => 400, :lowerRangeOfBeatsPerMeasure => 2, :upperRangeOfBeatsPerMeasure => 14, :looping => true }, :without_protection => true ).save!
 
 # Settings
+  puts 'SETTING UP DEFAULT SETTINGS'
   settings1 = Setting.create({ user_id: 1, mic_level: 1 }, :without_protection => true).save!
   settings2 = Setting.create({ user_id: 2, mic_level: 1 }, :without_protection => true).save!
   settings3 = Setting.create({ user_id: 3, mic_level: 1 }, :without_protection => true).save!
@@ -80,7 +77,31 @@
 
 
 # ClassInstruction Assignment
-  # cia1 = 
+  puts 'SETTING UP DEFAULT Class-Assignments'
+  cia1 = ClassAssignment.create({ class_instruction_id: 1, assignment_id:1 }, :without_protection => true).save! 
+  cia2 = ClassAssignment.create({ class_instruction_id: 1, assignment_id:2 }, :without_protection => true).save! 
+  cia3 = ClassAssignment.create({ class_instruction_id: 2, assignment_id:1 }, :without_protection => true).save! 
+
+# Participants
+  puts 'SETTING UP DEFAULT Participants'
+  # Admin ATTENDS class 1 and 2
+  p1a = Participant.create({ person_id: 1, class_instruction_id: 1 }, :without_protection => true).save!
+  p1b = Participant.create({ person_id: 1, class_instruction_id: 2 }, :without_protection => true).save!
+  # Teacher 1 and student 1 and 2 ATTEND class 1
+  p2 = Participant.create({ person_id: 2, class_instruction_id: 1 }, :without_protection => true).save!
+  p3 = Participant.create({ person_id: 3, class_instruction_id: 1 }, :without_protection => true).save!
+  p4 = Participant.create({ person_id: 4, class_instruction_id: 1 }, :without_protection => true).save!
+  # Teacher 2 ATTENDS class 2
+  p5 = Participant.create({ person_id: 5, class_instruction_id: 2 }, :without_protection => true).save!
+  # Student 3 ATTENDS class 2
+  p6 = Participant.create({ person_id: 6, class_instruction_id: 2 }, :without_protection => true).save!
+  # Student 4 ATTENDS class 1 and 2
+  p7a = Participant.create({ person_id: 7, class_instruction_id: 1 }, :without_protection => true).save!
+  p7b = Participant.create({ person_id: 7, class_instruction_id: 2 }, :without_protection => true).save!
+  # Teacher 3 ATTENDS class 1 and 2
+  p8a = Participant.create({ person_id: 8, class_instruction_id: 1 }, :without_protection => true).save!
+  p8a = Participant.create({ person_id: 8, class_instruction_id: 2 }, :without_protection => true).save!
+
 
 # {"components":[
 #     {"label":"Snare","img":"snare.png","mute":false,"sample":"808_sd.m4a","measures":[{"beats":[{"selected":true},{"selected":true},{"selected":true},{"selected":true}],"label":"0/4","numberOfBeats":0,"divisions":8}],"active":true,"signature":4,"representation":"fraction"},

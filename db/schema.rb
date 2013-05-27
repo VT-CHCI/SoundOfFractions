@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130524122443) do
+ActiveRecord::Schema.define(:version => 20130527145852) do
 
   create_table "assignments", :force => true do |t|
     t.string   "name"
@@ -29,25 +29,32 @@ ActiveRecord::Schema.define(:version => 20130524122443) do
     t.datetime "updated_at",                  :null => false
   end
 
-  create_table "class_assignment", :force => true do |t|
+  create_table "class_assignments", :force => true do |t|
     t.integer  "class_instruction_id"
     t.integer  "assignment_id"
     t.datetime "created_at",           :null => false
     t.datetime "updated_at",           :null => false
   end
 
-  add_index "class_assignment", ["assignment_id"], :name => "index_class_assignment_on_assignment_id"
-  add_index "class_assignment", ["class_instruction_id"], :name => "index_class_assignment_on_class_instruction_id"
+  add_index "class_assignments", ["assignment_id"], :name => "index_class_assignments_on_assignment_id"
+  add_index "class_assignments", ["class_instruction_id"], :name => "index_class_assignments_on_class_instruction_id"
 
   create_table "class_instructions", :force => true do |t|
     t.string   "name"
     t.datetime "time"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
-    t.integer  "person_id"
   end
 
-  add_index "class_instructions", ["person_id"], :name => "index_class_instructions_on_person_id"
+  create_table "participants", :force => true do |t|
+    t.integer  "person_id"
+    t.integer  "class_instruction_id"
+    t.datetime "created_at",           :null => false
+    t.datetime "updated_at",           :null => false
+  end
+
+  add_index "participants", ["class_instruction_id"], :name => "index_participants_on_class_instruction_id"
+  add_index "participants", ["person_id"], :name => "index_participants_on_person_id"
 
   create_table "people", :force => true do |t|
     t.string   "firstName"

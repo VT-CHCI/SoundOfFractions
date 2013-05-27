@@ -1,4 +1,6 @@
 class ClassInstruction < ActiveRecord::Base
-  # belongs_to :user_role
   belongs_to :people
+
+  has_many :participants
+  has_many :people, :through => :participants
 end
