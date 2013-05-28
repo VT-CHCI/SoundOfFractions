@@ -1,6 +1,7 @@
 <% if user_signed_in? %>
   <li id="nav-songs-info"></li>
-  <li id="nav-user-label"><%= 'User: ' + current_user.email %></li>
+  <li id="nav-user-label"><%= 'User: ' + current_user.name %></li>
+  <li id="nav-user-role-label"><%= 'Role: ' + current_user.role %></li>
   <li><%= link_to('Settings', edit_setting_path(current_user.thisUsersID), :class => 'btn btn-inverse btn-small') %></li>
   <li><%= link_to('Edit account', edit_user_registration_path, :class => 'btn btn-inverse btn-small') %></li>
   <li><%= link_to('Logout', destroy_user_session_path, :class => 'btn btn-inverse btn-small') %></li>

@@ -25,6 +25,19 @@ class User < ActiveRecord::Base
     self.id
   end
 
+  def name
+    self.person.firstName + ' ' + self.person.lastName
+  end
+
+  def role
+    arrayOfUserRoles = []
+    self.user_roles.each do |ur|
+      arrayOfUserRoles << { "id" => ur.role_id, "name" => ur.roleName }
+    end
+    role_hash_with_smallest_id = arrayOfUserRoles.min_by {|role_hash| role_hash['id']}
+    role_hash_with_smallest_id['name']
+  end
+
   # def student_classes(class_instruction_name)
   #   member_classes(class_instruction_name, 'Student')
   # end
