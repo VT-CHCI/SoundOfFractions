@@ -40,7 +40,7 @@ define([
       if(!this.transportModel.get('isPlaying')) {
         dispatch.trigger('togglePlay.event', 'on');
         this.transportModel.set('isPlaying', true);
-        $(this.el).removeClass();
+        $(this.el).removeClass('play');
         $(this.el).addClass('pause');
         console.log('now playing');
 
@@ -61,7 +61,7 @@ define([
       else {
         dispatch.trigger('togglePlay.event', 'off');
         this.transportModel.set('isPlaying', false);
-        $(this.el).removeClass();
+        $(this.el).removeClass('pause');
         $(this.el).addClass('play');
         console.log('now paused');
 
@@ -80,7 +80,7 @@ define([
       if(this.transportModel.get('isPlaying')) {
         dispatch.trigger('togglePlay.event', 'off');
         this.transportModel.set('isPlaying', false);
-        $(this.el).removeClass();
+        $(this.el).removeClass('pause');
         $(this.el).addClass('play');
         console.log('now paused');
       }
