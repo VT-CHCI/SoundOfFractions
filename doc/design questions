@@ -1,0 +1,43 @@
+External Instruction
+  
+Intro
+  Sequential Popovers
+  Settings and Configuration
+    Should this be a session in and of itself, as testing with 20+ kids will change the experience.
+
+Composition
+  Is the only way to construct a song by tapping, or can it also be constructed graphically?
+  Are a "record" and "stop" button needed?
+  How do we enable constant audio usage of the microphone?
+  How do we handle the user accidentally clicking no to "allow the webpage to use your microphone?"
+  If we capture beat intensity during replaying, should we replay it with the same intensity?
+  Beat intensity aids in analysis of the repetition to identify the down beat and the end of the pattern.  This assumes a measure starts with a beat, and not a rest.   The analysis can also exist without beat intensity, just requires a different approach. Do we need intensity?
+  How does beat intensity effect the animation?
+  What is the minimum beat length?
+  How does composition differ from editing?
+  
+
+Transition
+  
+
+Comparison
+
+Collaboration
+
+Playback
+
+Curriculum
+
+Editing
+  How does editing differ from composition?
+
+Representations
+  Audio:
+    This representation has a minimalist graphic representation for spatialy conceptualizing the music
+    How do we ask a student to identify a specific beat, given that beats are presented chronologically, with no spatial representation?
+  Bead:
+  Group:
+  Number Line:
+  Pie:
+  Linear Bar:
+  Radial:
