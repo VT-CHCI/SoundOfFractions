@@ -9,3 +9,6 @@ shim:
   'backbone':
     deps: ['underscore', 'jquery']
     exports: 'Backbone'
+  'jquery-ui':
+    deps: ['jquery']
+    exports: '$$'

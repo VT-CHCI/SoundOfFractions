@@ -1,0 +1,153 @@
+Design Questions
+
+External Instruction
+
+What happens if we change the group size (increase or decrease) to reflect some of the challenges already posed in fraction questions? This would let classes with no common LCM/LCD for one group to develop with a common song, and then if we switch which group has the uncommon group size, for both groups to adjust their construction of sharing the song.
+Intro
+
+Sequential Popovers
+
+Settings and Configuration
+
+Should this be a session in and of itself, as testing with 20+ kids will change the experience.
+Composition
+
+Is the only way to construct a song by tapping, or can it also be constructed graphically?
+Are a "record" and "stop" button needed?
+How do we enable constant audio usage of the microphone?
+How do we handle the user accidentally clicking no to "allow the webpage to use your microphone?"
+If we capture beat intensity during replaying, should we replay it with the same intensity?
+Beat intensity aids in analysis of the repetition to identify the down beat and the end of the pattern. This assumes a measure starts with a beat, and not a rest. The analysis can also exist without beat intensity, just requires a different approach. Do we need intensity?
+How does beat intensity effect the animation?
+What is the minimum beat length?
+How does composition differ from editing?
+How do we capture the tempo and the beat pattern at the same time?
+We should watch for secondary physical movements by the student (whether they are beats or rests) during the composition process, as they have important beat/tempo keeping properties for entrainment.
+Could we "apply" a tempo to beat pattern?
+Should we predefine the audio length of a beat?
+Should the audio length of a beat be defined by the shortest time between two beats in a recorded song?
+Should we have a delay and or count down after pressing the record button to allow the user to get ready?
+How would we capture the end of a recording session, as to allow for a measure to end with a measure?
+Should we have a uniform area that shows a beat is being registered in an addition area of the screen?
+Should lowest unit beat also mean the same minimum unit rest and vice-vera?
+Could they upload their own song (or url), and have it make a pattern from it?
+Could the mic listen to music, and make a pattern from that if the settings are set correctly?
+Encourange beat boxing?
+Transition
+
+When the current representation lacks or posseses attirbutes of the newer representation, when should the new attributes animate (creation or deletion) occur? before, during, or after?
+From audio to other reps: How will the spatial elements of the graphical rep be presented? In reverse, how will the spatial component be eliminated?
+Comparison
+
+Do we have students compare their songs for the same assignment? or a base song
+Do the students in the groups face changing attributes like the fractional questions we pose to them?
+Does comparing a tempo form one song to another benficial? (if it has the same pattern, if it doesn't, if they are complementary: mixed meter)
+Collaboration
+
+Allow one User's song to be viewed/forked by other users.
+Allow one User's tempos to be applied to another user's songs.
+Allow the class to compose a song that meats certain amthematicla principles…
+Playback
+
+Animation
+
+Should the animation match the sound of the music, or the spatial characteristic of the beat?
+How do we animate the beat when it is played?
+How do we animate the tempo? If it is measured in BPM, we could use a metronome-like rep, or instrument pictures If it is measured in DPT, we could have a line that grows and replaces itself
+
+|->    |  |--->  |  |----->| (n)            |  >---|  |    >-|  |      |  (n+1)
+
+|->    |  |--->  |  |----->| (1)            |------|  |------|  |------|  (1)
+                                            |->    |  |--->  |  |----->|  (2)
+What happens if a beat is played/recorded before the prior beat finishes it's sound and/or animation
+Should we allow separation of the playback of audio and animation? and then pose questions:
+What would this sound like?
+What would this look like?
+When we add a beat here… when we delete this sequence/portion… when we increase the tempo by…
+Should we allow playback to be either a single playback, repeat n times, or a neverneding loop?
+Is there danger in the circular reps of having a vector rep of the tempo before a scalar rep of the linear versions?
+Is it important to pause playback and animation to ask questions in between?
+If we overlay all same representations (with lower opacity) of different songs, can the student "see" all the different instruments?
+Curriculum
+
+If instruction is going to be off screen, is that for every assignment or interaction, or is there going to be a point at which the students begin interacting with the program?
+What should a user be presented if they are not logged in?
+What should the home page /splash screen include?
+When do we allow proper fraction notes (beats whose length are not unit fractions)?
+Editing
+
+How does editing differ from composition?
+How do we increase/decrease a beat's length?
+How do we increase/decrease a measure's length?
+Are there other methods of editing other than embodied tapping and graphical manipulation?
+During a graphical edit, should the beat have a reference line to its location on the measure? What if there is a conflict?
+Can a beat overlap another beat?
+Does clicking a beat without moving it delete the beat?
+Representations
+
+Component:
+
+Does multiple representations of the same type benefit the student?
+Do we separate the measure from the beats?
+If we have all instruments colored and shaped the same, could we represent all beats on the same measure representation?
+Measure:
+
+Is a measure defined solely from its beats?
+If a measure is "at capacity" for the number of beats, what happens if the student adds another beat?
+Beat:
+
+Would a beat, when tapped be represented on all represetntations, and should it differ from the audio represntation, showing a beat was "read" by the microphone? Maybe the instrument being static, and being struck?
+Rest:
+
+Do we graphically repreent a rest?
+Does a rest have unit fraction or proper fraction quantity?
+Tempo:
+
+Should we represent tempo as BeatsPerMinute or DistancePerTime?
+How would we represent tempo as DPT?
+pixels per second? or pixels per n seconds? a growing line?
+Do we allow different tempos?
+How do we adjust tempo?
+Audio:
+
+This representation has a minimalist graphic representation for spatialy conceptualizing the music
+How do we ask a student to identify a specific beat, given that beats are presented chronologically, with no spatial representation?
+Bead:
+
+Group:
+
+Number Line:
+
+How should the demarcations look? esp for each beat or measure?
+Should we allow for range changing of the labels?
+Pie:
+
+Linear Bar:
+
+Radial:
+
+Implementation Questions
+
+Intro
+
+Sequential Popovers
+Settings and Configuration
+Should this be a session in and of itself, as testing with 20+ kids will change the experience.
+Composition
+
+Setting the threshold for the analysis timeout while recording the tempo
+Transition
+
+Comparison
+
+Collaboration
+
+Rails 4 vs Socet IO integration with 3
+Playback
+
+Curriculum
+
+Editing
+
+Representations
+
