@@ -97,6 +97,8 @@ If a measure is "at capacity" for the number of beats, what happens if the stude
 Beat:
 
 Would a beat, when tapped be represented on all represetntations, and should it differ from the audio represntation, showing a beat was "read" by the microphone? Maybe the instrument being static, and being struck?
+When adding a beat to the end of a measure, does it lengthen the measure duration, or readjust the spacing of the beats in the measure?
+
 Rest:
 
 Do we graphically repreent a rest?

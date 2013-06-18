@@ -166,6 +166,9 @@ Additive factory // This is a factory that has beats that are readily available 
 |                 |                         | .20                                                                                                                                                                         |           |      |
 | export          | song (audio)            | download the audio song to the computer                                                                                                                                     | Yes       |      |
 |                 | student performance     | the student metrics in CSV                                                                                                                                                  | Yes       |      |
+| Hot key(switch) | instrument              |                                                                                                                                                                             |           |      |
+| Scramble        | Labels                  | Scramble them into a non uniform arrangement                                                                                                                                | Yes       | No   |
+|                 |                         |                                                                                                                                                                             |           |      |
 
 ## Current Structure Functions
 
