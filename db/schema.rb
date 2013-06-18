@@ -11,7 +11,73 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130508173008) do
+ActiveRecord::Schema.define(:version => 20130527145852) do
+
+  create_table "assignments", :force => true do |t|
+    t.string   "name"
+    t.string   "fractionRepresentations"
+    t.string   "measureRepresentations"
+    t.string   "visibleWindows"
+    t.string   "visibleWindowItems"
+    t.boolean  "tempoEditable"
+    t.integer  "lowerRangeOfTempo"
+    t.integer  "upperRangeOfTempo"
+    t.integer  "lowerRangeOfBeatsPerMeasure"
+    t.integer  "upperRangeOfBeatsPerMeasure"
+    t.boolean  "looping"
+    t.datetime "created_at",                  :null => false
+    t.datetime "updated_at",                  :null => false
+  end
+
+  create_table "class_assignments", :force => true do |t|
+    t.integer  "class_instruction_id"
+    t.integer  "assignment_id"
+    t.datetime "created_at",           :null => false
+    t.datetime "updated_at",           :null => false
+  end
+
+  add_index "class_assignments", ["assignment_id"], :name => "index_class_assignments_on_assignment_id"
+  add_index "class_assignments", ["class_instruction_id"], :name => "index_class_assignments_on_class_instruction_id"
+
+  create_table "class_instructions", :force => true do |t|
+    t.string   "name"
+    t.datetime "time"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "participants", :force => true do |t|
+    t.integer  "person_id"
+    t.integer  "class_instruction_id"
+    t.datetime "created_at",           :null => false
+    t.datetime "updated_at",           :null => false
+  end
+
+  add_index "participants", ["class_instruction_id"], :name => "index_participants_on_class_instruction_id"
+  add_index "participants", ["person_id"], :name => "index_participants_on_person_id"
+
+  create_table "people", :force => true do |t|
+    t.string   "firstName"
+    t.string   "lastName"
+    t.integer  "user_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "people", ["user_id"], :name => "index_people_on_user_id"
+
+  create_table "roles", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "settings", :force => true do |t|
+    t.integer  "user_id"
+    t.float    "mic_level"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
 
   create_table "songs", :force => true do |t|
     t.string   "title"
@@ -22,6 +88,16 @@ ActiveRecord::Schema.define(:version => 20130508173008) do
     t.string   "fractionRepresentation"
     t.string   "measureRepresentation"
   end
+
+  create_table "user_roles", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "role_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "user_roles", ["role_id"], :name => "index_user_roles_on_role_id"
+  add_index "user_roles", ["user_id"], :name => "index_user_roles_on_user_id"
 
   create_table "users", :force => true do |t|
     t.string   "email",                  :default => "", :null => false

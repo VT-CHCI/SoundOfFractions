@@ -1,8 +1,8 @@
 // Filename: views/measures/measuresView.js
 /*
   This is the MeasuresView.
-
   This is contained in a ComponentsView.
+  //dthree can be referenced by d3, NOT ignore, and ignore CANNOT be renamed to d3
 */
 define([
   'jquery',
@@ -18,12 +18,10 @@ define([
   'text!backbone/templates/measures/circularBeadMeasures.html',
   'text!backbone/templates/measures/numberLineMeasures.html',
   'colors',
-  'app/d3',
   'app/dispatch',
   'app/state',
   'app/log'
-], function($, _, Backbone, BeatsCollection, MeasureModel, beatView, audioMeasuresTemplate, linearBarMeasuresTemplate, linearBarSVGMeasuresTemplate, circularPieMeasuresTemplate, circularBeadMeasuresTemplate, numberLineMeasuresTemplate, COLORS, dthree, dispatch, state, log){
-  //dthree can be referenced by d3, NOT dthree, and dthree CANNOT be renamed to d3
+], function($, _, Backbone, BeatsCollection, MeasureModel, beatView, audioMeasuresTemplate, linearBarMeasuresTemplate, linearBarSVGMeasuresTemplate, circularPieMeasuresTemplate, circularBeadMeasuresTemplate, numberLineMeasuresTemplate, COLORS, dispatch, state, log){
   return Backbone.View.extend({
     // el: $('.component'),
 
@@ -90,13 +88,14 @@ define([
       dispatch.on('measureRepresentation.event', this.changeMeasureRepresentation, this);
       dispatch.on('unroll.event', this.unroll, this);
       dispatch.on('tempoChange.event', this.adjustRadius, this);
-
       this.render();
     },
 
     changeMeasureRepresentation: function(representation) {
       this.previousMeasureRepresentation = this.currentMeasureRepresentation;
       this.currentMeasureRepresentation = representation;
+      var d3Els = d3.selectAll($('.d3'));
+      d3Els.remove();
       this.render();
     },
     transitionRoll: function(options) {
@@ -149,7 +148,7 @@ define([
       var measureRadius = this.measureRadius;
       // Bead
       var circularBeadBeatRadius = 8;
-      var measureNumberOfPoints = 181; //always add 1 to close the circle
+      var measureNumberOfPoints = 60; //always add 1 to close the circle AND keep under 91 to avoid computational and animation delay
       var beadBeatRadious = 15;
       this.measureNumberOfPoints = measureNumberOfPoints;
         // Transition
@@ -255,8 +254,61 @@ define([
             .y(function (d) {return d.y;})
             .interpolate('basis'); // bundle | basis | linear | cardinal are also options
 
+        (function(){
+          d3.experiments = {};
+          d3.experiments.dragAll = function() {
+              this.on("mousedown", function(){grab(this, event)})
+                  .on("mousemove", function(){drag(this, event)})
+                  .on("mouseup", function(){drop(this, event)});
+          };
+
+          var trueCoordX = null,
+              trueCoordY = null,
+              grabPointX = null,
+              grabPointY = null,
+              newX       = null,
+              newY       = null,
+              dragTarget = null;
+
+          function grab(element, event){
+              dragTarget = event.target;
+              //// send the grabbed element to top
+              dragTarget.parentNode.appendChild( dragTarget );
+              d3.select(dragTarget).attr("pointer-events", "none");
+              //// find the coordinates
+              var transMatrix = dragTarget.getCTM();
+              grabPointX = trueCoordX - Number(transMatrix.e);
+              grabPointY = trueCoordY - Number(transMatrix.f);
+          };
+
+          function drag(element, event){
+              var newScale = 1; //svgContainer.node().currentScale;
+              var translation = svgContainer.node().currentTranslate;
+              trueCoordX = (event.clientX - translation.x)/newScale;
+              trueCoordY = (event.clientY - translation.y)/newScale;
+              if (dragTarget){
+                  newX = trueCoordX - grabPointX;
+                  newY = trueCoordY - grabPointY;
+                  d3.select(dragTarget).attr("transform", "translate(" + newX + "," + newY + ")");
+              }
+          };
+
+          function drop(element, event){
+              if (dragTarget){
+                  d3.select(dragTarget).attr("pointer-events", "all");
+                  var targetElement = event.target;
+                  if(targetElement != svgContainer.node()){
+                      console.log(dragTarget.id + ' has been dropped on top of ' + targetElement.id);
+                  }
+                  dragTarget = null;
+              }
+          };
+        })();
+
+
         //The Circle SVG Path we draw MUST BE AFTER THE COMPILED TEMPLATE
-        var svgContainer = d3.select('#svg'+measure.cid);
+        var svgContainer = d3.select('#svg'+measure.cid)
+            .call(d3.experiments.dragAll);
         var circlePath = svgContainer //.append('g')
             // .append('path')
             .insert('path', ':first-child')
@@ -267,7 +319,6 @@ define([
             .attr('opacity', .2)
             .attr('class', 'circle')
             .attr('class', 'circle-path')
-            .on('click', unroll);
 
         function transitionRoll(options) {
           if (this.unrolled == false) {

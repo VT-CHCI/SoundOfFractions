@@ -79,6 +79,9 @@ define([
         this.margin = options.margin;
         this.measureNumberOfPoints = options.measureNumberOfPoints;
         this.animationDuration = options.animationDuration;
+        // To allow the toggle function to be accesable outside of the nested d3 functions inside render
+        // per http://stackoverflow.com/questions/16672862/reference-backbone-functions-from-within-a-nested-d3-function?noredirect=1#comment24003171_16672862
+        _.bindAll(this, 'toggle');
       } else {
         console.error('should not be in here!');
         this.model = new BeatModel;
@@ -96,15 +99,13 @@ define([
 
       // if render is being called from the toggle function, we may want to do something different
       if (toggledBeat) {
-        //DIV
-        $('#beat'+toggledBeat.cid).toggleClass('ON');
-        $('#beat'+toggledBeat.cid).toggleClass('OFF');
         //SVG
         if(this.currentBeatRepresentation == 'number-line') {
-          $('#beat'+toggledBeat.cid)[0].setAttribute('fill-opacity', this.getOpacityNumber(toggledBeat.get('selected')));
+          // $('#beat'+toggledBeat.cid)[0].setAttribute('fill-opacity', this.getOpacityNumber(toggledBeat.get('selected')));
         }
         else {
-          $('#beat'+toggledBeat.cid)[0].setAttribute('opacity', this.getOpacityNumber(toggledBeat.get('selected')));
+          var toggled = d3.select($('#beat'+this.cid));
+          toggled[0][0].attr('style', 'opacity: '+this.getOpacityNumber(toggledBeat.get('selected')));
         }
       } else {
         // this is reached during the initial rendering of the page or transition
@@ -184,7 +185,6 @@ define([
           beatUnwindingPaths.push(computedBeatBeadPath);
         };
         this.beatUnwindingPaths = beatUnwindingPaths;
-        window.csf = beatUnwindingPaths;
 
         // var computedBeatBeadPath = $.map(Array(this.beatNumberOfPoints), function (d, j) {
         //   var x = beatTemplateParameters.x1 + beatR * Math.sin(2 * j * Math.PI / (ƒthis.beatNumberOfPoints - 1));
@@ -216,18 +216,25 @@ define([
         //The Circle SVG Path we draw MUST BE AFTER THE COMPILED TEMPLATE
         var beatContainer = d3.select('#beatHolder'+this.parent.cid);
         var beatPath = beatContainer //.append('g')
-            // .append('path')
-            .insert('path', ':first-child')
+            // .insert('path', ':first-child')
+            .append('path')
+            .attr('class', 'beat')
+            .attr('id', 'beat'+ƒthis.cid)
             // .data([computedBeatBeadPath])
+            .attr('class', 'beat')
+            .attr('id', 'beat'+this.cid)
             .data([beatUnwindingPaths[0]])
             .attr('d', pathFunction)
             .attr('fill', COLORS.hexColors[this.color])
             .attr('stroke', 'black')
             // .attr('stroke-dasharray', '5, 10')
-            .attr('opacity', 1)
+            .style('opacity', .2)
             .attr('class', 'beat')
+            .attr('class', 'd3')
             // .attr('class', 'circle-path')
-            // .on('click', unroll);
+            .on('click', ƒthis.toggle);
+
+        this.beatPath = beatPath;
 
         function unroll() {
           console.log('INNER UNROLL');
@@ -253,7 +260,7 @@ define([
 
         $('#a'+this.parent.cid).on('click', unroll);
         $('#b'+this.parent.cid).on('click', reverse);
-        
+     
         if (this.currentBeatRepresentation == 'linear-bar') {
           // append the compiled template to the measureBeatHolder
           $(this.measureBeatHolder).append(compiledTemplate);          

@@ -1,0 +1,32 @@
+Reconfigure for new libraries
+  Restructure backbone to not use underscore for rep changes or constructions or deletions of reps
+  consideration of new model 'Lines' from 'component'
+
+Study backbone / rails integration more
+
+Convert to Rails 4 to accomodate for future specs
+
+Music capture analysis to capture and analyze for tempo, LCD, and beats and rests
+
+Animation convert to d3 animation
+
+Transformations
+  Use d3 and have it represent the beats, and use d3 transitions
+  math behind transformations
+
+convert the website to https to enable remembering of the audio setting
+
+additional templates for label placements
+
+make set-ups maintain state
+
+manage students/classes
+
+add save as
+
+design the number line and group
+
+switch the 'transport' buttons
+
+design the set-up
+

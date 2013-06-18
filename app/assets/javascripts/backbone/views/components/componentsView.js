@@ -62,69 +62,69 @@ define([
         active: true
       });
 
-      //this is creating the hi-hat component.
-      this.measure = new BeatsCollection;
+      // //this is creating the hi-hat component.
+      // this.measure = new BeatsCollection;
 
-      //for each beat - also change signature below
-      for (var i = 0; i < 5; i++) {
-        this.measure.add();
-      }
+      // //for each beat - also change signature below
+      // for (var i = 0; i < 5; i++) {
+      //   this.measure.add();
+      // }
 
-      this.component = new MeasuresCollection;
-      this.component.add({beats: this.measure});
+      // this.component = new MeasuresCollection;
+      // this.component.add({beats: this.measure});
 
-      this.drumkit = componentsCollection.add({
-        label: 'Hi Hat',
-        img: 'hihat.png',
-        mute: true,
-        sample: '808_chh.m4a',
-        measures: this.component,
-        signature: 5,
-        active: true
-      });
+      // this.drumkit = componentsCollection.add({
+      //   label: 'Hi Hat',
+      //   img: 'hihat.png',
+      //   mute: true,
+      //   sample: '808_chh.m4a',
+      //   measures: this.component,
+      //   signature: 5,
+      //   active: true
+      // });
 
-      //this is creating the kick drum component.
-      this.measure = new BeatsCollection;
+      // //this is creating the kick drum component.
+      // this.measure = new BeatsCollection;
 
-      //for each beat - also change signature below
-      for (var i = 0; i < 4; i++) {
-        this.measure.add();
-      }
+      // //for each beat - also change signature below
+      // for (var i = 0; i < 4; i++) {
+      //   this.measure.add();
+      // }
 
-      this.component = new MeasuresCollection;
-      this.component.add({beats: this.measure});
+      // this.component = new MeasuresCollection;
+      // this.component.add({beats: this.measure});
 
-      this.drumkit = componentsCollection.add({
-        label: 'Kick Drum',
-        img: 'kick.png',
-        mute: true,
-        sample: '808_bd.m4a',
-        measures: this.component,
-        signature: 4,
-        active: true
-      });
+      // this.drumkit = componentsCollection.add({
+      //   label: 'Kick Drum',
+      //   img: 'kick.png',
+      //   mute: true,
+      //   sample: '808_bd.m4a',
+      //   measures: this.component,
+      //   signature: 4,
+      //   active: true
+      // });
 
 
-      //this is creating the synth component.
-      this.measure = new BeatsCollection;
+      // //this is creating the synth component.
+      // this.measure = new BeatsCollection;
 
-      //for each beat - also change signature below
-      for (var i = 0; i < 3; i++) {
-        this.measure.add();
-      }
+      // //for each beat - also change signature below
+      // for (var i = 0; i < 3; i++) {
+      //   this.measure.add();
+      // }
 
-      this.component = new MeasuresCollection;
-      this.component.add({beats: this.measure});
+      // this.component = new MeasuresCollection;
+      // this.component.add({beats: this.measure});
 
-      this.drumkit = componentsCollection.add({
-        label: 'Synth',
-        img: 'synth.png',
-        mute: true,
-        sample: 'ambass.mp3',
-        measures: this.component,
-        signature: 3,
-        active: true
-      });
+      // this.drumkit = componentsCollection.add({
+      //   label: 'Synth',
+      //   img: 'synth.png',
+      //   mute: true,
+      //   sample: 'ambass.mp3',
+      //   measures: this.component,
+      //   signature: 3,
+      //   active: true
+      // });
 
       //creating two arrays to hold our gain nodes.
       //the first is for sustained-note sounds,
@@ -236,7 +236,6 @@ define([
     */
     playLoop: function(){
       var tempo = state.get('tempo');
-      console.log('TEMPO IN PLAYLOOP' + tempo);
       var numBeats = 0;
       var i = 0;
 
@@ -253,9 +252,8 @@ define([
 
         _.each(component.get('measures').models, function(measure) {
           numBeats = measure.get('beats').length;
-
           //determining the duration for each beat.
-          var beatDuration = 60 / tempo * component.get('signature') / numBeats;
+          var beatDuration = 60 / tempo * state.get('signature') / (numBeats);
           _.each(measure.get('beats').models, function(beat) {
 
             /* if we need to trigger a sound at this beat
@@ -279,7 +277,7 @@ define([
         // Reset the deadspace for the next component
         deadSpace = 0;
       }, this);
-      
+      console.log(componentDurations);
       //Lastly, we call playSound() with our completed
       //componentDurations 2d array.
       this.playSound(componentDurations);
@@ -344,11 +342,11 @@ define([
         specGainNode.gain.value = 1;
 
         //calulating the duration of one beat.
-        var duration =  (state.get('signature') * 60 / state.get('tempo')) / component.get('signature');
+        var duration =  (60 / state.get('tempo'));
 
         //note on causes the playback to start.
-        source.noteOn(time);
-
+        source.noteOn(time, 0, duration);
+        console.error(time);
         //these calls are used to generate an envelope that
         //makes sustained instruments play for only the duration of one beat.
         //this reduces pops and clicks from the signal being abruptly
@@ -418,6 +416,7 @@ define([
       //we use the maximum number of measures, and the global tempo
       //to determine the duration (in ms) of one loop of the sequencer.
       var duration = state.get('signature') * 60 / state.get('tempo') * maxMeasures * 1000;
+      console.warn(duration);
       if (this.intervalID) {
         //if we are already playing, we stop and trigger the
         //animation to stop.
@@ -438,7 +437,9 @@ define([
         //and play the audio.
         //this.playLoop();
         this.intervalID = setInterval((function(self) {
-        return function() {self.playLoop(); } } )(this),
+        return function() {
+          self.playLoop(); 
+        } } )(this),
         duration);
         //we set the masterGainNode to 1, turning on master output.
         this.masterGainNode.gain.value = 1;
