@@ -2,4 +2,3 @@
 *.sublime-workspace
 tmp/
 vendor/
-config/initializers/secret_token.rb
