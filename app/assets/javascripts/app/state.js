@@ -60,13 +60,16 @@ define([
       // elapsed time since last beat was detected in ms
       var elapsedTime = time - this.prevTime;
 
+      // If we are still tapping, and are still recording (isWaiting = true), and the RMS is greater than .05
       if(RMS > 0.05 && (elapsedTime > 200) && this.isTapping && this.isWaiting) {
         console.log('RMS = ' + RMS);
         console.log(time - this.prevTime);
         this.prevTime = time;
+        //On the first beat
         if(this.countIn == 1) {
-          this.previousTime = new Date().getTime();
-          console.log("Start time: " + this.previousTime);
+          var newCurrentTime = new Date().getTime();
+          console.log("Start time: " + this.newCurrentTime);
+          this.previousTime = newCurrentTime;
           this.countIn++;
           this.signature++;
           console.log("Beats per Measure = " + this.signature);

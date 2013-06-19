@@ -37,4 +37,9 @@ SoundOfFractions::Application.configure do
   # Chris.RailsLogger
   Rails.logger = Logger.new(STDOUT)
 
+  # Chris for https
+  # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
+  config.force_ssl = true
+
+
 end

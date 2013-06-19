@@ -1,6 +1,6 @@
-//Application.js
-//this sets up the paths to our vendor scripts
-//that we use in our require statements.
+// Application.js
+// this sets up the paths to our vendor scripts
+// that we use in our require statements.
 
 // This is a manifest file that'll be compiled into application.js, which will include all the files
 // listed below.
@@ -19,7 +19,6 @@ require([
 
   // Load our "app" module and pass it to our definition function
   'SOF'
-
 
   // Some plugins have to be loaded in order due to their non AMD compliance
   // Because these scripts are not "modules" they do not pass any values to the definition function below
