@@ -1,9 +1,6 @@
-// Filename: views/button/fractionRepresentionView.js
+// Filename: views/button/tapTempoView.js
 /*
-  This is the RepButtonView.
-  This renders the four-state radio button
-  that controls which representation is displayed
-  on the side of each component.  
+  This is the TapTempoView button
 */  
 define([
   'jquery',

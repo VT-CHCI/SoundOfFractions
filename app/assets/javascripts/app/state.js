@@ -47,14 +47,20 @@ define([
     },
 
     processWaveform: function(time, waveform) {
-      var totals = 0;
-      this.totals = totals;
+      this.totals = 0;
+      // Waveform.length = 512  ¿listen to 512 partitions per second?
       for(var i = 0; i < waveform.length; i++) {
         this.totals += waveform[i] * waveform[i];
       }
       this.totals = this.totals / waveform.length;
       var RMS = Math.sqrt(this.totals);
-      if(RMS > 0.05 && ((time - this.prevTime) > 200) && this.isTapping && this.isWaiting) {
+      console.warn(this.prevTime);
+      // console.warn('Time: ' + time + ' RMS: ' + RMS);
+
+      // elapsed time since last beat was detected in ms
+      var elapsedTime = time - this.prevTime;
+
+      if(RMS > 0.05 && (elapsedTime > 200) && this.isTapping && this.isWaiting) {
         console.log('RMS = ' + RMS);
         console.log(time - this.prevTime);
         this.prevTime = time;
@@ -80,34 +86,34 @@ define([
           if(window.waitIntervalID) {
             window.clearInterval(window.waitIntervalID);
           }
-          var that = this;
+          var ƒthis = this;
           window.waitIntervalID = window.setInterval(function() {
-            if(that.waitCount == 2) {
-              that.isWaiting = false;
-              that.waitCount = 0;
+            if(ƒthis.waitCount == 2) {
+              ƒthis.isWaiting = false;
+              ƒthis.waitCount = 0;
 
-              that.mainCounter = 0;
-              that.isRecording = true;
-              for(var i = 0; i < that.signature; i++) {
-                that.beatArray[i] = 0;
+              ƒthis.mainCounter = 0;
+              ƒthis.isRecording = true;
+              for(var i = 0; i < ƒthis.signature; i++) {
+                ƒthis.beatArray[i] = 0;
               }
 
-              dispatch.trigger('signatureChange.event', that.signature);
+              dispatch.trigger('signatureChange.event', ƒthis.signature);
               
-              that.isTapping = false;
-              that.countIn = 1;
+              ƒthis.isTapping = false;
+              ƒthis.countIn = 1;
               //show the BPM
-              var bpm = 1000 / that.average * 60;
-              that.set('baseTempo', bpm);
-              that.set('tempo', bpm);
-              that.set('signature', that.signature);
+              var bpm = 1000 / ƒthis.average * 60;
+              ƒthis.set('baseTempo', bpm);
+              ƒthis.set('tempo', bpm);
+              ƒthis.set('signature', ƒthis.signature);
               $('#tap-tempo').click();
               $('#tempo-slider-input').val(1);
               dispatch.trigger('tempoChange.event', bpm);
               dispatch.trigger('stopRecording.event');
               window.clearInterval(waitIntervalID);
             }
-            that.waitCount++;
+            ƒthis.waitCount++;
           }, this.average);
           this.countIn++;
         }
@@ -150,24 +156,24 @@ define([
 
       if (this.hasGetUserMedia()) {
         console.log("we do have user media access.");
-        var that = this;
+        var ƒthis = this;
         navigator.webkitGetUserMedia({audio: true}, function(stream) {
-          var microphone = that.context.createMediaStreamSource(stream);
-          that.microphone = microphone;
-          that.micGain = that.context.createGainNode();
-          that.micGain.gain = that.micLevel;
-          that.jsNode = that.context.createScriptProcessor(512, 2, 2);
-          that.microphone.connect(that.micGain);
-          that.microphone.connect(that.context.destination);   
-          that.micGain.connect(that.jsNode);
-          that.jsNode.connect(that.context.destination);
-          that.prevTime = new Date().getTime();
-          that.jsNode.onaudioprocess = (function() {
+          var microphone = ƒthis.context.createMediaStreamSource(stream);
+          ƒthis.microphone = microphone;
+          ƒthis.micGain = ƒthis.context.createGainNode();
+          ƒthis.micGain.gain = ƒthis.micLevel;
+          ƒthis.jsNode = ƒthis.context.createScriptProcessor(512, 2, 2);
+          ƒthis.microphone.connect(ƒthis.micGain);
+          ƒthis.microphone.connect(ƒthis.context.destination);   
+          ƒthis.micGain.connect(ƒthis.jsNode);
+          ƒthis.jsNode.connect(ƒthis.context.destination);
+          ƒthis.prevTime = new Date().getTime();
+          ƒthis.jsNode.onaudioprocess = (function() {
             return function(e) {
-              that.analyze(e);
+              ƒthis.analyze(e);
             };
           }());
-          that.waveform = new Float32Array(that.jsNode.bufferSize);   
+          ƒthis.waveform = new Float32Array(ƒthis.jsNode.bufferSize);   
         }, this.onFailSoHard);
       } 
       else {
@@ -192,24 +198,24 @@ define([
 
       if (this.hasGetUserMedia()) {
         console.log("we do have user media access.");
-        var that = this;
+        var ƒthis = this;
         navigator.webkitGetUserMedia({audio: true}, function(stream) {
-          var microphone = that.context.createMediaStreamSource(stream);
-          that.microphone = microphone;
-          that.micGain = that.context.createGainNode();
-          that.micGain.gain = that.micLevel;
-          that.jsNode = that.context.createScriptProcessor(512, 2, 2);
-          that.microphone.connect(that.micGain);
-          that.microphone.connect(that.context.destination);
-          that.micGain.connect(that.jsNode);
-          that.jsNode.connect(that.context.destination);
-          that.prevTime = new Date().getTime();
-          that.jsNode.onaudioprocess = (function() {
+          var microphone = ƒthis.context.createMediaStreamSource(stream);
+          ƒthis.microphone = microphone;
+          ƒthis.micGain = ƒthis.context.createGainNode();
+          ƒthis.micGain.gain = ƒthis.micLevel;
+          ƒthis.jsNode = ƒthis.context.createScriptProcessor(512, 2, 2);
+          ƒthis.microphone.connect(ƒthis.micGain);
+          ƒthis.microphone.connect(ƒthis.context.destination);
+          ƒthis.micGain.connect(ƒthis.jsNode);
+          ƒthis.jsNode.connect(ƒthis.context.destination);
+          ƒthis.prevTime = new Date().getTime();
+          ƒthis.jsNode.onaudioprocess = (function() {
             return function(e) {
-              that.analyze(e);
+              ƒthis.analyze(e);
             };
           }());
-          that.waveform = new Float32Array(that.jsNode.bufferSize);   
+          ƒthis.waveform = new Float32Array(ƒthis.jsNode.bufferSize);   
         }, this.onFailSoHard);
       } 
       else {
@@ -239,10 +245,10 @@ define([
       this.jsNode.disconnect();
       this.micGain.disconnect();
 
+      // If the waitIntervalID or tapIntervalID exist, clear them
       if(window.waitIntervalID) {
         window.clearInterval(window.waitIntervalID);
       }
-
       if(window.tapIntervalID) {
         window.clearInterval(tapIntervalID);
       }
