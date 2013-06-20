@@ -254,61 +254,9 @@ define([
             .y(function (d) {return d.y;})
             .interpolate('basis'); // bundle | basis | linear | cardinal are also options
 
-        (function(){
-          d3.experiments = {};
-          d3.experiments.dragAll = function() {
-              this.on("mousedown", function(){grab(this, event)})
-                  .on("mousemove", function(){drag(this, event)})
-                  .on("mouseup", function(){drop(this, event)});
-          };
-
-          var trueCoordX = null,
-              trueCoordY = null,
-              grabPointX = null,
-              grabPointY = null,
-              newX       = null,
-              newY       = null,
-              dragTarget = null;
-
-          function grab(element, event){
-              dragTarget = event.target;
-              //// send the grabbed element to top
-              dragTarget.parentNode.appendChild( dragTarget );
-              d3.select(dragTarget).attr("pointer-events", "none");
-              //// find the coordinates
-              var transMatrix = dragTarget.getCTM();
-              grabPointX = trueCoordX - Number(transMatrix.e);
-              grabPointY = trueCoordY - Number(transMatrix.f);
-          };
-
-          function drag(element, event){
-              var newScale = 1; //svgContainer.node().currentScale;
-              var translation = svgContainer.node().currentTranslate;
-              trueCoordX = (event.clientX - translation.x)/newScale;
-              trueCoordY = (event.clientY - translation.y)/newScale;
-              if (dragTarget){
-                  newX = trueCoordX - grabPointX;
-                  newY = trueCoordY - grabPointY;
-                  d3.select(dragTarget).attr("transform", "translate(" + newX + "," + newY + ")");
-              }
-          };
-
-          function drop(element, event){
-              if (dragTarget){
-                  d3.select(dragTarget).attr("pointer-events", "all");
-                  var targetElement = event.target;
-                  if(targetElement != svgContainer.node()){
-                      console.log(dragTarget.id + ' has been dropped on top of ' + targetElement.id);
-                  }
-                  dragTarget = null;
-              }
-          };
-        })();
-
-
         //The Circle SVG Path we draw MUST BE AFTER THE COMPILED TEMPLATE
         var svgContainer = d3.select('#svg'+measure.cid)
-            .call(d3.experiments.dragAll);
+            // .call(d3.experiments.dragAll);
         var circlePath = svgContainer //.append('g')
             // .append('path')
             .insert('path', ':first-child')

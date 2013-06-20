@@ -23,10 +23,10 @@ define([
     /* TODO still issues with this
       el: '.beat',
       registering backbone's click event to our toggle() function.
-       events : {
-         'click' : 'toggle'
-       },
     */
+     events : {
+       'click' : 'toggle'
+     },
 
     // The different representations
     representations: {
@@ -79,6 +79,7 @@ define([
         this.margin = options.margin;
         this.measureNumberOfPoints = options.measureNumberOfPoints;
         this.animationDuration = options.animationDuration;
+        this.beatCenterPosition = {};
         // To allow the toggle function to be accesable outside of the nested d3 functions inside render
         // per http://stackoverflow.com/questions/16672862/reference-backbone-functions-from-within-a-nested-d3-function?noredirect=1#comment24003171_16672862
         _.bindAll(this, 'toggle');
@@ -99,6 +100,7 @@ define([
 
       // if render is being called from the toggle function, we may want to do something different
       if (toggledBeat) {
+        console.log('getting in re-render with toggledBeat');
         //SVG
         if(this.currentBeatRepresentation == 'number-line') {
           // $('#beat'+toggledBeat.cid)[0].setAttribute('fill-opacity', this.getOpacityNumber(toggledBeat.get('selected')));
@@ -168,6 +170,11 @@ define([
         var y2 = centerY + measureR * Math.sin(Math.PI * beatEndAngle/180);
         beatTemplateParameters.y2 = y2;
 
+        this.beatCenterPosition = {
+          x: beatTemplateParameters.x1,
+          y: beatTemplateParameters.y1
+        };
+
         //Circular Bead
         var beatR = this.beatR;
         beatTemplateParameters.beatR = beatR;
@@ -202,6 +209,58 @@ define([
         // compile the template for this beat (respect the current representation)
         var compiledTemplate = _.template(this.representations[this.currentBeatRepresentation], beatTemplateParameters );
 
+        // (function(){
+        //   d3.experiments = {};
+        //   d3.experiments.dragAll = function() {
+        //       this.on("mousedown", function(){grab(this, event)})
+        //           .on("mousemove", function(){drag(this, event)})
+        //           .on("mouseup", function(){drop(this, event)});
+        //   };
+
+        //   var trueCoordX = null,
+        //       trueCoordY = null,
+        //       grabPointX = null,
+        //       grabPointY = null,
+        //       newX       = null,
+        //       newY       = null,
+        //       dragTarget = null;
+
+        //   function grab(element, event){
+        //       dragTarget = event.target;
+        //       //// send the grabbed element to top
+        //       dragTarget.parentNode.appendChild( dragTarget );
+        //       d3.select(dragTarget).attr("pointer-events", "none");
+        //       //// find the coordinates
+        //       var transMatrix = dragTarget.getCTM();
+        //       grabPointX = trueCoordX - Number(transMatrix.e);
+        //       grabPointY = trueCoordY - Number(transMatrix.f);
+        //   };
+
+        //   function drag(element, event){
+        //     console.warn(beatPath.node());
+        //       var newScale = 1; //beatPath.node().currentScale;
+        //       var translation = beatPath.node().currentTranslate;
+        //       trueCoordX = (event.clientX - translation.x)/newScale;
+        //       trueCoordY = (event.clientY - translation.y)/newScale;
+        //       if (dragTarget){
+        //           newX = trueCoordX - grabPointX;
+        //           newY = trueCoordY - grabPointY;
+        //           d3.select(dragTarget).attr("transform", "translate(" + newX + "," + newY + ")");
+        //       }
+        //   };
+
+        //   function drop(element, event){
+        //       if (dragTarget){
+        //           d3.select(dragTarget).attr("pointer-events", "all");
+        //           var targetElement = event.target;
+        //           if(targetElement != beatPath.node()){
+        //               console.log(dragTarget.id + ' has been dropped on top of ' + targetElement.id);
+        //           }
+        //           dragTarget = null;
+        //       }
+        //   };
+        // })();
+
         var margin = this.margin;
         var lineData = $.map(Array(this.measureNumberOfPoints), function (d, i) {
             var y = margin.top;
@@ -213,28 +272,44 @@ define([
             .y(function (d) {return d.y;})
             .interpolate('basis'); // bundle | basis | linear | cardinal are also options
 
+        var drag = d3.behavior.drag()
+          .on("drag", function(d,i) {
+            var full = $('#beat'+ƒthis.cid).attr('transform');
+            var small = full.substring(10, full.length-1);
+            var comma =small.indexOf(',');
+            d.x = parseInt(small.substr(0,comma));
+            d.y = parseInt(small.substr(comma+1));
+            d.x += d3.event.dx;
+            d.y += d3.event.dy;
+            if (d.x > 100) {
+              d3.select(this).remove();  
+            }
+            d3.select(this).attr("transform", function(d,i){
+                return "translate(" + [ d.x,d.y ] + ")"
+            })
+        });
+
         //The Circle SVG Path we draw MUST BE AFTER THE COMPILED TEMPLATE
         var beatContainer = d3.select('#beatHolder'+this.parent.cid);
         var beatPath = beatContainer //.append('g')
             // .insert('path', ':first-child')
             .append('path')
+            // Calling the click handler here doesn't work for some reason
+            // .on('click', function(){console.log('beat container click handler')})
             .attr('class', 'beat')
-            .attr('id', 'beat'+ƒthis.cid)
-            // .data([computedBeatBeadPath])
-            .attr('class', 'beat')
+            .attr('class', 'd3')
+            .attr('transform', 'translate(0,0)')
             .attr('id', 'beat'+this.cid)
+            // This is the path that the beat will follow when un/roll is clicked
             .data([beatUnwindingPaths[0]])
             .attr('d', pathFunction)
             .attr('fill', COLORS.hexColors[this.color])
             .attr('stroke', 'black')
-            // .attr('stroke-dasharray', '5, 10')
-            .style('opacity', .2)
-            .attr('class', 'beat')
-            .attr('class', 'd3')
-            // .attr('class', 'circle-path')
-            .on('click', ƒthis.toggle);
+            .style('opacity', this.getOpacityNumber(this.model.get('selected')))
+            .call(drag);
 
         this.beatPath = beatPath;
+        this.beatPath.on('click', this.toggle);
 
         function unroll() {
           console.log('INNER UNROLL');
@@ -281,6 +356,7 @@ define([
 
         // add click handler to this beat
         $('#beat'+this.model.cid).click($.proxy(this.toggle, this));
+        console.log('after the click handler was added');
         return this;
       }
     },
@@ -317,8 +393,10 @@ define([
     */
     toggle: function(){
       //switch the selected boolean value on the model
+      console.warn('Here');
       this.model.set('selected', !this.model.get('selected'));
       //re-render it, passing the clicked beat to render()
+      d3.select('#beat'+this.cid).style('opacity', this.getOpacityNumber(this.model.get('selected')))
       this.render(this.model);
       // log.sendLog([[1, "beat" + this.model.cid + " toggled: "+!bool]]);
       dispatch.trigger('beatClicked.event');
