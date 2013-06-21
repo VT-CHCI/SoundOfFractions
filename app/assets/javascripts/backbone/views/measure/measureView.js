@@ -1,4 +1,4 @@
-// Filename: views/measures/measuresView.js
+// Filename: views/measure/measureView.js
 /*
   This is the MeasuresView.
   This is contained in a ComponentsView.
@@ -10,13 +10,13 @@ define([
   'backbone',
   'backbone/collections/beats',
   'backbone/models/measure',
-  'backbone/views/beats/beatView',
-  'text!backbone/templates/measures/audioMeasures.html',
-  'text!backbone/templates/measures/linearBarMeasures.html',
-  'text!backbone/templates/measures/linearBarSVGMeasures.html',
-  'text!backbone/templates/measures/circularPieMeasures.html',
-  'text!backbone/templates/measures/circularBeadMeasures.html',
-  'text!backbone/templates/measures/numberLineMeasures.html',
+  'backbone/views/beat/beatView',
+  'text!backbone/templates/measure/audioMeasures.html',
+  'text!backbone/templates/measure/linearBarMeasures.html',
+  'text!backbone/templates/measure/linearBarSVGMeasures.html',
+  'text!backbone/templates/measure/circularPieMeasures.html',
+  'text!backbone/templates/measure/circularBeadMeasures.html',
+  'text!backbone/templates/measure/numberLineMeasures.html',
   'colors',
   'app/dispatch',
   'app/state',
@@ -40,8 +40,8 @@ define([
 
     //registering click events to add and remove measures.
     events : {
-      'click .addMeasure' : 'add',
-      'click .delete' : 'remove'
+      'click .addMeasure' : 'addMeasure',
+      'click .delete' : 'removeMeasure'
     },
 
     initialize: function(options){
@@ -392,7 +392,7 @@ define([
       Lastly, it triggers a stopRequest, because we can't continue playing until
       all the durations get recalculated to reflect this new measure.
     */
-    add: function(){
+    addMeasure: function(){
         console.log('add measure');
         var newMeasure = new BeatsCollection;
 
@@ -418,7 +418,7 @@ define([
     /*
       This is called when the user clicks on the minus to remove a measure.
     */
-    remove: function(ev){
+    removeMeasure: function(ev){
       if ($('#measure'+this.measuresCollection.models[0].cid).parent()) {
         //removing the last measure isn't allowed.
         if(this.measuresCollection.models.length == 1) {
@@ -432,7 +432,7 @@ define([
         this.measuresCollection.remove(model);
 
         //send a log event showing the removal.
-        log.sendLog([[3, 'Removed a measure: measure' + model.cid]]);
+        log.sendLog([[3, 'Removed a measure: measure' + this.cid]]);
 
         //re-render the view.
         this.render();

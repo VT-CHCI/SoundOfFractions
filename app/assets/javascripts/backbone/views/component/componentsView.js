@@ -16,8 +16,8 @@ define([
   'backbone/models/beat',
   'backbone/models/measure',
   'backbone/models/component',
-  'backbone/views/components/componentView',
-  'text!backbone/templates/components/components.html',
+  'backbone/views/component/componentView',
+  'text!backbone/templates/component/component.html',
   'app/dispatch',
   'app/state'
 ], function($, _, Backbone, BeatsCollection, MeasuresCollection, componentsCollection, 

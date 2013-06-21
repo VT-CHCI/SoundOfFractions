@@ -7,7 +7,7 @@ define([
   'underscore',
   'backbone',
   'backbone/models/component',
-  'backbone/views/measures/measuresView',
+  'backbone/views/measure/measureView',
   'backbone/views/fraction/fractionView',
   'backbone/views/slider/beatsPerMeasureSliderView',
   'app/dispatch',

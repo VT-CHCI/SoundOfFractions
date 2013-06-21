@@ -9,7 +9,7 @@ define([
   'backbone/views/home/homeView',
   'backbone/views/slider/beatsPerMeasureSliderView',
   'backbone/views/additiveBeatPalette/additiveLinearBeatPaletteView',
-  'backbone/views/components/componentsView',
+  'backbone/views/component/componentsView',
   'backbone/views/slider/tempoSliderView',
   'backbone/views/transport/transportView',
   'backbone/views/button/fractionRepresentionView',
@@ -18,10 +18,10 @@ define([
   'backbone/views/button/tapTempoView',
   'app/log',
   'backbone/collections/songsCollection',
-  'backbone/views/songs/new_view',
-  'backbone/views/songs/index_view',
-  'backbone/views/songs/show_view',
-  'backbone/views/songs/edit_view'
+  'backbone/views/song/new_view',
+  'backbone/views/song/index_view',
+  'backbone/views/song/show_view',
+  'backbone/views/song/edit_view'
 ], function($, _, Backbone, mainHomeView, beatsPerMeasureSliderView, additiveLinearBeatPaletteView, componentsView, tempoSliderView, transportView, fractionRepresentionView, wholeMeasureRepresentationView, recorderView, tapTempoView, log, songsCollection, songsViewNew, songsViewIndex, songsViewShow, songsViewEdit ){
 
   var BBRouter = Backbone.Router.extend({

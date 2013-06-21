@@ -6,7 +6,7 @@ define([
   'backbone/collections/songsCollection',
   'backbone/collections/components',
   'backbone/models/song',
-  'text!backbone/templates/songs/index.html',
+  'text!backbone/templates/song/index.html',
   'text!backbone/templates/tiny/navSave.html',
   'text!backbone/templates/tiny/navLoad.html',
   'text!backbone/templates/tiny/navNew.html',

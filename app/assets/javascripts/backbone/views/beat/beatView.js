@@ -8,12 +8,12 @@ define([
   'underscore',
   'backbone',
   'backbone/models/beat',
-  'text!backbone/templates/beats/audioBeats.html',
-  'text!backbone/templates/beats/linearBarBeats.html',
-  'text!backbone/templates/beats/linearBarSVGBeats.html',
-  'text!backbone/templates/beats/circularPieBeats.html',
-  'text!backbone/templates/beats/circularBeadBeats.html',
-  'text!backbone/templates/beats/numberLineBeats.html',
+  'text!backbone/templates/beat/audioBeats.html',
+  'text!backbone/templates/beat/linearBarBeats.html',
+  'text!backbone/templates/beat/linearBarSVGBeats.html',
+  'text!backbone/templates/beat/circularPieBeats.html',
+  'text!backbone/templates/beat/circularBeadBeats.html',
+  'text!backbone/templates/beat/numberLineBeats.html',
   'colors',
   'app/dispatch',
   'app/log'
@@ -193,14 +193,6 @@ define([
         };
         this.beatUnwindingPaths = beatUnwindingPaths;
 
-        // var computedBeatBeadPath = $.map(Array(this.beatNumberOfPoints), function (d, j) {
-        //   var x = beatTemplateParameters.x1 + beatR * Math.sin(2 * j * Math.PI / (ƒthis.beatNumberOfPoints - 1));
-        //   // margin.top + beatR
-        //   var y = beatTemplateParameters.y1 - beatR * Math.cos(2 * j * Math.PI / (ƒthis.beatNumberOfPoints - 1));
-        //   return { x: x, y: y };
-        // });
-        // console.warn(computedBeatBeadPath);
-
         //Audio
         var beatRForAudio = this.beatRForAudio;
         beatTemplateParameters.beatRForAudio = beatRForAudio;
@@ -208,58 +200,6 @@ define([
         beatTemplateParameters.colorForAudio = colorForAudio;
         // compile the template for this beat (respect the current representation)
         var compiledTemplate = _.template(this.representations[this.currentBeatRepresentation], beatTemplateParameters );
-
-        // (function(){
-        //   d3.experiments = {};
-        //   d3.experiments.dragAll = function() {
-        //       this.on("mousedown", function(){grab(this, event)})
-        //           .on("mousemove", function(){drag(this, event)})
-        //           .on("mouseup", function(){drop(this, event)});
-        //   };
-
-        //   var trueCoordX = null,
-        //       trueCoordY = null,
-        //       grabPointX = null,
-        //       grabPointY = null,
-        //       newX       = null,
-        //       newY       = null,
-        //       dragTarget = null;
-
-        //   function grab(element, event){
-        //       dragTarget = event.target;
-        //       //// send the grabbed element to top
-        //       dragTarget.parentNode.appendChild( dragTarget );
-        //       d3.select(dragTarget).attr("pointer-events", "none");
-        //       //// find the coordinates
-        //       var transMatrix = dragTarget.getCTM();
-        //       grabPointX = trueCoordX - Number(transMatrix.e);
-        //       grabPointY = trueCoordY - Number(transMatrix.f);
-        //   };
-
-        //   function drag(element, event){
-        //     console.warn(beatPath.node());
-        //       var newScale = 1; //beatPath.node().currentScale;
-        //       var translation = beatPath.node().currentTranslate;
-        //       trueCoordX = (event.clientX - translation.x)/newScale;
-        //       trueCoordY = (event.clientY - translation.y)/newScale;
-        //       if (dragTarget){
-        //           newX = trueCoordX - grabPointX;
-        //           newY = trueCoordY - grabPointY;
-        //           d3.select(dragTarget).attr("transform", "translate(" + newX + "," + newY + ")");
-        //       }
-        //   };
-
-        //   function drop(element, event){
-        //       if (dragTarget){
-        //           d3.select(dragTarget).attr("pointer-events", "all");
-        //           var targetElement = event.target;
-        //           if(targetElement != beatPath.node()){
-        //               console.log(dragTarget.id + ' has been dropped on top of ' + targetElement.id);
-        //           }
-        //           dragTarget = null;
-        //       }
-        //   };
-        // })();
 
         var margin = this.margin;
         var lineData = $.map(Array(this.measureNumberOfPoints), function (d, i) {
@@ -281,7 +221,7 @@ define([
             d.y = parseInt(small.substr(comma+1));
             d.x += d3.event.dx;
             d.y += d3.event.dy;
-            if (d.x > 100) {
+            if (d.x > 100 || d.x < -100) {
               d3.select(this).remove();  
             }
             d3.select(this).attr("transform", function(d,i){
@@ -356,7 +296,7 @@ define([
 
         // add click handler to this beat
         $('#beat'+this.model.cid).click($.proxy(this.toggle, this));
-        console.log('after the click handler was added');
+
         return this;
       }
     },
@@ -366,6 +306,8 @@ define([
       this.currentBeatRepresentation = representation;
     },
 
+    // Depricated
+    // sets the Color based on CSS between selected and not-selected
     getSelectionBooleanCSS: function(){
       if (this.model.get('selected')) {
         return 'ON';
@@ -374,10 +316,13 @@ define([
       }
     },
 
+    // sets the opacity between selected and not-selected
     getOpacityNumber : function(bool) {
       if (bool == true) {
+        // Selected
         return 1;
       } else {
+        // Not-Selected
         return 0.2;
       }      
     },

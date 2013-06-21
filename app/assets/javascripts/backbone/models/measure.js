@@ -11,11 +11,9 @@ define([
 ], function(_, Backbone, beatsCollection) {
   var measureModel = Backbone.Model.extend({
     defaults: {
-      label: '0/4',
       beats: beatsCollection,
       numberOfBeats: 0,
-      divisions: 8,
-      unrolled: false
+      representation: undefined
     },
     initialize: function(){     
     }
