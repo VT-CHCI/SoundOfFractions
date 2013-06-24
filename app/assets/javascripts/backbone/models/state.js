@@ -26,13 +26,18 @@ define([
       this.countIn = 1;
       this.globalDate = new Date();
       this.previousTime = 0;
-      this.timeIntervals = new Array();
+      this.timeIntervals = [0];
       this.isTapping = false;
       this.isRecording = false;
       this.beatArray = new Array();
       this.waitCount = 0;
       this.isWaiting = true;
       this.transport = transport;
+      this.finalMeasureBeatTimeIntervals50 = [];
+      this.finalMeasureBeatTimeIntervals100 = [];
+      this.finalMeasureBeatTimeIntervals150 = [];
+      this.finalMeasureBeatTimeIntervals200 = [];
+      this.finalMeasureBeatTimeIntervals250 = [];
       if(window.gon) {
         this.micLevel = gon.micLevel;
         console.warn('Mic Level = ' + this.micLevel);
@@ -49,7 +54,45 @@ define([
     },
 
     recordTempoAndPattern: function() {
-      console.log('Doall clicked in state');
+      console.log('recordTempoAndPattern function in state');
+      if(this.transport.isPlaying) {
+        dispatch.trigger('togglePlay.event');
+      }
+      this.isTapping = true;
+      if(window.tapIntervalID) {
+        window.clearInterval(tapIntervalID);
+      }
+      for(var i = 0; i < window.signature; i++) {
+        window.beatArray[i] = 0;
+      }
+      this.isWaiting = true;
+      this.signature = 0;
+
+      if (this.hasGetUserMedia()) {
+        console.log("we do have user media access.");
+        var ƒthis = this;
+        navigator.webkitGetUserMedia({audio: true}, function(stream) {
+          var microphone = ƒthis.context.createMediaStreamSource(stream);
+          ƒthis.microphone = microphone;
+          ƒthis.micGain = ƒthis.context.createGainNode();
+          ƒthis.micGain.gain = ƒthis.micLevel;
+          ƒthis.jsNode = ƒthis.context.createScriptProcessor(512, 2, 2);
+          ƒthis.microphone.connect(ƒthis.micGain);
+          ƒthis.microphone.connect(ƒthis.context.destination);   
+          ƒthis.micGain.connect(ƒthis.jsNode);
+          ƒthis.jsNode.connect(ƒthis.context.destination);
+          ƒthis.prevTime = new Date().getTime();
+          ƒthis.jsNode.onaudioprocess = (function() {
+            return function(e) {
+              ƒthis.analyze(e);
+            };
+          }());
+          ƒthis.waveform = new Float32Array(ƒthis.jsNode.bufferSize);   
+        }, this.onFailSoHard);
+      } 
+      else {
+        alert('getUserMedia() is not supported in your browser');
+      }
     },
 
     processWaveform: function(time, waveform) {
@@ -63,41 +106,56 @@ define([
       console.warn(this.prevTime);
       // console.warn('Time: ' + time + ' RMS: ' + RMS);
 
-      // elapsed time since last beat was detected in ms
+      // elapsed time since last beat analysis in ms
       var elapsedTime = time - this.prevTime;
 
       // If we are still tapping, and are still recording (isWaiting = true), and the RMS is greater than .05
       if(RMS > 0.05 && (elapsedTime > 200) && this.isTapping && this.isWaiting) {
         console.log('RMS = ' + RMS);
-        console.log(time - this.prevTime);
+        console.log('elapsed time: ' + elapsedTime);
         this.prevTime = time;
         //On the first beat
         if(this.countIn == 1) {
           var newCurrentTime = new Date().getTime();
-          console.log("Start time: " + this.newCurrentTime);
+          this.startTime = newCurrentTime;
+          console.log('Start time: ' + this.startTime);
           this.previousTime = newCurrentTime;
+          console.warn(this.beatTimings);
           this.countIn++;
           this.signature++;
-          console.log("Beats per Measure = " + this.signature);
+          console.log('Beats in Measure = ' + this.signature);
+          console.log('average in ms: ' + 'CAN\'T MEASSURE WITH ONE BEAT' + ' || average in BPM: ' + 'CAN\'T MEASSURE WITH ONE BEAT');
         }
-        // As long as we are still beating, but not on the first beat
+        // As long as we are still tapping, but not on the first beat
         else if(this.isWaiting) {
-          var currentTime = new Date().getTime();
+          // Beat Count
           this.signature++;
-          console.log("Beats per Measure = " + this.signature);
-          this.timeIntervals[(this.countIn - 2)] = currentTime - this.previousTime;
+          //Reset the wait counter since a beat was detected
+          this.waitCount = 0;
+          console.log('Beats in Measure = ' + this.signature);
+
+          // BPM in ms and min
+          var currentTime = new Date().getTime();
+          this.timeIntervals.push(currentTime - this.previousTime);
           this.previousTime = currentTime;
-          var total = 0;
+          this.lastTimeDelta = currentTime - this.previousTime;
+          var songTotalTimeDuration = 0;
           for(var i = 0; i < this.timeIntervals.length; i++) {
-            total += this.timeIntervals[i];
+            songTotalTimeDuration += this.timeIntervals[i];
           }
-          this.average = total / this.timeIntervals.length;
-          console.log("average ms: " + this.average);
+          this.average = songTotalTimeDuration / this.timeIntervals.length;
+          console.log('average in ms: ' + this.average + ' || average in BPM: ' + 60*1000/this.average);
+
+          // Waiting for the listener to stop tapping
           if(window.waitIntervalID) {
             window.clearInterval(window.waitIntervalID);
+            this.waitCount = 0;
           }
           var ƒthis = this;
           window.waitIntervalID = window.setInterval(function() {
+            // If the user stops beating for *n* times, we stop listening to the tapping automatically
+            // *n* is represented by ƒthis.waitCount
+            console.warn('waitCount: ' + ƒthis.waitCount);
             if(ƒthis.waitCount == 2) {
               ƒthis.isWaiting = false;
               ƒthis.waitCount = 0;
@@ -105,9 +163,19 @@ define([
               ƒthis.mainCounter = 0;
               ƒthis.isRecording = true;
               for(var i = 0; i < ƒthis.signature; i++) {
+                ƒthis.finalMeasureBeatTimeIntervals50.push(ƒthis.roundTo50(ƒthis.timeIntervals[i]));
+                ƒthis.finalMeasureBeatTimeIntervals100.push(ƒthis.roundTo100(ƒthis.timeIntervals[i]));
+                ƒthis.finalMeasureBeatTimeIntervals150.push(ƒthis.roundTo150(ƒthis.timeIntervals[i]));
+                ƒthis.finalMeasureBeatTimeIntervals200.push(ƒthis.roundTo200(ƒthis.timeIntervals[i]));
+                ƒthis.finalMeasureBeatTimeIntervals250.push(ƒthis.roundTo250(ƒthis.timeIntervals[i]));
                 ƒthis.beatArray[i] = 0;
               }
-
+              // ƒthis.finalMeasureBeatTimeIntervals[ƒthis.finalMeasureBeatTimeIntervals.length-1] = ƒthis.roundTo100(ƒthis.lastTimeDelta);
+              console.warn(ƒthis.finalMeasureBeatTimeIntervals50);
+              console.warn(ƒthis.finalMeasureBeatTimeIntervals100);
+              console.warn(ƒthis.finalMeasureBeatTimeIntervals150);
+              console.warn(ƒthis.finalMeasureBeatTimeIntervals200);
+              console.warn(ƒthis.finalMeasureBeatTimeIntervals250);
               dispatch.trigger('signatureChange.event', ƒthis.signature);
 
               ƒthis.isTapping = false;
@@ -127,8 +195,7 @@ define([
           }, this.average);
           this.countIn++;
         }
-
-        console.log(this.timeIntervals);
+        console.warn(this.timeIntervals);
       }
       else if(RMS > 0.05 && this.isRecording) {
         _.each(this.get('components').models, function(component) {
@@ -151,7 +218,7 @@ define([
 
     tapTempoClicked: function() {
       console.log('Tap Tempo Clicked');
-      if(transport.isPlaying) {
+      if(this.transport.isPlaying) {
         dispatch.trigger('togglePlay.event');
       }
       this.isTapping = true;
@@ -192,7 +259,8 @@ define([
     },
 
     recordButtonClicked: function() {
-     if(this.transport.isPlaying) {
+      console.log('Tap Tempo Clicked');
+      if(this.transport.isPlaying) {
         dispatch.trigger('togglePlay.event');
       }
       $('#transport').click();
@@ -245,7 +313,7 @@ define([
       this.countIn = 1;
       this.globalDate = new Date();
       this.previousTime = 0;
-      this.timeIntervals = new Array();
+      this.timeIntervals = [0];
       this.isTapping = false;
       this.isRecording = false;
       this.beatArray = new Array();
@@ -271,8 +339,23 @@ define([
 
     onFailSoHard: function(e) {
       console.log('Reeeejected!', e);
-    }
+    },
 
+    roundTo50: function(x){
+      return (x % 50) >= 25 ? parseInt(x / 50) * 50 + 50 : parseInt(x / 50) * 50;
+    },
+    roundTo100: function(x){
+      return (x % 100) >= 50 ? parseInt(x / 100) * 100 + 100 : parseInt(x / 100) * 100;
+    },
+    roundTo150: function(x){
+      return (x % 150) >= 75 ? parseInt(x / 150) * 150 + 150 : parseInt(x / 150) * 150;
+    },
+    roundTo200: function(x){
+      return (x % 200) >= 100 ? parseInt(x / 200) * 200 + 200 : parseInt(x / 200) * 200;
+    },
+    roundTo250: function(x){
+      return (x % 250) >= 125 ? parseInt(x / 250) * 250 + 250 : parseInt(x / 250) * 250;
+    }
   });
   return new state;
 });
