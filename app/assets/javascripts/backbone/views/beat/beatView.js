@@ -244,8 +244,7 @@ define([
             .append('path')
             // Calling the click handler here doesn't work for some reason
             // .on('click', function(){console.log('beat container click handler')})
-            .attr('class', 'beat')
-            .attr('class', 'd3')
+            .attr('class', 'beat d3')
             .attr('transform', 'translate(0,0)')
             .attr('id', 'beat'+this.cid)
             // This is the path that the beat will follow when un/roll is clicked
