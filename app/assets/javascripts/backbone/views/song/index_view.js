@@ -11,7 +11,7 @@ define([
   'text!backbone/templates/tiny/navLoad.html',
   'text!backbone/templates/tiny/navNew.html',
   'app/dispatch',
-  'app/state'
+  'backbone/models/state'
 ], function($, _, Backbone, SongsCollection, Components, song, songsBodyTemplate, songNavSaveTemplate, songsNavLoadTemplate, songsNavNewTemplate, dispatch, state){
   return Backbone.View.extend({
     navLoadEl: $('#nav-songs-load'),

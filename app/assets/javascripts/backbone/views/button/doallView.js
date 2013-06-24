@@ -1,6 +1,6 @@
-// Filename: views/button/tapTempoView.js
+// Filename: views/button/doallView.js
 /*
-  This is the TapTempoView button
+  This is the DoallView button
 */  
 define([
   'jquery',
@@ -11,8 +11,8 @@ define([
   'app/log'
 ], function($, _, Backbone, Bootstrap, dispatch, log){
 
-  var TapTempoView = Backbone.View.extend({
-    el : $('#tap-tempo'), // Specifies the DOM element which this view handles
+  var DoallView = Backbone.View.extend({
+    el : $('#doall'), // Specifies the DOM element which this view handles
 
     events : {
       'click' : 'buttonClicked'
@@ -20,7 +20,7 @@ define([
 
     //simply creates the model.
     initialize: function() {
-      this.isTapping = false;
+      this.isDoing = false;
     },
 
     render: function() {
@@ -36,16 +36,16 @@ define([
       a log message is sent reflecting the representation change.
     */
     buttonClicked: function(button) {
-      console.log('clicked');
+      console.log('Doall clicked');
       if(!this.isTapping) {
-        dispatch.trigger('tappingTempo.event');
+        dispatch.trigger('doall.event');
         this.isTapping = true;
       }
       else {
-        dispatch.trigger('tempoDetected.event');
+        dispatch.trigger('doall.event');
         this.isTapping = false;
       }
     },
   });
-  return new TapTempoView();
+  return new DoallView();
 });

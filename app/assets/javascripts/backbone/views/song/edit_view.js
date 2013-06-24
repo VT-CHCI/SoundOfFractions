@@ -9,7 +9,7 @@
 //   'backbone/views/songs/new_view',
 //   'text!backbone/templates/songs/new.html',
 //   'app/dispatch',
-//   'app/state'
+//   'backbone/models/state'
 // ], function($, _, Backbone, SongsCollection, SongsView, songsTemplate, dispatch, state){
 //   return Backbone.View.extend({
 //     el: $('.measure'),

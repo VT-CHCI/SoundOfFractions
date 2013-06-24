@@ -17,7 +17,9 @@ define([
   'colors',
   'app/dispatch',
   'app/log'
-], function($, _, Backbone, BeatModel, audioBeatsTemplate, linearBarBeatsTemplate, linearBarSVGBeatsTemplate, circularPieBeatsTemplate, circularBeadBeatsTemplate, numberLineBeatsTemplate, COLORS, dispatch, log){
+], function($, _, Backbone, BeatModel, audioBeatsTemplate,
+  linearBarBeatsTemplate, linearBarSVGBeatsTemplate, circularPieBeatsTemplate,
+  circularBeadBeatsTemplate, numberLineBeatsTemplate, COLORS, dispatch, log){
   return Backbone.View.extend({
 
     /* TODO still issues with this
@@ -213,21 +215,27 @@ define([
             .interpolate('basis'); // bundle | basis | linear | cardinal are also options
 
         var drag = d3.behavior.drag()
-          .on("drag", function(d,i) {
-            var full = $('#beat'+ƒthis.cid).attr('transform');
-            var small = full.substring(10, full.length-1);
-            var comma =small.indexOf(',');
-            d.x = parseInt(small.substr(0,comma));
-            d.y = parseInt(small.substr(comma+1));
-            d.x += d3.event.dx;
-            d.y += d3.event.dy;
-            if (d.x > 100 || d.x < -100) {
-              d3.select(this).remove();  
-            }
-            d3.select(this).attr("transform", function(d,i){
-                return "translate(" + [ d.x,d.y ] + ")"
-            })
-        });
+        // to prevent the draging of a one beat measure
+        if (ƒthis.parent.attributes.beats.length > 1) {
+            drag
+              .on("drag", function(d,i) {
+              // add the 'selected' class when a beat is dragged
+              $('#beat'+ƒthis.cid).closest($('.component')).addClass('selected');
+              var transformString = $('#beat'+ƒthis.cid).attr('transform').substring(10, $('#beat'+ƒthis.cid).attr('transform').length-1);
+              var comma =transformString.indexOf(',');
+              d.x = parseInt(transformString.substr(0,comma));
+              d.y = parseInt(transformString.substr(comma+1));
+              d.x += d3.event.dx;
+              d.y += d3.event.dy;
+              if (d.x > 100 || d.x < -100) {
+                d3.select(this).remove();
+                dispatch.trigger('signatureChange.event', ƒthis.parent.attributes.beats.length-1);
+              }
+              d3.select(this).attr("transform", function(d,i){
+                  return "translate(" + [ d.x,d.y ] + ")"
+              })
+          });
+        }
 
         //The Circle SVG Path we draw MUST BE AFTER THE COMPILED TEMPLATE
         var beatContainer = d3.select('#beatHolder'+this.parent.cid);

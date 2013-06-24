@@ -8,7 +8,7 @@ define([
   'text!backbone/templates/tiny/navSave.html',
   'backbone/models/unsavedSong',
   'app/dispatch',
-  'app/state'
+  'backbone/models/state'
 ], function($, _, Backbone, SongsCollection, Components, songsNewTemplate, unsavedSong, dispatch, state){
   return Backbone.View.extend({
     //WORKING

@@ -12,7 +12,7 @@ define([
   var measureModel = Backbone.Model.extend({
     defaults: {
       beats: beatsCollection,
-      numberOfBeats: 0,
+      // numberOfBeats: 0,
       representation: undefined
     },
     initialize: function(){     

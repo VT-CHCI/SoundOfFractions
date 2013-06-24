@@ -11,7 +11,7 @@ define([
   'backbone/views/fraction/fractionView',
   'backbone/views/slider/beatsPerMeasureSliderView',
   'app/dispatch',
-  'app/state',
+  'backbone/models/state',
   'app/log'
 ], function($, _, Backbone, Component, MeasuresView, FractionRepresentationView, BPMSliderView, dispatch, state, log){
   return Backbone.View.extend({

@@ -19,7 +19,7 @@ define([
   'backbone/views/component/componentView',
   'text!backbone/templates/component/component.html',
   'app/dispatch',
-  'app/state'
+  'backbone/models/state'
 ], function($, _, Backbone, BeatsCollection, MeasuresCollection, componentsCollection, 
     BeatModel, MeasureModel, ComponentModel, ComponentView, componentsTemplate, dispatch, state){
   var componentsView = Backbone.View.extend({

@@ -11,7 +11,7 @@ define([
   'backbone/models/slider',
   'text!backbone/templates/slider/tempoSlider.html',
   'app/dispatch',
-  'app/state',
+  'backbone/models/state',
   'app/log'
 ], function($, _, Backbone, SliderModel, sliderTemplate, dispatch, state, log){
   var sliderModel = new SliderModel;

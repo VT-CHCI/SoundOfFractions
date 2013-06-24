@@ -15,7 +15,7 @@ define([
   'text!backbone/templates/fraction/percent.html',
   'text!backbone/templates/fraction/blank.html',
   'app/dispatch',
-  'app/state',
+  'backbone/models/state',
   'app/log'
 ], function($, _, Backbone, ComponentModel, decimalTemplate, fractionTemplate, mixedNumberTemplate, percentTemplate, blankTemplate, dispatch, state, log){
   return Backbone.View.extend({

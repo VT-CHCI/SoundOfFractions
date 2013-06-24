@@ -19,7 +19,7 @@ define([
   'text!backbone/templates/measure/numberLineMeasures.html',
   'colors',
   'app/dispatch',
-  'app/state',
+  'backbone/models/state',
   'app/log'
 ], function($, _, Backbone, BeatsCollection, MeasureModel, beatView, audioMeasuresTemplate, linearBarMeasuresTemplate, linearBarSVGMeasuresTemplate, circularPieMeasuresTemplate, circularBeadMeasuresTemplate, numberLineMeasuresTemplate, COLORS, dispatch, state, log){
   return Backbone.View.extend({
@@ -316,7 +316,6 @@ define([
 
         // $('#a'+measure.cid).on('click', dispatch.trigger('unroll.event'), circlePath);
         $('#a'+measure.cid).on('click', unroll);
-        // dispatch.trigger('signatureChange.event', that.signature)
         $('#b'+measure.cid).on('click', reverse);
 
         // console.log(this.currentMeasureRepresentation);

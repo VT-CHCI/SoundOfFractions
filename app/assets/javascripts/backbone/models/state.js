@@ -1,4 +1,4 @@
-//filename: app/state.js
+//filename: backbone/models/state.js
 /*
   This maintains two pieces of information that are
   global to the song.
@@ -18,7 +18,7 @@ define([
       tempo: 120,
       baseTempo: 120,
       components: null,
-      micLevel: 1
+      micLevel: .8
     },
 
     initialize: function() {
@@ -40,15 +40,21 @@ define([
 
       this.context = new window.webkitAudioContext();
 
+      dispatch.on('doall.event', this.recordTempoAndPattern, this);
+
       dispatch.on('recordClicked.event', this.recordButtonClicked, this);
       dispatch.on('tappingTempo.event', this.tapTempoClicked, this);
       dispatch.on('stopRecording.event', this.stopRecording, this);
       dispatch.on('tempoDetected.event', this.stopRecording, this);
     },
 
+    recordTempoAndPattern: function() {
+      console.log('Doall clicked in state');
+    },
+
     processWaveform: function(time, waveform) {
       this.totals = 0;
-      // Waveform.length = 512  ¿listen to 512 partitions per second?
+      // Waveform.length = 512  ¿ I think this means we listen to 512 partitions per second?
       for(var i = 0; i < waveform.length; i++) {
         this.totals += waveform[i] * waveform[i];
       }
@@ -74,6 +80,7 @@ define([
           this.signature++;
           console.log("Beats per Measure = " + this.signature);
         }
+        // As long as we are still beating, but not on the first beat
         else if(this.isWaiting) {
           var currentTime = new Date().getTime();
           this.signature++;
@@ -102,7 +109,7 @@ define([
               }
 
               dispatch.trigger('signatureChange.event', ƒthis.signature);
-              
+
               ƒthis.isTapping = false;
               ƒthis.countIn = 1;
               //show the BPM
@@ -120,7 +127,7 @@ define([
           }, this.average);
           this.countIn++;
         }
-          
+
         console.log(this.timeIntervals);
       }
       else if(RMS > 0.05 && this.isRecording) {
