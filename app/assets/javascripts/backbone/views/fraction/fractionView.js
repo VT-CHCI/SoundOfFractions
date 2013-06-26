@@ -19,7 +19,7 @@ define([
   'app/log'
 ], function($, _, Backbone, ComponentModel, decimalTemplate, fractionTemplate, mixedNumberTemplate, percentTemplate, blankTemplate, dispatch, state, log){
   return Backbone.View.extend({
-    // el: $('.count'),
+    // el: $('#fraction-representation'),
 
     // The different representations
     representations: {
@@ -105,6 +105,10 @@ define([
 
       // TODO, we need to refresh the svg
       // $('#component'+this.parent.cid).html($('#component'+this.parent.cid).html());
+
+      // JQuery-UI draggable
+      $('#fraction-representation').draggable();
+
       return this;
     },
 

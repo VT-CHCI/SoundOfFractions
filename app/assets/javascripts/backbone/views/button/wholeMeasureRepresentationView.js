@@ -52,6 +52,10 @@ define([
     //no need to compile the template for this one.
     render: function() {
       $(this.el).html(wholeMeasureRepresentationTemplate);
+
+      // JQuery-UI draggable
+      $(this.el).draggable();
+
       return this;
     }
   });

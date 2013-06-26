@@ -18,11 +18,13 @@ console.log('Application.js Started');
 require([
 
   // Load our "app" module and pass it to our definition function
-  'SOF'
+  'SOF',
+  'jquery',
+  'app/draggable'
 
   // Some plugins have to be loaded in order due to their non AMD compliance
   // Because these scripts are not "modules" they do not pass any values to the definition function below
-], function(Application){
+], function(Application, $, Draggable){
   console.log("Application initializing...");
 
 
@@ -30,5 +32,12 @@ require([
   // Again, the other dependencies passed in are not "AMD" therefore don't pass a parameter to this function
   Application.initialize(App.songs);
   console.log("Application Fully initialized");
+  window.csf = Draggable;
+  $(document).ready(function() {
+    for (i = 0; i < Draggable.size(); i++) {
+      // $(Draggable.draggableElementID[i]).draggable();
+    }
+  });
 });
+
 

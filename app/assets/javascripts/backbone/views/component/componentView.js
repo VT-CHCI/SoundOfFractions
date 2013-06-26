@@ -97,8 +97,8 @@ define([
           defaultFractionRepresentation: this.defaultFractionRepresentation
         });
       }
-
-     return this;
+      $(this.el).draggable({ axis: "y",containment: "parent" });
+      return this;
     },
 
     updateModelSignature: function(val){

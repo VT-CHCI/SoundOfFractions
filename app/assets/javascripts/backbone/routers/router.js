@@ -17,13 +17,14 @@ define([
   'backbone/views/recorder/recorderView',
   'backbone/views/button/tapTempoView',
   'backbone/views/button/doallView',
+  'backbone/views/label/systemLabelView',
   'app/log',
   'backbone/collections/songsCollection',
   'backbone/views/song/new_view',
   'backbone/views/song/index_view',
   'backbone/views/song/show_view',
   'backbone/views/song/edit_view'
-], function($, _, Backbone, mainHomeView, beatsPerMeasureSliderView, additiveLinearBeatPaletteView, componentsView, tempoSliderView, transportView, fractionRepresentionView, wholeMeasureRepresentationView, recorderView, tapTempoView, doallView, log, songsCollection, songsViewNew, songsViewIndex, songsViewShow, songsViewEdit ){
+], function($, _, Backbone, mainHomeView, beatsPerMeasureSliderView, additiveLinearBeatPaletteView, componentsView, tempoSliderView, transportView, fractionRepresentionView, wholeMeasureRepresentationView, recorderView, tapTempoView, doallView, systemLabelView, log, songsCollection, songsViewNew, songsViewIndex, songsViewShow, songsViewEdit ){
 
   var BBRouter = Backbone.Router.extend({
     // songs: {},
@@ -49,6 +50,7 @@ define([
       recorderView.render();
       tapTempoView.render();
       doallView.render();
+      systemLabelView.render();
     },
 
     index: function(){

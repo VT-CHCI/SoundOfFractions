@@ -1,5 +1,12 @@
+.btn-group {
+  display: block;
+}
+
+#sof-composer {
+  min-height: 450px;
+}
+
 .circle-path {
-  // stroke:red;
   stroke-width:3;
   fill:none;
 }
@@ -287,16 +294,36 @@ svg.circular-pie {
   margin: 0 auto 10px auto;
   text-align: center;
   width: 100%;
+  background-color: whitesmoke;
+  border: 1px solid #e3e3e3
 }
 
 #fraction-representation button {
   width: 20%;
 }
 
+#transport {
+  margin: 0px auto 10px auto;
+  text-align: center;
+  width: 100%;
+  background-color: whitesmoke;
+  border: 1px solid #e3e3e3
+}
+
+#system-label {
+  margin: 0px auto 10px auto;
+  text-align: center;
+  width: 100%;
+  background-color: whitesmoke;
+  border: 1px solid #e3e3e3
+}
+
 #measure-representation {
   margin: 0 auto 10px auto;
   text-align: center;
   width: 100%;
+  background-color: whitesmoke;
+  border: 1px solid #e3e3e3
 }
 
 #measure-representation-buttons {
