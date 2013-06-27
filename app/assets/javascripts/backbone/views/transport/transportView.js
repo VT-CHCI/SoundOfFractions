@@ -88,6 +88,7 @@ define([
 
     render: function() {
       $(this.el).html(transportTemplate);
+      $(this.el).draggable({ axis: "y",containment: "#right-column" });
       return this;
     }
   });

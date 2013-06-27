@@ -90,12 +90,12 @@ define([
           defaultMeasureRepresentation: this.defaultMeasureRepresentation
         });
 
-        new FractionRepresentationView({
-          collection:this.component.get('measures'),
-          parent: this.component,
-          el:'#fraction'+this.component.cid,
-          defaultFractionRepresentation: this.defaultFractionRepresentation
-        });
+        // new FractionRepresentationView({
+        //   collection:this.component.get('measures'),
+        //   parent: this.component,
+        //   el:'#fraction'+this.component.cid,
+        //   defaultFractionRepresentation: this.defaultFractionRepresentation
+        // });
       }
       $(this.el).draggable({ axis: "y",containment: "parent" });
       return this;

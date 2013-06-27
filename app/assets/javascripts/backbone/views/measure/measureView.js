@@ -94,8 +94,11 @@ define([
     changeMeasureRepresentation: function(representation) {
       this.previousMeasureRepresentation = this.currentMeasureRepresentation;
       this.currentMeasureRepresentation = representation;
-      var d3Els = d3.selectAll($('.d3'));
-      d3Els.remove();
+      // var d3Beats = d3.selectAll($('.d3'));
+      // console.warn(d3Beats);
+      // for (var i = 0; i<d3Beats.length ; i++){
+      //   d3Beats[i].exit();
+      // }
       this.render();
     },
     transitionRoll: function(options) {
@@ -243,80 +246,81 @@ define([
         // find the plus sign we put in there, and right before it, put in the rendered template
         $(this.el).find('.addMeasure').before( compiledTemplate )
 
+        if (currentMeasureRepresentation = "bead") {
+          var lineData = $.map(Array(measureNumberOfPoints), function (d, i) {
+              var y = margin.top;
+              var x = margin.left + i * lineLength / (measureNumberOfPoints - 1)
+              return {x: x, y: y}
+          });
+          var pathFunction = d3.svg.line()
+              .x(function (d) {return d.x;})
+              .y(function (d) {return d.y;})
+              .interpolate('basis'); // bundle | basis | linear | cardinal are also options
 
-        var lineData = $.map(Array(measureNumberOfPoints), function (d, i) {
-            var y = margin.top;
-            var x = margin.left + i * lineLength / (measureNumberOfPoints - 1)
-            return {x: x, y: y}
-        });
-        var pathFunction = d3.svg.line()
-            .x(function (d) {return d.x;})
-            .y(function (d) {return d.y;})
-            .interpolate('basis'); // bundle | basis | linear | cardinal are also options
+          //The Circle SVG Path we draw MUST BE AFTER THE COMPILED TEMPLATE
+          var svgContainer = d3.select('#svg'+measure.cid)
+              // .call(d3.experiments.dragAll);
+          var circlePath = svgContainer //.append('g')
+              // .append('path')
+              .insert('path', ':first-child')
+              .data([circleStates[0]])
+              .attr('d', pathFunction)
+              .attr('stroke', 'black')
+              // .attr('stroke-dasharray', '5, 10')
+              .attr('opacity', .2)
+              .attr('class', 'circle')
+              .attr('class', 'circle-path')
 
-        //The Circle SVG Path we draw MUST BE AFTER THE COMPILED TEMPLATE
-        var svgContainer = d3.select('#svg'+measure.cid)
-            // .call(d3.experiments.dragAll);
-        var circlePath = svgContainer //.append('g')
-            // .append('path')
-            .insert('path', ':first-child')
-            .data([circleStates[0]])
-            .attr('d', pathFunction)
-            .attr('stroke', 'black')
-            // .attr('stroke-dasharray', '5, 10')
-            .attr('opacity', .2)
-            .attr('class', 'circle')
-            .attr('class', 'circle-path')
-
-        function transitionRoll(options) {
-          if (this.unrolled == false) {
-            for(i=0; i<this.measureNumberOfPoints; i++){
-                options.circlePath.data([this.circleStates[this.measureNumberOfPoints-1-i]])
-                    .transition()
-                    .delay(this.animationDuration*i)
-                    .duration(this.animationDuration)
-                    .ease('linear')
-                    .attr('d', this.pathFunction);
+          function transitionRoll(options) {
+            if (this.unrolled == false) {
+              for(i=0; i<this.measureNumberOfPoints; i++){
+                  options.circlePath.data([this.circleStates[this.measureNumberOfPoints-1-i]])
+                      .transition()
+                      .delay(this.animationDuration*i)
+                      .duration(this.animationDuration)
+                      .ease('linear')
+                      .attr('d', this.pathFunction);
+              }
+            } else {
+              console.log('unroll clicked');
+              console.warn(options);
+              for(i=0; i<this.measureNumberOfPoints; i++){
+                  options.circlePath.data([this.circleStates[i]])
+                      .transition()
+                      .delay(this.animationDuration*i)
+                      .duration(this.animationDuration)
+                      .ease('linear')
+                      .attr('d', this.pathFunction);
+              }
             }
-          } else {
-            console.log('unroll clicked');
-            console.warn(options);
-            for(i=0; i<this.measureNumberOfPoints; i++){
-                options.circlePath.data([this.circleStates[i]])
-                    .transition()
-                    .delay(this.animationDuration*i)
-                    .duration(this.animationDuration)
-                    .ease('linear')
-                    .attr('d', this.pathFunction);
-            }
+            this.unrolled = !this.unrolled;
           }
-          this.unrolled = !this.unrolled;
+
+          function unroll() {
+            for(i=0; i<measureNumberOfPoints; i++){
+                circlePath.data([circleStates[i]])
+                    .transition()
+                    .delay(animationDuration*i)
+                    .duration(animationDuration)
+                    .ease('linear')
+                    .attr('d', pathFunction);
+            }
+          };
+          function reverse() {
+            for(i=0; i<measureNumberOfPoints; i++){
+                circlePath.data([circleStates[measureNumberOfPoints-1-i]])
+                    .transition()
+                    .delay(animationDuration*i)
+                    .duration(animationDuration)
+                    .ease('linear')
+                    .attr('d', pathFunction);
+            }
+          };
+
+          // $('#a'+measure.cid).on('click', dispatch.trigger('unroll.event'), circlePath);
+          $('#a'+measure.cid).on('click', unroll);
+          $('#b'+measure.cid).on('click', reverse);
         }
-
-        function unroll() {
-          for(i=0; i<measureNumberOfPoints; i++){
-              circlePath.data([circleStates[i]])
-                  .transition()
-                  .delay(animationDuration*i)
-                  .duration(animationDuration)
-                  .ease('linear')
-                  .attr('d', pathFunction);
-          }
-        };
-        function reverse() {
-          for(i=0; i<measureNumberOfPoints; i++){
-              circlePath.data([circleStates[measureNumberOfPoints-1-i]])
-                  .transition()
-                  .delay(animationDuration*i)
-                  .duration(animationDuration)
-                  .ease('linear')
-                  .attr('d', pathFunction);
-          }
-        };
-
-        // $('#a'+measure.cid).on('click', dispatch.trigger('unroll.event'), circlePath);
-        $('#a'+measure.cid).on('click', unroll);
-        $('#b'+measure.cid).on('click', reverse);
 
         // console.log(this.currentMeasureRepresentation);
         // for each beat in this measure

@@ -45,7 +45,7 @@ define([
       componentsView.render();
       tempoSliderView.render();
       transportView.render();
-      fractionRepresentionView.render();
+      // fractionRepresentionView.render();
       wholeMeasureRepresentationView.render();
       recorderView.render();
       tapTempoView.render();
