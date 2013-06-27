@@ -21,8 +21,7 @@ define([
 
     //registering backbone's click event to our cycle() method.
     events : {
-      "click .btn" : "cycle",
-      "click .svg" : "cycle"
+      "click .btn" : "cycle"
     },
 
     //simply creates the model.
@@ -40,15 +39,11 @@ define([
       a log message is sent reflecting the representation change.
     */
     cycle: function(e) {
-      var newState;
-      if($(e.target).is('button')) {
-        newState = $(e.target).data('state');
-      } else {
-        newState = $(e.target).closest('button').data('state'); 
-      }
-      console.log(newState);
-      // var buttonNewState = $(button.target).data('state');
-      // var svgNewState = 
+      //Clear the active classes
+      $('#measure-representation-buttons button').removeClass('active');
+      console.log('removed');
+      //Grab the data-state from the clicked button
+      var newState = $(e.currentTarget).data('state');
       this.repButtonModel.set('buttonState', newState);
       //trigger the Measure representation change
       dispatch.trigger('measureRepresentation.event', newState);

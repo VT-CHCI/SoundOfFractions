@@ -1,3 +1,8 @@
+.container-fluid {
+/*  position: relative;
+  top: -10px;*/
+}
+
 .btn-group {
   display: block;
 }
@@ -318,10 +323,19 @@ svg.circular-pie {
   border: 1px solid #e3e3e3
 }
 
+#measure-representation-buttons button svg {
+  height: 30px;
+}
+
+#measure-representation-buttons button{
+  padding: 0px;
+  margin: 0px;
+}
+
 #measure-representation {
   margin: 0 auto 10px auto;
   text-align: center;
-  width: 100%;
+  width: 40%;
   background-color: whitesmoke;
   border: 1px solid #e3e3e3
 }

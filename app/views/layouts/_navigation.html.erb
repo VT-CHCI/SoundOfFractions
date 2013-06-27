@@ -13,7 +13,7 @@
     </div> <!-- End Navbar-inner -->
   </div> <!-- End Navbar -->
 
-<div class="row-fluid">
+<div class="row-fluid" id="rails-alerts">
   <% flash.each do |name, msg| %>
     <% if msg.is_a?(String) %>
       <div class="alert alert-<%= name == :notice ? "success" : "error" %>">
