@@ -23,7 +23,7 @@ define([
 ], function($, _, Backbone, BeatsCollection, MeasuresCollection, componentsCollection, 
     BeatModel, MeasureModel, ComponentModel, ComponentView, componentsTemplate, dispatch, state){
   var componentsView = Backbone.View.extend({
-    el: $('#sof-composer'),
+    el: $('#sof-composition-area'),
 
     initialize: function(){
       // Default Measure representation state - also set "active" class in fractionRepresentation.html AND wholeMeasureRepresentation.html

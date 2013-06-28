@@ -1,0 +1,7 @@
+There is only one type of beat (a unit fraction)
+Bead bead is a fixed size
+
+tempo is not to be a "first class" representation
+"components" are to be arranged hiorizontally and referred to as "line"s
+
+one instrument is allowed at a time

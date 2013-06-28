@@ -1,9 +1,7 @@
-// Filename: views/button/wholeMeasureRepresentationView.js
+// Filename: views/button/measureTransformationView.js
 /*
-  This is the RepButtonView.
-  This renders the four-state radio button
-  that controls which representation is displayed
-  on the side of each component.  
+  This is the MeasureTransformationView.
+  This renders the buttons for measure transformations
 */  
 define([
   'jquery',
@@ -11,13 +9,13 @@ define([
   'backbone',
   'bootstrap',
   'backbone/models/repButton',
-  'text!backbone/templates/button/wholeMeasureRepresentation.html',
+  'text!backbone/templates/button/measureTransformation.html',
   'app/dispatch',
   'app/log'
 ], function($, _, Backbone, Bootstrap, RepButtonModel, wholeMeasureRepresentationTemplate, dispatch, log){
 
-  var WholeMeasureRepresentationView = Backbone.View.extend({
-    el : $("#measure-representation"), // Specifies the DOM element which this view handles
+  var MeasureTransformationView = Backbone.View.extend({
+    el : $("#measure-transformation"), // Specifies the DOM element which this view handles
 
     //registering backbone's click event to our cycle() method.
     events : {
@@ -43,9 +41,9 @@ define([
       var newState = $(e.currentTarget).data('state');
       this.repButtonModel.set('buttonState', newState);
       //trigger the Measure representation change
-      dispatch.trigger('measureRepresentation.event', newState);
+      // dispatch.trigger('measureRepresentation.event', newState);
       //trigger the Beat representation change
-      dispatch.trigger('beatRepresentation.event', newState);
+      // dispatch.trigger('beatRepresentation.event', newState);
 
       log.sendLog([[2, "representation changed to: "+newState]]);
     },
@@ -60,5 +58,5 @@ define([
       return this;
     }
   });
-  return new WholeMeasureRepresentationView();
+  return new MeasureTransformationView();
 });

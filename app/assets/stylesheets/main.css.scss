@@ -1,3 +1,58 @@
+#top-row .l2b-circle {
+    stroke:black;
+    stroke-width:1;
+    fill:none;
+    opacity: 1;
+}
+#top-row .l2b-partial1 {
+    stroke:black;
+    stroke-dasharray: 6;
+    stroke-width:1;
+    fill:none;
+    opacity: .6;
+}
+#top-row .l2b-partial2 {
+    stroke:black;
+    stroke-dasharray: 4;
+    stroke-width:1;
+    fill:none;
+    opacity: .4;
+}
+#top-row .l2b-line {
+    stroke:black;
+    stroke-dasharray: 2;
+    stroke-width: 1;
+    fill:none;
+    opacity: .2;
+}
+#top-row .b2l-circle {
+    stroke:black;
+    stroke-dasharray: 2;
+    stroke-width:1;
+    fill:none;
+    opacity: .2;
+}
+#top-row .b2l-partial1 {
+    stroke:black;
+    stroke-dasharray: 4;
+    stroke-width:1;
+    fill:none;
+    opacity: .4;
+}
+#top-row .b2l-partial2 {
+    stroke:black;
+    stroke-dasharray: 6;
+    stroke-width:1;
+    fill:none;
+    opacity: .6;
+}
+#top-row .b2l-line {
+    stroke:black;
+    stroke-width: 1;
+    fill:none;
+    opacity: 1;
+}
+
 .container-fluid {
 /*  position: relative;
   top: -10px;*/
@@ -7,7 +62,7 @@
   display: block;
 }
 
-#sof-composer {
+#sof-composition-area {
   min-height: 450px;
 }
 
@@ -323,11 +378,11 @@ svg.circular-pie {
   border: 1px solid #e3e3e3
 }
 
-#measure-representation-buttons button svg {
+#top-row button svg {
   height: 30px;
 }
 
-#measure-representation-buttons button{
+#top-row button{
   padding: 0px;
   margin: 0px;
 }
@@ -339,9 +394,18 @@ svg.circular-pie {
   background-color: whitesmoke;
   border: 1px solid #e3e3e3
 }
-
 #measure-representation-buttons {
   width: 100%;
+}
+#measure-transformation {
+  margin: 0 auto 10px auto;
+  text-align: center;
+  width: 55%;
+  background-color: whitesmoke;
+  border: 1px solid #e3e3e3
+}
+#measure-transformation button {
+  width: 20%;
 }
 #fraction-representation-buttons {
   width: 100%;

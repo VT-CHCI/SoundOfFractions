@@ -22,7 +22,7 @@ define([
     navInfoEl: $('#nav-songs-info'),
     navSaveEl: $('#nav-songs-save'),
     showBodyEl: $('#show-song'),
-    sofComposerEl: $('#sof-composer'),
+    sofCompossitionAreaEl: $('#sof-composition-area'),
 
     initialize: function(options){
       console.log("Show View initializing...");
@@ -94,8 +94,8 @@ define([
       $(this.navInfoEl).html(compiledNavTemplate);
       //remove the save button
       $(this.navSaveEl).html('');
-      // remove the sof-composer 
-      //$(this.sofComposerEl).html('');
+      // remove the sof-composition-area 
+      //$(this.sofCompossitionAreaEl).html('');
       // change the body to show the title
       $(this.showBodyEl).html(compiledBodyTemplate);
 
