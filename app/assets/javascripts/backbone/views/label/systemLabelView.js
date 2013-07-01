@@ -30,7 +30,7 @@ define([
       $(this.el).html(systemLabelTemplate);
 
       // JQuery-UI draggable
-      $(this.el).draggable({ axis: "y",containment: "#right-column" });
+      $(this.el).draggable({ axis: "y",containment: "#middle-right-column" });
 
       return this;
     }

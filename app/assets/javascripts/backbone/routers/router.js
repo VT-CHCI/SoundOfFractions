@@ -18,6 +18,7 @@ define([
   'backbone/views/recorder/recorderView',
   'backbone/views/button/tapTempoView',
   'backbone/views/button/doallView',
+  'backbone/views/button/remainingInstrumentGeneratorView',
   'backbone/views/label/systemLabelView',
   'app/log',
   'backbone/collections/songsCollection',
@@ -25,7 +26,7 @@ define([
   'backbone/views/song/index_view',
   'backbone/views/song/show_view',
   'backbone/views/song/edit_view'
-], function($, _, Backbone, mainHomeView, beatsPerMeasureSliderView, additiveLinearBeatPaletteView, componentsView, tempoSliderView, transportView, fractionRepresentionView, wholeMeasureRepresentationView, measureTransformationView, recorderView, tapTempoView, doallView, systemLabelView, log, songsCollection, songsViewNew, songsViewIndex, songsViewShow, songsViewEdit ){
+], function($, _, Backbone, mainHomeView, beatsPerMeasureSliderView, additiveLinearBeatPaletteView, componentsView, tempoSliderView, transportView, fractionRepresentionView, wholeMeasureRepresentationView, measureTransformationView, recorderView, tapTempoView, doallView, remainingInstrumentGeneratorView, systemLabelView, log, songsCollection, songsViewNew, songsViewIndex, songsViewShow, songsViewEdit ){
 
   var BBRouter = Backbone.Router.extend({
     // songs: {},
@@ -53,6 +54,7 @@ define([
       tapTempoView.render();
       doallView.render();
       systemLabelView.render();
+      remainingInstrumentGeneratorView.render();
     },
 
     index: function(){

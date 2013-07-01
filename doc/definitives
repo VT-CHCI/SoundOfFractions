@@ -1,7 +1,16 @@
 There is only one type of beat (a unit fraction)
-Bead bead is a fixed size
+Bead beat is a fixed size
 
 tempo is not to be a "first class" representation
 "components" are to be arranged hiorizontally and referred to as "line"s
 
-one instrument is allowed at a time
+the capture should be one step, and record the student's song
+
+the implementation must match the curriculum
+the implementation should allow for as much customization as possible
+one instrument only is allowed at a time
+
+there will be a labeling system
+
+create and transform a representation are different methods and therefore represented separately
+

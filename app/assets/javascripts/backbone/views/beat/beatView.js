@@ -10,15 +10,13 @@ define([
   'backbone/models/beat',
   'text!backbone/templates/beat/audioBeats.html',
   'text!backbone/templates/beat/linearBarBeats.html',
-  'text!backbone/templates/beat/linearBarSVGBeats.html',
   'text!backbone/templates/beat/circularPieBeats.html',
   'text!backbone/templates/beat/circularBeadBeats.html',
   'text!backbone/templates/beat/numberLineBeats.html',
   'colors',
   'app/dispatch',
   'app/log'
-], function($, _, Backbone, BeatModel, audioBeatsTemplate,
-  linearBarBeatsTemplate, linearBarSVGBeatsTemplate, circularPieBeatsTemplate,
+], function($, _, Backbone, BeatModel, audioBeatsTemplate, linearBarBeatsTemplate, circularPieBeatsTemplate,
   circularBeadBeatsTemplate, numberLineBeatsTemplate, COLORS, dispatch, log){
   return Backbone.View.extend({
 
@@ -34,7 +32,6 @@ define([
     representations: {
       "audio": audioBeatsTemplate,
       "linear-bar": linearBarBeatsTemplate,
-      "linear-bar-svg": linearBarSVGBeatsTemplate,
       "circular-pie": circularPieBeatsTemplate,
       "circular-bead": circularBeadBeatsTemplate,
       "number-line": numberLineBeatsTemplate

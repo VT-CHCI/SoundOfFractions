@@ -13,7 +13,6 @@ define([
   'backbone/views/beat/beatView',
   'text!backbone/templates/measure/audioMeasures.html',
   'text!backbone/templates/measure/linearBarMeasures.html',
-  'text!backbone/templates/measure/linearBarSVGMeasures.html',
   'text!backbone/templates/measure/circularPieMeasures.html',
   'text!backbone/templates/measure/circularBeadMeasures.html',
   'text!backbone/templates/measure/numberLineMeasures.html',
@@ -21,7 +20,7 @@ define([
   'app/dispatch',
   'backbone/models/state',
   'app/log'
-], function($, _, Backbone, BeatsCollection, MeasureModel, beatView, audioMeasuresTemplate, linearBarMeasuresTemplate, linearBarSVGMeasuresTemplate, circularPieMeasuresTemplate, circularBeadMeasuresTemplate, numberLineMeasuresTemplate, COLORS, dispatch, state, log){
+], function($, _, Backbone, BeatsCollection, MeasureModel, beatView, audioMeasuresTemplate, linearBarMeasuresTemplate, circularPieMeasuresTemplate, circularBeadMeasuresTemplate, numberLineMeasuresTemplate, COLORS, dispatch, state, log){
   return Backbone.View.extend({
     // el: $('.component'),
 
@@ -29,7 +28,6 @@ define([
     representations: {
       'audio': audioMeasuresTemplate,
       'linear-bar': linearBarMeasuresTemplate,
-      'linear-bar-svg': linearBarSVGMeasuresTemplate,
       'circular-pie': circularPieMeasuresTemplate,
       'circular-bead': circularBeadMeasuresTemplate,
       'number-line': numberLineMeasuresTemplate
@@ -371,7 +369,7 @@ define([
             colorForAudio: colorForAudio
           };
 
-          // manipulate linear-bar-svg beat parameters
+          // manipulate linear-bar beat parameters
           measurePassingToBeatViewParamaters.beatBBX = xMeasureLocation + linearBeatXPadding+(measurePassingToBeatViewParamaters.beatWidth*(index));
           measurePassingToBeatViewParamaters.opacity = beat.get('selected');
 

@@ -1,3 +1,21 @@
+/*This prevents the highlighting color when a user clicks fast, the user still is selecting something, but it is not actually showing*/
+* {
+   -moz-user-select: -moz-none;
+   -khtml-user-select: none;
+   -webkit-user-select: none;
+   /*
+     Introduced in IE 10.
+     See http://ie.microsoft.com/testdrive/HTML5/msUserSelect/
+   */
+   -ms-user-select: none;
+   user-select: none;
+}
+
+#remaining-instrument-generator{
+  background-color: whitesmoke;
+  border: 1px solid #e3e3e3
+}
+
 #top-row .l2b-circle {
     stroke:black;
     stroke-width:1;
@@ -63,7 +81,7 @@
 }
 
 #sof-composition-area {
-  min-height: 450px;
+  /*min-height: 450px;*/
 }
 
 .circle-path {
