@@ -33,16 +33,16 @@ define([
       a log message is sent reflecting the representation change.
     */
     cycle: function(e) {
-      this.remainingInstrumentGeneratorModel.removeInstrument($(e.currentTarget)[0].id.slice(15));
-      // //Grab the data-state from the clicked button
-      // var newState = $(e.currentTarget).data('state');
-      // this.repButtonModel.set('buttonState', newState);
-      // //trigger the Measure representation change
-      // dispatch.trigger('measureRepresentation.event', newState);
-      // //trigger the Beat representation change
-      // dispatch.trigger('beatRepresentation.event', newState);
+      // Instrument type
+      var instrument = $(e.currentTarget)[0].id.slice(15);
+      // Update the model that the instrument is not available
+      this.remainingInstrumentGeneratorModel.removeInstrument(instrument);
+      // remove the button clicked
+      $('#new-instrument-'+instrument).remove();
+      // Dispatch an event to add the new instrument in the sof-composition-area
+      dispatch.trigger('instrumentAdded.event', instrument);
 
-      // log.sendLog([[2, "representation changed to: "+newState]]);
+      log.sendLog([[2, "instrument added: "+instrument]]);
     },
 
     //no need to compile the template for this one.

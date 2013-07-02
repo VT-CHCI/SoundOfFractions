@@ -7,13 +7,16 @@ define([
   'underscore',
   'backbone',
   'backbone/models/component',
+  'backbone/models/remainingInstrumentGenerator',
   'backbone/views/measure/measureView',
   'backbone/views/fraction/fractionView',
+  'backbone/views/menu/instrumentDropDownView',
   'backbone/views/slider/beatsPerMeasureSliderView',
   'app/dispatch',
   'backbone/models/state',
   'app/log'
-], function($, _, Backbone, Component, MeasuresView, FractionRepresentationView, BPMSliderView, dispatch, state, log){
+
+], function($, _, Backbone, Component, RemainingInstrumentGenerator, MeasuresView, FractionRepresentationView, InstrumentDropDownView, BPMSliderView, dispatch, state, log){
   return Backbone.View.extend({
     // this is needed to recalculate a beat's size
     el: $('.component'),
@@ -45,6 +48,7 @@ define([
         if (options.defaultFractionRepresentation) {
           this.defaultFractionRepresentation = options.defaultFractionRepresentation;
         }
+        this.unusedInstruments = options.unusedInstruments;
       } else {
         this.component = new Component;
       }
@@ -75,12 +79,12 @@ define([
           newMeasureRepresentation: options.representation
         });
 
-        new FractionRepresentationView({
-          collection:this.component.get('measures'),
-          parent: this.component,
-          el:'#fraction'+this.component.cid,
-          defaultFractionRepresentation: this.defaultFractionRepresentation
-        }); 
+        // new FractionRepresentationView({
+        //   collection:this.component.get('measures'),
+        //   parent: this.component,
+        //   el:'#fraction'+this.component.cid,
+        //   defaultFractionRepresentation: this.defaultFractionRepresentation
+        // }); 
       }
       else {
         new MeasuresView({
@@ -88,6 +92,14 @@ define([
           parent: this.component,
           el:'#component'+this.component.cid,
           defaultMeasureRepresentation: this.defaultMeasureRepresentation
+        });
+
+        new InstrumentDropDownView({
+          unusedInstruments: this.unusedInstruments,
+          collection:this.component.get('measures'),
+          parent: this.component,
+          el:'#instrument-selector-'+this.component.cid,
+          parentCID: this.component.cid
         });
 
         // new FractionRepresentationView({

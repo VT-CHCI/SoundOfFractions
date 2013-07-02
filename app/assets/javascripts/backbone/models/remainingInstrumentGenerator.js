@@ -46,11 +46,9 @@ define([
       for (i = 0; i < len ; ++i) {
           if (this.unusedInstruments[i].type == removedInstrument) {
               remove(this.unusedInstruments, i);
-              $('#new-instrument-'+removedInstrument).remove();
               break;
           }
       }
-console.log(this.unusedInstruments);
     },
 
     addInstrument: function(addedIntrument) {

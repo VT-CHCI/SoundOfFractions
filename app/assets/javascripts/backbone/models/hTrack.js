@@ -7,8 +7,9 @@
 define([
   'underscore',
   'backbone',
-  'backbone/collections/measures'
-], function(_, Backbone, measuresCollection) {
+  'backbone/collections/measures',
+  'backbone/models/remainingInstrumentGenerator'
+], function(_, Backbone, measuresCollection, remainingInstrumentGenerator ) {
   var componentModel = Backbone.Model.extend({
     defaults: {
       label: 'snare',
@@ -18,7 +19,8 @@ define([
       measures: measuresCollection,
       active: true,
       signature: 0, //initially set to zero, but set in the init of componentsView
-      placementOrder: 0 //initially 0, but set later to its placement
+      placementOrder: 0, //initially 0, but set later to its placement
+      instrumentMenu: remainingInstrumentGenerator
     },
     initialize: function(){
     }

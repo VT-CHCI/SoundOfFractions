@@ -16,12 +16,12 @@ define([
   'backbone/models/beat',
   'backbone/models/measure',
   'backbone/models/component',
+  'backbone/models/remainingInstrumentGenerator',
   'backbone/views/component/componentView',
   'text!backbone/templates/component/component.html',
   'app/dispatch',
   'backbone/models/state'
-], function($, _, Backbone, BeatsCollection, MeasuresCollection, componentsCollection, 
-    BeatModel, MeasureModel, ComponentModel, ComponentView, componentsTemplate, dispatch, state){
+], function($, _, Backbone, BeatsCollection, MeasuresCollection, ComponentsCollection, RemainingInstrumentGenerator, BeatModel, MeasureModel, ComponentModel, ComponentView, componentsTemplate, dispatch, state){
   var componentsView = Backbone.View.extend({
     el: $('#sof-composition-area'),
 
@@ -35,11 +35,14 @@ define([
       this.context = new webkitAudioContext();
       this.bufferList = new Array();
 
+      // set the songs unused instruments
+      this.unusedInstruments = new RemainingInstrumentGenerator();
+
       //this gainNode controls the volume of the entire audio output.
       //we use it to toggle play/stop.
       this.masterGainNode = this.context.createGainNode();
 
-      this.drumkit = componentsCollection;
+      this.drumkit = ComponentsCollection;
 
       //this is creating the snare component.
       this.measure = new BeatsCollection;
@@ -52,7 +55,7 @@ define([
       this.component = new MeasuresCollection;
       this.component.add({beats: this.measure});
 
-      this.drumkit = componentsCollection.add({
+      this.drumkit = ComponentsCollection.add({
         label: 'Snare',
         img: 'snare.png',
         mute: false,
@@ -73,7 +76,7 @@ define([
       // this.component = new MeasuresCollection;
       // this.component.add({beats: this.measure});
 
-      // this.drumkit = componentsCollection.add({
+      // this.drumkit = ComponentsCollection.add({
       //   label: 'Hi Hat',
       //   img: 'hihat.png',
       //   mute: true,
@@ -94,7 +97,7 @@ define([
       // this.component = new MeasuresCollection;
       // this.component.add({beats: this.measure});
 
-      // this.drumkit = componentsCollection.add({
+      // this.drumkit = ComponentsCollection.add({
       //   label: 'Kick Drum',
       //   img: 'kick.png',
       //   mute: true,
@@ -116,7 +119,7 @@ define([
       // this.component = new MeasuresCollection;
       // this.component.add({beats: this.measure});
 
-      // this.drumkit = componentsCollection.add({
+      // this.drumkit = ComponentsCollection.add({
       //   label: 'Synth',
       //   img: 'synth.png',
       //   mute: true,
@@ -216,7 +219,8 @@ define([
           el:'#component-container'+component.cid, 
           gainNode:this.muteGainNodeList[counter],
           defaultMeasureRepresentation: this.defaultMeasureRepresentation,
-          defaultFractionRepresentation: this.defaultFractionRepresentation
+          defaultFractionRepresentation: this.defaultFractionRepresentation,
+          unusedInstruments: this.unusedInstruments
         });
         if(!component.get('active')) {
           console.log('found a muted one');

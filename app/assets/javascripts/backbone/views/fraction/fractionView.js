@@ -23,21 +23,20 @@ define([
 
     // The different representations
     representations: {
-      "none": blankTemplate,
-      "fraction": fractionTemplate,
-      "percent": percentTemplate,
-      "decimal": decimalTemplate,
-      "mixed": mixedNumberTemplate
+      'none': blankTemplate,
+      'fraction': fractionTemplate,
+      'percent': percentTemplate,
+      'decimal': decimalTemplate,
+      'mixed': mixedNumberTemplate
     },
     //grab the current measure representation's data-state
-    currentFractionRepresentation: "", //temp-holder
-    previousFractionRepresentation: "", //temp-holder
+    currentFractionRepresentation: '', //temp-holder
+    previousFractionRepresentation: '', //temp-holder
 
     initialize: function(options){
       //console.warn(options.el);
-      //if we're being created by a componentView, we are
-      //passed in options. Otherwise we create a single
-      //measure and add it to our collection.
+      //if we're being created by a componentView, we are passed in options.
+      // Otherwise we create a single measure and add it to our collection.
       if (options) {
         this.measuresCollection = options.collection;
         this.beatsInMeasure = this.measuresCollection.models[0].attributes.beats.length
@@ -45,6 +44,8 @@ define([
         this.el = options.el;
         if (options.defaultFractionRepresentation) {
           this.currentFractionRepresentation = options.defaultFractionRepresentation;
+        } else {//merely as a backup
+          this.currentFractionRepresentation = this.representations['none'];
         }
       }
 
@@ -54,7 +55,7 @@ define([
       dispatch.on('signatureChange.event', this.updateFractionValues, this);
       // dispatch.on('bPMSlider.event', this.updateFractionValues, this);
 
-      this.render();
+      this.render(this.beatsInMeasure);
     },
 
     changeFractionRepresentation: function(representation) {
@@ -64,13 +65,13 @@ define([
     },
 
     render: function(val){
-      var numerator = 0;
       var denominator;
       if (val){
         denominator = val;
       } else {
         denominator = this.beatsInMeasure;
       }
+      var numerator = 0;
       var mixedNumerator;
       var wholeNumber;
       // var percent;
