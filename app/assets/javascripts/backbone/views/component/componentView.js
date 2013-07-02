@@ -97,7 +97,7 @@ define([
         //   defaultFractionRepresentation: this.defaultFractionRepresentation
         // });
       }
-      $(this.el).draggable({ axis: "y",containment: "parent" });
+      $(this.el).draggable({ axis: "y", containment: "#middle-left-column" });
       return this;
     },
 
@@ -190,7 +190,6 @@ define([
             if (counter >= 0 && counter < beats.length)
               self.component.set('currentBeat',counter);
               if (self.defaultMeasureRepresentation == 'circular-bead'){
-                window.csf = $('.d3');
                 // console.log(self.component.get('currentBeat'));
                 self.d3animate();
               } else {
