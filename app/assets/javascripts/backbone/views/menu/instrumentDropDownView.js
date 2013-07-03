@@ -27,6 +27,9 @@ define([
       this.parentCID = options.parentCID;
 
       this.render();
+
+      dispatch.on('instrumentAdded.event', this.updateRemove, this);
+
     },
 
     /*
@@ -34,21 +37,11 @@ define([
 
       a log message is sent reflecting the instrument change.
     */
-    remove: function(e) {
+    updateRemove: function(e) {
+
       // Update the model that the instrument is not available
-      this.remainingInstrumentGeneratorModel.removeInstrument($(e.currentTarget)[0].id.slice(15));
-
-
-
-      // //Grab the data-state from the clicked button
-      // var newState = $(e.currentTarget).data('state');
-      // this.repButtonModel.set('buttonState', newState);
-      // //trigger the Measure representation change
-      // dispatch.trigger('measureRepresentation.event', newState);
-      // //trigger the Beat representation change
-      // dispatch.trigger('beatRepresentation.event', newState);
-
-      // log.sendLog([[2, "representation changed to: "+newState]]);
+      this.remainingInstrumentGeneratorModel.removeInstrument(e);
+      this.render();
     },
 
     //no need to compile the template for this one.
@@ -58,7 +51,7 @@ define([
       var compiledTemplate = _.template( instrumentDropDownTemplate, { 
         unusedInstruments: this.remainingInstrumentGeneratorModel.get('unusedInstruments'),
         cid: this.parentCID
-      } );
+      });
       $(this.el).html( compiledTemplate );
 
       // $(this.el).html(remainingInstrumentGeneratorTemplate);

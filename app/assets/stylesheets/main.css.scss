@@ -272,7 +272,7 @@ svg.circular-pie {
 }
 
 .component-container .count .whole {
-  display: block;
+  dis1: block;
   margin: 15px auto 25px auto;
   font-size: 80px;
   // margin-bottom: 12px;
@@ -406,9 +406,9 @@ svg.circular-pie {
 }
 
 #measure-representation {
-  margin: 0 auto 10px auto;
+  /*margin: 0 auto 10px auto;*/
   text-align: center;
-  width: 40%;
+  /*width: 40%;*/
   background-color: whitesmoke;
   border: 1px solid #e3e3e3
 }
@@ -416,9 +416,10 @@ svg.circular-pie {
   width: 100%;
 }
 #measure-transformation {
+  float: right;
   margin: 0 auto 10px auto;
   text-align: center;
-  width: 55%;
+  /*width: 55%;*/
   background-color: whitesmoke;
   border: 1px solid #e3e3e3
 }
