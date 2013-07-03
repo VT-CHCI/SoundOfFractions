@@ -141,16 +141,15 @@ define([
         this.gainNodeList[i] = this.context.createGainNode();
         this.muteGainNodeList[i] = this.context.createGainNode();
       };
-      ///////////////////////////////
 
       this.intervalID = null; //time is a function of measures and tempo (4 * 60/tempo * measures)
 
       //register the handler for togglePlay events.
       dispatch.on('togglePlay.event', this.togglePlay, this);
       dispatch.on('tempoChange.event', this.updateTempo, this);
+      dispatch.on('instrumentAdded.event', this.addInstrument, this);
 
       state.set('components', this.drumkit);
-
     },
 
     build: function(song) {
@@ -453,9 +452,35 @@ define([
       }
     },
 
-    updateTempo:function(val) {
+    updateTempo: function(val) {
       console.log('tempo changed to ' + val);
       this.drumkit.tempo = val;
+    },
+
+    addInstrument: function(instrument) {
+      var ƒthis = this;
+      //this is creating the new instrument htrack.
+      this.measure = new BeatsCollection;
+
+      //for default number of beats
+      var defaultNumberOfBeats = 6;
+      for (var i = 0; i < defaultNumberOfBeats; i++) {
+        this.measure.add();
+      }
+
+      this.component = new MeasuresCollection;
+      this.component.add({beats: this.measure});
+
+      this.drumkit = ComponentsCollection.add({
+        label: 'newer',//ƒthis.unusedInstruments.getLabel(instrument),
+        img: 'orange.png',
+        mute: false,
+        sample: '808_sd.m4a',
+        measures: this.component,
+        signature: defaultNumberOfBeats,
+        active: true
+      });
+      this.render();
     }
   });
   return new componentsView();

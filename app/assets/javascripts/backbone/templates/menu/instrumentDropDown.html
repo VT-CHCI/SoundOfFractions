@@ -1,4 +1,4 @@
-<select name="unused-instruments-selector-<%= cid %>">
+<select name="unused-instruments-selector-<%= cid %>" class="unused-instruments-selector">
   <% _.each(unusedInstruments, function(uI){ %>
     <option value="<%= uI.type %>"><%= uI.label %></option>
   <% }); %>

@@ -31,6 +31,18 @@ define([
       // ]
     },
 
+    getLabel: function(type){
+      var len = this.unusedInstruments.length,
+          i;
+
+      for (i = 0; i < len ; ++i) {
+          if (this.unusedInstruments[i].type == type) {
+              return this.unusedInstruments[i].label;
+              break;
+          }
+      }
+    },
+
     removeInstrument: function(removedInstrument) {
       var len = this.unusedInstruments.length,
           i;
