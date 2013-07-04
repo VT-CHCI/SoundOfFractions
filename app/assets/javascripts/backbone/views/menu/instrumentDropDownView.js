@@ -30,6 +30,7 @@ define([
 
       dispatch.on('instrumentAdded.event', this.updateRemove, this);
       dispatch.on('instrumentChanged.event', this.instrumentChanged, this);
+      dispatch.on('reRenderInstrumentDropDown.event', this.render, this)
     },
 
     instrumentChanged: function(){
@@ -39,7 +40,6 @@ define([
       // this.remainingInstrumentGeneratorModel.addInstrument(newInstrument);
       this.updateAddRemove(oldInstrument,newInstrument);
       // this.updateAdd(oldInstrument);
-      dispatch.trigger('reRenderInstrumentGenerator.event', this)
     },
     /*
       This is called when a user adds a instrument form the selector.
@@ -48,16 +48,12 @@ define([
     updateAddRemove: function(add, remove) {
       this.remainingInstrumentGeneratorModel.addInstrument(add);
       this.remainingInstrumentGeneratorModel.removeInstrument(remove);
-      this.render();
+      dispatch.trigger('reRenderInstrumentGenerator.event', this)
+      dispatch.trigger('reRenderInstrumentDropDown.event', this)
     },
     updateRemove: function(e) {
       // Update the model that the instrument is not available
       this.remainingInstrumentGeneratorModel.removeInstrument(e);
-      this.render();
-    },
-    updateAdd: function(instrument) {
-      // Update the model that the instrument is not available
-      this.remainingInstrumentGeneratorModel.addInstrument(instrument);
       this.render();
     },
 

@@ -16,9 +16,9 @@ define([
   var RemainingInstrumentGeneratorView = Backbone.View.extend({
     el : $("#remaining-instrument-generator"), // Specifies the DOM element which this view handles
 
-    //registering backbone's click event to our cycle() method.
+    //registering backbone's click event to our addInstrument() method.
     events : {
-      "click .btn" : "cycle"
+      "click .btn" : "addInstrument"
     },
 
     //simply creates the model.
@@ -36,7 +36,7 @@ define([
 
       a log message is sent reflecting the representation change.
     */
-    cycle: function(e) {
+    addInstrument: function(e) {
       // Instrument type
       var instrument = $(e.currentTarget)[0].id.slice(15);
       // Update the model that the instrument is not available

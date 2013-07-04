@@ -14,9 +14,9 @@ define([
       unusedInstruments: [
         // { label: 'Snare', type: 'sn'},//, image: SnareImage },
         { label: 'Hi Hat', type: 'hh'},//, image: HiHatImage },
-        { label: 'Kick Drum', type: 'kd'},//, image: KickDrumImage },
-        { label: 'other1', type: 'o1'},//, image: KickDrumImage },
-        { label: 'other2', type: 'o2'}//, image: KickDrumImage },
+        { label: 'Kick Drum', type: 'kd'}// ,//, image: KickDrumImage },
+        // { label: 'other1', type: 'o1'},//, image: KickDrumImage },
+        // { label: 'other2', type: 'o2'}//, image: KickDrumImage },
         // { label: 'Synth', type: 'sy'}//, image: SynthImage }
       ],
       instrumentLookup: {

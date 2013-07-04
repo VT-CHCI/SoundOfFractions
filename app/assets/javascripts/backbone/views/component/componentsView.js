@@ -475,6 +475,7 @@ define([
 
       this.drumkit = ComponentsCollection.add({
         label: 'newer',//ƒthis.unusedInstruments.getLabel(instrument),
+        type: instrument,
         img: 'orange.png',
         mute: false,
         sample: '808_sd.m4a',
