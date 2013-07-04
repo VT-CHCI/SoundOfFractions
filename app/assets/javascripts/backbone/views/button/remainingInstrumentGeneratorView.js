@@ -24,6 +24,10 @@ define([
     //simply creates the model.
     initialize: function() {
       this.remainingInstrumentGeneratorModel = new RemainingInstrumentGeneratorModel;
+
+      dispatch.on('instrumentChanged.event', this.render, this);
+      dispatch.on('reRenderInstrumentGenerator.event', this.render, this);
+
       this.render();
     },
 

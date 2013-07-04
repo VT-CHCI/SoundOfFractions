@@ -12,6 +12,7 @@ define([
   var componentModel = Backbone.Model.extend({
     defaults: {
       label: 'snare',
+      type: 'sn',
       img: 'ofAsnare',
       mute: false,
       sample: 'shhh',

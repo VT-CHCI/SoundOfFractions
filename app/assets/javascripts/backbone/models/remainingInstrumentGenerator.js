@@ -12,13 +12,21 @@ define([
   var remainingInstrumentGeneratorModel = Backbone.Model.extend({
     defaults: {
       unusedInstruments: [
-        // { label: 'Snare'},//, image: SnareImage },
+        // { label: 'Snare', type: 'sn'},//, image: SnareImage },
         { label: 'Hi Hat', type: 'hh'},//, image: HiHatImage },
         { label: 'Kick Drum', type: 'kd'},//, image: KickDrumImage },
         { label: 'other1', type: 'o1'},//, image: KickDrumImage },
         { label: 'other2', type: 'o2'}//, image: KickDrumImage },
-        // { label: 'Synth'}//, image: SynthImage }
-      ]
+        // { label: 'Synth', type: 'sy'}//, image: SynthImage }
+      ],
+      instrumentLookup: {
+        sn: {label: 'Snare', type: 'sn'},
+        hh: {label: 'Hi Hat', type: 'hh'},
+        kd: {label: 'Kick Drum', type: 'kd'},
+        o1: {label: 'other1', type: 'o1'},
+        o2: {label: 'other2', type: 'o2'}//,
+        // sy: {label: 'Synth', type: 'sy'}
+      }
     },
 
     initialize: function(){
@@ -64,7 +72,11 @@ define([
     },
 
     addInstrument: function(addedIntrument) {
-      this.unusedInstruments.push(addedIntrument);
+      console.warn('addedIntrument: '+ addedIntrument );
+      var newLabel = this.defaults.instrumentLookup[ addedIntrument ].label;
+      var newType = addedIntrument;
+      console.warn(newLabel + ' ' + newType)
+      this.unusedInstruments.push({ label: newLabel, type: newType });
     }
   });
   

@@ -49,6 +49,7 @@ define([
           this.defaultFractionRepresentation = options.defaultFractionRepresentation;
         }
         this.unusedInstruments = options.unusedInstruments;
+        this.type = options.type;
       } else {
         this.component = new Component;
       }

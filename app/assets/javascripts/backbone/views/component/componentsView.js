@@ -57,6 +57,7 @@ define([
 
       this.drumkit = ComponentsCollection.add({
         label: 'Snare',
+        type: 'sn',
         img: 'snare.png',
         mute: false,
         sample: '808_sd.m4a',
@@ -165,6 +166,7 @@ define([
       for(var i = 0; i < components.length; i++) {
         var component = new ComponentModel();
         component.set('label', components[i].label);
+        component.set('type', components[i].type);
         component.set('img', components[i].img);
         component.set('mute', components[i].mute);
         component.set('sample', components[i].sample);
@@ -209,7 +211,7 @@ define([
         this.loadAudio(this.context, component.get('sample'), this.bufferList, counter );
 
         //compiling our template.
-        var compiledTemplate = _.template( componentsTemplate, {component: component} );
+        var compiledTemplate = _.template( componentsTemplate, {component: component, type: component.get('type')} );
         $(this.el).append( compiledTemplate );
 
         //create a component view.

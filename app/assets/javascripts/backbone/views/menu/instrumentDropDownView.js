@@ -13,9 +13,9 @@ define([
   'app/log'
 ], function($, _, Backbone, RemainingInstrumentGeneratorModel, instrumentDropDownTemplate, dispatch, log){
   return Backbone.View.extend({
-    //registering backbone's click event to our remove() method.
+    //registering backbone's change event to our instrumentChanged() method.
     events : {
-      "click .btn" : "remove"
+      'change .unused-instruments-selector': 'instrumentChanged'
     },
 
     //simply creates the model.
@@ -29,18 +29,35 @@ define([
       this.render();
 
       dispatch.on('instrumentAdded.event', this.updateRemove, this);
-
+      dispatch.on('instrumentChanged.event', this.instrumentChanged, this);
     },
 
+    instrumentChanged: function(){
+      var oldInstrument = $(this.el).closest('.component-container').data().state;
+      var newInstrument = $(this.el).find(':selected').val();
+      console.log('oI: '+ oldInstrument + ' | nI: '+ newInstrument);
+      // this.remainingInstrumentGeneratorModel.addInstrument(newInstrument);
+      this.updateAddRemove(oldInstrument,newInstrument);
+      // this.updateAdd(oldInstrument);
+      dispatch.trigger('reRenderInstrumentGenerator.event', this)
+    },
     /*
-      This is called when a click event occurs.
-
-      a log message is sent reflecting the instrument change.
+      This is called when a user adds a instrument form the selector.
+      A log message is sent reflecting the instrument change.
     */
+    updateAddRemove: function(add, remove) {
+      this.remainingInstrumentGeneratorModel.addInstrument(add);
+      this.remainingInstrumentGeneratorModel.removeInstrument(remove);
+      this.render();
+    },
     updateRemove: function(e) {
-
       // Update the model that the instrument is not available
       this.remainingInstrumentGeneratorModel.removeInstrument(e);
+      this.render();
+    },
+    updateAdd: function(instrument) {
+      // Update the model that the instrument is not available
+      this.remainingInstrumentGeneratorModel.addInstrument(instrument);
       this.render();
     },
 
