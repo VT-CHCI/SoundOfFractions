@@ -8,10 +8,11 @@ define([
   'underscore',
   'backbone',
   'backbone/models/transport',
-  'text!backbone/templates/transport/transport.html',
+  'text!backbone/templates/transport/play.html',
+  'text!backbone/templates/transport/stop.html',
   'app/dispatch',
   'app/log'
-], function($, _, Backbone, TransportModel, transportTemplate, dispatch, log){
+], function($, _, Backbone, TransportModel, transportPlayTemplate, transportStopTemplate, dispatch, log){
 
   var TransportView = Backbone.View.extend({
     el : $("#transport"), // Specifies the DOM element which this view handles
@@ -40,6 +41,10 @@ define([
       if(!this.transportModel.get('isPlaying')) {
         dispatch.trigger('togglePlay.event', 'on');
         this.transportModel.set('isPlaying', true);
+
+        var compiledTemplate = _.template( transportStopTemplate );
+        $(this.el).html( compiledTemplate );
+
         $(this.el).removeClass('play');
         $(this.el).addClass('pause');
         console.log('now playing');
@@ -61,6 +66,10 @@ define([
       else {
         dispatch.trigger('togglePlay.event', 'off');
         this.transportModel.set('isPlaying', false);
+
+        var compiledTemplate = _.template( transportPlayTemplate );
+        $(this.el).html( compiledTemplate );
+
         $(this.el).removeClass('pause');
         $(this.el).addClass('play');
         console.log('now paused');
@@ -80,14 +89,14 @@ define([
       if(this.transportModel.get('isPlaying')) {
         dispatch.trigger('togglePlay.event', 'off');
         this.transportModel.set('isPlaying', false);
-        $(this.el).removeClass('pause');
+        $(this.el).
         $(this.el).addClass('play');
         console.log('now paused');
       }
     },
 
     render: function() {
-      $(this.el).html(transportTemplate);
+      $(this.el).html(transportPlayTemplate);
       $(this.el).draggable({ axis: "y",containment: "#middle-right-column" });
       return this;
     }

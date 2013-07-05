@@ -32,11 +32,6 @@ require([
   // Again, the other dependencies passed in are not "AMD" therefore don't pass a parameter to this function
   Application.initialize(App.songs);
   console.log("Application Fully initialized");
-  $(document).ready(function() {
-    for (i = 0; i < Draggable.size(); i++) {
-      // $(Draggable.draggableElementID[i]).draggable();
-    }
-  });
 });
 
 

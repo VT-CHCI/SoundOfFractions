@@ -78,6 +78,9 @@ GEM
     eventmachine (1.0.3)
     execjs (1.4.0)
       multi_json (~> 1.0)
+    font-awesome-sass-rails (3.0.2.2)
+      railties (>= 3.1.1)
+      sass-rails (>= 3.1.1)
     gon (4.1.1)
       actionpack (>= 2.3.0)
       json
@@ -180,6 +183,7 @@ DEPENDENCIES
   d3_rails
   devise!
   ejs
+  font-awesome-sass-rails
   gon
   jquery-rails
   jquery-ui-rails

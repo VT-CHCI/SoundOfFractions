@@ -11,6 +11,7 @@
  * Loads all Bootstrap javascripts
  *
  *= require bootstrap
+ *= require _font-awesome
  *= require_self
  *= require_tree .
 */

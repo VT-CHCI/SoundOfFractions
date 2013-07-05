@@ -60,7 +60,7 @@ define([
         type: 'sn',
         img: 'snare.png',
         mute: false,
-        sample: '808_sd.m4a',
+        sample: '808_sn.m4a',
         measures: this.component,
         signature: 6,
         active: true
@@ -81,7 +81,7 @@ define([
       //   label: 'Hi Hat',
       //   img: 'hihat.png',
       //   mute: true,
-      //   sample: '808_chh.m4a',
+      //   sample: '808_hh.m4a',
       //   measures: this.component,
       //   signature: 5,
       //   active: true
@@ -102,7 +102,7 @@ define([
       //   label: 'Kick Drum',
       //   img: 'kick.png',
       //   mute: true,
-      //   sample: '808_bd.m4a',
+      //   sample: '808_kd.m4a',
       //   measures: this.component,
       //   signature: 4,
       //   active: true
@@ -124,7 +124,7 @@ define([
       //   label: 'Synth',
       //   img: 'synth.png',
       //   mute: true,
-      //   sample: 'ambass.mp3',
+      //   sample: 'sy.mp3',
       //   measures: this.component,
       //   signature: 3,
       //   active: true

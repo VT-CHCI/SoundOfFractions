@@ -1,3 +1,7 @@
+.icon-circle {
+  color: red;
+}
+
 select {
   width: 85px;
 }
@@ -338,10 +342,12 @@ svg.circular-pie {
 }
 
 #transport {
-  width: 100px;
-  height: 100px;
-  padding-bottom: 15px;
-  margin: 0 auto;
+  /*margin: 0px auto 10px auto;*/
+  text-align: center;
+  /*background-color: whitesmoke;*/
+  /*border: 1px solid #e3e3e3*/
+  /*padding-bottom: 15px;*/
+  /*margin: 0 auto;*/
   cursor: pointer;
 }
 
@@ -355,11 +361,11 @@ svg.circular-pie {
 }
 
 .play {
-  background:url(image_path("playStop.png")) 0 0 no-repeat;
+  /*background:url(image_path("playStop.png")) 0 0 no-repeat;*/
 }
 
 .pause {
-  background:url(image_path("playStop.png")) 100% 0 no-repeat;
+  /*background:url(image_path("playStop.png")) 100% 0 no-repeat;*/
 }
 
 .record {
@@ -390,13 +396,6 @@ svg.circular-pie {
   width: 20%;
 }
 
-#transport {
-  margin: 0px auto 10px auto;
-  text-align: center;
-  /*width: 100%;*/
-  background-color: whitesmoke;
-  border: 1px solid #e3e3e3
-}
 
 #system-label {
   margin: 0px auto 10px auto;

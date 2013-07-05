@@ -342,7 +342,6 @@ define([
     */
     toggle: function(){
       //switch the selected boolean value on the model
-      console.warn('Here');
       this.model.set('selected', !this.model.get('selected'));
       //re-render it, passing the clicked beat to render()
       d3.select('#beat'+this.cid).style('opacity', this.getOpacityNumber(this.model.get('selected')))
