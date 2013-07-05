@@ -149,6 +149,7 @@ define([
       dispatch.on('togglePlay.event', this.togglePlay, this);
       dispatch.on('tempoChange.event', this.updateTempo, this);
       dispatch.on('instrumentAdded.event', this.addInstrument, this);
+      dispatch.on('instrumentDeleted.event', this.deleteInstrument, this);
 
       state.set('components', this.drumkit);
     },
@@ -473,6 +474,23 @@ define([
       this.component = new MeasuresCollection;
       this.component.add({beats: this.measure});
 
+      this.drumkit = ComponentsCollection.add({
+        label: 'newer',//ƒthis.unusedInstruments.getLabel(instrument),
+        type: instrument,
+        img: 'orange.png',
+        mute: false,
+        sample: '808_sd.m4a',
+        measures: this.component,
+        signature: defaultNumberOfBeats,
+        active: true
+      });
+      this.render();
+    },
+
+    deleteInstrument: function(instrument) {
+      var ƒthis = this;
+
+      console.log('deleting : ' + instrument);
       this.drumkit = ComponentsCollection.add({
         label: 'newer',//ƒthis.unusedInstruments.getLabel(instrument),
         type: instrument,

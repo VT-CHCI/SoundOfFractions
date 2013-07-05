@@ -14,7 +14,7 @@ define([
 ], function($, _, Backbone, RemainingInstrumentGeneratorModel, remainingInstrumentGeneratorTemplate, dispatch, log){
 
   var RemainingInstrumentGeneratorView = Backbone.View.extend({
-    el : $("#remaining-instrument-generator"), // Specifies the DOM element which this view handles
+    el : $("#instrument-generator-holder"), // Specifies the DOM element which this view handles
 
     //registering backbone's click event to our addInstrument() method.
     events : {
@@ -41,10 +41,9 @@ define([
       var instrument = $(e.currentTarget)[0].id.slice(15);
       // Update the model that the instrument is not available
       this.remainingInstrumentGeneratorModel.removeInstrument(instrument);
-      // remove the button clicked
-      $('#new-instrument-'+instrument).remove();
       // Dispatch an event to add the new instrument in the sof-composition-area
       dispatch.trigger('instrumentAdded.event', instrument);
+      this.render();
 
       log.sendLog([[2, "instrument added: "+instrument]]);
     },
@@ -52,8 +51,10 @@ define([
     //no need to compile the template for this one.
     render: function() {
 
+      var uI = this.remainingInstrumentGeneratorModel.get('unusedInstruments');
+      console.log(uI.length);
       //compiling our template.
-      var compiledTemplate = _.template( remainingInstrumentGeneratorTemplate, {reps: this.remainingInstrumentGeneratorModel.get('unusedInstruments')} );
+      var compiledTemplate = _.template( remainingInstrumentGeneratorTemplate, {reps: uI, len: uI.length} );
       $(this.el).html( compiledTemplate );
 
       // $(this.el).html(remainingInstrumentGeneratorTemplate);

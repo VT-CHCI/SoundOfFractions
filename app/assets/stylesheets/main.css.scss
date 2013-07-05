@@ -1,3 +1,7 @@
+.light-hr {
+  border-top: 1px solid lightgray;
+  margin: 10px 0px;
+}
 .icon-circle {
   color: red;
 }
@@ -94,7 +98,7 @@ select {
 }
 
 #sof-composition-area {
-  max-height: 500px;
+  max-height: 675px;
   overflow: auto;
 }
 
@@ -107,9 +111,10 @@ select {
   display: inline-block;
 }
 
-hr {
-  border-top: 1px solid rgb(0, 0, 0)!important;
-}
+  /*hr {
+    border-top: 1px solid rgb(0, 0, 0)!important;
+  }
+*/
 .navbar .nav p {
   margin: 1em 0 10px;
   max-height: 30px;
@@ -425,8 +430,8 @@ svg.circular-pie {
   width: 100%;
 }
 #measure-transformation {
-  float: right;
-  margin: 0 auto 10px auto;
+  /*float: right;*/
+  /*margin: 0 auto 10px auto;*/
   text-align: center;
   /*width: 55%;*/
   background-color: whitesmoke;

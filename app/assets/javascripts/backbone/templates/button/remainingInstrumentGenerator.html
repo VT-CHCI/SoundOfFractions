@@ -1,6 +1,9 @@
-<div>
-  Click a new instrument to add it
-  <% _.each(reps, function(uI){ %>
-      <div id='new-instrument-<%= uI.type %>' class='btn'><%= uI.label %></div>
-  <% }); %>
-</div>
+<% if (len==0) { %>
+<% } else { %>
+  <div id="remaining-instrument-generator">
+    Click a new instrument to add it
+    <% _.each(reps, function(uI){ %>
+        <div id='new-instrument-<%= uI.type %>' class='btn'><%= uI.label %></div>
+    <% }); %>
+  </div>
+<% } %>
