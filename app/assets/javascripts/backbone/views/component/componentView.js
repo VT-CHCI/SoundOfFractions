@@ -12,11 +12,11 @@ define([
   'backbone/views/fraction/fractionView',
   'backbone/views/menu/instrumentDropDownView',
   'backbone/views/slider/beatsPerMeasureSliderView',
+  'backbone/views/button/deleteInstrumentView',
   'app/dispatch',
   'backbone/models/state',
   'app/log'
-
-], function($, _, Backbone, Component, RemainingInstrumentGenerator, MeasuresView, FractionRepresentationView, InstrumentDropDownView, BPMSliderView, dispatch, state, log){
+], function($, _, Backbone, Component, RemainingInstrumentGenerator, MeasuresView, FractionRepresentationView, InstrumentDropDownView, BPMSliderView, DeleteInstrumentView, dispatch, state, log){
   return Backbone.View.extend({
     // this is needed to recalculate a beat's size
     el: $('.component'),
@@ -74,9 +74,9 @@ define([
     render: function(options){
       if(options) {
         new MeasuresView({
-          collection:this.component.get('measures'),
+          collection: this.component.get('measures'),
           parent: this.component,
-          el:'#component'+this.component.cid,
+          el: '#component'+this.component.cid,
           newMeasureRepresentation: options.representation
         });
 
@@ -89,7 +89,7 @@ define([
       }
       else {
         new MeasuresView({
-          collection:this.component.get('measures'),
+          collection: this.component.get('measures'),
           parent: this.component,
           el:'#component'+this.component.cid,
           defaultMeasureRepresentation: this.defaultMeasureRepresentation
@@ -97,9 +97,16 @@ define([
 
         new InstrumentDropDownView({
           unusedInstruments: this.unusedInstruments,
-          collection:this.component.get('measures'),
+          collection: this.component.get('measures'),
           parent: this.component,
-          el:'#instrument-selector-'+this.component.cid,
+          el: '#instrument-selector-'+this.component.cid,
+          parentCID: this.component.cid
+        });
+
+        new DeleteInstrumentView({
+          collection: this.component.get('measures'),
+          parent: this.component,
+          el: '#delete-component-'+this.component.cid,
           parentCID: this.component.cid
         });
 
@@ -239,6 +246,6 @@ define([
       //we trigger this event to cause the beats per measure slider and
       //beat bars to update based on which component is selected.
       dispatch.trigger('bPMSlider.event', {signature: this.component.get('signature'), name: this.component.get('label') } );
-    },
+    }
   });
 });

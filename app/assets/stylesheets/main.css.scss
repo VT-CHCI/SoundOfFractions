@@ -1,3 +1,13 @@
+.delete-instrument {
+  position: absolute;
+  top: 155px;
+  left: 10px;
+}
+
+.icon-remove-sign {
+  color: crimson;
+}
+
 .light-hr {
   border-top: 1px solid lightgray;
   margin: 10px 0px;
@@ -13,6 +23,7 @@ select {
 .unused-instruments-selector {
   position: absolute;
   top: 100px;
+  left: 3px;
 }
 
 /*This prevents the highlighting color when a user clicks fast, the user still is selecting something, but it is not actually showing*/

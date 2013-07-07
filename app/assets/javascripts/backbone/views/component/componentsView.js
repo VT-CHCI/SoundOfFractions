@@ -21,7 +21,7 @@ define([
   'text!backbone/templates/component/component.html',
   'app/dispatch',
   'backbone/models/state'
-], function($, _, Backbone, BeatsCollection, MeasuresCollection, ComponentsCollection, RemainingInstrumentGenerator, BeatModel, MeasureModel, ComponentModel, ComponentView, componentsTemplate, dispatch, state){
+], function($, _, Backbone, BeatsCollection, MeasuresCollection, ComponentsCollection, RemainingInstrumentGenerator, BeatModel, MeasureModel, ComponentModel, ComponentView, ComponentTemplate, dispatch, state){
   var componentsView = Backbone.View.extend({
     el: $('#sof-composition-area'),
 
@@ -148,8 +148,8 @@ define([
       //register the handler for togglePlay events.
       dispatch.on('togglePlay.event', this.togglePlay, this);
       dispatch.on('tempoChange.event', this.updateTempo, this);
-      dispatch.on('instrumentAdded.event', this.addInstrument, this);
-      dispatch.on('instrumentDeleted.event', this.deleteInstrument, this);
+      dispatch.on('instrumentAddedToCompostionArea.event', this.addInstrument, this);
+      dispatch.on('instrumentDeletedFromCompositionArea.event', this.deleteInstrument, this);
 
       state.set('components', this.drumkit);
     },
@@ -212,7 +212,7 @@ define([
         this.loadAudio(this.context, component.get('sample'), this.bufferList, counter );
 
         //compiling our template.
-        var compiledTemplate = _.template( componentsTemplate, {component: component, type: component.get('type')} );
+        var compiledTemplate = _.template( ComponentTemplate, {component: component, type: component.get('type')} );
         $(this.el).append( compiledTemplate );
 
         //create a component view.
@@ -479,7 +479,7 @@ define([
         type: instrument,
         img: 'orange.png',
         mute: false,
-        sample: '808_sd.m4a',
+        sample: 'sy.mp3',
         measures: this.component,
         signature: defaultNumberOfBeats,
         active: true
@@ -488,19 +488,11 @@ define([
     },
 
     deleteInstrument: function(instrument) {
-      var ƒthis = this;
+      console.log('deleting : ' + instrument.instrument);
+      console.log('deleting : ' + instrument.model);
+      dispatch.trigger('removeInstrumentToGeneratorModel.event', instrument.instrument);
+      this.drumkit.remove(instrument.model);
 
-      console.log('deleting : ' + instrument);
-      this.drumkit = ComponentsCollection.add({
-        label: 'newer',//ƒthis.unusedInstruments.getLabel(instrument),
-        type: instrument,
-        img: 'orange.png',
-        mute: false,
-        sample: '808_sd.m4a',
-        measures: this.component,
-        signature: defaultNumberOfBeats,
-        active: true
-      });
       this.render();
     }
   });
