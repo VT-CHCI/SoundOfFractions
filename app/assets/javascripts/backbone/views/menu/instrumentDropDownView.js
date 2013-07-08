@@ -61,7 +61,7 @@ define([
 
     //no need to compile the template for this one.
     render: function() {
-
+      
       //compiling our template.
       var compiledTemplate = _.template( instrumentDropDownTemplate, { 
         unusedInstruments: this.remainingInstrumentGeneratorModel.get('unusedInstruments'),
