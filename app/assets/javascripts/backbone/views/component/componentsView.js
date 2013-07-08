@@ -149,7 +149,8 @@ define([
       //register the handler for togglePlay events.
       dispatch.on('togglePlay.event', this.togglePlay, this);
       dispatch.on('tempoChange.event', this.updateTempo, this);
-      dispatch.on('instrumentAddedToCompostionArea.event', this.addInstrument, this);
+
+      dispatch.on('instrumentAddedToCompositionArea.event', this.addInstrument, this);
       dispatch.on('instrumentDeletedFromCompositionArea.event', this.deleteInstrument, this);
 
       state.set('components', this.drumkit);
@@ -233,7 +234,6 @@ define([
       }, this);
 
       // Render the RemainingInstrumentGeneratorView
-      console.warn(this.unusedInstrumentsModel);
       var instrumentSelectorView = new RemainingInstrumentGeneratorView({
         unusedInstrumentsModel: this.unusedInstrumentsModel
       });
@@ -479,17 +479,26 @@ define([
 
       this.component = new MeasuresCollection;
       this.component.add({beats: this.measure});
+      
+      console.warn(this.unusedInstrumentsModel.getThing(instrument, 'label'));
+      console.warn(this.unusedInstrumentsModel.getThing(instrument, 'image'));
+      console.warn(this.unusedInstrumentsModel.getThing(instrument, 'sample'));
+      console.warn(this.unusedInstrumentsModel.getThing(instrument, 'type'));
 
       this.drumkit = ComponentsCollection.add({
-        label: 'newer',//ƒthis.unusedInstruments.getLabel(instrument),
-        type: instrument,
-        img: 'orange.png',
+        label: this.unusedInstrumentsModel.getThing(instrument, 'label'),
+        type: this.unusedInstrumentsModel.getThing(instrument, 'type'),
+        img: this.unusedInstrumentsModel.getThing(instrument, 'image'),
         mute: false,
-        sample: 'sy.mp3',
+        sample: this.unusedInstrumentsModel.getThing(instrument, 'sample'),
         measures: this.component,
         signature: defaultNumberOfBeats,
         active: true
       });
+
+      console.warn('this.drumkit in componentsView : ');
+      console.warn(this.drumkit);
+
       this.render();
     },
 
@@ -497,7 +506,9 @@ define([
       console.log('deleting : ' + instrument.instrument);
       console.log('deleting : ' + instrument.model);
       dispatch.trigger('removeInstrumentToGeneratorModel.event', instrument.instrument);
+      console.warn(this.drumkit);
       this.drumkit.remove(instrument.model);
+      console.warn(this.drumkit);
 
       this.render();
     }

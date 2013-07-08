@@ -1,7 +1,12 @@
+.component.well {
+  padding: 10px;
+  margin-bottom: 10px;
+  min-height: 164px;
+}
 .delete-instrument {
   position: absolute;
-  top: 155px;
-  left: 10px;
+  top: 133px;
+  left: 3px;
 }
 
 .icon-remove-sign {
@@ -229,7 +234,7 @@ svg.circular-pie {
 }
 
 .bead-measure {
-  width: 400px!important;
+  width: 200px!important;
 }
 
 .measure .title {
@@ -268,12 +273,13 @@ svg.circular-pie {
 }
 
 .component {
-  min-height: 50px;
+  /*min-height: 50px;*/
   /*width: 87%;*/
 }
 
 .component-container {
   position: relative;
+  /*min-height: 150px;*/
 }
 
 .component-container .count {

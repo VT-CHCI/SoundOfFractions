@@ -28,7 +28,7 @@ define([
 
       this.render();
 
-      dispatch.on('instrumentAddedToCompostionArea.event', this.updateRemove, this);
+      // dispatch.on('instrumentAddedToCompostionArea.event', this.updateRemove, this);
       dispatch.on('instrumentChanged.event', this.instrumentChanged, this);
       dispatch.on('reRenderInstrumentDropDown.event', this.render, this);
       // dispatch.on('instrumentDeletedFromCompositionArea.event', this.render, this);
@@ -47,15 +47,15 @@ define([
       A log message is sent reflecting the instrument change.
     */
     updateAddRemove: function(add, remove) {
-      dispatch.trigger('addInstrumentToGeneratorModel', add);
-      dispatch.trigger('removeInstrumentFromGeneratorModel', remove);
+      dispatch.trigger('addInstrumentToGeneratorModel.event', add);
+      dispatch.trigger('removeInstrumentFromGeneratorModel.event', remove);
       dispatch.trigger('reRenderInstrumentGenerator.event', this)
       dispatch.trigger('reRenderInstrumentDropDown.event', this)
     },
  
     updateRemove: function(removedInstrument) {
       // Update the model that the instrument is not available
-      dispatch.trigger('removeInstrumentFromGeneratorModel', removedInstrument);
+      dispatch.trigger('removeInstrumentFromGeneratorModel.event', removedInstrument);
       this.render();
     },
 

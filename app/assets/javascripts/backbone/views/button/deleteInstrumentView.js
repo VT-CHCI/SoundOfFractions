@@ -41,7 +41,7 @@ define([
     deleteInstrumentFromCompositionArea: function(e) {
       var instrument = $(e.currentTarget).closest('.component-container').data().state;
       console.log('in delete' + instrument);
-      dispatch.trigger('addInstrumentToGeneratorModel', instrument);
+      dispatch.trigger('addInstrumentToGeneratorModel.event', instrument);
       dispatch.trigger('instrumentDeletedFromCompositionArea.event', { instrument:instrument, model:this.parentCID });
       dispatch.trigger('reRenderInstrumentGenerator.event', instrument);
 

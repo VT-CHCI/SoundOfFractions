@@ -13,7 +13,7 @@ define([
     defaults: {
       label: 'snare',
       type: 'sn',
-      img: 'ofAsnare',
+      img: 'orange.png',
       mute: false,
       sample: 'shhh',
       measures: measuresCollection,

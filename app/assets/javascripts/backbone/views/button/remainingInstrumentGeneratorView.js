@@ -44,10 +44,10 @@ define([
     addInstrumentToCompositionArea: function(e) {
       // Instrument type
       var instrument = $(e.currentTarget)[0].id.slice(15);
-      // Update the model that the instrument is not available
-      this.remainingInstrumentGeneratorModel.removeInstrument(instrument);
-      // Dispatch an event to add the new instrument in the sof-composition-area
-      dispatch.trigger('instrumentAddedToCompostionArea.event', instrument);
+      // update model
+      dispatch.trigger('removeInstrumentFromGeneratorModel.event', instrument);
+      dispatch.trigger('reRenderInstrumentDropDown.event', instrument);
+      dispatch.trigger('instrumentAddedToCompositionArea.event', instrument);
       this.render();
 
       log.sendLog([[2, "instrument added: "+instrument]]);
