@@ -54,7 +54,7 @@ define([
       tapTempoView.render();
       doallView.render();
       systemLabelView.render();
-      remainingInstrumentGeneratorView.render();
+      // remainingInstrumentGeneratorView.render();
     },
 
     index: function(){

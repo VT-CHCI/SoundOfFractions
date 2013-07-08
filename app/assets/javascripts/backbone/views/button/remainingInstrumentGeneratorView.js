@@ -13,7 +13,7 @@ define([
   'app/log'
 ], function($, _, Backbone, RemainingInstrumentGeneratorModel, remainingInstrumentGeneratorTemplate, dispatch, log){
 
-  var RemainingInstrumentGeneratorView = Backbone.View.extend({
+  return Backbone.View.extend({
     el : $("#instrument-generator-holder"), // Specifies the DOM element which this view handles
 
     //registering backbone's click event to our addInstrumentToCompositionArea() method.
@@ -22,8 +22,13 @@ define([
     },
 
     //simply creates the model.
-    initialize: function() {
-      this.remainingInstrumentGeneratorModel = new RemainingInstrumentGeneratorModel;
+    initialize: function(options) {
+      console.log(options);
+      if(options) {
+        this.remainingInstrumentGeneratorModel = options.unusedInstrumentsModel;
+      } else {
+        // this.remainingInstrumentGeneratorModel = new RemainingInstrumentGeneratorModel;
+      }
 
       dispatch.on('instrumentChanged.event', this.render, this);
       dispatch.on('reRenderInstrumentGenerator.event', this.render, this);
@@ -64,5 +69,5 @@ define([
       return this;
     }
   });
-  return new RemainingInstrumentGeneratorView();
+  // return new RemainingInstrumentGeneratorView();
 });

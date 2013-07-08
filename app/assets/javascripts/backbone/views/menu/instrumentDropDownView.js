@@ -23,7 +23,7 @@ define([
       this.collection = options.collection;
       this.parent = options.parent;
       this.el = options.el; //'#instrument-selector-'+this.component.cid
-      this.remainingInstrumentGeneratorModel = new RemainingInstrumentGeneratorModel;
+      this.remainingInstrumentGeneratorModel = options.unusedInstrumentsModel;
       this.parentCID = options.parentCID;
 
       this.render();

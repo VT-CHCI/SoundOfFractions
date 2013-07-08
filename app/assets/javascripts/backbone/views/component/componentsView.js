@@ -17,11 +17,12 @@ define([
   'backbone/models/measure',
   'backbone/models/component',
   'backbone/models/remainingInstrumentGenerator',
+  'backbone/views/button/remainingInstrumentGeneratorView',
   'backbone/views/component/componentView',
   'text!backbone/templates/component/component.html',
   'app/dispatch',
   'backbone/models/state'
-], function($, _, Backbone, BeatsCollection, MeasuresCollection, ComponentsCollection, RemainingInstrumentGenerator, BeatModel, MeasureModel, ComponentModel, ComponentView, ComponentTemplate, dispatch, state){
+], function($, _, Backbone, BeatsCollection, MeasuresCollection, ComponentsCollection, BeatModel, MeasureModel, ComponentModel, RemainingInstrumentGeneratorModel, RemainingInstrumentGeneratorView, ComponentView, ComponentTemplate, dispatch, state){
   var componentsView = Backbone.View.extend({
     el: $('#sof-composition-area'),
 
@@ -36,7 +37,7 @@ define([
       this.bufferList = new Array();
 
       // set the songs unused instruments
-      this.unusedInstruments = new RemainingInstrumentGenerator();
+      this.unusedInstrumentsModel = new RemainingInstrumentGeneratorModel();
 
       //this gainNode controls the volume of the entire audio output.
       //we use it to toggle play/stop.
@@ -222,7 +223,7 @@ define([
           gainNode:this.muteGainNodeList[counter],
           defaultMeasureRepresentation: this.defaultMeasureRepresentation,
           defaultFractionRepresentation: this.defaultFractionRepresentation,
-          unusedInstruments: this.unusedInstruments
+          unusedInstrumentsModel: this.unusedInstrumentsModel
         });
         if(!component.get('active')) {
           console.log('found a muted one');
@@ -231,6 +232,11 @@ define([
         counter++;
       }, this);
 
+      // Render the RemainingInstrumentGeneratorView
+      console.warn(this.unusedInstrumentsModel);
+      var instrumentSelectorView = new RemainingInstrumentGeneratorView({
+        unusedInstrumentsModel: this.unusedInstrumentsModel
+      });
 
       return this;
     },

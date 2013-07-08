@@ -48,7 +48,7 @@ define([
         if (options.defaultFractionRepresentation) {
           this.defaultFractionRepresentation = options.defaultFractionRepresentation;
         }
-        this.unusedInstruments = options.unusedInstruments;
+        this.unusedInstrumentsModel = options.unusedInstrumentsModel;
         this.type = options.type;
       } else {
         this.component = new Component;
@@ -96,11 +96,12 @@ define([
         });
 
         new InstrumentDropDownView({
-          unusedInstruments: this.unusedInstruments,
+          unusedInstrumentsModel: this.unusedInstrumentsModel,
           collection: this.component.get('measures'),
           parent: this.component,
           el: '#instrument-selector-'+this.component.cid,
-          parentCID: this.component.cid
+          parentCID: this.component.cid,
+          unusedInstrumentsModel: this.unusedInstrumentsModel
         });
 
         new DeleteInstrumentView({
