@@ -467,7 +467,8 @@ define([
     },
 
     addInstrument: function(instrument) {
-      var ƒthis = this;
+      console.warn('in componentsView addInstrument');
+
       //this is creating the new instrument htrack.
       this.measure = new BeatsCollection;
 
@@ -479,11 +480,6 @@ define([
 
       this.component = new MeasuresCollection;
       this.component.add({beats: this.measure});
-      
-      console.warn(this.unusedInstrumentsModel.getThing(instrument, 'label'));
-      console.warn(this.unusedInstrumentsModel.getThing(instrument, 'image'));
-      console.warn(this.unusedInstrumentsModel.getThing(instrument, 'sample'));
-      console.warn(this.unusedInstrumentsModel.getThing(instrument, 'type'));
 
       this.drumkit = ComponentsCollection.add({
         label: this.unusedInstrumentsModel.getThing(instrument, 'label'),
@@ -503,6 +499,7 @@ define([
     },
 
     deleteInstrument: function(instrument) {
+      console.warn('in componentsView deleteInstrument');
       console.log('deleting : ' + instrument.instrument);
       console.log('deleting : ' + instrument.model);
       dispatch.trigger('removeInstrumentToGeneratorModel.event', instrument.instrument);

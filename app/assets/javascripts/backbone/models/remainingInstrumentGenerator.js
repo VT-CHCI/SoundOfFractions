@@ -41,6 +41,7 @@ define([
 
       dispatch.on('addInstrumentToGeneratorModel.event', this.addInstrument, this);
       dispatch.on('removeInstrumentFromGeneratorModel.event', this.removeInstrument, this);
+      window.rig = this;
     },
 
     getThing: function(type, thing) {
@@ -54,7 +55,8 @@ define([
 
 
     removeInstrument: function(removedInstrument) {
-      console.warn('removedIntrument: '+ removedInstrument + ' from generatorModel');
+      console.log('in remainingInstrumentGeneratorModel removeInstrument()');
+
       var len = this.unusedInstruments.length,
           i;
 
@@ -69,15 +71,17 @@ define([
       for (i = 0; i < len ; ++i) {
           if (this.unusedInstruments[i].type == removedInstrument) {
               remove(this.unusedInstruments, i);
-              console.log('removed');
+              console.error('removed');
+              console.warn('removedIntrument: '+ removedInstrument + ' from generatorModel');
               break;
           }
+          console.error('None Found');
       }
     },
 
     addInstrument: function(addedIntrument) {
       console.warn(this.unusedInstruments);
-      console.warn('addedIntrument: '+ addedIntrument + ' from generatorModel' );
+      console.warn('addedIntrument: '+ addedIntrument + ' to generatorModel' );
       var newLabel = this.defaults.instrumentLookup[ addedIntrument ].label;
       var newType = addedIntrument;
       console.warn(newLabel + ' ' + newType)

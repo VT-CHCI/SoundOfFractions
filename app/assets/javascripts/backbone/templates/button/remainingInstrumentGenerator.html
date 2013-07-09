@@ -3,7 +3,7 @@
   <div id="remaining-instrument-generator">
     Add a new instrumnet :
     <% _.each(reps, function(uI){ %>
-        <div id='new-instrument-<%= uI.type %>' class='btn'><%= uI.label %></div>
+        <div id='new-instrument-<%= uI.type %>' class='btn new-instrument-btn'><%= uI.label %></div>
     <% }); %>
   </div>
 <% } %>

@@ -18,7 +18,7 @@ define([
 
     //registering backbone's click event to our addInstrumentToCompositionArea() method.
     events : {
-      "click .btn" : "addInstrumentToCompositionArea"
+      "click .new-instrument-btn" : "addInstrumentToCompositionArea"
     },
 
     //simply creates the model.
@@ -42,13 +42,17 @@ define([
       a log message is sent reflecting the representation change.
     */
     addInstrumentToCompositionArea: function(e) {
-      // Instrument type
+      console.warn(e);
+      console.log('in remainingInstrumentGeneratorView addInstrumentToCompositionArea()');
+      // Instrument type   'sn'|'hh'|'kd'
       var instrument = $(e.currentTarget)[0].id.slice(15);
       // update model
       dispatch.trigger('removeInstrumentFromGeneratorModel.event', instrument);
+      // update the dropdown menus in each htrack
       dispatch.trigger('reRenderInstrumentDropDown.event', instrument);
+      //add the instrument to the Composition-Area and re-render
       dispatch.trigger('instrumentAddedToCompositionArea.event', instrument);
-      this.render();
+      // this.render();
 
       log.sendLog([[2, "instrument added: "+instrument]]);
     },

@@ -35,6 +35,8 @@ define([
     },
 
     instrumentChanged: function(){
+      console.log('in remainingInstrumentGeneratorModel instrumentChanged()');
+
       var oldInstrument = $(this.el).closest('.component-container').data().state;
       var newInstrument = $(this.el).find(':selected').val();
       console.log('oI: '+ oldInstrument + ' | nI: '+ newInstrument);
@@ -47,6 +49,7 @@ define([
       A log message is sent reflecting the instrument change.
     */
     updateAddRemove: function(add, remove) {
+      console.log('in instrumentDropDownView updateAddRemove()');
       dispatch.trigger('addInstrumentToGeneratorModel.event', add);
       dispatch.trigger('removeInstrumentFromGeneratorModel.event', remove);
       dispatch.trigger('reRenderInstrumentGenerator.event', this)
@@ -54,6 +57,8 @@ define([
     },
  
     updateRemove: function(removedInstrument) {
+      console.log('in remainingInstrumentGeneratorModel updateRemove()');
+
       // Update the model that the instrument is not available
       dispatch.trigger('removeInstrumentFromGeneratorModel.event', removedInstrument);
       this.render();
@@ -61,7 +66,6 @@ define([
 
     //no need to compile the template for this one.
     render: function() {
-      
       //compiling our template.
       var compiledTemplate = _.template( instrumentDropDownTemplate, { 
         unusedInstruments: this.remainingInstrumentGeneratorModel.get('unusedInstruments'),
