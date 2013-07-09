@@ -475,18 +475,20 @@ define([
       //for default number of beats
       var defaultNumberOfBeats = 6;
       for (var i = 0; i < defaultNumberOfBeats; i++) {
+        // add a beat to the measure
         this.measure.add();
       }
 
+      // Make a htrack
       this.component = new MeasuresCollection;
       this.component.add({beats: this.measure});
 
       this.drumkit = ComponentsCollection.add({
-        label: this.unusedInstrumentsModel.getThing(instrument, 'label'),
-        type: this.unusedInstrumentsModel.getThing(instrument, 'type'),
-        img: this.unusedInstrumentsModel.getThing(instrument, 'image'),
+        label: this.unusedInstrumentsModel.getDefault(instrument, 'label'),
+        type: this.unusedInstrumentsModel.getDefault(instrument, 'type'),
+        img: this.unusedInstrumentsModel.getDefault(instrument, 'image'),
         mute: false,
-        sample: this.unusedInstrumentsModel.getThing(instrument, 'sample'),
+        sample: this.unusedInstrumentsModel.getDefault(instrument, 'sample'),
         measures: this.component,
         signature: defaultNumberOfBeats,
         active: true

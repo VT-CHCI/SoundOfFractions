@@ -26,7 +26,7 @@ define([
     //the second is for setting this component in focus (or selected).
     events : {
       'click .control' : 'toggleMute',
-      'click' : 'select'
+      'click .component' : 'toggleSelection'
     },
 
     /*
@@ -240,13 +240,12 @@ define([
 
     //This is called when the component is clicked anywhere to bring
     //the component into focus as selected.
-    select: function(){
-      $('.component').removeClass('selected');
-      $('#component'+this.component.cid).addClass('selected');
+    toggleSelection: function(){
+      $('#component'+this.component.cid).toggleClass('selected');
 
       //we trigger this event to cause the beats per measure slider and
       //beat bars to update based on which component is selected.
-      dispatch.trigger('bPMSlider.event', {signature: this.component.get('signature'), name: this.component.get('label') } );
+      // dispatch.trigger('bPMSlider.event', {signature: this.component.get('signature'), name: this.component.get('label') } );
     }
   });
 });

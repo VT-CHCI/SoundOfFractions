@@ -39,7 +39,8 @@ define([
     //registering click events to add and remove measures.
     events : {
       'click .addMeasure' : 'addMeasure',
-      'click .delete' : 'removeMeasure'
+      'click .delete' : 'removeMeasure',
+      'click .measure' : 'toggleSelection'
     },
 
     initialize: function(options){
@@ -477,7 +478,14 @@ define([
         //re-render the view
         this.render();
       }
+    },
+    //This is called when the component is clicked anywhere to bring
+    //the component into focus as selected.
+    toggleSelection: function(e){
+      e.stopPropagation();
+      $('#measure'+this.measuresCollection.models[0].cid).toggleClass('selected');
     }
+
 
   });
 });

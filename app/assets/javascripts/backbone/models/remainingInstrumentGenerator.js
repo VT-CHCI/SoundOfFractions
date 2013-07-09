@@ -44,7 +44,7 @@ define([
       window.rig = this;
     },
 
-    getThing: function(type, thing) {
+    getDefault: function(type, thing) {
       for (var key in this.instrumentLookup) {
         if (this.instrumentLookup[key].type == type) {
             return this.instrumentLookup[key][thing];
