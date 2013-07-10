@@ -11,9 +11,7 @@ define([
 ], function($, _, Backbone, measureModel){
   return Backbone.Collection.extend({
     model: measureModel,
-
     initialize: function(){
-
     }
   });
 

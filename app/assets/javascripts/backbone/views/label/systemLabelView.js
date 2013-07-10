@@ -11,7 +11,7 @@ define([
   'app/log'
 ], function($, _, Backbone, SystemLabelTemplate, dispatch, log){
 
-  var SytemLabelView = Backbone.View.extend({
+  var SystemLabelView = Backbone.View.extend({
     //simply creates the model.
     initialize: function(options) {
       if(options){
@@ -39,5 +39,5 @@ define([
       return this;
     }
   });
-  return SytemLabelView;
+  return SystemLabelView;
 });

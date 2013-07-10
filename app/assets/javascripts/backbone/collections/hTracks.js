@@ -16,5 +16,5 @@ define([
     }
   });
 
-  return new componentsCollection();
+  return hTracksCollection;
 });
