@@ -90,5 +90,5 @@ define([
     }
   });
   
-  return remainingInstrumentGeneratorModel;
+  return new remainingInstrumentGeneratorModel();
 });

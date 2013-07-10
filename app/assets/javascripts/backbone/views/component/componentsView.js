@@ -37,7 +37,7 @@ define([
       this.bufferList = new Array();
 
       // set the songs unused instruments
-      this.unusedInstrumentsModel = new RemainingInstrumentGeneratorModel();
+      this.unusedInstrumentsModel = RemainingInstrumentGeneratorModel;
 
       //this gainNode controls the volume of the entire audio output.
       //we use it to toggle play/stop.
@@ -234,9 +234,7 @@ define([
       }, this);
 
       // Render the RemainingInstrumentGeneratorView
-      var instrumentSelectorView = new RemainingInstrumentGeneratorView({
-        unusedInstrumentsModel: this.unusedInstrumentsModel
-      });
+      var instrumentSelectorView = RemainingInstrumentGeneratorView;
 
       return this;
     },
