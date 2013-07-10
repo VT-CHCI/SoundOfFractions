@@ -19,14 +19,14 @@ define([
   'backbone/views/button/tapTempoView',
   'backbone/views/button/doallView',
   'backbone/views/button/remainingInstrumentGeneratorView',
-  'backbone/views/label/systemLabelView',
+  'backbone/views/label/systemLabelContainerView',
   'app/log',
   'backbone/collections/songsCollection',
   'backbone/views/song/new_view',
   'backbone/views/song/index_view',
   'backbone/views/song/show_view',
   'backbone/views/song/edit_view'
-], function($, _, Backbone, mainHomeView, beatsPerMeasureSliderView, additiveLinearBeatPaletteView, componentsView, tempoSliderView, transportView, fractionRepresentionView, wholeMeasureRepresentationView, measureTransformationView, recorderView, tapTempoView, doallView, remainingInstrumentGeneratorView, systemLabelView, log, songsCollection, songsViewNew, songsViewIndex, songsViewShow, songsViewEdit ){
+], function($, _, Backbone, mainHomeView, beatsPerMeasureSliderView, additiveLinearBeatPaletteView, componentsView, tempoSliderView, transportView, fractionRepresentionView, wholeMeasureRepresentationView, measureTransformationView, recorderView, tapTempoView, doallView, remainingInstrumentGeneratorView, systemLabelContainerView, log, songsCollection, songsViewNew, songsViewIndex, songsViewShow, songsViewEdit ){
 
   var BBRouter = Backbone.Router.extend({
     // songs: {},
@@ -41,19 +41,22 @@ define([
     newSong: function(){
       console.log('BB routes => new : newSong');
       var view = new songsViewNew({collection : this.songs});
-      //left side
+      // general
       mainHomeView.render();
-      //right side
-      componentsView.render();
-      tempoSliderView.render();
+      // top side
       transportView.render();
-      // fractionRepresentionView.render();
-      measureTransformationView.render();
       wholeMeasureRepresentationView.render();
-      recorderView.render();
+      measureTransformationView.render();
+      // middle
+      componentsView.render();
+      systemLabelContainerView.render();
+      // bottom
+      // unused/old/deprecated
       tapTempoView.render();
       doallView.render();
-      systemLabelView.render();
+      recorderView.render();
+      tempoSliderView.render();
+      // fractionRepresentionView.render();
       // remainingInstrumentGeneratorView.render();
     },
 

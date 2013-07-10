@@ -8,11 +8,11 @@ define([
   'backbone',
   'backbone/models/label'
 ], function($, _, Backbone, LabelModel){
-  var LabelCollection = Backbone.Collection.extend({
+  return Backbone.Collection.extend({
     model: LabelModel,
     initialize: function(){
     }
   });
 
-  return new LabelCollection();
+  // return new LabelCollection();
 });

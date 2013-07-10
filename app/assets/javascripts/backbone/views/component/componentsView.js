@@ -23,7 +23,7 @@ define([
   'app/dispatch',
   'backbone/models/state'
 ], function($, _, Backbone, BeatsCollection, MeasuresCollection, ComponentsCollection, BeatModel, MeasureModel, ComponentModel, RemainingInstrumentGeneratorModel, RemainingInstrumentGeneratorView, ComponentView, ComponentTemplate, dispatch, state){
-  var componentsView = Backbone.View.extend({
+  var ComponentsView = Backbone.View.extend({
     el: $('#sof-composition-area'),
 
     initialize: function(){
@@ -219,9 +219,9 @@ define([
 
         //create a component view.
         var componentView = new ComponentView({
-          collection:component,
-          el:'#component-container'+component.cid, 
-          gainNode:this.muteGainNodeList[counter],
+          collection: component,
+          el: '#component-container'+component.cid, 
+          gainNode: this.muteGainNodeList[counter],
           defaultMeasureRepresentation: this.defaultMeasureRepresentation,
           defaultFractionRepresentation: this.defaultFractionRepresentation,
           unusedInstrumentsModel: this.unusedInstrumentsModel
@@ -512,5 +512,5 @@ define([
       this.render();
     }
   });
-  return new componentsView();
+  return new ComponentsView();
 });

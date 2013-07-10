@@ -9,13 +9,11 @@ define([
   'backbone',
   'backbone/models/beat'
 ], function($, _, Backbone, beatModel){
-  return Backbone.Collection.extend({
+  var BeatsCollection = Backbone.Collection.extend({
     model: beatModel,
-
     initialize: function(){
-
     }
   });
 
-  //return new beatsCollection();
+  return BeatsCollection;
 });

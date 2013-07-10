@@ -23,7 +23,6 @@ define([
 
     //simply creates the model.
     initialize: function(options) {
-      console.log(options);
       if(options) {
         this.remainingInstrumentGeneratorModel = options.unusedInstrumentsModel;
       } else {
