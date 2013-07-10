@@ -24,19 +24,19 @@ define([
 
     //simply creates the model.
     initialize: function() {
-      this.systemLabelCollection = new SystemLabelCollection();
+      // this.systemLabelCollection = new SystemLabelCollection();
 
       var minNumerator = 0;
       var maxNumerator = 16;
       var minDenominator = 1;
       var maxDenominator = 16;
       // whole numbers
-      for( i=0 ; i < maxDenominator ; i++ ) {
-        this.systemLabelCollection.add({
-          label: String(i),
-          type: 'whole-number-label'
-        })
-      }
+      // for( i=0 ; i < maxDenominator ; i++ ) {
+      //   this.systemLabelCollection.add({
+      //     label: String(i),
+      //     type: 'whole-number-label'
+      //   })
+      // }
     },
 
     render: function() {

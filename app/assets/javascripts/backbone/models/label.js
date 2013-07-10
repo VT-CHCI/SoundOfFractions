@@ -6,7 +6,7 @@ define([
   'underscore',
   'backbone'
 ], function(_, Backbone) {
-  var labelModel = Backbone.Model.extend({
+  var LabelModel = Backbone.Model.extend({
     defaults: {
       label: '',
       type: ''
@@ -15,5 +15,5 @@ define([
     },
   });
   
-  return new labelModel;
+  return LabelModel;
 });
