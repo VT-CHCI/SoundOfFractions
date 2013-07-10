@@ -234,9 +234,7 @@ define([
       }, this);
 
       // Render the RemainingInstrumentGeneratorView
-      var instrumentSelectorView = new RemainingInstrumentGeneratorView({
-        unusedInstrumentsModel: this.unusedInstrumentsModel
-      });
+      var instrumentSelectorView = RemainingInstrumentGeneratorView;
 
       return this;
     },

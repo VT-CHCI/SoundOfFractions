@@ -26,7 +26,7 @@ define([
       if(options) {
         this.remainingInstrumentGeneratorModel = options.unusedInstrumentsModel;
       } else {
-        // this.remainingInstrumentGeneratorModel = new RemainingInstrumentGeneratorModel;
+        this.remainingInstrumentGeneratorModel = RemainingInstrumentGeneratorModel;
       }
 
       dispatch.on('instrumentChanged.event', this.render, this);
