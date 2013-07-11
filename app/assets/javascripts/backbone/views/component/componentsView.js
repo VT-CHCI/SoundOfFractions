@@ -28,7 +28,7 @@ define([
 
     initialize: function(){
       // Default Measure representation state - also set "active" class in fractionRepresentation.html AND wholeMeasureRepresentation.html
-      this.defaultMeasureRepresentation = 'circular-bead';
+      this.defaultMeasureRepresentation = 'audio';
       this.defaultFractionRepresentation = 'fraction';
 
       //this context variable gives us access to all of the
@@ -63,7 +63,7 @@ define([
         mute: false,
         sample: '808_sn.m4a',
         measures: this.component,
-        signature: 6,
+        signature: this.component.models[0].get('beats').length,
         active: true
       });
 
@@ -491,9 +491,6 @@ define([
         signature: defaultNumberOfBeats,
         active: true
       });
-
-      console.warn('this.drumkit in componentsView : ');
-      console.warn(this.drumkit);
 
       this.render();
     },

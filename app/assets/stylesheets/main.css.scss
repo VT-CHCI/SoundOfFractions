@@ -1,3 +1,16 @@
+.remove-measure-btn {
+
+}
+
+#measure-representation-buttons button {
+  font-size: 12px;
+  /*padding-left: 5px;*/
+}
+
+#system-label-group {
+  padding: 5px;
+}
+
 #system-label-group .btn {
   padding: 1px  3px;
 }
@@ -49,6 +62,7 @@ select {
 }
 
 #remaining-instrument-generator{
+  padding: 5px;
   background-color: whitesmoke;
   border: 1px solid #e3e3e3
 }
@@ -237,8 +251,20 @@ svg.circular-pie {
   width: 300px;
 }
 
-.bead-measure {
-  width: 200px!important;
+.measure-audio {
+  width: 200px;
+}
+.measure-bead {
+  width: 200px;
+}
+.measure-number {
+  width: 300px;
+}
+.measure-pie {
+  width: 200px;
+}
+.measure-bar {
+  width: 300px;
 }
 
 .measure .title {
@@ -436,7 +462,7 @@ svg.circular-pie {
 }
 
 #top-row button{
-  padding: 0px;
+  padding: 0px 0px 0px 5px ;
   margin: 0px;
 }
 

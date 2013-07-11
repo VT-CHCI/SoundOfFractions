@@ -212,14 +212,14 @@ define([
             .interpolate('basis'); // bundle | basis | linear | cardinal are also options
 
         var drag = d3.behavior.drag()
-        // to prevent the draging of a one beat measure
+        // to prevent the dragging of a one beat measure
         if (ƒthis.parent.attributes.beats.length > 1) {
             drag
               .on("drag", function(d,i) {
               // add the 'selected' class when a beat is dragged
               $('#beat'+ƒthis.cid).closest($('.component')).addClass('selected');
               var transformString = $('#beat'+ƒthis.cid).attr('transform').substring(10, $('#beat'+ƒthis.cid).attr('transform').length-1);
-              var comma =transformString.indexOf(',');
+              var comma = transformString.indexOf(',');
               d.x = parseInt(transformString.substr(0,comma));
               d.y = parseInt(transformString.substr(comma+1));
               d.x += d3.event.dx;
@@ -234,53 +234,53 @@ define([
           });
         }
 
-        //The Circle SVG Path we draw MUST BE AFTER THE COMPILED TEMPLATE
-        var beatContainer = d3.select('#beatHolder'+this.parent.cid);
-        var beatPath = beatContainer //.append('g')
-            // .insert('path', ':first-child')
-            .append('path')
-            // Calling the click handler here doesn't work for some reason
-            // .on('click', function(){console.log('beat container click handler')})
-            .attr('class', 'beat d3')
-            .attr('transform', 'translate(0,0)')
-            .attr('id', 'beat'+this.cid)
-            // This is the path that the beat will follow when un/roll is clicked
-            .data([beatUnwindingPaths[0]])
-            .attr('d', pathFunction)
-            .attr('fill', COLORS.hexColors[this.color])
-            .attr('stroke', 'black')
-            .style('opacity', this.getOpacityNumber(this.model.get('selected')))
-            .call(drag);
+        if (this.currentBeatRepresentation == 'circular-bead') {
+          //The Circle SVG Path we draw MUST BE AFTER THE COMPILED TEMPLATE
+          var beatContainer = d3.select('#beatHolder'+this.parent.cid);
+          var beatPath = beatContainer //.append('g')
+              // .insert('path', ':first-child')
+              .append('path')
+              // Calling the click handler here doesn't work for some reason
+              // .on('click', function(){console.log('beat container click handler')})
+              .attr('class', 'beat d3')
+              .attr('transform', 'translate(0,0)')
+              .attr('id', 'beat'+this.cid)
+              // This is the path that the beat will follow when un/roll is clicked
+              .data([beatUnwindingPaths[0]])
+              .attr('d', pathFunction)
+              .attr('fill', COLORS.hexColors[this.color])
+              .attr('stroke', 'black')
+              .style('opacity', this.getOpacityNumber(this.model.get('selected')))
+              .call(drag);
 
-        this.beatPath = beatPath;
-        this.beatPath.on('click', this.toggle);
+          this.beatPath = beatPath;
+          this.beatPath.on('click', this.toggle);
 
-        function unroll() {
-          console.log('INNER UNROLL');
-          for(i=0; i<ƒthis.measureNumberOfPoints; i++){
-              beatPath.data([beatUnwindingPaths[i]])
-                  .transition()
-                  .delay(ƒthis.animationDuration*i)
-                  .duration(ƒthis.animationDuration)
-                  .ease('linear')
-                  .attr('d', pathFunction);
-          }
-        };
-        function reverse() {
-          for(i=0; i<ƒthis.measureNumberOfPoints; i++){
-              beatPath.data([beatUnwindingPaths[ƒthis.measureNumberOfPoints-1-i]])
-                  .transition()
-                  .delay(ƒthis.animationDuration*i)
-                  .duration(ƒthis.animationDuration)
-                  .ease('linear')
-                  .attr('d', pathFunction);
-          }
-        };
+          function unroll() {
+            console.log('INNER UNROLL');
+            for(i=0; i<ƒthis.measureNumberOfPoints; i++){
+                beatPath.data([beatUnwindingPaths[i]])
+                    .transition()
+                    .delay(ƒthis.animationDuration*i)
+                    .duration(ƒthis.animationDuration)
+                    .ease('linear')
+                    .attr('d', pathFunction);
+            }
+          };
+          function reverse() {
+            for(i=0; i<ƒthis.measureNumberOfPoints; i++){
+                beatPath.data([beatUnwindingPaths[ƒthis.measureNumberOfPoints-1-i]])
+                    .transition()
+                    .delay(ƒthis.animationDuration*i)
+                    .duration(ƒthis.animationDuration)
+                    .ease('linear')
+                    .attr('d', pathFunction);
+            }
+          };
 
-        $('#a'+this.parent.cid).on('click', unroll);
-        $('#b'+this.parent.cid).on('click', reverse);
-     
-        if (this.currentBeatRepresentation == 'linear-bar') {
+          $('#a'+this.parent.cid).on('click', unroll);
+          $('#b'+this.parent.cid).on('click', reverse);
+        } else if (this.currentBeatRepresentation == 'linear-bar') {
           // append the compiled template to the measureBeatHolder
           $(this.measureBeatHolder).append(compiledTemplate);          
         // SVG rendering

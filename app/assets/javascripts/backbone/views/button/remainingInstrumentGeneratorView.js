@@ -28,7 +28,7 @@ define([
       } else {
         this.remainingInstrumentGeneratorModel = RemainingInstrumentGeneratorModel;
       }
-
+      // this.remainingInstrumentGeneratorModel.bind('change', _.bind(this.render, this));
       dispatch.on('instrumentChanged.event', this.render, this);
       dispatch.on('reRenderInstrumentGenerator.event', this.render, this);
 
@@ -51,7 +51,7 @@ define([
       dispatch.trigger('reRenderInstrumentDropDown.event', instrument);
       //add the instrument to the Composition-Area and re-render
       dispatch.trigger('instrumentAddedToCompositionArea.event', instrument);
-      // this.render();
+      this.render();
 
       log.sendLog([[2, "instrument added: "+instrument]]);
     },

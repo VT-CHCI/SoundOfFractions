@@ -1,7 +1,7 @@
 <% if (len==0) { %>
 <% } else { %>
   <div id="remaining-instrument-generator">
-    Add a new instrumnet :
+    Add a new instrument :
     <% _.each(reps, function(uI){ %>
         <div id='new-instrument-<%= uI.type %>' class='btn new-instrument-btn'><%= uI.label %></div>
     <% }); %>

@@ -61,6 +61,7 @@ define([
       //registering our handlers for serveral events.
       dispatch.on('toggleAnimation.event', this.toggleAnimation, this);
       dispatch.on('signatureChange.event', this.updateModelSignature, this);
+      dispatch.on('instrumentChanged.event', this.changeInstrument, this);
       // dispatch.on('fractionRepresentation.event', this.recalculateFraction, this);
       // dispatch.on('beatClicked.event', this.recalculateFraction, this);
 
@@ -247,5 +248,20 @@ define([
       //beat bars to update based on which component is selected.
       // dispatch.trigger('bPMSlider.event', {signature: this.component.get('signature'), name: this.component.get('label') } );
     }
+
+    // changeInstrument: function(instrument){
+    //   var ƒthis = this;
+    //   var options = {
+    //     label =  ƒthis.unusedInstrumentsModel.getDefault(instrument, 'label'),
+    //     type = ƒthis.unusedInstrumentsModel.getDefault(instrument, 'type'),
+    //     img = ƒthis.unusedInstrumentsModel.getDefault(instrument, 'image'),
+    //     mute = false,
+    //     sample = ƒthis.unusedInstrumentsModel.getDefault(instrument, 'sample'),
+    //     measures = ƒthis.component,
+    //     signature = ƒthis.component.models[0].get('beats').length,
+    //     active = true
+    //   }
+    //   this.render();
+    // }
   });
 });

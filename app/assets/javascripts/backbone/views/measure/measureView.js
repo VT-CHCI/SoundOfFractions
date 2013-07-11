@@ -2,7 +2,6 @@
 /*
   This is the MeasuresView.
   This is contained in a ComponentsView.
-  //dthree can be referenced by d3, NOT ignore, and ignore CANNOT be renamed to d3
 */
 define([
   'jquery',
@@ -142,7 +141,7 @@ define([
 
 
       // Circle
-      var centerX = 150;
+      var centerX = 100;
       var centerY = 50;
       var measureStartAngle = 0;
       var beatStartAngle;
@@ -175,7 +174,6 @@ define([
       // Audio
       var beatRForAudio = 24;
       var colorForAudio = COLORS.hexColors[5];
-      // console.log(this.representations[this.currentMeasureRepresentation]);
 
       // for each measure in measuresCollection
       _.each(this.measuresCollection.models, function(measure, index) {
@@ -245,7 +243,7 @@ define([
         // find the plus sign we put in there, and right before it, put in the rendered template
         $(this.el).find('.addMeasure').before( compiledTemplate )
 
-        if (currentMeasureRepresentation = "bead") {
+        if (this.currentMeasureRepresentation == 'circular-bead') {
           var lineData = $.map(Array(measureNumberOfPoints), function (d, i) {
               var y = margin.top;
               var x = margin.left + i * lineLength / (measureNumberOfPoints - 1)

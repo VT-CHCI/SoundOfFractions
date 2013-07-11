@@ -1,6 +1,7 @@
-<div id="measure<%= measure.cid %>" class="measure">
-  <span class="title">SVG Bar Measure <span class="number"><%= measureCount %></span>
-    <% if(measureCount == 1) { %>
+<div id="measure<%= measure.cid %>" class="measure measure-bar">
+  <!-- <span class="title">SVG Bar Measure <span class="number"><%= measureCount %></span> -->
+  <div class="btn pause pull-right"><i class="icon-remove-circle remove-measure-btn"></i></div>
+  <% if(measureCount == 1) { %>
   <% } else { %>
    - <span class="delete">[X]</span>
   <% } %>

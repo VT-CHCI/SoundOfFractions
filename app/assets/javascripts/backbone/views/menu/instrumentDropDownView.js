@@ -28,9 +28,11 @@ define([
 
       this.render();
 
-      // dispatch.on('instrumentAddedToCompostionArea.event', this.updateRemove, this);
+      // this.remainingInstrumentGeneratorModel.bind('change', _.bind(this.render, this));
       dispatch.on('instrumentChanged.event', this.instrumentChanged, this);
       dispatch.on('reRenderInstrumentDropDown.event', this.render, this);
+
+      // dispatch.on('instrumentAddedToCompostionArea.event', this.updateRemove, this);
       // dispatch.on('instrumentDeletedFromCompositionArea.event', this.render, this);
     },
 
@@ -76,7 +78,7 @@ define([
       // $(this.el).html(remainingInstrumentGeneratorTemplate);
 
       // JQuery-UI draggable
-      $(this.el).draggable({ axis: "y", containment: "#middle-left-column" });
+      // $(this.el).draggable({ axis: "y", containment: "#middle-left-column" });
 
       return this;
     }
