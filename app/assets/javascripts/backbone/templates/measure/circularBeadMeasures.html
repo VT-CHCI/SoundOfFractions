@@ -1,8 +1,8 @@
-<div id="measure<%= measure.cid %>" class="measure measure-bead">
+<div id="measure<%= mCID %>" class="measure measure-bead">
   <!-- <div class="btn a unroll" id="a<%= measure.cid %>">Unroll</div> -->
   <!-- <div class="btn b rollup" id="b<%= measure.cid %>">Rollup</div> -->
   <!-- <span class="title">Measure <span class="number"><%= measureCount %></span> -->
-  <div class="btn pause pull-right remove-measure-btn"><i class="icon-remove"></i></div>
+  <div class="btn pause pull-right remove-measure-btn"><i class="icon-minus-sign"></i></div>
   <% if(measureCount == 1) { %>
   <% } else { %>
    - <span class="delete">[X]</span>
@@ -14,7 +14,7 @@
     <g id="<%= beatHolder %>">
     </g>
   </svg>
-  <div class="btn pull-right resize-measure-pull visHidden"><i class="icon-resize-horizontal"></i></div>
-  <i class="pull-right resize-measure-pull visHidden icon-resize-horizontal icon-2x"></i> 
+  <div class="btn pull-right resize-measure-pull"><i class="icon-resize-horizontal"></i></div>
+  <i class="pull-right resize-measure-pull icon-resize-horizontal icon-2x"></i> 
 </div>
 

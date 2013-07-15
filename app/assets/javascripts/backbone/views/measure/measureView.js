@@ -22,7 +22,7 @@ define([
   'app/log'
 ], function($, _, Backbone, BeatsCollection, MeasureModel, MeasureRepModel, beatView, audioMeasuresTemplate, linearBarMeasuresTemplate, circularPieMeasuresTemplate, circularBeadMeasuresTemplate, numberLineMeasuresTemplate, COLORS, dispatch, state, log){
   return Backbone.View.extend({
-    // el: $('.component'),
+    // el: $('.measure')[0],
 
     // The different representations
     representations: {
@@ -52,12 +52,11 @@ define([
       //passed in options. Otherwise we create a single
       //measure and add it to our collection.
       if (options) {
-        console.error(options);
         if (options.defaultMeasureRepresentation) {
           this.currentMeasureRepresentation = options.defaultMeasureRepresentation;
         }
-        if(options.newMeasureRepresentation) {
-          this.currentMeasureRepresentation = options.newMeasureRepresentation;
+        if(options.currentMeasureRepresentation) {
+          this.currentMeasureRepresentation = options.currentMeasureRepresentation;
         }
         if(options.collectionOfMeasures) {
           this.measuresCollection = options.collectionOfMeasures;
@@ -73,8 +72,8 @@ define([
         this.circlePath = '';
         this.measureRadius = 40;
         this.unrolled = MeasureModel.unrolled;
+        this.el = $('#measure'+this.model.cid);
       }
-      this.el = '#measure'+this.cid;
       // else {
       //   this.measure = new BeatsCollection;
 
@@ -147,6 +146,7 @@ define([
     },
 
     render: function(){
+      window.csf = this.el;
       // REPLACE whatever is already in the measure container with: a plus sign in the measure rendering
       $(this.componentEl).html('<div class="addMeasure pull-right">+</div>');
 
@@ -223,6 +223,7 @@ define([
         console.warn(this.model);
         var measureTemplateParamaters = {
           measure: this.model,
+          mCID: this.model.cid,
           beatHolder:'beatHolder'+this.model.cid,
           measureCount:this.measuresCollection.length,
           measureAngle: 360.0,
@@ -530,11 +531,16 @@ define([
     },
 
     showInteractionButtons: function () {
+  console.error('gih');
       $('.remove-measure-btn').css({'visibility' : 'visible'});
+      $('.resize-measure-pull').css({'visibility' : 'visible'});
+      // resize-measure-pull
     },
 
     hideInteractionButtons: function () {
+  console.error('gih');
       $('.remove-measure-btn').css({'visibility' : 'hidden'});
+      $('.resize-measure-pull').css({'visibility' : 'hidden'});
     }
 
 

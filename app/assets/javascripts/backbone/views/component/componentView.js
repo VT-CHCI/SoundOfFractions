@@ -74,12 +74,15 @@ define([
     */
     render: function(options){
       if(options) {
+        // for each of the measures
+        var ƒthis = this;
         _.each(this.hTrack.get('measures').models, function(measure, index) {
           new MeasuresView({
-            collectionOfMeasures: this.hTrack.get('measures'),
-            parent: this.hTrack,
-            parentEl: '#component'+this.hTrack.cid,
-            newMeasureRepresentation: options.representation
+            collectionOfMeasures: ƒthis.hTrack.get('measures'),
+            parent: ƒthis.hTrack,
+            parentEl: '#component'+ƒthis.hTrack.cid,
+            model: ƒthis.hTrack.get('measures').models[index],
+            currentMeasureRepresentation: options.representation
           });
         });
 
@@ -90,10 +93,9 @@ define([
         //   defaultFractionRepresentation: this.defaultFractionRepresentation
         // }); 
       } else {
-window.csf = this.hTrack;
-        ƒthis = this;
+        var ƒthis = this;
+        // for each of the measures
         _.each(this.hTrack.get('measures'), function(measure, index) {
-          console.warn(ƒthis.hTrack.get('measures').models[index]);
           new MeasuresView({
             collectionOfMeasures: ƒthis.hTrack.get('measures'),
             parent: ƒthis.hTrack,
@@ -135,11 +137,6 @@ window.csf = this.hTrack;
       if($('#component'+this.hTrack.cid).hasClass('selected')) {
         this.hTrack.set('signature', val);
       }
-      
-      var rep = $('#measure-representation-buttons').find('.active').data('state')
-
-      var options = {representation: rep};
-      this.render(options);
     },
     /*
       This is called when the user clicks on the icon of this component

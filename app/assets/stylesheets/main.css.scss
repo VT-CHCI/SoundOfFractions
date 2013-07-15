@@ -10,7 +10,9 @@
 .addRepresentation[data-state="audio"] svg {
     margin-left: 5px;
 }
-
+.resize-measure-pull{
+  visibility: hidden;  
+}
 .remove-measure-btn {
   color: red;
   visibility: hidden;
