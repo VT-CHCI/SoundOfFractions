@@ -91,7 +91,6 @@ define([
     },
 
     //We use css classes to control the color of the beat.
-    //A beat is essentially an empty div.
     render: function(toggledBeat){
       // the current state of the beat (is it ON or OFF?)
       var state = this.getSelectionBooleanCSS();
@@ -237,8 +236,7 @@ define([
         if (this.currentBeatRepresentation == 'circular-bead') {
           //The Circle SVG Path we draw MUST BE AFTER THE COMPILED TEMPLATE
           var beatContainer = d3.select('#beatHolder'+this.parent.cid);
-          var beatPath = beatContainer //.append('g')
-              // .insert('path', ':first-child')
+          var beatPath = beatContainer
               .append('path')
               // Calling the click handler here doesn't work for some reason
               // .on('click', function(){console.log('beat container click handler')})

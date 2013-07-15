@@ -11,6 +11,7 @@ define([
   'backbone/models/measure',
   'backbone/models/measureRep',
   'backbone/views/beat/beatView',
+  'backbone/views/factory/beadFactoryView',
   'text!backbone/templates/measure/audioMeasures.html',
   'text!backbone/templates/measure/linearBarMeasures.html',
   'text!backbone/templates/measure/circularPieMeasures.html',
@@ -20,7 +21,7 @@ define([
   'app/dispatch',
   'backbone/models/state',
   'app/log'
-], function($, _, Backbone, BeatsCollection, MeasureModel, MeasureRepModel, beatView, audioMeasuresTemplate, linearBarMeasuresTemplate, circularPieMeasuresTemplate, circularBeadMeasuresTemplate, numberLineMeasuresTemplate, COLORS, dispatch, state, log){
+], function($, _, Backbone, BeatsCollection, MeasureModel, MeasureRepModel, BeatView, BeadFactoryView, audioMeasuresTemplate, linearBarMeasuresTemplate, circularPieMeasuresTemplate, circularBeadMeasuresTemplate, numberLineMeasuresTemplate, COLORS, dispatch, state, log){
   return Backbone.View.extend({
     // el: $('.measure')[0],
 
@@ -163,7 +164,6 @@ define([
       // Bead
       var circularBeadBeatRadius = 8;
       var measureNumberOfPoints = 60; //always add 1 to close the circle AND keep under 91 to avoid computational and animation delay
-      var beadBeatRadious = 15;
       this.measureNumberOfPoints = measureNumberOfPoints;
         // Transition
         var margin = {top: 20, left: 60};
@@ -225,6 +225,7 @@ define([
           measure: this.model,
           mCID: this.model.cid,
           beatHolder:'beatHolder'+this.model.cid,
+          beatFactoryHolder: 'beatFactoryHolder'+this.model.cid,
           measureCount:this.measuresCollection.length,
           measureAngle: 360.0,
           beatHolderWidth: beatHolderWidth,
@@ -272,13 +273,11 @@ define([
           //The Circle SVG Path we draw MUST BE AFTER THE COMPILED TEMPLATE
           var svgContainer = d3.select('#svg'+this.model.cid)
               // .call(d3.experiments.dragAll);
-          var circlePath = svgContainer //.append('g')
-              // .append('path')
+          var circlePath = svgContainer
               .insert('path', ':first-child')
               .data([circleStates[0]])
               .attr('d', pathFunction)
               .attr('stroke', 'black')
-              // .attr('stroke-dasharray', '5, 10')
               .attr('opacity', .2)
               .attr('class', 'circle')
               .attr('class', 'circle-path')
@@ -350,7 +349,7 @@ define([
         // for each beat in this measure
         _.each(this.model.get('beats').models, function(beat, index) {
 
-          // create a beatview
+          // create a Beatview
           var measurePassingToBeatViewParamaters = {
             //General
             model: beat,
@@ -402,9 +401,28 @@ define([
           // manipulate circular-pie beat parameters
           // 
 
-          new beatView(measurePassingToBeatViewParamaters);
+          new BeatView(measurePassingToBeatViewParamaters);
         }, this);
       // }, this);
+
+      // make a beat factory
+      this.measurePassingToBeatFactoryParamaters = {
+        // beat, number of beats, each beat's color, location, path
+        beatFactoryHolder: '#beatFactoryHolder'+this.model.cid,
+        remainingNumberOfBeats: 16-this.model.get('beats').models.length,
+        currentMeasureRepresentation: this.currentMeasureRepresentation,
+        beadRadius: circularBeadBeatRadius,
+        colorIndex: ''
+      };
+      if (this.currentMeasureRepresentation == 'circular-bead') {
+        for (i = 0 ; i < this.measurePassingToBeatFactoryParamaters.remainingNumberOfBeats ; i++){
+          var index = 15-i;
+          this.measurePassingToBeatFactoryParamaters.x = 20 + (Math.random() * (10) - 5);
+          this.measurePassingToBeatFactoryParamaters.y = 100 + (Math.random() * (10) - 5);
+          this.measurePassingToBeatFactoryParamaters.colorIndex = index;
+          new BeadFactoryView(this.measurePassingToBeatFactoryParamaters);
+        }
+      }
 
       return this;
     },

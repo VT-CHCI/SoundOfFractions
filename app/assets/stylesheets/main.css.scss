@@ -11,7 +11,9 @@
     margin-left: 5px;
 }
 .resize-measure-pull{
-  visibility: hidden;  
+  visibility: hidden; 
+  position: relative;
+  top: -20px;
 }
 .remove-measure-btn {
   color: red;
@@ -196,7 +198,7 @@ svg.linear-bar {
   height: 40px;
 }
 svg.circular-pie {
-  height: 100px;
+  height: 120px;
 }
 
 #record {
@@ -241,23 +243,6 @@ svg.circular-pie {
 	background: #FF9700;
 }
 
-.beat {
-  width: 24.583333333333332%;
-  height: 25px;
-	float: left;
-	border-top: 1px solid;
-  border-bottom: 1px solid;
-  border-left: 1px solid;
-}
-
-.beat:last-of-type {
-  border-right: 1px solid;
-}
-
-.beat > div {
-  position: relative;
-}
-
 .measure {
 	border: solid 1px grey;
   border-radius: 3px;
@@ -272,6 +257,7 @@ svg.circular-pie {
 }
 .measure-bead {
   width: 200px;
+  height: 165px;
 }
 .measure-number {
   width: 300px;
