@@ -7,8 +7,9 @@
 define([
   'underscore',
   'backbone',
-  'backbone/collections/measures'
-], function(_, Backbone, measuresCollection) {
+  'backbone/collections/measures',
+  'backbone/collections/measureReps'
+], function(_, Backbone, MeasuresCollection, MeasureRepsCollection) {
   var componentModel = Backbone.Model.extend({
     defaults: {
       label: 'snare',
@@ -16,7 +17,8 @@ define([
       img: 'orange.png',
       mute: false,
       sample: 'shhh',
-      measures: measuresCollection,
+      measures: MeasuresCollection,
+      representations: MeasureRepsCollection,
       active: true,
       signature: 0, //initially set to zero, but set in the init of componentsView
       representation: 'fraction'

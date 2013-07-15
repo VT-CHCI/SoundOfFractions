@@ -9,6 +9,7 @@ define([
   'backbone',
   'backbone/collections/beats',
   'backbone/models/measure',
+  'backbone/models/measureRep',
   'backbone/views/beat/beatView',
   'text!backbone/templates/measure/audioMeasures.html',
   'text!backbone/templates/measure/linearBarMeasures.html',
@@ -19,7 +20,7 @@ define([
   'app/dispatch',
   'backbone/models/state',
   'app/log'
-], function($, _, Backbone, BeatsCollection, MeasureModel, beatView, audioMeasuresTemplate, linearBarMeasuresTemplate, circularPieMeasuresTemplate, circularBeadMeasuresTemplate, numberLineMeasuresTemplate, COLORS, dispatch, state, log){
+], function($, _, Backbone, BeatsCollection, MeasureModel, MeasureRepModel, beatView, audioMeasuresTemplate, linearBarMeasuresTemplate, circularPieMeasuresTemplate, circularBeadMeasuresTemplate, numberLineMeasuresTemplate, COLORS, dispatch, state, log){
   return Backbone.View.extend({
     // el: $('.component'),
 
@@ -37,9 +38,13 @@ define([
 
     //registering click events to add and remove measures.
     events : {
+      'mouseenter': 'showInteractionButtons',
+      'mouseleave': 'hideInteractionButtons',
       'click .addMeasure' : 'addMeasure',
+      'click .addRepresentation' : 'addRepresentation',
       'click .delete' : 'removeMeasure',
-      'click .measure' : 'toggleSelection'
+      'click .measure' : 'toggleSelection',
+      'click .remove-measure-btn' : 'removeMeasure'
     },
 
     initialize: function(options){
@@ -47,24 +52,29 @@ define([
       //passed in options. Otherwise we create a single
       //measure and add it to our collection.
       if (options) {
-        // console.warn(options);
+        console.error(options);
         if (options.defaultMeasureRepresentation) {
           this.currentMeasureRepresentation = options.defaultMeasureRepresentation;
         }
         if(options.newMeasureRepresentation) {
           this.currentMeasureRepresentation = options.newMeasureRepresentation;
         }
-        this.measuresCollection = options.collection;
+        if(options.collectionOfMeasures) {
+          this.measuresCollection = options.collectionOfMeasures;
+        }
         this.parent = options.parent;
-        this.el = options.el;
+        this.model = options.model;
+        this.parentCID = options.parent.CID;
+        this.componentEl = options.parentEl;
         this.vis = {};
-        this.vis.svg = d3.select(this.el).append('svg');
+        this.vis.svg = d3.select(this.componentEl).append('svg');
         this.vis.svg.attr('class', this.currentMeasureRepresentation);
         this.d3 = {};
         this.circlePath = '';
         this.measureRadius = 40;
         this.unrolled = MeasureModel.unrolled;
       }
+      this.el = '#measure'+this.cid;
       // else {
       //   this.measure = new BeatsCollection;
 
@@ -78,6 +88,7 @@ define([
 
       if (options['template-key']) {
         this.currentBeatRepresentation = options['template-key'];
+
       }
 
       //registering a callback for signatureChange events.
@@ -137,8 +148,10 @@ define([
 
     render: function(){
       // REPLACE whatever is already in the measure container with: a plus sign in the measure rendering
-      $(this.el).html('<div class="addMeasure pull-right">+</div>');
+      $(this.componentEl).html('<div class="addMeasure pull-right">+</div>');
 
+      //Remove button
+      // var removeButtonEl = $('.remove-measure-btn');
 
       // Circle
       var centerX = 100;
@@ -176,7 +189,7 @@ define([
       var colorForAudio = COLORS.hexColors[5];
 
       // for each measure in measuresCollection
-      _.each(this.measuresCollection.models, function(measure, index) {
+      // _.each(this.measuresCollection.models, function(measure, index) {
 
         var ƒthis = this;
         var circleStates = [];
@@ -207,10 +220,11 @@ define([
 
         // (when representation button changes, the current representation template will get updated)
         // compile the template for a measure
+        console.warn(this.model);
         var measureTemplateParamaters = {
-          measure: measure,
-          beatHolder:'beatHolder'+measure.cid,
-          measureCount:index+1,
+          measure: this.model,
+          beatHolder:'beatHolder'+this.model.cid,
+          measureCount:this.measuresCollection.length,
           measureAngle: 360.0,
           beatHolderWidth: beatHolderWidth,
           // SVG Properties
@@ -241,7 +255,7 @@ define([
         var compiledTemplate = _.template( this.representations[this.currentMeasureRepresentation], measureTemplateParamaters );
 
         // find the plus sign we put in there, and right before it, put in the rendered template
-        $(this.el).find('.addMeasure').before( compiledTemplate )
+        $(this.componentEl).find('.addMeasure').before( compiledTemplate )
 
         if (this.currentMeasureRepresentation == 'circular-bead') {
           var lineData = $.map(Array(measureNumberOfPoints), function (d, i) {
@@ -255,7 +269,7 @@ define([
               .interpolate('basis'); // bundle | basis | linear | cardinal are also options
 
           //The Circle SVG Path we draw MUST BE AFTER THE COMPILED TEMPLATE
-          var svgContainer = d3.select('#svg'+measure.cid)
+          var svgContainer = d3.select('#svg'+this.model.cid)
               // .call(d3.experiments.dragAll);
           var circlePath = svgContainer //.append('g')
               // .append('path')
@@ -315,26 +329,38 @@ define([
           };
 
           // $('#a'+measure.cid).on('click', dispatch.trigger('unroll.event'), circlePath);
-          $('#a'+measure.cid).on('click', unroll);
-          $('#b'+measure.cid).on('click', reverse);
+          $('#a'+this.model.cid).on('click', unroll);
+          $('#b'+this.model.cid).on('click', reverse);
         }
+
+        // Managing the hover showing of the delete buttons
+        // $('#measure' + measure.cid).hover(
+        //     function() {
+        //         $('.remove-measure-btn').removeClass('visHidden');
+        //         $('.resize-measure-pull').removeClass('visHidden');
+        //     },
+        //     function() {
+        //         $('.remove-measure-btn').addClass('visHidden');
+        //         $('.resize-measure-pull').addClass('visHidden');
+        //     }
+        // );
 
         // console.log(this.currentMeasureRepresentation);
         // for each beat in this measure
-        _.each(measure.get('beats').models, function(beat, index) {
+        _.each(this.model.get('beats').models, function(beat, index) {
 
           // create a beatview
           var measurePassingToBeatViewParamaters = {
             //General
-            model:beat,
-            parentElHolder:'#beatHolder'+measure.cid,
-            parent:measure,
-            parentCID:measure.cid,
-            singleBeat:'#beat'+beat.cid,
+            model: beat,
+            parentElHolder: '#beatHolder'+this.model.cid,
+            parent: this.model,
+            parentCID: this.model.cid,
+            singleBeat: '#beat'+beat.cid,
             beatIndex: index,
             margin : margin,
-            measureRepresentation:this.currentMeasureRepresentation,
-            beatsInMeasure: this.measuresCollection.models[0].attributes.beats.length,
+            measureRepresentation: this.currentMeasureRepresentation,
+            beatsInMeasure: this.model.attributes.beats.length,
             // To use the range of colors
             color: index,
             // To use one color
@@ -377,7 +403,7 @@ define([
 
           new beatView(measurePassingToBeatViewParamaters);
         }, this);
-      }, this);
+      // }, this);
 
       return this;
     },
@@ -393,12 +419,31 @@ define([
       all the durations get recalculated to reflect this new measure.
     */
     addMeasure: function(){
-        console.log('add measure');
+        console.log('add a measure');
         var newMeasure = new BeatsCollection;
 
         for (var i = 0; i < this.parent.get('signature'); i++) {
           newMeasure.add();
         }
+
+        this.measuresCollection.add({beats: newMeasure});
+
+        //Logging
+        name = 'measure' + _.last(this.measuresCollection.models).cid + '.';
+        _.each(newMeasure.models, function(beats) {
+          name = name + 'beat'+ beats.cid + '.';
+        }, this);
+        log.sendLog([[3, 'Added a measure: ' + name]]);
+
+        //Render
+        this.render();
+        //Dispatch
+        dispatch.trigger('stopRequest.event', 'off');
+    },
+
+    addRepresentation: function(){
+        console.log('adding another representation of the measure');
+        var sameMeasure = this.measuresCollection;
 
         this.measuresCollection.add({beats: newMeasure});
 
@@ -451,7 +496,7 @@ define([
          new beats with the number of beats specified
          by the signature parameter.
       */
-      if ($(this.el).hasClass('selected')) {
+      if ($(this.componentEl).hasClass('selected')) {
         dispatch.trigger('stopRequest.event', 'off');
         for (var i = 0; i < this.measuresCollection.models.length; i++) {
           while (this.measuresCollection.models[i].get('beats').length < signature) {
@@ -470,7 +515,7 @@ define([
       }
     },
     adjustRadius: function(tempo) {
-      if ($(this.el).hasClass('selected')) {
+      if ($(this.componentEl).hasClass('selected')) {
         console.log('here');
         this.measureRadius = (tempo/120)*40;
         //re-render the view
@@ -482,7 +527,16 @@ define([
     toggleSelection: function(e){
       e.stopPropagation();
       $('#measure'+this.measuresCollection.models[0].cid).toggleClass('selected');
+    },
+
+    showInteractionButtons: function () {
+      $('.remove-measure-btn').css({'visibility' : 'visible'});
+    },
+
+    hideInteractionButtons: function () {
+      $('.remove-measure-btn').css({'visibility' : 'hidden'});
     }
+
 
 
   });

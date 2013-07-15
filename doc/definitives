@@ -10,7 +10,7 @@ the capture process should be one step to record the student's song
 the implementation must match the curriculum
 the implementation should allow for as much customization as possible
 
-persitance is needed for the users
+persistance is needed for the users
 
 one instrument only is allowed at a time
 
@@ -22,8 +22,11 @@ stretch/expanding a song increases its duration, and tempo and divisions/placeme
 
 drag and drop beats should preserve order (add or delete)
 
+Stage 2
+multiple measures
 
 V2
 allow for individual representations
 Compare
 import/convert
+

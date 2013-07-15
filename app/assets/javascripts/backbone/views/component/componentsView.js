@@ -219,7 +219,7 @@ define([
 
         //create a component view.
         var componentView = new ComponentView({
-          collection: component,
+          hTrack: component,
           el: '#component-container'+component.cid, 
           gainNode: this.muteGainNodeList[counter],
           defaultMeasureRepresentation: this.defaultMeasureRepresentation,

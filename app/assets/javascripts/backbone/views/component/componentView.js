@@ -39,7 +39,7 @@ define([
     */
     initialize: function(options){
       if (options) {
-        this.component = options.collection;
+        this.hTrack = options.hTrack;
         this.el = options.el;
         this.gainNode = options.gainNode;
         if (options.defaultMeasureRepresentation) {
@@ -51,12 +51,12 @@ define([
         this.unusedInstrumentsModel = options.unusedInstrumentsModel;
         this.type = options.type;
       } else {
-        this.component = new Component;
+        this.hTrack = new Component;
       }
 
       this.animationIntervalID = null;
 
-      this.component.set('currentBeat',0);
+      this.hTrack.set('currentBeat',0);
 
       //registering our handlers for serveral events.
       dispatch.on('toggleAnimation.event', this.toggleAnimation, this);
@@ -74,48 +74,56 @@ define([
     */
     render: function(options){
       if(options) {
-        new MeasuresView({
-          collection: this.component.get('measures'),
-          parent: this.component,
-          el: '#component'+this.component.cid,
-          newMeasureRepresentation: options.representation
+        _.each(this.hTrack.get('measures').models, function(measure, index) {
+          new MeasuresView({
+            collectionOfMeasures: this.hTrack.get('measures'),
+            parent: this.hTrack,
+            parentEl: '#component'+this.hTrack.cid,
+            newMeasureRepresentation: options.representation
+          });
         });
 
         // new FractionRepresentationView({
-        //   collection:this.component.get('measures'),
-        //   parent: this.component,
-        //   el:'#fraction'+this.component.cid,
+        //   collection:this.hTrack.get('measures'),
+        //   parent: this.hTrack,
+        //   el:'#fraction'+this.hTrack.cid,
         //   defaultFractionRepresentation: this.defaultFractionRepresentation
         // }); 
-      }
-      else {
-        new MeasuresView({
-          collection: this.component.get('measures'),
-          parent: this.component,
-          el:'#component'+this.component.cid,
-          defaultMeasureRepresentation: this.defaultMeasureRepresentation
+      } else {
+window.csf = this.hTrack;
+        ƒthis = this;
+        _.each(this.hTrack.get('measures'), function(measure, index) {
+          console.warn(ƒthis.hTrack.get('measures').models[index]);
+          new MeasuresView({
+            collectionOfMeasures: ƒthis.hTrack.get('measures'),
+            parent: ƒthis.hTrack,
+            parentEl: '#component'+ƒthis.hTrack.cid,
+            model: ƒthis.hTrack.get('measures').models[index],
+            defaultMeasureRepresentation: ƒthis.defaultMeasureRepresentation
+            // newMeasureRepresentation: options.representation
+          });
         });
 
         new InstrumentDropDownView({
           unusedInstrumentsModel: this.unusedInstrumentsModel,
-          collection: this.component.get('measures'),
-          parent: this.component,
-          el: '#instrument-selector-'+this.component.cid,
-          parentCID: this.component.cid,
+          collection: this.hTrack.get('measures'),
+          parent: this.hTrack,
+          el: '#instrument-selector-'+this.hTrack.cid,
+          parentCID: this.hTrack.cid,
           unusedInstrumentsModel: this.unusedInstrumentsModel
         });
 
         new DeleteInstrumentView({
-          collection: this.component.get('measures'),
-          parent: this.component,
-          el: '#delete-component-'+this.component.cid,
-          parentCID: this.component.cid
+          collection: this.hTrack.get('measures'),
+          parent: this.hTrack,
+          el: '#delete-component-'+this.hTrack.cid,
+          parentCID: this.hTrack.cid
         });
 
         // new FractionRepresentationView({
-        //   collection:this.component.get('measures'),
-        //   parent: this.component,
-        //   el:'#fraction'+this.component.cid,
+        //   collection:this.hTrack.get('measures'),
+        //   parent: this.hTrack,
+        //   el:'#fraction'+this.hTrack.cid,
         //   defaultFractionRepresentation: this.defaultFractionRepresentation
         // });
       }
@@ -124,8 +132,8 @@ define([
     },
 
     updateModelSignature: function(val){
-      if($('#component'+this.component.cid).hasClass('selected')) {
-        this.component.set('signature', val);
+      if($('#component'+this.hTrack.cid).hasClass('selected')) {
+        this.hTrack.set('signature', val);
       }
       
       var rep = $('#measure-representation-buttons').find('.active').data('state')
@@ -145,19 +153,19 @@ define([
       This also sends a log message.
     */
     toggleMute: function(){
-      this.component.set('active', !this.component.get('active'));
+      this.hTrack.set('active', !this.hTrack.get('active'));
 
       if (this.gainNode.gain.value == 1) {
         this.gainNode.gain.value = 0;
         $(this.el).find('.control').removeClass('unmute').addClass('mute');
 
-        log.sendLog([[2, "Component muted: "+"component"+this.component.cid]]);
+        log.sendLog([[2, "Component muted: "+"component"+this.hTrack.cid]]);
 
       } else {
         this.gainNode.gain.value = 1;
         $(this.el).find('.control').removeClass('mute').addClass('unmute');
 
-        log.sendLog([[2, "Component unmuted: "+"component"+this.component.cid]]);
+        log.sendLog([[2, "Component unmuted: "+"component"+this.hTrack.cid]]);
       }
     },
 
@@ -170,7 +178,7 @@ define([
     toggleAnimation: function(state, duration, signature, maxMeasures){
       // TODO why bring in signature to have it reset
       //signature = $(this.el).find('.measure').eq(0).find('.beat').length;
-      signature = this.component.get('signature');
+      signature = this.hTrack.get('signature');
 
       //duration is of one beat.
       duration = duration/signature/maxMeasures;
@@ -242,11 +250,11 @@ define([
     //This is called when the component is clicked anywhere to bring
     //the component into focus as selected.
     toggleSelection: function(){
-      $('#component'+this.component.cid).toggleClass('selected');
+      $('#component'+this.hTrack.cid).toggleClass('selected');
 
       //we trigger this event to cause the beats per measure slider and
       //beat bars to update based on which component is selected.
-      // dispatch.trigger('bPMSlider.event', {signature: this.component.get('signature'), name: this.component.get('label') } );
+      // dispatch.trigger('bPMSlider.event', {signature: this.hTrack.get('signature'), name: this.hTrack.get('label') } );
     }
 
     // changeInstrument: function(instrument){
@@ -257,8 +265,8 @@ define([
     //     img = ƒthis.unusedInstrumentsModel.getDefault(instrument, 'image'),
     //     mute = false,
     //     sample = ƒthis.unusedInstrumentsModel.getDefault(instrument, 'sample'),
-    //     measures = ƒthis.component,
-    //     signature = ƒthis.component.models[0].get('beats').length,
+    //     measures = ƒthis.hTrack,
+    //     signature = ƒthis.hTrack.models[0].get('beats').length,
     //     active = true
     //   }
     //   this.render();

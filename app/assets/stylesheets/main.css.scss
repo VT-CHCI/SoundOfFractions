@@ -1,9 +1,23 @@
-.remove-measure-btn {
+.addRepresentation[data-state="number-line"] svg {
+    margin-left: -45px;
+}
+.addRepresentation[data-state="circular-pie"] svg {
+    margin-left: 15px;
+}
+.addRepresentation[data-state="circular-bead"] svg {
+    margin-left: 10px;
+}
+.addRepresentation[data-state="audio"] svg {
+    margin-left: 5px;
+}
 
+.remove-measure-btn {
+  color: red;
+  visibility: hidden;
 }
 
 #measure-representation-buttons button {
-  font-size: 12px;
+  font-size: 10px;
   /*padding-left: 5px;*/
 }
 

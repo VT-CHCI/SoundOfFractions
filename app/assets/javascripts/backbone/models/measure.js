@@ -8,10 +8,10 @@ define([
   'underscore',
   'backbone',
   'backbone/collections/beats'
-], function(_, Backbone, beatsCollection) {
+], function(_, Backbone, BeatsCollection) {
   var measureModel = Backbone.Model.extend({
     defaults: {
-      beats: beatsCollection,
+      beats: BeatsCollection,
       // numberOfBeats: 0,
       representation: undefined
     },
