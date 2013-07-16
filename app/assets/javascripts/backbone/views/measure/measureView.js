@@ -155,8 +155,8 @@ define([
       // var removeButtonEl = $('.remove-measure-btn');
 
       // Circle
-      var centerX = 100;
-      var centerY = 50;
+      var measureCenterX = 100;
+      var measureCenterY = 50;
       var measureStartAngle = 0;
       var beatStartAngle;
       var beatEndAngle;
@@ -185,7 +185,12 @@ define([
       var firstBeatStart = 0; // in s
       var timeIncrement = 500; // in ms
       // Audio
-      var beatRForAudio = 24;
+      var audioMeasureCx = 100;
+      var audioMeasureCy = 25;
+      var audioMeasureR = 24;
+      var audioBeatCx = 100;
+      var audioBeatCy = 25;
+      var audioBeatR = 24;
       var colorForAudio = COLORS.hexColors[5];
 
       // for each measure in measuresCollection
@@ -197,18 +202,18 @@ define([
             // circle portion
             var circleState = $.map(Array(measureNumberOfPoints), function (d, j) {
               // margin.left + measureRadius
-              var x = centerX + lineDivision*i + measureRadius * Math.sin(2 * j * Math.PI / (measureNumberOfPoints - 1));
+              var x = measureCenterX + lineDivision*i + measureRadius * Math.sin(2 * j * Math.PI / (measureNumberOfPoints - 1));
               // margin.top + measureRadius
-              var y =  centerY - measureRadius * Math.cos(2 * j * Math.PI / (measureNumberOfPoints - 1));
+              var y =  measureCenterY - measureRadius * Math.cos(2 * j * Math.PI / (measureNumberOfPoints - 1));
               return { x: x, y: y};
             })
             circleState.splice(measureNumberOfPoints-i);
             //line portion
             var lineState = $.map(Array(measureNumberOfPoints), function (d, j) {
                // margin.left + measureRadius
-              var x = centerX + lineDivision*j;
+              var x = measureCenterX + lineDivision*j;
               // margin.top
-              var y =  centerY - measureRadius;
+              var y =  measureCenterY - measureRadius;
               return { x: x, y: y};
             })
             lineState.splice(i);
@@ -234,15 +239,20 @@ define([
           measureHeight: lbbMeasureHeight,
           measureColor: COLORS.hexColors[COLORS.colorIndices.WHITE],
           // SVG Locations
-          cx: centerX,
-          cy: centerY,
+          cx: measureCenterX,
+          cy: measureCenterY,
           xMeasureLocation: xMeasureLocation,
           yMeasureLocation: yMeasureLocation,
           measureR: measureRadius,
           // Bead
           measureNumberOfPoints: measureNumberOfPoints,
           //Audio
-          beatRForAudio: beatRForAudio,
+          audioMeasureCx: audioMeasureCx,
+          audioMeasureCy: audioMeasureCy,
+          audioMeasureR: audioMeasureR,
+          audioBeatCx: audioBeatCx,
+          audioBeatCy: audioBeatCy,
+          audioBeatR: audioBeatR,
           colorForAudio: colorForAudio,
           // Transition
           circleStates: circleStates,
@@ -278,7 +288,7 @@ define([
               .data([circleStates[0]])
               .attr('d', pathFunction)
               .attr('stroke', 'black')
-              .attr('opacity', .2)
+              .attr('opacity', 1)
               .attr('class', 'circle')
               .attr('class', 'circle-path')
 
@@ -374,8 +384,8 @@ define([
             beatWidth: beatHolderWidth/this.measuresCollection.models[0].attributes.beats.length,
             beatHeight: beatHeight,
             // Circular Pie
-            cx: centerX,
-            cy: centerY,
+            measureCx: measureCenterX,
+            measureCy: measureCenterY,
             measureR: measureRadius,
             beatAngle: 360/this.measuresCollection.models[0].attributes.beats.length,
             beatStartAngle: -90+((360/this.measuresCollection.models[0].attributes.beats.length)*index),
@@ -390,7 +400,12 @@ define([
             animationDuration: animationDuration,
 
             //Audio
-            beatRForAudio: beatRForAudio,
+            audioMeasureCx: audioMeasureCx,
+            audioMeasureCy: audioMeasureCy,
+            audioMeasureR: audioMeasureR,
+            audioBeatCx: audioBeatCx,
+            audioBeatCy: audioBeatCy,
+            audioBeatR: audioBeatR,
             colorForAudio: colorForAudio
           };
 
@@ -417,9 +432,11 @@ define([
       if (this.currentMeasureRepresentation == 'circular-bead') {
         for (i = 0 ; i < this.measurePassingToBeatFactoryParamaters.remainingNumberOfBeats ; i++){
           var index = 15-i;
-          this.measurePassingToBeatFactoryParamaters.x = 20 + (Math.random() * (10) - 5);
-          this.measurePassingToBeatFactoryParamaters.y = 100 + (Math.random() * (10) - 5);
+          //Base + Math.random() * (max - min) + min;
+          this.measurePassingToBeatFactoryParamaters.x = 20 + (Math.random() * (20) - 10);
+          this.measurePassingToBeatFactoryParamaters.y = 100 + (Math.random() * (20) - 10);
           this.measurePassingToBeatFactoryParamaters.colorIndex = index;
+          // this.measurePassingToBeatFactoryParamaters.colorIndex = 18;
           new BeadFactoryView(this.measurePassingToBeatFactoryParamaters);
         }
       }

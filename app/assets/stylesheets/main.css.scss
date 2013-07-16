@@ -1,3 +1,9 @@
+.record-button {
+  position: relative;
+  top: 85px;
+  left: 44%;
+}
+
 .addRepresentation[data-state="number-line"] svg {
     margin-left: -45px;
 }
@@ -11,13 +17,16 @@
     margin-left: 5px;
 }
 .resize-measure-pull{
-  visibility: hidden; 
+  /*visibility: hidden; */
   position: relative;
-  top: -20px;
+  top: -40px;
+  -webkit-transform: rotate(90deg); 
+  -moz-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
 }
 .remove-measure-btn {
-  color: red;
-  visibility: hidden;
+  /*color: red;*/
+  /*visibility: hidden;*/
 }
 
 #measure-representation-buttons button {
@@ -44,16 +53,9 @@
   left: 3px;
 }
 
-.icon-remove-sign {
-  color: crimson;
-}
-
 .light-hr {
   border-top: 1px solid lightgray;
   margin: 10px 0px;
-}
-.icon-circle {
-  color: red;
 }
 
 select {
@@ -257,7 +259,9 @@ svg.circular-pie {
 }
 .measure-bead {
   width: 200px;
-  height: 165px;
+  /*height: 145px;*/
+  resize: both;
+  overflow: auto;
 }
 .measure-number {
   width: 300px;
@@ -396,7 +400,6 @@ svg.circular-pie {
 }
 
 #transport {
-  /*margin: 0px auto 10px auto;*/
   text-align: center;
   /*background-color: whitesmoke;*/
   /*border: 1px solid #e3e3e3*/

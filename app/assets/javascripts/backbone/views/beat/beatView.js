@@ -53,8 +53,8 @@ define([
         this.el = options.singleBeat;
         this.parent = options.parent;
         this.currentBeatRepresentation = options.measureRepresentation;
-        this.cx = options.cx;
-        this.cy = options.cy;
+        this.measureCx = options.measureCx;
+        this.measureCy = options.measureCy;
         this.measureR = options.measureR;
         this.beatBBX = options.beatBBX;
         this.beatBBY = options.beatBBY;
@@ -69,7 +69,6 @@ define([
         this.beatStartTime = options.beatStartTime;
         this.timeIncrement = options.timeIncrement;
         this.beatR = options.beatRadius;
-        this.beatRForAudio = options.beatRForAudio;
         this.beatHolderWidth = options.beatHolderWidth;
         this.linearBeatXPadding = options.linearBeatXPadding;
         this.circleStates = options.circleStates;
@@ -79,7 +78,13 @@ define([
         this.measureNumberOfPoints = options.measureNumberOfPoints;
         this.animationDuration = options.animationDuration;
         this.beatCenterPosition = {};
-        // To allow the toggle function to be accesable outside of the nested d3 functions inside render
+        this.audioBeatCx = options.audioBeatCx;
+        this.audioBeatCy = options.audioBeatCy;
+        this.audioBeatR = options.audioBeatR;
+        this.audioMeasureCy = options.audioMeasureCy;
+        this.audioMeasureCx = options.audioMeasureCx;
+        this.audioMeasureR = options.audioMeasureR;
+        // To alloBeatw the toggle function to be accesable outside of the nested d3 functions inside render
         // per http://stackoverflow.com/questions/16672862/reference-backbone-functions-from-within-a-nested-d3-function?noredirect=1#comment24003171_16672862
         _.bindAll(this, 'toggle');
       } else {
@@ -134,10 +139,10 @@ define([
         beatTemplateParameters.beatHeight = beatHeight;
 
         //Circlular Pie
-        var centerX = this.cx;
-        beatTemplateParameters.cx = centerX;
-        var centerY = this.cy;
-        beatTemplateParameters.cy = centerY;
+        var centerX = this.measureCx;
+        beatTemplateParameters.measureCx = centerX;
+        var centerY = this.measureCy;
+        beatTemplateParameters.measureCy = centerY;
         var measureStartAngle = -90;
         beatTemplateParameters.measureStartAngle = measureStartAngle;
         var beatStartAngle = this.beatStartAngle;
@@ -192,10 +197,12 @@ define([
         this.beatUnwindingPaths = beatUnwindingPaths;
 
         //Audio
-        var beatRForAudio = this.beatRForAudio;
-        beatTemplateParameters.beatRForAudio = beatRForAudio;
-        var colorForAudio = this.colorForAudio;
-        beatTemplateParameters.colorForAudio = colorForAudio;
+        beatTemplateParameters.beatRForAudio = this.beatRForAudio;
+        beatTemplateParameters.colorForAudio = this.colorForAudio;
+        beatTemplateParameters.audioBeatCx = this.audioBeatCx;
+        beatTemplateParameters.audioBeatCy = this.audioBeatCy;
+        beatTemplateParameters.audioBeatR = this.audioBeatR;
+
         // compile the template for this beat (respect the current representation)
         var compiledTemplate = _.template(this.representations[this.currentBeatRepresentation], beatTemplateParameters );
 
@@ -214,7 +221,7 @@ define([
         // to prevent the dragging of a one beat measure
         if (ƒthis.parent.attributes.beats.length > 1) {
             drag
-              .on("drag", function(d,i) {
+              .on("drag", function(d) {
               // add the 'selected' class when a beat is dragged
               $('#beat'+ƒthis.cid).closest($('.component')).addClass('selected');
               var transformString = $('#beat'+ƒthis.cid).attr('transform').substring(10, $('#beat'+ƒthis.cid).attr('transform').length-1);
@@ -223,11 +230,13 @@ define([
               d.y = parseInt(transformString.substr(comma+1));
               d.x += d3.event.dx;
               d.y += d3.event.dy;
-              if (d.x > 100 || d.x < -100) {
+              // x and y must satisfy (x - center_x)^2 + (y - center_y)^2 < radius^2
+              if ( (d.x - ƒthis.measureCx)^2 + (d.y - ƒthis.measureCy)^2 < ƒthis.measureR ) {
+              // if (d.x > 30 || d.x < -30) {
                 d3.select(this).remove();
                 dispatch.trigger('signatureChange.event', ƒthis.parent.attributes.beats.length-1);
               }
-              d3.select(this).attr("transform", function(d,i){
+              d3.select(this).attr("transform", function(d){
                   return "translate(" + [ d.x,d.y ] + ")"
               })
           });

@@ -1,6 +1,6 @@
 <div id="measure<%= measure.cid %>" class="measure measure-audio">
   <!-- <span class="title">Audio Representation Measure <span class="number"><%= measureCount %></span> -->
-  <div class="btn pause"><i id="transport" class="icon-circle icon-2x"></i></div>
+  <div class="pause"><i id="record-<%= measure.cid %>" class="record-button icon-circle icon-2x"></i></div>
   <!-- <div class="btn pause pull-right remove-measure-btn"><i class="icon-remove"></i></div> -->
   <% if(measureCount == 1) { %>
   <% } else { %>
@@ -8,9 +8,9 @@
   <% } %>
   </span>
    <svg xmlns="http://www.w3.org/2000/svg" version="1.1" class="audio">
-    <circle cx="<%= cx %>" cy="<%= cy %>" r="<%= beatRForAudio %>" stroke="black" stroke-width="1" fill="<%= colorForAudio %>"  opacity="0.25"></circle>
+    <circle cx="<%= audioMeasureCx %>" cy="<%= audioMeasureCy %>" r="<%= audioMeasureR %>" stroke="black" stroke-width="1" fill="<%= colorForAudio %>"  opacity="0.25"></circle>
     <g id="<%= beatHolder %>">
     </g>
-    <circle cx="<%= cx%>" cy="<%= cy %>" r="<%= beatRForAudio + 2%>" fill="white"  opacity="0.1"></circle>
+    <circle cx="<%= audioMeasureCx%>" cy="<%= audioMeasureCy %>" r="<%= audioMeasureR + 2%>" fill="white"  opacity="0.1"></circle>
   </svg> 
 </div>

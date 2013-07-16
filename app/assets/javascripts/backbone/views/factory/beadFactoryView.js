@@ -127,25 +127,26 @@ define([
           .interpolate('basis'); // bundle | basis | linear | cardinal are also options
 
       var drag = d3.behavior.drag();
-      drag.on("drag", function(d,i) {
-        console.warn(d);
-        console.warn(i)
-        // add the 'selected' class when a beat is dragged
-        $('#factory-beat'+ƒthis.cid).closest($('.component')).addClass('selected');
-        window.csf = $('#factory-beat'+ƒthis.cid);
-        var transformString = $('#factory-beat'+ƒthis.cid).attr('transform').substring(10, $('#factory-beat'+ƒthis.cid).attr('transform').length-1);
-        var comma = transformString.indexOf(',');
-        d.x = parseInt(transformString.substr(0,comma));
-        d.y = parseInt(transformString.substr(comma+1));
-        d.x += d3.event.dx;
-        d.y += d3.event.dy;
-        if (d.x > 100 || d.x < -100) {
-          d3.select(this).remove();
-          dispatch.trigger('signatureChange.event', ƒthis.parent.attributes.beats.length-1);
-        }
-        d3.select(this).attr("transform", function(d,i){
-            return "translate(" + [ d.x,d.y ] + ")"
-        })
+      drag.on('drag', function(d) {
+        d3.select(this).attr("cx", +d3.select(this).attr("cx") + d3.event.dx);
+        d3.select(this).attr("cy", +d3.select(this).attr("cy") + d3.event.dy);
+
+        // // add the 'selected' class when a beat is dragged
+        // $('#factory-beat'+ƒthis.cid).closest($('.component')).addClass('selected');
+        // window.csf = $('#factory-beat'+ƒthis.cid);
+        // var transformString = $('#factory-beat'+ƒthis.cid).attr('transform').substring(10, $('#factory-beat'+ƒthis.cid).attr('transform').length-1);
+        // var comma = transformString.indexOf(',');
+        // d.x = parseInt(transformString.substr(0,comma));
+        // d.y = parseInt(transformString.substr(comma+1));
+        // d.x += d3.event.dx;
+        // d.y += d3.event.dy;
+        // if (d.x > 100 || d.x < -100) {
+        //   d3.select(this).remove();
+        //   dispatch.trigger('signatureChange.event', ƒthis.parent.attributes.beats.length-1);
+        // }
+        // d3.select(this).attr("transform", function(d){
+        //     return "translate(" + [ d.x,d.y ] + ")";
+        // })
       });
 
 
@@ -167,6 +168,7 @@ define([
             // .attr('d', pathFunction)
             .attr('fill', this.beatColor)
             .attr('stroke', 'black')
+            .attr('opacity', .2)
             .call(drag);
       }
       return this;

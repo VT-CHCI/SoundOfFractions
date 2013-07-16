@@ -1,4 +1,4 @@
-<circle id="beat<%= beat.cid %>" class="beat" cx="<%= cx %>" cy="<%= cy %>" r="24" stroke="black" stroke-width="1" fill="<%= colorForAudio %>"  opacity="0">
+<circle id="beat<%= beat.cid %>" class="beat" cx="<%= audioBeatCx %>" cy="<%= audioBeatCy %>" r="<%= audioBeatR %>" stroke="black" stroke-width="1" fill="<%= colorForAudio %>"  opacity="0">
 	<animate attributeType="CSS" attributeName="opacity" 
 		<% if(opacity == 0.2) { %>
         from="0" to="0" begin="indefinite" dur="" />
