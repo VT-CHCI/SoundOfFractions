@@ -1,7 +1,7 @@
-<div id="measure<%= measure.cid %>" class="measure measure-pie">
+<div id="measure<%= measure.cid %>" class="measure resizable measure-pie">
   <!-- <span class="title">Measure <span class="number"><%= measureCount %></span> -->
-  <div class="delta" id="delta-<%= measure.cid %>" >&Delta;</div>
-  <div class="btn pull-right remove-measure-btn visHidden"><i class="icon-remove"></i></div>
+  <div class="delta pull-left" id="delta-<%= measure.cid %>" >&Delta;</div>
+  <div class="pause pull-right remove-measure-btn"><i class="icon-minus"></i></div>
   <% if(measureCount == 1) { %>
   <% } else { %>
    - <span class="delete">[X]</span>
@@ -12,6 +12,4 @@
     <g id="<%= beatHolder %>">
     </g>
   </svg> 
-  <div class="btn pull-right resize-measure-pull visHidden"><i class="icon-resize-horizontal"></i></div>
-  <i class="pull-right resize-measure-pull visHidden icon-resize-horizontal icon-2x"></i>
 </div>

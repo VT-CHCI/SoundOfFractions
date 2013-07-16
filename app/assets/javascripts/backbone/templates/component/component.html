@@ -1,9 +1,11 @@
 <div id="component-container<%= component.cid %>" class="component-container" data-state="<%= type %>">
   <!-- <h4><%= component.get('label') %></h4> -->
   <div class="pull-left">
+    <div id="delete-component-<%= component.cid %>" class="delete-instrument"></div>
+    <img src="<%= App.assets.path(component.get('img'))%>" class="img-circle component-image">
+    <div class="control unmute"><i class="icon-volume-up"></i></div>
     <div id="instrument-selector-<%= component.cid %>" class="change-instrument"></div>
-    <img src="<%= App.assets.path(component.get('img'))%>" class="img-circle component-image"><span class="control unmute">X</span>
-    <div id="delete-component-<%= component.cid %>" class="btn delete-instrument"></div>
+    <!-- <span class="control unmute">X</span> -->
   </div>
   <div class="">
     <div id="component<%= component.cid %>" class="component well"></div>

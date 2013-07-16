@@ -155,12 +155,13 @@ define([
       if (this.gainNode.gain.value == 1) {
         this.gainNode.gain.value = 0;
         $(this.el).find('.control').removeClass('unmute').addClass('mute');
-
+        $(this.el+ ' .control').html('<i class="icon-volume-off"></i>');
         log.sendLog([[2, "Component muted: "+"component"+this.hTrack.cid]]);
 
       } else {
         this.gainNode.gain.value = 1;
         $(this.el).find('.control').removeClass('mute').addClass('unmute');
+        $(this.el+ ' .control').html('<i class="icon-volume-up"></i>');
 
         log.sendLog([[2, "Component unmuted: "+"component"+this.hTrack.cid]]);
       }

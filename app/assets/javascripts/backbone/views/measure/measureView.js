@@ -228,7 +228,6 @@ define([
 
         // (when representation button changes, the current representation template will get updated)
         // compile the template for a measure
-        console.warn(this.model);
         var measureTemplateParamaters = {
           measure: this.model,
           mCID: this.model.cid,
