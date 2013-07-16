@@ -43,14 +43,18 @@ define([
       var view = new songsViewNew({collection : this.songs});
       // general
       mainHomeView.render();
+
       // top side
       transportView.render();
       wholeMeasureRepresentationView.render();
       measureTransformationView.render();
+
       // middle
       componentsView.render();
-      systemLabelContainerView.render();
+      // systemLabelContainerView.render();
+
       // bottom
+
       // unused/old/deprecated
       tapTempoView.render();
       doallView.render();
