@@ -1,20 +1,25 @@
+.delta {
+  padding: 3px;
+  font-size: 17px;
+}
 .record-button {
   position: relative;
-  top: 85px;
-  left: 44%;
+  left: 38%;
 }
-
+.change-instrument {
+  width: 135px;  
+}
 .addRepresentation[data-state="number-line"] svg {
-    margin-left: -45px;
+  margin-left: -45px;
 }
 .addRepresentation[data-state="circular-pie"] svg {
-    margin-left: 15px;
+  margin-left: 15px;
 }
 .addRepresentation[data-state="circular-bead"] svg {
-    margin-left: 10px;
+  margin-left: 10px;
 }
 .addRepresentation[data-state="audio"] svg {
-    margin-left: 5px;
+  margin-left: 5px;
 }
 .resize-measure-pull{
   /*visibility: hidden; */
@@ -66,6 +71,8 @@ select {
   position: absolute;
   top: 100px;
   left: 3px;
+  width: 125px;
+  font-size: 10px;
 }
 
 /*This prevents the highlighting color when a user clicks fast, the user still is selecting something, but it is not actually showing*/
@@ -255,7 +262,7 @@ svg.circular-pie {
 }
 
 .measure-audio {
-  width: 200px;
+  width: 100px;
 }
 .measure-bead {
   width: 200px;

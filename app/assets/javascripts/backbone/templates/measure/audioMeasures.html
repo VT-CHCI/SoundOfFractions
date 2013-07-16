@@ -1,7 +1,7 @@
 <div id="measure<%= measure.cid %>" class="measure measure-audio">
   <!-- <span class="title">Audio Representation Measure <span class="number"><%= measureCount %></span> -->
-  <div class="pause"><i id="record-<%= measure.cid %>" class="record-button icon-circle icon-2x"></i></div>
   <!-- <div class="btn pause pull-right remove-measure-btn"><i class="icon-remove"></i></div> -->
+  <div class="delta" id="delta-<%= measure.cid %>" >&Delta;</div>
   <% if(measureCount == 1) { %>
   <% } else { %>
    - <span class="delete">[X]</span>
@@ -13,4 +13,5 @@
     </g>
     <circle cx="<%= audioMeasureCx%>" cy="<%= audioMeasureCy %>" r="<%= audioMeasureR + 2%>" fill="white"  opacity="0.1"></circle>
   </svg> 
+  <div class="pause"><i id="record-<%= measure.cid %>" class="record-button icon-hand-down icon-2x"></i></div>
 </div>

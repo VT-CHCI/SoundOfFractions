@@ -47,7 +47,7 @@ define([
       // top side
       transportView.render();
       wholeMeasureRepresentationView.render();
-      measureTransformationView.render();
+      // measureTransformationView.render();
 
       // middle
       componentsView.render();

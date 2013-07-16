@@ -71,7 +71,7 @@ define([
         this.vis.svg.attr('class', this.currentMeasureRepresentation);
         this.d3 = {};
         this.circlePath = '';
-        this.measureRadius = 40;
+        this.circularMeasureR = 40;
         this.unrolled = MeasureModel.unrolled;
         this.el = $('#measure'+this.model.cid);
       }
@@ -154,20 +154,23 @@ define([
       //Remove button
       // var removeButtonEl = $('.remove-measure-btn');
 
-      // Circle
-      var measureCenterX = 100;
-      var measureCenterY = 50;
+      // Circular
+      var circularMeasureCx = 100;
+      var circularMeasureCy = 50;
+      var circularMeasureR = this.circularMeasureR;
+      // Linear
+
+      // Pie
       var measureStartAngle = 0;
       var beatStartAngle;
       var beatEndAngle;
-      var measureRadius = this.measureRadius;
       // Bead
       var circularBeadBeatRadius = 8;
       var measureNumberOfPoints = 60; //always add 1 to close the circle AND keep under 91 to avoid computational and animation delay
       this.measureNumberOfPoints = measureNumberOfPoints;
         // Transition
         var margin = {top: 20, left: 60};
-        var lineLength = 2 * measureRadius * Math.PI;
+        var lineLength = 2 * circularMeasureR * Math.PI;
         var lineDivision = lineLength/measureNumberOfPoints;
         var animationDuration = 3000/measureNumberOfPoints;
       // Linear
@@ -185,12 +188,12 @@ define([
       var firstBeatStart = 0; // in s
       var timeIncrement = 500; // in ms
       // Audio
-      var audioMeasureCx = 100;
-      var audioMeasureCy = 25;
-      var audioMeasureR = 24;
-      var audioBeatCx = 100;
-      var audioBeatCy = 25;
-      var audioBeatR = 24;
+      var audioMeasureCx = 50;
+      var audioMeasureCy = 40;
+      var audioMeasureR = 12;
+      var audioBeatCx = 50;
+      var audioBeatCy = 40;
+      var audioBeatR = 12;
       var colorForAudio = COLORS.hexColors[5];
 
       // for each measure in measuresCollection
@@ -202,18 +205,18 @@ define([
             // circle portion
             var circleState = $.map(Array(measureNumberOfPoints), function (d, j) {
               // margin.left + measureRadius
-              var x = measureCenterX + lineDivision*i + measureRadius * Math.sin(2 * j * Math.PI / (measureNumberOfPoints - 1));
+              var x = circularMeasureCx + lineDivision*i + circularMeasureR * Math.sin(2 * j * Math.PI / (measureNumberOfPoints - 1));
               // margin.top + measureRadius
-              var y =  measureCenterY - measureRadius * Math.cos(2 * j * Math.PI / (measureNumberOfPoints - 1));
+              var y =  circularMeasureCy - circularMeasureR * Math.cos(2 * j * Math.PI / (measureNumberOfPoints - 1));
               return { x: x, y: y};
             })
             circleState.splice(measureNumberOfPoints-i);
             //line portion
             var lineState = $.map(Array(measureNumberOfPoints), function (d, j) {
                // margin.left + measureRadius
-              var x = measureCenterX + lineDivision*j;
+              var x = circularMeasureCx + lineDivision*j;
               // margin.top
-              var y =  measureCenterY - measureRadius;
+              var y =  circularMeasureCy - circularMeasureR;
               return { x: x, y: y};
             })
             lineState.splice(i);
@@ -238,12 +241,13 @@ define([
           measureWidth: lbbMeasureWidth,
           measureHeight: lbbMeasureHeight,
           measureColor: COLORS.hexColors[COLORS.colorIndices.WHITE],
-          // SVG Locations
-          cx: measureCenterX,
-          cy: measureCenterY,
+          // Circular
+          circularMeasureCx: circularMeasureCx,
+          circularMeasureCy: circularMeasureCy,
+          circularMeasureR: circularMeasureR,
+
           xMeasureLocation: xMeasureLocation,
           yMeasureLocation: yMeasureLocation,
-          measureR: measureRadius,
           // Bead
           measureNumberOfPoints: measureNumberOfPoints,
           //Audio
@@ -384,9 +388,9 @@ define([
             beatWidth: beatHolderWidth/this.measuresCollection.models[0].attributes.beats.length,
             beatHeight: beatHeight,
             // Circular Pie
-            measureCx: measureCenterX,
-            measureCy: measureCenterY,
-            measureR: measureRadius,
+            circularMeasureCx: circularMeasureCx,
+            circularMeasureCy: circularMeasureCy,
+            circularMeasureR: circularMeasureR,
             beatAngle: 360/this.measuresCollection.models[0].attributes.beats.length,
             beatStartAngle: -90+((360/this.measuresCollection.models[0].attributes.beats.length)*index),
             beatStartTime: firstBeatStart+(index)*(timeIncrement/1000),
@@ -553,7 +557,7 @@ define([
     adjustRadius: function(tempo) {
       if ($(this.componentEl).hasClass('selected')) {
         console.log('here');
-        this.measureRadius = (tempo/120)*40;
+        this.circularMeasureR = (tempo/120)*40;
         //re-render the view
         this.render();
       }

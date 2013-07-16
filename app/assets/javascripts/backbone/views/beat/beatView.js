@@ -53,9 +53,9 @@ define([
         this.el = options.singleBeat;
         this.parent = options.parent;
         this.currentBeatRepresentation = options.measureRepresentation;
-        this.measureCx = options.measureCx;
-        this.measureCy = options.measureCy;
-        this.measureR = options.measureR;
+        this.circularMeasureCx = options.circularMeasureCx;
+        this.circularMeasureCy = options.circularMeasureCy;
+        this.circularMeasureR = options.circularMeasureR;
         this.beatBBX = options.beatBBX;
         this.beatBBY = options.beatBBY;
         this.beatWidth = options.beatWidth;
@@ -138,19 +138,19 @@ define([
         var beatHeight = this.beatHeight;
         beatTemplateParameters.beatHeight = beatHeight;
 
-        //Circlular Pie
-        var centerX = this.measureCx;
-        beatTemplateParameters.measureCx = centerX;
-        var centerY = this.measureCy;
-        beatTemplateParameters.measureCy = centerY;
+        //Circular Pie
+        beatTemplateParameters.circularMeasureCx = this.circularMeasureCx;
+        var centerX = beatTemplateParameters.circularMeasureCx;
+        beatTemplateParameters.circularMeasureCy = this.circularMeasureCy;
+        var centerY = beatTemplateParameters.circularMeasureCy;
+        beatTemplateParameters.circularMeasureR = this.circularMeasureR;
+        var measureR = beatTemplateParameters.circularMeasureR;
         var measureStartAngle = -90;
         beatTemplateParameters.measureStartAngle = measureStartAngle;
         var beatStartAngle = this.beatStartAngle;
         beatTemplateParameters.beatStartAngle = beatStartAngle;
         var beatEndAngle = beatStartAngle+this.beatAngle;
         beatTemplateParameters.beatEndAngle = beatEndAngle;
-        var measureR = this.measureR;
-        beatTemplateParameters.measureR = measureR;
 
         // x center of a bead or first x of pie piece
         if (this.currentBeatRepresentation == 'circular-pie') {
@@ -217,28 +217,37 @@ define([
             .y(function (d) {return d.y;})
             .interpolate('basis'); // bundle | basis | linear | cardinal are also options
 
-        var drag = d3.behavior.drag()
+        var drag = d3.behavior.drag();
         // to prevent the dragging of a one beat measure
         if (ƒthis.parent.attributes.beats.length > 1) {
-            drag
-              .on("drag", function(d) {
-              // add the 'selected' class when a beat is dragged
-              $('#beat'+ƒthis.cid).closest($('.component')).addClass('selected');
-              var transformString = $('#beat'+ƒthis.cid).attr('transform').substring(10, $('#beat'+ƒthis.cid).attr('transform').length-1);
-              var comma = transformString.indexOf(',');
-              d.x = parseInt(transformString.substr(0,comma));
-              d.y = parseInt(transformString.substr(comma+1));
-              d.x += d3.event.dx;
-              d.y += d3.event.dy;
-              // x and y must satisfy (x - center_x)^2 + (y - center_y)^2 < radius^2
-              if ( (d.x - ƒthis.measureCx)^2 + (d.y - ƒthis.measureCy)^2 < ƒthis.measureR ) {
-              // if (d.x > 30 || d.x < -30) {
-                d3.select(this).remove();
-                dispatch.trigger('signatureChange.event', ƒthis.parent.attributes.beats.length-1);
+          drag.on("drag", function(d) {
+            // Formula for circle beats, utilizing cx and cy
+              d3.select(this).attr("cx", +d3.select(this).attr("cx") + d3.event.dx);
+              d3.select(this).attr("cy", +d3.select(this).attr("cy") + d3.event.dy);
+              // Inside: x and y must satisfy (x - center_x)^2 + (y - center_y)^2 < radius^2
+              // Outside: x and y must satisfy (x - center_x)^2 + (y - center_y)^2 > radius^2
+              // On: x and y must satisfy (x - center_x)^2 + (y - center_y)^2 == radius^2
+              if ( (d3.select(this).attr("cx") - ƒthis.measureCx)^2 + (d3.select(this).attr("cy") - ƒthis.measureCy)^2 < ƒthis.circularMeasureR ) {
+                // d3.select(this).remove();
+                // dispatch.trigger('signatureChange.event', ƒthis.parent.attributes.beats.length-1);
               }
-              d3.select(this).attr("transform", function(d){
-                  return "translate(" + [ d.x,d.y ] + ")"
-              })
+            // Formula for using a non-circle beat, utilizing the transform
+              // // add the 'selected' class when a beat is dragged
+              // $('#beat'+ƒthis.cid).closest($('.component')).addClass('selected');
+              // var transformString = $('#beat'+ƒthis.cid).attr('transform').substring(10, $('#beat'+ƒthis.cid).attr('transform').length-1);
+              // var comma = transformString.indexOf(',');
+              // d.x = parseInt(transformString.substr(0,comma));
+              // d.y = parseInt(transformString.substr(comma+1));
+              // d.x += d3.event.dx;
+              // d.y += d3.event.dy;
+              // console.log( d.x + ' : ' + d.y );
+              // if (d.x > 30 || d.x < -30) {
+              //   d3.select(this).remove();
+              //   dispatch.trigger('signatureChange.event', ƒthis.parent.attributes.beats.length-1);
+              // }
+              // d3.select(this).attr("transform", function(d){
+              //     return "translate(" + [ d.x,d.y ] + ")"
+              // })
           });
         }
 
@@ -246,7 +255,10 @@ define([
           //The Circle SVG Path we draw MUST BE AFTER THE COMPILED TEMPLATE
           var beatContainer = d3.select('#beatHolder'+this.parent.cid);
           var beatPath = beatContainer
-              .append('path')
+              .append('circle')
+              .attr('cx', beatTemplateParameters.x1)
+              .attr('cy', beatTemplateParameters.y1)
+              .attr('r', this.beatR)
               // Calling the click handler here doesn't work for some reason
               // .on('click', function(){console.log('beat container click handler')})
               .attr('class', 'beat d3')
@@ -254,7 +266,7 @@ define([
               .attr('id', 'beat'+this.cid)
               // This is the path that the beat will follow when un/roll is clicked
               .data([beatUnwindingPaths[0]])
-              .attr('d', pathFunction)
+              // .attr('d', pathFunction)
               .attr('fill', COLORS.hexColors[this.color])
               .attr('stroke', 'black')
               .style('opacity', this.getOpacityNumber(this.model.get('selected')))
