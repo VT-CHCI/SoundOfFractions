@@ -54,9 +54,12 @@
 }
 .delete-instrument {
   margin: 5px;
+  width: 11px;
   color: grey;
 }
-
+.delete-instrument:hover {
+  color: red;
+}
 .light-hr {
   border-top: 1px solid lightgray;
   margin: 10px 0px;
@@ -386,7 +389,7 @@ svg.circular-bead {
 
 .mute {
   color: rgba(255, 0, 0, 1);
-  border: 2px solid red;
+  /*border: 2px solid red;*/
   /*padding: 11px 3px;*/
   /*top: 79px;*/
   /*left: 47px;*/

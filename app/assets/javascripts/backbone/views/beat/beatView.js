@@ -219,17 +219,24 @@ define([
 
         var drag = d3.behavior.drag();
         // to prevent the dragging of a one beat measure
-        if (ƒthis.parent.attributes.beats.length > 1) {
-          drag.on("drag", function(d) {
+        if (this.beatsInMeasure > 1) {
+          drag.on("drag", function() {
+              // console.log(parseInt(d3.select(this).attr("cx")) + ' <:> ' + parseInt(d3.select(this).attr("cy")));
+              // console.log(d3.event.dx + ' : ' + d3.event.dy);
             // Formula for circle beats, utilizing cx and cy
-              d3.select(this).attr("cx", +d3.select(this).attr("cx") + d3.event.dx);
-              d3.select(this).attr("cy", +d3.select(this).attr("cy") + d3.event.dy);
+              //                          |-----Current Value--------|   |-----Delta value----\
+              var newSettingX = parseInt(parseInt(d3.select(this).attr("cx")) + parseInt(d3.event.dx));
+              var newSettingY = parseInt(parseInt(d3.select(this).attr("cy")) + parseInt(d3.event.dy));
+              d3.select(this).attr("cx", newSettingX);
+              d3.select(this).attr("cy", newSettingY);
+              var newComputedValX = d3.select(this).attr('cx');
+              var newComputedValY = d3.select(this).attr('cy');
               // Inside: x and y must satisfy (x - center_x)^2 + (y - center_y)^2 < radius^2
               // Outside: x and y must satisfy (x - center_x)^2 + (y - center_y)^2 > radius^2
               // On: x and y must satisfy (x - center_x)^2 + (y - center_y)^2 == radius^2
-              if ( (d3.select(this).attr("cx") - ƒthis.measureCx)^2 + (d3.select(this).attr("cy") - ƒthis.measureCy)^2 < ƒthis.circularMeasureR ) {
-                // d3.select(this).remove();
-                // dispatch.trigger('signatureChange.event', ƒthis.parent.attributes.beats.length-1);
+              if ( Math.pow(newComputedValX - ƒthis.circularMeasureCx, 2) + Math.pow(newComputedValY - ƒthis.circularMeasureCy, 2) > Math.pow(ƒthis.circularMeasureR+15,2) ) {
+                d3.select(this).remove();
+                dispatch.trigger('signatureChange.event', ƒthis.beatsInMeasure-1);
               }
             // Formula for using a non-circle beat, utilizing the transform
               // // add the 'selected' class when a beat is dragged
