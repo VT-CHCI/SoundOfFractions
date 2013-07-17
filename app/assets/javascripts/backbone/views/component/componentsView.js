@@ -492,6 +492,10 @@ define([
         active: true
       });
 
+      // Add the gain nodes for the music for the new instrument
+      this.gainNodeList[this.drumkit.models.length-1] = this.context.createGainNode();
+      this.muteGainNodeList[this.drumkit.models.length-1] = this.context.createGainNode();
+
       this.render();
     },
 

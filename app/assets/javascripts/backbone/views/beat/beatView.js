@@ -225,8 +225,8 @@ define([
               // console.log(d3.event.dx + ' : ' + d3.event.dy);
             // Formula for circle beats, utilizing cx and cy
               //                          |-----Current Value--------|   |-----Delta value----\
-              var newSettingX = parseInt(parseInt(d3.select(this).attr("cx")) + parseInt(d3.event.dx));
-              var newSettingY = parseInt(parseInt(d3.select(this).attr("cy")) + parseInt(d3.event.dy));
+              var newSettingX = parseInt(d3.select(this).attr("cx")) + parseInt(d3.event.dx);
+              var newSettingY = parseInt(d3.select(this).attr("cy")) + parseInt(d3.event.dy);
               d3.select(this).attr("cx", newSettingX);
               d3.select(this).attr("cy", newSettingY);
               var newComputedValX = d3.select(this).attr('cx');

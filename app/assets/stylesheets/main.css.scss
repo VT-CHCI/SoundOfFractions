@@ -3,8 +3,6 @@
   font-size: 17px;
 }
 .record-button {
-  position: relative;
-  left: 38%;
 }
 .change-instrument {
   width: 135px;  
@@ -448,7 +446,7 @@ svg.circular-bead {
 }
 
 .selected {
-  background-color: #C9D2D4;
+  background-color: orange;
 }
 
 #fraction-representation {
