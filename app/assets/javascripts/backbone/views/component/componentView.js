@@ -7,6 +7,7 @@ define([
   'underscore',
   'backbone',
   'backbone/models/component',
+  'backbone/collections/representations',
   'backbone/models/remainingInstrumentGenerator',
   'backbone/views/measure/measureView',
   'backbone/views/fraction/fractionView',
@@ -16,7 +17,7 @@ define([
   'app/dispatch',
   'backbone/models/state',
   'app/log'
-], function($, _, Backbone, Component, RemainingInstrumentGenerator, MeasuresView, FractionRepresentationView, InstrumentDropDownView, BPMSliderView, DeleteInstrumentView, dispatch, state, log){
+], function($, _, Backbone, ComponentModel, RepresentationsCollection, RemainingInstrumentGenerator, MeasureView, FractionRepresentationView, InstrumentDropDownView, BPMSliderView, DeleteInstrumentView, dispatch, state, log){
   return Backbone.View.extend({
     // this is needed to recalculate a beat's size
     el: $('.component'),
@@ -26,7 +27,8 @@ define([
     //the second is for setting this component in focus (or selected).
     events : {
       'click .control' : 'toggleMute',
-      'click .component' : 'toggleSelection'
+      'click .component' : 'toggleSelection',
+      'click .addRepresentation' : 'addRepresentationToHTrack'
     },
 
     /*
@@ -49,10 +51,12 @@ define([
           this.defaultFractionRepresentation = options.defaultFractionRepresentation;
         }
         this.unusedInstrumentsModel = options.unusedInstrumentsModel;
-        this.type = options.type;
+        this.instrumentType = options.type;
       } else {
-        this.hTrack = new Component;
+        this.hTrack = new ComponentModel;
       }
+
+      this.hTrack.representations = new RepresentationsCollection;
 
       this.animationIntervalID = null;
 
@@ -70,14 +74,14 @@ define([
 
     /*
       This View does not have its own html rendering, but instead creates
-      a new MeasuresView which gets rendered instead.
+      a new MeasureView which gets rendered instead.
     */
     render: function(options){
       if(options) {
-        // for each of the measures
+        // for each of the measures (V1 should only have 1 Measure)
         var ƒthis = this;
         _.each(this.hTrack.get('measures').models, function(measure, index) {
-          new MeasuresView({
+          new MeasureView({
             collectionOfMeasures: ƒthis.hTrack.get('measures'),
             parent: ƒthis.hTrack,
             parentEl: '#component'+ƒthis.hTrack.cid,
@@ -85,6 +89,7 @@ define([
             currentMeasureRepresentation: options.representation
           });
         });
+        // for each of the measure representations
 
         // new FractionRepresentationView({
         //   collection:this.hTrack.get('measures'),
@@ -94,17 +99,33 @@ define([
         // }); 
       } else {
         var ƒthis = this;
-        // for each of the measures
-        _.each(this.hTrack.get('measures'), function(measure, index) {
-          new MeasuresView({
-            collectionOfMeasures: ƒthis.hTrack.get('measures'),
-            parent: ƒthis.hTrack,
-            parentEl: '#component'+ƒthis.hTrack.cid,
-            model: ƒthis.hTrack.get('measures').models[index],
-            defaultMeasureRepresentation: ƒthis.defaultMeasureRepresentation
-            // newMeasureRepresentation: options.representation
+        // for each of the measures (V1 should only have 1 Measure)
+        _.each(this.hTrack.get('measures').models, function(measure, index) {
+          // for each of the measure representations
+          console.error(measure);
+          _.each(measure.get('measureRepresentations').models, function(rep, index) {
+            console.error(rep);
+            new MeasureView({
+              collectionOfMeasures: ƒthis.hTrack.get('measures'),
+              collectionOfRepresentations: measure.get('representations'),
+              parent: ƒthis.hTrack,
+              parentEl: '#representation-area-'+ƒthis.hTrack.cid,
+              model: ƒthis.hTrack.get('measures').models[index],
+              defaultMeasureRepresentation: ƒthis.defaultMeasureRepresentation,
+              representation: rep,
+              index: index
+            });
           });
         });
+
+        // new MeasureRepView({
+        //   collectionOfMeasures: ƒthis.hTrack.get('measures'),
+        //   collectionOfRepresentations: ƒthis.hTrack.get('representations'),
+        //   parent: ƒthis.hTrack,
+        //   parentEl: '#component'+ƒthis.hTrack.cid,
+        //   model: ƒthis.hTrack.get('measures').models[index],
+        //   defaultMeasureRepresentation: ƒthis.defaultMeasureRepresentation
+        // });
 
         new InstrumentDropDownView({
           unusedInstrumentsModel: this.unusedInstrumentsModel,
@@ -232,6 +253,9 @@ define([
         //this.animationWrapper(counter, beats, signature, maxMeasures, duration);
       }
     },
+    addRepresentationToHTrack: function() {
+
+    },
 
     animationWrapper: function(counter, beats, signature, maxMeasures, duration) {
       console.warn('ANIMATION WRAPPER CALLED');
@@ -253,7 +277,7 @@ define([
       //we trigger this event to cause the beats per measure slider and
       //beat bars to update based on which component is selected.
       // dispatch.trigger('bPMSlider.event', {signature: this.hTrack.get('signature'), name: this.hTrack.get('label') } );
-    }
+    },
 
     // changeInstrument: function(instrument){
     //   var ƒthis = this;

@@ -2,23 +2,22 @@
 /*
   This is the measure model.
   A component has a collection of these models.
-  these models have a collection of beats.
+  these models have a collection of beats and
+  a collection of representations
 */
 define([
   'underscore',
   'backbone',
-  'backbone/collections/beats'
-], function(_, Backbone, BeatsCollection) {
+  'backbone/collections/beats',
+  'backbone/collections/representations'
+], function(_, Backbone, BeatsCollection, RepresentationsCollection) {
   var measureModel = Backbone.Model.extend({
     defaults: {
       beats: BeatsCollection,
-      // numberOfBeats: 0,
-      representation: undefined
+      measureRepresentations: RepresentationsCollection
     },
-    initialize: function(){     
+    initialize: function(){
     }
-
   });
-  
   return measureModel;
 });

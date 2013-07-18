@@ -8,9 +8,9 @@ define([
   'underscore',
   'backbone',
   'backbone/models/measure'
-], function($, _, Backbone, measureModel){
+], function($, _, Backbone, MeasureModel){
   return Backbone.Collection.extend({
-    model: measureModel,
+    model: MeasureModel,
     initialize: function(){
     }
   });

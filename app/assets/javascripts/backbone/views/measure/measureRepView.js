@@ -1,6 +1,6 @@
-// Filename: views/measure/measureView.js
+// Filename: views/measure/measureRepView.js
 /*
-  This is the MeasureView.
+  This is the MeasureRepView.
   This is contained in a ComponentView.
 */
 define([
@@ -9,7 +9,7 @@ define([
   'backbone',
   'backbone/collections/beats',
   'backbone/models/measure',
-  'backbone/models/representation',
+  'backbone/models/measureRep',
   'backbone/views/beat/beatView',
   'backbone/views/factory/beadFactoryView',
   'text!backbone/templates/measure/audioMeasures.html',
@@ -21,7 +21,7 @@ define([
   'app/dispatch',
   'backbone/models/state',
   'app/log'
-], function($, _, Backbone, BeatsCollection, MeasureModel, RepresentationModel, BeatView, BeadFactoryView, audioMeasuresTemplate, linearBarMeasuresTemplate, circularPieMeasuresTemplate, circularBeadMeasuresTemplate, numberLineMeasuresTemplate, COLORS, dispatch, state, log){
+], function($, _, Backbone, BeatsCollection, MeasureModel, MeasureRepModel, BeatView, BeadFactoryView, audioMeasuresTemplate, linearBarMeasuresTemplate, circularPieMeasuresTemplate, circularBeadMeasuresTemplate, numberLineMeasuresTemplate, COLORS, dispatch, state, log){
   return Backbone.View.extend({
     // el: $('.measure')[0],
 
@@ -41,8 +41,6 @@ define([
     events : {
       'mouseenter': 'showInteractionButtons',
       'mouseleave': 'hideInteractionButtons',
-      'click .addMeasure' : 'addMeasure',
-      // 'click .addRepresentation' : 'addRepresentation',
       'click .delete' : 'removeMeasure',
       'click .measure' : 'toggleSelection',
       'click .remove-measure-btn' : 'removeMeasure'
@@ -62,8 +60,9 @@ define([
         if(options.collectionOfMeasures) {
           this.measuresCollection = options.collectionOfMeasures;
         }
-        this.representation = options.representation;
-        this.representationIndex = options.index;
+        if (options.collectionOfRepresentations) {
+          this.representationsCollection = options.collectionOfRepresentations;
+        }
         this.parent = options.parent;
         this.model = options.model;
         this.parentCID = options.parent.CID;
@@ -75,7 +74,7 @@ define([
         this.circlePath = '';
         this.circularMeasureR = 40;
         this.unrolled = MeasureModel.unrolled;
-        this.el = $('#measure'+this.model.cid);
+        this.el = $('#representation-area-'+this.model.cid);
       }
       // else {
       //   this.measure = new BeatsCollection;
@@ -151,7 +150,7 @@ define([
     render: function(){
       window.csf = this.el;
       // REPLACE whatever is already in the measure container with: a plus sign in the measure rendering
-      // $(this.componentEl).html('<div class="addMeasure pull-right">+</div>');
+      $(this.componentEl).html('<div class="addMeasure pull-right">+</div>');
 
       //Remove button
       // var removeButtonEl = $('.remove-measure-btn');
@@ -272,8 +271,7 @@ define([
         var compiledTemplate = _.template( this.representations[this.currentMeasureRepresentation], measureTemplateParamaters );
 
         // find the plus sign we put in there, and right before it, put in the rendered template
-        console.error($(this.componentEl));
-        $(this.componentEl).append( compiledTemplate )
+        $(this.componentEl).find('.addMeasure').before( compiledTemplate )
 
         if (this.currentMeasureRepresentation == 'circular-bead') {
           var lineData = $.map(Array(measureNumberOfPoints), function (d, i) {
@@ -460,33 +458,23 @@ define([
       Lastly, it triggers a stopRequest, because we can't continue playing until
       all the durations get recalculated to reflect this new measure.
     */
-    addMeasure: function(){
-        console.log('add a measure');
-        var newMeasure = new BeatsCollection;
 
-        for (var i = 0; i < this.parent.get('signature'); i++) {
-          newMeasure.add();
-        }
-
-        this.measuresCollection.add({beats: newMeasure});
-
-        //Logging
-        name = 'measure' + _.last(this.measuresCollection.models).cid + '.';
-        _.each(newMeasure.models, function(beats) {
-          name = name + 'beat'+ beats.cid + '.';
-        }, this);
-        log.sendLog([[3, 'Added a measure: ' + name]]);
-
-        //Render
-        this.render();
-        //Dispatch
-        dispatch.trigger('stopRequest.event', 'off');
-    },
+    addRepresentation: function(rep){
+      console.log('adding another representation to the component');
+      this.hTrack.representations.add({
+        model: new ({
+          measureModel: this.hTrack.get('measures').model,
+          beats: this.hTrack.get('measures').model.get('beats'),
+          representation: rep
+        })
+      })
+      this.render();
+    }
 
     /*
       This is called when the user clicks on the minus to remove a measure.
     */
-    removeMeasure: function(ev){
+    removeRepresentation: function(ev){
       if ($('#measure'+this.measuresCollection.models[0].cid).parent()) {
         //removing the last measure isn't allowed.
         if(this.measuresCollection.models.length == 1) {

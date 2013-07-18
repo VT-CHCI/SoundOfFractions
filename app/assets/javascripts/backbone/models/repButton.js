@@ -14,8 +14,6 @@ define([
       text:'Representation' 
     },
     initialize: function(){
-
-      
     },
   });
   

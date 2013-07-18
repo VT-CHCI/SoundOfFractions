@@ -8,9 +8,9 @@ define([
   'underscore',
   'backbone',
   'backbone/models/beat'
-], function($, _, Backbone, beatModel){
+], function($, _, Backbone, BeatModel){
   var BeatsCollection = Backbone.Collection.extend({
-    model: beatModel,
+    model: BeatModel,
     initialize: function(){
     }
   });

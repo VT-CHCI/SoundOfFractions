@@ -1,6 +1,6 @@
-//filename: models/measureRep.js
+//filename: models/representation.js
 /*
-  This is the measureRep model.
+  This is the representation model.
   It is the same as a measure model, but it is just
   representation purposes of the measure, not a collection
   itself
@@ -10,17 +10,13 @@ define([
   'backbone',
   'backbone/models/measure'
 ], function(_, Backbone, MeasureModel) {
-  var measureModel = Backbone.Model.extend({
+  var RepresentationModel = Backbone.Model.extend({
     defaults: {
-      measureModel: MeasureModel,
-      beats: MeasureModel.beats,
-      // numberOfBeats: 0,
-      representation: undefined
+      // measureModel: MeasureModel,
+      representationType: undefined //should ovveride this each time
     },
     initialize: function(){     
     }
-
   });
-  
-  return measureModel;
+  return RepresentationModel;
 });

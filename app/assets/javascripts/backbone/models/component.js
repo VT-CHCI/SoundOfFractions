@@ -7,9 +7,8 @@
 define([
   'underscore',
   'backbone',
-  'backbone/collections/measures',
-  'backbone/collections/measureReps'
-], function(_, Backbone, MeasuresCollection, MeasureRepsCollection) {
+  'backbone/collections/measures'
+], function(_, Backbone, MeasuresCollection) {
   var componentModel = Backbone.Model.extend({
     defaults: {
       label: 'snare',
@@ -18,10 +17,9 @@ define([
       mute: false,
       sample: 'shhh',
       measures: MeasuresCollection,
-      representations: MeasureRepsCollection,
       active: true,
-      signature: 0, //initially set to zero, but set in the init of componentsView
-      representation: 'fraction'
+      signature: 0 //initially set to zero, but set in the init of componentsView
+      // representation: 'fraction'
     },
     initialize: function(){
     }

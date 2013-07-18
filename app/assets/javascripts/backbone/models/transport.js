@@ -16,7 +16,6 @@ define([
       img:'play.png' 
     },
     initialize: function(){
-
     },
   });
   

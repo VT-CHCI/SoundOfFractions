@@ -12,17 +12,19 @@ define([
   // Pull in the Collection module from above
   'backbone/collections/beats',
   'backbone/collections/measures',
+  'backbone/collections/representations',
   'backbone/collections/components',
   'backbone/models/beat',
   'backbone/models/measure',
   'backbone/models/component',
+  'backbone/models/representation',
   'backbone/models/remainingInstrumentGenerator',
   'backbone/views/button/remainingInstrumentGeneratorView',
   'backbone/views/component/componentView',
   'text!backbone/templates/component/component.html',
   'app/dispatch',
   'backbone/models/state'
-], function($, _, Backbone, BeatsCollection, MeasuresCollection, ComponentsCollection, BeatModel, MeasureModel, ComponentModel, RemainingInstrumentGeneratorModel, RemainingInstrumentGeneratorView, ComponentView, ComponentTemplate, dispatch, state){
+], function($, _, Backbone, BeatsCollection, MeasuresCollection, RepresentationsCollection, ComponentsCollection, BeatModel, MeasureModel, ComponentModel, RepresentationModel, RemainingInstrumentGeneratorModel, RemainingInstrumentGeneratorView, ComponentView, ComponentTemplate, dispatch, state){
   var ComponentsView = Backbone.View.extend({
     el: $('#sof-composition-area'),
 
@@ -46,15 +48,22 @@ define([
       this.drumkit = ComponentsCollection;
 
       //this is creating the snare component.
-      this.measure = new BeatsCollection;
 
+      // this creates 1 measure, and addes beats and the representations to itself
+      this.manuallyCreatedMeasureBeatsCollection = new BeatsCollection;
       //for each beat - also change signature below
       for (var i = 0; i < 6; i++) {
-        this.measure.add();
+        this.manuallyCreatedMeasureBeatsCollection.add();
       }
+      // add an audio rep
+      this.manuallyCreatedRepresentationModel = new RepresentationModel;
+      this.manuallyCreatedRepresentationModel.representationType = 'audio';
+      this.manuallyCreatedMeasureRepresentationCollection = new RepresentationsCollection;
+      this.manuallyCreatedMeasureRepresentationCollection.add(this.manuallyCreatedRepresentationModel);
 
-      this.component = new MeasuresCollection;
-      this.component.add({beats: this.measure});
+      this.manuallyCreatedMeasuresCollection = new MeasuresCollection;
+      this.manuallyCreatedMeasuresCollection.add({
+        beats: this.manuallyCreatedMeasureBeatsCollection, measureRepresentations: this.manuallyCreatedMeasureRepresentationCollection});
 
       this.drumkit = ComponentsCollection.add({
         label: 'Snare',
@@ -62,71 +71,72 @@ define([
         img: 'snare.png',
         mute: false,
         sample: '808_sn.m4a',
-        measures: this.component,
-        signature: this.component.models[0].get('beats').length,
+        measures: this.manuallyCreatedMeasuresCollection,
+        // representations: this.manuallyCreatedRepresentationsCollection,
+        signature: this.manuallyCreatedMeasuresCollection.models[0].get('beats').length,
         active: true
       });
 
       // //this is creating the hi-hat component.
-      // this.measure = new BeatsCollection;
+      // this.manuallyCreatedMeasure = new BeatsCollection;
 
       // //for each beat - also change signature below
       // for (var i = 0; i < 5; i++) {
-      //   this.measure.add();
+      //   this.manuallyCreatedMeasure.add();
       // }
 
-      // this.component = new MeasuresCollection;
-      // this.component.add({beats: this.measure});
+      // this.manuallyCreatedMeasuresCollection = new MeasuresCollection;
+      // this.manuallyCreatedMeasuresCollection.add({beats: this.manuallyCreatedMeasure});
 
       // this.drumkit = ComponentsCollection.add({
       //   label: 'Hi Hat',
       //   img: 'hihat.png',
       //   mute: true,
       //   sample: '808_hh.m4a',
-      //   measures: this.component,
+      //   measures: this.manuallyCreatedMeasuresCollection,
       //   signature: 5,
       //   active: true
       // });
 
       // //this is creating the kick drum component.
-      // this.measure = new BeatsCollection;
+      // this.manuallyCreatedMeasure = new BeatsCollection;
 
       // //for each beat - also change signature below
       // for (var i = 0; i < 4; i++) {
-      //   this.measure.add();
+      //   this.manuallyCreatedMeasure.add();
       // }
 
-      // this.component = new MeasuresCollection;
-      // this.component.add({beats: this.measure});
+      // this.manuallyCreatedMeasuresCollection = new MeasuresCollection;
+      // this.manuallyCreatedMeasuresCollection.add({beats: this.manuallyCreatedMeasure});
 
       // this.drumkit = ComponentsCollection.add({
       //   label: 'Kick Drum',
       //   img: 'kick.png',
       //   mute: true,
       //   sample: '808_kd.m4a',
-      //   measures: this.component,
+      //   measures: this.manuallyCreatedMeasuresCollection,
       //   signature: 4,
       //   active: true
       // });
 
 
       // //this is creating the synth component.
-      // this.measure = new BeatsCollection;
+      // this.manuallyCreatedMeasure = new BeatsCollection;
 
       // //for each beat - also change signature below
       // for (var i = 0; i < 3; i++) {
-      //   this.measure.add();
+      //   this.manuallyCreatedMeasure.add();
       // }
 
-      // this.component = new MeasuresCollection;
-      // this.component.add({beats: this.measure});
+      // this.manuallyCreatedMeasuresCollection = new MeasuresCollection;
+      // this.manuallyCreatedMeasuresCollection.add({beats: this.manuallyCreatedMeasure});
 
       // this.drumkit = ComponentsCollection.add({
       //   label: 'Synth',
       //   img: 'synth.png',
       //   mute: true,
       //   sample: 'sy.mp3',
-      //   measures: this.component,
+      //   measures: this.manuallyCreatedMeasuresCollection,
       //   signature: 3,
       //   active: true
       // });
@@ -468,18 +478,18 @@ define([
       console.warn('in componentsView addInstrument');
 
       //this is creating the new instrument htrack.
-      this.measure = new BeatsCollection;
+      this.manuallyCreatedMeasure = new BeatsCollection;
 
       //for default number of beats
       var defaultNumberOfBeats = 6;
       for (var i = 0; i < defaultNumberOfBeats; i++) {
         // add a beat to the measure
-        this.measure.add();
+        this.manuallyCreatedMeasure.add();
       }
 
       // Make a htrack
-      this.component = new MeasuresCollection;
-      this.component.add({beats: this.measure});
+      this.manuallyCreatedMeasuresCollection = new MeasuresCollection;
+      this.manuallyCreatedMeasuresCollection.add({beats: this.manuallyCreatedMeasure});
 
       this.drumkit = ComponentsCollection.add({
         label: this.unusedInstrumentsModel.getDefault(instrument, 'label'),
@@ -487,7 +497,7 @@ define([
         img: this.unusedInstrumentsModel.getDefault(instrument, 'image'),
         mute: false,
         sample: this.unusedInstrumentsModel.getDefault(instrument, 'sample'),
-        measures: this.component,
+        measures: this.manuallyCreatedMeasuresCollection,
         signature: defaultNumberOfBeats,
         active: true
       });

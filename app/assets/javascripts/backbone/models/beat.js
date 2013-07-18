@@ -8,7 +8,7 @@ define([
   'underscore',
   'backbone'
 ], function(_, Backbone) {
-  var beatModel = Backbone.Model.extend({
+  var BeatModel = Backbone.Model.extend({
     defaults: {
       selected: false,
       state: 'OFF'
@@ -25,5 +25,5 @@ define([
     }
   });
   
-  return beatModel;
+  return BeatModel;
 });

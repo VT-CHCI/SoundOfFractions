@@ -57,6 +57,7 @@
 }
 .delete-instrument:hover {
   color: red;
+  cursor: pointer;
 }
 .light-hr {
   border-top: 1px solid lightgray;
@@ -259,6 +260,10 @@ svg.circular-bead {
 	display: inline-block;
   margin-bottom: 5px;
   width: 300px;
+}
+.resizable-h {
+  resize: horizontal;
+  overflow: auto;
 }
 .resizable {
   resize: both;
