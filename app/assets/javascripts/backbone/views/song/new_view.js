@@ -80,10 +80,9 @@ define([
 
     render: function(){
       console.log("New View rendering...");
-      console.log($(this.el));
       $(this.sofCompositionAreaEl).html('');
       $(this.el).html('');
-      console.log(this.model.toJSON());
+      // console.log(this.model.toJSON());
 
       //Working
       var compiledTemplate = _.template ( songsNewTemplate, this.model.toJSON() );

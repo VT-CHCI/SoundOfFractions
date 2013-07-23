@@ -180,10 +180,13 @@ define([
       }
       this.circleStates = circleStates;
 
+      // console.error(this);
+      // console.error(this.cid);
+      // console.error(this.model);
+      // console.error(this.model.cid);
       // compile the template for a representation
       var measureRepTemplateParamaters = {
-        measure: this.model,
-        mCID: this.model.cid,
+        measureRepCID: this.cid,
         beatHolder:'beatHolder'+this.model.cid,
         beatFactoryHolder: 'beatFactoryHolder'+this.model.cid,
         measureCount: this.measureCount,

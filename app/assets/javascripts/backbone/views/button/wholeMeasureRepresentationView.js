@@ -21,13 +21,13 @@ define([
 
     //registering backbone's click event to our cycle() method.
     events : {
-      "click .btn" : "cycle"
+      'click .btn' : 'cycle',
+      'click .addRepresentation' : 'addRep'
     },
 
     //simply creates the model.
     initialize: function() {
       this.repButtonModel = new RepButtonModel;
-
     },
 
     /*
@@ -58,6 +58,16 @@ define([
       $(this.el).draggable();
 
       return this;
+    },
+    addRep: function(e) {
+      // find the plus sign with the class '.cs' and return the id of its hTrack
+      var newRepType = e.srcElement.getAttribute('data-state');
+      var hTrackID = $('.cs').closest('.hTrack').attr('id');
+      var cid = hTrackID.slice(7);
+      $('.cs').removeClass('cs'); 
+      //trigger the Measure representation addition
+      dispatch.trigger('addMeasureRepresentation.event', { newRepType: newRepType, hTrackID: hTrackID, hTrack: cid} );
+      // dispatch.on('addMeasureRepresentation.event', this.addRepToMeasure, this);
     }
   });
   return new WholeMeasureRepresentationView();

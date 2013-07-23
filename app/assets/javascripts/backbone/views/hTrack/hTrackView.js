@@ -26,8 +26,8 @@ define([
     //the second is for setting this hTrack in focus (or selected).
     events : {
       'click .control' : 'toggleMute',
-      'click .hTrack' : 'toggleSelection',
-      'click .addRepresentation' : 'addRepresentationToHTrack'
+      'click .hTrack-container' : 'toggleSelection',
+      'click .addMeasureRep' : 'addRepresentationToHTrack'
     },
 
     /*
@@ -40,31 +40,22 @@ define([
     */
     initialize: function(options){
       if (options) {
-        this.hTrack = options.hTrack;
-        this.el = options.el;
-        this.gainNode = options.gainNode;
-        if (options.defaultMeasureRepresentation) {
-          this.defaultMeasureRepresentation = options.defaultMeasureRepresentation;
+        for (var key in options) {
+          this[key] = options[key];
         }
-        if (options.defaultFractionRepresentation) {
-          this.defaultFractionRepresentation = options.defaultFractionRepresentation;
-        }
-        this.unusedInstrumentsModel = options.unusedInstrumentsModel;
-        this.instrumentType = options.type;
       } else {
         this.hTrack = new HTrackModel;
       }
 
-      this.hTrack.representations = new RepresentationsCollection;
-
-      this.animationIntervalID = null;
-
-      this.hTrack.set('currentBeat',0);
+      // this.hTrack.representations = new RepresentationsCollection;
+      // this.animationIntervalID = null;
+      // this.hTrack.set('currentBeat',0);
 
       //registering our handlers for serveral events.
       dispatch.on('toggleAnimation.event', this.toggleAnimation, this);
       dispatch.on('signatureChange.event', this.updateModelSignature, this);
       dispatch.on('instrumentChanged.event', this.changeInstrument, this);
+
       // dispatch.on('fractionRepresentation.event', this.recalculateFraction, this);
       // dispatch.on('beatClicked.event', this.recalculateFraction, this);
 
@@ -83,7 +74,7 @@ define([
           new MeasureView({
             collectionOfMeasures: ƒthis.hTrack.get('measures'),
             parent: ƒthis.hTrack,
-            parentEl: '#hTrack'+ƒthis.hTrack.cid,
+            parentEl: '#hTrack-'+ƒthis.hTrack.cid,
             model: ƒthis.hTrack.get('measures').models[index],
             currentMeasureRepresentation: options.representation
           });
@@ -96,8 +87,8 @@ define([
               collectionOfMeasures: ƒthis.hTrack.get('measures'),
               collectionOfRepresentations: measure.get('measureRepresentations'),
               parent: ƒthis.hTrack,
-              parentEl: '#measure-area-'+ƒthis.hTrack.cid,
-              hTrackEl: '#hTrack-container-'+ƒthis.hTrack.cid,
+              parentEl: '#measure-container-'+ƒthis.hTrack.cid,
+              hTrackEl: '#hTrack-'+ƒthis.hTrack.cid,
               model: ƒthis.hTrack.get('measures').models[index],
               fullMeasure: measure,
               defaultMeasureRepresentation: ƒthis.defaultMeasureRepresentation,
@@ -165,7 +156,6 @@ define([
     */
     toggleMute: function(){
       this.hTrack.set('active', !this.hTrack.get('active'));
-
       if (this.gainNode.gain.value == 1) {
         this.gainNode.gain.value = 0;
         $(this.el).find('.control').removeClass('unmute').addClass('mute');
@@ -245,8 +235,8 @@ define([
         //this.animationWrapper(counter, beats, signature, maxMeasures, duration);
       }
     },
-    addRepresentationToHTrack: function() {
-
+    addRepresentationToHTrack: function(e) {
+      e.srcElement.parentElement.classList.add('cs');
     },
 
     animationWrapper: function(counter, beats, signature, maxMeasures, duration) {
@@ -264,7 +254,7 @@ define([
     //This is called when the hTrack is clicked anywhere to bring
     //the hTrack into focus as selected.
     toggleSelection: function(){
-      $('#hTrack'+this.hTrack.cid).toggleClass('selected');
+      $('#hTrack-container-'+this.hTrack.cid).toggleClass('selected');
 
       //we trigger this event to cause the beats per measure slider and
       //beat bars to update based on which hTrack is selected.

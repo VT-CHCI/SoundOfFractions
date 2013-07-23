@@ -6,7 +6,7 @@
   margin-bottom: 5px;
   width: 95%;
   display: inline-block;
-
+  overflow: hidden;
 }
 .measure-rep-container {
   width: 99%;
@@ -14,7 +14,7 @@
   overflow-x: auto;
   white-space: nowrap;
 }
-.measure-area {
+.measure-container {
   width: 89%;
   /*overflow: auto;*/
 }
@@ -31,7 +31,7 @@
   width: 135px;  
 }
 .addRepresentation[data-state="number-line"] svg {
-  margin-left: -45px;
+  margin-left: -65px;
 }
 .addRepresentation[data-state="circular-pie"] svg {
   margin-left: 15px;
@@ -236,9 +236,7 @@ svg.circular-bead {
   height: 120px;
   /*width: 165px;*/
 }
-svg {
-  width: 90%;
-}
+
 
 #record {
   float: left;
@@ -332,8 +330,8 @@ svg {
   font-weight: bold;
 }
 
-.addMeasure {
-	color: green;
+.addMeasureRep {
+  color: grey;
 	display: inline-block;
 	vertical-align: bottom;
 	padding: 0 5px;
@@ -341,8 +339,8 @@ svg {
   cursor: pointer;
 }
 
-.addMeasure:hover {
-  font-weight: bold;
+.addMeasureRep:hover {
+  color: green;
 }
 
 .hTrack-image {
@@ -398,11 +396,11 @@ svg {
 }
 
 .control {
-  position: absolute;
-  top: 45px;
+  position: relative;
+  top: 20px;
   font-size: 45px;
   font-weight: bold;
-  left: 85px;
+  /*left: 85px;*/
   cursor: pointer;
 }
 
@@ -411,11 +409,12 @@ svg {
 }
 
 .unmute:hover {
-  color: rgba(255, 0, 0, 0.75);
+  color: red;
+  opacity: .75;
 }
 
 .mute {
-  color: rgba(255, 0, 0, 1);
+  color: red;
   /*border: 2px solid red;*/
   /*padding: 11px 3px;*/
   /*top: 79px;*/

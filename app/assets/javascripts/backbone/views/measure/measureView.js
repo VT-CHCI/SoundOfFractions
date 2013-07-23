@@ -8,6 +8,8 @@ define([
   'underscore',
   'backbone',
   'backbone/collections/beats',
+  'backbone/collections/stage',
+  'backbone/collections/representations',
   'backbone/models/measure',
   'backbone/models/state',
   'backbone/models/representation',
@@ -18,7 +20,7 @@ define([
   'colors',
   'app/dispatch',
   'app/log'
-], function($, _, Backbone, BeatsCollection, MeasureModel, StateModel, RepresentationModel, BeatView, BeadFactoryView, MeasureRepView, MeasureTemplate, COLORS, dispatch, log){
+], function($, _, Backbone, BeatsCollection, StageCollection, RepresentationsCollection, MeasureModel, StateModel, RepresentationModel, BeatView, BeadFactoryView, MeasureRepView, MeasureTemplate, COLORS, dispatch, log){
   return Backbone.View.extend({
     // el: $('.measure')[0],
 
@@ -56,7 +58,7 @@ define([
         // this.circlePath = ''; //Not sure we still need this....
         this.circularMeasureR = 40;
 
-        this.el = '#measure-area-'+options.parent.cid;
+        this.el = '#measure-container-'+options.parent.cid;
       }
       // else {
       //   this.measure = new BeatsCollection;
@@ -76,6 +78,8 @@ define([
       dispatch.on('measureRepresentation.event', this.changeMeasureRepresentation, this);
       dispatch.on('unroll.event', this.unroll, this);
       dispatch.on('tempoChange.event', this.adjustRadius, this);
+      dispatch.on('addMeasureRepresentation.event', this.addRepToMeasure, this);
+
       this.render();
     },
 
@@ -277,6 +281,14 @@ define([
         dispatch.trigger('stopRequest.event', 'off');
         dispatch.trigger('signatureChange.event', this.parent.get('signature'));
       }
+    },
+
+    addRepToMeasure: function(options) {
+      var representationModel = new RepresentationModel;
+      representationModel.representationType = options.newRepType;
+
+      StageCollection.get(options.hTrack).get('measures').models[0].get('measureRepresentations').add(representationModel)
+      this.render();
     },
     //This is called when the hTrack is clicked anywhere to bring
     //the hTrack into focus as selected.

@@ -228,11 +228,12 @@ define([
         //create a hTrack view.
         var hTrackView = new HTrackView({
           hTrack: hTrack,
-          el: '#hTrack-container'+hTrack.cid, 
+          el: '#hTrack-'+hTrack.cid, 
           gainNode: this.muteGainNodeList[counter],
           defaultMeasureRepresentation: this.defaultMeasureRepresentation,
           // defaultFractionRepresentation: this.defaultFractionRepresentation,
-          unusedInstrumentsModel: this.unusedInstrumentsModel
+          unusedInstrumentsModel: this.unusedInstrumentsModel,
+          type: hTrack.get('type')
         });
         if(!hTrack.get('active')) {
           console.log('found a muted one');
