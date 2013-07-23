@@ -240,7 +240,7 @@ define([
               }
             // Formula for using a non-circle beat, utilizing the transform
               // // add the 'selected' class when a beat is dragged
-              // $('#beat'+ƒthis.cid).closest($('.component')).addClass('selected');
+              // $('#beat'+ƒthis.cid).closest($('.hTrack')).addClass('selected');
               // var transformString = $('#beat'+ƒthis.cid).attr('transform').substring(10, $('#beat'+ƒthis.cid).attr('transform').length-1);
               // var comma = transformString.indexOf(',');
               // d.x = parseInt(transformString.substr(0,comma));

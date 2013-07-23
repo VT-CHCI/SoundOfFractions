@@ -8,7 +8,6 @@ define([
   'backbone',
   'backbone/views/home/homeView',
   'backbone/views/slider/beatsPerMeasureSliderView',
-  'backbone/views/additiveBeatPalette/additiveLinearBeatPaletteView',
   'backbone/views/stage/stageView',
   'backbone/views/slider/tempoSliderView',
   'backbone/views/transport/transportView',
@@ -26,7 +25,7 @@ define([
   'backbone/views/song/index_view',
   'backbone/views/song/show_view',
   'backbone/views/song/edit_view'
-], function($, _, Backbone, mainHomeView, beatsPerMeasureSliderView, additiveLinearBeatPaletteView, StageView, tempoSliderView, transportView, fractionRepresentionView, wholeMeasureRepresentationView, measureTransformationView, recorderView, tapTempoView, doallView, remainingInstrumentGeneratorView, systemLabelContainerView, log, songsCollection, songsViewNew, songsViewIndex, songsViewShow, songsViewEdit ){
+], function($, _, Backbone, mainHomeView, beatsPerMeasureSliderView, StageView, tempoSliderView, transportView, fractionRepresentionView, wholeMeasureRepresentationView, measureTransformationView, recorderView, tapTempoView, doallView, remainingInstrumentGeneratorView, systemLabelContainerView, log, songsCollection, songsViewNew, songsViewIndex, songsViewShow, songsViewEdit ){
 
   var BBRouter = Backbone.Router.extend({
     // songs: {},
@@ -78,7 +77,6 @@ define([
       fractionRepresentionView.render();
       wholeMeasureRepresentationView.render();
       measureTransformationView.render();
-      additiveLinearBeatPaletteView.render();
       tempoSliderView.render();
       transportView.render();
       recorderView.render();
@@ -125,7 +123,7 @@ define([
     //and send it to the logging system.
     //(important so that we know the IDs of everything)
     name = '';
-    $('.component').each( function() {
+    $('.hTrack').each( function() {
       name = name + $(this).attr('id') + '.';
 
       $(this).children('.measure').each( function() {
@@ -136,7 +134,7 @@ define([
           });
       });
 
-      log.sendLog([[1, "Component structure: "+name]]);
+      log.sendLog([[1, "HTrack structure: "+name]]);
       name = '';
     });
 

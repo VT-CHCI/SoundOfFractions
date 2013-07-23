@@ -35,7 +35,7 @@ define([
 
     initialize: function(options){
       //console.warn(options.el);
-      //if we're being created by a componentView, we are passed in options.
+      //if we're being created by a HTrackView, we are passed in options.
       // Otherwise we create a single measure and add it to our collection.
       if (options) {
         this.measuresCollection = options.collection;
@@ -105,7 +105,7 @@ define([
       $(this.el).html( compiledTemplate );
 
       // TODO, we need to refresh the svg
-      // $('#component'+this.parent.cid).html($('#component'+this.parent.cid).html());
+      // $('#hTrack'+this.parent.cid).html($('#hTrack'+this.parent.cid).html());
 
       // JQuery-UI draggable
       $('#fraction-representation').draggable();

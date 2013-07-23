@@ -1,7 +1,7 @@
-// Filename: views/measure/measureRepView.js
+// Filename: views/measure/measureView.js
 /*
-  This is the MeasureRepView.
-  This is contained in a ComponentView.
+  This is the MeasureView.
+  This is contained in a HTrackView.
 */
 define([
   'jquery',
@@ -31,7 +31,7 @@ define([
     },
 
     initialize: function(options){
-      //if we're being created by a componentView, we are
+      //if we're being created by a HTrackView, we are
       //passed in options. Otherwise we create a single
       //measure and add it to our collection.
       if (options) {
@@ -53,11 +53,10 @@ define([
         // this.parent = options.parent;
         // this.model = options.model;
         // this.parentCID = options.parent.CID;
-        // this.componentEl = options.parentEl;
         // this.circlePath = ''; //Not sure we still need this....
         this.circularMeasureR = 40;
 
-        this.el = options.parentEl;
+        this.el = '#measure-area-'+options.parent.cid;
       }
       // else {
       //   this.measure = new BeatsCollection;
@@ -89,7 +88,7 @@ define([
       // TODO maybe make another line to hold each measure
       var compiledMeasureTemplate = _.template( MeasureTemplate, measureTemplateParamaters );
 
-      // append the MeasureTemplate to the componentEl
+      // append the MeasureTemplate to the measure area in the hTrack
       $(this.el).append( compiledMeasureTemplate )
 
       // Circular
@@ -172,7 +171,7 @@ define([
           parent: this,
           model: rep,
           parentCID: this.cid,
-          componentEl: this.componentEl,
+          hTrackEl: this.hTrackEl,
           representationType: rep.representationType,
           mCID: this.model.cid,
           measureRepContainer: '#measure-rep-container-'+this.model.cid,
@@ -221,7 +220,7 @@ define([
     /*
       This is called when the user clicks on the plus to add a new measure.
 
-      It creates a new measure and adds it to the component.
+      It creates a new measure and adds it to the hTrack.
       It generates a string representing the id of the measure and the ids of
       its beats and logs the creation.
 
@@ -279,8 +278,8 @@ define([
         dispatch.trigger('signatureChange.event', this.parent.get('signature'));
       }
     },
-    //This is called when the component is clicked anywhere to bring
-    //the component into focus as selected.
+    //This is called when the hTrack is clicked anywhere to bring
+    //the hTrack into focus as selected.
     toggleSelection: function(e){
       e.stopPropagation();
       $('#measure'+this.measuresCollection.models[0].cid).toggleClass('selected');

@@ -3,7 +3,7 @@
   This is the RepButtonView.
   This renders the four-state radio button
   that controls which representation is displayed
-  on the side of each component.  
+  on the side of each hTrack.  
 */  
 define([
   'jquery',

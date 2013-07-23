@@ -54,7 +54,7 @@
 //       }, this);
 
 //       var measureCount = 1;
-//       $('.component-container').each(function() {
+//       $('.hTrack-container').each(function() {
 //         $(this).find('.number').each(function() {
 //           $(this).text(measureCount);
 //           measureCount++;

@@ -50,7 +50,7 @@ define([
         console.log('now playing');
 
         name = '';
-        $('.component').each(function(index) {
+        $('.hTrack').each(function(index) {
           name = name + index + ':';
           $(this).children('.measure').children('.beat').children().each(function() {
             if ($(this).attr('class') == 'ON')

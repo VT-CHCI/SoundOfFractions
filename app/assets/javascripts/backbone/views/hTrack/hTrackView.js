@@ -97,6 +97,7 @@ define([
               collectionOfRepresentations: measure.get('measureRepresentations'),
               parent: ƒthis.hTrack,
               parentEl: '#measure-area-'+ƒthis.hTrack.cid,
+              hTrackEl: '#hTrack-container-'+ƒthis.hTrack.cid,
               model: ƒthis.hTrack.get('measures').models[index],
               fullMeasure: measure,
               defaultMeasureRepresentation: ƒthis.defaultMeasureRepresentation,

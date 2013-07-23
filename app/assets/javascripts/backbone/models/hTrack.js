@@ -10,7 +10,7 @@ define([
   'backbone/collections/measures',
   'backbone/models/remainingInstrumentGenerator'
 ], function(_, Backbone, MeasuresCollection, RemainingInstrumentGenerator ) {
-  var componentModel = Backbone.Model.extend({
+  var HTrackModel = Backbone.Model.extend({
     defaults: {
       label: 'snare',
       type: 'sn',
@@ -26,5 +26,5 @@ define([
     initialize: function(){
     }
   });
-  return componentModel;
+  return HTrackModel;
 });

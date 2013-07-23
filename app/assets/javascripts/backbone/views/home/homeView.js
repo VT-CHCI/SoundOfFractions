@@ -38,10 +38,9 @@ define([
       //clear the login form.
       $('.navbar-form input').val('');
 
-      //creating a string representation of the entire
-      //component structure.
+      //creating a string representation of the entire hTrack structure.
       name = '';
-      $('.component').each( function() {
+      $('.hTrack').each( function() {
         name = name + $(this).attr('id') + '.';
 
         $(this).children('.measure').each( function() {
@@ -52,8 +51,8 @@ define([
             });
         });
 
-        //sending the component structure to the logging system.
-        log.sendLog([[1, "Component structure: "+name]]);
+        //sending the hTrack structure to the logging system.
+        log.sendLog([[1, "hTrack structure: "+name]]);
         name = '';
       });
 

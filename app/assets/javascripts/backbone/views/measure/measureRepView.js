@@ -1,7 +1,7 @@
 // Filename: views/measure/measureRepView.js
 /*
   This is the MeasureRepView.
-  This is contained in a ComponentView.
+  This is contained in a MeasureView.
 */
 define([
   'jquery',
@@ -44,7 +44,7 @@ define([
     },
 
     initialize: function(options){
-      //if we're being created by a componentView, we are
+      //if we're being created by a MeasureView, we are
       //passed in options. Otherwise we create a single
       //measure and add it to our collection.
       if (options) {
@@ -401,7 +401,7 @@ define([
     /*
       This is called when the user clicks on the plus to add a new measure.
 
-      It creates a new measure and adds it to the component.
+      It creates a new measure and adds it to the hTrack.
       It generates a string representing the id of the measure and the ids of
       its beats and logs the creation.
 
@@ -410,7 +410,7 @@ define([
     */
 
     addRepresentation: function(rep){
-      console.log('adding another representation to the component');
+      console.log('adding another representation to the hTrack');
       this.hTrack.representations.add({
         model: new ({
           measureModel: this.hTrack.get('measures').model,
@@ -450,14 +450,14 @@ define([
     },
     // This is triggered by signatureChange events.
     reconfigure: function(signature) {
-      /* if the containing component is selected, this
+      /* if the containing hTrack is selected, this
          triggers a request event to stop the sound.
          
          Then this destroys the beats and creates
          new beats with the number of beats specified
          by the signature parameter.
       */
-      if ($(this.componentEl).hasClass('selected')) {
+      if ($(this.hTrackEl).hasClass('selected')) {
         dispatch.trigger('stopRequest.event', 'off');
         for (var i = 0; i < this.measuresCollection.models.length; i++) {
           while (this.measuresCollection.models[i].get('beats').length < signature) {
@@ -476,15 +476,15 @@ define([
       }
     },
     adjustRadius: function(tempo) {
-      if ($(this.componentEl).hasClass('selected')) {
+      if ($(this.hTrackEl).hasClass('selected')) {
         console.log('here');
         this.circularMeasureR = (tempo/120)*40;
         //re-render the view
         this.render();
       }
     },
-    //This is called when the component is clicked anywhere to bring
-    //the component into focus as selected.
+    //This is called when the hTrack is clicked anywhere to bring
+    //the hTrack into focus as selected.
     toggleSelection: function(e){
       e.stopPropagation();
       $('#measure'+this.measuresCollection.models[0].cid).toggleClass('selected');

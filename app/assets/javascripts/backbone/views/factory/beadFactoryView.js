@@ -132,7 +132,7 @@ define([
         d3.select(this).attr("cy", +d3.select(this).attr("cy") + d3.event.dy);
 
         // // add the 'selected' class when a beat is dragged
-        // $('#factory-beat'+ƒthis.cid).closest($('.component')).addClass('selected');
+        // $('#factory-beat'+ƒthis.cid).closest($('.hTrack')).addClass('selected');
         // var transformString = $('#factory-beat'+ƒthis.cid).attr('transform').substring(10, $('#factory-beat'+ƒthis.cid).attr('transform').length-1);
         // var comma = transformString.indexOf(',');
         // d.x = parseInt(transformString.substr(0,comma));

@@ -7,7 +7,7 @@ Additive factory // This is a factory that has beats that are readily available 
 
 ## Entities
 
-*   component / sheet/tab/track?
+*   hTrack / sheet/tab/track?
     *   instrument
     *   name // a name of the instrument
     *   icon //an image that symbolizes the instrument
@@ -277,7 +277,7 @@ Additive factory // This is a factory that has beats that are readily available 
  <td> focus / selection </td>
  <td>
 
-*   component
+*   hTrack
 *   measure
 *   instrument
  </td>
@@ -289,7 +289,7 @@ Additive factory // This is a factory that has beats that are readily available 
  <td> deselect </td>
  <td>
 
-*   component
+*   hTrack
 *   measure
 *   instrument
  </td>

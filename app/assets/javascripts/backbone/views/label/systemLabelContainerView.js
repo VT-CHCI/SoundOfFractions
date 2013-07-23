@@ -1,9 +1,5 @@
-// Filename: views/button/systemLabelContainerView.js
+// Filename: views/label/systemLabelContainerView.js
 /*
-  This is the RepButtonView.
-  This renders the four-state radio button
-  that controls which representation is displayed
-  on the side of each component.  
 */  
 define([
   'jquery',

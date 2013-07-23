@@ -22,7 +22,7 @@ define([
     initialize: function(options) {
       this.collection = options.collection;
       this.parent = options.parent;
-      this.el = options.el; //'#instrument-selector-'+this.component.cid
+      this.el = options.el; //'#instrument-selector-'+this.hTrack.cid
       this.remainingInstrumentGeneratorModel = options.unusedInstrumentsModel;
       this.parentCID = options.parentCID;
 
@@ -39,7 +39,7 @@ define([
     instrumentChanged: function(){
       console.log('in remainingInstrumentGeneratorModel instrumentChanged()');
 
-      var oldInstrument = $(this.el).closest('.component-container').data().state;
+      var oldInstrument = $(this.el).closest('.hTrack-container').data().state;
       var newInstrument = $(this.el).find(':selected').val();
       console.log('oI: '+ oldInstrument + ' | nI: '+ newInstrument);
       // this.remainingInstrumentGeneratorModel.addInstrument(newInstrument);

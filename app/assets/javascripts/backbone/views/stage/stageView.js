@@ -46,7 +46,7 @@ define([
 
       this.stage = StageCollection;
 
-      //this is creating the snare component.
+      //this is creating the snare hTrack.
 
       // this creates 1 measure, and addes beats and the representations to itself
       this.manuallyCreatedMeasureBeatsCollection = new BeatsCollection;
@@ -75,7 +75,7 @@ define([
         active: true
       });
 
-      // //this is creating the hi-hat component.
+      // //this is creating the hi-hat hTrack.
       // this.manuallyCreatedMeasure = new BeatsCollection;
 
       // //for each beat - also change signature below
@@ -96,7 +96,7 @@ define([
       //   active: true
       // });
 
-      // //this is creating the kick drum component.
+      // //this is creating the kick drum hTrack.
       // this.manuallyCreatedMeasure = new BeatsCollection;
 
       // //for each beat - also change signature below
@@ -118,7 +118,7 @@ define([
       // });
 
 
-      // //this is creating the synth component.
+      // //this is creating the synth hTrack.
       // this.manuallyCreatedMeasure = new BeatsCollection;
 
       // //for each beat - also change signature below
@@ -146,7 +146,7 @@ define([
       this.muteGainNodeList = new Array();
 
       //use our webaudio context to creat two gain nodes
-      //for each component.
+      //for each hTrack.
       for (var i = 0; i < this.stage.models.length; i++) {
         this.gainNodeList[i] = this.context.createGainNode();
         this.muteGainNodeList[i] = this.context.createGainNode();
@@ -260,13 +260,13 @@ define([
       var deadSpace = 0;
 
       //create an array to hold arrays of durations.
-      var componentDurations = new Array();
+      var hTrackDurations = new Array();
 
       //looping over each hTrack in the stage.
       _.each(this.stage.models, function(hTrack) {
 
         //create a duration array for this hTrack.
-        componentDurations[i] = new Array();
+        hTrackDurations[i] = new Array();
 
         _.each(hTrack.get('measures').models, function(measure) {
           numBeats = measure.get('beats').length;
@@ -282,7 +282,7 @@ define([
             */
             if (beat.get('selected')) {
               //deadspace is a beat that is not getting played
-              componentDurations[i].push(deadSpace);
+              hTrackDurations[i].push(deadSpace);
               deadSpace = deadSpace + beatDuration;
 
             } else {
@@ -295,10 +295,10 @@ define([
         // Reset the deadspace for the next hTrack
         deadSpace = 0;
       }, this);
-      console.log(componentDurations);
+      console.log(hTrackDurations);
       //Lastly, we call playSound() with our completed
-      //componentDurations 2d array.
-      this.playSound(componentDurations);
+      //hTrackDurations 2d array.
+      this.playSound(hTrackDurations);
     },
 
     /*
@@ -307,7 +307,7 @@ define([
     */
     playSound: function(durations){
       console.log('Playing sound!');
-      var componentToPlayIterator = 0;
+      var hTrackToPlayIterator = 0;
       var startTime = this.context.currentTime; //this is important (check docs for explanation)
       _.each(durations, function(duration) { // hTrack array
         _.each(duration, function(time) { // beats or deadspace start times
@@ -318,14 +318,14 @@ define([
           play(
             this,
             this.context,
-            this.stage.at(componentToPlayIterator),
-            this.bufferList[componentToPlayIterator],
+            this.stage.at(hTrackToPlayIterator),
+            this.bufferList[hTrackToPlayIterator],
             startTime+time, //startTime is the current time you request to play + the beat start time
             this.masterGainNode,
-            this.gainNodeList[componentToPlayIterator],
-            this.muteGainNodeList[componentToPlayIterator]);
+            this.gainNodeList[hTrackToPlayIterator],
+            this.muteGainNodeList[hTrackToPlayIterator]);
         }, this);
-        componentToPlayIterator++;
+        hTrackToPlayIterator++;
       }, this);
 
       /*

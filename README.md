@@ -17,7 +17,7 @@ The Ruby on Rails version with persistence, requires a server that can accept th
 The interface is dividing into two sections, the musical hTracks and the beat palette toolbar.
 
 ### Musical HTracks ###
-In the main workspace, there is a list of each musical component and their individual measures. For each component, there is also a mathematical representation of its current state. To enable a beat, simply click a subsection of the measure. It will turn orange to show that has been enabled. As beats are enabled or disabled, the mathematical representation of the component changes. To add new measures, click the green plus button, and to remove, click the red [X] above the measure. *Note: there must always be at least one measure; therefore the application will not allow you to remove all of them. Also, as more measures are added the fraction denominator will not change. This is because a measure represents one whole. Instead, as more than a measures worth of beats are selected, improper fractions will be made.*
+In the main workspace, there is a list of each musical hTrack and their individual measures. For each hTrack, there is also a mathematical representation of its current state. To enable a beat, simply click a subsection of the measure. It will turn orange to show that has been enabled. As beats are enabled or disabled, the mathematical representation of the hTrack changes. To add new measures, click the green plus button, and to remove, click the red [X] above the measure. *Note: there must always be at least one measure; therefore the application will not allow you to remove all of them. Also, as more measures are added the fraction denominator will not change. This is because a measure represents one whole. Instead, as more than a measures worth of beats are selected, improper fractions will be made.*
 
 ### Beat Palette ###
 
@@ -51,15 +51,15 @@ To add a new instrument, first upload the sound sample to /samples and an image 
       this.measure.add();
     }
 
-    this.component = new MeasuresCollection;
-    this.component.add({beats: this.measure});
+    this.hTrack = new MeasuresCollection;
+    this.hTrack.add({beats: this.measure});
 
     this.drumkit = StageCollection.add({
       label: '',
       img: '',
       mute: true,
       sample: '',
-      measures: this.component,
+      measures: this.hTrack,
       active: true
     });
 

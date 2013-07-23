@@ -39,7 +39,7 @@ define([
       a log message is sent reflecting the representation change.
     */
     deleteInstrumentFromCompositionArea: function(e) {
-      var instrument = $(e.currentTarget).closest('.htrack-container').data().state;
+      var instrument = $(e.currentTarget).closest('.hTrack-container').data().state;
       console.log('in deleteInstrumentView deleteInstrumentFromCompositionArea() of ' + instrument);
       dispatch.trigger('addInstrumentToGeneratorModel.event', instrument);
       dispatch.trigger('instrumentDeletedFromCompositionArea.event', { instrument:instrument, model:this.parentCID });
