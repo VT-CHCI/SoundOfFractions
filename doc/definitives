@@ -3,7 +3,7 @@ Bead beat is a fixed size (based on visual awareness of the screen size)
 
 tempo is not to be a "first class" representation
 
-"components" are to be arranged horizontally and referred to as "line"s
+"hTracks" are to be arranged horizontally and referred to as "line"s
 
 the capture process should be one step to record the student's song
 

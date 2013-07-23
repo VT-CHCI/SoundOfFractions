@@ -14,14 +14,14 @@ The Ruby on Rails version with persistence, requires a server that can accept th
 
 ## Using ##
 
-The interface is dividing into two sections, the musical components and the beat palette toolbar.
+The interface is dividing into two sections, the musical hTracks and the beat palette toolbar.
 
-### Musical Components ###
+### Musical HTracks ###
 In the main workspace, there is a list of each musical component and their individual measures. For each component, there is also a mathematical representation of its current state. To enable a beat, simply click a subsection of the measure. It will turn orange to show that has been enabled. As beats are enabled or disabled, the mathematical representation of the component changes. To add new measures, click the green plus button, and to remove, click the red [X] above the measure. *Note: there must always be at least one measure; therefore the application will not allow you to remove all of them. Also, as more measures are added the fraction denominator will not change. This is because a measure represents one whole. Instead, as more than a measures worth of beats are selected, improper fractions will be made.*
 
 ### Beat Palette ###
 
-The beat palette on the right provides different tools to modify the musical components. The first set of button on the top, change the mathematical representations to either hidden, fraction, percent, or decimal. The next set of sliders change the tempo of the music and the number of beats per division. The Tempo Slider ranges from 1/2 (slower) to 2 (faster) and affects the playback globally. The Beats per Measure slider changes a selected components’ measure division. *Note: Tempo is represented as a fraction rather than a number so that it can be used to explain how it mathematically affects the components’ sound. Also, when changing the number of division, all the beats will be reset.* There is also a visualization under the beat slider which shows common fractions of the measure based on the number of divisions selected.*
+The beat palette on the right provides different tools to modify the musical `hTrack`s. The first set of button on the top, change the mathematical representations to either hidden, fraction, percent, or decimal. The next set of sliders change the tempo of the music and the number of beats per division. The Tempo Slider ranges from 1/2 (slower) to 2 (faster) and affects the playback globally. The Beats per Measure slider changes a selected hTrack’s measure division. *Note: Tempo is represented as a fraction rather than a number so that it can be used to explain how it mathematically affects the song's sound. Also, when changing the number of division, all the beats will be reset.* There is also a visualization under the beat slider which shows common fractions of the measure based on the number of divisions selected.*
 
 ### Music Playback ###
 
@@ -42,8 +42,8 @@ To receive the event, in the initialize function add:
 
     dispatch.on('YOUR_EVENT_NAME.event', this.YOUR_EVENT_HANDLER_FUNCTION, this);
 
-### Adding New Instruments ###
-To add a new instrument, first upload the sound sample to /samples and an image to /img. Then, in the initialize function of componentsView (located in /js/views/components) add:
+### Adding New HTracks ###
+To add a new instrument, first upload the sound sample to /samples and an image to /img. Then, in the initialize function of StageView.js (located in /js/views/stage) add:
 
     this.measure = new BeatsCollection;
 
@@ -54,7 +54,7 @@ To add a new instrument, first upload the sound sample to /samples and an image 
     this.component = new MeasuresCollection;
     this.component.add({beats: this.measure});
 
-    this.drumkit = componentsCollection.add({
+    this.drumkit = StageCollection.add({
       label: '',
       img: '',
       mute: true,
@@ -70,13 +70,13 @@ Make sure to add values for lable, img, and sample that correspond to your instr
 ### Logging ###
 Logging is currently enabled. Initially, a random number is generated and stored into local storage. If you sign in using the navigation bar, the user id will replace the random number. This ensures that even if someone doesn't sign in, the logging info can be differentiated between other users. Currently logged events are:
 
-- On page load and after signing in: all components, measures, and beats
+- On page load and after signing in: all hTracks, measures, and beats
 - Beats that are clicked
 - Representation changes
-- Components muted and unmuted
+- hTrack's muted and unmuted
 - Signature changes
 - Tempo changes
-- Play clicked along with state of components, measures, and beats
+- Play clicked along with state of hTracks, measures, and beats
 - Play stopped
 
 To create custom logs, first pass it through to the function as log. Then, to send a log event use:

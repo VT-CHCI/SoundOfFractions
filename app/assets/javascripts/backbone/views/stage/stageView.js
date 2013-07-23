@@ -1,6 +1,6 @@
-// Filename: views/components/componentsView.js
+// Filename: views/stage/stageView.js
 /*
-  This is the componentsView.
+  This is the StageView.
   This is the view that represents the entire drum kit.
 
   This is where the audio is initialized and played.
@@ -18,13 +18,13 @@ define([
   'backbone/models/hTrack',
   'backbone/models/representation',
   'backbone/models/remainingInstrumentGenerator',
+  'backbone/models/state',
   'backbone/views/button/remainingInstrumentGeneratorView',
   'backbone/views/hTrack/hTrackView',
   'text!backbone/templates/hTrack/hTrack.html',
-  'app/dispatch',
-  'backbone/models/state'
-], function($, _, Backbone, BeatsCollection, MeasuresCollection, RepresentationsCollection, StageCollection, BeatModel, MeasureModel, HTrackModel, RepresentationModel, RemainingInstrumentGeneratorModel, RemainingInstrumentGeneratorView, HTrackView, HTrackTemplate, dispatch, state){
-  var ComponentsView = Backbone.View.extend({
+  'app/dispatch'
+], function($, _, Backbone, BeatsCollection, MeasuresCollection, RepresentationsCollection, StageCollection, BeatModel, MeasureModel, HTrackModel, RepresentationModel, RemainingInstrumentGeneratorModel, StateModel, RemainingInstrumentGeneratorView, HTrackView, HTrackTemplate, dispatch){
+  var StageView = Backbone.View.extend({
     el: $('#sof-composition-area'),
 
     initialize: function(){
@@ -141,7 +141,7 @@ define([
 
       //creating two arrays to hold our gain nodes.
       //the first is for sustained-note sounds,
-      //the second is for the muting of individual components.
+      //the second is for the muting of individual 'hTrack's.
       this.gainNodeList = new Array();
       this.muteGainNodeList = new Array();
 
@@ -161,7 +161,7 @@ define([
       dispatch.on('instrumentAddedToCompositionArea.event', this.addInstrument, this);
       dispatch.on('instrumentDeletedFromCompositionArea.event', this.deleteInstrument, this);
 
-      state.set('components', this.stage);
+      StateModel.set('stage', this.stage);
     },
 
     build: function(song) {
@@ -170,23 +170,23 @@ define([
       console.warn(song);
       song.set('content', JSON.parse(song.get('content')));
       this.stage.reset();
-      // console.log('song.get('content').components');
-      var components = song.get('content').components;
-      console.log('var components');
-      console.warn(components);
-      for(var i = 0; i < components.length; i++) {
+      // console.log('song.get('content').stage');
+      var stage = song.get('content').stage;
+      console.log('var stage');
+      console.warn(stage);
+      for(var i = 0; i < stage.length; i++) {
         var hTrack = new HTrackModel();
-        hTrack.set('label', components[i].label);
-        hTrack.set('type', components[i].type);
-        hTrack.set('img', components[i].img);
-        hTrack.set('mute', components[i].mute);
-        hTrack.set('sample', components[i].sample);
-        hTrack.set('active', components[i].active);
-        hTrack.set('signature', components[i].signature);
-        hTrack.set('representation', components[i].representation);
+        hTrack.set('label', stage[i].label);
+        hTrack.set('type', stage[i].type);
+        hTrack.set('img', stage[i].img);
+        hTrack.set('mute', stage[i].mute);
+        hTrack.set('sample', stage[i].sample);
+        hTrack.set('active', stage[i].active);
+        hTrack.set('signature', stage[i].signature);
+        hTrack.set('representation', stage[i].representation);
         var mC = new MeasuresCollection();
-        for(var j = 0; j < components[i].measures.length; j++) {
-          var measureObj = components[i].measures[j];
+        for(var j = 0; j < stage[i].measures.length; j++) {
+          var measureObj = stage[i].measures[j];
           var measure = new MeasureModel();
           measure.set('label', measureObj.label);
           measure.set('numberOfBeats', measureObj.numberOfBeats);
@@ -211,12 +211,12 @@ define([
     },
 
     render: function(){
-      console.log('render: componentsView.js');
+      console.log('render: stageView.js');
       $(this.el).html('');
 
       var counter = 0;
 
-      //we have to render each one of our components.
+      //we have to render each one of our `hTrack`s.
       _.each(this.stage.models, function(hTrack) {
         //loading the audio files into the bufferList.
         this.loadAudio(this.context, hTrack.get('sample'), this.bufferList, counter );
@@ -253,7 +253,7 @@ define([
       of each beat on each hTrack should occur.
     */
     playLoop: function(){
-      var tempo = state.get('tempo');
+      var tempo = StateModel.get('tempo');
       var numBeats = 0;
       var i = 0;
 
@@ -271,7 +271,7 @@ define([
         _.each(hTrack.get('measures').models, function(measure) {
           numBeats = measure.get('beats').length;
           //determining the duration for each beat.
-          var beatDuration = 60 / tempo * state.get('signature') / (numBeats);
+          var beatDuration = 60 / tempo * StateModel.get('signature') / (numBeats);
           _.each(measure.get('beats').models, function(beat) {
 
             /* if we need to trigger a sound at this beat
@@ -332,13 +332,13 @@ define([
         This is where all the magic happens for the audio.
 
         Parameters are:
-          self -> a reference to this componentsView instance.
+          self -> a reference to this StageView instance.
           context -> a reference to the webaudio context.
           buffer -> the buffer that has been loaded with the appropriate audio file.
           time -> the duration that this playback is to last.
-          gainNode -> this is the masterGainNode of this componentsView
+          gainNode -> this is the masterGainNode of this StageView
           specGainNode -> this gain node controls envelope generation for sustained instruments.
-          muteGainNoe -> this gain node controls the muting of components.
+          muteGainNode -> this gain node controls the muting of `hTrack`s.
       */
       function play(self, context, hTrack, buffer, time, gainNode, specGainNode, muteGainNode) {
 
@@ -360,7 +360,7 @@ define([
         specGainNode.gain.value = 1;
 
         //calulating the duration of one beat.
-        var duration =  (60 / state.get('tempo'));
+        var duration =  (60 / StateModel.get('tempo'));
 
         //note on causes the playback to start.
         source.noteOn(time, 0, duration);
@@ -433,7 +433,7 @@ define([
 
       //we use the maximum number of measures, and the global tempo
       //to determine the duration (in ms) of one loop of the sequencer.
-      var duration = state.get('signature') * 60 / state.get('tempo') * maxMeasures * 1000;
+      var duration = StateModel.get('signature') * 60 / StateModel.get('tempo') * maxMeasures * 1000;
       console.warn(duration);
       if (this.intervalID) {
         //if we are already playing, we stop and trigger the
@@ -462,7 +462,7 @@ define([
         //we set the masterGainNode to 1, turning on master output.
         this.masterGainNode.gain.value = 1;
 
-        dispatch.trigger('toggleAnimation.event', 'on', duration, state.get('signature'), maxMeasures);
+        dispatch.trigger('toggleAnimation.event', 'on', duration, StateModel.get('signature'), maxMeasures);
 
       }
     },
@@ -512,7 +512,7 @@ define([
     },
 
     deleteInstrument: function(instrument) {
-      console.warn('in componentsView deleteInstrument');
+      console.warn('in StageView deleteInstrument');
       console.log('deleting : ' + instrument.instrument);
       console.log('deleting : ' + instrument.model);
       dispatch.trigger('removeInstrumentToGeneratorModel.event', instrument.instrument);
@@ -523,5 +523,5 @@ define([
       this.render();
     }
   });
-  return new ComponentsView();
+  return new StageView();
 });
