@@ -2,8 +2,7 @@
 define([
   'underscore',
   'backbone',
-  'backbone/collections/components'
-], function(_, Backbone, componentCollection) {
+], function(_, Backbone) {
   var songModel = Backbone.Model.extend({
     paramRoot: 'song',
     defaults: {
@@ -13,7 +12,6 @@ define([
       currentFractionRepresentation: '',
       currentMeasureRepresentation: '',
       tempo: ''
-      // components: componentCollection   //move to songTemplate.js
     },
     initialize: function(){
     }

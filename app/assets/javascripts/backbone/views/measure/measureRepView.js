@@ -10,6 +10,7 @@ define([
   'backbone/collections/beats',
   'backbone/models/measure',
   'backbone/models/representation',
+  'backbone/models/state',
   'backbone/views/beat/beatView',
   'backbone/views/factory/beadFactoryView',
   'text!backbone/templates/measure/audioMeasures.html',
@@ -19,9 +20,8 @@ define([
   'text!backbone/templates/measure/numberLineMeasures.html',
   'colors',
   'app/dispatch',
-  'backbone/models/state',
   'app/log'
-], function($, _, Backbone, BeatsCollection, MeasureModel, RepresentationModel, BeatView, BeadFactoryView, AudioMeasuresTemplate, LinearBarMeasuresTemplate, CircularPieMeasuresTemplate, CircularBeadMeasuresTemplate, NumberLineMeasuresTemplate, COLORS, dispatch, state, log){
+], function($, _, Backbone, BeatsCollection, MeasureModel, RepresentationModel, StateModel, BeatView, BeadFactoryView, AudioMeasuresTemplate, LinearBarMeasuresTemplate, CircularPieMeasuresTemplate, CircularBeadMeasuresTemplate, NumberLineMeasuresTemplate, COLORS, dispatch, log){
   return Backbone.View.extend({
     // el: $('.measure')[0],
 

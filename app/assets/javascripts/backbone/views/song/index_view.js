@@ -4,7 +4,7 @@ define([
   'underscore',
   'backbone',
   'backbone/collections/songsCollection',
-  'backbone/collections/components',
+  'backbone/collections/stage',
   'backbone/models/song',
   'text!backbone/templates/song/index.html',
   'text!backbone/templates/tiny/navSave.html',
@@ -12,7 +12,7 @@ define([
   'text!backbone/templates/tiny/navNew.html',
   'app/dispatch',
   'backbone/models/state'
-], function($, _, Backbone, SongsCollection, Components, song, songsBodyTemplate, songNavSaveTemplate, songsNavLoadTemplate, songsNavNewTemplate, dispatch, state){
+], function($, _, Backbone, SongsCollection, StageCollection, song, songsBodyTemplate, songNavSaveTemplate, songsNavLoadTemplate, songsNavNewTemplate, dispatch, state){
   return Backbone.View.extend({
     navLoadEl: $('#nav-songs-load'),
     navNewEl: $('#nav-songs-new'),

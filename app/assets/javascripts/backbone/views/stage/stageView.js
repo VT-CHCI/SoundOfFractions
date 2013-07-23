@@ -9,22 +9,21 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  // Pull in the Collection module from above
   'backbone/collections/beats',
   'backbone/collections/measures',
   'backbone/collections/representations',
-  'backbone/collections/components',
+  'backbone/collections/stage',
   'backbone/models/beat',
   'backbone/models/measure',
-  'backbone/models/component',
+  'backbone/models/hTrack',
   'backbone/models/representation',
   'backbone/models/remainingInstrumentGenerator',
   'backbone/views/button/remainingInstrumentGeneratorView',
-  'backbone/views/component/componentView',
-  'text!backbone/templates/component/component.html',
+  'backbone/views/hTrack/hTrackView',
+  'text!backbone/templates/hTrack/hTrack.html',
   'app/dispatch',
   'backbone/models/state'
-], function($, _, Backbone, BeatsCollection, MeasuresCollection, RepresentationsCollection, ComponentsCollection, BeatModel, MeasureModel, ComponentModel, RepresentationModel, RemainingInstrumentGeneratorModel, RemainingInstrumentGeneratorView, ComponentView, ComponentTemplate, dispatch, state){
+], function($, _, Backbone, BeatsCollection, MeasuresCollection, RepresentationsCollection, StageCollection, BeatModel, MeasureModel, HTrackModel, RepresentationModel, RemainingInstrumentGeneratorModel, RemainingInstrumentGeneratorView, HTrackView, HTrackTemplate, dispatch, state){
   var ComponentsView = Backbone.View.extend({
     el: $('#sof-composition-area'),
 
@@ -45,7 +44,7 @@ define([
       //we use it to toggle play/stop.
       this.masterGainNode = this.context.createGainNode();
 
-      this.drumkit = ComponentsCollection;
+      this.stage = StageCollection;
 
       //this is creating the snare component.
 
@@ -65,7 +64,7 @@ define([
       this.manuallyCreatedMeasuresCollection.add({
         beats: this.manuallyCreatedMeasureBeatsCollection, measureRepresentations: this.manuallyCreatedMeasureRepresentationCollection});
 
-      this.drumkit = ComponentsCollection.add({
+      this.stage = StageCollection.add({
         label: 'Snare',
         type: 'sn',
         img: 'snare.png',
@@ -87,7 +86,7 @@ define([
       // this.manuallyCreatedMeasuresCollection = new MeasuresCollection;
       // this.manuallyCreatedMeasuresCollection.add({beats: this.manuallyCreatedMeasure});
 
-      // this.drumkit = ComponentsCollection.add({
+      // this.stage = StageCollection.add({
       //   label: 'Hi Hat',
       //   img: 'hihat.png',
       //   mute: true,
@@ -108,7 +107,7 @@ define([
       // this.manuallyCreatedMeasuresCollection = new MeasuresCollection;
       // this.manuallyCreatedMeasuresCollection.add({beats: this.manuallyCreatedMeasure});
 
-      // this.drumkit = ComponentsCollection.add({
+      // this.stage = StageCollection.add({
       //   label: 'Kick Drum',
       //   img: 'kick.png',
       //   mute: true,
@@ -130,7 +129,7 @@ define([
       // this.manuallyCreatedMeasuresCollection = new MeasuresCollection;
       // this.manuallyCreatedMeasuresCollection.add({beats: this.manuallyCreatedMeasure});
 
-      // this.drumkit = ComponentsCollection.add({
+      // this.stage = StageCollection.add({
       //   label: 'Synth',
       //   img: 'synth.png',
       //   mute: true,
@@ -148,7 +147,7 @@ define([
 
       //use our webaudio context to creat two gain nodes
       //for each component.
-      for (var i = 0; i < this.drumkit.models.length; i++) {
+      for (var i = 0; i < this.stage.models.length; i++) {
         this.gainNodeList[i] = this.context.createGainNode();
         this.muteGainNodeList[i] = this.context.createGainNode();
       };
@@ -162,7 +161,7 @@ define([
       dispatch.on('instrumentAddedToCompositionArea.event', this.addInstrument, this);
       dispatch.on('instrumentDeletedFromCompositionArea.event', this.deleteInstrument, this);
 
-      state.set('components', this.drumkit);
+      state.set('components', this.stage);
     },
 
     build: function(song) {
@@ -170,21 +169,21 @@ define([
       console.log('song');
       console.warn(song);
       song.set('content', JSON.parse(song.get('content')));
-      this.drumkit.reset();
+      this.stage.reset();
       // console.log('song.get('content').components');
       var components = song.get('content').components;
       console.log('var components');
       console.warn(components);
       for(var i = 0; i < components.length; i++) {
-        var component = new ComponentModel();
-        component.set('label', components[i].label);
-        component.set('type', components[i].type);
-        component.set('img', components[i].img);
-        component.set('mute', components[i].mute);
-        component.set('sample', components[i].sample);
-        component.set('active', components[i].active);
-        component.set('signature', components[i].signature);
-        component.set('representation', components[i].representation);
+        var hTrack = new HTrackModel();
+        hTrack.set('label', components[i].label);
+        hTrack.set('type', components[i].type);
+        hTrack.set('img', components[i].img);
+        hTrack.set('mute', components[i].mute);
+        hTrack.set('sample', components[i].sample);
+        hTrack.set('active', components[i].active);
+        hTrack.set('signature', components[i].signature);
+        hTrack.set('representation', components[i].representation);
         var mC = new MeasuresCollection();
         for(var j = 0; j < components[i].measures.length; j++) {
           var measureObj = components[i].measures[j];
@@ -202,13 +201,13 @@ define([
           measure.set('beats', bC);
           mC.add(measure);
         }
-        component.set('measures', mC);
-        console.log(component);
-        this.drumkit.add(component);
+        hTrack.set('measures', mC);
+        console.log(hTrack);
+        this.stage.add(hTrack);
       }
       this.render();
       console.log('done building');
-      return this.drumkit;
+      return this.stage;
     },
 
     render: function(){
@@ -218,26 +217,26 @@ define([
       var counter = 0;
 
       //we have to render each one of our components.
-      _.each(this.drumkit.models, function(component) {
+      _.each(this.stage.models, function(hTrack) {
         //loading the audio files into the bufferList.
-        this.loadAudio(this.context, component.get('sample'), this.bufferList, counter );
+        this.loadAudio(this.context, hTrack.get('sample'), this.bufferList, counter );
 
         //compiling our template.
-        var compiledTemplate = _.template( ComponentTemplate, {component: component, type: component.get('type')} );
+        var compiledTemplate = _.template( HTrackTemplate, {hTrack: hTrack, type: hTrack.get('type')} );
         $(this.el).append( compiledTemplate );
 
-        //create a component view.
-        var componentView = new ComponentView({
-          hTrack: component,
-          el: '#component-container'+component.cid, 
+        //create a hTrack view.
+        var hTrackView = new HTrackView({
+          hTrack: hTrack,
+          el: '#hTrack-container'+hTrack.cid, 
           gainNode: this.muteGainNodeList[counter],
           defaultMeasureRepresentation: this.defaultMeasureRepresentation,
           // defaultFractionRepresentation: this.defaultFractionRepresentation,
           unusedInstrumentsModel: this.unusedInstrumentsModel
         });
-        if(!component.get('active')) {
+        if(!hTrack.get('active')) {
           console.log('found a muted one');
-          componentView.toggleMute();
+          hTrackView.toggleMute();
         }
         counter++;
       }, this);
@@ -251,7 +250,7 @@ define([
     /*
       This function generates a 2d array
       of time durations that determine when the playback
-      of each beat on each component should occur.
+      of each beat on each hTrack should occur.
     */
     playLoop: function(){
       var tempo = state.get('tempo');
@@ -263,13 +262,13 @@ define([
       //create an array to hold arrays of durations.
       var componentDurations = new Array();
 
-      //looping over each component in the drumkit.
-      _.each(this.drumkit.models, function(component) {
+      //looping over each hTrack in the stage.
+      _.each(this.stage.models, function(hTrack) {
 
-        //create a duration array for this component.
+        //create a duration array for this hTrack.
         componentDurations[i] = new Array();
 
-        _.each(component.get('measures').models, function(measure) {
+        _.each(hTrack.get('measures').models, function(measure) {
           numBeats = measure.get('beats').length;
           //determining the duration for each beat.
           var beatDuration = 60 / tempo * state.get('signature') / (numBeats);
@@ -293,7 +292,7 @@ define([
           }, this);
         }, this);
         i++;
-        // Reset the deadspace for the next component
+        // Reset the deadspace for the next hTrack
         deadSpace = 0;
       }, this);
       console.log(componentDurations);
@@ -304,22 +303,22 @@ define([
 
     /*
       This triggers the playback of sounds at the appropriate
-      intervals for each component.
+      intervals for each hTrack.
     */
     playSound: function(durations){
       console.log('Playing sound!');
       var componentToPlayIterator = 0;
       var startTime = this.context.currentTime; //this is important (check docs for explanation)
-      _.each(durations, function(duration) { // component array
+      _.each(durations, function(duration) { // hTrack array
         _.each(duration, function(time) { // beats or deadspace start times
-          //we call play on each component, passing in a lot of information.
+          //we call play on each hTrack, passing in a lot of information.
           //this is called for each 'duration' in the duration array,
           //which is every activated beat and its associated duration between
           //it and the next activated beat.
           play(
             this,
             this.context,
-            this.drumkit.at(componentToPlayIterator),
+            this.stage.at(componentToPlayIterator),
             this.bufferList[componentToPlayIterator],
             startTime+time, //startTime is the current time you request to play + the beat start time
             this.masterGainNode,
@@ -341,7 +340,7 @@ define([
           specGainNode -> this gain node controls envelope generation for sustained instruments.
           muteGainNoe -> this gain node controls the muting of components.
       */
-      function play(self, context, component, buffer, time, gainNode, specGainNode, muteGainNode) {
+      function play(self, context, hTrack, buffer, time, gainNode, specGainNode, muteGainNode) {
 
         //a buffer source is what can actually generate audio.
         source = context.createBufferSource();
@@ -382,7 +381,7 @@ define([
     },
 
     /*
-      This function loads the audio files for each component
+      This function loads the audio files for each hTrack
       and loads them into the buffer list.
     */
     loadAudio: function(context, url, bufferList, index){
@@ -424,11 +423,11 @@ define([
     togglePlay: function(val){
 
       //first we determine the number of the measures in
-      //the component with the most measures.
+      //the hTrack with the most measures.
       var maxMeasures = 0;
-      _.each(this.drumkit.models, function(component) {
-        if(maxMeasures < component.get('measures').length) {
-          maxMeasures = component.get('measures').length;
+      _.each(this.stage.models, function(hTrack) {
+        if(maxMeasures < hTrack.get('measures').length) {
+          maxMeasures = hTrack.get('measures').length;
         }
       }, this);
 
@@ -470,7 +469,7 @@ define([
 
     updateTempo: function(val) {
       console.log('tempo changed to ' + val);
-      this.drumkit.tempo = val;
+      this.stage.tempo = val;
     },
 
     addInstrument: function(instrument) {
@@ -494,7 +493,7 @@ define([
       this.manuallyCreatedMeasuresCollection.add({
         beats: this.manuallyCreatedMeasureBeatsCollection, measureRepresentations: this.manuallyCreatedMeasureRepresentationCollection});
 
-      this.drumkit = ComponentsCollection.add({
+      this.stage = StageCollection.add({
         label: this.unusedInstrumentsModel.getDefault(instrument, 'label'),
         type: this.unusedInstrumentsModel.getDefault(instrument, 'type'),
         img: this.unusedInstrumentsModel.getDefault(instrument, 'image'),
@@ -506,8 +505,8 @@ define([
       });
 
       // Add the gain nodes for the music for the new instrument
-      this.gainNodeList[this.drumkit.models.length-1] = this.context.createGainNode();
-      this.muteGainNodeList[this.drumkit.models.length-1] = this.context.createGainNode();
+      this.gainNodeList[this.stage.models.length-1] = this.context.createGainNode();
+      this.muteGainNodeList[this.stage.models.length-1] = this.context.createGainNode();
 
       this.render();
     },
@@ -517,9 +516,9 @@ define([
       console.log('deleting : ' + instrument.instrument);
       console.log('deleting : ' + instrument.model);
       dispatch.trigger('removeInstrumentToGeneratorModel.event', instrument.instrument);
-      console.warn(this.drumkit);
-      this.drumkit.remove(instrument.model);
-      console.warn(this.drumkit);
+      console.warn(this.stage);
+      this.stage.remove(instrument.model);
+      console.warn(this.stage);
 
       this.render();
     }

@@ -1,43 +1,42 @@
-// Filename: views/components/componentView.js
+// Filename: views/hTrack/hTrackView.js
 /*
-  This is the view for one component of the drum kit.
+  This is the view for one hTrack of the drum kit.
 */
 define([
   'jquery',
   'underscore',
   'backbone',
-  'backbone/models/component',
+  'backbone/models/hTrack',
+  'backbone/models/state',
   'backbone/collections/representations',
-  'backbone/models/remainingInstrumentGenerator',
   'backbone/views/measure/measureView',
   'backbone/views/fraction/fractionView',
   'backbone/views/menu/instrumentDropDownView',
   'backbone/views/slider/beatsPerMeasureSliderView',
   'backbone/views/button/deleteInstrumentView',
   'app/dispatch',
-  'backbone/models/state',
   'app/log'
-], function($, _, Backbone, ComponentModel, RepresentationsCollection, RemainingInstrumentGenerator, MeasureView, FractionRepresentationView, InstrumentDropDownView, BPMSliderView, DeleteInstrumentView, dispatch, state, log){
+], function($, _, Backbone, HTrackModel, StateModel, RepresentationsCollection, MeasureView, FractionRepresentationView, InstrumentDropDownView, BPMSliderView, DeleteInstrumentView, dispatch, log){
   return Backbone.View.extend({
     // this is needed to recalculate a beat's size
-    el: $('.component'),
+    el: $('.hTrack'),
 
     //registering two handlers for backbone's click events.
-    //the first is for toggling the component's muted state.
-    //the second is for setting this component in focus (or selected).
+    //the first is for toggling the hTrack's muted state.
+    //the second is for setting this hTrack in focus (or selected).
     events : {
       'click .control' : 'toggleMute',
-      'click .component' : 'toggleSelection',
+      'click .hTrack' : 'toggleSelection',
       'click .addRepresentation' : 'addRepresentationToHTrack'
     },
 
     /*
-      We are receiving options from componentsView, where this view is
+      We are receiving options from stageView, where this view is
       being instantiated.
 
-      We get a component model, a DOM element, and a gainNode.
+      We get a hTrack model, a DOM element, and a gainNode.
       this.gainNode is the gainNode responsible for controlling the
-      individual muting of this component in the web audio API.
+      individual muting of this hTrack in the web audio API.
     */
     initialize: function(options){
       if (options) {
@@ -53,7 +52,7 @@ define([
         this.unusedInstrumentsModel = options.unusedInstrumentsModel;
         this.instrumentType = options.type;
       } else {
-        this.hTrack = new ComponentModel;
+        this.hTrack = new HTrackModel;
       }
 
       this.hTrack.representations = new RepresentationsCollection;
@@ -84,7 +83,7 @@ define([
           new MeasureView({
             collectionOfMeasures: ƒthis.hTrack.get('measures'),
             parent: ƒthis.hTrack,
-            parentEl: '#component'+ƒthis.hTrack.cid,
+            parentEl: '#hTrack'+ƒthis.hTrack.cid,
             model: ƒthis.hTrack.get('measures').models[index],
             currentMeasureRepresentation: options.representation
           });
@@ -132,7 +131,7 @@ define([
         new DeleteInstrumentView({
           collection: this.hTrack.get('measures'),
           parent: this.hTrack,
-          el: '#delete-component-'+this.hTrack.cid,
+          el: '#delete-hTrack-'+this.hTrack.cid,
           parentCID: this.hTrack.cid
         });
 
@@ -148,16 +147,16 @@ define([
     },
 
     updateModelSignature: function(val){
-      if($('#component'+this.hTrack.cid).hasClass('selected')) {
+      if($('#hTrack'+this.hTrack.cid).hasClass('selected')) {
         this.hTrack.set('signature', val);
       }
     },
     /*
-      This is called when the user clicks on the icon of this component
+      This is called when the user clicks on the icon of this hTrack
       which has the css class 'control'
       
-      This toggles the appearance of the [X] on the component as well
-      as the volume of the gainNode associated with this component's muting state.
+      This toggles the appearance of the [X] on the hTrack as well
+      as the volume of the gainNode associated with this hTrack's muting state.
 
       gainNode volumes are stored in the value attribute and range from 0 to 1.
 
@@ -170,14 +169,14 @@ define([
         this.gainNode.gain.value = 0;
         $(this.el).find('.control').removeClass('unmute').addClass('mute');
         $(this.el+ ' .control').html('<i class="icon-volume-off"></i>');
-        log.sendLog([[2, "Component muted: "+"component"+this.hTrack.cid]]);
+        log.sendLog([[2, "hTrack muted: "+"hTrack"+this.hTrack.cid]]);
 
       } else {
         this.gainNode.gain.value = 1;
         $(this.el).find('.control').removeClass('mute').addClass('unmute');
         $(this.el+ ' .control').html('<i class="icon-volume-up"></i>');
 
-        log.sendLog([[2, "Component unmuted: "+"component"+this.hTrack.cid]]);
+        log.sendLog([[2, "hTrack unmuted: "+"hTrack"+this.hTrack.cid]]);
       }
     },
 
@@ -230,9 +229,8 @@ define([
         this.animationIntervalID = setInterval((function(self) {
           return function() {
             if (counter >= 0 && counter < beats.length)
-              self.component.set('currentBeat',counter);
+              self.hTrack.set('currentBeat',counter);
               if (self.defaultMeasureRepresentation == 'circular-bead'){
-                // console.log(self.component.get('currentBeat'));
                 self.d3animate();
               } else {
                 self.animate(beats.eq(counter).children().first()[0]);
@@ -262,13 +260,13 @@ define([
       this.animationIntervalID = setTimeout(this.animationWrapper, duration);
     },
 
-    //This is called when the component is clicked anywhere to bring
-    //the component into focus as selected.
+    //This is called when the hTrack is clicked anywhere to bring
+    //the hTrack into focus as selected.
     toggleSelection: function(){
-      $('#component'+this.hTrack.cid).toggleClass('selected');
+      $('#hTrack'+this.hTrack.cid).toggleClass('selected');
 
       //we trigger this event to cause the beats per measure slider and
-      //beat bars to update based on which component is selected.
+      //beat bars to update based on which hTrack is selected.
       // dispatch.trigger('bPMSlider.event', {signature: this.hTrack.get('signature'), name: this.hTrack.get('label') } );
     },
 

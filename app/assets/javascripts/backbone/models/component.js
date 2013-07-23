@@ -19,11 +19,9 @@ define([
       measures: MeasuresCollection,
       active: true,
       signature: 0 //initially set to zero, but set in the init of componentsView
-      // representation: 'fraction'
     },
     initialize: function(){
     }
   });
-  
   return componentModel;
 });

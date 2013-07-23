@@ -11,13 +11,13 @@ define([
   'backbone',
   'app/dispatch',
   'backbone/models/transport'
-], function(_, Backbone, dispatch, transport) {
+], function(_, Backbone, dispatch, TransportModel) {
   var state = Backbone.Model.extend({
     defaults: {
       signature: 4,
       tempo: 120,
       baseTempo: 120,
-      components: null,
+      stage: null,
       micLevel: .8
     },
 
@@ -32,7 +32,7 @@ define([
       this.beatArray = new Array();
       this.waitCount = 0;
       this.isWaiting = true;
-      this.transport = transport;
+      this.TransportModel = TransportModel;
       this.finalMeasureBeatTimeIntervals50 = [];
       this.finalMeasureBeatTimeIntervals100 = [];
       this.finalMeasureBeatTimeIntervals150 = [];
@@ -55,7 +55,7 @@ define([
 
     recordTempoAndPattern: function() {
       console.log('recordTempoAndPattern function in state');
-      if(this.transport.isPlaying) {
+      if(this.TransportModel.isPlaying) {
         dispatch.trigger('togglePlay.event');
       }
       this.isTapping = true;
@@ -198,13 +198,13 @@ define([
         console.warn(this.timeIntervals);
       }
       else if(RMS > 0.05 && this.isRecording) {
-        _.each(this.get('components').models, function(component) {
-          if($('#component'+component.cid).hasClass('selected')) {
-            console.log(component.get('currentBeat'));
-            var measuresCollection = component.get('measures');
+        _.each(this.get('stage').models, function(hTrack) {
+          if($('#hTrack'+hTrack.cid).hasClass('selected')) {
+            console.log(hTrack.get('currentBeat'));
+            var measuresCollection = hTrack.get('measures');
             _.each(measuresCollection.models, function(measure) {
               var beatsCollection = measure.get('beats');
-              var beat = beatsCollection.at(component.get('currentBeat'));
+              var beat = beatsCollection.at(hTrack.get('currentBeat'));
               console.log(beat);
               if(!beat.get('selected')) {
                 $('#beat'+beat.cid).click();
@@ -218,7 +218,7 @@ define([
 
     tapTempoClicked: function() {
       console.log('Tap Tempo Clicked');
-      if(this.transport.isPlaying) {
+      if(this.TransportModel.isPlaying) {
         dispatch.trigger('togglePlay.event');
       }
       this.isTapping = true;
@@ -260,7 +260,7 @@ define([
 
     recordButtonClicked: function() {
       console.log('Tap Tempo Clicked');
-      if(this.transport.isPlaying) {
+      if(this.TransportModel.isPlaying) {
         dispatch.trigger('togglePlay.event');
       }
       $('#transport').click();

@@ -2,13 +2,13 @@
 define([
   'underscore',
   'backbone',
-  'backbone/collections/components'
-], function(_, Backbone, componentCollection) {
-  var unsavedSongModel = Backbone.Model.extend({
+  'backbone/collections/stage'
+], function(_, Backbone, StageCollection) {
+  var UnsavedSongModel = Backbone.Model.extend({
     // paramRoot: 'song',
     defaults: {
       // title: '',                        //move to unsavedSongTemplate.js
-      components: componentCollection,   //move to unsavedSongTemplate.js
+      stage: StageCollection,   //move to unsavedSongTemplate.js
       // TODO : add current representation
       currentFractionRepresentation: '',
       currentMeasureRepresentation: '',
@@ -18,5 +18,5 @@ define([
     }
   });
   
-  return unsavedSongModel;
+  return UnsavedSongModel;
 });

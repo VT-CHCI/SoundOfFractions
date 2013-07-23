@@ -4,10 +4,10 @@ define([
   'underscore',
   'backbone',
   'backbone/collections/songsCollection',
-  'backbone/collections/components',
+  'backbone/collections/stage',
   'backbone/models/song',
   'backbone/models/unsavedSong',
-  'backbone/views/component/componentsView',
+  'backbone/views/stage/stageView',
   'text!backbone/templates/song/show.html',
   'text!backbone/templates/tiny/navSave.html',
   'text!backbone/templates/tiny/navLoad.html',
@@ -15,7 +15,7 @@ define([
   'text!backbone/templates/tiny/navInfo.html',
   'app/dispatch',
   'backbone/models/state'
-], function($, _, Backbone, SongsCollection, Components, songModel, unsavedSongModel, ComponentsView, songsBodyTemplate, songNavSaveTemplate, songNavLoadTemplate, songNavUpdateTemplate, songNavInfoTemplate, dispatch, state){
+], function($, _, Backbone, SongsCollection, StageCollection, songModel, unsavedSongModel, StageView, songsBodyTemplate, songNavSaveTemplate, songNavLoadTemplate, songNavUpdateTemplate, songNavInfoTemplate, dispatch, state){
   return Backbone.View.extend({
     navLoadEl: $('#nav-songs-load'),
     navUpdateEl: $('#nav-songs-update'),
@@ -40,11 +40,11 @@ define([
     update: function(e){
       console.log('Show View Save function starting');      
       var unupdatedSong = new unsavedSongModel();
-      unupdatedSong.set('components', e.data.context.drumkit);
+      unupdatedSong.set('stage', e.data.context.drumkit);
       var toBeUpdatedSong = e.data.context.model;
       //TODO potentially update the content for the current song
       toBeUpdatedSong.set({
-        // unupdatedSong is a unsavedSong.js model which contains and 'components'
+        // unupdatedSong is a unsavedSong.js model which contains a 'stage'
         content : JSON.stringify(unupdatedSong.toJSON()),
         title: $('#song-title').val()
       });
@@ -103,7 +103,7 @@ define([
       // context:this => pass the show_view.js back to itself
       this.navUpdateEl.click({context:this},this.update);
 
-      this.drumkit = ComponentsView.build(this.model);
+      this.drumkit = StageView.build(this.model);
       //TODO calcBeatWidth;
       console.log("Show View rendered");
       return this;

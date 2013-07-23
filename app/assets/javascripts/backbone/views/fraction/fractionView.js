@@ -2,13 +2,13 @@
 /*
   This is the FractionsView.
 
-  This is contained in a ComponentsView.
+  This is contained in an HTrackView.
 */
 define([
   'jquery',
   'underscore',
   'backbone',
-  'backbone/models/component',
+  'backbone/models/hTrack',
   'text!backbone/templates/fraction/decimal.html',
   'text!backbone/templates/fraction/fraction.html',
   'text!backbone/templates/fraction/mixedNumber.html',
@@ -17,7 +17,7 @@ define([
   'app/dispatch',
   'backbone/models/state',
   'app/log'
-], function($, _, Backbone, ComponentModel, decimalTemplate, fractionTemplate, mixedNumberTemplate, percentTemplate, blankTemplate, dispatch, state, log){
+], function($, _, Backbone, HTrackModel, decimalTemplate, fractionTemplate, mixedNumberTemplate, percentTemplate, blankTemplate, dispatch, state, log){
   return Backbone.View.extend({
     // el: $('#fraction-representation'),
 

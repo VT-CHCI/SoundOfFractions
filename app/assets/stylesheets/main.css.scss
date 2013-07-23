@@ -70,7 +70,7 @@
   padding: 1px  3px;
 }
 
-.component.well {
+.hTrack.well {
   padding: 10px;
   margin-bottom: 10px;
   min-height: 164px;
@@ -345,17 +345,17 @@ svg {
   font-weight: bold;
 }
 
-.component-image {
+.hTrack-image {
   width: 70px;
   float: left;
   margin: 10px;
 }
-.component-container {
+.hTrack-container {
   position: relative;
   /*min-height: 150px;*/
 }
 
-.component-container .count {
+.hTrack-container .count {
   position: absolute;
   top: 30px;
   right: 0;
@@ -366,31 +366,31 @@ svg {
 }
 
 // TODO figure out CSS
-.component-container .count .numerator {
+.hTrack-container .count .numerator {
   display: block;
   margin: 15px auto 15px auto;
   border-bottom: 4px solid;
   padding-bottom: 12px;
 }
 
-.component-container .count .mixedNumerator {
+.hTrack-container .count .mixedNumerator {
   display: block;
   margin: 15px auto 15px auto;
   border-bottom: 4px solid;
   padding-bottom: 12px;
 }
 
-.component-container .count .whole {
+.hTrack-container .count .whole {
   dis1: block;
   margin: 15px auto 25px auto;
   font-size: 80px;
   // margin-bottom: 12px;
 }
 
-.component-container .count .denominator {
+.hTrack-container .count .denominator {
 }
 
-.component-container .count .percent, .component-container .count .decimal {
+.hTrack-container .count .percent, .hTrack-container .count .decimal {
   margin-top: 65%;
   display: block;
   margin-left: -25px;
