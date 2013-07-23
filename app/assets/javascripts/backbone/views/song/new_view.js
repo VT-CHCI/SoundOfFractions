@@ -24,11 +24,9 @@ define([
 
     initialize: function(options){
       console.log("New View initializing...");
-      console.warn(window.router);
       
       // console.log(this.collection);
       this.model = new unsavedSong();
-      console.warn(this.model);
 
       this.model.bind("change:errors", function(){
         console.log("In change error func() for new view");

@@ -41,7 +41,6 @@ define([
       a log message is sent reflecting the representation change.
     */
     addInstrumentToCompositionArea: function(e) {
-      console.warn(e);
       console.log('in remainingInstrumentGeneratorView addInstrumentToCompositionArea()');
       // Instrument type   'sn'|'hh'|'kd'
       var instrument = $(e.currentTarget)[0].id.slice(15);

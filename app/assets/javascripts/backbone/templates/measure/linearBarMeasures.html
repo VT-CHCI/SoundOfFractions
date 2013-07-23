@@ -1,14 +1,10 @@
-<div id="measure<%= measure.cid %>" class="measure resizable-h measure-bar">
+<div id="measure<%= measureRep.cid %>" class="measureRep resizable-h measure-bar">
   <!-- <span class="title">SVG Bar Measure <span class="number"><%= measureCount %></span> -->
-  <div class="btn pause pull-right remove-measure-btn visHidden"><i class="icon-remove"></i></div>
-  <% if(measureCount == 1) { %>
-  <% } else { %>
-   - <span class="delete">[X]</span>
-  <% } %>
-  </span>
+  <div class="delta pull-left" id="delta-<%= measureRep.cid %>" >&Delta;</div>
+  <div class="pull-right remove-measure-rep"><i class="icon-minus"></i></div>
   <svg xmlns="http://www.w3.org/2000/svg" version="1.1" class="linear-bar">
     <rect x="<%= xMeasureLocation %>" y="<%= yMeasureLocation %>" width="<%= measureWidth %>" height="<%= measureHeight %>" style="stroke:black; stroke-width:1; fill:<%= measureColor %>;" />
-    <g id="<%= beatHolder %>">
-    </g>
+    <g id="<%= beatHolder %>"></g>
+    <g id="<%= beatFactoryHolder %>"></g>
   </svg> 
 </div>

@@ -37,22 +37,21 @@ define([
       "number-line": numberLineBeatsTemplate
     },
     //grab the current measure representation's data-state
-    currentBeatRepresentation: $('#measure-representation-buttons').children('.active').attr('data-state'),
-    previousBeatRepresentation: $('#measure-representation-buttons').children('.active').attr('data-state'),
+    currentRepresentationType: '',
+    previousRepresentationType: '',
 
     //The constructor takes options because these views are created
     //by measuresView objects.
     initialize: function(options){
       if (options) {
         // TODO: need to take in an option about currentBeatRep
-        // TODO: maybe need to respond to a representation changed event (change this.currentBeatRepresentation and rerender)
+        // TODO: maybe need to respond to a representation changed event (change this.currentRepresentationType and rerender)
         this.model = options.model;
 
         // this is the html element into which this class should render its template
         this.measureBeatHolder = options.parentElHolder;
         this.el = options.singleBeat;
         this.parent = options.parent;
-        this.currentBeatRepresentation = options.measureRepresentation;
         this.circularMeasureCx = options.circularMeasureCx;
         this.circularMeasureCy = options.circularMeasureCy;
         this.circularMeasureR = options.circularMeasureR;
@@ -86,6 +85,7 @@ define([
         this.audioMeasureR = options.audioMeasureR;
         // To alloBeatw the toggle function to be accesable outside of the nested d3 functions inside render
         // per http://stackoverflow.com/questions/16672862/reference-backbone-functions-from-within-a-nested-d3-function?noredirect=1#comment24003171_16672862
+        this.currentRepresentationType = options.representationType;
         _.bindAll(this, 'toggle');
       } else {
         console.error('should not be in here!');
@@ -105,7 +105,7 @@ define([
       if (toggledBeat) {
         console.log('getting in re-render with toggledBeat');
         //SVG
-        if(this.currentBeatRepresentation == 'number-line') {
+        if(this.currentRepresentationType == 'number-line') {
           // $('#beat'+toggledBeat.cid)[0].setAttribute('fill-opacity', this.getOpacityNumber(toggledBeat.get('selected')));
         }
         else {
@@ -153,17 +153,17 @@ define([
         beatTemplateParameters.beatEndAngle = beatEndAngle;
 
         // x center of a bead or first x of pie piece
-        if (this.currentBeatRepresentation == 'circular-pie') {
+        if (this.currentRepresentationType == 'circular-pie') {
           var x1 = centerX + measureR * Math.cos(Math.PI * beatStartAngle/180); 
           beatTemplateParameters.x1 = x1;
-        } else if (this.currentBeatRepresentation == 'circular-bead') {
+        } else if (this.currentRepresentationType == 'circular-bead') {
           beatTemplateParameters.x1 = this.circleStates[0][Math.floor((this.beatIndex/this.beatsInMeasure)*(this.measureNumberOfPoints))].x;
         }
-        // y center of a bead
-        if (this.currentBeatRepresentation == 'circular-pie') {
+        // y center of a bead or first y of a pie piece
+        if (this.currentRepresentationType == 'circular-pie') {
           var y1 = centerY + measureR * Math.sin(Math.PI * beatStartAngle/180);     
           beatTemplateParameters.y1 = y1;
-        } else if (this.currentBeatRepresentation == 'circular-bead') {
+        } else if (this.currentRepresentationType == 'circular-bead') {
           beatTemplateParameters.y1 = this.circleStates[0][Math.floor((this.beatIndex/this.beatsInMeasure)*(this.measureNumberOfPoints))].y;
         }
         // the second x point of a pie piece
@@ -204,7 +204,7 @@ define([
         beatTemplateParameters.audioBeatR = this.audioBeatR;
 
         // compile the template for this beat (respect the current representation)
-        var compiledTemplate = _.template(this.representations[this.currentBeatRepresentation], beatTemplateParameters );
+        var compiledTemplate = _.template(this.representations[this.currentRepresentationType], beatTemplateParameters );
 
         var margin = this.margin;
         var lineData = $.map(Array(this.measureNumberOfPoints), function (d, i) {
@@ -258,7 +258,7 @@ define([
           });
         }
 
-        if (this.currentBeatRepresentation == 'circular-bead') {
+        if (this.currentRepresentationType == 'circular-bead') {
           //The Circle SVG Path we draw MUST BE AFTER THE COMPILED TEMPLATE
           var beatContainer = d3.select('#beatHolder'+this.parent.cid);
           var beatPath = beatContainer
@@ -306,7 +306,7 @@ define([
 
           $('#a'+this.parent.cid).on('click', unroll);
           $('#b'+this.parent.cid).on('click', reverse);
-        } else if (this.currentBeatRepresentation == 'linear-bar') {
+        } else if (this.currentRepresentationType == 'linear-bar') {
           // append the compiled template to the measureBeatHolder
           $(this.measureBeatHolder).append(compiledTemplate);          
         // SVG rendering
@@ -332,8 +332,8 @@ define([
     },
 
     changeBeatRepresentation: function(representation) {
-      this.previousBeatRepresentation = this.currentBeatRepresentation;
-      this.currentBeatRepresentation = representation;
+      this.previousRepresentationType = this.currentRepresentationType;
+      this.currentRepresentationType = representation;
     },
 
     // Depricated

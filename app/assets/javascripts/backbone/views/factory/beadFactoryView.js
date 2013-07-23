@@ -133,7 +133,6 @@ define([
 
         // // add the 'selected' class when a beat is dragged
         // $('#factory-beat'+ƒthis.cid).closest($('.component')).addClass('selected');
-        // window.csf = $('#factory-beat'+ƒthis.cid);
         // var transformString = $('#factory-beat'+ƒthis.cid).attr('transform').substring(10, $('#factory-beat'+ƒthis.cid).attr('transform').length-1);
         // var comma = transformString.indexOf(',');
         // d.x = parseInt(transformString.substr(0,comma));

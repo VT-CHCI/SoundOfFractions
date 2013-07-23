@@ -1,3 +1,26 @@
+.measureRep {
+  border: solid 1px grey;
+  border-radius: 3px;
+  padding: 0 5px 5px 5px;
+  display: inline-block;
+  margin-bottom: 5px;
+  width: 95%;
+  display: inline-block;
+
+}
+.measure-rep-container {
+  width: 99%;
+  display: inline-block;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+.measure-area {
+  width: 89%;
+  /*overflow: auto;*/
+}
+.well {
+  padding: 5px;
+}
 .delta {
   padding: 3px;
   font-size: 17px;
@@ -27,9 +50,11 @@
   -moz-transform: rotate(90deg);
   -o-transform: rotate(90deg);
 }
-.remove-measure-btn {
-  /*color: red;*/
-  /*visibility: hidden;*/
+.remove-measure-rep:hover {
+  color: red;
+}
+.remove-measure-rep {
+  padding: 3px;
 }
 
 #measure-representation-buttons button {
@@ -209,6 +234,10 @@ svg.circular-pie {
 }
 svg.circular-bead {
   height: 120px;
+  /*width: 165px;*/
+}
+svg {
+  width: 90%;
 }
 
 #record {
@@ -259,7 +288,8 @@ svg.circular-bead {
 	padding: 0 5px 5px 5px;
 	display: inline-block;
   margin-bottom: 5px;
-  width: 300px;
+  width: 99%;
+  display: inline-block;
 }
 .resizable-h {
   resize: horizontal;
@@ -320,12 +350,6 @@ svg.circular-bead {
   float: left;
   margin: 10px;
 }
-
-.component {
-  /*min-height: 50px;*/
-  /*width: 87%;*/
-}
-
 .component-container {
   position: relative;
   /*min-height: 150px;*/

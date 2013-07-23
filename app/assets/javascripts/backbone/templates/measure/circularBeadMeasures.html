@@ -1,21 +1,12 @@
-<div id="measure<%= mCID %>" class="measure resizable measure-bead">
-  <!-- <div class="btn a unroll" id="a<%= measure.cid %>">Unroll</div> -->
-  <!-- <div class="btn b rollup" id="b<%= measure.cid %>">Rollup</div> -->
+<div id="measure-rep-<%= measureRep.cid %>" class="measureRep resizable measure-bead">
   <!-- <span class="title">Measure <span class="number"><%= measureCount %></span> -->
-  <div class="delta pull-left" id="delta-<%= measure.cid %>" >&Delta;</div>
-  <div class="pause pull-right remove-measure-btn"><i class="icon-minus"></i></div>
-  <% if(measureCount == 1) { %>
-  <% } else { %>
-   - <span class="delete">[X]</span>
-  <% } %>
-  </span>
-  <svg id="svg<%= measure.cid %>" xmlns="http://www.w3.org/2000/svg" version="1.1" class="circular-bead">
+  <div class="delta pull-left" id="delta-<%= measureRep.cid %>" >&Delta;</div>
+  <div class="pause pull-right remove-measure-rep"><i class="icon-minus"></i></div>
+  <svg id="svg-<%= measureRep.cid %>" xmlns="http://www.w3.org/2000/svg" version="1.1" class="circular-bead">
     <!-- <path d="<%= pathFunction %>" /> -->
     <!-- <circle cx="<%= circularMeasureCx %>" cy="<%= circularMeasureCy %>" r="<%= circularMeasureR %>" stroke="black" stroke-dasharray="1,3" stroke-width="1" fill="none" /> -->
-    <g id="<%= beatHolder %>">
-    </g>
-    <g id="<%= beatFactoryHolder %>">
-    </g>
+    <g id="<%= beatHolder %>"></g>
+    <g id="<%= beatFactoryHolder %>"></g>
   </svg>
   <!-- <div class="btn pull-right resize-measure-pull"><i class="icon-resize-full"></i></div> -->
   <!-- <i class="pull-right resize-measure-pull icon-resize-small icon-resize-small-2x"></i>  -->

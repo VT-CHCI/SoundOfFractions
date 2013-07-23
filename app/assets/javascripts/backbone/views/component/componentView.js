@@ -89,43 +89,36 @@ define([
             currentMeasureRepresentation: options.representation
           });
         });
-        // for each of the measure representations
-
-        // new FractionRepresentationView({
-        //   collection:this.hTrack.get('measures'),
-        //   parent: this.hTrack,
-        //   el:'#fraction'+this.hTrack.cid,
-        //   defaultFractionRepresentation: this.defaultFractionRepresentation
-        // }); 
       } else {
         var ƒthis = this;
         // for each of the measures (V1 should only have 1 Measure)
         _.each(this.hTrack.get('measures').models, function(measure, index) {
-          // for each of the measure representations
-          console.error(measure);
-          _.each(measure.get('measureRepresentations').models, function(rep, index) {
-            console.error(rep);
             new MeasureView({
               collectionOfMeasures: ƒthis.hTrack.get('measures'),
-              collectionOfRepresentations: measure.get('representations'),
+              collectionOfRepresentations: measure.get('measureRepresentations'),
               parent: ƒthis.hTrack,
-              parentEl: '#representation-area-'+ƒthis.hTrack.cid,
+              parentEl: '#measure-area-'+ƒthis.hTrack.cid,
               model: ƒthis.hTrack.get('measures').models[index],
+              fullMeasure: measure,
               defaultMeasureRepresentation: ƒthis.defaultMeasureRepresentation,
-              representation: rep,
-              index: index
+              measureIndex: index,
+              measureCount: ƒthis.hTrack.get('measures').models.length
             });
-          });
-        });
 
-        // new MeasureRepView({
-        //   collectionOfMeasures: ƒthis.hTrack.get('measures'),
-        //   collectionOfRepresentations: ƒthis.hTrack.get('representations'),
-        //   parent: ƒthis.hTrack,
-        //   parentEl: '#component'+ƒthis.hTrack.cid,
-        //   model: ƒthis.hTrack.get('measures').models[index],
-        //   defaultMeasureRepresentation: ƒthis.defaultMeasureRepresentation
-        // });
+          // for each of the measure representations
+          // _.each(measure.get('measureRepresentations').models, function(rep, indx) {
+          //   new MeasureView({
+          //     collectionOfMeasures: ƒthis.hTrack.get('measures'),
+          //     collectionOfRepresentations: measure.get('representations'),
+          //     parent: ƒthis.hTrack,
+          //     parentEl: '#representation-area-'+ƒthis.hTrack.cid,
+          //     model: ƒthis.hTrack.get('measures').models[indx],
+          //     defaultMeasureRepresentation: ƒthis.defaultMeasureRepresentation,
+          //     representation: rep,
+          //     measureIndex: indx
+          //   });
+          // });
+        });
 
         new InstrumentDropDownView({
           unusedInstrumentsModel: this.unusedInstrumentsModel,

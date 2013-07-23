@@ -41,7 +41,6 @@ define([
 
       dispatch.on('addInstrumentToGeneratorModel.event', this.addInstrument, this);
       dispatch.on('removeInstrumentFromGeneratorModel.event', this.removeInstrument, this);
-      window.rig = this;
     },
 
     getDefault: function(type, thing) {
@@ -68,15 +67,18 @@ define([
           return arr.push.apply(arr, rest);
       };
 
+      var found = false;
       for (i = 0; i < len ; ++i) {
-          if (this.unusedInstruments[i].type == removedInstrument) {
-              remove(this.unusedInstruments, i);
-              console.error('removed');
-              console.warn('removedIntrument: '+ removedInstrument + ' from generatorModel');
-              break;
-          }
-          console.error('None Found');
+        if (this.unusedInstruments[i].type == removedInstrument) {
+            remove(this.unusedInstruments, i);
+            console.warn('removedIntrument: '+ removedInstrument + ' from generatorModel');
+            found = true;
+            break;
+        } else {
+          console.warn('Looking...');
+        }
       }
+      if (!found) { console.error('none found!'); }
     },
 
     addInstrument: function(addedIntrument) {

@@ -72,7 +72,6 @@ define([
         mute: false,
         sample: '808_sn.m4a',
         measures: this.manuallyCreatedMeasuresCollection,
-        // representations: this.manuallyCreatedRepresentationsCollection,
         signature: this.manuallyCreatedMeasuresCollection.models[0].get('beats').length,
         active: true
       });
@@ -233,7 +232,7 @@ define([
           el: '#component-container'+component.cid, 
           gainNode: this.muteGainNodeList[counter],
           defaultMeasureRepresentation: this.defaultMeasureRepresentation,
-          defaultFractionRepresentation: this.defaultFractionRepresentation,
+          // defaultFractionRepresentation: this.defaultFractionRepresentation,
           unusedInstrumentsModel: this.unusedInstrumentsModel
         });
         if(!component.get('active')) {
@@ -475,21 +474,25 @@ define([
     },
 
     addInstrument: function(instrument) {
-      console.warn('in componentsView addInstrument');
-
       //this is creating the new instrument htrack.
-      this.manuallyCreatedMeasure = new BeatsCollection;
 
-      //for default number of beats
-      var defaultNumberOfBeats = 6;
-      for (var i = 0; i < defaultNumberOfBeats; i++) {
-        // add a beat to the measure
-        this.manuallyCreatedMeasure.add();
+      // this creates 1 measure, and addes beats and the representations to itself
+      this.manuallyCreatedMeasureBeatsCollection = new BeatsCollection;
+      //for each beat - also change signature below
+      for (var i = 0; i < 6; i++) {
+        this.manuallyCreatedMeasureBeatsCollection.add();
       }
+
+      // add an instrument rep
+      this.manuallyCreatedRepresentationModel = new RepresentationModel;
+      this.manuallyCreatedRepresentationModel.representationType = 'audio';
+      this.manuallyCreatedMeasureRepresentationCollection = new RepresentationsCollection;
+      this.manuallyCreatedMeasureRepresentationCollection.add(this.manuallyCreatedRepresentationModel);
 
       // Make a htrack
       this.manuallyCreatedMeasuresCollection = new MeasuresCollection;
-      this.manuallyCreatedMeasuresCollection.add({beats: this.manuallyCreatedMeasure});
+      this.manuallyCreatedMeasuresCollection.add({
+        beats: this.manuallyCreatedMeasureBeatsCollection, measureRepresentations: this.manuallyCreatedMeasureRepresentationCollection});
 
       this.drumkit = ComponentsCollection.add({
         label: this.unusedInstrumentsModel.getDefault(instrument, 'label'),
@@ -498,7 +501,7 @@ define([
         mute: false,
         sample: this.unusedInstrumentsModel.getDefault(instrument, 'sample'),
         measures: this.manuallyCreatedMeasuresCollection,
-        signature: defaultNumberOfBeats,
+        signature: this.manuallyCreatedMeasuresCollection.models[0].get('beats').length,
         active: true
       });
 

@@ -1,6 +1,6 @@
-<div id="component-container<%= component.cid %>" class="component-container well" data-state="<%= type %>">
+<div id="component-container<%= component.cid %>" class="component-container well container-fluid" data-state="<%= type %>">
   <!-- <h4><%= component.get('label') %></h4> -->
-  <div class="htrack-info">
+  <div class="htrack-info pull-left">
     <div id="delete-component-<%= component.cid %>" class="delete-instrument"></div>
     <img src="<%= App.assets.path(component.get('img'))%>" class="img-circle component-image">
     <div class="control unmute"><i class="icon-volume-up"></i></div>
@@ -8,7 +8,7 @@
     <!-- <span class="control unmute">X</span> -->
   </div>
   <!-- <div id="component<%= component.cid %>" class="component well"></div> -->
-  <div id="representation-area-<%= component.cid %>" class="component well"></div>
+  <div id="measure-area-<%= component.cid %>" class="measure-area component pull-left"></div>
   <!-- <div id="fraction<%= component.cid %>" class="count"></div> -->
   <div class="addMeasure pull-right"><i class="icon-plus"></i></div>
 </div>
