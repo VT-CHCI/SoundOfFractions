@@ -90,7 +90,7 @@ define([
               parentEl: '#measure-container-'+ƒthis.hTrack.cid,
               hTrackEl: '#hTrack-'+ƒthis.hTrack.cid,
               model: ƒthis.hTrack.get('measures').models[index],
-              fullMeasure: measure,
+              parentMeasureModel: measure,
               defaultMeasureRepresentation: ƒthis.defaultMeasureRepresentation,
               measureIndex: index,
               measureCount: ƒthis.hTrack.get('measures').models.length
@@ -237,6 +237,7 @@ define([
     },
     addRepresentationToHTrack: function(e) {
       e.srcElement.parentElement.classList.add('cs');
+      console.log('clicked the plus sign');
     },
 
     animationWrapper: function(counter, beats, signature, maxMeasures, duration) {

@@ -23,8 +23,6 @@ define([
   'app/log'
 ], function($, _, Backbone, BeatsCollection, MeasureModel, RepresentationModel, StateModel, BeatView, BeadFactoryView, AudioMeasuresTemplate, LinearBarMeasuresTemplate, CircularPieMeasuresTemplate, CircularBeadMeasuresTemplate, NumberLineMeasuresTemplate, COLORS, dispatch, log){
   return Backbone.View.extend({
-    // el: $('.measure')[0],
-
     // The different representations
     representations: {
       'audio': AudioMeasuresTemplate,
@@ -36,13 +34,10 @@ define([
     //grab the current measure representation's data-state
     currentRepresentationType: '', //temp-holder until init
     previousRepresentationType: '', //temp-holder until init
-
     //registering click events to add and remove measures.
     events : {
-      'click .remove-measure-rep' : 'removeRepresentation',
-      'click .add-measure-rep' : 'addRepresentation'
+      'click .remove-measure-rep' : 'removeRepresentation'
     },
-
     initialize: function(options){
       //if we're being created by a MeasureView, we are
       //passed in options. Otherwise we create a single
@@ -53,10 +48,10 @@ define([
         }
         this.el = options.measureRepContainer;
         this.currentRepresentationType = options.representationType;
+        this.beatFactoryHolder = 'beat-factory-holder-'+this.measureRepModel.cid;
       } else {
         console.error('Should not be in here: NO MeasureRep!');
       }
-
       //Dispatch listeners
       dispatch.on('signatureChange.event', this.reconfigure, this);
       dispatch.on('measureRepresentation.event', this.changeMeasureRepresentation, this);
@@ -64,15 +59,9 @@ define([
       dispatch.on('tempoChange.event', this.adjustRadius, this);
       this.render();
     },
-
     changeMeasureRepresentation: function(representation) {
       this.previousRepresentationType = this.currentRepresentationType;
       this.currentRepresentationType = representation;
-      // var d3Beats = d3.selectAll($('.d3'));
-      // console.warn(d3Beats);
-      // for (var i = 0; i<d3Beats.length ; i++){
-      //   d3Beats[i].exit();
-      // }
       this.render();
     },
     transitionRoll: function(options) {
@@ -99,18 +88,16 @@ define([
       }
       this.unrolled = !this.unrolled;
     },
-
     rollup: function() {
       for(i=0; i<this.measureNumberOfPoints; i++){
-          circlePath.data([this.circleStates[this.measureNumberOfPoints-1-i]])
-              .transition()
-              .delay(this.animationDuration*i)
-              .duration(this.animationDuration)
-              .ease('linear')
-              .attr('d', this.pathFunction);
+        circlePath.data([this.circleStates[this.measureNumberOfPoints-1-i]])
+          .transition()
+          .delay(this.animationDuration*i)
+          .duration(this.animationDuration)
+          .ease('linear')
+          .attr('d', this.pathFunction);
       }
     },
-
     render: function(){
       // Circular
       var circularMeasureCx = 100;
@@ -182,13 +169,14 @@ define([
 
       // console.error(this);
       // console.error(this.cid);
-      // console.error(this.model);
-      // console.error(this.model.cid);
+      // console.error(this.measureRepModel);
+      // console.error(this.measureRepModel.cid);
       // compile the template for a representation
       var measureRepTemplateParamaters = {
-        measureRepCID: this.cid,
-        beatHolder:'beatHolder'+this.model.cid,
-        beatFactoryHolder: 'beatFactoryHolder'+this.model.cid,
+        parentMeasureModel: this.parentMeasureModel,
+        measureRepCID: this.measureRepModel.cid,
+        beatHolder: 'beatHolder'+this.measureRepModel.cid,
+        beatFactoryHolder: this.beatFactoryHolder,
         measureCount: this.measureCount,
         measureAngle: 360.0,
         beatHolderWidth: beatHolderWidth,
@@ -240,7 +228,7 @@ define([
             .interpolate('basis'); // bundle | basis | linear | cardinal are also options
 
         //The Circle SVG Path we draw MUST BE AFTER THE COMPILED TEMPLATE
-        var svgContainer = d3.select('#svg'+this.model.cid)
+        var svgContainer = d3.select('#svg-'+this.measureRepModel.cid)
             // .call(d3.experiments.dragAll);
         var circlePath = svgContainer
             .insert('path', ':first-child')
@@ -275,7 +263,6 @@ define([
           }
           this.unrolled = !this.unrolled;
         }
-
         function unroll() {
           for(i=0; i<measureNumberOfPoints; i++){
               circlePath.data([circleStates[i]])
@@ -298,21 +285,9 @@ define([
         };
 
         // $('#a'+measure.cid).on('click', dispatch.trigger('unroll.event'), circlePath);
-        $('#a'+this.model.cid).on('click', unroll);
-        $('#b'+this.model.cid).on('click', reverse);
+        $('#a'+this.measureRepModel.cid).on('click', unroll);
+        $('#b'+this.measureRepModel.cid).on('click', reverse);
       }
-
-      // Managing the hover showing of the delete buttons
-      // $('#measure' + measure.cid).hover(
-      //     function() {
-      //         $('.remove-measure-btn').removeClass('visHidden');
-      //         $('.resize-measure-pull').removeClass('visHidden');
-      //     },
-      //     function() {
-      //         $('.remove-measure-btn').addClass('visHidden');
-      //         $('.resize-measure-pull').addClass('visHidden');
-      //     }
-      // );
 
       // for each beat in this measure
       _.each(this.parentMeasureModel.get('beats').models, function(beat, index) {
@@ -321,9 +296,10 @@ define([
         var measurePassingToBeatViewParamaters = {
           //General
           model: beat,
-          parentElHolder: '#beatHolder'+this.model.cid,
-          parent: this.model,
-          parentCID: this.model.cid,
+          parentMeasureModel: this.parentMeasureModel,
+          parentElHolder: '#beatHolder'+this.measureRepModel.cid,
+          parentMeasureRepModel: this.measureRepModel,
+          parentCID: this.measureRepModel.cid,
           singleBeat: '#beat'+beat.cid,
           beatIndex: index,
           margin : margin,
@@ -380,11 +356,13 @@ define([
       // make a beat factory
       this.measurePassingToBeatFactoryParamaters = {
         // beat, number of beats, each beat's color, location, path
-        beatFactoryHolder: '#beatFactoryHolder'+this.model.cid,
+        beatFactoryHolder: this.beatFactoryHolder,
         remainingNumberOfBeats: 16-this.beatsInMeasure,
         currentRepresentationType: this.currentRepresentationType,
         beadRadius: circularBeadBeatRadius,
-        colorIndex: ''
+        colorIndex: '',
+        measureRepModel: this.measureRepModel,
+        parentMeasureModel: this.parentMeasureModel
       };
       if (this.currentRepresentationType == 'circular-bead') {
         for (i = 0 ; i < this.measurePassingToBeatFactoryParamaters.remainingNumberOfBeats ; i++){
@@ -428,6 +406,7 @@ define([
       This is called when the user clicks on the minus to remove a measure.
     */
     removeRepresentation: function(ev){
+      console.log('getting here')
       if ($('#measure'+this.measuresCollection.models[0].cid).parent()) {
         //removing the last measure isn't allowed.
         if(this.measuresCollection.models.length == 1) {
@@ -491,22 +470,6 @@ define([
     toggleSelection: function(e){
       e.stopPropagation();
       $('#measure'+this.measuresCollection.models[0].cid).toggleClass('selected');
-    },
-
-    showInteractionButtons: function () {
-  console.error('gih');
-      $('.remove-measure-btn').css({'visibility' : 'visible'});
-      $('.resize-measure-pull').css({'visibility' : 'visible'});
-      // resize-measure-pull
-    },
-
-    hideInteractionButtons: function () {
-  console.error('gih');
-      $('.remove-measure-btn').css({'visibility' : 'hidden'});
-      $('.resize-measure-pull').css({'visibility' : 'hidden'});
     }
-
-
-
   });
 });

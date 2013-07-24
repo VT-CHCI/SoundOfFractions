@@ -19,27 +19,16 @@ define([
 ], function($, _, Backbone, BeatModel, audioBeatsTemplate, linearBarBeatsTemplate, circularPieBeatsTemplate,
   circularBeadBeatsTemplate, numberLineBeatsTemplate, COLORS, dispatch, log){
   var BeadFactory = Backbone.View.extend({
-
-     events : {
-     },
-
-    // The different representations
-    representations: {
-      "audio": audioBeatsTemplate,
-      "linear-bar": linearBarBeatsTemplate,
-      "circular-pie": circularPieBeatsTemplate,
-      "circular-bead": circularBeadBeatsTemplate,
-      "number-line": numberLineBeatsTemplate
-    },
+    events : {},
     //The constructor takes options because these views are created
-    //by measuresView objects.
+    //by measureRepView objects.
     initialize: function(options){
       if (options) {
       // beat, number of beats, each beat's color, location, path
-        this.beatFactoryHolderEl = options.beatFactoryHolder;
+        this.beatFactoryHolderEl = '#' + options.beatFactoryHolder;
         this.beatColor = COLORS.hexColors[options.colorIndex];
         this.remainingNumberOfBeats = options.remainingNumberOfBeats;
-        this.currentBeatRepresentation = options.currentMeasureRepresentation;
+        this.currentRepresentationType = options.currentRepresentationType;
         this.x = options.x;
         this.y = options.y;
         this.beadRadius = options.beadRadius;
@@ -50,7 +39,6 @@ define([
       this.render();
     },
 
-    //We use css classes to control the color of the beat.
     render: function(){
       var ƒthis = this;
       var beatFactoryParameters = {
@@ -83,17 +71,17 @@ define([
         // beatFactoryParameters.measureR = measureR;
 
       // x center of a bead or first x of pie piece
-      if (this.currentBeatRepresentation == 'circular-pie') {
+      if (this.currentRepresentationType == 'circular-pie') {
         // var x1 = centerX + measureR * Math.cos(Math.PI * beatStartAngle/180); 
         // beatFactoryParameters.x1 = x1;
-      } else if (this.currentBeatRepresentation == 'circular-bead') {
+      } else if (this.currentRepresentationType == 'circular-bead') {
         beatFactoryParameters.x1 = this.x;
       }
       // y center of a bead
-      if (this.currentBeatRepresentation == 'circular-pie') {
+      if (this.currentRepresentationType == 'circular-pie') {
         // var y1 = centerY + measureR * Math.sin(Math.PI * beatStartAngle/180);     
         // beatFactoryParameters.y1 = y1;
-      } else if (this.currentBeatRepresentation == 'circular-bead') {
+      } else if (this.currentRepresentationType == 'circular-bead') {
         beatFactoryParameters.y1 = this.y;
       }
         // the second x point of a pie piece
@@ -111,10 +99,6 @@ define([
       //Circular Bead
       var beatR = this.beatR;
       beatFactoryParameters.beatR = beatR;
-      //console.log(x1 + ',' + y1);
-
-      // // compile the template for this beat (respect the current representation)
-      // var compiledTemplate = _.template(this.representations[this.currentBeatRepresentation], beatFactoryParameters );
 
       var lineData = $.map(Array(this.measureNumberOfPoints), function (d, i) {
         var y = 0;
@@ -130,26 +114,9 @@ define([
       drag.on('drag', function(d) {
         d3.select(this).attr("cx", +d3.select(this).attr("cx") + d3.event.dx);
         d3.select(this).attr("cy", +d3.select(this).attr("cy") + d3.event.dy);
-
-        // // add the 'selected' class when a beat is dragged
-        // $('#factory-beat'+ƒthis.cid).closest($('.hTrack')).addClass('selected');
-        // var transformString = $('#factory-beat'+ƒthis.cid).attr('transform').substring(10, $('#factory-beat'+ƒthis.cid).attr('transform').length-1);
-        // var comma = transformString.indexOf(',');
-        // d.x = parseInt(transformString.substr(0,comma));
-        // d.y = parseInt(transformString.substr(comma+1));
-        // d.x += d3.event.dx;
-        // d.y += d3.event.dy;
-        // if (d.x > 100 || d.x < -100) {
-        //   d3.select(this).remove();
-        //   dispatch.trigger('signatureChange.event', ƒthis.parent.attributes.beats.length-1);
-        // }
-        // d3.select(this).attr("transform", function(d){
-        //     return "translate(" + [ d.x,d.y ] + ")";
-        // })
       });
 
-
-      if (this.currentBeatRepresentation == 'circular-bead') {
+      if (this.currentRepresentationType == 'circular-bead') {
         //The Circle SVG Path we draw MUST BE AFTER THE COMPILED TEMPLATE
         var beatContainer = d3.select(this.beatFactoryHolderEl);
         var beatPath = beatContainer
@@ -171,11 +138,6 @@ define([
             .call(drag);
       }
       return this;
-    },
-
-    changeBeatRepresentation: function(representation) {
-      this.previousBeatRepresentation = this.currentBeatRepresentation;
-      this.currentBeatRepresentation = representation;
     }
   });
   return BeadFactory;

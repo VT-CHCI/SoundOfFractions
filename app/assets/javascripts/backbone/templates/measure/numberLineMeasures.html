@@ -1,6 +1,6 @@
-<div id="measure-rep-<%= measureRep.cid %>" class="measureRep resizable-h measure-number">
+<div id="measure-rep-<%= measureRepCID %>" class="measureRep resizable-h measure-number">
   <!-- <span class="title">SVG Bar Measure <span class="number"><%= measureCount %></span> -->
-  <div class="delta pull-left" id="delta-<%= measureRep.cid %>" >&Delta;</div>
+  <div class="delta pull-left" id="delta-<%= measureRepCID %>" >&Delta;</div>
   <div class="pull-right remove-measure-rep"><i class="icon-minus"></i></div>
   <svg xmlns="http://www.w3.org/2000/svg" version="1.1" class="linear-bar">
     <line x1="<%= xMeasureLocation + xOffset %>" y1="<%= yMeasureLocation + yOffset %>" x2="<%= xMeasureLocation + measureWidth - xOffset %>" y2="<%= yMeasureLocation + yOffset %>" style="stroke:black; stroke-width:2;" />

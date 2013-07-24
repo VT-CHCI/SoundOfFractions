@@ -19,11 +19,7 @@ define([
 ], function($, _, Backbone, BeatModel, audioBeatsTemplate, linearBarBeatsTemplate, circularPieBeatsTemplate,
   circularBeadBeatsTemplate, numberLineBeatsTemplate, COLORS, dispatch, log){
   return Backbone.View.extend({
-
-    /* TODO still issues with this
-      el: '.beat',
-      registering backbone's click event to our toggle() function.
-    */
+    // registering backbone's click event to our toggle() function.
      events : {
        'click' : 'toggle'
      },
@@ -47,11 +43,12 @@ define([
         // TODO: need to take in an option about currentBeatRep
         // TODO: maybe need to respond to a representation changed event (change this.currentRepresentationType and rerender)
         this.model = options.model;
-
+        this.parentMeasureRepModel = options.parentMeasureRepModel;
+        this.parentMeasureModel = options.parentMeasureModel;
         // this is the html element into which this class should render its template
         this.measureBeatHolder = options.parentElHolder;
         this.el = options.singleBeat;
-        this.parent = options.parent;
+        this.parentMeasureRepModel = options.parentMeasureRepModel;
         this.circularMeasureCx = options.circularMeasureCx;
         this.circularMeasureCy = options.circularMeasureCy;
         this.circularMeasureR = options.circularMeasureR;
@@ -220,11 +217,13 @@ define([
         var drag = d3.behavior.drag();
         // to prevent the dragging of a one beat measure
         if (this.beatsInMeasure > 1) {
+          ƒthis = this;
           drag.on("drag", function() {
+            ƒthis = ƒthis;
               // console.log(parseInt(d3.select(this).attr("cx")) + ' <:> ' + parseInt(d3.select(this).attr("cy")));
               // console.log(d3.event.dx + ' : ' + d3.event.dy);
             // Formula for circle beats, utilizing cx and cy
-              //                          |-----Current Value--------|   |-----Delta value----\
+              //                        |-----Current Value--------|   |-----Delta value----\
               var newSettingX = parseInt(d3.select(this).attr("cx")) + parseInt(d3.event.dx);
               var newSettingY = parseInt(d3.select(this).attr("cy")) + parseInt(d3.event.dy);
               d3.select(this).attr("cx", newSettingX);
@@ -236,6 +235,9 @@ define([
               // On: x and y must satisfy (x - center_x)^2 + (y - center_y)^2 == radius^2
               if ( Math.pow(newComputedValX - ƒthis.circularMeasureCx, 2) + Math.pow(newComputedValY - ƒthis.circularMeasureCy, 2) > Math.pow(ƒthis.circularMeasureR+15,2) ) {
                 d3.select(this).remove();
+                console.warn('removed beat on measure');
+                ƒthis.parentMeasureModel.get('beats').remove(ƒthis.model);
+                window.csf = ƒthis.parentMeasureModel;
                 dispatch.trigger('signatureChange.event', ƒthis.beatsInMeasure-1);
               }
             // Formula for using a non-circle beat, utilizing the transform
@@ -260,7 +262,7 @@ define([
 
         if (this.currentRepresentationType == 'circular-bead') {
           //The Circle SVG Path we draw MUST BE AFTER THE COMPILED TEMPLATE
-          var beatContainer = d3.select('#beatHolder'+this.parent.cid);
+          var beatContainer = d3.select('#beatHolder'+this.parentMeasureRepModel.cid);
           var beatPath = beatContainer
               .append('circle')
               .attr('cx', beatTemplateParameters.x1)
@@ -304,8 +306,8 @@ define([
             }
           };
 
-          $('#a'+this.parent.cid).on('click', unroll);
-          $('#b'+this.parent.cid).on('click', reverse);
+          $('#a'+this.parentMeasureRepModel.cid).on('click', unroll);
+          $('#b'+this.parentMeasureRepModel.cid).on('click', reverse);
         } else if (this.currentRepresentationType == 'linear-bar') {
           // append the compiled template to the measureBeatHolder
           $(this.measureBeatHolder).append(compiledTemplate);          

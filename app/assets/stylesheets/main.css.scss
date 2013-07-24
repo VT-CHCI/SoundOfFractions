@@ -1,3 +1,16 @@
+.add-measure {
+  color: gray;
+}
+.add-measure:hover {
+  color: green;
+}
+.remove-measure {
+  color: gray;
+}
+.remove-measure:hover {
+  color: red;
+}
+
 .measureRep {
   border: solid 1px grey;
   border-radius: 3px;
@@ -22,6 +35,7 @@
   padding: 5px;
 }
 .delta {
+  color: gray;
   padding: 3px;
   font-size: 17px;
 }
@@ -54,6 +68,7 @@
   color: red;
 }
 .remove-measure-rep {
+  color: grey;
   padding: 3px;
 }
 
@@ -234,7 +249,7 @@ svg.circular-pie {
 }
 svg.circular-bead {
   height: 120px;
-  /*width: 165px;*/
+  width: 165px;
 }
 
 

@@ -28,10 +28,6 @@ define([
     el: $('#sof-composition-area'),
 
     initialize: function(){
-      // Default Measure representation state - also set "active" class in fractionRepresentation.html AND wholeMeasureRepresentation.html
-      this.defaultMeasureRepresentation = 'audio';
-      this.defaultFractionRepresentation = 'fraction';
-
       //this context variable gives us access to all of the
       //web audio api methods/objects.
       this.context = new webkitAudioContext();
@@ -230,8 +226,6 @@ define([
           hTrack: hTrack,
           el: '#hTrack-'+hTrack.cid, 
           gainNode: this.muteGainNodeList[counter],
-          defaultMeasureRepresentation: this.defaultMeasureRepresentation,
-          // defaultFractionRepresentation: this.defaultFractionRepresentation,
           unusedInstrumentsModel: this.unusedInstrumentsModel,
           type: hTrack.get('type')
         });

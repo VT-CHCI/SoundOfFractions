@@ -27,51 +27,23 @@ define([
     //registering click events to add and remove measures.
     events : {
       'click .add-measure' : 'addMeasure',
-      // 'click .addRepresentation' : 'addRepresentation',
       'click .delete-measure' : 'removeMeasure',
       'click .measure' : 'toggleSelection'
     },
 
     initialize: function(options){
       //if we're being created by a HTrackView, we are
-      //passed in options. Otherwise we create a single
-      //measure and add it to our collection.
+      //passed in options.
       if (options) {
         for (var key in options) {
           this[key] = options[key];
         }
-        // if (options.defaultMeasureRepresentation) {
-        //   this.currentMeasureRepresentation = options.defaultMeasureRepresentation;
-        // }
-        // if(options.currentMeasureRepresentation) {
-        //   this.currentMeasureRepresentation = options.currentMeasureRepresentation;
-        // }
-        // if(options.collectionOfMeasures) {
-        //   this.measuresCollection = options.collectionOfMeasures;
-        // }
-        // this.collectionOfRepresentations = options.collectionOfRepresentations;
-        // this.measureIndex = options.measureIndex;
-        // this.fullMeasure = options.fullMeasure;
-        // this.parent = options.parent;
-        // this.model = options.model;
-        // this.parentCID = options.parent.CID;
-        // this.circlePath = ''; //Not sure we still need this....
         this.circularMeasureR = 40;
-
         this.el = '#measure-container-'+options.parent.cid;
+      } else {
+        console.error('Should not be in here: NO Measure!');
       }
-      // else {
-      //   this.measure = new BeatsCollection;
-      //   for (var i = 0; i < 4; i++) {
-      //     this.measure.add();
-      //   }
-      //   this.measuresCollection = new MeasuresCollection;
-      //   this.measuresCollection.add({beats: this.measure}); //Would still need to add representations
-      // }
 
-      if (options['template-key']) {
-        this.currentBeatRepresentation = options['template-key'];
-      }
       //registering a callback for signatureChange events.
       dispatch.on('signatureChange.event', this.reconfigure, this);
       //Dispatch listeners
@@ -83,16 +55,18 @@ define([
       this.render();
     },
 
-    render: function(){
+    render: function(options){
+      // Make a template for the measure and append the MeasureTemplate to the measure area in the hTrack
       var measureTemplateParamaters = {
         mCID: this.model.cid,
         measureCount: this.measureCount,
         measureNumberOfBeats: this.model.get('beats').length
       };
-      // TODO maybe make another line to hold each measure
       var compiledMeasureTemplate = _.template( MeasureTemplate, measureTemplateParamaters );
-
-      // append the MeasureTemplate to the measure area in the hTrack
+      // If we are adding a rep, clear the current reps, then add the template
+      if (options = 'adding') {
+        $(this.el).html('');
+      }
       $(this.el).append( compiledMeasureTemplate )
 
       // Circular
@@ -170,17 +144,17 @@ define([
         // compile the template for a measure
 
         var measureRepViewParamaters = {
-          parentMeasureModel: this.model,
+          parentMeasureModel: this.parentMeasureModel,
           beatsInMeasure: this.model.get('beats').models.length,
           parent: this,
-          model: rep,
+          measureRepModel: rep,
           parentCID: this.cid,
           hTrackEl: this.hTrackEl,
           representationType: rep.representationType,
           mCID: this.model.cid,
           measureRepContainer: '#measure-rep-container-'+this.model.cid,
           beatHolder:'beatHolder'+this.model.cid,
-          beatFactoryHolder: 'beatFactoryHolder'+this.model.cid,
+          // beatFactoryHolder: 'beat-factory-holder-'+this.model.cid,
           measureCount: this.measureCount,
           measureAngle: 360.0,
           beatHolderWidth: beatHolderWidth,
@@ -282,13 +256,18 @@ define([
         dispatch.trigger('signatureChange.event', this.parent.get('signature'));
       }
     },
-
+    reconfigure: function(options) {
+      console.warn(options);
+      this.render();
+    },
     addRepToMeasure: function(options) {
       var representationModel = new RepresentationModel;
       representationModel.representationType = options.newRepType;
-
+      console.log(options.newRepType);
+      // Currently forcing it to add to the first measure
+      window.csf = StageCollection.get(options.hTrack);
       StageCollection.get(options.hTrack).get('measures').models[0].get('measureRepresentations').add(representationModel)
-      this.render();
+      this.render('adding');
     },
     //This is called when the hTrack is clicked anywhere to bring
     //the hTrack into focus as selected.
