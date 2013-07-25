@@ -237,7 +237,6 @@ define([
                 d3.select(this).remove();
                 console.warn('removed beat on measure');
                 ƒthis.parentMeasureModel.get('beats').remove(ƒthis.model);
-                window.csf = ƒthis.parentMeasureModel;
                 dispatch.trigger('signatureChange.event', ƒthis.beatsInMeasure-1);
               }
             // Formula for using a non-circle beat, utilizing the transform

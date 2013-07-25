@@ -67,8 +67,9 @@ define([
         var cid = hTrackID.slice(7);
         $('.cs').removeClass('cs'); 
         //trigger the Measure representation addition
+        console.log('triggering');
         dispatch.trigger('addMeasureRepresentation.event', { newRepType: newRepType, hTrackID: hTrackID, hTrack: cid} );
-        // dispatch.on('addMeasureRepresentation.event', this.addRepToMeasure, this);
+        console.log('triggered');
       }
     }
   });

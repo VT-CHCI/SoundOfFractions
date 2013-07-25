@@ -25,13 +25,11 @@ define([
     initialize: function(options){
       if (options) {
       // beat, number of beats, each beat's color, location, path
+        for (var key in options) {
+          this[key] = options[key];
+        }
         this.beatFactoryHolderEl = '#' + options.beatFactoryHolder;
         this.beatColor = COLORS.hexColors[options.colorIndex];
-        this.remainingNumberOfBeats = options.remainingNumberOfBeats;
-        this.currentRepresentationType = options.currentRepresentationType;
-        this.x = options.x;
-        this.y = options.y;
-        this.beadRadius = options.beadRadius;
       } else {
         console.error('should not be in here!');
         this.model = new BeatModel;
@@ -112,8 +110,35 @@ define([
 
       var drag = d3.behavior.drag();
       drag.on('drag', function(d) {
-        d3.select(this).attr("cx", +d3.select(this).attr("cx") + d3.event.dx);
-        d3.select(this).attr("cy", +d3.select(this).attr("cy") + d3.event.dy);
+        var newSettingX = parseInt(d3.select(this).attr("cx")) + parseInt(d3.event.dx);
+        var newSettingY = parseInt(d3.select(this).attr("cy")) + parseInt(d3.event.dy);
+        d3.select(this).attr("cx", newSettingX);
+        d3.select(this).attr("cy", newSettingY);
+        var newComputedValX = d3.select(this).attr('cx');
+        var newComputedValY = d3.select(this).attr('cy');
+        // Inside: x and y must satisfy (x - center_x)^2 + (y - center_y)^2 < radius^2
+        // Outside: x and y must satisfy (x - center_x)^2 + (y - center_y)^2 > radius^2
+        // On: x and y must satisfy (x - center_x)^2 + (y - center_y)^2 == radius^2
+        if ( Math.pow(newComputedValX - ƒthis.circularMeasureCx, 2) + Math.pow(newComputedValY - ƒthis.circularMeasureCy, 2) <= Math.pow(ƒthis.circularMeasureR,2) ) {
+          var center = {x: ƒthis.circularMeasureCx, y:ƒthis.circularMeasureCy};
+          //give it two points, the center, and the new beat location, once it is on or inside the circle
+          function angle(center, p1) {
+            var p0 = {x: center.x, y: center.y - Math.sqrt(Math.abs(p1.x - center.x) * Math.abs(p1.x - center.x)
+                    + Math.abs(p1.y - center.y) * Math.abs(p1.y - center.y))};
+            return (2 * Math.atan2(p1.y - p0.y, p1.x - p0.x)) * 180 / Math.PI;
+          }
+          var p1 = {x: newComputedValX, y: newComputedValY};
+          var angleAtNewBeat = angle(center, p1);
+
+          // make an array to find out where the new beat should be added in the beatsCollection of the measure
+          var refArray = [];
+          for ( i=0 ; i < ƒthis.beatsInMeasure ; i++ ) {
+            refArray.push((360/ƒthis.beatsInMeasure)*i);
+          }
+          var newIndex = _.sortedIndex(refArray, angleAtNewBeat);
+          ƒthis.parentMeasureModel.get('beats').add(new BeatModel({selected:true}), {at: newIndex})
+          dispatch.trigger('signatureChange.event', ƒthis.beatsInMeasure+1);
+        }
       });
 
       if (this.currentRepresentationType == 'circular-bead') {

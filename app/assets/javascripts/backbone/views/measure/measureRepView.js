@@ -356,13 +356,18 @@ define([
       // make a beat factory
       this.measurePassingToBeatFactoryParamaters = {
         // beat, number of beats, each beat's color, location, path
+        measureModel: this.measureModel,
         beatFactoryHolder: this.beatFactoryHolder,
+        beatsInMeasure: this.beatsInMeasure,
         remainingNumberOfBeats: 16-this.beatsInMeasure,
         currentRepresentationType: this.currentRepresentationType,
         beadRadius: circularBeadBeatRadius,
         colorIndex: '',
         measureRepModel: this.measureRepModel,
-        parentMeasureModel: this.parentMeasureModel
+        parentMeasureModel: this.parentMeasureModel,
+        circularMeasureR: circularMeasureR,
+        circularMeasureCx: circularMeasureCx,
+        circularMeasureCy: circularMeasureCy
       };
       if (this.currentRepresentationType == 'circular-bead') {
         for (i = 0 ; i < this.measurePassingToBeatFactoryParamaters.remainingNumberOfBeats ; i++){

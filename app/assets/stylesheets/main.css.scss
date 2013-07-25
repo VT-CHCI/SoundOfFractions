@@ -1,3 +1,15 @@
+.measure .measureRep:first-of-type .remove-measure-rep{
+  display: none;
+}
+
+.hTrack .measure-container .measure:first-of-type .remove-measure{
+  display: none;
+}
+
+/*Thanks to sammy for this idea*/
+.cs i{
+  color: green;
+}
 .add-measure {
   color: gray;
 }
@@ -86,6 +98,7 @@
 }
 
 .hTrack.well {
+  
   padding: 10px;
   margin-bottom: 10px;
   min-height: 164px;
@@ -362,6 +375,7 @@ svg.circular-bead {
   width: 70px;
   float: left;
   margin: 10px;
+  border: 1px solid black;
 }
 .hTrack-container {
   position: relative;
@@ -378,7 +392,6 @@ svg.circular-bead {
   text-align: center;
 }
 
-// TODO figure out CSS
 .hTrack-container .count .numerator {
   display: block;
   margin: 15px auto 15px auto;
@@ -522,16 +535,6 @@ svg.circular-bead {
   margin: 0px;
 }
 
-#measure-representation {
-  /*margin: 0 auto 10px auto;*/
-  text-align: center;
-  /*width: 40%;*/
-  background-color: whitesmoke;
-  border: 1px solid #e3e3e3
-}
-#measure-representation-buttons {
-  width: 100%;
-}
 #measure-transformation {
   /*float: right;*/
   /*margin: 0 auto 10px auto;*/

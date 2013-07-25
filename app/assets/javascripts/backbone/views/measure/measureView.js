@@ -43,6 +43,7 @@ define([
       } else {
         console.error('Should not be in here: NO Measure!');
       }
+      this.counter = 0;
 
       //registering a callback for signatureChange events.
       dispatch.on('signatureChange.event', this.reconfigure, this);
@@ -154,6 +155,7 @@ define([
           mCID: this.model.cid,
           measureRepContainer: '#measure-rep-container-'+this.model.cid,
           beatHolder:'beatHolder'+this.model.cid,
+          measureNumberOfBeats: this.model.get('beats').length,
           // beatFactoryHolder: 'beat-factory-holder-'+this.model.cid,
           measureCount: this.measureCount,
           measureAngle: 360.0,
@@ -261,12 +263,14 @@ define([
       this.render();
     },
     addRepToMeasure: function(options) {
+      console.log('adding rep trigged in measureView');
       var representationModel = new RepresentationModel;
       representationModel.representationType = options.newRepType;
       console.log(options.newRepType);
       // Currently forcing it to add to the first measure
-      window.csf = StageCollection.get(options.hTrack);
-      StageCollection.get(options.hTrack).get('measures').models[0].get('measureRepresentations').add(representationModel)
+      StageCollection.get(options.hTrack).get('measures').models[0].get('measureRepresentations').add(representationModel);
+      this.counter++;
+      console.log(this.counter);
       this.render('adding');
     },
     //This is called when the hTrack is clicked anywhere to bring
