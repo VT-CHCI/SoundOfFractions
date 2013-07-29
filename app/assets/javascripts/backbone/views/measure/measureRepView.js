@@ -18,18 +18,19 @@ define([
   'text!backbone/templates/measure/circularPieMeasures.html',
   'text!backbone/templates/measure/circularBeadMeasures.html',
   'text!backbone/templates/measure/numberLineMeasures.html',
+  'text!backbone/templates/measure/measureRep.html',
   'colors',
   'app/dispatch',
   'app/log'
-], function($, _, Backbone, BeatsCollection, MeasureModel, RepresentationModel, StateModel, BeatView, BeadFactoryView, AudioMeasuresTemplate, LinearBarMeasuresTemplate, CircularPieMeasuresTemplate, CircularBeadMeasuresTemplate, NumberLineMeasuresTemplate, COLORS, dispatch, log){
+], function($, _, Backbone, BeatsCollection, MeasureModel, RepresentationModel, StateModel, BeatView, BeadFactoryView, AudioMeasuresTemplate, LinearBarMeasuresTemplate, CircularPieMeasuresTemplate, CircularBeadMeasuresTemplate, NumberLineMeasuresTemplate, MeasureRepTemplate, COLORS, dispatch, log){
   return Backbone.View.extend({
     // The different representations
     representations: {
       'audio': AudioMeasuresTemplate,
-      'linear-bar': LinearBarMeasuresTemplate,
-      'circular-pie': CircularPieMeasuresTemplate,
-      'circular-bead': CircularBeadMeasuresTemplate,
-      'number-line': NumberLineMeasuresTemplate
+      'bar': LinearBarMeasuresTemplate,
+      'pie': CircularPieMeasuresTemplate,
+      'bead': CircularBeadMeasuresTemplate,
+      'line': NumberLineMeasuresTemplate
     },
     //grab the current measure representation's data-state
     currentRepresentationType: '', //temp-holder until init
@@ -174,13 +175,17 @@ define([
       // compile the template for a representation
       var measureRepTemplateParamaters = {
         parentMeasureModel: this.parentMeasureModel,
-        measureRepCID: this.measureRepModel.cid,
-        beatHolder: 'beatHolder'+this.measureRepModel.cid,
-        beatFactoryHolder: this.beatFactoryHolder,
+        measureRepID: 'measure-rep-'+this.measureRepModel.cid,
+        measureRepDeltaID: 'delta-'+this.measureRepModel.cid,
+        measureRepSVGID: 'svg-'+this.measureRepModel.cid,
+        beatHolderID: 'beat-holder-'+this.measureRepModel.cid,
+        beatFactoryHolderID: this.beatFactoryHolder,
         measureCount: this.measureCount,
         measureAngle: 360.0,
         beatHolderWidth: beatHolderWidth,
         measureRep: this.currentRepresentationType,
+        measureClasses: 'measureRep resizable measure-'+this.currentRepresentationType,
+        svgClasses: this.currentRepresentationType,
         // SVG Properties
         measureWidth: lbbMeasureWidth,
         measureHeight: lbbMeasureHeight,
@@ -202,6 +207,7 @@ define([
         audioBeatCy: audioBeatCy,
         audioBeatR: audioBeatR,
         colorForAudio: colorForAudio,
+        measureRepRecordID: 'record-'+this.measureRepModel.cid,
         // Transition
         circleStates: circleStates,
         lineData: lineData,
@@ -212,11 +218,11 @@ define([
         yOffset: lbbMeasureHeight / 2
       };
 
-      var compiledTemplate = _.template( this.representations[this.currentRepresentationType], measureRepTemplateParamaters );
+      var compiledTemplate = _.template( MeasureRepTemplate, measureRepTemplateParamaters );
       // put in the rendered template in the measure-rep-container of the measure
       $(this.el).append( compiledTemplate );
 
-      if (this.currentRepresentationType == 'circular-bead') {
+      if (this.currentRepresentationType == 'bead') {
         var lineData = $.map(Array(measureNumberOfPoints), function (d, i) {
             var y = margin.top;
             var x = margin.left + i * lineLength / (measureNumberOfPoints - 1)
@@ -287,6 +293,23 @@ define([
         // $('#a'+measure.cid).on('click', dispatch.trigger('unroll.event'), circlePath);
         $('#a'+this.measureRepModel.cid).on('click', unroll);
         $('#b'+this.measureRepModel.cid).on('click', reverse);
+      } else if (this.currentRepresentationType == 'line'){
+
+      } else if (this.currentRepresentationType == 'pie'){
+
+      } else if (this.currentRepresentationType == 'audio'){
+        var svgContainer = d3.select('#svg-'+this.measureRepModel.cid)
+        var circlePath = svgContainer
+            .insert('circle', ':first-child')
+            .attr('cx', audioMeasureCx)
+            .attr('cy', audioMeasureCy)
+            .attr('r', audioMeasureR)
+            .attr('fill', colorForAudio)
+            .attr('stroke', 'black')
+            .attr('opacity', .2)
+
+      } else if (this.currentRepresentationType == 'bar'){
+
       }
 
       // for each beat in this measure
@@ -343,11 +366,11 @@ define([
           colorForAudio: colorForAudio
         };
 
-        // manipulate linear-bar beat parameters
+        // manipulate bar beat parameters
         measurePassingToBeatViewParamaters.beatBBX = xMeasureLocation + linearBeatXPadding+(measurePassingToBeatViewParamaters.beatWidth*(index));
         measurePassingToBeatViewParamaters.opacity = beat.get('selected');
 
-        // manipulate circular-pie beat parameters
+        // manipulate pie beat parameters
         // 
 
         new BeatView(measurePassingToBeatViewParamaters);
@@ -369,7 +392,7 @@ define([
         circularMeasureCx: circularMeasureCx,
         circularMeasureCy: circularMeasureCy
       };
-      if (this.currentRepresentationType == 'circular-bead') {
+      if (this.currentRepresentationType == 'bead') {
         for (i = 0 ; i < this.measurePassingToBeatFactoryParamaters.remainingNumberOfBeats ; i++){
           var index = 15-i;
           //Base + Math.random() * (max - min) + min;

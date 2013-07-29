@@ -62,8 +62,8 @@
 
 # Assignments
   puts 'SETTING UP DEFAULT ASSIGNMENTS'.colorize( :color => :light_blue, :background => :green )
-  assignment1 = Assignment.create({ :name => 'Assignment 1', :fractionRepresentations => 'fraction', :measureRepresentations => 'circular-pie', :visibleWindows => '', :visibleWindowItems => '', :tempoEditable => true, :lowerRangeOfTempo => 30, :upperRangeOfTempo => 400, :lowerRangeOfBeatsPerMeasure => 2, :upperRangeOfBeatsPerMeasure => 14, :looping => false }, :without_protection => true ).save!
-  assignment2 = Assignment.create({ :name => 'Assignment 1', :fractionRepresentations => 'fraction,percent', :measureRepresentations => 'circular-bead,circular-pie', :visibleWindows => '', :visibleWindowItems => '', :tempoEditable => true, :lowerRangeOfTempo => 30, :upperRangeOfTempo => 400, :lowerRangeOfBeatsPerMeasure => 2, :upperRangeOfBeatsPerMeasure => 14, :looping => true }, :without_protection => true ).save!
+  assignment1 = Assignment.create({ :name => 'Assignment 1', :fractionRepresentations => 'fraction', :measureRepresentations => 'pie', :visibleWindows => '', :visibleWindowItems => '', :tempoEditable => true, :lowerRangeOfTempo => 30, :upperRangeOfTempo => 400, :lowerRangeOfBeatsPerMeasure => 2, :upperRangeOfBeatsPerMeasure => 14, :looping => false }, :without_protection => true ).save!
+  assignment2 = Assignment.create({ :name => 'Assignment 1', :fractionRepresentations => 'fraction,percent', :measureRepresentations => 'bead,pie', :visibleWindows => '', :visibleWindowItems => '', :tempoEditable => true, :lowerRangeOfTempo => 30, :upperRangeOfTempo => 400, :lowerRangeOfBeatsPerMeasure => 2, :upperRangeOfBeatsPerMeasure => 14, :looping => true }, :without_protection => true ).save!
 
 # Settings
   puts 'SETTING UP DEFAULT SETTINGS'.colorize( :color => :light_blue, :background => :green )

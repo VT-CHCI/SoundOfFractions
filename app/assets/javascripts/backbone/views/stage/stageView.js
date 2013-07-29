@@ -214,6 +214,7 @@ define([
 
       //we have to render each one of our `hTrack`s.
       _.each(this.stage.models, function(hTrack) {
+        dispatch.stopListening('addMeasureRepresentation.event');
         //loading the audio files into the bufferList.
         this.loadAudio(this.context, hTrack.get('sample'), this.bufferList, counter );
 

@@ -56,13 +56,13 @@
 .change-instrument {
   width: 135px;  
 }
-.addRepresentation[data-state="number-line"] svg {
+.addRepresentation[data-state="line"] svg {
   margin-left: -65px;
 }
-.addRepresentation[data-state="circular-pie"] svg {
+.addRepresentation[data-state="pie"] svg {
   margin-left: 15px;
 }
-.addRepresentation[data-state="circular-bead"] svg {
+.addRepresentation[data-state="bead"] svg {
   margin-left: 10px;
 }
 .addRepresentation[data-state="audio"] svg {
@@ -254,17 +254,16 @@ select {
 svg.audio {
   height: 80px;
 }
-svg.linear-bar {
+svg.bar {
   height: 40px;
 }
-svg.circular-pie {
+svg.pie {
   height: 120px;
 }
-svg.circular-bead {
+svg.bead {
   height: 120px;
   width: 165px;
 }
-
 
 #record {
   float: left;

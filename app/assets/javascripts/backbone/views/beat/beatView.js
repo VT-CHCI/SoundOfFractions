@@ -26,11 +26,11 @@ define([
 
     // The different representations
     representations: {
-      "audio": audioBeatsTemplate,
-      "linear-bar": linearBarBeatsTemplate,
-      "circular-pie": circularPieBeatsTemplate,
-      "circular-bead": circularBeadBeatsTemplate,
-      "number-line": numberLineBeatsTemplate
+      'audio': audioBeatsTemplate,
+      'bar': linearBarBeatsTemplate,
+      'pie': circularPieBeatsTemplate,
+      'bead': circularBeadBeatsTemplate,
+      'line': numberLineBeatsTemplate
     },
     //grab the current measure representation's data-state
     currentRepresentationType: '',
@@ -84,6 +84,7 @@ define([
         // per http://stackoverflow.com/questions/16672862/reference-backbone-functions-from-within-a-nested-d3-function?noredirect=1#comment24003171_16672862
         this.currentRepresentationType = options.representationType;
         _.bindAll(this, 'toggle');
+       dispatch.on('beatToggled.event', this.render, this);
       } else {
         console.error('should not be in here!');
         this.model = new BeatModel;
@@ -102,7 +103,7 @@ define([
       if (toggledBeat) {
         console.log('getting in re-render with toggledBeat');
         //SVG
-        if(this.currentRepresentationType == 'number-line') {
+        if(this.currentRepresentationType == 'line') {
           // $('#beat'+toggledBeat.cid)[0].setAttribute('fill-opacity', this.getOpacityNumber(toggledBeat.get('selected')));
         }
         else {
@@ -150,17 +151,17 @@ define([
         beatTemplateParameters.beatEndAngle = beatEndAngle;
 
         // x center of a bead or first x of pie piece
-        if (this.currentRepresentationType == 'circular-pie') {
+        if (this.currentRepresentationType == 'pie') {
           var x1 = centerX + measureR * Math.cos(Math.PI * beatStartAngle/180); 
           beatTemplateParameters.x1 = x1;
-        } else if (this.currentRepresentationType == 'circular-bead') {
+        } else if (this.currentRepresentationType == 'bead') {
           beatTemplateParameters.x1 = this.circleStates[0][Math.floor((this.beatIndex/this.beatsInMeasure)*(this.measureNumberOfPoints))].x;
         }
         // y center of a bead or first y of a pie piece
-        if (this.currentRepresentationType == 'circular-pie') {
+        if (this.currentRepresentationType == 'pie') {
           var y1 = centerY + measureR * Math.sin(Math.PI * beatStartAngle/180);     
           beatTemplateParameters.y1 = y1;
-        } else if (this.currentRepresentationType == 'circular-bead') {
+        } else if (this.currentRepresentationType == 'bead') {
           beatTemplateParameters.y1 = this.circleStates[0][Math.floor((this.beatIndex/this.beatsInMeasure)*(this.measureNumberOfPoints))].y;
         }
         // the second x point of a pie piece
@@ -200,8 +201,9 @@ define([
         beatTemplateParameters.audioBeatCy = this.audioBeatCy;
         beatTemplateParameters.audioBeatR = this.audioBeatR;
 
+
         // compile the template for this beat (respect the current representation)
-        var compiledTemplate = _.template(this.representations[this.currentRepresentationType], beatTemplateParameters );
+        // var compiledTemplate = _.template(this.representations[this.currentRepresentationType], beatTemplateParameters );
 
         var margin = this.margin;
         var lineData = $.map(Array(this.measureNumberOfPoints), function (d, i) {
@@ -259,9 +261,9 @@ define([
           });
         }
 
-        if (this.currentRepresentationType == 'circular-bead') {
+        if (this.currentRepresentationType == 'bead') {
           //The Circle SVG Path we draw MUST BE AFTER THE COMPILED TEMPLATE
-          var beatContainer = d3.select('#beatHolder'+this.parentMeasureRepModel.cid);
+          var beatContainer = d3.select('#beat-holder-'+this.parentMeasureRepModel.cid);
           var beatPath = beatContainer
               .append('circle')
               .attr('cx', beatTemplateParameters.x1)
@@ -307,7 +309,7 @@ define([
 
           $('#a'+this.parentMeasureRepModel.cid).on('click', unroll);
           $('#b'+this.parentMeasureRepModel.cid).on('click', reverse);
-        } else if (this.currentRepresentationType == 'linear-bar') {
+        } else if (this.currentRepresentationType == 'bar') {
           // append the compiled template to the measureBeatHolder
           $(this.measureBeatHolder).append(compiledTemplate);          
         // SVG rendering
@@ -319,10 +321,10 @@ define([
           // http://stackoverflow.com/questions/3642035/jquerys-append-not-working-with-svg-element/#13654655
 
           // make the fake svg using the appropriate svg template
-          $('body').append('<svg id="dummy" style="display:none">'+ compiledTemplate +'</svg>');
+          // $('body').append('<svg id="dummy" style="display:none">'+ compiledTemplate +'</svg>');
           // append to beatHolder
-          $(this.measureBeatHolder).append($('#dummy .beat'));
-          $('#dummy').remove();
+          // $(this.measureBeatHolder).append($('#dummy .beat'));
+          // $('#dummy').remove();
         }
 
         // add click handler to this beat
@@ -374,7 +376,7 @@ define([
       d3.select('#beat'+this.cid).style('opacity', this.getOpacityNumber(this.model.get('selected')))
       this.render(this.model);
       // log.sendLog([[1, "beat" + this.model.cid + " toggled: "+!bool]]);
-      dispatch.trigger('beatClicked.event');
+      // dispatch.trigger('beatToggled.event', this.model);
     }
   });
 });

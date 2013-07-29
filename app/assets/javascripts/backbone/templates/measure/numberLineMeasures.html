@@ -2,7 +2,7 @@
   <!-- <span class="title">SVG Bar Measure <span class="number"><%= measureCount %></span> -->
   <div class="delta pull-left" id="delta-<%= measureRepCID %>" >&Delta;</div>
   <div class="pull-right remove-measure-rep"><i class="icon-minus"></i></div>
-  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" class="linear-bar">
+  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" class="bar">
     <line x1="-100" y1="<%= yMeasureLocation + yOffset %>" x2="400" y2="<%= yMeasureLocation + yOffset %>" style="stroke:black; stroke-width:1; opacity:.5;" />
     <line x1="<%= xMeasureLocation + xOffset %>" y1="<%= yMeasureLocation + yOffset %>" x2="<%= xMeasureLocation + measureWidth - xOffset %>" y2="<%= yMeasureLocation + yOffset %>" style="stroke:black; stroke-width:2;" />
     <g id="<%= beatHolder %>"></g>

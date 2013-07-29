@@ -69,17 +69,17 @@ define([
         // beatFactoryParameters.measureR = measureR;
 
       // x center of a bead or first x of pie piece
-      if (this.currentRepresentationType == 'circular-pie') {
+      if (this.currentRepresentationType == 'pie') {
         // var x1 = centerX + measureR * Math.cos(Math.PI * beatStartAngle/180); 
         // beatFactoryParameters.x1 = x1;
-      } else if (this.currentRepresentationType == 'circular-bead') {
+      } else if (this.currentRepresentationType == 'bead') {
         beatFactoryParameters.x1 = this.x;
       }
       // y center of a bead
-      if (this.currentRepresentationType == 'circular-pie') {
+      if (this.currentRepresentationType == 'pie') {
         // var y1 = centerY + measureR * Math.sin(Math.PI * beatStartAngle/180);     
         // beatFactoryParameters.y1 = y1;
-      } else if (this.currentRepresentationType == 'circular-bead') {
+      } else if (this.currentRepresentationType == 'bead') {
         beatFactoryParameters.y1 = this.y;
       }
         // the second x point of a pie piece
@@ -141,7 +141,7 @@ define([
         }
       });
 
-      if (this.currentRepresentationType == 'circular-bead') {
+      if (this.currentRepresentationType == 'bead') {
         //The Circle SVG Path we draw MUST BE AFTER THE COMPILED TEMPLATE
         var beatContainer = d3.select(this.beatFactoryHolderEl);
         var beatPath = beatContainer

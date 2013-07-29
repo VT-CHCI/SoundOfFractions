@@ -1,0 +1,14 @@
+<div id="<%= measureRepID %>" class="<%= measureClasses %>">
+  <!-- <span class="title">SVG Bar Measure <span class="number"><%= measureCount %></span> -->
+  <div id="<%= measureRepDeltaID %>" class="delta pull-left">&Delta;</div>
+  <div class="pull-right remove-measure-rep"><i class="icon-minus"></i></div>
+  <svg id="<%= measureRepSVGID %>" xmlns="http://www.w3.org/2000/svg" version="1.1" class="<%= svgClasses %>">
+    <g id="<%= beatHolderID %>"></g>
+    <g id="<%= beatFactoryHolderID %>"></g>
+  </svg> 
+  <% if ( measureRep == 'audio') { %>
+    <div class="pause"><i id="<%= measureRepRecordID %>" class="record-button icon-hand-down icon-2x"></i></div>
+  <% } else { %>
+
+  <% } %>
+</div>

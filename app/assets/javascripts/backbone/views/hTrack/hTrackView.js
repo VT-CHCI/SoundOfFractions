@@ -221,7 +221,7 @@ define([
           return function() {
             if (counter >= 0 && counter < beats.length)
               self.hTrack.set('currentBeat',counter);
-              if (self.defaultMeasureRepresentation == 'circular-bead'){
+              if (self.defaultMeasureRepresentation == 'bead'){
                 self.d3animate();
               } else {
                 self.animate(beats.eq(counter).children().first()[0]);
