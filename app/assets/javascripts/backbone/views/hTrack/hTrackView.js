@@ -46,7 +46,9 @@ define([
       } else {
         this.hTrack = new HTrackModel;
       }
-
+      // allow the letter p to click the first plus sign
+      _.bindAll(this, 'manuallPress');
+      $(document).bind('keypress', this.manuallPress);
       // this.hTrack.representations = new RepresentationsCollection;
       // this.animationIntervalID = null;
       // this.hTrack.set('currentBeat',0);
@@ -239,7 +241,11 @@ define([
       e.srcElement.parentElement.classList.add('cs');
       console.log('clicked the plus sign');
     },
-
+    manuallPress: function(e) {
+      if (e.keyCode == 112) {
+        $('.icon-plus')[1].parentElement.classList.add('cs');
+      } 
+    },
     animationWrapper: function(counter, beats, signature, maxMeasures, duration) {
       console.warn('ANIMATION WRAPPER CALLED');
       if (counter >= 0 && counter < beats.length)

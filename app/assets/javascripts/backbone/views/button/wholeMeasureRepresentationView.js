@@ -28,6 +28,10 @@ define([
     //simply creates the model.
     initialize: function() {
       this.repButtonModel = new RepButtonModel;
+
+      // manually clicking
+      _.bindAll(this, 'manuallPress');
+      $(document).bind('keypress', this.manuallPress);
     },
 
     /*
@@ -71,7 +75,31 @@ define([
         dispatch.trigger('addMeasureRepresentation.event', { newRepType: newRepType, hTrackID: hTrackID, hTrack: cid} );
         console.log('triggered');
       }
+    },
+    // a:97 b:98 l:108 i:105 r:114
+    manuallPress: function(e) {
+      if (e.keyCode == 97) {
+        var newRepType = 'audio';
+      } else if (e.keyCode == 98) {
+        var newRepType = 'bead';
+      } else if (e.keyCode == 108) {
+        var newRepType = 'line';
+      } else if (e.keyCode == 105) {
+        var newRepType = 'pie';
+      } else if (e.keyCode == 114) {
+        var newRepType = 'bar';
+      } else {
+        $('.cs').removeClass('cs');
+        return;
+      }
+      if ($('.cs').length) {      
+        var hTrackID = $('.cs').closest('.hTrack').attr('id');
+        var cid = hTrackID.slice(7);
+        $('.cs').removeClass('cs'); 
+        dispatch.trigger('addMeasureRepresentation.event', { newRepType: newRepType, hTrackID: hTrackID, hTrack: cid} );
+      }
     }
+
   });
   return new WholeMeasureRepresentationView();
 });
