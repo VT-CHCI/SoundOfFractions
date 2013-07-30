@@ -195,17 +195,17 @@ define([
         var measureLine = svgContainer
             .insert('line', ':first-child')
             .attr('x1', -200)
-            .attr('y1', 40)
+            .attr('y1', this.numberLineY)
             .attr('x2', 600)
-            .attr('y2', 40)
+            .attr('y2', this.numberLineY)
             .attr('stroke', 'black')
             .attr('stroke-width', 1)
         var actualMeasureLinePath = svgContainer
             .insert('line', ':first-child')
             .attr('x1', this.xMeasureLocation)
-            .attr('y1', 40)
+            .attr('y1', this.numberLineY)
             .attr('x2', this.xMeasureLocation+this.lineLength)
-            .attr('y2', 40)
+            .attr('y2', this.numberLineY)
             .attr('stroke', 'black')
             .attr('stroke-width', 2)
 
@@ -228,8 +228,6 @@ define([
 
       // for each beat in this measure
       _.each(this.parentMeasureModel.get('beats').models, function(beat, index) {
-
-console.warn(this.xMeasureLocation, this.beatBBY, this.beatHashHeight, this.beatWidth, index);
         // create a Beatview
         var measurePassingToBeatViewParamaters = {
           //General
@@ -257,10 +255,10 @@ console.warn(this.xMeasureLocation, this.beatBBY, this.beatHashHeight, this.beat
           beatHeight: this.beatHeight,
           // Line
           lineHashHieght: this.lineHashHeight,
-          numberX1: this.xMeasureLocation +(this.beatWidth*(index)),
-          numberY1: this.beatBBY,
-          numberX2: this.xMeasureLocation +(this.beatWidth*(index)),
-          numberY2: this.beatBBY + this.beatHashHeight,
+          X1: this.xMeasureLocation +(this.beatWidth*(index)),
+          Y1: this.numberLineY - this.lineHashHeight/2,
+          X2: this.xMeasureLocation +(this.beatWidth*(index)),
+          Y2: this.numberLineY + this.lineHashHeight/2,
           // Circular Pie
           circularMeasureCx: this.circularMeasureCx,
           circularMeasureCy: this.circularMeasureCy,
@@ -324,7 +322,7 @@ console.warn(this.xMeasureLocation, this.beatBBY, this.beatHashHeight, this.beat
           var index = 15-i;
           //Base + Math.random() * (max - min) + min;
           this.measurePassingToBeatFactoryParamaters.x1 = 20 + (Math.random() * (20) - 10);
-          this.measurePassingToBeatFactoryParamaters.y1 = 60 + (Math.random() * (20) - 10);
+          this.measurePassingToBeatFactoryParamaters.y1 = this.numberLineY + 60 + (Math.random() * (20) - 10);
           this.measurePassingToBeatFactoryParamaters.x2 = this.measurePassingToBeatFactoryParamaters.x1;
           this.measurePassingToBeatFactoryParamaters.y2 = this.measurePassingToBeatFactoryParamaters.y1 + this.lineHashHeight;
           this.measurePassingToBeatFactoryParamaters.colorIndex = index;

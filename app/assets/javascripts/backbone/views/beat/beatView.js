@@ -258,14 +258,13 @@ define([
           $('#a'+this.parentMeasureRepModel.cid).on('click', unroll);
           $('#b'+this.parentMeasureRepModel.cid).on('click', reverse);
         } else if (this.currentRepresentationType == 'line'){
-          console.warn(this.numberX1, this.numberY1, this.numberX2, this.numberY2);
           var beatContainer = d3.select('#beat-holder-'+this.parentMeasureRepModel.cid);
           var beatPath = beatContainer
               .append('line')
-              .attr('x1', this.numberX1)
-              .attr('y1', this.numberY1)
-              .attr('x2', this.numberX2)
-              .attr('y2', this.numberY2)
+              .attr('x1', this.X1)
+              .attr('y1', this.Y1)
+              .attr('x2', this.X2)
+              .attr('y2', this.Y2)
               .attr('class', 'beat d3')
               .attr('id', 'beat'+this.cid)
               // This is the path that the beat will follow when un/roll is clicked

@@ -104,7 +104,8 @@ define([
       // Bead
       var circularBeadBeatRadius = 8;
       //Number Line
-      var lineHashHeight = 15;
+      var lineHashHeight = 20;
+      var numberLineY = 50;
       // Bar
       var xMeasureLocation = 15; // 5%
       var yMeasureLocation = 10;
@@ -196,7 +197,7 @@ define([
           lineLength: lineLength,
           beatBBY: beatBBY,
           beatWidth: beatWidth,
-          beatHashHeight: beatHashHeight
+          numberLineY: numberLineY
         };
 
         new MeasureRepView(measureRepViewParamaters);
