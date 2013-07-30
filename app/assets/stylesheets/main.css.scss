@@ -1,3 +1,7 @@
+.measure-line {
+  width: 338px;
+}
+
 .measure .measureRep:first-of-type .remove-measure-rep{
   display: none;
 }
@@ -29,7 +33,8 @@
   padding: 0 5px 5px 5px;
   display: inline-block;
   margin-bottom: 5px;
-  width: 95%;
+  /*width: 95%;*/
+  height: 150px;
   display: inline-block;
   overflow: hidden;
 }
@@ -252,17 +257,24 @@ select {
   max-height: 30px;
 }
 svg.audio {
-  height: 80px;
+  height: 121px;
 }
 svg.bar {
+  height: 150px;
   height: 40px;
 }
 svg.pie {
-  height: 120px;
+  height: 150px;
 }
 svg.bead {
-  height: 120px;
+  height: 150px;
   width: 165px;
+}
+svg.line {
+  height: 150px;
+  width: 350px;
+  position: relative;
+  left: -25px;
 }
 
 #record {

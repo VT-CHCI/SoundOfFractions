@@ -38,7 +38,8 @@ define([
         for (var key in options) {
           this[key] = options[key];
         }
-        this.circularMeasureR = 40;
+        this.circularMeasureR = 51; // 8 pxs per bead plus 1 px border = 10
+                                    // 10 * 16 = 160/pi = 51
         this.el = '#measure-container-'+options.parent.cid;
       } else {
         console.error('Should not be in here: NO Measure!');
@@ -70,30 +71,40 @@ define([
       }
       $(this.el).append( compiledMeasureTemplate )
 
+      // Constant Variables throughout the representations
+      // Audio
+      var audioMeasureCx = 50;
+      var audioMeasureCy = 40;
+      var audioMeasureR = 12;
+      var audioBeatCx = 50;
+      var audioBeatCy = 40;
+      var audioBeatR = 12;
+      var colorForAudio = COLORS.hexColors[5];
       // Circular
-      var circularMeasureCx = 90;
-      var circularMeasureCy = 50;
+      var circularMeasureCx = 100;
+      var circularMeasureCy = 75;
       var circularMeasureR = this.circularMeasureR;
       var measureNumberOfPoints = 60; //keep under 91 to avoid computational and animation delay
       this.measureNumberOfPoints = measureNumberOfPoints;
       // Linear
-      // 
+      var lineLength = 2 * circularMeasureR * Math.PI;
+      var beatWidth = lineLength/this.model.get('beats').length;
+      var beatHashHeight = 10;
       // Transition
       var firstBeatStart = 0; // in s
       var timeIncrement = 500; // in ms
       var margin = {top: 20, left: 60};
-      var lineLength = 2 * circularMeasureR * Math.PI;
       var lineDivision = lineLength/measureNumberOfPoints;
       var animationDuration = 3000/measureNumberOfPoints;
 
-      //Number Line
-      // 
       // Pie
       var measureStartAngle = 0;
       var beatStartAngle;
       var beatEndAngle;
       // Bead
       var circularBeadBeatRadius = 8;
+      //Number Line
+      var lineHashHeight = 15;
       // Bar
       var xMeasureLocation = 15; // 5%
       var yMeasureLocation = 10;
@@ -103,15 +114,6 @@ define([
       var linearBeatYPadding = 0;  // tiny sliver
       var beatHeight = 25 - 2*linearBeatYPadding;
       var beatBBY = 10 + linearBeatYPadding;
-      var beatHolderWidth = lbbMeasureWidth-(2*linearBeatXPadding);
-      // Audio
-      var audioMeasureCx = 50;
-      var audioMeasureCy = 40;
-      var audioMeasureR = 12;
-      var audioBeatCx = 50;
-      var audioBeatCy = 40;
-      var audioBeatR = 12;
-      var colorForAudio = COLORS.hexColors[5];
 
       var circleStates = [];
       for (i=0; i<measureNumberOfPoints; i++){
@@ -159,7 +161,6 @@ define([
           // beatFactoryHolder: 'beat-factory-holder-'+this.model.cid,
           measureCount: this.measureCount,
           measureAngle: 360.0,
-          beatHolderWidth: beatHolderWidth,
           // SVG Properties
           measureWidth: lbbMeasureWidth,
           measureHeight: lbbMeasureHeight,
@@ -168,11 +169,12 @@ define([
           circularMeasureCx: circularMeasureCx,
           circularMeasureCy: circularMeasureCy,
           circularMeasureR: circularMeasureR,
-
+          circularBeadBeatRadius: circularBeadBeatRadius,
           xMeasureLocation: xMeasureLocation,
           yMeasureLocation: yMeasureLocation,
           // Bead
           measureNumberOfPoints: measureNumberOfPoints,
+          margin: margin,
           //Audio
           audioMeasureCx: audioMeasureCx,
           audioMeasureCy: audioMeasureCy,
@@ -183,12 +185,18 @@ define([
           colorForAudio: colorForAudio,
           // Transition
           circleStates: circleStates,
+          measureNumberOfPoints: this.measureNumberOfPoints,
           // lineData: lineData,
           pathFunction: this.circlePath,
 
           //Number Line
-          // xOffset: beatHolderWidth/this.measuresCollection.models[0].attributes.beats.length / 2,
-          yOffset: lbbMeasureHeight / 2
+          xOffset: lineLength/this.model.get('beats').models.length / 2,
+          yOffset: lbbMeasureHeight / 2,
+          lineHashHeight: lineHashHeight,
+          lineLength: lineLength,
+          beatBBY: beatBBY,
+          beatWidth: beatWidth,
+          beatHashHeight: beatHashHeight
         };
 
         new MeasureRepView(measureRepViewParamaters);

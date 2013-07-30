@@ -100,132 +100,28 @@ define([
       }
     },
     render: function(){
-      // Circular
-      var circularMeasureCx = 100;
-      var circularMeasureCy = 50;
-      var circularMeasureR = this.circularMeasureR;
-      // Linear
-
-      // Pie
-      var measureStartAngle = 0;
-      var beatStartAngle;
-      var beatEndAngle;
-      // Bead
-      var circularBeadBeatRadius = 8;
-      var measureNumberOfPoints = 60; //always add 1 to close the circle AND keep under 91 to avoid computational and animation delay
-      this.measureNumberOfPoints = measureNumberOfPoints;
-        // Transition
-        var margin = {top: 20, left: 60};
-        var lineLength = 2 * circularMeasureR * Math.PI;
-        var lineDivision = lineLength/measureNumberOfPoints;
-        var animationDuration = 3000/measureNumberOfPoints;
-      // Linear
-      var beatBBX;
-      var xMeasureLocation = 15; // 5%
-      var yMeasureLocation = 10;
-      var lbbMeasureWidth = 272; // 90%
-      var lbbMeasureHeight = 25;
-      var linearBeatXPadding = 0; // 5% left AND right
-      var linearBeatYPadding = 0;  // tiny sliver
-      var beatHeight = 25 - 2*linearBeatYPadding;
-      var beatBBY = 10 + linearBeatYPadding;
-      var beatHolderWidth = lbbMeasureWidth-(2*linearBeatXPadding);
-      // Time
-      var firstBeatStart = 0; // in s
-      var timeIncrement = 500; // in ms
-      // Audio
-      var audioMeasureCx = 50;
-      var audioMeasureCy = 40;
-      var audioMeasureR = 12;
-      var audioBeatCx = 50;
-      var audioBeatCy = 40;
-      var audioBeatR = 12;
-      var colorForAudio = COLORS.hexColors[5];
-
-      var circleStates = [];
-      for (i=0; i<measureNumberOfPoints; i++){
-          // circle portion
-          var circleState = $.map(Array(measureNumberOfPoints), function (d, j) {
-            // margin.left + measureRadius
-            var x = circularMeasureCx + lineDivision*i + circularMeasureR * Math.sin(2 * j * Math.PI / (measureNumberOfPoints - 1));
-            // margin.top + measureRadius
-            var y =  circularMeasureCy - circularMeasureR * Math.cos(2 * j * Math.PI / (measureNumberOfPoints - 1));
-            return { x: x, y: y};
-          })
-          circleState.splice(measureNumberOfPoints-i);
-          //line portion
-          var lineState = $.map(Array(measureNumberOfPoints), function (d, j) {
-             // margin.left + measureRadius
-            var x = circularMeasureCx + lineDivision*j;
-            // margin.top
-            var y =  circularMeasureCy - circularMeasureR;
-            return { x: x, y: y};
-          })
-          lineState.splice(i);
-          //together
-          var individualState = lineState.concat(circleState);
-          circleStates.push(individualState);
-      }
-      this.circleStates = circleStates;
-
-      // console.error(this);
-      // console.error(this.cid);
-      // console.error(this.measureRepModel);
-      // console.error(this.measureRepModel.cid);
       // compile the template for a representation
       var measureRepTemplateParamaters = {
-        parentMeasureModel: this.parentMeasureModel,
         measureRepID: 'measure-rep-'+this.measureRepModel.cid,
+        measureClasses: 'measureRep resizable measure-'+this.currentRepresentationType,
         measureRepDeltaID: 'delta-'+this.measureRepModel.cid,
         measureRepSVGID: 'svg-'+this.measureRepModel.cid,
+        svgClasses: this.currentRepresentationType,
         beatHolderID: 'beat-holder-'+this.measureRepModel.cid,
         beatFactoryHolderID: this.beatFactoryHolder,
         measureCount: this.measureCount,
-        measureAngle: 360.0,
-        beatHolderWidth: beatHolderWidth,
         measureRep: this.currentRepresentationType,
-        measureClasses: 'measureRep resizable measure-'+this.currentRepresentationType,
-        svgClasses: this.currentRepresentationType,
-        // SVG Properties
-        measureWidth: lbbMeasureWidth,
-        measureHeight: lbbMeasureHeight,
-        measureColor: COLORS.hexColors[COLORS.colorIndices.WHITE],
-        // Circular
-        circularMeasureCx: circularMeasureCx,
-        circularMeasureCy: circularMeasureCy,
-        circularMeasureR: circularMeasureR,
-
-        xMeasureLocation: xMeasureLocation,
-        yMeasureLocation: yMeasureLocation,
-        // Bead
-        measureNumberOfPoints: measureNumberOfPoints,
-        //Audio
-        audioMeasureCx: audioMeasureCx,
-        audioMeasureCy: audioMeasureCy,
-        audioMeasureR: audioMeasureR,
-        audioBeatCx: audioBeatCx,
-        audioBeatCy: audioBeatCy,
-        audioBeatR: audioBeatR,
-        colorForAudio: colorForAudio,
-        measureRepRecordID: 'record-'+this.measureRepModel.cid,
-        // Transition
-        circleStates: circleStates,
-        lineData: lineData,
-        pathFunction: this.circlePath,
-
-        //Number Line
-        xOffset: beatHolderWidth / this.measureNumberOfBeats / 2,
-        yOffset: lbbMeasureHeight / 2
+        measureRepRecordID: 'record-'+this.measureRepModel.cid
       };
-
       var compiledTemplate = _.template( MeasureRepTemplate, measureRepTemplateParamaters );
       // put in the rendered template in the measure-rep-container of the measure
       $(this.el).append( compiledTemplate );
 
       if (this.currentRepresentationType == 'bead') {
-        var lineData = $.map(Array(measureNumberOfPoints), function (d, i) {
+        var margin = this.margin;
+        var lineData = $.map(Array(this.measureNumberOfPoints), function (d, i) {
             var y = margin.top;
-            var x = margin.left + i * lineLength / (measureNumberOfPoints - 1)
+            var x = margin.left + i * this.lineLength / (this.measureNumberOfPoints - 1)
             return {x: x, y: y}
         });
         var pathFunction = d3.svg.line()
@@ -238,7 +134,7 @@ define([
             // .call(d3.experiments.dragAll);
         var circlePath = svgContainer
             .insert('path', ':first-child')
-            .data([circleStates[0]])
+            .data([this.circleStates[0]])
             .attr('d', pathFunction)
             .attr('stroke', 'black')
             .attr('opacity', 1)
@@ -294,6 +190,24 @@ define([
         $('#a'+this.measureRepModel.cid).on('click', unroll);
         $('#b'+this.measureRepModel.cid).on('click', reverse);
       } else if (this.currentRepresentationType == 'line'){
+        console.log(this.xMeasureLocation, this.lineLength);
+        var svgContainer = d3.select('#svg-'+this.measureRepModel.cid)
+        var measureLine = svgContainer
+            .insert('line', ':first-child')
+            .attr('x1', -200)
+            .attr('y1', 40)
+            .attr('x2', 600)
+            .attr('y2', 40)
+            .attr('stroke', 'black')
+            .attr('stroke-width', 1)
+        var actualMeasureLinePath = svgContainer
+            .insert('line', ':first-child')
+            .attr('x1', this.xMeasureLocation)
+            .attr('y1', 40)
+            .attr('x2', this.xMeasureLocation+this.lineLength)
+            .attr('y2', 40)
+            .attr('stroke', 'black')
+            .attr('stroke-width', 2)
 
       } else if (this.currentRepresentationType == 'pie'){
 
@@ -301,10 +215,10 @@ define([
         var svgContainer = d3.select('#svg-'+this.measureRepModel.cid)
         var circlePath = svgContainer
             .insert('circle', ':first-child')
-            .attr('cx', audioMeasureCx)
-            .attr('cy', audioMeasureCy)
-            .attr('r', audioMeasureR)
-            .attr('fill', colorForAudio)
+            .attr('cx', this.audioMeasureCx)
+            .attr('cy', this.audioMeasureCy)
+            .attr('r', this.audioMeasureR)
+            .attr('fill', this.colorForAudio)
             .attr('stroke', 'black')
             .attr('opacity', .2)
 
@@ -315,6 +229,7 @@ define([
       // for each beat in this measure
       _.each(this.parentMeasureModel.get('beats').models, function(beat, index) {
 
+console.warn(this.xMeasureLocation, this.beatBBY, this.beatHashHeight, this.beatWidth, index);
         // create a Beatview
         var measurePassingToBeatViewParamaters = {
           //General
@@ -325,54 +240,55 @@ define([
           parentCID: this.measureRepModel.cid,
           singleBeat: '#beat'+beat.cid,
           beatIndex: index,
-          margin : margin,
-          representationType: this.currentRepresentationType,
+          margin : this.margin,
+          currentRepresentationType: this.currentRepresentationType,
           beatsInMeasure: this.beatsInMeasure,
           // To use the range of colors
           color: index,
           // To use one color
           // color: x,
-          timeIncrement: timeIncrement,
-          //Linear
-         // beatBBX: xMeasureLocation + linearBeatXPadding+(this.beatWidth*(index)),
-          beatBBY: beatBBY,
-          beatHolderWidth: beatHolderWidth,
-          linearBeatXPadding: linearBeatXPadding,
-          beatWidth: beatHolderWidth / this.beatsInMeasure,
-          beatHeight: beatHeight,
+          timeIncrement: this.timeIncrement,
+          // Bar
+          beatBBX: this.xMeasureLocation +(this.beatWidth*(index)),
+          beatBBY: this.beatBBY,
+          beatHolderWidth: this.beatHolderWidth,
+          linearBeatXPadding: this.linearBeatXPadding,
+          beatWidth: this.beatWidth,
+          beatHeight: this.beatHeight,
+          // Line
+          lineHashHieght: this.lineHashHeight,
+          numberX1: this.xMeasureLocation +(this.beatWidth*(index)),
+          numberY1: this.beatBBY,
+          numberX2: this.xMeasureLocation +(this.beatWidth*(index)),
+          numberY2: this.beatBBY + this.beatHashHeight,
           // Circular Pie
-          circularMeasureCx: circularMeasureCx,
-          circularMeasureCy: circularMeasureCy,
-          circularMeasureR: circularMeasureR,
+          circularMeasureCx: this.circularMeasureCx,
+          circularMeasureCy: this.circularMeasureCy,
+          circularMeasureR: this.circularMeasureR,
           beatAngle: 360 / this.beatsInMeasure,
           beatStartAngle: -90+((360 / this.beatsInMeasure)*index),
-          beatStartTime: firstBeatStart+(index)*(timeIncrement/1000),
+          beatStartTime: this.firstBeatStart+(index)*(this.timeIncrement/1000),
           
           // Circular Bead
-          beatRadius: circularBeadBeatRadius,
-          circleStates: circleStates,
-          measureNumberOfPoints: measureNumberOfPoints,
-
+          beadRadius: this.circularBeadBeatRadius,
+          circleStates: this.circleStates,
+          measureNumberOfPoints: this.measureNumberOfPoints,
+          margin: this.margin, 
           // Transition
-          animationDuration: animationDuration,
+          animationDuration: this.animationDuration,
 
           //Audio
-          audioMeasureCx: audioMeasureCx,
-          audioMeasureCy: audioMeasureCy,
-          audioMeasureR: audioMeasureR,
-          audioBeatCx: audioBeatCx,
-          audioBeatCy: audioBeatCy,
-          audioBeatR: audioBeatR,
-          colorForAudio: colorForAudio
+          audioMeasureCx: this.audioMeasureCx,
+          audioMeasureCy: this.audioMeasureCy,
+          audioMeasureR: this.audioMeasureR,
+          audioBeatCx: this.audioBeatCx,
+          audioBeatCy: this.audioBeatCy,
+          audioBeatR: this.audioBeatR,
+          colorForAudio: this.colorForAudio
         };
-
-        // manipulate bar beat parameters
-        measurePassingToBeatViewParamaters.beatBBX = xMeasureLocation + linearBeatXPadding+(measurePassingToBeatViewParamaters.beatWidth*(index));
-        measurePassingToBeatViewParamaters.opacity = beat.get('selected');
 
         // manipulate pie beat parameters
         // 
-
         new BeatView(measurePassingToBeatViewParamaters);
       }, this);
 
@@ -384,24 +300,36 @@ define([
         beatsInMeasure: this.beatsInMeasure,
         remainingNumberOfBeats: 16-this.beatsInMeasure,
         currentRepresentationType: this.currentRepresentationType,
-        beadRadius: circularBeadBeatRadius,
+        beadRadius: this.circularBeadBeatRadius,
         colorIndex: '',
         measureRepModel: this.measureRepModel,
         parentMeasureModel: this.parentMeasureModel,
-        circularMeasureR: circularMeasureR,
-        circularMeasureCx: circularMeasureCx,
-        circularMeasureCy: circularMeasureCy
+        circularMeasureR: this.circularMeasureR,
+        circularMeasureCx: this.circularMeasureCx,
+        circularMeasureCy: this.circularMeasureCy
       };
       if (this.currentRepresentationType == 'bead') {
         for (i = 0 ; i < this.measurePassingToBeatFactoryParamaters.remainingNumberOfBeats ; i++){
           var index = 15-i;
           //Base + Math.random() * (max - min) + min;
-          this.measurePassingToBeatFactoryParamaters.x = 20 + (Math.random() * (20) - 10);
-          this.measurePassingToBeatFactoryParamaters.y = 100 + (Math.random() * (20) - 10);
+          this.measurePassingToBeatFactoryParamaters.cX = 20 + (Math.random() * (20) - 10);
+          this.measurePassingToBeatFactoryParamaters.cY = 130 + (Math.random() * (20) - 10);
           this.measurePassingToBeatFactoryParamaters.colorIndex = index;
           // this.measurePassingToBeatFactoryParamaters.colorIndex = 18;
+          console.log()
           new BeadFactoryView(this.measurePassingToBeatFactoryParamaters);
         }
+      } else if (this.currentRepresentationType == 'line') {
+        for (i = 0 ; i < this.measurePassingToBeatFactoryParamaters.remainingNumberOfBeats ; i++){
+          var index = 15-i;
+          //Base + Math.random() * (max - min) + min;
+          this.measurePassingToBeatFactoryParamaters.x1 = 20 + (Math.random() * (20) - 10);
+          this.measurePassingToBeatFactoryParamaters.y1 = 60 + (Math.random() * (20) - 10);
+          this.measurePassingToBeatFactoryParamaters.x2 = this.measurePassingToBeatFactoryParamaters.x1;
+          this.measurePassingToBeatFactoryParamaters.y2 = this.measurePassingToBeatFactoryParamaters.y1 + this.lineHashHeight;
+          this.measurePassingToBeatFactoryParamaters.colorIndex = index;
+          new BeadFactoryView(this.measurePassingToBeatFactoryParamaters);
+        }        
       }
 
       return this;

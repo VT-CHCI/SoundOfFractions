@@ -40,51 +40,16 @@ define([
     //by measuresView objects.
     initialize: function(options){
       if (options) {
-        // TODO: need to take in an option about currentBeatRep
-        // TODO: maybe need to respond to a representation changed event (change this.currentRepresentationType and rerender)
-        this.model = options.model;
-        this.parentMeasureRepModel = options.parentMeasureRepModel;
-        this.parentMeasureModel = options.parentMeasureModel;
-        // this is the html element into which this class should render its template
+        for (var key in options) {
+          this[key] = options[key];
+        }
         this.measureBeatHolder = options.parentElHolder;
         this.el = options.singleBeat;
-        this.parentMeasureRepModel = options.parentMeasureRepModel;
-        this.circularMeasureCx = options.circularMeasureCx;
-        this.circularMeasureCy = options.circularMeasureCy;
-        this.circularMeasureR = options.circularMeasureR;
-        this.beatBBX = options.beatBBX;
-        this.beatBBY = options.beatBBY;
-        this.beatWidth = options.beatWidth;
-        this.beatHeight = options.beatHeight;
         this.opacity = this.getOpacityNumber(options.opacity);
-        this.beatsInMeasure = options.beatsInMeasure;
-        this.beatAngle = options.beatAngle;
-        this.beatStartAngle = options.beatStartAngle;
-        this.color = options.color;                             //index number
-        this.colorForAudio = options.colorForAudio;
-        this.beatStartTime = options.beatStartTime;
-        this.timeIncrement = options.timeIncrement;
-        this.beatR = options.beatRadius;
-        this.beatHolderWidth = options.beatHolderWidth;
-        this.linearBeatXPadding = options.linearBeatXPadding;
-        this.circleStates = options.circleStates;
-        this.beatNumberOfPoints = 9;
-        this.beatIndex = options.beatIndex;
-        this.margin = options.margin;
-        this.measureNumberOfPoints = options.measureNumberOfPoints;
-        this.animationDuration = options.animationDuration;
         this.beatCenterPosition = {};
-        this.audioBeatCx = options.audioBeatCx;
-        this.audioBeatCy = options.audioBeatCy;
-        this.audioBeatR = options.audioBeatR;
-        this.audioMeasureCy = options.audioMeasureCy;
-        this.audioMeasureCx = options.audioMeasureCx;
-        this.audioMeasureR = options.audioMeasureR;
-        // To alloBeatw the toggle function to be accesable outside of the nested d3 functions inside render
-        // per http://stackoverflow.com/questions/16672862/reference-backbone-functions-from-within-a-nested-d3-function?noredirect=1#comment24003171_16672862
-        this.currentRepresentationType = options.representationType;
+
         _.bindAll(this, 'toggle');
-       dispatch.on('beatToggled.event', this.render, this);
+        dispatch.on('beatToggled.event', this.render, this);
       } else {
         console.error('should not be in here!');
         this.model = new BeatModel;
@@ -241,34 +206,17 @@ define([
                 ƒthis.parentMeasureModel.get('beats').remove(ƒthis.model);
                 dispatch.trigger('signatureChange.event', ƒthis.beatsInMeasure-1);
               }
-            // Formula for using a non-circle beat, utilizing the transform
-              // // add the 'selected' class when a beat is dragged
-              // $('#beat'+ƒthis.cid).closest($('.hTrack')).addClass('selected');
-              // var transformString = $('#beat'+ƒthis.cid).attr('transform').substring(10, $('#beat'+ƒthis.cid).attr('transform').length-1);
-              // var comma = transformString.indexOf(',');
-              // d.x = parseInt(transformString.substr(0,comma));
-              // d.y = parseInt(transformString.substr(comma+1));
-              // d.x += d3.event.dx;
-              // d.y += d3.event.dy;
-              // console.log( d.x + ' : ' + d.y );
-              // if (d.x > 30 || d.x < -30) {
-              //   d3.select(this).remove();
-              //   dispatch.trigger('signatureChange.event', ƒthis.parent.attributes.beats.length-1);
-              // }
-              // d3.select(this).attr("transform", function(d){
-              //     return "translate(" + [ d.x,d.y ] + ")"
-              // })
           });
         }
 
         if (this.currentRepresentationType == 'bead') {
-          //The Circle SVG Path we draw MUST BE AFTER THE COMPILED TEMPLATE
+          console.log(this.beadRadius)
           var beatContainer = d3.select('#beat-holder-'+this.parentMeasureRepModel.cid);
           var beatPath = beatContainer
               .append('circle')
               .attr('cx', beatTemplateParameters.x1)
               .attr('cy', beatTemplateParameters.y1)
-              .attr('r', this.beatR)
+              .attr('r', this.beadRadius)
               // Calling the click handler here doesn't work for some reason
               // .on('click', function(){console.log('beat container click handler')})
               .attr('class', 'beat d3')
@@ -309,24 +257,43 @@ define([
 
           $('#a'+this.parentMeasureRepModel.cid).on('click', unroll);
           $('#b'+this.parentMeasureRepModel.cid).on('click', reverse);
-        } else if (this.currentRepresentationType == 'bar') {
-          // append the compiled template to the measureBeatHolder
-          $(this.measureBeatHolder).append(compiledTemplate);          
-        // SVG rendering
-        } else {
-          // Notes
-          // Rather than appending to the beatHolder directly, we are going to append to a blank <svg>
-          // in the $('body') directly, then move into the beatHolder, then add the click handler
-          // Kind of hacky, but unaware of other way to do so.   Per SO?:
-          // http://stackoverflow.com/questions/3642035/jquerys-append-not-working-with-svg-element/#13654655
+        } else if (this.currentRepresentationType == 'line'){
+          console.warn(this.numberX1, this.numberY1, this.numberX2, this.numberY2);
+          var beatContainer = d3.select('#beat-holder-'+this.parentMeasureRepModel.cid);
+          var beatPath = beatContainer
+              .append('line')
+              .attr('x1', this.numberX1)
+              .attr('y1', this.numberY1)
+              .attr('x2', this.numberX2)
+              .attr('y2', this.numberY2)
+              .attr('class', 'beat d3')
+              .attr('id', 'beat'+this.cid)
+              // This is the path that the beat will follow when un/roll is clicked
+              // .attr('d', pathFunction)
+              .attr('stroke', COLORS.hexColors[this.color])
+              .attr('opacity', this.getOpacityNumber(this.model.get('selected')))
+              .attr('stroke-width', 4)
+              .call(drag);
 
-          // make the fake svg using the appropriate svg template
-          // $('body').append('<svg id="dummy" style="display:none">'+ compiledTemplate +'</svg>');
-          // append to beatHolder
-          // $(this.measureBeatHolder).append($('#dummy .beat'));
-          // $('#dummy').remove();
+          this.beatPath = beatPath;
+          this.beatPath.on('click', this.toggle);
+
+        } else if (this.currentRepresentationType == 'pie'){
+
+        } else if (this.currentRepresentationType == 'audio'){
+          var svgContainer = d3.select('#svg-'+this.parentMeasureRepModel.cid)
+          var circlePath = svgContainer
+              // .insert('circle', ':first-child')
+              // .attr('cx', audioMeasureCx)
+              // .attr('cy', audioMeasureCy)
+              // .attr('r', audioMeasureR)
+              // .attr('fill', colorForAudio)
+              // .attr('stroke', 'black')
+              // .attr('opacity', .2)
+
+        } else if (this.currentRepresentationType == 'bar'){
+
         }
-
         // add click handler to this beat
         $('#beat'+this.model.cid).click($.proxy(this.toggle, this));
 

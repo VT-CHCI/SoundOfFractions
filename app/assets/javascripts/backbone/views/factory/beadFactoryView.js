@@ -69,19 +69,19 @@ define([
         // beatFactoryParameters.measureR = measureR;
 
       // x center of a bead or first x of pie piece
-      if (this.currentRepresentationType == 'pie') {
-        // var x1 = centerX + measureR * Math.cos(Math.PI * beatStartAngle/180); 
-        // beatFactoryParameters.x1 = x1;
-      } else if (this.currentRepresentationType == 'bead') {
-        beatFactoryParameters.x1 = this.x;
-      }
-      // y center of a bead
-      if (this.currentRepresentationType == 'pie') {
-        // var y1 = centerY + measureR * Math.sin(Math.PI * beatStartAngle/180);     
-        // beatFactoryParameters.y1 = y1;
-      } else if (this.currentRepresentationType == 'bead') {
-        beatFactoryParameters.y1 = this.y;
-      }
+      // if (this.currentRepresentationType == 'pie') {
+      //   // var x1 = centerX + measureR * Math.cos(Math.PI * beatStartAngle/180); 
+      //   // beatFactoryParameters.x1 = x1;
+      // } else if (this.currentRepresentationType == 'bead') {
+      //   beatFactoryParameters.x1 = this.x;
+      // }
+      // // y center of a bead
+      // if (this.currentRepresentationType == 'pie') {
+      //   // var y1 = centerY + measureR * Math.sin(Math.PI * beatStartAngle/180);     
+      //   // beatFactoryParameters.y1 = y1;
+      // } else if (this.currentRepresentationType == 'bead') {
+      //   beatFactoryParameters.y1 = this.y;
+      // }
         // the second x point of a pie piece
         // var x2 = centerX + measureR * Math.cos(Math.PI * beatEndAngle/180);
         // beatFactoryParameters.x2 = x2;
@@ -147,8 +147,8 @@ define([
         var beatPath = beatContainer
             // .append('path')
             .append('circle')
-            .attr('cx', this.x)
-            .attr('cy', this.y)
+            .attr('cx', this.cX)
+            .attr('cy', this.cY)
             .attr('r', this.beadRadius)
             // Calling the click handler here doesn't work for some reason
             // .on('click', function(){console.log('beat container click handler')})
@@ -159,6 +159,24 @@ define([
             // .attr('d', pathFunction)
             .attr('fill', this.beatColor)
             .attr('stroke', 'black')
+            .attr('opacity', .2)
+            .call(drag);
+      } else if(this.currentRepresentationType == 'line') {
+        var beatContainer = d3.select(this.beatFactoryHolderEl);
+        var beatPath = beatContainer
+            .append('line')
+            .attr('x1', this.x1)
+            .attr('y1', this.y1)
+            .attr('x2', this.x2)
+            .attr('y2', this.y2)
+            // Calling the click handler here doesn't work for some reason
+            // .on('click', function(){console.log('beat container click handler')})
+            .attr('class', 'beat factory-beat d3')
+            .attr('id', 'factory-beat'+this.cid)
+            // This is the path that the beat will follow when un/roll is clicked
+            // .attr('d', pathFunction)
+            .attr('stroke', this.beatColor)
+            .attr('stroke-width', 4)
             .attr('opacity', .2)
             .call(drag);
       }
