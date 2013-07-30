@@ -39,6 +39,7 @@ define([
     //The constructor takes options because these views are created
     //by measuresView objects.
     initialize: function(options){
+      console.log(options)
       if (options) {
         for (var key in options) {
           this[key] = options[key];
@@ -49,7 +50,8 @@ define([
         this.beatCenterPosition = {};
 
         _.bindAll(this, 'toggle');
-        dispatch.on('beatToggled.event', this.render, this);
+        this.model.bind('change', this.test, this);
+        // dispatch.on('beatToggled.event', this.render, this);
       } else {
         console.error('should not be in here!');
         this.model = new BeatModel;
@@ -59,29 +61,29 @@ define([
     },
 
     //We use css classes to control the color of the beat.
-    render: function(toggledBeat){
-      // the current state of the beat (is it ON or OFF?)
-      var state = this.getSelectionBooleanCSS();
+    render: function(){
+      console.log('yy',this);
       var ƒthis = this;
 
       // if render is being called from the toggle function, we may want to do something different
-      if (toggledBeat) {
-        console.log('getting in re-render with toggledBeat');
-        //SVG
-        if(this.currentRepresentationType == 'line') {
-          // $('#beat'+toggledBeat.cid)[0].setAttribute('fill-opacity', this.getOpacityNumber(toggledBeat.get('selected')));
-        }
-        else {
-          var toggled = d3.select($('#beat'+this.cid));
-          toggled[0][0].attr('style', 'opacity: '+this.getOpacityNumber(toggledBeat.get('selected')));
-        }
-      } else {
+      // if (toggledBeat) {
+      //   console.log(toggledBeat)
+      //   console.log('getting in re-render with toggledBeat');
+      //   //SVG
+      //   if(this.currentRepresentationType == 'line') {
+      //     // $('#beat'+toggledBeat.cid)[0].setAttribute('fill-opacity', this.getOpacityNumber(toggledBeat.get('selected')));
+      //   }
+      //   else {
+      //     var toggled = d3.select($('#beat'+this.cid));
+      //     toggled[0][0].attr('style', 'opacity: '+ƒthis.getOpacityNumber(toggledBeat.get('selected')));
+      //   }
+      // } else {
         // this is reached during the initial rendering of the page or transition
 
         var beatTemplateParameters = {
           beat: this.model,
+          selected: this.model.get('selected'),
           beatAngle: this.beatAngle,
-          state: state,
           color: COLORS.hexColors[this.color],
           beatStartTime: this.beatStartTime,
           timeIncrement: this.timeIncrement,
@@ -297,7 +299,7 @@ define([
         $('#beat'+this.model.cid).click($.proxy(this.toggle, this));
 
         return this;
-      }
+      // }
     },
 
     changeBeatRepresentation: function(representation) {
@@ -337,12 +339,20 @@ define([
     */
     toggle: function(){
       //switch the selected boolean value on the model
+      console.log('toggle',this);
+      console.log(this.model.get('selected'));
+
       this.model.set('selected', !this.model.get('selected'));
       //re-render it, passing the clicked beat to render()
-      d3.select('#beat'+this.cid).style('opacity', this.getOpacityNumber(this.model.get('selected')))
-      this.render(this.model);
+     // d3.select('#beat'+this.cid).style('opacity', this.getOpacityNumber(this.model.get('selected')))
+     // this.render();
       // log.sendLog([[1, "beat" + this.model.cid + " toggled: "+!bool]]);
       // dispatch.trigger('beatToggled.event', this.model);
+    },
+    test: function() {
+      console.log('does this work?', this);
+      // re-rendering all beats, think it should only rerender itself, but w/e
+      d3.select('#beat'+this.cid).style('opacity', this.getOpacityNumber(this.model.get('selected')))
     }
   });
 });

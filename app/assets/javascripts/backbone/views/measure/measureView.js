@@ -104,7 +104,7 @@ define([
       // Bead
       var circularBeadBeatRadius = 8;
       //Number Line
-      var lineHashHeight = 20;
+      var lineHashHeight = 30;
       var numberLineY = 50;
       // Bar
       var xMeasureLocation = 15; // 5%
