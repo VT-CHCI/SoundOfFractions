@@ -304,7 +304,9 @@ define([
         parentMeasureModel: this.parentMeasureModel,
         circularMeasureR: this.circularMeasureR,
         circularMeasureCx: this.circularMeasureCx,
-        circularMeasureCy: this.circularMeasureCy
+        circularMeasureCy: this.circularMeasureCy,
+        numberLineY: this.numberLineY,
+        lineLength: this.lineLength
       };
       if (this.currentRepresentationType == 'bead') {
         for (i = 0 ; i < this.measurePassingToBeatFactoryParamaters.remainingNumberOfBeats ; i++){

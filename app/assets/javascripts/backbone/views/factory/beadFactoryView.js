@@ -44,56 +44,6 @@ define([
         color: this.beatColor
       };
 
-      //Linear
-        // var beatBBX = this.beatBBX;
-        // beatFactoryParameters.beatBBX = beatBBX;
-        // var beatBBY = this.beatBBY;
-        // beatFactoryParameters.beatBBY = beatBBY;
-        // var beatWidth = this.beatWidth;
-        // beatFactoryParameters.beatWidth = beatWidth;
-        // var beatHeight = this.beatHeight;
-        // beatFactoryParameters.beatHeight = beatHeight;
-
-      //Circlular Pie
-        // var centerX = this.cx;
-        // beatFactoryParameters.cx = centerX;
-        // var centerY = this.cy;
-        // beatFactoryParameters.cy = centerY;
-        // var measureStartAngle = -90;
-        // beatFactoryParameters.measureStartAngle = measureStartAngle;
-        // var beatStartAngle = this.beatStartAngle;
-        // beatFactoryParameters.beatStartAngle = beatStartAngle;
-        // var beatEndAngle = beatStartAngle+this.beatAngle;
-        // beatFactoryParameters.beatEndAngle = beatEndAngle;
-        // var measureR = this.measureR;
-        // beatFactoryParameters.measureR = measureR;
-
-      // x center of a bead or first x of pie piece
-      // if (this.currentRepresentationType == 'pie') {
-      //   // var x1 = centerX + measureR * Math.cos(Math.PI * beatStartAngle/180); 
-      //   // beatFactoryParameters.x1 = x1;
-      // } else if (this.currentRepresentationType == 'bead') {
-      //   beatFactoryParameters.x1 = this.x;
-      // }
-      // // y center of a bead
-      // if (this.currentRepresentationType == 'pie') {
-      //   // var y1 = centerY + measureR * Math.sin(Math.PI * beatStartAngle/180);     
-      //   // beatFactoryParameters.y1 = y1;
-      // } else if (this.currentRepresentationType == 'bead') {
-      //   beatFactoryParameters.y1 = this.y;
-      // }
-        // the second x point of a pie piece
-        // var x2 = centerX + measureR * Math.cos(Math.PI * beatEndAngle/180);
-        // beatFactoryParameters.x2 = x2;
-        // the second y point of a pie piece
-        // var y2 = centerY + measureR * Math.sin(Math.PI * beatEndAngle/180);
-        // beatFactoryParameters.y2 = y2;
-
-      // this.beatCenterPosition = {
-      //   x: beatFactoryParameters.x1,
-      //   y: beatFactoryParameters.y1
-      // };
-
       //Circular Bead
       var beatR = this.beatR;
       beatFactoryParameters.beatR = beatR;
@@ -142,7 +92,6 @@ define([
       });
       var dragLine = d3.behavior.drag();
       dragLine.on('drag', function(d) {
-        console.log('dragging line');
         var newSettingX1 = parseInt(d3.select(this).attr("x1")) + parseInt(d3.event.dx);
         var newSettingY1 = parseInt(d3.select(this).attr("y1")) + parseInt(d3.event.dy);
         var newSettingX2 = parseInt(d3.select(this).attr("x2")) + parseInt(d3.event.dx);
@@ -156,23 +105,14 @@ define([
         // Above: newComputedValY1 must be above line y
         // On : newComputedValY1 must be on the line y
         // Below: newComputedValY1 must be below the line y
-        if ( Math.pow(newComputedValX - ƒthis.circularMeasureCx, 2) + Math.pow(newComputedValY - ƒthis.circularMeasureCy, 2) <= Math.pow(ƒthis.circularMeasureR,2) ) {
-          var center = {x: ƒthis.circularMeasureCx, y:ƒthis.circularMeasureCy};
-          //give it two points, the center, and the new beat location, once it is on or inside the circle
-          function angle(center, p1) {
-            var p0 = {x: center.x, y: center.y - Math.sqrt(Math.abs(p1.x - center.x) * Math.abs(p1.x - center.x)
-                    + Math.abs(p1.y - center.y) * Math.abs(p1.y - center.y))};
-            return (2 * Math.atan2(p1.y - p0.y, p1.x - p0.x)) * 180 / Math.PI;
-          }
-          var p1 = {x: newComputedValX, y: newComputedValY};
-          var angleAtNewBeat = angle(center, p1);
-
+        if ( newComputedValY1 < ƒthis.numberLineY ) {
           // make an array to find out where the new beat should be added in the beatsCollection of the measure
           var refArray = [];
           for ( i=0 ; i < ƒthis.beatsInMeasure ; i++ ) {
-            refArray.push((360/ƒthis.beatsInMeasure)*i);
+            refArray.push((ƒthis.lineLength/ƒthis.beatsInMeasure)*i);
           }
-          var newIndex = _.sortedIndex(refArray, angleAtNewBeat);
+          console.log(refArray)
+          var newIndex = _.sortedIndex(refArray, newComputedValX1);
           ƒthis.parentMeasureModel.get('beats').add(new BeatModel({selected:true}), {at: newIndex})
           dispatch.trigger('signatureChange.event', ƒthis.beatsInMeasure+1);
         }
