@@ -39,7 +39,6 @@ define([
     //The constructor takes options because these views are created
     //by measuresView objects.
     initialize: function(options){
-      console.log(options)
       if (options) {
         for (var key in options) {
           this[key] = options[key];
@@ -51,18 +50,15 @@ define([
 
         _.bindAll(this, 'toggle');
         this.model.bind('change', this.test, this);
-        // dispatch.on('beatToggled.event', this.render, this);
       } else {
         console.error('should not be in here!');
         this.model = new BeatModel;
       }
-
       this.render();
     },
 
     //We use css classes to control the color of the beat.
     render: function(){
-      console.log('yy',this);
       var ƒthis = this;
 
       // if render is being called from the toggle function, we may want to do something different
@@ -299,7 +295,6 @@ define([
         $('#beat'+this.model.cid).click($.proxy(this.toggle, this));
 
         return this;
-      // }
     },
 
     changeBeatRepresentation: function(representation) {
