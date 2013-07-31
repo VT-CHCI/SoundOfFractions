@@ -32,7 +32,7 @@
   border-radius: 3px;
   padding: 0 5px 5px 5px;
   display: inline-block;
-  margin-bottom: 5px;
+  margin: 0px 5px 5px 0px;
   /*width: 95%;*/
   height: 150px;
   display: inline-block;
@@ -257,7 +257,7 @@ select {
   max-height: 30px;
 }
 svg.audio {
-  height: 121px;
+  height: 124px;
 }
 svg.bar {
   height: 150px;
@@ -330,11 +330,11 @@ svg.line {
 }
 .resizable-h {
   resize: horizontal;
-  overflow: auto;
+  /*overflow: auto;*/
 }
 .resizable {
   resize: both;
-  overflow: auto;
+  /*overflow: auto;*/
 }
 .measure-audio {
   width: 100px;
