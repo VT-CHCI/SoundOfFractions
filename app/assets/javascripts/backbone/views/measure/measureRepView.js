@@ -190,7 +190,6 @@ define([
         $('#a'+this.measureRepModel.cid).on('click', unroll);
         $('#b'+this.measureRepModel.cid).on('click', reverse);
       } else if (this.currentRepresentationType == 'line'){
-        console.log(this.xMeasureLocation, this.lineLength);
         var svgContainer = d3.select('#svg-'+this.measureRepModel.cid)
         var measureLine = svgContainer
             .insert('line', ':first-child')
