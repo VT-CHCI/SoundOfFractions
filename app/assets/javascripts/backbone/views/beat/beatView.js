@@ -21,7 +21,7 @@ define([
   return Backbone.View.extend({
     // registering backbone's click event to our toggle() function.
      events : {
-       'click' : 'toggle'
+       'click' : 'toggleModel'
      },
 
     // The different representations
@@ -48,8 +48,8 @@ define([
         this.opacity = this.getOpacityNumber(options.opacity);
         this.beatCenterPosition = {};
 
-        _.bindAll(this, 'toggle');
-        this.model.bind('change', this.test, this);
+        _.bindAll(this, 'toggleModel');
+        this.model.bind('change', this.toggleOpacity, this);
       } else {
         console.error('should not be in here!');
         this.model = new BeatModel;
@@ -213,7 +213,7 @@ define([
             .call(drag);
 
         this.beatPath = beatPath;
-        this.beatPath.on('click', this.toggle);
+        this.beatPath.on('click', this.toggleModel);
 
         function unroll() {
           console.log('INNER UNROLL');
@@ -257,7 +257,7 @@ define([
             .call(drag);
 
         this.beatPath = beatPath;
-        this.beatPath.on('click', this.toggle);
+        this.beatPath.on('click', this.toggleModel);
 
       } else if (this.currentRepresentationType == 'pie'){
 
@@ -275,9 +275,6 @@ define([
       } else if (this.currentRepresentationType == 'bar'){
 
       }
-      // add click handler to this beat
-      $('#beat'+this.model.cid).click($.proxy(this.toggle, this));
-
       return this;
     },
 
@@ -316,11 +313,8 @@ define([
       4. tells log to send a log of the click event.
       5. triggers a beatClicked event.
     */
-    toggle: function(){
+    toggleModel: function(){
       //switch the selected boolean value on the model
-      console.log('toggle',this);
-      console.log(this.model.get('selected'));
-
       this.model.set('selected', !this.model.get('selected'));
       //re-render it, passing the clicked beat to render()
      // d3.select('#beat'+this.cid).style('opacity', this.getOpacityNumber(this.model.get('selected')))
@@ -328,7 +322,7 @@ define([
       // log.sendLog([[1, "beat" + this.model.cid + " toggled: "+!bool]]);
       // dispatch.trigger('beatToggled.event', this.model);
     },
-    test: function() {
+    toggleOpacity: function() {
       console.log('does this work?', this);
       // re-rendering all beats, think it should only rerender itself, but w/e
       d3.select('#beat'+this.cid).style('opacity', this.getOpacityNumber(this.model.get('selected')))
