@@ -129,9 +129,7 @@ define([
             .y(function (d) {return d.y;})
             .interpolate('basis'); // bundle | basis | linear | cardinal are also options
 
-        //The Circle SVG Path we draw MUST BE AFTER THE COMPILED TEMPLATE
         var svgContainer = d3.select('#svg-'+this.measureRepModel.cid)
-            // .call(d3.experiments.dragAll);
         var circlePath = svgContainer
             .insert('path', ':first-child')
             .data([this.circleStates[0]])
@@ -191,7 +189,7 @@ define([
         $('#b'+this.measureRepModel.cid).on('click', reverse);
       } else if (this.currentRepresentationType == 'line'){
         var svgContainer = d3.select('#svg-'+this.measureRepModel.cid)
-        var measureLine = svgContainer
+        var infiniteLine = svgContainer
             .insert('line', ':first-child')
             .attr('x1', -200)
             .attr('y1', this.numberLineY)
@@ -209,6 +207,26 @@ define([
             .attr('stroke-width', 2)
 
       } else if (this.currentRepresentationType == 'pie'){
+        var margin = this.margin;
+        var lineData = $.map(Array(this.measureNumberOfPoints), function (d, i) {
+            var y = margin.top;
+            var x = margin.left + i * this.lineLength / (this.measureNumberOfPoints - 1)
+            return {x: x, y: y}
+        });
+        var pathFunction = d3.svg.line()
+            .x(function (d) {return d.x;})
+            .y(function (d) {return d.y;})
+            .interpolate('basis'); // bundle | basis | linear | cardinal are also options
+
+        var svgContainer = d3.select('#svg-'+this.measureRepModel.cid)
+        var circlePath = svgContainer
+            .insert('path', ':first-child')
+            .data([this.circleStates[0]])
+            .attr('d', pathFunction)
+            .attr('stroke', 'black')
+            .attr('opacity', 1)
+            .attr('class', 'circle')
+            .attr('class', 'circle-path')
 
       } else if (this.currentRepresentationType == 'audio'){
         var svgContainer = d3.select('#svg-'+this.measureRepModel.cid)
