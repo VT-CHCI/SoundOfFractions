@@ -148,33 +148,20 @@ define([
         // compile the template for a measure
 
         var measureRepViewParamaters = {
+          // HTrack
+          hTrackEl: this.hTrackEl,
+          measureCount: this.measureCount,
+          // Measure
           parentMeasureModel: this.parentMeasureModel,
           beatsInMeasure: this.model.get('beats').models.length,
           parent: this,
-          measureRepModel: rep,
           parentCID: this.cid,
-          hTrackEl: this.hTrackEl,
-          representationType: rep.representationType,
           mCID: this.model.cid,
           measureRepContainer: '#measure-rep-container-'+this.model.cid,
+          // Measure Rep
+          measureRepModel: rep,
+          representationType: rep.representationType,
           beatHolder:'beatHolder'+this.model.cid,
-          measureNumberOfBeats: this.model.get('beats').length,
-          // beatFactoryHolder: 'beat-factory-holder-'+this.model.cid,
-          measureCount: this.measureCount,
-          measureAngle: 360.0,
-          // SVG Properties
-          measureWidth: lbbMeasureWidth,
-          measureHeight: lbbMeasureHeight,
-          measureColor: COLORS.hexColors[COLORS.colorIndices.WHITE],
-          // Circular
-          circularMeasureCx: circularMeasureCx,
-          circularMeasureCy: circularMeasureCy,
-          circularMeasureR: circularMeasureR,
-          circularBeadBeatRadius: circularBeadBeatRadius,
-          xMeasureLocation: xMeasureLocation,
-          yMeasureLocation: yMeasureLocation,
-          // Bead
-          measureNumberOfPoints: measureNumberOfPoints,
           margin: margin,
           //Audio
           audioMeasureCx: audioMeasureCx,
@@ -184,12 +171,17 @@ define([
           audioBeatCy: audioBeatCy,
           audioBeatR: audioBeatR,
           colorForAudio: colorForAudio,
-          // Transition
-          circleStates: circleStates,
-          measureNumberOfPoints: this.measureNumberOfPoints,
-          // lineData: lineData,
-          pathFunction: this.circlePath,
-
+          // Pie
+          measureAngle: 360.0,
+          // Circular
+          circularMeasureCx: circularMeasureCx,
+          circularMeasureCy: circularMeasureCy,
+          circularMeasureR: circularMeasureR,
+          circularBeadBeatRadius: circularBeadBeatRadius,
+          xMeasureLocation: xMeasureLocation,
+          yMeasureLocation: yMeasureLocation,
+          // Bead
+          measureNumberOfPoints: measureNumberOfPoints,
           //Number Line
           xOffset: lineLength/this.model.get('beats').models.length / 2,
           yOffset: lbbMeasureHeight / 2,
@@ -197,7 +189,15 @@ define([
           lineLength: lineLength,
           beatBBY: beatBBY,
           beatWidth: beatWidth,
-          numberLineY: numberLineY
+          numberLineY: numberLineY,
+          // Bar
+          measureWidth: lbbMeasureWidth,
+          measureHeight: lbbMeasureHeight,
+          measureColor: COLORS.hexColors[COLORS.colorIndices.WHITE],
+          // Transition
+          circleStates: circleStates,
+          measureNumberOfPoints: this.measureNumberOfPoints,
+          pathFunction: this.circlePath
         };
 
         new MeasureRepView(measureRepViewParamaters);
@@ -268,7 +268,6 @@ define([
       }
     },
     reconfigure: function(options) {
-      console.warn(options);
       this.render();
     },
     addRepToMeasure: function(options) {

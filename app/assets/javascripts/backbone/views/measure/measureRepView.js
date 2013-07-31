@@ -253,7 +253,8 @@ define([
           beatWidth: this.beatWidth,
           beatHeight: this.beatHeight,
           // Line
-          lineHashHieght: this.lineHashHeight,
+          numberLineY: this.numberLineY,
+          lineHashHeight: this.lineHashHeight,
           X1: this.xMeasureLocation +(this.beatWidth*(index)),
           Y1: this.numberLineY - this.lineHashHeight/2,
           X2: this.xMeasureLocation +(this.beatWidth*(index)),

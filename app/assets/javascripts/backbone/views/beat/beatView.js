@@ -163,11 +163,11 @@ define([
           .y(function (d) {return d.y;})
           .interpolate('basis'); // bundle | basis | linear | cardinal are also options
 
-      var drag = d3.behavior.drag();
+      var dragBead = d3.behavior.drag();
       // to prevent the dragging of a one beat measure
       if (this.beatsInMeasure > 1) {
         ƒthis = this;
-        drag.on("drag", function() {
+        dragBead.on("drag", function() {
           ƒthis = ƒthis;
             // console.log(parseInt(d3.select(this).attr("cx")) + ' <:> ' + parseInt(d3.select(this).attr("cy")));
             // console.log(d3.event.dx + ' : ' + d3.event.dy);
@@ -191,6 +191,36 @@ define([
         });
       }
 
+      var dragLine = d3.behavior.drag();
+      if (this.beatsInMeasure > 1) {
+        ƒthis = this;
+        dragLine.on('drag', function(d) {
+          ƒthis = ƒthis;
+          var newSettingX1 = parseInt(d3.select(this).attr("x1")) + parseInt(d3.event.dx);
+          var newSettingY1 = parseInt(d3.select(this).attr("y1")) + parseInt(d3.event.dy);
+          var newSettingX2 = parseInt(d3.select(this).attr("x2")) + parseInt(d3.event.dx);
+          var newSettingY2 = parseInt(d3.select(this).attr("y2")) + parseInt(d3.event.dy);
+          d3.select(this).attr("x1", newSettingX1);
+          d3.select(this).attr("y1", newSettingY1);
+          d3.select(this).attr("x2", newSettingX2);
+          d3.select(this).attr("y2", newSettingY2);
+          var newCenterX1 = d3.select(this).attr('x1');
+          var newCenterY1 = parseInt(d3.select(this).attr('y1')) + parseInt(ƒthis.lineHashHeight/2);
+          // Above: newCenterY1 < ƒthis.numberLineY
+          // AboveByN: newCenterY1 < ƒthis.numberLineY - N
+          // On : newCenterY1 = ƒthis.numberLineY
+          // Below: newCenterY1 > ƒthis.numberLineY
+          // BelowByN: newCenterY1 > ƒthis.numberLineY + N
+          if ((newCenterY1 < ƒthis.numberLineY - 20) || (newCenterY1 > ƒthis.numberLineY + 20)) {
+            // make an array to find out where the new beat should be added in the beatsCollection of the measure
+            d3.select(this).remove();
+            console.warn('removed beat on measure');
+            ƒthis.parentMeasureModel.get('beats').remove(ƒthis.model);
+            dispatch.trigger('signatureChange.event', ƒthis.beatsInMeasure-1);
+          }
+        });
+      }
+
       if (this.currentRepresentationType == 'bead') {
         console.log(this.beadRadius)
         var beatContainer = d3.select('#beat-holder-'+this.parentMeasureRepModel.cid);
@@ -210,7 +240,7 @@ define([
             .attr('fill', COLORS.hexColors[this.color])
             .attr('stroke', 'black')
             .style('opacity', this.getOpacityNumber(this.model.get('selected')))
-            .call(drag);
+            .call(dragBead);
 
         this.beatPath = beatPath;
         this.beatPath.on('click', this.toggleModel);
@@ -254,7 +284,7 @@ define([
             .attr('stroke', COLORS.hexColors[this.color])
             .attr('opacity', this.getOpacityNumber(this.model.get('selected')))
             .attr('stroke-width', 4)
-            .call(drag);
+            .call(dragLine);
 
         this.beatPath = beatPath;
         this.beatPath.on('click', this.toggleModel);
