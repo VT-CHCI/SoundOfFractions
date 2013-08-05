@@ -224,30 +224,24 @@ define([
       var dragSlice = d3.behavior.drag();
       if (this.beatsInMeasure > 1) {
         ƒthis = this;
-        dragSlice.on('drag', function(d) {
-          ƒthis = ƒthis;
-          var newSettingX1 = parseInt(d3.select(this).attr("x1")) + parseInt(d3.event.dx);
-          var newSettingY1 = parseInt(d3.select(this).attr("y1")) + parseInt(d3.event.dy);
-          var newSettingX2 = parseInt(d3.select(this).attr("x2")) + parseInt(d3.event.dx);
-          var newSettingY2 = parseInt(d3.select(this).attr("y2")) + parseInt(d3.event.dy);
-          d3.select(this).attr("x1", newSettingX1);
-          d3.select(this).attr("y1", newSettingY1);
-          d3.select(this).attr("x2", newSettingX2);
-          d3.select(this).attr("y2", newSettingY2);
-          var newCenterX1 = d3.select(this).attr('x1');
-          var newCenterY1 = parseInt(d3.select(this).attr('y1')) + parseInt(ƒthis.lineHashHeight/2);
-          // Above: newCenterY1 < ƒthis.numberLineY
-          // AboveByN: newCenterY1 < ƒthis.numberLineY - N
-          // On : newCenterY1 = ƒthis.numberLineY
-          // Below: newCenterY1 > ƒthis.numberLineY
-          // BelowByN: newCenterY1 > ƒthis.numberLineY + N
-          if ((newCenterY1 < ƒthis.numberLineY - 20) || (newCenterY1 > ƒthis.numberLineY + 20)) {
-            // make an array to find out where the new beat should be added in the beatsCollection of the measure
+        dragSlice
+          .on("drag", function(d) {
+          // add the 'selected' class when a beat is dragged
+          var transformString = $('#beat'+ƒthis.cid).attr('transform').substring(10, $('#beat'+ƒthis.cid).attr('transform').length-1);
+          var comma = transformString.indexOf(',');
+          d.x = parseInt(transformString.substr(0,comma));
+          d.y = parseInt(transformString.substr(comma+1));
+          d.x += d3.event.dx;
+          d.y += d3.event.dy;
+          // x and y must satisfy (x - center_x)^2 + (y - center_y)^2 < radius^2
+          if ( (d.x - ƒthis.measureCx)^2 + (d.y - ƒthis.measureCy)^2 < ƒthis.measureR ) {
+          // if (d.x > 30 || d.x < -30) {
             d3.select(this).remove();
-            console.warn('removed beat on measure');
-            ƒthis.parentMeasureModel.get('beats').remove(ƒthis.model);
-            dispatch.trigger('signatureChange.event', ƒthis.beatsInMeasure-1);
+            dispatch.trigger('signatureChange.event', ƒthis.parent.attributes.beats.length-1);
           }
+          d3.select(this).attr("transform", function(d){
+              return "translate(" + [ d.x,d.y ] + ")"
+          })
         });
       }
 
