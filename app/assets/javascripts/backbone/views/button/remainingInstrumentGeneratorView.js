@@ -28,6 +28,11 @@ define([
       } else {
         this.remainingInstrumentGeneratorModel = RemainingInstrumentGeneratorModel;
       }
+
+      // manually clicking
+      _.bindAll(this, 'manuallPress');
+      $(document).bind('keypress', this.manuallPress);
+
       // this.remainingInstrumentGeneratorModel.bind('change', _.bind(this.render, this));
       dispatch.on('instrumentChanged.event', this.render, this);
       dispatch.on('reRenderInstrumentGenerator.event', this.render, this);
@@ -69,7 +74,18 @@ define([
       $(this.el).draggable({ axis: "y", containment: "#middle-left-column" });
 
       return this;
+    },
+    // h:104 k:107 s:115 
+    manuallPress: function(e) {
+      if (e.keyCode == 104) {
+        $('#new-instrument-hh').click();
+      } else if (e.keyCode == 107) {
+        $('#new-instrument-kd').click();
+      } else if (e.keyCode == 115) {
+        $('#new-instrument-sn').click();
+      }
     }
+
   });
   return new RemainingInstrumentGeneratorView();
 });

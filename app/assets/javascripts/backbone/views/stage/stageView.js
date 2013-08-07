@@ -206,41 +206,62 @@ define([
       return this.stage;
     },
 
-    render: function(){
-      console.log('render: stageView.js');
-      $(this.el).html('');
-
-      var counter = 0;
-
-      //we have to render each one of our `hTrack`s.
-      _.each(this.stage.models, function(hTrack) {
+    render: function(options){
+      console.log(this.stage.models);
+      if(options) {
+        var counter = $('.hTrack').size();
         dispatch.stopListening('addMeasureRepresentation.event');
         //loading the audio files into the bufferList.
-        this.loadAudio(this.context, hTrack.get('sample'), this.bufferList, counter );
+        this.loadAudio(this.context, options.sample, this.bufferList, counter );
 
         //compiling our template.
-        var compiledTemplate = _.template( HTrackTemplate, {hTrack: hTrack, type: hTrack.get('type')} );
+        var compiledTemplate = _.template( HTrackTemplate, {hTrack: this.stage.models[this.stage.models.length-1], type: this.stage.models[this.stage.models.length-1].get('type')} );
         $(this.el).append( compiledTemplate );
 
         //create a hTrack view.
         var hTrackView = new HTrackView({
-          hTrack: hTrack,
-          el: '#hTrack-'+hTrack.cid, 
+          hTrack: this.stage.models[this.stage.models.length-1],
+          el: '#hTrack-'+this.stage.models[this.stage.models.length-1].cid, 
           gainNode: this.muteGainNodeList[counter],
           unusedInstrumentsModel: this.unusedInstrumentsModel,
-          type: hTrack.get('type')
+          type: this.stage.models[this.stage.models.length-1].get('type')
         });
-        if(!hTrack.get('active')) {
-          console.log('found a muted one');
-          hTrackView.toggleMute();
-        }
-        counter++;
-      }, this);
+      } else {
+        console.log('render: stageView.js');
+        $(this.el).html('');
 
-      // Render the RemainingInstrumentGeneratorView
-      var instrumentSelectorView = RemainingInstrumentGeneratorView;
+        var counter = 0;
 
-      return this;
+        //we have to render each one of our `hTrack`s.
+        _.each(this.stage.models, function(hTrack) {
+          dispatch.stopListening('addMeasureRepresentation.event');
+          //loading the audio files into the bufferList.
+          this.loadAudio(this.context, hTrack.get('sample'), this.bufferList, counter );
+
+          //compiling our template.
+          var compiledTemplate = _.template( HTrackTemplate, {hTrack: hTrack, type: hTrack.get('type')} );
+          $(this.el).append( compiledTemplate );
+
+          //create a hTrack view.
+          var hTrackView = new HTrackView({
+            hTrack: hTrack,
+            el: '#hTrack-'+hTrack.cid, 
+            gainNode: this.muteGainNodeList[counter],
+            unusedInstrumentsModel: this.unusedInstrumentsModel,
+            type: hTrack.get('type')
+          });
+          if(!hTrack.get('active')) {
+            console.log('found a muted one');
+            hTrackView.toggleMute();
+          }
+          counter++;
+        }, this);
+
+        // Render the RemainingInstrumentGeneratorView
+        var instrumentSelectorView = RemainingInstrumentGeneratorView;
+
+        return this;
+      }
     },
 
     /*
@@ -489,7 +510,7 @@ define([
       this.manuallyCreatedMeasuresCollection.add({
         beats: this.manuallyCreatedMeasureBeatsCollection, measureRepresentations: this.manuallyCreatedMeasureRepresentationCollection});
 
-      this.stage = StageCollection.add({
+      var newInstrumentToAdd = {
         label: this.unusedInstrumentsModel.getDefault(instrument, 'label'),
         type: this.unusedInstrumentsModel.getDefault(instrument, 'type'),
         img: this.unusedInstrumentsModel.getDefault(instrument, 'image'),
@@ -498,13 +519,15 @@ define([
         measures: this.manuallyCreatedMeasuresCollection,
         signature: this.manuallyCreatedMeasuresCollection.models[0].get('beats').length,
         active: true
-      });
+      };
+
+      this.stage = StageCollection.add(newInstrumentToAdd);
 
       // Add the gain nodes for the music for the new instrument
       this.gainNodeList[this.stage.models.length-1] = this.context.createGainNode();
       this.muteGainNodeList[this.stage.models.length-1] = this.context.createGainNode();
 
-      this.render();
+      this.render(newInstrumentToAdd);
     },
 
     deleteInstrument: function(instrument) {

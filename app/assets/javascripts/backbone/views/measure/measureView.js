@@ -44,7 +44,6 @@ define([
       } else {
         console.error('Should not be in here: NO Measure!');
       }
-      this.counter = 0;
 
       //registering a callback for signatureChange events.
       dispatch.on('signatureChange.event', this.reconfigure, this);
@@ -276,7 +275,6 @@ define([
       representationModel.representationType = options.newRepType;
       // Currently forcing it to add to the first measure
       StageCollection.get(options.hTrack).get('measures').models[0].get('measureRepresentations').add(representationModel);
-      this.counter++;
       this.render('adding');
     },
     //This is called when the hTrack is clicked anywhere to bring

@@ -70,8 +70,8 @@ define([
     */
     render: function(options){
       if(options) {
-        // for each of the measures (V1 should only have 1 Measure)
         var ƒthis = this;
+        // for each of the measures (V1 should only have 1 Measure)
         _.each(this.hTrack.get('measures').models, function(measure, index) {
           new MeasureView({
             collectionOfMeasures: ƒthis.hTrack.get('measures'),
@@ -85,32 +85,18 @@ define([
         var ƒthis = this;
         // for each of the measures (V1 should only have 1 Measure)
         _.each(this.hTrack.get('measures').models, function(measure, index) {
-            new MeasureView({
-              collectionOfMeasures: ƒthis.hTrack.get('measures'),
-              collectionOfRepresentations: measure.get('measureRepresentations'),
-              parent: ƒthis.hTrack,
-              parentEl: '#measure-container-'+ƒthis.hTrack.cid,
-              hTrackEl: '#hTrack-'+ƒthis.hTrack.cid,
-              model: ƒthis.hTrack.get('measures').models[index],
-              parentMeasureModel: measure,
-              defaultMeasureRepresentation: ƒthis.defaultMeasureRepresentation,
-              measureIndex: index,
-              measureCount: ƒthis.hTrack.get('measures').models.length
-            });
-
-          // for each of the measure representations
-          // _.each(measure.get('measureRepresentations').models, function(rep, indx) {
-          //   new MeasureView({
-          //     collectionOfMeasures: ƒthis.hTrack.get('measures'),
-          //     collectionOfRepresentations: measure.get('representations'),
-          //     parent: ƒthis.hTrack,
-          //     parentEl: '#representation-area-'+ƒthis.hTrack.cid,
-          //     model: ƒthis.hTrack.get('measures').models[indx],
-          //     defaultMeasureRepresentation: ƒthis.defaultMeasureRepresentation,
-          //     representation: rep,
-          //     measureIndex: indx
-          //   });
-          // });
+          new MeasureView({
+            collectionOfMeasures: ƒthis.hTrack.get('measures'),
+            collectionOfRepresentations: measure.get('measureRepresentations'),
+            parent: ƒthis.hTrack,
+            parentEl: '#measure-container-'+ƒthis.hTrack.cid,
+            hTrackEl: '#hTrack-'+ƒthis.hTrack.cid,
+            model: ƒthis.hTrack.get('measures').models[index],
+            parentMeasureModel: measure,
+            defaultMeasureRepresentation: ƒthis.defaultMeasureRepresentation,
+            measureIndex: index,
+            measureCount: ƒthis.hTrack.get('measures').models.length
+          });
         });
 
         new InstrumentDropDownView({

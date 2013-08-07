@@ -314,7 +314,17 @@ define([
         this.beatPath.on('click', this.toggleModel);
 
       } else if (this.currentRepresentationType == 'pie'){
-
+        var arc = d3.svg.arc().innerRadius(0).outerRadius(this.circularMeasureR);
+        var pie = { pct: [ 16.66,  16.66, 16.66,  16.66, 16.66, 16.66 ] };
+        var beatContainer = d3.select('#beat-holder-'+this.parentMeasureRepModel.cid);
+        var beatPath = beatContainer
+            .insert('path', ':first-child')
+            .data([circleStates[0]])
+            .attr('d', pathFunction)
+            .attr('stroke', 'black')
+            .attr('opacity', 1)
+            .attr('class', 'circle')
+            .attr('class', 'circle-path')
       } else if (this.currentRepresentationType == 'audio'){
         var svgContainer = d3.select('#svg-'+this.parentMeasureRepModel.cid)
         var circlePath = svgContainer

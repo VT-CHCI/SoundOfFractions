@@ -81,11 +81,11 @@ define([
       if (!found) { console.error('none found!'); }
     },
 
-    addInstrument: function(addedIntrument) {
+    addInstrument: function(addedInstrument) {
       console.warn(this.unusedInstruments);
-      console.warn('addedIntrument: '+ addedIntrument + ' to generatorModel' );
-      var newLabel = this.defaults.instrumentLookup[ addedIntrument ].label;
-      var newType = addedIntrument;
+      console.warn('addedInstrument: '+ addedInstrument + ' to generatorModel' );
+      var newLabel = this.defaults.instrumentLookup[ addedInstrument ].label;
+      var newType = addedInstrument;
       console.warn(newLabel + ' ' + newType)
       this.unusedInstruments.push({ label: newLabel, type: newType });
       console.warn(this.unusedInstruments);
