@@ -463,7 +463,6 @@ define([
         //we set the masterGainNode to zero, which mutes all output.
         this.masterGainNode.gain.value = 0;
       } else {
-
         //if we are not playing, we start the playback of audio
         //and trigger an event to start the animation.
         console.log('togglePlay: on');
@@ -472,15 +471,15 @@ define([
         //and play the audio.
         //this.playLoop();
         this.intervalID = setInterval((function(self) {
-        return function() {
-          self.playLoop(); 
-        } } )(this),
+          return function() {
+            self.playLoop(); 
+          } 
+        })(this),
         duration);
         //we set the masterGainNode to 1, turning on master output.
         this.masterGainNode.gain.value = 1;
 
         dispatch.trigger('toggleAnimation.event', 'on', duration, StateModel.get('signature'), maxMeasures);
-
       }
     },
 

@@ -240,7 +240,16 @@ define([
             .attr('opacity', .2)
 
       } else if (this.currentRepresentationType == 'bar'){
-
+        var svgContainer = d3.select('#svg-'+this.measureRepModel.cid)
+        var box = svgContainer
+            .insert('rect', ':first-child')
+            .attr('x', this.xMeasureLocation)
+            .attr('y', this.numberLineY)
+            .attr('width', this.xMeasureLocation+this.lineLength)
+            .attr('height', this.measureHeight)
+            .attr('stroke', 'black')
+            .attr('stroke-width', 1)
+            .attr('fill', 'white')
       }
 
       // for each beat in this measure
@@ -321,6 +330,8 @@ define([
         circularMeasureCx: this.circularMeasureCx,
         circularMeasureCy: this.circularMeasureCy,
         numberLineY: this.numberLineY,
+        beatFactoryR: this.beatFactoryR,
+        beatFactoryWidth: this.beatFactoryWidth,
         lineLength: this.lineLength
       };
       if (this.currentRepresentationType == 'bead') {
@@ -351,6 +362,16 @@ define([
           //Base + Math.random() * (max - min) + min;
           this.measurePassingToBeatFactoryParamaters.cX = 30 + (Math.random() * (20) - 10);
           this.measurePassingToBeatFactoryParamaters.cY = 90 + (Math.random() * (20) - 10);
+          this.measurePassingToBeatFactoryParamaters.colorIndex = index;
+          new BeadFactoryView(this.measurePassingToBeatFactoryParamaters);
+        }        
+      } else if (this.currentRepresentationType == 'bar') {
+        for (i = 0 ; i < this.measurePassingToBeatFactoryParamaters.remainingNumberOfBeats ; i++){
+          var index = 15-i;
+          //Base + Math.random() * (max - min) + min;
+          this.measurePassingToBeatFactoryParamaters.x = 20 + (Math.random() * (20) - 10);
+          this.measurePassingToBeatFactoryParamaters.y = this.numberLineY + 60 + (Math.random() * (20) - 10);
+          this.measurePassingToBeatFactoryParamaters.beatHeight = this.beatHeight;
           this.measurePassingToBeatFactoryParamaters.colorIndex = index;
           new BeadFactoryView(this.measurePassingToBeatFactoryParamaters);
         }        

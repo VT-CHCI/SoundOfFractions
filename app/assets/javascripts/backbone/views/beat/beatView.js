@@ -221,6 +221,26 @@ define([
         });
       }
 
+      var dragBar = d3.behavior.drag();
+      dragBar.on('drag', function(d) {
+        var newSettingX = parseInt(d3.select(this).attr("x")) + parseInt(d3.event.dx);
+        var newSettingY = parseInt(d3.select(this).attr("y")) + parseInt(d3.event.dy);
+        d3.select(this).attr("x", newSettingX);
+        d3.select(this).attr("y", newSettingY);
+        var newComputedValX = d3.select(this).attr('x');
+        var newComputedValY = d3.select(this).attr('y');
+        // Above: newComputedValY1 must be above line y
+        // On : newComputedValY1 must be on the line y
+        // Below: newComputedValY1 must be below the line y
+        if ((newComputedValY < ƒthis.numberLineY - 20) || (newComputedValY > ƒthis.numberLineY + ƒthis.beatHeight + 20)) {
+        // make an array to find out where the new beat should be added in the beatsCollection of the measure
+          d3.select(this).remove();
+          console.warn('removed beat on measure');
+          ƒthis.parentMeasureModel.get('beats').remove(ƒthis.model);
+          dispatch.trigger('signatureChange.event', ƒthis.beatsInMeasure-1);
+        }
+      });
+
       var dragSlice = d3.behavior.drag();
       if (this.beatsInMeasure > 1) {
         ƒthis = this;
@@ -254,7 +274,7 @@ define([
             .attr('r', this.beadRadius)
             // Calling the click handler here doesn't work for some reason
             // .on('click', function(){console.log('beat container click handler')})
-            .attr('class', 'beat d3')
+            .attr('class', 'beat d3 bead-beat')
             .attr('transform', 'translate(0,0)')
             .attr('id', 'beat'+this.cid)
             // This is the path that the beat will follow when un/roll is clicked
@@ -289,9 +309,9 @@ define([
                   .attr('d', pathFunction);
           }
         };
-
         $('#a'+this.parentMeasureRepModel.cid).on('click', unroll);
         $('#b'+this.parentMeasureRepModel.cid).on('click', reverse);
+
       } else if (this.currentRepresentationType == 'line'){
         var beatContainer = d3.select('#beat-holder-'+this.parentMeasureRepModel.cid);
         var beatPath = beatContainer
@@ -300,7 +320,7 @@ define([
             .attr('y1', this.Y1)
             .attr('x2', this.X2)
             .attr('y2', this.Y2)
-            .attr('class', 'beat d3')
+            .attr('class', 'beat d3 line-beat')
             .attr('id', 'beat'+this.cid)
             // This is the path that the beat will follow when un/roll is clicked
             // .attr('d', pathFunction)
@@ -308,35 +328,34 @@ define([
             .attr('opacity', this.getOpacityNumber(this.model.get('selected')))
             .attr('stroke-width', 4)
             .call(dragLine);
-
         this.beatPath = beatPath;
         this.beatPath.on('click', this.toggleModel);
+
       } else if (this.currentRepresentationType == 'pie'){
         var arc = d3.svg.arc()
           .innerRadius(0)
           .outerRadius(this.circularMeasureR)
           .startAngle(this.beatStartAngle*(Math.PI/180))
           .endAngle((this.beatStartAngle + this.beatAngle)*(Math.PI/180));
-
         var beatContainer = d3.select('#beat-holder-'+this.parentMeasureRepModel.cid)
           .attr('transform', 'translate('+this.circularMeasureCx+','+this.circularMeasureCy+')')
-
         var beatPath = beatContainer
           .insert('path', ':first-child')
         // beatPath
           .attr('d', arc)
           .attr('id', 'beat'+this.cid)
+          .attr('class', 'beat d3 pie-beat')
           .attr('stroke', 'black')
           .attr('opacity', this.getOpacityNumber(this.model.get('selected')))
           .attr('fill', COLORS.hexColors[this.color])
           .attr('transform', 'translate(0,0)')
           .call(dragSlice);
           // .attr('class', 'pie-beat')
-
         this.beatPath = beatPath;
         this.beatPath.on('click', this.toggleModel);
+
       } else if (this.currentRepresentationType == 'audio'){
-        var svgContainer = d3.select('#svg-'+this.parentMeasureRepModel.cid)
+        var svgContainer = d3.select('#beat-holder-'+this.parentMeasureRepModel.cid)
         var circlePath = svgContainer
             // .insert('circle', ':first-child')
             // .attr('cx', audioMeasureCx)
@@ -347,7 +366,22 @@ define([
             // .attr('opacity', .2)
 
       } else if (this.currentRepresentationType == 'bar'){
-
+        var svgContainer = d3.select('#beat-holder-'+this.parentMeasureRepModel.cid)
+        var beatPath = svgContainer
+            .append('rect')
+            .attr('id', 'beat'+this.cid)
+            .attr('class', 'beat d3 bar-beat')
+            .attr('x', this.beatBBX)
+            .attr('y', this.beatBBY)
+            .attr('width', this.beatWidth)
+            .attr('height', this.beatHeight)
+            .attr('stroke', 'black')
+            .attr('stroke-width', 1)
+            .attr('opacity', this.getOpacityNumber(this.model.get('selected')))
+            .attr('fill', COLORS.hexColors[this.color])
+            .call(dragBar);
+        this.beatPath = beatPath;
+        this.beatPath.on('click', this.toggleModel);
       }
       return this;
     },

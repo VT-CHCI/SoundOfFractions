@@ -117,6 +117,29 @@ define([
           dispatch.trigger('signatureChange.event', ƒthis.beatsInMeasure+1);
         }
       });
+      var dragBar = d3.behavior.drag();
+      dragBar.on('drag', function(d) {
+        var newSettingX = parseInt(d3.select(this).attr("x")) + parseInt(d3.event.dx);
+        var newSettingY = parseInt(d3.select(this).attr("y")) + parseInt(d3.event.dy);
+        d3.select(this).attr("x", newSettingX);
+        d3.select(this).attr("y", newSettingY);
+        var newComputedValX = d3.select(this).attr('x');
+        var newComputedValY = d3.select(this).attr('y');
+        // Above: newComputedValY1 must be above line y
+        // On : newComputedValY1 must be on the line y
+        // Below: newComputedValY1 must be below the line y
+        if ( newComputedValY < ƒthis.numberLineY + ƒthis.beatHeight ) {
+          // make an array to find out where the new beat should be added in the beatsCollection of the measure
+          var refArray = [];
+          for ( i=0 ; i < ƒthis.beatsInMeasure ; i++ ) {
+            refArray.push((ƒthis.lineLength/ƒthis.beatsInMeasure)*i);
+          }
+          console.log(refArray)
+          var newIndex = _.sortedIndex(refArray, newComputedValX);
+          ƒthis.parentMeasureModel.get('beats').add(new BeatModel({selected:true}), {at: newIndex})
+          dispatch.trigger('signatureChange.event', ƒthis.beatsInMeasure+1);
+        }
+      });
       var dragPie = d3.behavior.drag();
       dragPie.on('drag', function() {
         var beatToChange = $('#factory-beat'+ƒthis.cid);
@@ -193,7 +216,7 @@ define([
       } else if(this.currentRepresentationType == 'pie') {
         var arc = d3.svg.arc()
           .innerRadius(0)
-          .outerRadius(this.circularMeasureR)
+          .outerRadius(this.beatFactoryR)
           .startAngle(160*(Math.PI/180))
           .endAngle(200*(Math.PI/180));
         var beatContainer = d3.select(this.beatFactoryHolderEl);
@@ -208,6 +231,25 @@ define([
           .attr('id', 'factory-beat'+this.cid)
           .attr('transform', 'translate('+this.cX+','+this.cY+')')
           .call(dragPie);
+      } else if(this.currentRepresentationType == 'bar') {
+        var beatContainer = d3.select(this.beatFactoryHolderEl);
+        var beatPath = beatContainer
+            .append('rect')
+            .attr('x', this.x)
+            .attr('y', this.y)
+            .attr('width', this.beatFactoryWidth)
+            .attr('height', this.beatHeight)
+            // Calling the click handler here doesn't work for some reason
+            // .on('click', function(){console.log('beat container click handler')})
+            .attr('class', 'beat factory-beat d3')
+            .attr('id', 'factory-beat'+this.cid)
+            // This is the path that the beat will follow when un/roll is clicked
+            // .attr('d', pathFunction)
+            .attr('stroke', 'black')
+            .attr('fill', this.beatColor)
+            .attr('stroke-width', 1)
+            .attr('opacity', .2)
+            .call(dragBar);
       }
       return this;
     }

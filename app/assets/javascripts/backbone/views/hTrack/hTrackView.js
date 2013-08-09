@@ -171,39 +171,39 @@ define([
       signature = this.hTrack.get('signature');
 
       //duration is of one beat.
-      duration = duration/signature/maxMeasures;
+      var dur = duration/signature/maxMeasures;
 
       //this is the SVG animation of a beat being played.
-      this.d3AudioAnimate = function() {
-        var target = d3.select('.d3');
+      this.d3AudioAnimate = function(target) {
+        var target = d3.select('.audio-beat');
+        console.log(target);
+        target.transition()
+          .attr('x', target.attr('x')+ 10)
+          .duration(dur)
+      };
+      this.d3BeadAnimate = function(target) {
+        var target = d3.select('.bead-beat');
         console.log(target);
         target.transition()
           .attr('x', target.attr('x')+ 10)
           .duration(1000)
       };
-      this.d3BeadAnimate = function() {
-        var target = d3.select('.d3');
+      this.d3LineAnimate = function(target) {
+        var target = d3.select('.line-beat');
         console.log(target);
         target.transition()
           .attr('x', target.attr('x')+ 10)
           .duration(1000)
       };
-      this.d3LineAnimate = function() {
-        var target = d3.select('.d3');
+      this.d3PieAnimate = function(target) {
+        var target = d3.select('.pie-beat');
         console.log(target);
         target.transition()
           .attr('x', target.attr('x')+ 10)
           .duration(1000)
       };
-      this.d3PieAnimate = function() {
-        var target = d3.select('.d3');
-        console.log(target);
-        target.transition()
-          .attr('x', target.attr('x')+ 10)
-          .duration(1000)
-      };
-      this.d3BarAnimate = function() {
-        var target = d3.select('.d3');
+      this.d3BarAnimate = function(target) {
+        var target = d3.select('.bar-beat');
         console.log(target);
         target.transition()
           .attr('x', target.attr('x')+ 10)
@@ -221,7 +221,7 @@ define([
         console.log('stopped animation');
       }
       else {
-        console.log('starting animation', duration);
+        console.log('starting animation', dur);
 
         // this sets the time interval that each animation should take,
         // and then calls animate on each beat with the appropriate
@@ -247,7 +247,7 @@ define([
             else
               counter = 0;
           }
-        })(this), duration); //duration should be set to something else
+        })(this), dur); //duration should be set to something else
         //this.animationWrapper(counter, beats, signature, maxMeasures, duration);
       }
     },

@@ -1,7 +1,3 @@
-.measure-line {
-  width: 338px;
-}
-
 .measure .measureRep:first-of-type .remove-measure-rep{
   display: none;
 }
@@ -261,7 +257,7 @@ svg.audio {
 }
 svg.bar {
   height: 150px;
-  height: 40px;
+  width: 365px;
 }
 svg.pie {
   height: 150px;
@@ -272,7 +268,7 @@ svg.bead {
 }
 svg.line {
   height: 150px;
-  width: 350px;
+  width: 365px;
   position: relative;
   left: -25px;
 }
@@ -343,14 +339,14 @@ svg.line {
   width: 200px;
   /*height: 145px;*/
 }
-.measure-number {
-  width: 300px;
+.measure-line {
+  width: 400px;
 }
 .measure-pie {
   width: 200px;
 }
 .measure-bar {
-  width: 300px;
+  width: 400px;
 }
 
 .measure .title {

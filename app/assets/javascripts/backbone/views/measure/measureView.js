@@ -87,7 +87,6 @@ define([
       this.measureNumberOfPoints = measureNumberOfPoints;
       // Linear
       var lineLength = 2 * circularMeasureR * Math.PI;
-      var beatWidth = lineLength/this.model.get('beats').length;
       var beatHashHeight = 10;
       // Transition
       var firstBeatStart = 0; // in s
@@ -100,6 +99,7 @@ define([
       var measureStartAngle = 0;
       var beatStartAngle;
       var beatEndAngle;
+      var beatFactoryR = 30;
       // Bead
       var circularBeadBeatRadius = 8;
       //Number Line
@@ -112,6 +112,8 @@ define([
       var lbbMeasureHeight = 25;
       var linearBeatXPadding = 0; // 5% left AND right
       var linearBeatYPadding = 0;  // tiny sliver
+      var beatFactoryWidth = 50;
+      var beatWidth = lineLength/this.model.get('beats').length;
       var beatHeight = 25 - 2*linearBeatYPadding;
       var beatBBY = 10 + linearBeatYPadding;
 
@@ -172,6 +174,7 @@ define([
           colorForAudio: colorForAudio,
           // Pie
           measureAngle: 360.0,
+          beatFactoryR: beatFactoryR,
           // Circular
           circularMeasureCx: circularMeasureCx,
           circularMeasureCy: circularMeasureCy,
@@ -186,11 +189,13 @@ define([
           yOffset: lbbMeasureHeight / 2,
           lineHashHeight: lineHashHeight,
           lineLength: lineLength,
-          beatBBY: beatBBY,
-          beatWidth: beatWidth,
           numberLineY: numberLineY,
           // Bar
           measureWidth: lbbMeasureWidth,
+          beatWidth: beatWidth,
+          beatFactoryWidth: beatFactoryWidth,
+          beatBBY: beatBBY,
+          beatHeight: beatHeight,
           measureHeight: lbbMeasureHeight,
           measureColor: COLORS.hexColors[COLORS.colorIndices.WHITE],
           // Transition
