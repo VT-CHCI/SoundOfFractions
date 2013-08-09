@@ -282,7 +282,7 @@ define([
           circularMeasureCy: this.circularMeasureCy,
           circularMeasureR: this.circularMeasureR,
           beatAngle: 360 / this.beatsInMeasure,
-          beatStartAngle: -90+((360 / this.beatsInMeasure)*index),
+          beatStartAngle: ((360 / this.beatsInMeasure)*index),
           beatStartTime: this.firstBeatStart+(index)*(this.timeIncrement/1000),
           
           // Circular Bead
@@ -345,6 +345,15 @@ define([
           this.measurePassingToBeatFactoryParamaters.y1 = this.numberLineY + 60 + (Math.random() * (20) - 10);
           this.measurePassingToBeatFactoryParamaters.x2 = this.measurePassingToBeatFactoryParamaters.x1;
           this.measurePassingToBeatFactoryParamaters.y2 = this.measurePassingToBeatFactoryParamaters.y1 + this.lineHashHeight;
+          this.measurePassingToBeatFactoryParamaters.colorIndex = index;
+          new BeadFactoryView(this.measurePassingToBeatFactoryParamaters);
+        }        
+      } else if (this.currentRepresentationType == 'pie') {
+        for (i = 0 ; i < this.measurePassingToBeatFactoryParamaters.remainingNumberOfBeats ; i++){
+          var index = 15-i;
+          //Base + Math.random() * (max - min) + min;
+          this.measurePassingToBeatFactoryParamaters.cX = 20 + (Math.random() * (20) - 10);
+          this.measurePassingToBeatFactoryParamaters.cY = 130 + (Math.random() * (20) - 10);
           this.measurePassingToBeatFactoryParamaters.colorIndex = index;
           new BeadFactoryView(this.measurePassingToBeatFactoryParamaters);
         }        

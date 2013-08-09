@@ -117,6 +117,38 @@ define([
           dispatch.trigger('signatureChange.event', ƒthis.beatsInMeasure+1);
         }
       });
+      var dragPie = d3.behavior.drag();
+      dragPie.on('drag', function(d) {
+        var newSettingX = parseInt(d3.select(this).attr("cx")) + parseInt(d3.event.dx);
+        var newSettingY = parseInt(d3.select(this).attr("cy")) + parseInt(d3.event.dy);
+        d3.select(this).attr("cx", newSettingX);
+        d3.select(this).attr("cy", newSettingY);
+        var newComputedValX = d3.select(this).attr('cx');
+        var newComputedValY = d3.select(this).attr('cy');
+        // Inside: x and y must satisfy (x - center_x)^2 + (y - center_y)^2 < radius^2
+        // Outside: x and y must satisfy (x - center_x)^2 + (y - center_y)^2 > radius^2
+        // On: x and y must satisfy (x - center_x)^2 + (y - center_y)^2 == radius^2
+        if ( Math.pow(newComputedValX - ƒthis.circularMeasureCx, 2) + Math.pow(newComputedValY - ƒthis.circularMeasureCy, 2) <= Math.pow(ƒthis.circularMeasureR,2) ) {
+          var center = {x: ƒthis.circularMeasureCx, y:ƒthis.circularMeasureCy};
+          //give it two points, the center, and the new beat location, once it is on or inside the circle
+          function angle(center, p1) {
+            var p0 = {x: center.x, y: center.y - Math.sqrt(Math.abs(p1.x - center.x) * Math.abs(p1.x - center.x)
+                    + Math.abs(p1.y - center.y) * Math.abs(p1.y - center.y))};
+            return (2 * Math.atan2(p1.y - p0.y, p1.x - p0.x)) * 180 / Math.PI;
+          }
+          var p1 = {x: newComputedValX, y: newComputedValY};
+          var angleAtNewBeat = angle(center, p1);
+
+          // make an array to find out where the new beat should be added in the beatsCollection of the measure
+          var refArray = [];
+          for ( i=0 ; i < ƒthis.beatsInMeasure ; i++ ) {
+            refArray.push((360/ƒthis.beatsInMeasure)*i);
+          }
+          var newIndex = _.sortedIndex(refArray, angleAtNewBeat);
+          ƒthis.parentMeasureModel.get('beats').add(new BeatModel({selected:true}), {at: newIndex})
+          dispatch.trigger('signatureChange.event', ƒthis.beatsInMeasure+1);
+        }
+      });
 
       if (this.currentRepresentationType == 'bead') {
         //The Circle SVG Path we draw MUST BE AFTER THE COMPILED TEMPLATE
@@ -156,6 +188,23 @@ define([
             .attr('stroke-width', 4)
             .attr('opacity', .2)
             .call(dragLine);
+      } else if(this.currentRepresentationType == 'pie') {
+        var arc = d3.svg.arc()
+          .innerRadius(0)
+          .outerRadius(this.circularMeasureR)
+          .startAngle(160*(Math.PI/180))
+          .endAngle(200*(Math.PI/180));
+        var beatContainer = d3.select(this.beatFactoryHolderEl);
+        var beatPath = beatContainer
+          .insert('path', ':first-child')
+        // beatPath
+          .attr('d', arc)
+          .attr('stroke', 'black')
+          .attr('opacity', .2)
+          .attr('fill', this.beatColor)
+          .attr('class', 'beat factory-beat d3')
+          .attr('id', 'factory-beat'+this.cid)
+          .call(dragPie);
       }
       return this;
     }

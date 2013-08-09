@@ -174,19 +174,40 @@ define([
       duration = duration/signature/maxMeasures;
 
       //this is the SVG animation of a beat being played.
-      this.animate = function(target) {
-        target.setAttributeNS(null, 'dur', (duration/1000)+'s');
-        target.beginElement();
-      };
-
-      this.d3animate = function() {
+      this.d3AudioAnimate = function() {
         var target = d3.select('.d3');
         console.log(target);
         target.transition()
-              // .delay(duration)
-              // .ease('linear')
-              .attr("x", 10)
-              .duration(1000)
+          .attr('x', target.attr('x')+ 10)
+          .duration(1000)
+      };
+      this.d3BeadAnimate = function() {
+        var target = d3.select('.d3');
+        console.log(target);
+        target.transition()
+          .attr('x', target.attr('x')+ 10)
+          .duration(1000)
+      };
+      this.d3LineAnimate = function() {
+        var target = d3.select('.d3');
+        console.log(target);
+        target.transition()
+          .attr('x', target.attr('x')+ 10)
+          .duration(1000)
+      };
+      this.d3PieAnimate = function() {
+        var target = d3.select('.d3');
+        console.log(target);
+        target.transition()
+          .attr('x', target.attr('x')+ 10)
+          .duration(1000)
+      };
+      this.d3BarAnimate = function() {
+        var target = d3.select('.d3');
+        console.log(target);
+        target.transition()
+          .attr('x', target.attr('x')+ 10)
+          .duration(1000)
       };
 
       var beats = $(this.el).find('.beat');
@@ -206,13 +227,20 @@ define([
         // and then calls animate on each beat with the appropriate
         // timing interval.
         this.animationIntervalID = setInterval((function(self) {
+          console.warn(self)
           return function() {
             if (counter >= 0 && counter < beats.length)
               self.hTrack.set('currentBeat',counter);
-              if (self.defaultMeasureRepresentation == 'bead'){
-                self.d3animate();
-              } else {
-                self.animate(beats.eq(counter).children().first()[0]);
+              if (self.defaultMeasureRepresentation == 'audio'){
+                self.d3AudioAnimate(beats.eq(counter).children().first()[0]);
+              } else if (self.defaultMeasureRepresentation == 'bead'){
+                self.d3BeadAnimate(beats.eq(counter).children().first()[0]);
+              } else if (self.defaultMeasureRepresentation == 'line'){
+                self.d3LineAnimate(beats.eq(counter).children().first()[0]);
+              } else if (self.defaultMeasureRepresentation == 'pie'){
+                self.d3PieAnimate(beats.eq(counter).children().first()[0]);
+              } else if (self.defaultMeasureRepresentation == 'bar'){
+                self.d3BarAnimate(beats.eq(counter).children().first()[0]);
               }
             if (counter < (signature*maxMeasures-1))
               counter ++;
@@ -252,21 +280,6 @@ define([
       //we trigger this event to cause the beats per measure slider and
       //beat bars to update based on which hTrack is selected.
       // dispatch.trigger('bPMSlider.event', {signature: this.hTrack.get('signature'), name: this.hTrack.get('label') } );
-    },
-
-    // changeInstrument: function(instrument){
-    //   var ƒthis = this;
-    //   var options = {
-    //     label =  ƒthis.unusedInstrumentsModel.getDefault(instrument, 'label'),
-    //     type = ƒthis.unusedInstrumentsModel.getDefault(instrument, 'type'),
-    //     img = ƒthis.unusedInstrumentsModel.getDefault(instrument, 'image'),
-    //     mute = false,
-    //     sample = ƒthis.unusedInstrumentsModel.getDefault(instrument, 'sample'),
-    //     measures = ƒthis.hTrack,
-    //     signature = ƒthis.hTrack.models[0].get('beats').length,
-    //     active = true
-    //   }
-    //   this.render();
-    // }
+    }
   });
 });

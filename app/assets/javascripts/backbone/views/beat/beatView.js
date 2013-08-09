@@ -312,19 +312,27 @@ define([
 
         this.beatPath = beatPath;
         this.beatPath.on('click', this.toggleModel);
-
       } else if (this.currentRepresentationType == 'pie'){
-        var arc = d3.svg.arc().innerRadius(0).outerRadius(this.circularMeasureR);
-        var pie = { pct: [ 16.66,  16.66, 16.66,  16.66, 16.66, 16.66 ] };
-        var beatContainer = d3.select('#beat-holder-'+this.parentMeasureRepModel.cid);
+        var arc = d3.svg.arc()
+          .innerRadius(0)
+          .outerRadius(this.circularMeasureR)
+          .startAngle(this.beatStartAngle*(Math.PI/180))
+          .endAngle((this.beatStartAngle + this.beatAngle)*(Math.PI/180));
+
+        var beatContainer = d3.select('#beat-holder-'+this.parentMeasureRepModel.cid)
+          .attr('transform', 'translate(100,90)')
+
         var beatPath = beatContainer
-            .insert('path', ':first-child')
-            .data([circleStates[0]])
-            .attr('d', pathFunction)
-            .attr('stroke', 'black')
-            .attr('opacity', 1)
-            .attr('class', 'circle')
-            .attr('class', 'circle-path')
+          .insert('path', ':first-child')
+        // beatPath
+          .attr('d', arc)
+          .attr('stroke', 'black')
+          .attr('opacity', 1)
+          .attr('fill', COLORS.hexColors[this.color])
+          // .attr('class', 'pie-beat')
+
+        this.beatPath = beatPath;
+        this.beatPath.on('click', this.toggleModel);
       } else if (this.currentRepresentationType == 'audio'){
         var svgContainer = d3.select('#svg-'+this.parentMeasureRepModel.cid)
         var circlePath = svgContainer
@@ -387,7 +395,6 @@ define([
       // dispatch.trigger('beatToggled.event', this.model);
     },
     toggleOpacity: function() {
-      console.log('does this work?', this);
       // re-rendering all beats, think it should only rerender itself, but w/e
       d3.select('#beat'+this.cid).style('opacity', this.getOpacityNumber(this.model.get('selected')))
     }
