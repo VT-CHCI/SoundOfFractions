@@ -320,14 +320,15 @@ define([
           .endAngle((this.beatStartAngle + this.beatAngle)*(Math.PI/180));
 
         var beatContainer = d3.select('#beat-holder-'+this.parentMeasureRepModel.cid)
-          .attr('transform', 'translate(100,90)')
+          .attr('transform', 'translate('+this.circularMeasureCx+','+this.circularMeasureCy+')')
 
         var beatPath = beatContainer
           .insert('path', ':first-child')
         // beatPath
           .attr('d', arc)
+          .attr('id', 'beat'+this.cid)
           .attr('stroke', 'black')
-          .attr('opacity', 1)
+          .attr('opacity', this.getOpacityNumber(this.model.get('selected')))
           .attr('fill', COLORS.hexColors[this.color])
           // .attr('class', 'pie-beat')
 

@@ -302,9 +302,6 @@ define([
           audioBeatR: this.audioBeatR,
           colorForAudio: this.colorForAudio
         };
-
-        // manipulate pie beat parameters
-        // 
         new BeatView(measurePassingToBeatViewParamaters);
       }, this);
 
@@ -352,8 +349,8 @@ define([
         for (i = 0 ; i < this.measurePassingToBeatFactoryParamaters.remainingNumberOfBeats ; i++){
           var index = 15-i;
           //Base + Math.random() * (max - min) + min;
-          this.measurePassingToBeatFactoryParamaters.cX = 20 + (Math.random() * (20) - 10);
-          this.measurePassingToBeatFactoryParamaters.cY = 130 + (Math.random() * (20) - 10);
+          this.measurePassingToBeatFactoryParamaters.cX = 30 + (Math.random() * (20) - 10);
+          this.measurePassingToBeatFactoryParamaters.cY = 90 + (Math.random() * (20) - 10);
           this.measurePassingToBeatFactoryParamaters.colorIndex = index;
           new BeadFactoryView(this.measurePassingToBeatFactoryParamaters);
         }        
