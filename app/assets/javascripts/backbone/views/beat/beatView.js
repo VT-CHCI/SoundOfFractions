@@ -224,24 +224,23 @@ define([
       var dragSlice = d3.behavior.drag();
       if (this.beatsInMeasure > 1) {
         ƒthis = this;
-        dragSlice
-          .on("drag", function(d) {
-          // add the 'selected' class when a beat is dragged
-          var transformString = $('#beat'+ƒthis.cid).attr('transform').substring(10, $('#beat'+ƒthis.cid).attr('transform').length-1);
+        dragSlice.on("drag", function() {
+          var beatToChange = $('#beat'+ƒthis.cid);
+          var transformString = beatToChange.attr('transform').substring(10, beatToChange.attr('transform').length-1);
           var comma = transformString.indexOf(',');
-          d.x = parseInt(transformString.substr(0,comma));
-          d.y = parseInt(transformString.substr(comma+1));
-          d.x += d3.event.dx;
-          d.y += d3.event.dy;
-          // x and y must satisfy (x - center_x)^2 + (y - center_y)^2 < radius^2
-          if ( (d.x - ƒthis.measureCx)^2 + (d.y - ƒthis.measureCy)^2 < ƒthis.measureR ) {
-          // if (d.x > 30 || d.x < -30) {
+          var newX = parseInt(transformString.substr(0,comma));
+          var newY = parseInt(transformString.substr(comma+1));
+          newX += d3.event.dx;
+          newY += d3.event.dy;
+          var relativeSVGX = newX + ƒthis.circularMeasureCx;
+          var relativeSVGY = newX + ƒthis.circularMeasureCy;
+          d3.select(this).attr('transform', 'translate(' + [ newX, newY ] + ')');
+          // x and y must satisfy (x - center_x)^2 + (y - center_y)^2 >= radius^2
+          if ( Math.pow(relativeSVGX - ƒthis.circularMeasureCx, 2) + Math.pow(relativeSVGY - ƒthis.circularMeasureCy, 2) >= Math.pow(ƒthis.circularMeasureR, 2) ) {
             d3.select(this).remove();
-            dispatch.trigger('signatureChange.event', ƒthis.parent.attributes.beats.length-1);
+            ƒthis.parentMeasureModel.get('beats').remove(ƒthis.model);
+            dispatch.trigger('signatureChange.event', ƒthis.beatsInMeasure-2);
           }
-          d3.select(this).attr("transform", function(d){
-              return "translate(" + [ d.x,d.y ] + ")"
-          })
         });
       }
 
@@ -330,6 +329,8 @@ define([
           .attr('stroke', 'black')
           .attr('opacity', this.getOpacityNumber(this.model.get('selected')))
           .attr('fill', COLORS.hexColors[this.color])
+          .attr('transform', 'translate(0,0)')
+          .call(dragSlice);
           // .attr('class', 'pie-beat')
 
         this.beatPath = beatPath;
@@ -389,11 +390,7 @@ define([
     toggleModel: function(){
       //switch the selected boolean value on the model
       this.model.set('selected', !this.model.get('selected'));
-      //re-render it, passing the clicked beat to render()
-     // d3.select('#beat'+this.cid).style('opacity', this.getOpacityNumber(this.model.get('selected')))
-     // this.render();
       // log.sendLog([[1, "beat" + this.model.cid + " toggled: "+!bool]]);
-      // dispatch.trigger('beatToggled.event', this.model);
     },
     toggleOpacity: function() {
       // re-rendering all beats, think it should only rerender itself, but w/e

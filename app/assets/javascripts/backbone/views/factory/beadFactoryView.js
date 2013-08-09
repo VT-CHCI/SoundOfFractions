@@ -120,22 +120,36 @@ define([
       var dragPie = d3.behavior.drag();
       dragPie.on('drag', function() {
         var beatToChange = $('#factory-beat'+ƒthis.cid);
-        window.csf = beatToChange;
-        var transformString = beatToChange.attr('transform').substring(10, beatToChange.attr('transform').length-1);
-        var comma = transformString.indexOf(',');
-        var x = parseInt(transformString.substr(0,comma));
-        var y = parseInt(transformString.substr(comma+1));
-        x += d3.event.dx;
-        y += d3.event.dy;
-        d3.select(this).attr('transform', 'translate(' + [ x,y ] + ')');
-
-        var refArray = [];
-        for ( i=0 ; i < ƒthis.beatsInMeasure ; i++ ) {
-          refArray.push((360/ƒthis.beatsInMeasure)*i);
+        if(beatToChange.length >= 1) {
+          var transformString = beatToChange.attr('transform').substring(10, beatToChange.attr('transform').length-1);
+          var comma = transformString.indexOf(',');
+          var newX = parseInt(transformString.substr(0,comma));
+          var newY = parseInt(transformString.substr(comma+1));
+          newX += d3.event.dx;
+          newY += d3.event.dy;
+          d3.select(this).attr('transform', 'translate(' + [ newX, newY ] + ')');
         }
-        // var newIndex = _.sortedIndex(refArray, angleAtNewBeat);
-        // ƒthis.parentMeasureModel.get('beats').add(new BeatModel({selected:true}), {at: newIndex})
-        // dispatch.trigger('signatureChange.event', ƒthis.beatsInMeasure+1);
+        
+        if ( Math.pow(newX - ƒthis.circularMeasureCx, 2) + Math.pow(newY - ƒthis.circularMeasureCy, 2) <= Math.pow(ƒthis.circularMeasureR,2) ) {
+          var center = {x: ƒthis.circularMeasureCx, y:ƒthis.circularMeasureCy};
+          //give it two points, the center, and the new beat location, once it is on or inside the circle
+          function angle(center, p1) {
+            var p0 = {x: center.x, y: center.y - Math.sqrt(Math.abs(p1.x - center.x) * Math.abs(p1.x - center.x)
+                    + Math.abs(p1.y - center.y) * Math.abs(p1.y - center.y))};
+            return (2 * Math.atan2(p1.y - p0.y, p1.x - p0.x)) * 180 / Math.PI;
+          }
+          var p1 = {x: newX, y: newY};
+          var angleAtNewBeat = angle(center, p1);
+
+          // make an array to find out where the new beat should be added in the beatsCollection of the measure
+          var refArray = [];
+          for ( i=0 ; i < ƒthis.beatsInMeasure ; i++ ) {
+            refArray.push(((360/ƒthis.beatsInMeasure)*i)+((360/ƒthis.beatsInMeasure)/2));
+          }
+          var newIndex = _.sortedIndex(refArray, angleAtNewBeat);
+          ƒthis.parentMeasureModel.get('beats').add(new BeatModel({selected:true}), {at: newIndex})
+          dispatch.trigger('signatureChange.event', ƒthis.beatsInMeasure+1);
+        }
       });
 
       if (this.currentRepresentationType == 'bead') {
