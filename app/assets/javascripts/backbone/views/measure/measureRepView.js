@@ -47,7 +47,7 @@ define([
         for (var key in options) {
           this[key] = options[key];
         }
-        this.el = options.measureRepContainer;
+        this.repContainerEl = options.measureRepContainer;
         this.currentRepresentationType = options.representationType;
         this.beatFactoryHolder = 'beat-factory-holder-'+this.measureRepModel.cid;
       } else {
@@ -58,7 +58,128 @@ define([
       dispatch.on('measureRepresentation.event', this.changeMeasureRepresentation, this);
       dispatch.on('unroll.event', this.unroll, this);
       dispatch.on('tempoChange.event', this.adjustRadius, this);
+      dispatch.on('toggleAnimation.event', this.toggleAnimation, this);
       this.render();
+    },
+    d3AudioAnimate: function(target, dur) {
+      // var target = d3.select('.audio-beat');
+      // console.log(target);
+      // target.transition()
+      //   .attr('x', target.attr('x')+ 10)
+      //   .duration(dur)
+    },
+    d3BeadAnimate: function(target, dur) {
+      var target = d3.select(target);
+      var originalCX = parseInt(target.attr('cx'));
+      var newCX = originalCX + 10;
+      target.transition()
+        .attr('cx', newCX )
+        .duration(dur)
+        .each('end',function() {                   // as seen above
+          d3.select(this).                         // this is the object 
+            transition()                           // a new transition!
+              .attr('cx', originalCX )    // we could have had another
+              .duration(dur);                  // .each("end" construct here.
+         });
+    },
+    d3LineAnimate: function(target, dur) {
+      var target = d3.select(target);
+      var originalX = parseInt(target.attr('x1'));
+      var newX = originalX + 10;
+      target.transition()
+        .attr('x1', newX )
+        .attr('x2', newX )
+        .duration(dur)
+        .each('end',function() {                   // as seen above
+          d3.select(this).                         // this is the object 
+            transition()                           // a new transition!
+              .attr('x1', originalX )    // we could have had another
+              .attr('x2', originalX )    // we could have had another
+              .duration(dur);                  // .each("end" construct here.
+         });
+    },
+    d3PieAnimate: function(target, dur) {
+      var target = d3.select(target);
+      target.transition()
+        .attr('transform', 'translate(10,0)' )
+        .duration(dur)
+        .each('end',function() {                               // as seen above
+          d3.select(this).                                     // this is the object 
+            transition()                                       // a new transition!
+              .attr('transform', 'translate(0,0)' )
+              .duration(dur);                  // .each("end" construct here.
+         });
+    },
+    d3BarAnimate: function(target, dur) {
+      var target = d3.select(target);
+      var originalX = parseInt(target.attr('x'));
+      var newX = originalX + 10;
+      target.transition()
+        .attr('x', newX )
+        .duration(dur)
+        .each('end',function() {                   // as seen above
+          d3.select(this).                         // this is the object 
+            transition()                           // a new transition!
+              .attr('x', originalX )    // we could have had another
+              .duration(dur);                  // .each("end" construct here.
+         });
+    },
+    toggleAnimation: function(state, duration, signature, maxMeasures){
+      var ƒthis = this;
+      // TODO why bring in signature to have it reset
+      //signature = $(this.el).find('.measure').eq(0).find('.beat').length;
+      signature = this.hTrack.get('signature');
+
+      //dur is time of one beat.
+      var dur = duration/signature/maxMeasures;
+
+      var totalNumberOfBeats = signature*maxMeasures;
+// go through the measure(s) first without animation
+      var counter = 0-(signature*maxMeasures-1);
+
+      //when playing is stoped we stop the animation.
+      if (state == 'off') {
+        clearInterval(this.animationIntervalID);
+        this.animationIntervalID = null;
+
+        console.log('stopped animation');
+      }
+      else {
+        console.log('starting animation', dur);
+
+        // this sets the time interval that each animation should take,
+        // and then calls animate on each beat with the appropriate
+        // timing interval.
+        // Self is the parent hTrack
+        this.animationIntervalID = setInterval((function(self) {
+          return function() {
+            if (counter >= 0 && counter < totalNumberOfBeats) {
+              if (self.currentRepresentationType == 'audio'){
+                var beats = $('#measure-rep-'+self.measureRepModel.cid).find('.audio-beat');
+                self.d3AudioAnimate(beats.eq(counter)[0], dur/2);
+              } else if (self.currentRepresentationType == 'bead'){
+                var beats = $('#measure-rep-'+self.measureRepModel.cid).find('.bead-beat');
+                self.d3BeadAnimate(beats.eq(counter)[0], dur/2);
+              } else if (self.currentRepresentationType == 'line'){
+                var beats = $('#measure-rep-'+self.measureRepModel.cid).find('.line-beat');
+                self.d3LineAnimate(beats.eq(counter)[0], dur/2);
+              } else if (self.currentRepresentationType == 'pie'){
+                var beats = $('#measure-rep-'+self.measureRepModel.cid).find('.pie-beat');
+                self.d3PieAnimate(beats.eq(counter)[0], dur/2);
+              } else if (self.currentRepresentationType == 'bar'){
+                var beats = $('#measure-rep-'+self.measureRepModel.cid).find('.bar-beat');
+                self.d3BarAnimate(beats.eq(counter)[0], dur/2);
+              }
+            }
+            if (counter < (signature*maxMeasures-1)) {
+              counter ++;
+            } else {
+              counter = 0;
+            }
+          }
+        })(this), dur); //duration should be set to something else
+        //this.animationWrapper(counter, beats, signature, maxMeasures, duration);
+      }
     },
     changeMeasureRepresentation: function(representation) {
       this.previousRepresentationType = this.currentRepresentationType;
@@ -115,7 +236,7 @@ define([
       };
       var compiledTemplate = _.template( MeasureRepTemplate, measureRepTemplateParamaters );
       // put in the rendered template in the measure-rep-container of the measure
-      $(this.el).append( compiledTemplate );
+      $(this.repContainerEl).append( compiledTemplate );
 
       if (this.currentRepresentationType == 'bead') {
         var margin = this.margin;

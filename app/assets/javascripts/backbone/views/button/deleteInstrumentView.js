@@ -40,7 +40,6 @@ define([
     */
     deleteInstrumentFromCompositionArea: function(e) {
       var instrument = $(e.currentTarget).closest('.hTrack').data().state;
-      window.csf = $(e.currentTarget).closest('.hTrack');
       console.log('in deleteInstrumentView deleteInstrumentFromCompositionArea() of ' + instrument);
       dispatch.trigger('addInstrumentToGeneratorModel.event', instrument);
       dispatch.trigger('instrumentDeletedFromCompositionArea.event', { instrument:instrument, model:this.parentCID });

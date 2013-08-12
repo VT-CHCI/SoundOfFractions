@@ -269,14 +269,14 @@ define([
         var beatContainer = d3.select('#beat-holder-'+this.parentMeasureRepModel.cid);
         var beatPath = beatContainer
             .append('circle')
+            .attr('id', 'beat'+this.cid)
+            .attr('class', 'beat d3 bead-beat')
             .attr('cx', beatTemplateParameters.x1)
             .attr('cy', beatTemplateParameters.y1)
             .attr('r', this.beadRadius)
             // Calling the click handler here doesn't work for some reason
             // .on('click', function(){console.log('beat container click handler')})
-            .attr('class', 'beat d3 bead-beat')
             .attr('transform', 'translate(0,0)')
-            .attr('id', 'beat'+this.cid)
             // This is the path that the beat will follow when un/roll is clicked
             .data([beatUnwindingPaths[0]])
             // .attr('d', pathFunction)
@@ -316,12 +316,12 @@ define([
         var beatContainer = d3.select('#beat-holder-'+this.parentMeasureRepModel.cid);
         var beatPath = beatContainer
             .append('line')
+            .attr('id', 'beat'+this.cid)
+            .attr('class', 'beat d3 line-beat')
             .attr('x1', this.X1)
             .attr('y1', this.Y1)
             .attr('x2', this.X2)
             .attr('y2', this.Y2)
-            .attr('class', 'beat d3 line-beat')
-            .attr('id', 'beat'+this.cid)
             // This is the path that the beat will follow when un/roll is clicked
             // .attr('d', pathFunction)
             .attr('stroke', COLORS.hexColors[this.color])
@@ -340,11 +340,11 @@ define([
         var beatContainer = d3.select('#beat-holder-'+this.parentMeasureRepModel.cid)
           .attr('transform', 'translate('+this.circularMeasureCx+','+this.circularMeasureCy+')')
         var beatPath = beatContainer
-          .insert('path', ':first-child')
+          .append('path', ':first-child')
         // beatPath
-          .attr('d', arc)
           .attr('id', 'beat'+this.cid)
           .attr('class', 'beat d3 pie-beat')
+          .attr('d', arc)
           .attr('stroke', 'black')
           .attr('opacity', this.getOpacityNumber(this.model.get('selected')))
           .attr('fill', COLORS.hexColors[this.color])

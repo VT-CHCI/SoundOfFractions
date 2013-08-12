@@ -71,70 +71,6 @@ define([
         active: true
       });
 
-      // //this is creating the hi-hat hTrack.
-      // this.manuallyCreatedMeasure = new BeatsCollection;
-
-      // //for each beat - also change signature below
-      // for (var i = 0; i < 5; i++) {
-      //   this.manuallyCreatedMeasure.add();
-      // }
-
-      // this.manuallyCreatedMeasuresCollection = new MeasuresCollection;
-      // this.manuallyCreatedMeasuresCollection.add({beats: this.manuallyCreatedMeasure});
-
-      // this.stage = StageCollection.add({
-      //   label: 'Hi Hat',
-      //   img: 'hihat.png',
-      //   mute: true,
-      //   sample: '808_hh.m4a',
-      //   measures: this.manuallyCreatedMeasuresCollection,
-      //   signature: 5,
-      //   active: true
-      // });
-
-      // //this is creating the kick drum hTrack.
-      // this.manuallyCreatedMeasure = new BeatsCollection;
-
-      // //for each beat - also change signature below
-      // for (var i = 0; i < 4; i++) {
-      //   this.manuallyCreatedMeasure.add();
-      // }
-
-      // this.manuallyCreatedMeasuresCollection = new MeasuresCollection;
-      // this.manuallyCreatedMeasuresCollection.add({beats: this.manuallyCreatedMeasure});
-
-      // this.stage = StageCollection.add({
-      //   label: 'Kick Drum',
-      //   img: 'kick.png',
-      //   mute: true,
-      //   sample: '808_kd.m4a',
-      //   measures: this.manuallyCreatedMeasuresCollection,
-      //   signature: 4,
-      //   active: true
-      // });
-
-
-      // //this is creating the synth hTrack.
-      // this.manuallyCreatedMeasure = new BeatsCollection;
-
-      // //for each beat - also change signature below
-      // for (var i = 0; i < 3; i++) {
-      //   this.manuallyCreatedMeasure.add();
-      // }
-
-      // this.manuallyCreatedMeasuresCollection = new MeasuresCollection;
-      // this.manuallyCreatedMeasuresCollection.add({beats: this.manuallyCreatedMeasure});
-
-      // this.stage = StageCollection.add({
-      //   label: 'Synth',
-      //   img: 'synth.png',
-      //   mute: true,
-      //   sample: 'sy.mp3',
-      //   measures: this.manuallyCreatedMeasuresCollection,
-      //   signature: 3,
-      //   active: true
-      // });
-
       //creating two arrays to hold our gain nodes.
       //the first is for sustained-note sounds,
       //the second is for the muting of individual 'hTrack's.
@@ -312,7 +248,6 @@ define([
         // Reset the deadspace for the next hTrack
         deadSpace = 0;
       }, this);
-      console.log(hTrackDurations);
       //Lastly, we call playSound() with our completed
       //hTrackDurations 2d array.
       this.playSound(hTrackDurations);

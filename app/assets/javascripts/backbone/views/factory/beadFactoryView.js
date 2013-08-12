@@ -186,7 +186,7 @@ define([
             .attr('r', this.beadRadius)
             // Calling the click handler here doesn't work for some reason
             // .on('click', function(){console.log('beat container click handler')})
-            .attr('class', 'beat factory-beat d3')
+            .attr('class', 'factory-beat d3')
             .attr('transform', 'translate(0,0)')
             .attr('id', 'factory-beat'+this.cid)
             // This is the path that the beat will follow when un/roll is clicked
@@ -205,7 +205,7 @@ define([
             .attr('y2', this.y2)
             // Calling the click handler here doesn't work for some reason
             // .on('click', function(){console.log('beat container click handler')})
-            .attr('class', 'beat factory-beat d3')
+            .attr('class', 'factory-beat d3')
             .attr('id', 'factory-beat'+this.cid)
             // This is the path that the beat will follow when un/roll is clicked
             // .attr('d', pathFunction)
@@ -227,7 +227,7 @@ define([
           .attr('stroke', 'black')
           .attr('opacity', .2)
           .attr('fill', this.beatColor)
-          .attr('class', 'beat factory-beat d3')
+          .attr('class', 'factory-beat d3')
           .attr('id', 'factory-beat'+this.cid)
           .attr('transform', 'translate('+this.cX+','+this.cY+')')
           .call(dragPie);
@@ -241,7 +241,7 @@ define([
             .attr('height', this.beatHeight)
             // Calling the click handler here doesn't work for some reason
             // .on('click', function(){console.log('beat container click handler')})
-            .attr('class', 'beat factory-beat d3')
+            .attr('class', 'factory-beat d3')
             .attr('id', 'factory-beat'+this.cid)
             // This is the path that the beat will follow when un/roll is clicked
             // .attr('d', pathFunction)

@@ -54,7 +54,7 @@ define([
       // this.hTrack.set('currentBeat',0);
 
       //registering our handlers for serveral events.
-      dispatch.on('toggleAnimation.event', this.toggleAnimation, this);
+      // dispatch.on('toggleAnimation.event', this.toggleAnimation, this);
       dispatch.on('signatureChange.event', this.updateModelSignature, this);
       dispatch.on('instrumentChanged.event', this.changeInstrument, this);
 

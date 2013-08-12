@@ -151,6 +151,7 @@ define([
         var measureRepViewParamaters = {
           // HTrack
           hTrackEl: this.hTrackEl,
+          hTrack: this.parent,
           measureCount: this.measureCount,
           // Measure
           parentMeasureModel: this.parentMeasureModel,
