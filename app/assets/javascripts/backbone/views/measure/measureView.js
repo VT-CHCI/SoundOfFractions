@@ -71,51 +71,57 @@ define([
       $(this.el).append( compiledMeasureTemplate )
 
       // Constant Variables throughout the representations
-      // Audio
-      var audioMeasureCx = 50;
-      var audioMeasureCy = 40;
-      var audioMeasureR = 12;
-      var audioBeatCx = 50;
-      var audioBeatCy = 40;
-      var audioBeatR = 12;
-      var colorForAudio = COLORS.hexColors[5];
       // Circular
-      var circularMeasureCx = 100;
-      var circularMeasureCy = 75;
-      var circularMeasureR = this.circularMeasureR;
-      var measureNumberOfPoints = 60; //keep under 91 to avoid computational and animation delay
-      this.measureNumberOfPoints = measureNumberOfPoints;
+        var circularMeasureCx = 100;
+        var circularMeasureCy = 75;
+        var circularMeasureR = this.circularMeasureR;
+        var measureNumberOfPoints = 60; //keep under 91 to avoid computational and animation delay
+        this.measureNumberOfPoints = measureNumberOfPoints;
       // Linear
-      var lineLength = 2 * circularMeasureR * Math.PI;
-      var beatHashHeight = 10;
+        var linearLineLength = 2 * circularMeasureR * Math.PI;
+        console.warn(linearLineLength);
       // Transition
-      var firstBeatStart = 0; // in s
-      var timeIncrement = 500; // in ms
-      var margin = {top: 20, left: 60};
-      var lineDivision = lineLength/measureNumberOfPoints;
-      var animationDuration = 3000/measureNumberOfPoints;
+        var firstBeatStart = 0; // in s
+        var timeIncrement = 500; // in ms
+        var margin = {top: 20, left: 60};
+        var lineDivision = linearLineLength/measureNumberOfPoints;
+        var animationDuration = 3000/measureNumberOfPoints;
 
+      // Audio
+        //Measure
+        var audioMeasureCx = 50;
+        var audioMeasureCy = 40;
+        var audioMeasureR = 12;
+        //Beat
+        var audioBeatCx = 50;
+        var audioBeatCy = 40;
+        var audioBeatR = 12;
+        var colorForAudio = COLORS.hexColors[5];
       // Pie
-      var measureStartAngle = 0;
-      var beatStartAngle;
-      var beatEndAngle;
-      var beatFactoryR = 30;
+        //Measure
+        var measureStartAngle = 0;
+        //Beat
+        var beatStartAngle;
+        var beatEndAngle;
+        var beatFactoryR = 30;
       // Bead
-      var circularBeadBeatRadius = 8;
+        var circularBeadBeatRadius = 8;
       //Number Line
-      var lineHashHeight = 30;
-      var numberLineY = 50;
+        var lineHashHeight = 30;
+        var numberLineY = 50;
       // Bar
-      var xMeasureLocation = 15; // 5%
-      var yMeasureLocation = 10;
-      var lbbMeasureWidth = 272; // 90%
-      var lbbMeasureHeight = 25;
-      var linearBeatXPadding = 0; // 5% left AND right
-      var linearBeatYPadding = 0;  // tiny sliver
-      var beatFactoryWidth = 50;
-      var beatWidth = lineLength/this.model.get('beats').length;
-      var beatHeight = 25 - 2*linearBeatYPadding;
-      var beatBBY = 10 + linearBeatYPadding;
+        //Measure
+        var lbbMeasureLocationX = 15; // 5%
+        var lbbMeasureLocationY = 10;
+        var lbbMeasureWidth = linearLineLength;
+        var lbbMeasureHeight = 25;
+        //Beat
+        var linearBeatXPadding = 0;
+        var linearBeatYPadding = 0;
+        var beatWidth = linearLineLength/this.model.get('beats').length;
+        var beatHeight = lbbMeasureHeight - 2*linearBeatYPadding;
+        var beatBBY = linearBeatYPadding + lbbMeasureLocationY;
+        var beatFactoryWidth = 50;
 
       var circleStates = [];
       for (i=0; i<measureNumberOfPoints; i++){
@@ -181,15 +187,15 @@ define([
           circularMeasureCy: circularMeasureCy,
           circularMeasureR: circularMeasureR,
           circularBeadBeatRadius: circularBeadBeatRadius,
-          xMeasureLocation: xMeasureLocation,
-          yMeasureLocation: yMeasureLocation,
+          lbbMeasureLocationX: lbbMeasureLocationX,
+          lbbMeasureLocationY: lbbMeasureLocationY,
           // Bead
           measureNumberOfPoints: measureNumberOfPoints,
           //Number Line
-          xOffset: lineLength/this.model.get('beats').models.length / 2,
+          xOffset: linearLineLength/this.model.get('beats').models.length / 2,
           yOffset: lbbMeasureHeight / 2,
           lineHashHeight: lineHashHeight,
-          lineLength: lineLength,
+          linearLineLength: linearLineLength,
           numberLineY: numberLineY,
           // Bar
           measureWidth: lbbMeasureWidth,

@@ -11,16 +11,16 @@ duration    = 1000      //in ms
 
 circle
 totalPoints = 361  //should have one more to connect the circle, NOT using z to close it
-circumference = 2 * radius * Math.PI;  //also lineLength
+circumference = 2 * radius * Math.PI;  //also linearLineLength
 coordinate x of n =
  marginleft + radius + radius * Math.sin(2 * n * Math.PI / (numberOfPoints - 1))
 coordinate y of n =
  margintop + radius - radius * Math.cos(2 * n * Math.PI / (numberOfPoints - 1))
 
 line
-var lineLength = 2 * radius * Math.PI;
-lineDivision = lineLength/totalPoints
-line cooridinate (x) of point n = marginleft + lineLength/totalPoints * n
+var linearLineLength = 2 * radius * Math.PI;
+lineDivision = linearLineLength/totalPoints
+line cooridinate (x) of point n = marginleft + linearLineLength/totalPoints * n
 line coordinate (y) of point n = margintop
 
 stateOfUnroll
@@ -59,7 +59,7 @@ stateOfUnroll
     origin remains same
     totalPoints-1 remains same
     shift = 04
-    x = linelength
+    x = linearLineLength
     y = margin top
 
 Circle:
@@ -429,8 +429,8 @@ Circle:
 
 LINE
 totalPoints = 361  //should have one more to connect the circle, NOT using z to close it
-var lineLength = 2 * radius * Math.PI;
-line cooridinate (x) of point n = marginleft + lineLength/totalPoints * n
+var linearLineLength = 2 * radius * Math.PI;
+line cooridinate (x) of point n = marginleft + linearLineLength/totalPoints * n
 line coordinate (y) of point n = margintop
 
 0: 100 , 0

@@ -50,7 +50,7 @@ define([
 
       var lineData = $.map(Array(this.measureNumberOfPoints), function (d, i) {
         var y = 0;
-        var x = i * this.lineLength / (this.measureNumberOfPoints - 1)
+        var x = i * this.linearLineLength / (this.measureNumberOfPoints - 1)
         return {x: x, y: y}
       });
       var pathFunction = d3.svg.line()
@@ -109,7 +109,7 @@ define([
           // make an array to find out where the new beat should be added in the beatsCollection of the measure
           var refArray = [];
           for ( i=0 ; i < ƒthis.beatsInMeasure ; i++ ) {
-            refArray.push((ƒthis.lineLength/ƒthis.beatsInMeasure)*i);
+            refArray.push((ƒthis.linearLineLength/ƒthis.beatsInMeasure)*i);
           }
           console.log(refArray)
           var newIndex = _.sortedIndex(refArray, newComputedValX1);
@@ -128,14 +128,15 @@ define([
         // Above: newComputedValY1 must be above line y
         // On : newComputedValY1 must be on the line y
         // Below: newComputedValY1 must be below the line y
-        if ( newComputedValY < ƒthis.numberLineY + ƒthis.beatHeight ) {
+        if ( newComputedValY < ƒthis.lbbMeasureLocationY + ƒthis.beatHeight ) {
           // make an array to find out where the new beat should be added in the beatsCollection of the measure
           var refArray = [];
           for ( i=0 ; i < ƒthis.beatsInMeasure ; i++ ) {
-            refArray.push((ƒthis.lineLength/ƒthis.beatsInMeasure)*i);
+            refArray.push((ƒthis.linearLineLength/ƒthis.beatsInMeasure)*i+ƒthis.beatWidth);
           }
+          var newIndex = _.sortedIndex(refArray, parseInt(newComputedValX)+ƒthis.beatFactoryWidth/2);
           console.log(refArray)
-          var newIndex = _.sortedIndex(refArray, newComputedValX);
+          console.log(parseInt(newComputedValX)+ƒthis.beatFactoryWidth/2)
           ƒthis.parentMeasureModel.get('beats').add(new BeatModel({selected:true}), {at: newIndex})
           dispatch.trigger('signatureChange.event', ƒthis.beatsInMeasure+1);
         }

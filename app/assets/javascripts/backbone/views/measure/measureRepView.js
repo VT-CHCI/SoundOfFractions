@@ -242,7 +242,7 @@ define([
         var margin = this.margin;
         var lineData = $.map(Array(this.measureNumberOfPoints), function (d, i) {
             var y = margin.top;
-            var x = margin.left + i * this.lineLength / (this.measureNumberOfPoints - 1)
+            var x = margin.left + i * this.linearLineLength / (this.measureNumberOfPoints - 1)
             return {x: x, y: y}
         });
         var pathFunction = d3.svg.line()
@@ -320,9 +320,9 @@ define([
             .attr('stroke-width', 1)
         var actualMeasureLinePath = svgContainer
             .insert('line', ':first-child')
-            .attr('x1', this.xMeasureLocation)
+            .attr('x1', this.lbbMeasureLocationX)
             .attr('y1', this.numberLineY)
-            .attr('x2', this.xMeasureLocation+this.lineLength)
+            .attr('x2', this.lbbMeasureLocationX+this.linearLineLength)
             .attr('y2', this.numberLineY)
             .attr('stroke', 'black')
             .attr('stroke-width', 2)
@@ -331,7 +331,7 @@ define([
         var margin = this.margin;
         var lineData = $.map(Array(this.measureNumberOfPoints), function (d, i) {
             var y = margin.top;
-            var x = margin.left + i * this.lineLength / (this.measureNumberOfPoints - 1)
+            var x = margin.left + i * this.linearLineLength / (this.measureNumberOfPoints - 1)
             return {x: x, y: y}
         });
         var pathFunction = d3.svg.line()
@@ -364,9 +364,9 @@ define([
         var svgContainer = d3.select('#svg-'+this.measureRepModel.cid)
         var box = svgContainer
             .insert('rect', ':first-child')
-            .attr('x', this.xMeasureLocation)
-            .attr('y', this.numberLineY)
-            .attr('width', this.xMeasureLocation+this.lineLength)
+            .attr('x', this.lbbMeasureLocationX)
+            .attr('y', this.lbbMeasureLocationY)
+            .attr('width', this.linearLineLength)
             .attr('height', this.measureHeight)
             .attr('stroke', 'black')
             .attr('stroke-width', 1)
@@ -394,18 +394,19 @@ define([
           // color: x,
           timeIncrement: this.timeIncrement,
           // Bar
-          beatBBX: this.xMeasureLocation +(this.beatWidth*(index)),
+          beatBBX: this.lbbMeasureLocationX +(this.beatWidth*(index)),
           beatBBY: this.beatBBY,
           beatHolderWidth: this.beatHolderWidth,
           linearBeatXPadding: this.linearBeatXPadding,
+          lbbMeasureLocationY: this.lbbMeasureLocationY,
           beatWidth: this.beatWidth,
           beatHeight: this.beatHeight,
           // Line
           numberLineY: this.numberLineY,
           lineHashHeight: this.lineHashHeight,
-          X1: this.xMeasureLocation +(this.beatWidth*(index)),
+          X1: this.lbbMeasureLocationX +(this.beatWidth*(index)),
           Y1: this.numberLineY - this.lineHashHeight/2,
-          X2: this.xMeasureLocation +(this.beatWidth*(index)),
+          X2: this.lbbMeasureLocationX +(this.beatWidth*(index)),
           Y2: this.numberLineY + this.lineHashHeight/2,
           // Circular Pie
           circularMeasureCx: this.circularMeasureCx,
@@ -451,9 +452,11 @@ define([
         circularMeasureCx: this.circularMeasureCx,
         circularMeasureCy: this.circularMeasureCy,
         numberLineY: this.numberLineY,
+        beatWidth: this.beatWidth,
         beatFactoryR: this.beatFactoryR,
         beatFactoryWidth: this.beatFactoryWidth,
-        lineLength: this.lineLength
+        linearLineLength: this.linearLineLength,
+        lbbMeasureLocationY: this.lbbMeasureLocationY
       };
       if (this.currentRepresentationType == 'bead') {
         for (i = 0 ; i < this.measurePassingToBeatFactoryParamaters.remainingNumberOfBeats ; i++){

@@ -155,7 +155,7 @@ define([
       var margin = this.margin;
       var lineData = $.map(Array(this.measureNumberOfPoints), function (d, i) {
           var y = margin.top;
-          var x = margin.left + i * this.lineLength / (this.measureNumberOfPoints - 1)
+          var x = margin.left + i * this.linearLineLength / (this.measureNumberOfPoints - 1)
           return {x: x, y: y}
       });
       var pathFunction = d3.svg.line()
@@ -229,10 +229,11 @@ define([
         d3.select(this).attr("y", newSettingY);
         var newComputedValX = d3.select(this).attr('x');
         var newComputedValY = d3.select(this).attr('y');
+        console.log(newComputedValY, ƒthis.lbbMeasureLocationY + ƒthis.beatHeight)
         // Above: newComputedValY1 must be above line y
         // On : newComputedValY1 must be on the line y
         // Below: newComputedValY1 must be below the line y
-        if ((newComputedValY < ƒthis.numberLineY - 20) || (newComputedValY > ƒthis.numberLineY + ƒthis.beatHeight + 20)) {
+        if ((newComputedValY < ƒthis.lbbMeasureLocationY - ƒthis.beatHeight - 2) || (newComputedValY > ƒthis.lbbMeasureLocationY + ƒthis.beatHeight + 2)) {
         // make an array to find out where the new beat should be added in the beatsCollection of the measure
           d3.select(this).remove();
           console.warn('removed beat on measure');
