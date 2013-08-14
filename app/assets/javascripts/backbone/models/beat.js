@@ -12,11 +12,9 @@ define([
     defaults: {
       selected: false
     },
-    initialize: function(options){
-      if(options) {
-        for (var key in options) {
-          this[key] = options[key];
-        }
+    initialize: function(boolean){
+      if(boolean) {
+        this.selected = boolean;
       }
     }
   });

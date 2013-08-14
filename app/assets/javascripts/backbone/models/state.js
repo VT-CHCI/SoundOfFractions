@@ -46,7 +46,6 @@ define([
       this.context = new window.webkitAudioContext();
 
       dispatch.on('doall.event', this.recordTempoAndPattern, this);
-
       dispatch.on('recordClicked.event', this.recordButtonClicked, this);
       dispatch.on('tappingTempo.event', this.tapTempoClicked, this);
       dispatch.on('stopRecording.event', this.stopRecording, this);
@@ -171,12 +170,38 @@ define([
                 ƒthis.beatArray[i] = 0;
               }
               // ƒthis.finalMeasureBeatTimeIntervals[ƒthis.finalMeasureBeatTimeIntervals.length-1] = ƒthis.roundTo100(ƒthis.lastTimeDelta);
-              console.warn(ƒthis.finalMeasureBeatTimeIntervals50);
               console.warn(ƒthis.finalMeasureBeatTimeIntervals100);
-              console.warn(ƒthis.finalMeasureBeatTimeIntervals150);
-              console.warn(ƒthis.finalMeasureBeatTimeIntervals200);
-              console.warn(ƒthis.finalMeasureBeatTimeIntervals250);
+              // [0, 800, 200, 1000, 800, 700] 
+              var mdc = function(o){
+                  if(!o.length)
+                      return 0;
+                  for(var r, a, i = o.length - 1, b = o[i]; i;)
+                      for(a = o[--i]; r = a % b; a = b, b = r);
+                  return b;
+              };
+
+              var diffBeats = [];
+              //var beats = [ 0, 800, 200, 1000, 800, 800 ];
+              var beats = ƒthis.finalMeasureBeatTimeIntervals100;
+
+              //Greatest Common Divisor of the beats
+              var gcd = mdc(beats);
+
+              for (var i=0 ; i<beats.length ; i++) {
+                  if(i==0){
+                      diffBeats.push('ON');
+                  } else {
+                      var rests = (beats[i]/gcd == 0) ? 0 : beats[i]/gcd-1 ;
+                      for (var j= 0 ; j<rests ; j++) {
+                          diffBeats.push('OFF');
+                      }
+                      diffBeats.push('ON');
+                  }
+              }
+              diffBeats.splice(16);
+              console.log(diffBeats);
               dispatch.trigger('signatureChange.event', ƒthis.signature);
+              dispatch.trigger('newInstrumentTempoRecorded', {instrument:'hh', beatPattern:diffBeats});
 
               ƒthis.isTapping = false;
               ƒthis.countIn = 1;
@@ -185,7 +210,7 @@ define([
               ƒthis.set('baseTempo', bpm);
               ƒthis.set('tempo', bpm);
               ƒthis.set('signature', ƒthis.signature);
-              $('#tap-tempo').click();
+              // $('#tap-tempo').click();
               $('#tempo-slider-input').val(1);
               dispatch.trigger('tempoChange.event', bpm);
               dispatch.trigger('stopRecording.event');

@@ -92,7 +92,7 @@ define([
 
       dispatch.on('instrumentAddedToCompositionArea.event', this.addInstrument, this);
       dispatch.on('instrumentDeletedFromCompositionArea.event', this.deleteInstrument, this);
-
+      dispatch.on('newInstrumentTempoRecorded', this.addInstrument, this);
       StateModel.set('stage', this.stage);
     },
 
@@ -423,16 +423,33 @@ define([
       this.stage.tempo = val;
     },
 
-    addInstrument: function(instrument) {
-      //this is creating the new instrument htrack.
+    // addInstrumentWithPattern
+    addInstrument: function(options) {
+      if (options.beatPattern){
+        //this is creating the new instrument htrack.
 
-      // this creates 1 measure, and addes beats and the representations to itself
-      this.manuallyCreatedMeasureBeatsCollection = new BeatsCollection;
-      //for each beat - also change signature below
-      for (var i = 0; i < 6; i++) {
-        this.manuallyCreatedMeasureBeatsCollection.add();
+        // this creates 1 measure, and addes beats and the representations to itself
+        this.manuallyCreatedMeasureBeatsCollection = new BeatsCollection;
+        //for each beat - also change signature below
+        for (var i = 0; i < options.beatPattern.length; i++) {
+          console.log(options.beatPattern[i])
+          var beat = new BeatModel();
+          if (options.beatPattern[i] == 'ON') {
+            beat.set('selected', true);
+          }
+          this.manuallyCreatedMeasureBeatsCollection.add(beat);            
+        }
+
+      } else {
+        //this is creating the new instrument htrack.
+
+        // this creates 1 measure, and addes beats and the representations to itself
+        this.manuallyCreatedMeasureBeatsCollection = new BeatsCollection;
+        //for each beat - also change signature below
+        for (var i = 0; i < 6; i++) {
+          this.manuallyCreatedMeasureBeatsCollection.add();
+        }
       }
-
       // add an instrument rep
       this.manuallyCreatedRepresentationModel = new RepresentationModel;
       this.manuallyCreatedRepresentationModel.representationType = 'audio';
@@ -445,11 +462,11 @@ define([
         beats: this.manuallyCreatedMeasureBeatsCollection, measureRepresentations: this.manuallyCreatedMeasureRepresentationCollection});
 
       var newInstrumentToAdd = {
-        label: this.unusedInstrumentsModel.getDefault(instrument, 'label'),
-        type: this.unusedInstrumentsModel.getDefault(instrument, 'type'),
-        img: this.unusedInstrumentsModel.getDefault(instrument, 'image'),
+        label: this.unusedInstrumentsModel.getDefault(options.instrument, 'label'),
+        type: this.unusedInstrumentsModel.getDefault(options.instrument, 'type'),
+        img: this.unusedInstrumentsModel.getDefault(options.instrument, 'image'),
         mute: false,
-        sample: this.unusedInstrumentsModel.getDefault(instrument, 'sample'),
+        sample: this.unusedInstrumentsModel.getDefault(options.instrument, 'sample'),
         measures: this.manuallyCreatedMeasuresCollection,
         signature: this.manuallyCreatedMeasuresCollection.models[0].get('beats').length,
         active: true

@@ -54,7 +54,7 @@ define([
       // update the dropdown menus in each htrack
       dispatch.trigger('reRenderInstrumentDropDown.event', instrument);
       //add the instrument to the Composition-Area and re-render
-      dispatch.trigger('instrumentAddedToCompositionArea.event', instrument);
+      dispatch.trigger('instrumentAddedToCompositionArea.event', {instrument:instrument} );
       this.render();
 
       log.sendLog([[2, "instrument added: "+instrument]]);
