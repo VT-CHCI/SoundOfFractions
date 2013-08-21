@@ -47,6 +47,7 @@ define([
         for (var key in options) {
           this[key] = options[key];
         }
+        this.el = '#measure-rep-'+this.measureRepModel.cid;
         this.repContainerEl = options.measureRepContainer;
         this.currentRepresentationType = options.representationType;
         this.beatFactoryHolder = 'beat-factory-holder-'+this.measureRepModel.cid;
@@ -59,6 +60,10 @@ define([
       dispatch.on('unroll.event', this.unroll, this);
       dispatch.on('tempoChange.event', this.adjustRadius, this);
       dispatch.on('toggleAnimation.event', this.toggleAnimation, this);
+
+      _.bindAll(this, 'render');
+      this.model.bind('change', _.bind(this.render, this));
+
       this.render();
     },
     d3AudioAnimate: function(target, dur) {
@@ -134,7 +139,7 @@ define([
       var dur = duration/signature/maxMeasures;
 
       var totalNumberOfBeats = signature*maxMeasures;
-// go through the measure(s) first without animation
+      // go through the measure(s) first without animation
       var counter = 0-(signature*maxMeasures-1);
 
       //when playing is stoped we stop the animation.
@@ -224,7 +229,7 @@ define([
       // compile the template for a representation
       var measureRepTemplateParamaters = {
         measureRepID: 'measure-rep-'+this.measureRepModel.cid,
-        measureClasses: 'measureRep resizable measure-'+this.currentRepresentationType,
+        measureClasses: 'measureRep measure-'+this.currentRepresentationType,
         measureRepDeltaID: 'delta-'+this.measureRepModel.cid,
         measureRepSVGID: 'svg-'+this.measureRepModel.cid,
         svgClasses: this.currentRepresentationType,
@@ -308,6 +313,10 @@ define([
         // $('#a'+measure.cid).on('click', dispatch.trigger('unroll.event'), circlePath);
         $('#a'+this.measureRepModel.cid).on('click', unroll);
         $('#b'+this.measureRepModel.cid).on('click', reverse);
+
+        // JQ-UI resizable
+        $(this.el).resizable({ aspectRatio:true });
+
       } else if (this.currentRepresentationType == 'line'){
         var svgContainer = d3.select('#svg-'+this.measureRepModel.cid)
         var infiniteLine = svgContainer
@@ -326,6 +335,9 @@ define([
             .attr('y2', this.numberLineY)
             .attr('stroke', 'black')
             .attr('stroke-width', 2)
+
+        // JQ-UI resizable
+        $(this.el).resizable({ maxHeight: 180, minHeight: 180 });
 
       } else if (this.currentRepresentationType == 'pie'){
         var margin = this.margin;
@@ -349,6 +361,9 @@ define([
             .attr('class', 'circle')
             .attr('class', 'circle-path')
 
+        // JQ-UI resizable
+        $(this.el).resizable({ aspectRatio:true });
+
       } else if (this.currentRepresentationType == 'audio'){
         var svgContainer = d3.select('#svg-'+this.measureRepModel.cid)
         var circlePath = svgContainer
@@ -371,6 +386,9 @@ define([
             .attr('stroke', 'black')
             .attr('stroke-width', 1)
             .attr('fill', 'white')
+
+        // JQ-UI resizable
+        $(this.el).resizable({ maxHeight: 180, minHeight: 180 });
       }
 
       // for each beat in this measure
@@ -504,17 +522,6 @@ define([
       return this;
     },
 
-    /*
-      This is called when the user clicks on the plus to add a new measure.
-
-      It creates a new measure and adds it to the hTrack.
-      It generates a string representing the id of the measure and the ids of
-      its beats and logs the creation.
-
-      Lastly, it triggers a stopRequest, because we can't continue playing until
-      all the durations get recalculated to reflect this new measure.
-    */
-
     addRepresentation: function(rep){
       console.log('adding another representation to the hTrack');
       this.hTrack.representations.add({
@@ -531,7 +538,7 @@ define([
       This is called when the user clicks on the minus to remove a measure.
     */
     removeRepresentation: function(ev){
-      console.log('getting here')
+      console.log('getting here');
       if ($('#measure'+this.measuresCollection.models[0].cid).parent()) {
         //removing the last measure isn't allowed.
         if(this.measuresCollection.models.length == 1) {
@@ -589,12 +596,6 @@ define([
         //re-render the view
         this.render();
       }
-    },
-    //This is called when the hTrack is clicked anywhere to bring
-    //the hTrack into focus as selected.
-    toggleSelection: function(e){
-      e.stopPropagation();
-      $('#measure'+this.measuresCollection.models[0].cid).toggleClass('selected');
     }
   });
 });

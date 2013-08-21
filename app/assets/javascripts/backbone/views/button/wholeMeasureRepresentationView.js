@@ -11,17 +11,17 @@ define([
   'backbone',
   'bootstrap',
   'backbone/models/repButton',
+  'backbone/models/representation',
+  'backbone/collections/stage',
   'text!backbone/templates/button/wholeMeasureRepresentation.html',
   'app/dispatch',
   'app/log'
-], function($, _, Backbone, Bootstrap, RepButtonModel, wholeMeasureRepresentationTemplate, dispatch, log){
+], function($, _, Backbone, Bootstrap, RepButtonModel, RepresentationModel, StageCollection, wholeMeasureRepresentationTemplate, dispatch, log){
 
   var WholeMeasureRepresentationView = Backbone.View.extend({
     el : $("#measure-representation"), // Specifies the DOM element which this view handles
 
-    //registering backbone's click event to our cycle() method.
     events : {
-      // 'click .btn' : 'cycle',
       'click .addRepresentation' : 'addRep'
     },
 
@@ -68,12 +68,15 @@ define([
       var newRepType = $(e.target).closest('.addRepresentation').attr('data-state');
       if ($('.cs').length) {      
         var hTrackID = $('.cs').closest('.hTrack').attr('id');
+        var measureContainer; 
         var cid = hTrackID.slice(7);
         $('.cs').removeClass('cs'); 
         //trigger the Measure representation addition
-        console.log('triggering');
-        dispatch.trigger('addMeasureRepresentation.event', { newRepType: newRepType, hTrackID: hTrackID, hTrack: cid} );
-        console.log('triggered');
+        var representationModel = new RepresentationModel({representationType: newRepType});
+        console.log('adding to the instrument/measure/measureRep');
+        // Currently forcing it to add to the first measure
+        StageCollection.get(cid).get('measures').models[0].get('measureRepresentations').add(representationModel);
+        // dispatch.trigger('addMeasureRepresentation.event', { newRepType: newRepType, hTrackID: hTrackID, hTrack: cid} );
       }
     },
     // a:97 b:98 l:108 i:105 r:114
@@ -96,7 +99,14 @@ define([
         var hTrackID = $('.cs').closest('.hTrack').attr('id');
         var cid = hTrackID.slice(7);
         $('.cs').removeClass('cs'); 
-        dispatch.trigger('addMeasureRepresentation.event', { newRepType: newRepType, hTrackID: hTrackID, hTrack: cid} );
+        var representationModel = new RepresentationModel({representationType: newRepType});
+        // representationModel.representationType = newRepType;
+        console.log(hTrackID, cid, newRepType, representationModel);
+
+        console.log(' MANUALLY adding to the instrument/measure/measureRep');
+        // Currently forcing it to add to the first measure
+        StageCollection.get(cid).get('measures').models[0].get('measureRepresentations').add(representationModel);
+        window.csf = StageCollection;
       }
     }
 

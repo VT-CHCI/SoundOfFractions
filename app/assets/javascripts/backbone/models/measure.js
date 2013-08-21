@@ -11,7 +11,7 @@ define([
   'backbone/collections/beats',
   'backbone/collections/representations'
 ], function(_, Backbone, BeatsCollection, RepresentationsCollection) {
-  var measureModel = Backbone.Model.extend({
+  var MeasureModel = Backbone.Model.extend({
     defaults: {
       beats: BeatsCollection,
       measureRepresentations: RepresentationsCollection
@@ -19,5 +19,5 @@ define([
     initialize: function(){
     }
   });
-  return measureModel;
+  return MeasureModel;
 });

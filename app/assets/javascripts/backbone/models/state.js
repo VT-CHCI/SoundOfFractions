@@ -201,18 +201,18 @@ define([
               diffBeats.splice(16);
               console.log(diffBeats);
               dispatch.trigger('signatureChange.event', ƒthis.signature);
-              dispatch.trigger('newInstrumentTempoRecorded', {instrument:'hh', beatPattern:diffBeats});
+              //show the BPM
+              var bpm = 1000 / ƒthis.average * 60;
+              dispatch.trigger('newInstrumentTempoRecorded', {instrument:'hh', beatPattern:diffBeats, bpm:bpm});
 
               ƒthis.isTapping = false;
               ƒthis.countIn = 1;
-              //show the BPM
-              var bpm = 1000 / ƒthis.average * 60;
               ƒthis.set('baseTempo', bpm);
-              ƒthis.set('tempo', bpm);
+              // ƒthis.set('tempo', bpm);
               ƒthis.set('signature', ƒthis.signature);
               // $('#tap-tempo').click();
               $('#tempo-slider-input').val(1);
-              dispatch.trigger('tempoChange.event', bpm);
+              // dispatch.trigger('tempoChange.event', bpm);
               dispatch.trigger('stopRecording.event');
               window.clearInterval(waitIntervalID);
             }

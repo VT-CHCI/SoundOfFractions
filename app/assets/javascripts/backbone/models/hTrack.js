@@ -21,7 +21,8 @@ define([
       active: true,
       signature: 0, //initially set to zero, but set in the init of StageView
       placementOrder: 0, //initially 0, but set later to its placement
-      instrumentMenu: RemainingInstrumentGenerator
+      instrumentMenu: RemainingInstrumentGenerator,
+      tempo: '' //bpm
     },
     initialize: function(){
     }

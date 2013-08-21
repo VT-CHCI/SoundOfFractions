@@ -11,7 +11,6 @@ define([
 ], function($, _, Backbone, HTrackModel){
   var StageCollection = Backbone.Collection.extend({
     model: HTrackModel,
-    tempo: 120,
     initialize: function(){
     }
   });

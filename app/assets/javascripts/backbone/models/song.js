@@ -10,8 +10,7 @@ define([
       user: '',
       title: '',
       currentFractionRepresentation: '',
-      currentMeasureRepresentation: '',
-      tempo: ''
+      currentMeasureRepresentation: ''
     },
     initialize: function(){
     }

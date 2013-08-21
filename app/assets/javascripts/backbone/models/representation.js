@@ -7,15 +7,15 @@
 */
 define([
   'underscore',
-  'backbone',
-  'backbone/models/measure'
-], function(_, Backbone, MeasureModel) {
+  'backbone'
+], function(_, Backbone) {
   var RepresentationModel = Backbone.Model.extend({
-    defaults: {
-      // measureModel: MeasureModel,
-      representationType: undefined //should ovveride this each time
-    },
-    initialize: function(){     
+    representationType: undefined, //should overide this each time
+
+    initialize: function(options){
+      if(options){
+        this.representationType = options.representationType;
+      }
     }
   });
   return RepresentationModel;

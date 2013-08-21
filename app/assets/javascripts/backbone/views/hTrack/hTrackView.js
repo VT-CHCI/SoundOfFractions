@@ -122,7 +122,7 @@ define([
         //   defaultFractionRepresentation: this.defaultFractionRepresentation
         // });
       }
-      $(this.el).draggable({ axis: "y", containment: "#middle-left-column" });
+      // $(this.el).draggable({ axis: "y", containment: "#middle-left-column" });
       return this;
     },
 

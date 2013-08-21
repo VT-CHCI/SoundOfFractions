@@ -22,7 +22,6 @@ define([
   'app/log'
 ], function($, _, Backbone, BeatsCollection, StageCollection, RepresentationsCollection, MeasureModel, StateModel, RepresentationModel, BeatView, BeadFactoryView, MeasureRepView, MeasureTemplate, COLORS, dispatch, log){
   return Backbone.View.extend({
-    // el: $('.measure')[0],
 
     //registering click events to add and remove measures.
     events : {
@@ -51,23 +50,27 @@ define([
       dispatch.on('measureRepresentation.event', this.changeMeasureRepresentation, this);
       dispatch.on('unroll.event', this.unroll, this);
       dispatch.on('tempoChange.event', this.adjustRadius, this);
-      dispatch.on('addMeasureRepresentation.event', this.addRepToMeasure, this);
+
+      window.css = this.collectionOfRepresentations;
+      window.csd = this.model;
+      _.bindAll(this, 'render');
+      this.collectionOfRepresentations.bind('change', _.bind(this.render, this));
 
       this.render();
     },
 
-    render: function(options){
+    render: function(){
+      console.log('rendering rendering');
       // Make a template for the measure and append the MeasureTemplate to the measure area in the hTrack
-      var measureTemplateParamaters = {
+      var measureTemplateParameters = {
         mCID: this.model.cid,
         measureCount: this.measureCount,
         measureNumberOfBeats: this.model.get('beats').length
       };
-      var compiledMeasureTemplate = _.template( MeasureTemplate, measureTemplateParamaters );
+      var compiledMeasureTemplate = _.template( MeasureTemplate, measureTemplateParameters );
       // If we are adding a rep, clear the current reps, then add the template
-      if (options = 'adding') {
-        $(this.el).html('');
-      }
+      $(this.el).html('');
+
       $(this.el).append( compiledMeasureTemplate )
 
       // Constant Variables throughout the representations
@@ -79,7 +82,6 @@ define([
         this.measureNumberOfPoints = measureNumberOfPoints;
       // Linear
         var linearLineLength = 2 * circularMeasureR * Math.PI;
-        console.warn(linearLineLength);
       // Transition
         var firstBeatStart = 0; // in s
         var timeIncrement = 500; // in ms
@@ -167,6 +169,7 @@ define([
           mCID: this.model.cid,
           measureRepContainer: '#measure-rep-container-'+this.model.cid,
           // Measure Rep
+          model: rep,
           measureRepModel: rep,
           representationType: rep.representationType,
           beatHolder:'beatHolder'+this.model.cid,
@@ -283,11 +286,14 @@ define([
     },
     addRepToMeasure: function(options) {
       console.log('adding rep trigged in measureView');
-      var representationModel = new RepresentationModel;
-      representationModel.representationType = options.newRepType;
-      // Currently forcing it to add to the first measure
-      StageCollection.get(options.hTrack).get('measures').models[0].get('measureRepresentations').add(representationModel);
-      this.render('adding');
+      // if(){      
+        var representationModel = new RepresentationModel;
+        representationModel.representationType = options.newRepType;
+        // Currently forcing it to add to the first measure
+        StageCollection.get(options.hTrack).get('measures').models[0].get('measureRepresentations').add(representationModel);
+        console.log('calling render with adding');
+        this.render('adding');
+      // }
     },
     //This is called when the hTrack is clicked anywhere to bring
     //the hTrack into focus as selected.

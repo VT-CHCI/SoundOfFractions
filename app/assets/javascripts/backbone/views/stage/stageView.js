@@ -68,7 +68,8 @@ define([
         sample: '808_sn.m4a',
         measures: this.manuallyCreatedMeasuresCollection,
         signature: this.manuallyCreatedMeasuresCollection.models[0].get('beats').length,
-        active: true
+        active: true,
+        tempo: 120 //bpm
       });
 
       //creating two arrays to hold our gain nodes.
@@ -145,8 +146,9 @@ define([
     render: function(options){
       console.log(this.stage.models);
       if(options) {
+        console.log('render: stageView.js with options');
         var counter = $('.hTrack').size();
-        dispatch.stopListening('addMeasureRepresentation.event');
+//        dispatch.stopListening('addMeasureRepresentation.event');
         //loading the audio files into the bufferList.
         this.loadAudio(this.context, options.sample, this.bufferList, counter );
 
@@ -170,7 +172,7 @@ define([
 
         //we have to render each one of our `hTrack`s.
         _.each(this.stage.models, function(hTrack) {
-          dispatch.stopListening('addMeasureRepresentation.event');
+//          dispatch.stopListening('addMeasureRepresentation.event');
           //loading the audio files into the bufferList.
           this.loadAudio(this.context, hTrack.get('sample'), this.bufferList, counter );
 
@@ -275,7 +277,9 @@ define([
             startTime+time, //startTime is the current time you request to play + the beat start time
             this.masterGainNode,
             this.gainNodeList[hTrackToPlayIterator],
-            this.muteGainNodeList[hTrackToPlayIterator]);
+            this.muteGainNodeList[hTrackToPlayIterator],
+            this.stage.models[[hTrackToPlayIterator]].get('tempo')
+          );
         }, this);
         hTrackToPlayIterator++;
       }, this);
@@ -292,7 +296,7 @@ define([
           specGainNode -> this gain node controls envelope generation for sustained instruments.
           muteGainNode -> this gain node controls the muting of `hTrack`s.
       */
-      function play(self, context, hTrack, buffer, time, gainNode, specGainNode, muteGainNode) {
+      function play(self, context, hTrack, buffer, time, gainNode, specGainNode, muteGainNode, hTrackTempo) {
 
         //a buffer source is what can actually generate audio.
         source = context.createBufferSource();
@@ -312,7 +316,7 @@ define([
         specGainNode.gain.value = 1;
 
         //calulating the duration of one beat.
-        var duration =  (60 / StateModel.get('tempo'));
+        var duration =  (60 / hTrackTempo);
 
         //note on causes the playback to start.
         source.noteOn(time, 0, duration);
@@ -418,11 +422,6 @@ define([
       }
     },
 
-    updateTempo: function(val) {
-      console.log('tempo changed to ' + val);
-      this.stage.tempo = val;
-    },
-
     // addInstrumentWithPattern
     addInstrument: function(options) {
       if (options.beatPattern){
@@ -469,7 +468,8 @@ define([
         sample: this.unusedInstrumentsModel.getDefault(options.instrument, 'sample'),
         measures: this.manuallyCreatedMeasuresCollection,
         signature: this.manuallyCreatedMeasuresCollection.models[0].get('beats').length,
-        active: true
+        active: true,
+        tempo: options.bpm //bpm
       };
 
       this.stage = StageCollection.add(newInstrumentToAdd);
