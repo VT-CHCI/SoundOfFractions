@@ -14,7 +14,7 @@ define([
 
     initialize: function(options){
       if(options){
-        this.representationType = options.representationType;
+        this.set('representationType' , options.representationType);
       }
     }
   });

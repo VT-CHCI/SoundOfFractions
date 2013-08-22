@@ -52,7 +52,7 @@ define([
       }
       // add an audio rep
       this.manuallyCreatedRepresentationModel = new RepresentationModel;
-      this.manuallyCreatedRepresentationModel.representationType = 'audio';
+      this.manuallyCreatedRepresentationModel.set('representationType', 'audio');
       this.manuallyCreatedMeasureRepresentationCollection = new RepresentationsCollection;
       this.manuallyCreatedMeasureRepresentationCollection.add(this.manuallyCreatedRepresentationModel);
 
@@ -451,7 +451,7 @@ define([
       }
       // add an instrument rep
       this.manuallyCreatedRepresentationModel = new RepresentationModel;
-      this.manuallyCreatedRepresentationModel.representationType = 'audio';
+      this.manuallyCreatedRepresentationModel.set('representationType', 'audio');
       this.manuallyCreatedMeasureRepresentationCollection = new RepresentationsCollection;
       this.manuallyCreatedMeasureRepresentationCollection.add(this.manuallyCreatedRepresentationModel);
 

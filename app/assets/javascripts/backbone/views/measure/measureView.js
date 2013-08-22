@@ -51,10 +51,11 @@ define([
       dispatch.on('unroll.event', this.unroll, this);
       dispatch.on('tempoChange.event', this.adjustRadius, this);
 
-      window.css = this.collectionOfRepresentations;
+      window.css = this.measureRepresentationsCollection;
       window.csd = this.model;
+      window.csf = this;
       _.bindAll(this, 'render');
-      this.collectionOfRepresentations.bind('change', _.bind(this.render, this));
+      this.measureRepresentationsCollection.on('add', _.bind(this.render, this));
 
       this.render();
     },
@@ -152,7 +153,7 @@ define([
       this.circleStates = circleStates;
 
       // for each rep in the measuresCollection
-      _.each(this.collectionOfRepresentations.models, function(rep, repIndex) {
+      _.each(this.measureRepresentationsCollection.models, function(rep, repIndex) {
         // (when representation button changes, the current representation template will get updated)
         // compile the template for a measure
 
@@ -171,7 +172,7 @@ define([
           // Measure Rep
           model: rep,
           measureRepModel: rep,
-          representationType: rep.representationType,
+          representationType: rep.get('representationType'),
           beatHolder:'beatHolder'+this.model.cid,
           margin: margin,
           //Audio
@@ -290,7 +291,10 @@ define([
         var representationModel = new RepresentationModel;
         representationModel.representationType = options.newRepType;
         // Currently forcing it to add to the first measure
-        StageCollection.get(options.hTrack).get('measures').models[0].get('measureRepresentations').add(representationModel);
+        StageCollection.get(options.hTrack).get('measures').models[0].get('measureRepresentationsCollection').add(representationModel);
+        window.css = this.measureRepresentationsCollection;
+        window.csd = this.model;
+        window.csf = this;
         console.log('calling render with adding');
         this.render('adding');
       // }

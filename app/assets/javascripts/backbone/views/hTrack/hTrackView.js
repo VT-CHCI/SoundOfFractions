@@ -87,7 +87,7 @@ define([
         _.each(this.hTrack.get('measures').models, function(measure, index) {
           new MeasureView({
             collectionOfMeasures: ƒthis.hTrack.get('measures'),
-            collectionOfRepresentations: measure.get('measureRepresentations'),
+            measureRepresentationsCollection: measure.get('measureRepresentations'),
             parent: ƒthis.hTrack,
             parentEl: '#measure-container-'+ƒthis.hTrack.cid,
             hTrackEl: '#hTrack-'+ƒthis.hTrack.cid,

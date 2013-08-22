@@ -64,9 +64,11 @@ define([
       return this;
     },
     addRep: function(e) {
-      // find the plus sign with the class '.cs' and return the id of its hTrack
+      console.log('clicking in the WMRV');
       var newRepType = $(e.target).closest('.addRepresentation').attr('data-state');
-      if ($('.cs').length) {      
+      // find the plus sign with the class '.cs' and return the id of its hTrack
+      var csLength = $('.cs').length;
+      if (csLength == 1) {      
         var hTrackID = $('.cs').closest('.hTrack').attr('id');
         var measureContainer; 
         var cid = hTrackID.slice(7);
@@ -75,7 +77,8 @@ define([
         var representationModel = new RepresentationModel({representationType: newRepType});
         console.log('adding to the instrument/measure/measureRep');
         // Currently forcing it to add to the first measure
-        StageCollection.get(cid).get('measures').models[0].get('measureRepresentations').add(representationModel);
+        var measureRepColl = StageCollection.get(cid).get('measures').models[0].get('measureRepresentations');
+        measureRepColl.add(representationModel);
         // dispatch.trigger('addMeasureRepresentation.event', { newRepType: newRepType, hTrackID: hTrackID, hTrack: cid} );
       }
     },
