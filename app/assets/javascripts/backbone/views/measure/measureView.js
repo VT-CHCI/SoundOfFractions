@@ -51,9 +51,6 @@ define([
       dispatch.on('unroll.event', this.unroll, this);
       dispatch.on('tempoChange.event', this.adjustRadius, this);
 
-      window.css = this.measureRepresentationsCollection;
-      window.csd = this.model;
-      window.csf = this;
       _.bindAll(this, 'render');
       this.measureRepresentationsCollection.on('add', _.bind(this.render, this));
 
@@ -292,9 +289,6 @@ define([
         representationModel.representationType = options.newRepType;
         // Currently forcing it to add to the first measure
         StageCollection.get(options.hTrack).get('measures').models[0].get('measureRepresentationsCollection').add(representationModel);
-        window.css = this.measureRepresentationsCollection;
-        window.csd = this.model;
-        window.csf = this;
         console.log('calling render with adding');
         this.render('adding');
       // }

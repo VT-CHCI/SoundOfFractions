@@ -51,6 +51,8 @@ define([
         this.repContainerEl = options.measureRepContainer;
         this.currentRepresentationType = options.representationType;
         this.beatFactoryHolder = 'beat-factory-holder-'+this.measureRepModel.cid;
+        this.originalScale = 1;
+        this.scale = 1;
       } else {
         console.error('Should not be in here: NO MeasureRep!');
       }
@@ -61,10 +63,50 @@ define([
       dispatch.on('tempoChange.event', this.adjustRadius, this);
       dispatch.on('toggleAnimation.event', this.toggleAnimation, this);
 
-      _.bindAll(this, 'render');
+      // _.bindAll(this, 'render');
       this.model.bind('change', _.bind(this.render, this));
+      $(this.el).on('resize', this.stop);
 
       this.render();
+    },
+    start: function(e, ui) {
+      console.log('start');
+    },
+    resizeCallback: function( e, ui ) {
+      // console.log(e, ui)
+      if(this.oldW === undefined){
+        this.oldW = ui.originalSize.width;
+      }
+      var newW = ui.size.width;
+      var deltaWidth = newW - this.oldW;
+      var deltaRatio = deltaWidth/this.oldW;
+      var svgContainer = d3.select('#svg-'+this.measureRepModel.cid);
+      var circlePath = svgContainer.select('path');
+      var scale = circlePath.attr('transform').slice(6, circlePath.attr('transform').length-1);
+      var circlePathCurrentScale = parseInt(scale.slice(0, scale.indexOf(',')));
+      this.scale = (this.originalScale+deltaRatio);
+      console.log(deltaRatio, this.scale);
+      // this.globalScale = this.scale;
+      circlePath
+          .attr('transform', 'scale(' + this.scale + ',' + this.scale + ')');
+      // svgContainer.selectAll('g')
+            // .attr('transform', 'translate(' + (this.circularMeasureCx-this.circularMeasureR)*this.scale + ',' + (this.circularMeasureCy-this.circularMeasureR)*this.scale + ')');
+    },
+    stop: function(e, ui) {
+      console.log('adjusted scale by : ' + this.scale)
+      console.log('globalScale : ' + this.globalScale)
+      // var oldW = ui.originalSize.width;
+      // var newW = ui.size.width;
+      // var deltaWidth = newW - oldW;
+      // var deltaRatio = deltaWidth/oldW;
+      // var svgContainer = d3.select('#svg-'+this.measureRepModel.cid);
+      // var circlePath = svgContainer.select('path');
+      // var scale = circlePath.attr('transform').slice(6, circlePath.attr('transform').length-1);
+      // var circlePathCurrentScale = scale.slice(0, scale.indexOf(','));
+      // var newDeltaRatio = parseInt(circlePathCurrentScale) + deltaRatio;
+      // console.warn(oldW, newW, deltaWidth, deltaRatio, parseInt(circlePathCurrentScale));
+      // circlePath
+      //     .attr('transform', 'scale(' + newDeltaRatio + ',' + newDeltaRatio + ')')
     },
     d3AudioAnimate: function(target, dur) {
       // var target = d3.select('.audio-beat');
@@ -226,6 +268,7 @@ define([
       }
     },
     render: function(){
+      var ƒthis = this;
       // compile the template for a representation
       var measureRepTemplateParamaters = {
         measureRepID: 'measure-rep-'+this.measureRepModel.cid,
@@ -264,6 +307,7 @@ define([
             .attr('opacity', 1)
             .attr('class', 'circle')
             .attr('class', 'circle-path')
+            .attr('transform', 'scale('+this.originalScale+','+this.originalScale+')')
 
         function transitionRoll(options) {
           if (this.unrolled == false) {
@@ -315,7 +359,20 @@ define([
         $('#b'+this.measureRepModel.cid).on('click', reverse);
 
         // JQ-UI resizable
-        $(this.el).resizable({ aspectRatio:true });
+        $(this.el).resizable({ 
+          aspectRatio: true,
+          // ghost:true,
+          // animate: true,
+          start: function(e, ui) {
+            console.warn('starting');
+          },
+          resize: function( e, ui ) {
+            ƒthis.resizeCallback(e, ui);
+          },
+          stop: function(e, ui) {
+            ƒthis.stop(e, ui);
+          }  
+        });
 
       } else if (this.currentRepresentationType == 'line'){
         var svgContainer = d3.select('#svg-'+this.measureRepModel.cid)
@@ -337,7 +394,10 @@ define([
             .attr('stroke-width', 2)
 
         // JQ-UI resizable
-        $(this.el).resizable({ maxHeight: 180, minHeight: 180 });
+        $(this.el).resizable({ 
+          maxHeight: 180, 
+          minHeight: 180
+        });
 
       } else if (this.currentRepresentationType == 'pie'){
         var margin = this.margin;
@@ -362,7 +422,9 @@ define([
             .attr('class', 'circle-path')
 
         // JQ-UI resizable
-        $(this.el).resizable({ aspectRatio:true });
+        $(this.el).resizable({ 
+          aspectRatio: true
+        });
 
       } else if (this.currentRepresentationType == 'audio'){
         var svgContainer = d3.select('#svg-'+this.measureRepModel.cid)
@@ -388,7 +450,11 @@ define([
             .attr('fill', 'white')
 
         // JQ-UI resizable
-        $(this.el).resizable({ maxHeight: 180, minHeight: 180 });
+        $(this.el).resizable({ 
+          aspectRatio: true,
+          maxHeight: 180, 
+          minHeight: 180
+        });
       }
 
       // for each beat in this measure

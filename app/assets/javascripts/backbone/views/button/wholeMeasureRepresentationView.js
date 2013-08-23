@@ -109,7 +109,6 @@ define([
         console.log(' MANUALLY adding to the instrument/measure/measureRep');
         // Currently forcing it to add to the first measure
         StageCollection.get(cid).get('measures').models[0].get('measureRepresentations').add(representationModel);
-        window.csf = StageCollection;
       }
     }
 
