@@ -53,10 +53,65 @@ define([
 
       _.bindAll(this, 'render');
       this.measureRepresentationsCollection.on('add', _.bind(this.render, this));
+      this.collectionOfMeasures.on('add', _.bind(this.render, this));
+      this.collectionOfMeasures.on('remove', _.bind(this.render, this));
 
       this.render();
     },
 
+    calculateNumberOfPoints: function(n) {
+              // We want to be above 30, but below 90 to avoid computational and animation delay
+        switch (n){
+        case 1:
+          this.measureNumberOfPoints = 60;
+          break;
+        case 2:
+          this.measureNumberOfPoints = 60;
+          break;
+        case 3:
+          this.measureNumberOfPoints = 60;
+          break;
+        case 4:
+          this.measureNumberOfPoints = 60;
+          break;
+        case 5:
+          this.measureNumberOfPoints = 60;
+          break;
+        case 6:
+          this.measureNumberOfPoints = 60;
+          break;
+        case 7:
+          this.measureNumberOfPoints = 63;
+          break;
+        case 8:
+          this.measureNumberOfPoints = 64;
+          break;
+        case 9:
+          this.measureNumberOfPoints = 63;
+          break;
+        case 10:
+          this.measureNumberOfPoints = 60;
+          break;
+        case 11:
+          this.measureNumberOfPoints = 66;
+          break;
+        case 12:
+          this.measureNumberOfPoints = 60;
+          break;
+        case 13:
+          this.measureNumberOfPoints = 65;
+          break;
+        case 14:
+          this.measureNumberOfPoints = 56;
+          break;
+        case 15:
+          this.measureNumberOfPoints = 60;
+          break;
+        case 16:
+          this.measureNumberOfPoints = 64;
+          break;
+      }
+    },
     render: function(){
       console.log('rendering rendering');
       // Make a template for the measure and append the MeasureTemplate to the measure area in the hTrack
@@ -76,8 +131,8 @@ define([
         var circularMeasureCx = 100;
         var circularMeasureCy = 75;
         var circularMeasureR = this.circularMeasureR;
-        var measureNumberOfPoints = 60; //keep under 91 to avoid computational and animation delay
-        this.measureNumberOfPoints = measureNumberOfPoints;
+        this.calculateNumberOfPoints(this.collectionOfMeasures.models[0].get('beats').models.length);
+        var measureNumberOfPoints = this.measureNumberOfPoints;
       // Linear
         var linearLineLength = 2 * circularMeasureR * Math.PI;
       // Transition

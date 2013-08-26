@@ -90,7 +90,7 @@ define([
       circlePath
           .attr('transform', 'scale(' + this.scale + ',' + this.scale + ')');
       // svgContainer.selectAll('g')
-            // .attr('transform', 'translate(' + (this.circularMeasureCx-this.circularMeasureR)*this.scale + ',' + (this.circularMeasureCy-this.circularMeasureR)*this.scale + ')');
+            // .attr('transform', 'scale(' + this.scale + ',' + this.scale + ')');
     },
     stop: function(e, ui) {
       console.log('adjusted scale by : ' + this.scale)
