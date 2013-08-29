@@ -14,9 +14,11 @@ define([
   var MeasureModel = Backbone.Model.extend({
     beats: BeatsCollection,
     measureRepresentations: RepresentationsCollection,
+    defaults: {
+      originalScale: 1,
+      scale: 1
+    },
     initialize: function(){
-      var logg = function() { console.log('changed'); };
-      this.get('measureRepresentations').on('add', logg);
     }
   });
   return MeasureModel;

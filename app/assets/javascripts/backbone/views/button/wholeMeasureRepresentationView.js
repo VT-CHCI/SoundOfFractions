@@ -34,26 +34,6 @@ define([
       $(document).bind('keypress', this.manuallPress);
     },
 
-    /*
-      This is called when a click event occurs.
-
-      It sets the state to the state the user selected.
-      It then triggers a representationChange event.
-
-      a log message is sent reflecting the representation change.
-    */
-    cycle: function(e) {
-      //Grab the data-state from the clicked button
-      var newState = $(e.currentTarget).data('state');
-      this.repButtonModel.set('buttonState', newState);
-      //trigger the Measure representation change
-      dispatch.trigger('measureRepresentation.event', newState);
-      //trigger the Beat representation change
-      dispatch.trigger('beatRepresentation.event', newState);
-
-      log.sendLog([[2, "representation changed to: "+newState]]);
-    },
-
     //no need to compile the template for this one.
     render: function() {
       $(this.el).html(wholeMeasureRepresentationTemplate);

@@ -37,6 +37,7 @@ define([
         for (var key in options) {
           this[key] = options[key];
         }
+        this.originalScale = this.measureModel.get('originalScale');
         this.circularMeasureR = 51; // 8 pxs per bead plus 1 px border = 10
                                     // 10 * 16 = 160/pi = 51
         this.el = '#measure-container-'+options.parent.cid;
@@ -55,13 +56,13 @@ define([
       this.measureRepresentationsCollection.on('add', _.bind(this.render, this));
       this.collectionOfMeasures.on('add', _.bind(this.render, this));
       this.collectionOfMeasures.on('remove', _.bind(this.render, this));
+      this.measureModel.on('change', _.bind(this.render, this));
 
       this.render();
     },
-
     calculateNumberOfPoints: function(n) {
-              // We want to be above 30, but below 90 to avoid computational and animation delay
-        switch (n){
+      // We want to be above 30, but below 90 to avoid computational and animation delay
+      switch (n){
         case 1:
           this.measureNumberOfPoints = 60;
           break;
@@ -113,7 +114,7 @@ define([
       }
     },
     render: function(){
-      console.log('rendering rendering');
+      this.scale = this.measureModel.get('scale');
       // Make a template for the measure and append the MeasureTemplate to the measure area in the hTrack
       var measureTemplateParameters = {
         mCID: this.model.cid,
@@ -121,20 +122,31 @@ define([
         measureNumberOfBeats: this.model.get('beats').length
       };
       var compiledMeasureTemplate = _.template( MeasureTemplate, measureTemplateParameters );
+      
       // If we are adding a rep, clear the current reps, then add the template
       $(this.el).html('');
-
       $(this.el).append( compiledMeasureTemplate )
 
       // Constant Variables throughout the representations
+      // General
+        var originalScale = this.originalScale;
+        var scale = this.scale;
+        var vertDivPadding = 25;
+        var horzDivPadding = 25;
       // Circular
-        var circularMeasureCx = 100;
-        var circularMeasureCy = 75;
-        var circularMeasureR = this.circularMeasureR;
+        var cX = 100;
+        var cY = 75
+        var circularMeasureCx = (cX+horzDivPadding)*scale;
+        var circularMeasureCy = (cY+vertDivPadding)*scale;
+        var circularMeasureR = this.circularMeasureR*scale;
         this.calculateNumberOfPoints(this.collectionOfMeasures.models[0].get('beats').models.length);
         var measureNumberOfPoints = this.measureNumberOfPoints;
+        var circularDivWidth = 2*circularMeasureR + horzDivPadding*2 + cX*this.scale; 
+        var circularDivHeight = 2*circularMeasureR + vertDivPadding*2 + cY*this.scale; 
       // Linear
         var linearLineLength = 2 * circularMeasureR * Math.PI;
+        var linearDivWidth = linearLineLength + horzDivPadding;
+        var linearDivHeight = 25 + vertDivPadding;
       // Transition
         var firstBeatStart = 0; // in s
         var timeIncrement = 500; // in ms
@@ -215,13 +227,21 @@ define([
           hTrack: this.parent,
           measureCount: this.measureCount,
           // Measure
-          parentMeasureModel: this.parentMeasureModel,
+          parentMeasureModel: this.measureModel,
           beatsInMeasure: this.model.get('beats').models.length,
           parent: this,
           parentCID: this.cid,
           mCID: this.model.cid,
           measureRepContainer: '#measure-rep-container-'+this.model.cid,
+          circularDivWidth: circularDivWidth,
+          circularDivHeight: circularDivHeight,
+          linearDivWidth: linearDivWidth,
+          linearDivHeight: linearDivHeight,
+          vertDivPadding: vertDivPadding,
+          horzDivPadding: horzDivPadding,
           // Measure Rep
+          originalScale: this.originalScale,
+          scale: this.scale,
           model: rep,
           measureRepModel: rep,
           representationType: rep.get('representationType'),

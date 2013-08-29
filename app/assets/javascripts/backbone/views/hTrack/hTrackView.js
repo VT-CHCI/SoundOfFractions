@@ -92,7 +92,7 @@ define([
             parentEl: '#measure-container-'+ƒthis.hTrack.cid,
             hTrackEl: '#hTrack-'+ƒthis.hTrack.cid,
             model: ƒthis.hTrack.get('measures').models[index],
-            parentMeasureModel: measure,
+            measureModel: measure,
             defaultMeasureRepresentation: ƒthis.defaultMeasureRepresentation,
             measureIndex: index,
             measureCount: ƒthis.hTrack.get('measures').models.length

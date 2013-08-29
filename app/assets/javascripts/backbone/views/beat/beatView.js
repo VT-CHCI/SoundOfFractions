@@ -337,7 +337,7 @@ define([
           .innerRadius(0)
           .outerRadius(this.circularMeasureR)
           .startAngle(this.beatStartAngle*(Math.PI/180))
-          .endAngle((this.beatStartAngle + this.beatAngle)*(Math.PI/180));
+          .endAngle((this.beatStartAngle + this.beatAngle)*(Math.PI/180))
         var beatContainer = d3.select('#beat-holder-'+this.parentMeasureRepModel.cid)
           .attr('transform', 'translate('+this.circularMeasureCx+','+this.circularMeasureCy+')')
         var beatPath = beatContainer
@@ -358,13 +358,16 @@ define([
       } else if (this.currentRepresentationType == 'audio'){
         var svgContainer = d3.select('#beat-holder-'+this.parentMeasureRepModel.cid)
         var circlePath = svgContainer
-            // .insert('circle', ':first-child')
-            // .attr('cx', audioMeasureCx)
-            // .attr('cy', audioMeasureCy)
-            // .attr('r', audioMeasureR)
-            // .attr('fill', colorForAudio)
-            // .attr('stroke', 'black')
-            // .attr('opacity', .2)
+            .insert('circle', ':first-child')
+            .attr('id', 'beat'+this.cid)
+            .attr('class', 'beat d3 audio-beat')
+            .attr('cx', this.audioMeasureCx)
+            .attr('cy', this.audioMeasureCy)
+            .attr('r', this.audioMeasureR)
+            .attr('fill', this.colorForAudio)
+            .attr('opacity', this.opacityForAudio)
+            .attr('transform', 'translate(0,0)')
+            // NO click handler to prevent the user from editing in the audio Rep
 
       } else if (this.currentRepresentationType == 'bar'){
         var svgContainer = d3.select('#beat-holder-'+this.parentMeasureRepModel.cid)
@@ -404,13 +407,17 @@ define([
 
     // sets the opacity between selected and not-selected
     getOpacityNumber : function(bool) {
-      if (bool == true) {
-        // Selected
-        return 1;
+      if(this.currentRepresentationType == 'audio'){
+        return 0.2/this.beatsInMeasure;
       } else {
-        // Not-Selected
-        return 0.2;
-      }      
+        if (bool == true) {
+          // Selected
+          return 1;
+        } else {
+          // Not-Selected
+          return 0.2;
+        }
+      }
     },
 
     /*

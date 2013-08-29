@@ -51,8 +51,6 @@ define([
         this.repContainerEl = options.measureRepContainer;
         this.currentRepresentationType = options.representationType;
         this.beatFactoryHolder = 'beat-factory-holder-'+this.measureRepModel.cid;
-        this.originalScale = 1;
-        this.scale = 1;
       } else {
         console.error('Should not be in here: NO MeasureRep!');
       }
@@ -69,51 +67,132 @@ define([
 
       this.render();
     },
-    start: function(e, ui) {
-      console.log('start');
-    },
-    resizeCallback: function( e, ui ) {
-      // console.log(e, ui)
+    circleStart: function(e, ui) {
+      console.log('circle start');
+      console.log(this.oldW)
       if(this.oldW === undefined){
+        console.log('this.oldW is undefined');
         this.oldW = ui.originalSize.width;
+        this.oldH = ui.originalSize.height;
       }
+      // because I don't know how to compute the arc from a point, I generate the pie slices and then move them as a group.  Thus we have to get the group's transform translate, and store the number, so that when we scale the slices in the next func(), we also translate them the origianl amount, otherwise when we are scaling it, the slices are not translated, and the origin is 0,0
+      if (this.pieTranslate == undefined){
+        this.pieTranslate = d3.select('#svg-'+this.measureRepModel.cid).select('g').attr('transform')
+        console.log(this.pieTranslate);
+      }
+      console.log(this.oldW, this.oldH, ui.size.width, ui.size.height)
+    },
+    circleResizeCallback: function( e, ui ) {
+      console.log(this.oldW, this.oldH, ui.size.width, ui.size.height)
+      // console.log(e, ui)
       var newW = ui.size.width;
+      var newH = ui.size.height;
       var deltaWidth = newW - this.oldW;
+      var deltaHeight = newH - this.oldH;
       var deltaRatio = deltaWidth/this.oldW;
       var svgContainer = d3.select('#svg-'+this.measureRepModel.cid);
-      var circlePath = svgContainer.select('path');
-      var scale = circlePath.attr('transform').slice(6, circlePath.attr('transform').length-1);
-      var circlePathCurrentScale = parseInt(scale.slice(0, scale.indexOf(',')));
-      this.scale = (this.originalScale+deltaRatio);
-      console.log(deltaRatio, this.scale);
-      // this.globalScale = this.scale;
-      circlePath
-          .attr('transform', 'scale(' + this.scale + ',' + this.scale + ')');
-      // svgContainer.selectAll('g')
-            // .attr('transform', 'scale(' + this.scale + ',' + this.scale + ')');
+      svgContainer.attr('width', parseInt(svgContainer.attr('width'))+deltaWidth );
+      svgContainer.attr('height', parseInt(svgContainer.attr('height'))+deltaHeight );
+      if(this.currentRepresentationType == 'bead'){
+        var circlePath = svgContainer.select('path');
+        var scale = circlePath.attr('transform').slice(6, circlePath.attr('transform').length-1);
+        this.scale = (this.originalScale+deltaRatio);
+        // aspect ratio scale the measure circle, and the beats
+        circlePath
+            .attr('transform', 'scale(' + this.scale + ',' + this.scale + ')');
+        // svgContainer.selectAll('g')
+              // .attr('transform', 'scale(' + this.scale + ',' + this.scale + ')');
+      } else if (this.currentRepresentationType == 'pie'){
+        var circlePath = svgContainer.select('path');
+        var beatSlices = svgContainer.select('g');
+        var scale = circlePath.attr('transform').slice(6, circlePath.attr('transform').length-1);
+        this.scale = (this.originalScale+deltaRatio);
+        // aspect ratio scale the measure circle, and the beats
+        circlePath
+            .attr('transform', 'scale(' + this.scale + ',' + this.scale + ')');
+        beatSlices
+              .attr('transform', 'scale(' + this.scale + ',' + this.scale + ')' + this.pieTranslate);
+      }
     },
-    stop: function(e, ui) {
-      console.log('adjusted scale by : ' + this.scale)
-      console.log('globalScale : ' + this.globalScale)
-      // var oldW = ui.originalSize.width;
-      // var newW = ui.size.width;
-      // var deltaWidth = newW - oldW;
-      // var deltaRatio = deltaWidth/oldW;
-      // var svgContainer = d3.select('#svg-'+this.measureRepModel.cid);
-      // var circlePath = svgContainer.select('path');
-      // var scale = circlePath.attr('transform').slice(6, circlePath.attr('transform').length-1);
-      // var circlePathCurrentScale = scale.slice(0, scale.indexOf(','));
-      // var newDeltaRatio = parseInt(circlePathCurrentScale) + deltaRatio;
-      // console.warn(oldW, newW, deltaWidth, deltaRatio, parseInt(circlePathCurrentScale));
-      // circlePath
-      //     .attr('transform', 'scale(' + newDeltaRatio + ',' + newDeltaRatio + ')')
+    circleStop: function(e, ui) {
+      console.log('circle: adjusted scale by : ' + this.scale);
+      console.log(this.oldW, this.oldH, ui.size.width, ui.size.height)
+      this.oldW = ui.size.width;
+      this.oldH = ui.size.height;
+      console.log(this.oldW, this.oldH, ui.size.width, ui.size.height)
+      this.parentMeasureModel.set('scale', this.scale);
     },
-    d3AudioAnimate: function(target, dur) {
-      // var target = d3.select('.audio-beat');
-      // console.log(target);
-      // target.transition()
-      //   .attr('x', target.attr('x')+ 10)
-      //   .duration(dur)
+    linearStart: function(e, ui) {
+      console.log('linear start');
+      console.log(this.oldW)
+      if(this.oldW === undefined){
+        console.log('this.oldW is undefined');
+        this.oldW = ui.originalSize.width;
+        this.oldH = ui.originalSize.height;
+      }
+      console.log(this.oldW, this.oldH, ui.size.width, ui.size.height)
+    },
+    linearResizeCallback: function( e, ui ) {
+      console.log(this.oldW, this.oldH, ui.size.width, ui.size.height)
+      // console.log(e, ui)
+      var newW = ui.size.width;
+      var newH = ui.size.height;
+      var deltaWidth = newW - this.oldW;
+      var deltaHeight = newH - this.oldH;
+      var deltaRatio = deltaWidth/this.oldW;
+      var svgContainer = d3.select('#svg-'+this.measureRepModel.cid);
+      svgContainer.attr('width', parseInt(svgContainer.attr('width'))+deltaWidth );
+      // svgContainer.attr('height', parseInt(svgContainer.attr('height'))+deltaHeight );
+      if(this.currentRepresentationType == 'line'){
+        var linePath = svgContainer.select('line');
+        var beatLines = svgContainer.select('g');
+        var scale = linePath.attr('transform').slice(6, linePath.attr('transform').length-1);
+        // var linePathCurrentScale = parseInt(scale.slice(0, scale.indexOf(',')));
+        this.scale = (this.originalScale+deltaRatio);
+        // linearly scale the Line, and the beats
+        linePath
+            .attr('transform', 'scale(' + this.scale + ',' + 1 + ')');
+        beatLines
+              .attr('transform', 'scale(' + this.scale + ',' + 1 + ')');
+      } else if (this.currentRepresentationType == 'bar'){
+        var barPath = svgContainer.select('rect');
+        var beatBars = svgContainer.select('g');
+        var scale = barPath.attr('transform').slice(6, barPath.attr('transform').length-1);
+        // var barPathCurrentScale = parseInt(scale.slice(0, scale.indexOf(',')));
+        this.scale = (this.originalScale+deltaRatio);
+        // linearly scale the Line, and the beats
+        barPath
+            .attr('transform', 'scale(' + this.scale + ',' + 1 + ')');
+        beatBars
+              .attr('transform', 'scale(' + this.scale + ',' + 1 + ')');
+      }
+    },
+    linearStop: function(e, ui) {
+      console.log('linear adjusted scale by : ' + this.scale);
+      console.log(this.oldW, this.oldH, ui.size.width, ui.size.height)
+      this.oldW = ui.size.width;
+      this.oldH = ui.size.height;
+      console.log(this.oldW, this.oldH, ui.size.width, ui.size.height)
+      this.parentMeasureModel.set('scale', this.scale);
+    },
+    d3AudioAnimate: function(target, dur, selected) {
+      var target = d3.select(target);
+      var originalOpacity = parseInt(target.attr('opacity'));
+      if(selected == true){
+        var newOpacity = 1;
+      } else {
+        var newOpacity = originalOpacity;
+      }
+      target.transition()
+        .attr('opacity', newOpacity )
+        .duration(1)
+        .each('end',function() {                   // as seen above
+          d3.select(this).                         // this is the object 
+            transition()                           // a new transition!
+              .attr('opacity', originalOpacity )   // we could have had another
+              .delay(dur-1)
+              .duration(1);                      // .each("end" construct here.
+         });
     },
     d3BeadAnimate: function(target, dur) {
       var target = d3.select(target);
@@ -203,7 +282,8 @@ define([
             if (counter >= 0 && counter < totalNumberOfBeats) {
               if (self.currentRepresentationType == 'audio'){
                 var beats = $('#measure-rep-'+self.measureRepModel.cid).find('.audio-beat');
-                self.d3AudioAnimate(beats.eq(counter)[0], dur/2);
+                var selected = self.parentMeasureModel.get('beats').models[counter].get('selected');
+                self.d3AudioAnimate(beats.eq(counter)[0], dur/2, selected);
               } else if (self.currentRepresentationType == 'bead'){
                 var beats = $('#measure-rep-'+self.measureRepModel.cid).find('.bead-beat');
                 self.d3BeadAnimate(beats.eq(counter)[0], dur/2);
@@ -229,7 +309,7 @@ define([
       }
     },
     changeMeasureRepresentation: function(representation) {
-      this.previousRepresentationType = this.currentRepresentationType;
+      this.previous3RepresentationType = this.currentRepresentationType;
       this.currentRepresentationType = representation;
       this.render();
     },
@@ -299,6 +379,8 @@ define([
             .interpolate('basis'); // bundle | basis | linear | cardinal are also options
 
         var svgContainer = d3.select('#svg-'+this.measureRepModel.cid)
+            .attr('width', this.circularDivWidth)
+            .attr('height', this.circularDivHeight);
         var circlePath = svgContainer
             .insert('path', ':first-child')
             .data([this.circleStates[0]])
@@ -307,7 +389,7 @@ define([
             .attr('opacity', 1)
             .attr('class', 'circle')
             .attr('class', 'circle-path')
-            .attr('transform', 'scale('+this.originalScale+','+this.originalScale+')')
+            .attr('transform', 'scale('+this.originalScale+','+this.originalScale+')');
 
         function transitionRoll(options) {
           if (this.unrolled == false) {
@@ -364,26 +446,29 @@ define([
           // ghost:true,
           // animate: true,
           start: function(e, ui) {
-            console.warn('starting');
+            ƒthis.circleStart(e, ui);
           },
           resize: function( e, ui ) {
-            ƒthis.resizeCallback(e, ui);
+            ƒthis.circleResizeCallback(e, ui);
           },
           stop: function(e, ui) {
-            ƒthis.stop(e, ui);
+            ƒthis.circleStop(e, ui);
           }  
         });
 
       } else if (this.currentRepresentationType == 'line'){
         var svgContainer = d3.select('#svg-'+this.measureRepModel.cid)
+            .attr('width', this.linearDivWidth)
+            .attr('height', this.linearDivHeight);
         var infiniteLine = svgContainer
             .insert('line', ':first-child')
             .attr('x1', -200)
             .attr('y1', this.numberLineY)
-            .attr('x2', 600)
+            .attr('x2', 10000)
             .attr('y2', this.numberLineY)
             .attr('stroke', 'black')
             .attr('stroke-width', 1)
+            .attr('opacity', .5)
         var actualMeasureLinePath = svgContainer
             .insert('line', ':first-child')
             .attr('x1', this.lbbMeasureLocationX)
@@ -392,11 +477,21 @@ define([
             .attr('y2', this.numberLineY)
             .attr('stroke', 'black')
             .attr('stroke-width', 2)
+            .attr('transform', 'scale('+this.originalScale+','+this.originalScale+')');
 
         // JQ-UI resizable
         $(this.el).resizable({ 
           maxHeight: 180, 
-          minHeight: 180
+          minHeight: 180,
+          start: function(e, ui) {
+            ƒthis.linearStart(e, ui);
+          },
+          resize: function( e, ui ) {
+            ƒthis.linearResizeCallback(e, ui);
+          },
+          stop: function(e, ui) {
+            ƒthis.linearStop(e, ui);
+          }  
         });
 
       } else if (this.currentRepresentationType == 'pie'){
@@ -412,6 +507,8 @@ define([
             .interpolate('basis'); // bundle | basis | linear | cardinal are also options
 
         var svgContainer = d3.select('#svg-'+this.measureRepModel.cid)
+            .attr('width', this.circularDivWidth)
+            .attr('height', this.circularDivHeight);
         var circlePath = svgContainer
             .insert('path', ':first-child')
             .data([this.circleStates[0]])
@@ -420,10 +517,20 @@ define([
             .attr('opacity', 1)
             .attr('class', 'circle')
             .attr('class', 'circle-path')
+            .attr('transform', 'scale('+this.originalScale+','+this.originalScale+')');
 
         // JQ-UI resizable
         $(this.el).resizable({ 
-          aspectRatio: true
+          aspectRatio: true,
+          start: function(e, ui) {
+            ƒthis.circleStart(e, ui);
+          },
+          resize: function( e, ui ) {
+            ƒthis.circleResizeCallback(e, ui);
+          },
+          stop: function(e, ui) {
+            ƒthis.circleStop(e, ui);
+          }  
         });
 
       } else if (this.currentRepresentationType == 'audio'){
@@ -433,12 +540,13 @@ define([
             .attr('cx', this.audioMeasureCx)
             .attr('cy', this.audioMeasureCy)
             .attr('r', this.audioMeasureR)
-            .attr('fill', this.colorForAudio)
-            .attr('stroke', 'black')
-            .attr('opacity', .2)
+            .attr('fill', 'none')
+            .attr('stroke', 'black');
 
       } else if (this.currentRepresentationType == 'bar'){
         var svgContainer = d3.select('#svg-'+this.measureRepModel.cid)
+            .attr('width', this.linearDivWidth)
+            .attr('height', this.linearDivHeight);
         var box = svgContainer
             .insert('rect', ':first-child')
             .attr('x', this.lbbMeasureLocationX)
@@ -448,12 +556,22 @@ define([
             .attr('stroke', 'black')
             .attr('stroke-width', 1)
             .attr('fill', 'white')
+            .attr('transform', 'scale('+this.originalScale+','+this.originalScale+')');
 
         // JQ-UI resizable
         $(this.el).resizable({ 
-          aspectRatio: true,
+          // aspectRatio: true,
           maxHeight: 180, 
-          minHeight: 180
+          minHeight: 180,
+          start: function(e, ui) {
+            ƒthis.linearStart(e, ui);
+          },
+          resize: function( e, ui ) {
+            ƒthis.linearResizeCallback(e, ui);
+          },
+          stop: function(e, ui) {
+            ƒthis.linearStop(e, ui);
+          }  
         });
       }
 
@@ -515,7 +633,8 @@ define([
           audioBeatCx: this.audioBeatCx,
           audioBeatCy: this.audioBeatCy,
           audioBeatR: this.audioBeatR,
-          colorForAudio: this.colorForAudio
+          colorForAudio: this.colorForAudio,
+          opacityForAudio: .2/this.beatsInMeasure
         };
         new BeatView(measurePassingToBeatViewParamaters);
       }, this);
@@ -546,8 +665,8 @@ define([
         for (i = 0 ; i < this.measurePassingToBeatFactoryParamaters.remainingNumberOfBeats ; i++){
           var index = 15-i;
           //Base + Math.random() * (max - min) + min;
-          this.measurePassingToBeatFactoryParamaters.cX = 20 + (Math.random() * (20) - 10);
-          this.measurePassingToBeatFactoryParamaters.cY = 130 + (Math.random() * (20) - 10);
+          this.measurePassingToBeatFactoryParamaters.cX = this.horzDivPadding + (Math.random() * (20) - 10);
+          this.measurePassingToBeatFactoryParamaters.cY = (this.circularDivHeight-this.vertDivPadding-this.beatFactoryR) + (Math.random() * (20) - 10);
           this.measurePassingToBeatFactoryParamaters.colorIndex = index;
           // this.measurePassingToBeatFactoryParamaters.colorIndex = 18;
           console.log()
@@ -557,7 +676,7 @@ define([
         for (i = 0 ; i < this.measurePassingToBeatFactoryParamaters.remainingNumberOfBeats ; i++){
           var index = 15-i;
           //Base + Math.random() * (max - min) + min;
-          this.measurePassingToBeatFactoryParamaters.x1 = 20 + (Math.random() * (20) - 10);
+          this.measurePassingToBeatFactoryParamaters.x1 = this.horzDivPadding + (Math.random() * (20) - 10);
           this.measurePassingToBeatFactoryParamaters.y1 = this.numberLineY + 60 + (Math.random() * (20) - 10);
           this.measurePassingToBeatFactoryParamaters.x2 = this.measurePassingToBeatFactoryParamaters.x1;
           this.measurePassingToBeatFactoryParamaters.y2 = this.measurePassingToBeatFactoryParamaters.y1 + this.lineHashHeight;
@@ -568,8 +687,8 @@ define([
         for (i = 0 ; i < this.measurePassingToBeatFactoryParamaters.remainingNumberOfBeats ; i++){
           var index = 15-i;
           //Base + Math.random() * (max - min) + min;
-          this.measurePassingToBeatFactoryParamaters.cX = 30 + (Math.random() * (20) - 10);
-          this.measurePassingToBeatFactoryParamaters.cY = 90 + (Math.random() * (20) - 10);
+          this.measurePassingToBeatFactoryParamaters.cX = this.horzDivPadding + (Math.random() * (20) - 10);
+          this.measurePassingToBeatFactoryParamaters.cY = (this.circularDivHeight-this.vertDivPadding*3) + (Math.random() * (30) - 20);
           this.measurePassingToBeatFactoryParamaters.colorIndex = index;
           new BeadFactoryView(this.measurePassingToBeatFactoryParamaters);
         }        
@@ -577,7 +696,7 @@ define([
         for (i = 0 ; i < this.measurePassingToBeatFactoryParamaters.remainingNumberOfBeats ; i++){
           var index = 15-i;
           //Base + Math.random() * (max - min) + min;
-          this.measurePassingToBeatFactoryParamaters.x = 20 + (Math.random() * (20) - 10);
+          this.measurePassingToBeatFactoryParamaters.x = this.horzDivPadding + (Math.random() * (20) - 10);
           this.measurePassingToBeatFactoryParamaters.y = this.numberLineY + 60 + (Math.random() * (20) - 10);
           this.measurePassingToBeatFactoryParamaters.beatHeight = this.beatHeight;
           this.measurePassingToBeatFactoryParamaters.colorIndex = index;

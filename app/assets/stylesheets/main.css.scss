@@ -1,3 +1,7 @@
+svg {
+  /*height: 100%;*/
+  /*width: 100%*/
+}
 .measure .measureRep:first-of-type .remove-measure-rep{
   display: none;
 }
@@ -26,11 +30,8 @@
 .measureRep {
   border: solid 1px grey;
   border-radius: 3px;
-  padding: 0 5px 5px 5px;
   display: inline-block;
   margin: 0px 5px 5px 0px;
-  height: 180px;
-  display: inline-block;
   overflow: hidden;
 }
 .measure-rep-container {
@@ -144,67 +145,6 @@ select {
   background-color: whitesmoke;
   border: 1px solid #e3e3e3
 }
-
-#top-row .l2b-circle {
-    stroke:black;
-    stroke-width:1;
-    fill:none;
-    opacity: 1;
-}
-#top-row .l2b-partial1 {
-    stroke:black;
-    stroke-dasharray: 6;
-    stroke-width:1;
-    fill:none;
-    opacity: .6;
-}
-#top-row .l2b-partial2 {
-    stroke:black;
-    stroke-dasharray: 4;
-    stroke-width:1;
-    fill:none;
-    opacity: .4;
-}
-#top-row .l2b-line {
-    stroke:black;
-    stroke-dasharray: 2;
-    stroke-width: 1;
-    fill:none;
-    opacity: .2;
-}
-#top-row .b2l-circle {
-    stroke:black;
-    stroke-dasharray: 2;
-    stroke-width:1;
-    fill:none;
-    opacity: .2;
-}
-#top-row .b2l-partial1 {
-    stroke:black;
-    stroke-dasharray: 4;
-    stroke-width:1;
-    fill:none;
-    opacity: .4;
-}
-#top-row .b2l-partial2 {
-    stroke:black;
-    stroke-dasharray: 6;
-    stroke-width:1;
-    fill:none;
-    opacity: .6;
-}
-#top-row .b2l-line {
-    stroke:black;
-    stroke-width: 1;
-    fill:none;
-    opacity: 1;
-}
-
-.container-fluid {
-/*  position: relative;
-  top: -10px;*/
-}
-
 .btn-group {
   display: block;
 }
@@ -256,20 +196,18 @@ svg.audio {
 }
 svg.bar {
   height: 150px;
-  width: 365px;
 }
 svg.pie {
-  height: 150px;
+  /*height: 150px;*/
 }
-svg.bead {
+/*svg.bead {*/
   /*height: 150px;*/
   /*width: 165px;*/
-}
+/*}*/
 svg.line {
   height: 150px;
-  width: 365px;
   position: relative;
-  left: -25px;
+
 }
 
 #record {
@@ -294,26 +232,6 @@ svg.line {
   width: 100%;
 }
 
-.beat-bar {
-	height: 25px;
-	background: #FF9700;
-	text-align: center;
-	border: 1px solid gray;
-	margin: 5px 0;
-}
-
-.OFF {
-  width: 100%;
-  height: 100%;
-	background: #679ED2;
-}
-
-.ON {
-  width: 100%;
-  height: 100%;
-	background: #FF9700;
-}
-
 .measure {
 	border: solid 1px grey;
   border-radius: 3px;
@@ -335,17 +253,17 @@ svg.line {
   width: 100px;
 }
 .measure-bead {
-  width: 200px;
+  /*min-width: 200px;*/
   /*height: 145px;*/
 }
 .measure-line {
-  width: 400px;
+  /*width: 400px;*/
 }
 .measure-pie {
-  width: 200px;
+  /*width: 200px;*/
 }
 .measure-bar {
-  width: 400px;
+  /*width: 400px;*/
 }
 
 .measure .title {
@@ -428,7 +346,6 @@ svg.line {
   margin-left: -25px;
   font-size: 40px;
 }
-
 .control {
   position: relative;
   top: 20px;
@@ -437,7 +354,6 @@ svg.line {
   /*left: 85px;*/
   cursor: pointer;
 }
-
 .unmute {
   color: rgba(5, 5, 5, .25);
 }
@@ -485,22 +401,6 @@ svg.line {
   margin-left: 15%;
   margin-right: 2%;
   cursor: pointer;
-}
-
-.play {
-  /*background:url(image_path("playStop.png")) 0 0 no-repeat;*/
-}
-
-.pause {
-  /*background:url(image_path("playStop.png")) 100% 0 no-repeat;*/
-}
-
-.record {
-  background:url(image_path("recStop.png")) 0 0 no-repeat;
-}
-
-.recordPause {
-  background:url(image_path("recStop.png")) 100% 0 no-repeat;
 }
 
 #visual-beats {

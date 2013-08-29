@@ -52,7 +52,7 @@ define([
       }
       // add an audio rep
       this.manuallyCreatedRepresentationModel = new RepresentationModel;
-      this.manuallyCreatedRepresentationModel.set('representationType', 'bead');
+      this.manuallyCreatedRepresentationModel.set('representationType', 'audio');
       this.manuallyCreatedMeasureRepresentationCollection = new RepresentationsCollection;
       this.manuallyCreatedMeasureRepresentationCollection.add(this.manuallyCreatedRepresentationModel);
 
