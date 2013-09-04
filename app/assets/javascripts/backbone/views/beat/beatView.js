@@ -266,7 +266,6 @@ define([
       }
 
       if (this.currentRepresentationType == 'bead') {
-        console.log(this.beadRadius)
         var beatContainer = d3.select('#beat-holder-'+this.parentMeasureRepModel.cid);
         var beatPath = beatContainer
             .append('circle')

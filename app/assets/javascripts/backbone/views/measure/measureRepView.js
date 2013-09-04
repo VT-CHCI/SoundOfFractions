@@ -4,13 +4,9 @@
   This is contained in a MeasureView.
 */
 define([
-  'jquery',
-  'underscore',
-  'backbone',
+  'jquery', 'underscore', 'backbone',
   'backbone/collections/beats',
-  'backbone/models/measure',
-  'backbone/models/representation',
-  'backbone/models/state',
+  'backbone/models/measure', 'backbone/models/representation', 'backbone/models/state',
   'backbone/views/beat/beatView',
   'backbone/views/factory/beadFactoryView',
   'text!backbone/templates/measure/audioMeasures.html',
@@ -37,7 +33,8 @@ define([
     previousRepresentationType: '', //temp-holder until init
     //registering click events to add and remove measures.
     events : {
-      'click .remove-measure-rep' : 'removeRepresentation'
+      'click .remove-measure-rep' : 'removeRepresentation',
+      'click .delta' : 'transitionRepresentation'
     },
     initialize: function(options){
       //if we're being created by a MeasureView, we are
@@ -47,7 +44,7 @@ define([
         for (var key in options) {
           this[key] = options[key];
         }
-        this.el = '#measure-rep-'+this.measureRepModel.cid;
+
         this.repContainerEl = options.measureRepContainer;
         this.currentRepresentationType = options.representationType;
         this.beatFactoryHolder = 'beat-factory-holder-'+this.measureRepModel.cid;
@@ -61,9 +58,8 @@ define([
       dispatch.on('tempoChange.event', this.adjustRadius, this);
       dispatch.on('toggleAnimation.event', this.toggleAnimation, this);
 
-      // _.bindAll(this, 'render');
-      this.model.bind('change', _.bind(this.render, this));
-      $(this.el).on('resize', this.stop);
+  //     this.model.bind('change', _.bind(this.render, this));
+      this.listenTo(this.model, 'change', _.bind(this.render, this));  
 
       this.render();
     },
@@ -349,6 +345,9 @@ define([
     },
     render: function(){
       var ƒthis = this;
+
+      // this.$el.attr('id', 'merasure-rep-' + this.measureRepModel.cid);
+
       // compile the template for a representation
       var measureRepTemplateParamaters = {
         measureRepID: 'measure-rep-'+this.measureRepModel.cid,
@@ -365,6 +364,7 @@ define([
       var compiledTemplate = _.template( MeasureRepTemplate, measureRepTemplateParamaters );
       // put in the rendered template in the measure-rep-container of the measure
       $(this.repContainerEl).append( compiledTemplate );
+      this.setElement($('#measure-rep-'+this.measureRepModel.cid));
 
       if (this.currentRepresentationType == 'bead') {
         var margin = this.margin;
@@ -441,7 +441,7 @@ define([
         $('#b'+this.measureRepModel.cid).on('click', reverse);
 
         // JQ-UI resizable
-        $(this.el).resizable({ 
+        this.$el.resizable({ 
           aspectRatio: true,
           // ghost:true,
           // animate: true,
@@ -723,29 +723,20 @@ define([
       This is called when the user clicks on the minus to remove a measure.
     */
     removeRepresentation: function(ev){
-      console.log('getting here');
-      if ($('#measure'+this.measuresCollection.models[0].cid).parent()) {
+      // if ($('#measure'+this.measuresCollection.models[0].cid).parent()) {
         //removing the last measure isn't allowed.
-        if(this.measuresCollection.models.length == 1) {
-          console.log('Can\'t remove the last measure!');
+        if(this.measureRepresentationsCollection.length == 1) {
+          console.log('Can\'t remove the last representation!');
           return;
         }
-        console.log('remove measure');
+        console.log('removed representation');
 
+        var measureModelCid = ev.srcElement.parentElement.parentElement.parentElement.id.slice(12);
         //we remove the measure and get its model.
-        var model = this.measuresCollection.get($(ev.target).parents('.measure').attr('id').replace('measure',''));
-        this.measuresCollection.remove(model);
+        this.measureRepresentationsCollection.remove(measureModelCid);
 
         //send a log event showing the removal.
-        log.sendLog([[3, 'Removed a measure: measure' + this.cid]]);
-
-        //re-render the view.
-        this.render();
-
-        //trigger a stop request to stop playback.
-        dispatch.trigger('stopRequest.event', 'off');
-        dispatch.trigger('signatureChange.event', this.parent.get('signature'));
-      }
+        log.sendLog([[3, 'Removed a measure representation: representation' + this.cid]]);
     },
     // This is triggered by signatureChange events.
     reconfigure: function(signature) {
@@ -781,6 +772,10 @@ define([
         //re-render the view
         this.render();
       }
+    },
+    transitionRepresentation: function(e){
+      e.srcElement.parentElement.classList.add('transition-rep');
+      console.log('transitioning a rep');
     }
   });
 });

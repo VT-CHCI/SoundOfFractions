@@ -26,8 +26,7 @@ define([
     //registering click events to add and remove measures.
     events : {
       'click .add-measure' : 'addMeasure',
-      'click .delete-measure' : 'removeMeasure',
-      'click .measure' : 'toggleSelection'
+      'click .delete-measure' : 'removeMeasure'
     },
 
     initialize: function(options){
@@ -53,6 +52,7 @@ define([
       dispatch.on('tempoChange.event', this.adjustRadius, this);
 
       _.bindAll(this, 'render');
+      this.listenTo(this.measureRepresentationsCollection, 'remove', _.bind(this.render, this));  
       this.measureRepresentationsCollection.on('add', _.bind(this.render, this));
       this.collectionOfMeasures.on('add', _.bind(this.render, this));
       this.collectionOfMeasures.on('remove', _.bind(this.render, this));
@@ -247,6 +247,7 @@ define([
           representationType: rep.get('representationType'),
           beatHolder:'beatHolder'+this.model.cid,
           margin: margin,
+          measureRepresentationsCollection: this.measureRepresentationsCollection,
           //Audio
           audioMeasureCx: audioMeasureCx,
           audioMeasureCy: audioMeasureCy,
@@ -367,12 +368,6 @@ define([
         console.log('calling render with adding');
         this.render('adding');
       // }
-    },
-    //This is called when the hTrack is clicked anywhere to bring
-    //the hTrack into focus as selected.
-    toggleSelection: function(e){
-      e.stopPropagation();
-      $('#measure'+this.measuresCollection.models[0].cid).toggleClass('selected');
     }
   });
 });

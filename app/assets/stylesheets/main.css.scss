@@ -14,6 +14,11 @@ svg {
 .cs i{
   color: green;
 }
+.delta.btn{
+  border: none;
+  background: none;
+  box-shadow: none;
+}
 .add-measure {
   color: gray;
 }
@@ -51,6 +56,10 @@ svg {
   color: gray;
   padding: 3px;
   font-size: 17px;
+}
+.delta:hover {
+  color: green;
+  font-weight: bold;
 }
 .record-button {
 }
