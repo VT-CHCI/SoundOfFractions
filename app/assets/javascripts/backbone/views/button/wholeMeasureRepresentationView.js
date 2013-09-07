@@ -22,7 +22,7 @@ define([
     el : $("#measure-representation"), // Specifies the DOM element which this view handles
 
     events : {
-      'click .addRepresentation' : 'addRep'
+      'click .representation' : 'addOrTransition'
     },
 
     //simply creates the model.
@@ -43,24 +43,47 @@ define([
 
       return this;
     },
+    addOrTransition: function(e){
+      var csLength = $('.cs').length;
+      var trLength = $('.transition-rep').length;
+      if (csLength == 1) {
+        this.addRep(e);
+      } else if (trLength == 1) {
+        this.transitionRep(e);
+      }
+    },
     addRep: function(e) {
-      console.log('clicking in the WMRV');
-      var newRepType = $(e.target).closest('.addRepresentation').attr('data-state');
+      var newRepType = $(e.target).closest('.representation').attr('data-state');
       // find the plus sign with the class '.cs' and return the id of its hTrack
       var csLength = $('.cs').length;
-      if (csLength == 1) {      
-        var hTrackID = $('.cs').closest('.hTrack').attr('id');
-        var measureContainer; 
-        var cid = hTrackID.slice(7);
-        $('.cs').removeClass('cs'); 
-        //trigger the Measure representation addition
-        var representationModel = new RepresentationModel({representationType: newRepType});
-        console.log('adding to the instrument/measure/measureRep');
-        // Currently forcing it to add to the first measure
-        var measureRepColl = StageCollection.get(cid).get('measures').models[0].get('measureRepresentations');
-        measureRepColl.add(representationModel);
-        // dispatch.trigger('addMeasureRepresentation.event', { newRepType: newRepType, hTrackID: hTrackID, hTrack: cid} );
-      }
+      var trLength = $('.transition-rep').length;
+      var oldRep = $('.transition-rep').closest('.measureRep').attr('data-representation');
+      var hTrackID = $('.cs').closest('.hTrack').attr('id');
+      var cid = hTrackID.slice(7);
+      $('.cs').removeClass('cs'); 
+      //trigger the Measure representation addition
+      var representationModel = new RepresentationModel({representationType: newRepType});
+      console.log('adding to the instrument/measure/measureRep');
+      // Currently forcing it to add to the first measure
+      var measureRepColl = StageCollection.get(cid).get('measures').models[0].get('measureRepresentations');
+      measureRepColl.add(representationModel);
+      // dispatch.trigger('addMeasureRepresentation.event', { newRepType: newRepType, hTrackID: hTrackID, hTrack: cid} );
+    },
+    transitionRep: function(e){
+      console.log('wmrv transitioning');
+      var newRepType = $(e.target).closest('.representation').attr('data-state');
+      // find the plus sign with the class '.cs' and return the id of its hTrack
+      var csLength = $('.cs').length;
+      var trLength = $('.transition-rep').length;
+      var oldRep = $('.transition-rep').closest('.measureRep').attr('data-representation');
+      var hTrackID = $('.transition-rep').closest('.hTrack').attr('id');
+      var hTrackCID = hTrackID.slice(7);
+      var measureRepIndex = $('.transition-rep').closest('.measureRep').index();
+      var measureRepID = $('.transition-rep').closest('.measureRep').attr('id');
+      var measureRepCID = measureRepID.slice(12);
+      $('.transition-rep').removeClass('transition-rep');
+      var measureRepColl = StageCollection.get(hTrackCID).get('measures').models[0].get('measureRepresentations').get(measureRepCID).transition(newRepType);
+      // dispatch.trigger('transition.event', {oldRep: oldRep, newRep:newRepType } );
     },
     // a:97 b:98 l:108 i:105 r:114
     manuallPress: function(e) {
@@ -86,7 +109,7 @@ define([
         // representationModel.representationType = newRepType;
         console.log(hTrackID, cid, newRepType, representationModel);
 
-        console.log(' MANUALLY adding to the instrument/measure/measureRep');
+        console.log('MANUALLY adding to the instrument/measure/measureRep');
         // Currently forcing it to add to the first measure
         StageCollection.get(cid).get('measures').models[0].get('measureRepresentations').add(representationModel);
       }

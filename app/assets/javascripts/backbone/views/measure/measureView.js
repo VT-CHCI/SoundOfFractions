@@ -52,8 +52,8 @@ define([
       dispatch.on('tempoChange.event', this.adjustRadius, this);
 
       _.bindAll(this, 'render');
-      this.listenTo(this.measureRepresentationsCollection, 'remove', _.bind(this.render, this));  
-      this.measureRepresentationsCollection.on('add', _.bind(this.render, this));
+      this.listenTo(this.measureRepresentations, 'remove', _.bind(this.render, this));  
+      this.measureRepresentations.on('add', _.bind(this.render, this));
       this.collectionOfMeasures.on('add', _.bind(this.render, this));
       this.collectionOfMeasures.on('remove', _.bind(this.render, this));
       this.measureModel.on('change', _.bind(this.render, this));
@@ -217,7 +217,7 @@ define([
       this.circleStates = circleStates;
 
       // for each rep in the measuresCollection
-      _.each(this.measureRepresentationsCollection.models, function(rep, repIndex) {
+      _.each(this.measureRepresentations.models, function(rep, repIndex) {
         // (when representation button changes, the current representation template will get updated)
         // compile the template for a measure
 
@@ -247,7 +247,7 @@ define([
           representationType: rep.get('representationType'),
           beatHolder:'beatHolder'+this.model.cid,
           margin: margin,
-          measureRepresentationsCollection: this.measureRepresentationsCollection,
+          measureRepresentations: this.measureRepresentations,
           //Audio
           audioMeasureCx: audioMeasureCx,
           audioMeasureCy: audioMeasureCy,
@@ -285,7 +285,8 @@ define([
           // Transition
           circleStates: circleStates,
           measureNumberOfPoints: this.measureNumberOfPoints,
-          pathFunction: this.circlePath
+          pathFunction: this.circlePath,
+          animationDuration: animationDuration
         };
 
         new MeasureRepView(measureRepViewParamaters);
@@ -362,9 +363,9 @@ define([
       console.log('adding rep trigged in measureView');
       // if(){      
         var representationModel = new RepresentationModel;
-        representationModel.representationType = options.newRepType;
+        representationModel.set('representationType', options.newRepType);
         // Currently forcing it to add to the first measure
-        StageCollection.get(options.hTrack).get('measures').models[0].get('measureRepresentationsCollection').add(representationModel);
+        StageCollection.get(options.hTrack).get('measures').models[0].get('measureRepresentations').add(representationModel);
         console.log('calling render with adding');
         this.render('adding');
       // }

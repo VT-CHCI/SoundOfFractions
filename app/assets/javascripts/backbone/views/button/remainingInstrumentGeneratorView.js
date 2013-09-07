@@ -33,7 +33,6 @@ define([
       _.bindAll(this, 'manuallPress');
       $(document).bind('keypress', this.manuallPress);
 
-      // this.remainingInstrumentGeneratorModel.bind('change', _.bind(this.render, this));
       dispatch.on('instrumentChanged.event', this.render, this);
       dispatch.on('reRenderInstrumentGenerator.event', this.render, this);
 

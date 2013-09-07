@@ -8,34 +8,15 @@ define([
   'underscore',
   'backbone',
   'backbone/models/beat',
-  'text!backbone/templates/beat/audioBeats.html',
-  'text!backbone/templates/beat/linearBarBeats.html',
-  'text!backbone/templates/beat/circularPieBeats.html',
-  'text!backbone/templates/beat/circularBeadBeats.html',
-  'text!backbone/templates/beat/numberLineBeats.html',
   'colors',
   'app/dispatch',
   'app/log'
-], function($, _, Backbone, BeatModel, audioBeatsTemplate, linearBarBeatsTemplate, circularPieBeatsTemplate,
-  circularBeadBeatsTemplate, numberLineBeatsTemplate, COLORS, dispatch, log){
+], function($, _, Backbone, BeatModel, COLORS, dispatch, log){
   return Backbone.View.extend({
     // registering backbone's click event to our toggle() function.
      events : {
        'click' : 'toggleModel'
      },
-
-    // The different representations
-    representations: {
-      'audio': audioBeatsTemplate,
-      'bar': linearBarBeatsTemplate,
-      'pie': circularPieBeatsTemplate,
-      'bead': circularBeadBeatsTemplate,
-      'line': numberLineBeatsTemplate
-    },
-    //grab the current measure representation's data-state
-    currentRepresentationType: '',
-    previousRepresentationType: '',
-
     //The constructor takes options because these views are created
     //by measuresView objects.
     initialize: function(options){
@@ -49,12 +30,27 @@ define([
         this.beatCenterPosition = {};
 
         _.bindAll(this, 'toggleModel');
-        this.model.bind('change', this.toggleOpacity, this);
+        this.listenTo(this.model, 'change', _.bind(this.toggleOpacity, this));
       } else {
         console.error('should not be in here!');
         this.model = new BeatModel;
       }
+
+      this.listenTo(this.parentMeasureRepModel, 'change', _.bind(this.transition, this));
+
       this.render();
+    },
+
+    unroll: function() {
+      console.log('INNER UNROLL');
+      for(i=0; i<ƒthis.measureNumberOfPoints; i++){
+          this.beatPath.data([beatUnwindingPaths[i]])
+              .transition()
+              .delay(ƒthis.animationDuration*i)
+              .duration(ƒthis.animationDuration)
+              .ease('linear')
+              .attr('d', pathFunction);
+      }
     },
 
     //We use css classes to control the color of the beat.
@@ -288,17 +284,6 @@ define([
         this.beatPath = beatPath;
         this.beatPath.on('click', this.toggleModel);
 
-        function unroll() {
-          console.log('INNER UNROLL');
-          for(i=0; i<ƒthis.measureNumberOfPoints; i++){
-              beatPath.data([beatUnwindingPaths[i]])
-                  .transition()
-                  .delay(ƒthis.animationDuration*i)
-                  .duration(ƒthis.animationDuration)
-                  .ease('linear')
-                  .attr('d', pathFunction);
-          }
-        };
         function reverse() {
           for(i=0; i<ƒthis.measureNumberOfPoints; i++){
               beatPath.data([beatUnwindingPaths[ƒthis.measureNumberOfPoints-1-i]])
@@ -309,8 +294,6 @@ define([
                   .attr('d', pathFunction);
           }
         };
-        $('#a'+this.parentMeasureRepModel.cid).on('click', unroll);
-        $('#b'+this.parentMeasureRepModel.cid).on('click', reverse);
 
       } else if (this.currentRepresentationType == 'line'){
         var beatContainer = d3.select('#beat-holder-'+this.parentMeasureRepModel.cid);
@@ -436,6 +419,45 @@ define([
     toggleOpacity: function() {
       // re-rendering all beats, think it should only rerender itself, but w/e
       d3.select('#beat'+this.cid).style('opacity', this.getOpacityNumber(this.model.get('selected')))
+    },
+    transition: function(){
+      if (this.model.get('previousRepresentationType') == 'audio'){
+        if (this.model.get('representationType') == 'audio'){
+        } else if(this.model.get('representationType') == 'bead'){
+        } else if(this.model.get('representationType') == 'line'){
+        } else if(this.model.get('representationType') == 'pie'){
+        } else if(this.model.get('representationType') == 'bar'){
+        }
+      } else if(this.model.get('previousRepresentationType') == 'bead'){
+        if (this.model.get('representationType') == 'audio'){
+        } else if(this.model.get('representationType') == 'bead'){
+        } else if(this.model.get('representationType') == 'line'){
+          this.unroll();
+        } else if(this.model.get('representationType') == 'pie'){
+        } else if(this.model.get('representationType') == 'bar'){
+        }
+      } else if(this.model.get('previousRepresentationType') == 'line'){
+        if (this.model.get('representationType') == 'audio'){
+        } else if(this.model.get('representationType') == 'bead'){
+        } else if(this.model.get('representationType') == 'line'){
+        } else if(this.model.get('representationType') == 'pie'){
+        } else if(this.model.get('representationType') == 'bar'){
+        }
+      } else if(this.model.get('previousRepresentationType') == 'pie'){
+        if (this.model.get('representationType') == 'audio'){
+        } else if(this.model.get('representationType') == 'bead'){
+        } else if(this.model.get('representationType') == 'line'){
+        } else if(this.model.get('representationType') == 'pie'){
+        } else if(this.model.get('representationType') == 'bar'){
+        }
+      } else if(this.model.get('previousRepresentationType') == 'bar'){
+        if (this.model.get('representationType') == 'audio'){
+        } else if(this.model.get('representationType') == 'bead'){
+        } else if(this.model.get('representationType') == 'line'){
+        } else if(this.model.get('representationType') == 'pie'){
+        } else if(this.model.get('representationType') == 'bar'){
+        }
+      }
     }
   });
 });

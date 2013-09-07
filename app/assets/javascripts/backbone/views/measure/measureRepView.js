@@ -9,34 +9,19 @@ define([
   'backbone/models/measure', 'backbone/models/representation', 'backbone/models/state',
   'backbone/views/beat/beatView',
   'backbone/views/factory/beadFactoryView',
-  'text!backbone/templates/measure/audioMeasures.html',
-  'text!backbone/templates/measure/linearBarMeasures.html',
-  'text!backbone/templates/measure/circularPieMeasures.html',
-  'text!backbone/templates/measure/circularBeadMeasures.html',
-  'text!backbone/templates/measure/numberLineMeasures.html',
   'text!backbone/templates/measure/measureRep.html',
   'colors',
   'app/dispatch',
   'app/log'
-], function($, _, Backbone, BeatsCollection, MeasureModel, RepresentationModel, StateModel, BeatView, BeadFactoryView, AudioMeasuresTemplate, LinearBarMeasuresTemplate, CircularPieMeasuresTemplate, CircularBeadMeasuresTemplate, NumberLineMeasuresTemplate, MeasureRepTemplate, COLORS, dispatch, log){
+], function($, _, Backbone, BeatsCollection, MeasureModel, RepresentationModel, StateModel, BeatView, BeadFactoryView, MeasureRepTemplate, COLORS, dispatch, log){
   return Backbone.View.extend({
-    // The different representations
-    representations: {
-      'audio': AudioMeasuresTemplate,
-      'bar': LinearBarMeasuresTemplate,
-      'pie': CircularPieMeasuresTemplate,
-      'bead': CircularBeadMeasuresTemplate,
-      'line': NumberLineMeasuresTemplate
-    },
-    //grab the current measure representation's data-state
-    currentRepresentationType: '', //temp-holder until init
-    previousRepresentationType: '', //temp-holder until init
     //registering click events to add and remove measures.
     events : {
       'click .remove-measure-rep' : 'removeRepresentation',
       'click .delta' : 'transitionRepresentation'
     },
     initialize: function(options){
+      window.csf = this;
       //if we're being created by a MeasureView, we are
       //passed in options. Otherwise we create a single
       //measure and add it to our collection.
@@ -58,8 +43,8 @@ define([
       dispatch.on('tempoChange.event', this.adjustRadius, this);
       dispatch.on('toggleAnimation.event', this.toggleAnimation, this);
 
-  //     this.model.bind('change', _.bind(this.render, this));
-      this.listenTo(this.model, 'change', _.bind(this.render, this));  
+  //     this.model.bind('change', _.bind(this.transition, this));
+      this.listenTo(this.model, 'change', _.bind(this.transition, this));
 
       this.render();
     },
@@ -74,7 +59,6 @@ define([
       // because I don't know how to compute the arc from a point, I generate the pie slices and then move them as a group.  Thus we have to get the group's transform translate, and store the number, so that when we scale the slices in the next func(), we also translate them the origianl amount, otherwise when we are scaling it, the slices are not translated, and the origin is 0,0
       if (this.pieTranslate == undefined){
         this.pieTranslate = d3.select('#svg-'+this.measureRepModel.cid).select('g').attr('transform')
-        console.log(this.pieTranslate);
       }
       console.log(this.oldW, this.oldH, ui.size.width, ui.size.height)
     },
@@ -309,38 +293,24 @@ define([
       this.currentRepresentationType = representation;
       this.render();
     },
-    transitionRoll: function(options) {
-      if (this.unrolled == false) {
-        for(i=0; i<this.measureNumberOfPoints; i++){
-            options.circlePath.data([this.circleStates[this.measureNumberOfPoints-1-i]])
-                .transition()
-                .delay(this.animationDuration*i)
-                .duration(this.animationDuration)
-                .ease('linear')
-                .attr('d', this.pathFunction);
-        }
-      } else {
-        console.log('unroll clicked');
-        console.warn(options);
-        for(i=0; i<this.measureNumberOfPoints; i++){
-            options.circlePath.data([this.circleStates[i]])
-                .transition()
-                .delay(this.animationDuration*i)
-                .duration(this.animationDuration)
-                .ease('linear')
-                .attr('d', this.pathFunction);
-        }
-      }
-      this.unrolled = !this.unrolled;
-    },
-    rollup: function() {
+    unrollPie: function(options) {
       for(i=0; i<this.measureNumberOfPoints; i++){
-        circlePath.data([this.circleStates[this.measureNumberOfPoints-1-i]])
-          .transition()
-          .delay(this.animationDuration*i)
-          .duration(this.animationDuration)
-          .ease('linear')
-          .attr('d', this.pathFunction);
+        this.circlePath.data([this.circleStates[i]])
+            .transition()
+            .delay(this.animationDuration*i)
+            .duration(this.animationDuration)
+            .ease('linear')
+            .attr('d', this.pathFunction);
+      }
+    },
+    rollupPie: function() {
+      for(i=0; i<this.measureNumberOfPoints; i++){
+        this.circlePath.data([this.circleStates[this.measureNumberOfPoints-1-i]])
+            .transition()
+            .delay(this.animationDuration*i)
+            .duration(this.animationDuration)
+            .ease('linear')
+            .attr('d', this.pathFunction);
       }
     },
     render: function(){
@@ -355,6 +325,7 @@ define([
         measureRepDeltaID: 'delta-'+this.measureRepModel.cid,
         measureRepSVGID: 'svg-'+this.measureRepModel.cid,
         svgClasses: this.currentRepresentationType,
+        measureRepType: this.currentRepresentationType,
         beatHolderID: 'beat-holder-'+this.measureRepModel.cid,
         beatFactoryHolderID: this.beatFactoryHolder,
         measureCount: this.measureCount,
@@ -377,6 +348,7 @@ define([
             .x(function (d) {return d.x;})
             .y(function (d) {return d.y;})
             .interpolate('basis'); // bundle | basis | linear | cardinal are also options
+        this.pathFunction = pathFunction;
 
         var svgContainer = d3.select('#svg-'+this.measureRepModel.cid)
             .attr('width', this.circularDivWidth)
@@ -390,8 +362,9 @@ define([
             .attr('class', 'circle')
             .attr('class', 'circle-path')
             .attr('transform', 'scale('+this.originalScale+','+this.originalScale+')');
+            this.circlePath = circlePath;
 
-        function transitionRoll(options) {
+        function transitionRoll() {
           if (this.unrolled == false) {
             for(i=0; i<this.measureNumberOfPoints; i++){
                 options.circlePath.data([this.circleStates[this.measureNumberOfPoints-1-i]])
@@ -443,7 +416,7 @@ define([
         // JQ-UI resizable
         this.$el.resizable({ 
           aspectRatio: true,
-          // ghost:true,
+          ghost:true,
           // animate: true,
           start: function(e, ui) {
             ƒthis.circleStart(e, ui);
@@ -720,7 +693,7 @@ define([
     },
 
     /*
-      This is called when the user clicks on the minus to remove a measure.
+      This is called when the user clicks on the minus to remove a measureRep.
     */
     removeRepresentation: function(ev){
       // if ($('#measure'+this.measuresCollection.models[0].cid).parent()) {
@@ -774,8 +747,47 @@ define([
       }
     },
     transitionRepresentation: function(e){
-      e.srcElement.parentElement.classList.add('transition-rep');
+      e.srcElement.classList.add('transition-rep');
       console.log('transitioning a rep');
+    },
+    transition: function(){
+      if (this.model.get('previousRepresentationType') == 'audio'){
+        if (this.model.get('representationType') == 'audio'){
+        } else if(this.model.get('representationType') == 'bead'){
+        } else if(this.model.get('representationType') == 'line'){
+        } else if(this.model.get('representationType') == 'pie'){
+        } else if(this.model.get('representationType') == 'bar'){
+        }
+      } else if(this.model.get('previousRepresentationType') == 'bead'){
+        if (this.model.get('representationType') == 'audio'){
+        } else if(this.model.get('representationType') == 'bead'){
+        } else if(this.model.get('representationType') == 'line'){
+          this.unrollPie();
+        } else if(this.model.get('representationType') == 'pie'){
+        } else if(this.model.get('representationType') == 'bar'){
+        }
+      } else if(this.model.get('previousRepresentationType') == 'line'){
+        if (this.model.get('representationType') == 'audio'){
+        } else if(this.model.get('representationType') == 'bead'){
+        } else if(this.model.get('representationType') == 'line'){
+        } else if(this.model.get('representationType') == 'pie'){
+        } else if(this.model.get('representationType') == 'bar'){
+        }
+      } else if(this.model.get('previousRepresentationType') == 'pie'){
+        if (this.model.get('representationType') == 'audio'){
+        } else if(this.model.get('representationType') == 'bead'){
+        } else if(this.model.get('representationType') == 'line'){
+        } else if(this.model.get('representationType') == 'pie'){
+        } else if(this.model.get('representationType') == 'bar'){
+        }
+      } else if(this.model.get('previousRepresentationType') == 'bar'){
+        if (this.model.get('representationType') == 'audio'){
+        } else if(this.model.get('representationType') == 'bead'){
+        } else if(this.model.get('representationType') == 'line'){
+        } else if(this.model.get('representationType') == 'pie'){
+        } else if(this.model.get('representationType') == 'bar'){
+        }
+      }
     }
   });
 });

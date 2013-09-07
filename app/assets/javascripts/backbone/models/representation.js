@@ -10,12 +10,17 @@ define([
   'backbone'
 ], function(_, Backbone) {
   var RepresentationModel = Backbone.Model.extend({
-    representationType: undefined, //should overide this each time
-
     initialize: function(options){
-      if(options){
-        this.set('representationType' , options.representationType);
-      }
+      console.log(this)
+      this.representationType = options.representationType;
+      this.previousRepresentationType = undefined;
+      console.log(this)
+    },
+    transition: function(newRep){
+      this.set({
+        previousRepresentationType: this.representationType,
+        representationType: newRep
+      });
     }
   });
   return RepresentationModel;

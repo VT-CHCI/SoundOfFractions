@@ -28,7 +28,6 @@ define([
 
       this.render();
 
-      // this.remainingInstrumentGeneratorModel.bind('change', _.bind(this.render, this));
       dispatch.on('instrumentChanged.event', this.instrumentChanged, this);
       dispatch.on('reRenderInstrumentDropDown.event', this.render, this);
 

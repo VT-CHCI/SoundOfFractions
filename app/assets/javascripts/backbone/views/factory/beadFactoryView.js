@@ -8,16 +8,10 @@ define([
   'underscore',
   'backbone',
   'backbone/models/beat',
-  'text!backbone/templates/beat/audioBeats.html',
-  'text!backbone/templates/beat/linearBarBeats.html',
-  'text!backbone/templates/beat/circularPieBeats.html',
-  'text!backbone/templates/beat/circularBeadBeats.html',
-  'text!backbone/templates/beat/numberLineBeats.html',
   'colors',
   'app/dispatch',
   'app/log'
-], function($, _, Backbone, BeatModel, audioBeatsTemplate, linearBarBeatsTemplate, circularPieBeatsTemplate,
-  circularBeadBeatsTemplate, numberLineBeatsTemplate, COLORS, dispatch, log){
+], function($, _, Backbone, BeatModel, COLORS, dispatch, log){
   var BeadFactory = Backbone.View.extend({
     events : {},
     //The constructor takes options because these views are created
