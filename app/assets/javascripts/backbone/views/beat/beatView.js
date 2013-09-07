@@ -43,110 +43,56 @@ define([
 
     unroll: function() {
       console.log('INNER UNROLL');
-      for(i=0; i<ƒthis.measureNumberOfPoints; i++){
-          this.beatPath.data([beatUnwindingPaths[i]])
+      for(i=0; i<this.measureNumberOfPoints; i++){
+      console.log(this.beatUnwindingPaths[i].x,this.beatUnwindingPaths[i].y);
+          this.beatPath.data([this.beatUnwindingPaths[i]])
               .transition()
-              .delay(ƒthis.animationDuration*i)
-              .duration(ƒthis.animationDuration)
+              .delay(this.animationDuration*i)
+              .duration(this.animationDuration)
               .ease('linear')
-              .attr('d', pathFunction);
+              .attr('d', this.pathFunction);
       }
     },
 
     //We use css classes to control the color of the beat.
     render: function(){
       var ƒthis = this;
-      var beatTemplateParameters = {
-        beat: this.model,
-        selected: this.model.get('selected'),
-        beatAngle: this.beatAngle,
-        color: COLORS.hexColors[this.color],
-        beatStartTime: this.beatStartTime,
-        timeIncrement: this.timeIncrement,
-        beatHolderWidth: this.beatHolderWidth
-      };
-
-      //Opacity
-      beatTemplateParameters.opacity = this.opacity;        
-
-      //Linear
-      var beatBBX = this.beatBBX;
-      beatTemplateParameters.beatBBX = beatBBX;
-      var beatBBY = this.beatBBY;
-      beatTemplateParameters.beatBBY = beatBBY;
-      var beatWidth = this.beatWidth;
-      beatTemplateParameters.beatWidth = beatWidth;
-      var beatHeight = this.beatHeight;
-      beatTemplateParameters.beatHeight = beatHeight;
-
-      //Circular Pie
-      beatTemplateParameters.circularMeasureCx = this.circularMeasureCx;
-      var centerX = beatTemplateParameters.circularMeasureCx;
-      beatTemplateParameters.circularMeasureCy = this.circularMeasureCy;
-      var centerY = beatTemplateParameters.circularMeasureCy;
-      beatTemplateParameters.circularMeasureR = this.circularMeasureR;
-      var measureR = beatTemplateParameters.circularMeasureR;
-      var measureStartAngle = -90;
-      beatTemplateParameters.measureStartAngle = measureStartAngle;
-      var beatStartAngle = this.beatStartAngle;
-      beatTemplateParameters.beatStartAngle = beatStartAngle;
-      var beatEndAngle = beatStartAngle+this.beatAngle;
-      beatTemplateParameters.beatEndAngle = beatEndAngle;
 
       // x center of a bead or first x of pie piece
       if (this.currentRepresentationType == 'pie') {
-        var x1 = centerX + measureR * Math.cos(Math.PI * beatStartAngle/180); 
-        beatTemplateParameters.x1 = x1;
+        this.x1 = this.circularMeasureCx + this.circularMeasureR * Math.cos(Math.PI * this.beatStartAngle/180); 
       } else if (this.currentRepresentationType == 'bead') {
-        beatTemplateParameters.x1 = this.circleStates[0][Math.floor((this.beatIndex/this.beatsInMeasure)*(this.measureNumberOfPoints))].x;
+        this.x1 = this.circleStates[0][Math.floor((this.beatIndex/this.beatsInMeasure)*(this.measureNumberOfPoints))].x;
       }
       // y center of a bead or first y of a pie piece
       if (this.currentRepresentationType == 'pie') {
-        var y1 = centerY + measureR * Math.sin(Math.PI * beatStartAngle/180);     
-        beatTemplateParameters.y1 = y1;
+        this.y1 = this.circularMeasureCy + this.circularMeasureR * Math.sin(Math.PI * this.beatStartAngle/180);     
       } else if (this.currentRepresentationType == 'bead') {
-        beatTemplateParameters.y1 = this.circleStates[0][Math.floor((this.beatIndex/this.beatsInMeasure)*(this.measureNumberOfPoints))].y;
+        this.y1 = this.circleStates[0][Math.floor((this.beatIndex/this.beatsInMeasure)*(this.measureNumberOfPoints))].y;
       }
       // the second x point of a pie piece
-      var x2 = centerX + measureR * Math.cos(Math.PI * beatEndAngle/180);
-      beatTemplateParameters.x2 = x2;
+      this.x2 = this.circularMeasureCx + this.circularMeasureR * Math.cos(Math.PI * this.beatEndAngle/180);
       // the second y point of a pie piece
-      var y2 = centerY + measureR * Math.sin(Math.PI * beatEndAngle/180);
-      beatTemplateParameters.y2 = y2;
+      this.y2 = this.circularMeasureCy + this.circularMeasureR * Math.sin(Math.PI * this.beatEndAngle/180);
 
       this.beatCenterPosition = {
-        x: beatTemplateParameters.x1,
-        y: beatTemplateParameters.y1
+        x: this.x1,
+        y: this.y1
       };
 
       //Circular Bead
-      var beatR = this.beatR;
-      beatTemplateParameters.beatR = beatR;
-      //console.log(x1 + ',' + y1);
 
-      var beatUnwindingPaths = [];
-      for (i=0; i<ƒthis.circleStates.length; i++){
+      this.beatUnwindingPaths = [];
+      for (i=0; i<this.circleStates.length; i++){
         // circle portion of unroll
-        var computedBeatBeadPath = $.map(Array(this.beatNumberOfPoints), function (d, j) {
-          var x = (ƒthis.circleStates[i][Math.floor((ƒthis.beatIndex/ƒthis.beatsInMeasure)*(ƒthis.measureNumberOfPoints))].x) + beatR * Math.sin(2 * j * Math.PI / (ƒthis.beatNumberOfPoints - 1));
+        var computedBeatBeadPath = $.map(Array(ƒthis.beatNumberOfPoints), function (d, j) {
+          var x = (ƒthis.circleStates[i][Math.floor((ƒthis.beatIndex/ƒthis.beatsInMeasure)*(ƒthis.measureNumberOfPoints))].x) + ƒthis.beatR * Math.sin(2 * j * Math.PI / (ƒthis.beatNumberOfPoints - 1));
           // margin.top + beatR
-          var y = (ƒthis.circleStates[i][Math.floor((ƒthis.beatIndex/ƒthis.beatsInMeasure)*(ƒthis.measureNumberOfPoints))].y) - beatR * Math.cos(2 * j * Math.PI / (ƒthis.beatNumberOfPoints - 1));
+          var y = (ƒthis.circleStates[i][Math.floor((ƒthis.beatIndex/ƒthis.beatsInMeasure)*(ƒthis.measureNumberOfPoints))].y) - ƒthis.beatR * Math.cos(2 * j * Math.PI / (ƒthis.beatNumberOfPoints - 1));
           return { x: x, y: y };
         });
-        beatUnwindingPaths.push(computedBeatBeadPath);
+        this.beatUnwindingPaths.push(computedBeatBeadPath);
       };
-      this.beatUnwindingPaths = beatUnwindingPaths;
-
-      //Audio
-      beatTemplateParameters.beatRForAudio = this.beatRForAudio;
-      beatTemplateParameters.colorForAudio = this.colorForAudio;
-      beatTemplateParameters.audioBeatCx = this.audioBeatCx;
-      beatTemplateParameters.audioBeatCy = this.audioBeatCy;
-      beatTemplateParameters.audioBeatR = this.audioBeatR;
-
-
-      // compile the template for this beat (respect the current representation)
-      // var compiledTemplate = _.template(this.representations[this.currentRepresentationType], beatTemplateParameters );
 
       var margin = this.margin;
       var lineData = $.map(Array(this.measureNumberOfPoints), function (d, i) {
@@ -158,6 +104,7 @@ define([
           .x(function (d) {return d.x;})
           .y(function (d) {return d.y;})
           .interpolate('basis'); // bundle | basis | linear | cardinal are also options
+      this.pathFunction = pathFunction;
 
       var dragBead = d3.behavior.drag();
       // to prevent the dragging of a one beat measure
@@ -216,7 +163,6 @@ define([
           }
         });
       }
-
       var dragBar = d3.behavior.drag();
       dragBar.on('drag', function(d) {
         var newSettingX = parseInt(d3.select(this).attr("x")) + parseInt(d3.event.dx);
@@ -237,7 +183,6 @@ define([
           dispatch.trigger('signatureChange.event', ƒthis.beatsInMeasure-1);
         }
       });
-
       var dragSlice = d3.behavior.drag();
       if (this.beatsInMeasure > 1) {
         ƒthis = this;
@@ -267,14 +212,14 @@ define([
             .append('circle')
             .attr('id', 'beat'+this.cid)
             .attr('class', 'beat d3 bead-beat')
-            .attr('cx', beatTemplateParameters.x1)
-            .attr('cy', beatTemplateParameters.y1)
+            .attr('cx', this.x1)
+            .attr('cy', this.y1)
             .attr('r', this.beadRadius)
             // Calling the click handler here doesn't work for some reason
             // .on('click', function(){console.log('beat container click handler')})
             .attr('transform', 'translate(0,0)')
             // This is the path that the beat will follow when un/roll is clicked
-            .data([beatUnwindingPaths[0]])
+            .data([this.beatUnwindingPaths[0]])
             // .attr('d', pathFunction)
             .attr('fill', COLORS.hexColors[this.color])
             .attr('stroke', 'black')
@@ -286,7 +231,7 @@ define([
 
         function reverse() {
           for(i=0; i<ƒthis.measureNumberOfPoints; i++){
-              beatPath.data([beatUnwindingPaths[ƒthis.measureNumberOfPoints-1-i]])
+              beatPath.data([this.beatUnwindingPaths[ƒthis.measureNumberOfPoints-1-i]])
                   .transition()
                   .delay(ƒthis.animationDuration*i)
                   .duration(ƒthis.animationDuration)
@@ -421,41 +366,41 @@ define([
       d3.select('#beat'+this.cid).style('opacity', this.getOpacityNumber(this.model.get('selected')))
     },
     transition: function(){
-      if (this.model.get('previousRepresentationType') == 'audio'){
-        if (this.model.get('representationType') == 'audio'){
-        } else if(this.model.get('representationType') == 'bead'){
-        } else if(this.model.get('representationType') == 'line'){
-        } else if(this.model.get('representationType') == 'pie'){
-        } else if(this.model.get('representationType') == 'bar'){
+      if (this.parentMeasureRepModel.get('previousRepresentationType') == 'audio'){
+        if (this.parentMeasureRepModel.get('representationType') == 'audio'){
+        } else if(this.parentMeasureRepModel.get('representationType') == 'bead'){
+        } else if(this.parentMeasureRepModel.get('representationType') == 'line'){
+        } else if(this.parentMeasureRepModel.get('representationType') == 'pie'){
+        } else if(this.parentMeasureRepModel.get('representationType') == 'bar'){
         }
-      } else if(this.model.get('previousRepresentationType') == 'bead'){
-        if (this.model.get('representationType') == 'audio'){
-        } else if(this.model.get('representationType') == 'bead'){
-        } else if(this.model.get('representationType') == 'line'){
+      } else if(this.parentMeasureRepModel.get('previousRepresentationType') == 'bead'){
+        if (this.parentMeasureRepModel.get('representationType') == 'audio'){
+        } else if(this.parentMeasureRepModel.get('representationType') == 'bead'){
+        } else if(this.parentMeasureRepModel.get('representationType') == 'line'){
           this.unroll();
-        } else if(this.model.get('representationType') == 'pie'){
-        } else if(this.model.get('representationType') == 'bar'){
+        } else if(this.parentMeasureRepModel.get('representationType') == 'pie'){
+        } else if(this.parentMeasureRepModel.get('representationType') == 'bar'){
         }
-      } else if(this.model.get('previousRepresentationType') == 'line'){
-        if (this.model.get('representationType') == 'audio'){
-        } else if(this.model.get('representationType') == 'bead'){
-        } else if(this.model.get('representationType') == 'line'){
-        } else if(this.model.get('representationType') == 'pie'){
-        } else if(this.model.get('representationType') == 'bar'){
+      } else if(this.parentMeasureRepModel.get('previousRepresentationType') == 'line'){
+        if (this.parentMeasureRepModel.get('representationType') == 'audio'){
+        } else if(this.parentMeasureRepModel.get('representationType') == 'bead'){
+        } else if(this.parentMeasureRepModel.get('representationType') == 'line'){
+        } else if(this.parentMeasureRepModel.get('representationType') == 'pie'){
+        } else if(this.parentMeasureRepModel.get('representationType') == 'bar'){
         }
-      } else if(this.model.get('previousRepresentationType') == 'pie'){
-        if (this.model.get('representationType') == 'audio'){
-        } else if(this.model.get('representationType') == 'bead'){
-        } else if(this.model.get('representationType') == 'line'){
-        } else if(this.model.get('representationType') == 'pie'){
-        } else if(this.model.get('representationType') == 'bar'){
+      } else if(this.parentMeasureRepModel.get('previousRepresentationType') == 'pie'){
+        if (this.parentMeasureRepModel.get('representationType') == 'audio'){
+        } else if(this.parentMeasureRepModel.get('representationType') == 'bead'){
+        } else if(this.parentMeasureRepModel.get('representationType') == 'line'){
+        } else if(this.parentMeasureRepModel.get('representationType') == 'pie'){
+        } else if(this.parentMeasureRepModel.get('representationType') == 'bar'){
         }
-      } else if(this.model.get('previousRepresentationType') == 'bar'){
-        if (this.model.get('representationType') == 'audio'){
-        } else if(this.model.get('representationType') == 'bead'){
-        } else if(this.model.get('representationType') == 'line'){
-        } else if(this.model.get('representationType') == 'pie'){
-        } else if(this.model.get('representationType') == 'bar'){
+      } else if(this.parentMeasureRepModel.get('previousRepresentationType') == 'bar'){
+        if (this.parentMeasureRepModel.get('representationType') == 'audio'){
+        } else if(this.parentMeasureRepModel.get('representationType') == 'bead'){
+        } else if(this.parentMeasureRepModel.get('representationType') == 'line'){
+        } else if(this.parentMeasureRepModel.get('representationType') == 'pie'){
+        } else if(this.parentMeasureRepModel.get('representationType') == 'bar'){
         }
       }
     }
