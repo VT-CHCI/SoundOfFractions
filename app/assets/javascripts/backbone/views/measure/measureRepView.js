@@ -21,7 +21,6 @@ define([
       'click .delta' : 'transitionRepresentation'
     },
     initialize: function(options){
-      window.csf = this;
       //if we're being created by a MeasureView, we are
       //passed in options. Otherwise we create a single
       //measure and add it to our collection.
@@ -289,7 +288,7 @@ define([
       }
     },
     changeMeasureRepresentation: function(representation) {
-      this.previous3RepresentationType = this.currentRepresentationType;
+      this.previousRepresentationType = this.currentRepresentationType;
       this.currentRepresentationType = representation;
       this.render();
     },
@@ -341,8 +340,8 @@ define([
         var margin = this.margin;
         var lineData = $.map(Array(this.measureNumberOfPoints), function (d, i) {
             var y = margin.top;
-            var x = margin.left + i * this.linearLineLength / (this.measureNumberOfPoints - 1)
-            return {x: x, y: y}
+            var x = margin.left + i * this.linearLineLength / (this.measureNumberOfPoints - 1);
+            return {x: x, y: y};
         });
         var pathFunction = d3.svg.line()
             .x(function (d) {return d.x;})
@@ -577,6 +576,7 @@ define([
           beatWidth: this.beatWidth,
           beatHeight: this.beatHeight,
           // Line
+          lineDivision: this.lineDivision,
           numberLineY: this.numberLineY,
           lineHashHeight: this.lineHashHeight,
           X1: this.lbbMeasureLocationX +(this.beatWidth*(index)),
@@ -592,7 +592,7 @@ define([
           beatStartTime: this.firstBeatStart+(index)*(this.timeIncrement/1000),
           
           // Circular Bead
-          beadRadius: this.circularBeadBeatRadius,
+          circularBeadBeatRadius: this.circularBeadBeatRadius,
           circleStates: this.circleStates,
           measureNumberOfPoints: this.measureNumberOfPoints,
           margin: this.margin, 

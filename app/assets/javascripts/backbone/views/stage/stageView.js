@@ -47,7 +47,7 @@ define([
       // this creates 1 measure, and addes beats and the representations to itself
       this.manuallyCreatedMeasureBeatsCollection = new BeatsCollection;
       //for each beat - also change signature below
-      for (var i = 0; i < 6; i++) {
+      for (var i = 0; i < 7; i++) {
         this.manuallyCreatedMeasureBeatsCollection.add();
       }
       // add an audio rep

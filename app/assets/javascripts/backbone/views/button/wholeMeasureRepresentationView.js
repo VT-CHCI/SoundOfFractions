@@ -107,7 +107,6 @@ define([
         $('.cs').removeClass('cs'); 
         var representationModel = new RepresentationModel({representationType: newRepType});
         // representationModel.representationType = newRepType;
-        console.log(hTrackID, cid, newRepType, representationModel);
 
         console.log('MANUALLY adding to the instrument/measure/measureRep');
         // Currently forcing it to add to the first measure

@@ -28,6 +28,7 @@ define([
         this.el = options.singleBeat;
         this.opacity = this.getOpacityNumber(options.opacity);
         this.beatCenterPosition = {};
+        this.beatNumberOfPoints = this.measureNumberOfPoints;
 
         _.bindAll(this, 'toggleModel');
         this.listenTo(this.model, 'change', _.bind(this.toggleOpacity, this));
@@ -43,14 +44,14 @@ define([
 
     unroll: function() {
       console.log('INNER UNROLL');
-      for(i=0; i<this.measureNumberOfPoints; i++){
-      console.log(this.beatUnwindingPaths[i].x,this.beatUnwindingPaths[i].y);
-          this.beatPath.data([this.beatUnwindingPaths[i]])
-              .transition()
-              .delay(this.animationDuration*i)
-              .duration(this.animationDuration)
-              .ease('linear')
-              .attr('d', this.pathFunction);
+      for (i=0 ; i<this.beatNumberOfPoints ; i++){
+        this.beatPath.data([this.finalBeatUnwindingPaths[i]])
+            .transition()
+            .delay(this.animationDuration*i)
+            .duration(this.animationDuration)
+            .ease('linear')
+            .attr('cx', this.finalBeatUnwindingPaths[i].cx)
+            .attr('cy', this.finalBeatUnwindingPaths[i].cy)
       }
     },
 
@@ -83,16 +84,40 @@ define([
       //Circular Bead
 
       this.beatUnwindingPaths = [];
+      this.finalBeatUnwindingPaths = []
       for (i=0; i<this.circleStates.length; i++){
-        // circle portion of unroll
-        var computedBeatBeadPath = $.map(Array(ƒthis.beatNumberOfPoints), function (d, j) {
-          var x = (ƒthis.circleStates[i][Math.floor((ƒthis.beatIndex/ƒthis.beatsInMeasure)*(ƒthis.measureNumberOfPoints))].x) + ƒthis.beatR * Math.sin(2 * j * Math.PI / (ƒthis.beatNumberOfPoints - 1));
-          // margin.top + beatR
-          var y = (ƒthis.circleStates[i][Math.floor((ƒthis.beatIndex/ƒthis.beatsInMeasure)*(ƒthis.measureNumberOfPoints))].y) - ƒthis.beatR * Math.cos(2 * j * Math.PI / (ƒthis.beatNumberOfPoints - 1));
-          return { x: x, y: y };
+        var circleState = $.map(Array(ƒthis.beatNumberOfPoints), function (d, j) {
+          var cx = (ƒthis.circleStates[i][Math.floor((ƒthis.beatIndex/ƒthis.beatsInMeasure)*(ƒthis.measureNumberOfPoints))].x) + ƒthis.circularBeadBeatRadius * Math.sin(2 * j * Math.PI / (ƒthis.beatNumberOfPoints - 1));
+
+        //circle portion
+        // var circleState = $.map(Array(ƒthis.beatNumberOfPoints), function (d, j) {
+          // var cx = ƒthis.circularMeasureCx + ƒthis.lineDivision*i + ƒthis.circularMeasureR * Math.sin(2 * j * Math.PI / (ƒthis.beatNumberOfPoints - 1));
+          var cy = ƒthis.circularMeasureCy - ƒthis.circularMeasureR * Math.cos(2 * j * Math.PI / (ƒthis.beatNumberOfPoints - 1));
+          return { cx: cx, cy: cy};
         });
-        this.beatUnwindingPaths.push(computedBeatBeadPath);
+        circleState.splice(ƒthis.beatNumberOfPoints-i);
+        //line portion
+        var lineState = $.map(Array(ƒthis.beatNumberOfPoints), function (d, j) {
+          var cx = ƒthis.circularMeasureCx + ƒthis.lineDivision*j;
+          var cy =  ƒthis.circularMeasureCy - ƒthis.circularMeasureR;
+          return { cx: cx, cy: cy};
+        });
+        lineState.splice(i);
+        //together
+        var individualState = lineState.concat(circleState);
+        this.beatUnwindingPaths.push(individualState);
       };
+
+      for (i=0; i<this.circleStates.length; i++){
+        var computedBeatCoordinates = [];
+          // var cx = (ƒthis.beatUnwindingPaths[i][Math.floor((ƒthis.beatIndex/ƒthis.beatsInMeasure)*(ƒthis.measureNumberOfPoints))].cx);
+          computedBeatCoordinates.cx = (ƒthis.beatUnwindingPaths[i][Math.floor((ƒthis.beatIndex/ƒthis.beatsInMeasure)*(ƒthis.measureNumberOfPoints))].cx);
+          // margin.top + beatR
+          computedBeatCoordinates.cy = (ƒthis.beatUnwindingPaths[i][Math.floor((ƒthis.beatIndex/ƒthis.beatsInMeasure)*(ƒthis.measureNumberOfPoints))].cy);
+        this.finalBeatUnwindingPaths.push(computedBeatCoordinates);
+      };
+
+      window.csf = this.finalBeatUnwindingPaths;
 
       var margin = this.margin;
       var lineData = $.map(Array(this.measureNumberOfPoints), function (d, i) {
@@ -171,7 +196,6 @@ define([
         d3.select(this).attr("y", newSettingY);
         var newComputedValX = d3.select(this).attr('x');
         var newComputedValY = d3.select(this).attr('y');
-        console.log(newComputedValY, ƒthis.lbbMeasureLocationY + ƒthis.beatHeight)
         // Above: newComputedValY1 must be above line y
         // On : newComputedValY1 must be on the line y
         // Below: newComputedValY1 must be below the line y
@@ -214,7 +238,7 @@ define([
             .attr('class', 'beat d3 bead-beat')
             .attr('cx', this.x1)
             .attr('cy', this.y1)
-            .attr('r', this.beadRadius)
+            .attr('r', this.circularBeadBeatRadius)
             // Calling the click handler here doesn't work for some reason
             // .on('click', function(){console.log('beat container click handler')})
             .attr('transform', 'translate(0,0)')

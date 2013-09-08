@@ -274,6 +274,7 @@ define([
           lineHashHeight: lineHashHeight,
           linearLineLength: linearLineLength,
           numberLineY: numberLineY,
+          lineDivision: lineDivision,
           // Bar
           measureWidth: lbbMeasureWidth,
           beatWidth: beatWidth,
