@@ -68,16 +68,16 @@ svg {
 .change-instrument {
   width: 135px;  
 }
-.addRepresentation[data-state="line"] svg {
+.representation[data-state="line"] svg {
   margin-left: -65px;
 }
-.addRepresentation[data-state="pie"] svg {
+.representation[data-state="pie"] svg {
   margin-left: 15px;
 }
-.addRepresentation[data-state="bead"] svg {
+.representation[data-state="bead"] svg {
   margin-left: 10px;
 }
-.addRepresentation[data-state="audio"] svg {
+.representation[data-state="audio"] svg {
   margin-left: 5px;
 }
 .resize-measure-pull{
