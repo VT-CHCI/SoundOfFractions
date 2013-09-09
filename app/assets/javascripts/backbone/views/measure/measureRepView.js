@@ -37,7 +37,7 @@ define([
       }
       //Dispatch listeners
       dispatch.on('signatureChange.event', this.reconfigure, this);
-      dispatch.on('measureRepresentation.event', this.changeMeasureRepresentation, this);
+      // dispatch.on('measureRepresentation.event', this.changeMeasureRepresentation, this);
       dispatch.on('unroll.event', this.unroll, this);
       dispatch.on('tempoChange.event', this.adjustRadius, this);
       dispatch.on('toggleAnimation.event', this.toggleAnimation, this);
@@ -287,20 +287,30 @@ define([
         //this.animationWrapper(counter, beats, signature, maxMeasures, duration);
       }
     },
-    changeMeasureRepresentation: function(representation) {
-      this.previousRepresentationType = this.currentRepresentationType;
-      this.currentRepresentationType = representation;
-      this.render();
-    },
     unrollPie: function(options) {
+      var ƒthis = this;
+      var svgContainer = d3.select('#svg-'+this.measureRepModel.cid);
+      svgContainer.attr('width', this.linearDivWidth+this.circularMeasureR*2 );
+//      svgContainer.attr('height', parseInt(svgContainer.attr('height'))+deltaHeight );
+
       for(i=0; i<this.measureNumberOfPoints; i++){
         this.circlePath.data([this.circleStates[i]])
-            .transition()
+          .transition()
             .delay(this.animationDuration*i)
             .duration(this.animationDuration)
             .ease('linear')
-            .attr('d', this.pathFunction);
+            .attr('d', this.pathFunction)
+          // .transition()
+          // .each('end', _.once(this.render()));
       }
+      setTimeout(function(){
+        svgContainer.select('g')
+          .data([]).exit().remove();
+      }, this.animationDuration*(this.measureNumberOfPoints+1));
+      setTimeout(function(){
+        ƒthis.remove();
+        ƒthis.render();
+      }, this.animationDuration*(this.measureNumberOfPoints+2));
     },
     rollupPie: function() {
       for(i=0; i<this.measureNumberOfPoints; i++){
@@ -313,22 +323,23 @@ define([
       }
     },
     render: function(){
+      console.log('mR render');
       var ƒthis = this;
 
-      // this.$el.attr('id', 'merasure-rep-' + this.measureRepModel.cid);
+      this.$el.attr('id', 'merasure-rep-' + this.measureRepModel.cid);
 
       // compile the template for a representation
       var measureRepTemplateParamaters = {
         measureRepID: 'measure-rep-'+this.measureRepModel.cid,
-        measureClasses: 'measureRep measure-'+this.currentRepresentationType,
+        measureClasses: 'measureRep measure-'+this.model.get('representationType'),
         measureRepDeltaID: 'delta-'+this.measureRepModel.cid,
         measureRepSVGID: 'svg-'+this.measureRepModel.cid,
-        svgClasses: this.currentRepresentationType,
-        measureRepType: this.currentRepresentationType,
+        svgClasses: this.model.get('representationType'),
+        measureRepType: this.model.get('representationType'),
         beatHolderID: 'beat-holder-'+this.measureRepModel.cid,
         beatFactoryHolderID: this.beatFactoryHolder,
         measureCount: this.measureCount,
-        measureRep: this.currentRepresentationType,
+        measureRep: this.model.get('representationType'),
         measureRepRecordID: 'record-'+this.measureRepModel.cid
       };
       var compiledTemplate = _.template( MeasureRepTemplate, measureRepTemplateParamaters );
@@ -336,7 +347,7 @@ define([
       $(this.repContainerEl).append( compiledTemplate );
       this.setElement($('#measure-rep-'+this.measureRepModel.cid));
 
-      if (this.currentRepresentationType == 'bead') {
+      if (this.model.get('representationType') == 'bead') {
         var margin = this.margin;
         var lineData = $.map(Array(this.measureNumberOfPoints), function (d, i) {
             var y = margin.top;
@@ -428,7 +439,7 @@ define([
           }  
         });
 
-      } else if (this.currentRepresentationType == 'line'){
+      } else if (this.model.get('representationType') == 'line'){
         var svgContainer = d3.select('#svg-'+this.measureRepModel.cid)
             .attr('width', this.linearDivWidth)
             .attr('height', this.linearDivHeight);
@@ -466,7 +477,7 @@ define([
           }  
         });
 
-      } else if (this.currentRepresentationType == 'pie'){
+      } else if (this.model.get('representationType') == 'pie'){
         var margin = this.margin;
         var lineData = $.map(Array(this.measureNumberOfPoints), function (d, i) {
             var y = margin.top;
@@ -505,7 +516,7 @@ define([
           }  
         });
 
-      } else if (this.currentRepresentationType == 'audio'){
+      } else if (this.model.get('representationType') == 'audio'){
         var svgContainer = d3.select('#svg-'+this.measureRepModel.cid)
         var circlePath = svgContainer
             .insert('circle', ':first-child')
@@ -515,7 +526,7 @@ define([
             .attr('fill', 'none')
             .attr('stroke', 'black');
 
-      } else if (this.currentRepresentationType == 'bar'){
+      } else if (this.model.get('representationType') == 'bar'){
         var svgContainer = d3.select('#svg-'+this.measureRepModel.cid)
             .attr('width', this.linearDivWidth)
             .attr('height', this.linearDivHeight);
@@ -560,7 +571,7 @@ define([
           singleBeat: '#beat'+beat.cid,
           beatIndex: index,
           margin : this.margin,
-          currentRepresentationType: this.currentRepresentationType,
+          currentRepresentationType: this.model.get('representationType'),
           beatsInMeasure: this.beatsInMeasure,
           // To use the range of colors
           color: index,
@@ -619,7 +630,7 @@ define([
         beatFactoryHolder: this.beatFactoryHolder,
         beatsInMeasure: this.beatsInMeasure,
         remainingNumberOfBeats: 16-this.beatsInMeasure,
-        currentRepresentationType: this.currentRepresentationType,
+        currentRepresentationType: this.model.get('representationType'),
         beadRadius: this.circularBeadBeatRadius,
         colorIndex: '',
         measureRepModel: this.measureRepModel,
@@ -634,7 +645,7 @@ define([
         linearLineLength: this.linearLineLength,
         lbbMeasureLocationY: this.lbbMeasureLocationY
       };
-      if (this.currentRepresentationType == 'bead') {
+      if (this.model.get('representationType') == 'bead') {
         for (i = 0 ; i < this.measurePassingToBeatFactoryParamaters.remainingNumberOfBeats ; i++){
           var index = 15-i;
           //Base + Math.random() * (max - min) + min;
@@ -645,7 +656,7 @@ define([
           console.log()
           new BeadFactoryView(this.measurePassingToBeatFactoryParamaters);
         }
-      } else if (this.currentRepresentationType == 'line') {
+      } else if (this.model.get('representationType') == 'line') {
         for (i = 0 ; i < this.measurePassingToBeatFactoryParamaters.remainingNumberOfBeats ; i++){
           var index = 15-i;
           //Base + Math.random() * (max - min) + min;
@@ -656,7 +667,7 @@ define([
           this.measurePassingToBeatFactoryParamaters.colorIndex = index;
           new BeadFactoryView(this.measurePassingToBeatFactoryParamaters);
         }        
-      } else if (this.currentRepresentationType == 'pie') {
+      } else if (this.model.get('representationType') == 'pie') {
         for (i = 0 ; i < this.measurePassingToBeatFactoryParamaters.remainingNumberOfBeats ; i++){
           var index = 15-i;
           //Base + Math.random() * (max - min) + min;
@@ -665,7 +676,7 @@ define([
           this.measurePassingToBeatFactoryParamaters.colorIndex = index;
           new BeadFactoryView(this.measurePassingToBeatFactoryParamaters);
         }        
-      } else if (this.currentRepresentationType == 'bar') {
+      } else if (this.model.get('representationType') == 'bar') {
         for (i = 0 ; i < this.measurePassingToBeatFactoryParamaters.remainingNumberOfBeats ; i++){
           var index = 15-i;
           //Base + Math.random() * (max - min) + min;
@@ -698,18 +709,18 @@ define([
     removeRepresentation: function(ev){
       // if ($('#measure'+this.measuresCollection.models[0].cid).parent()) {
         //removing the last measure isn't allowed.
-        if(this.measureRepresentationsCollection.length == 1) {
+        if(this.measureRepresentations.length == 1) {
           console.log('Can\'t remove the last representation!');
           return;
         }
         console.log('removed representation');
 
         var measureModelCid = ev.srcElement.parentElement.parentElement.parentElement.id.slice(12);
-        //we remove the measure and get its model.
-        this.measureRepresentationsCollection.remove(measureModelCid);
+        //we remove the measureRep and get its model.
+        this.measureRepresentations.remove(measureModelCid);
 
         //send a log event showing the removal.
-        log.sendLog([[3, 'Removed a measure representation: representation' + this.cid]]);
+        log.sendLog([[3, 'Removed a measure representation: ' + this.cid]]);
     },
     // This is triggered by signatureChange events.
     reconfigure: function(signature) {
@@ -751,6 +762,9 @@ define([
       console.log('transitioning a rep');
     },
     transition: function(){
+      var PRT = this.model.get('previousRepresentationType');
+      var CRT = this.model.get('representationType');
+
       if (this.model.get('previousRepresentationType') == 'audio'){
         if (this.model.get('representationType') == 'audio'){
         } else if(this.model.get('representationType') == 'bead'){

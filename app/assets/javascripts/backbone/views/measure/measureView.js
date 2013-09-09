@@ -47,6 +47,7 @@ define([
       //registering a callback for signatureChange events.
       dispatch.on('signatureChange.event', this.reconfigure, this);
       //Dispatch listeners
+      dispatch.on('afterUnrollAnim', this.render, this);
       dispatch.on('measureRepresentation.event', this.changeMeasureRepresentation, this);
       dispatch.on('unroll.event', this.unroll, this);
       dispatch.on('tempoChange.event', this.adjustRadius, this);
@@ -114,6 +115,7 @@ define([
       }
     },
     render: function(){
+      console.log('m render');
       this.scale = this.measureModel.get('scale');
       // Make a template for the measure and append the MeasureTemplate to the measure area in the hTrack
       var measureTemplateParameters = {
