@@ -310,6 +310,7 @@ define([
       setTimeout(function(){
         ƒthis.remove();
         ƒthis.render();
+        // ƒthis.dispatch.trigger('afterUnrollAnim', this);
       }, this.animationDuration*(this.measureNumberOfPoints+2));
     },
     rollupPie: function() {
