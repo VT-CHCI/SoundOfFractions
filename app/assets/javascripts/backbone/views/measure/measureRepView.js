@@ -230,7 +230,7 @@ define([
          });
     },
     toggleAnimation: function(state, duration, signature, maxMeasures){
-      var ƒthis = this;
+      var †his = this;
       // TODO why bring in signature to have it reset
       //signature = $(this.el).find('.measure').eq(0).find('.beat').length;
       signature = this.hTrack.get('signature');
@@ -288,7 +288,7 @@ define([
       }
     },
     unrollPie: function(options) {
-      var ƒthis = this;
+      var †his = this;
       var svgContainer = d3.select('#svg-'+this.measureRepModel.cid);
       svgContainer.attr('width', this.linearDivWidth+this.circularMeasureR*2 );
 //      svgContainer.attr('height', parseInt(svgContainer.attr('height'))+deltaHeight );
@@ -308,9 +308,10 @@ define([
           .data([]).exit().remove();
       }, this.animationDuration*(this.measureNumberOfPoints+1));
       setTimeout(function(){
-        ƒthis.remove();
-        ƒthis.render();
-        // ƒthis.dispatch.trigger('afterUnrollAnim', this);
+        †his.remove();
+        // †his.render();
+        dispatch.trigger('afterUnrollAnim', †his);
+        // †his.
       }, this.animationDuration*(this.measureNumberOfPoints+2));
     },
     rollupPie: function() {
@@ -325,7 +326,7 @@ define([
     },
     render: function(){
       console.log('mR render');
-      var ƒthis = this;
+      var †his = this;
 
       this.$el.attr('id', 'merasure-rep-' + this.measureRepModel.cid);
 
@@ -430,13 +431,13 @@ define([
           ghost:true,
           // animate: true,
           start: function(e, ui) {
-            ƒthis.circleStart(e, ui);
+            †his.circleStart(e, ui);
           },
           resize: function( e, ui ) {
-            ƒthis.circleResizeCallback(e, ui);
+            †his.circleResizeCallback(e, ui);
           },
           stop: function(e, ui) {
-            ƒthis.circleStop(e, ui);
+            †his.circleStop(e, ui);
           }  
         });
 
@@ -468,13 +469,13 @@ define([
           maxHeight: 180, 
           minHeight: 180,
           start: function(e, ui) {
-            ƒthis.linearStart(e, ui);
+            †his.linearStart(e, ui);
           },
           resize: function( e, ui ) {
-            ƒthis.linearResizeCallback(e, ui);
+            †his.linearResizeCallback(e, ui);
           },
           stop: function(e, ui) {
-            ƒthis.linearStop(e, ui);
+            †his.linearStop(e, ui);
           }  
         });
 
@@ -507,13 +508,13 @@ define([
         $(this.el).resizable({ 
           aspectRatio: true,
           start: function(e, ui) {
-            ƒthis.circleStart(e, ui);
+            †his.circleStart(e, ui);
           },
           resize: function( e, ui ) {
-            ƒthis.circleResizeCallback(e, ui);
+            †his.circleResizeCallback(e, ui);
           },
           stop: function(e, ui) {
-            ƒthis.circleStop(e, ui);
+            †his.circleStop(e, ui);
           }  
         });
 
@@ -548,13 +549,13 @@ define([
           maxHeight: 180, 
           minHeight: 180,
           start: function(e, ui) {
-            ƒthis.linearStart(e, ui);
+            †his.linearStart(e, ui);
           },
           resize: function( e, ui ) {
-            ƒthis.linearResizeCallback(e, ui);
+            †his.linearResizeCallback(e, ui);
           },
           stop: function(e, ui) {
-            ƒthis.linearStop(e, ui);
+            †his.linearStop(e, ui);
           }  
         });
       }
@@ -747,14 +748,6 @@ define([
           } 
         }
         //re-render the view.
-        this.render();
-      }
-    },
-    adjustRadius: function(tempo) {
-      if ($(this.hTrackEl).hasClass('selected')) {
-        console.log('here');
-        this.circularMeasureR = (tempo/120)*40;
-        //re-render the view
         this.render();
       }
     },

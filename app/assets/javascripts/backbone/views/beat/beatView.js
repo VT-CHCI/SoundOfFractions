@@ -57,7 +57,7 @@ define([
 
     //We use css classes to control the color of the beat.
     render: function(){
-      var ƒthis = this;
+      var †his = this;
 
       // x center of a bead or first x of pie piece
       if (this.currentRepresentationType == 'pie') {
@@ -86,20 +86,20 @@ define([
       this.beatUnwindingPaths = [];
       this.finalBeatUnwindingPaths = []
       for (i=0; i<this.circleStates.length; i++){
-        var circleState = $.map(Array(ƒthis.beatNumberOfPoints), function (d, j) {
-          var cx = (ƒthis.circleStates[i][Math.floor((ƒthis.beatIndex/ƒthis.beatsInMeasure)*(ƒthis.measureNumberOfPoints))].x) + ƒthis.circularBeadBeatRadius * Math.sin(2 * j * Math.PI / (ƒthis.beatNumberOfPoints - 1));
+        var circleState = $.map(Array(†his.beatNumberOfPoints), function (d, j) {
+          var cx = (†his.circleStates[i][Math.floor((†his.beatIndex/†his.beatsInMeasure)*(†his.measureNumberOfPoints))].x) + †his.circularBeadBeatRadius * Math.sin(2 * j * Math.PI / (†his.beatNumberOfPoints - 1));
 
         //circle portion
-        // var circleState = $.map(Array(ƒthis.beatNumberOfPoints), function (d, j) {
-          // var cx = ƒthis.circularMeasureCx + ƒthis.lineDivision*i + ƒthis.circularMeasureR * Math.sin(2 * j * Math.PI / (ƒthis.beatNumberOfPoints - 1));
-          var cy = ƒthis.circularMeasureCy - ƒthis.circularMeasureR * Math.cos(2 * j * Math.PI / (ƒthis.beatNumberOfPoints - 1));
+        // var circleState = $.map(Array(†his.beatNumberOfPoints), function (d, j) {
+          // var cx = †his.circularMeasureCx + †his.lineDivision*i + †his.circularMeasureR * Math.sin(2 * j * Math.PI / (†his.beatNumberOfPoints - 1));
+          var cy = †his.circularMeasureCy - †his.circularMeasureR * Math.cos(2 * j * Math.PI / (†his.beatNumberOfPoints - 1));
           return { cx: cx, cy: cy};
         });
-        circleState.splice(ƒthis.beatNumberOfPoints-i);
+        circleState.splice(†his.beatNumberOfPoints-i);
         //line portion
-        var lineState = $.map(Array(ƒthis.beatNumberOfPoints), function (d, j) {
-          var cx = ƒthis.circularMeasureCx + ƒthis.lineDivision*j;
-          var cy =  ƒthis.circularMeasureCy - ƒthis.circularMeasureR;
+        var lineState = $.map(Array(†his.beatNumberOfPoints), function (d, j) {
+          var cx = †his.circularMeasureCx + †his.lineDivision*j;
+          var cy =  †his.circularMeasureCy - †his.circularMeasureR;
           return { cx: cx, cy: cy};
         });
         lineState.splice(i);
@@ -110,10 +110,10 @@ define([
 
       for (i=0; i<this.circleStates.length; i++){
         var computedBeatCoordinates = [];
-          // var cx = (ƒthis.beatUnwindingPaths[i][Math.floor((ƒthis.beatIndex/ƒthis.beatsInMeasure)*(ƒthis.measureNumberOfPoints))].cx);
-          computedBeatCoordinates.cx = (ƒthis.beatUnwindingPaths[i][Math.floor((ƒthis.beatIndex/ƒthis.beatsInMeasure)*(ƒthis.measureNumberOfPoints))].cx);
+          // var cx = (†his.beatUnwindingPaths[i][Math.floor((†his.beatIndex/†his.beatsInMeasure)*(†his.measureNumberOfPoints))].cx);
+          computedBeatCoordinates.cx = (†his.beatUnwindingPaths[i][Math.floor((†his.beatIndex/†his.beatsInMeasure)*(†his.measureNumberOfPoints))].cx);
           // margin.top + beatR
-          computedBeatCoordinates.cy = (ƒthis.beatUnwindingPaths[i][Math.floor((ƒthis.beatIndex/ƒthis.beatsInMeasure)*(ƒthis.measureNumberOfPoints))].cy);
+          computedBeatCoordinates.cy = (†his.beatUnwindingPaths[i][Math.floor((†his.beatIndex/†his.beatsInMeasure)*(†his.measureNumberOfPoints))].cy);
         this.finalBeatUnwindingPaths.push(computedBeatCoordinates);
       };
 
@@ -134,9 +134,9 @@ define([
       var dragBead = d3.behavior.drag();
       // to prevent the dragging of a one beat measure
       if (this.beatsInMeasure > 1) {
-        ƒthis = this;
+        †his = this;
         dragBead.on("drag", function() {
-          ƒthis = ƒthis;
+          †his = †his;
             // console.log(parseInt(d3.select(this).attr("cx")) + ' <:> ' + parseInt(d3.select(this).attr("cy")));
             // console.log(d3.event.dx + ' : ' + d3.event.dy);
           // Formula for circle beats, utilizing cx and cy
@@ -150,20 +150,20 @@ define([
             // Inside: x and y must satisfy (x - center_x)^2 + (y - center_y)^2 < radius^2
             // Outside: x and y must satisfy (x - center_x)^2 + (y - center_y)^2 > radius^2
             // On: x and y must satisfy (x - center_x)^2 + (y - center_y)^2 == radius^2
-            if ( Math.pow(newComputedValX - ƒthis.circularMeasureCx, 2) + Math.pow(newComputedValY - ƒthis.circularMeasureCy, 2) > Math.pow(ƒthis.circularMeasureR+15,2) ) {
+            if ( Math.pow(newComputedValX - †his.circularMeasureCx, 2) + Math.pow(newComputedValY - †his.circularMeasureCy, 2) > Math.pow(†his.circularMeasureR+15,2) ) {
               d3.select(this).remove();
               console.warn('removed beat on measure');
-              ƒthis.parentMeasureModel.get('beats').remove(ƒthis.model);
-              dispatch.trigger('signatureChange.event', ƒthis.beatsInMeasure-1);
+              †his.parentMeasureModel.get('beats').remove(†his.model);
+              dispatch.trigger('signatureChange.event', †his.beatsInMeasure-1);
             }
         });
       }
 
       var dragLine = d3.behavior.drag();
       if (this.beatsInMeasure > 1) {
-        ƒthis = this;
+        †his = this;
         dragLine.on('drag', function(d) {
-          ƒthis = ƒthis;
+          †his = †his;
           var newSettingX1 = parseInt(d3.select(this).attr("x1")) + parseInt(d3.event.dx);
           var newSettingY1 = parseInt(d3.select(this).attr("y1")) + parseInt(d3.event.dy);
           var newSettingX2 = parseInt(d3.select(this).attr("x2")) + parseInt(d3.event.dx);
@@ -173,18 +173,18 @@ define([
           d3.select(this).attr("x2", newSettingX2);
           d3.select(this).attr("y2", newSettingY2);
           var newCenterX1 = d3.select(this).attr('x1');
-          var newCenterY1 = parseInt(d3.select(this).attr('y1')) + parseInt(ƒthis.lineHashHeight/2);
-          // Above: newCenterY1 < ƒthis.numberLineY
-          // AboveByN: newCenterY1 < ƒthis.numberLineY - N
-          // On : newCenterY1 = ƒthis.numberLineY
-          // Below: newCenterY1 > ƒthis.numberLineY
-          // BelowByN: newCenterY1 > ƒthis.numberLineY + N
-          if ((newCenterY1 < ƒthis.numberLineY - 20) || (newCenterY1 > ƒthis.numberLineY + 20)) {
+          var newCenterY1 = parseInt(d3.select(this).attr('y1')) + parseInt(†his.lineHashHeight/2);
+          // Above: newCenterY1 < †his.numberLineY
+          // AboveByN: newCenterY1 < †his.numberLineY - N
+          // On : newCenterY1 = †his.numberLineY
+          // Below: newCenterY1 > †his.numberLineY
+          // BelowByN: newCenterY1 > †his.numberLineY + N
+          if ((newCenterY1 < †his.numberLineY - 20) || (newCenterY1 > †his.numberLineY + 20)) {
             // make an array to find out where the new beat should be added in the beatsCollection of the measure
             d3.select(this).remove();
             console.warn('removed beat on measure');
-            ƒthis.parentMeasureModel.get('beats').remove(ƒthis.model);
-            dispatch.trigger('signatureChange.event', ƒthis.beatsInMeasure-1);
+            †his.parentMeasureModel.get('beats').remove(†his.model);
+            dispatch.trigger('signatureChange.event', †his.beatsInMeasure-1);
           }
         });
       }
@@ -199,33 +199,33 @@ define([
         // Above: newComputedValY1 must be above line y
         // On : newComputedValY1 must be on the line y
         // Below: newComputedValY1 must be below the line y
-        if ((newComputedValY < ƒthis.lbbMeasureLocationY - ƒthis.beatHeight - 2) || (newComputedValY > ƒthis.lbbMeasureLocationY + ƒthis.beatHeight + 2)) {
+        if ((newComputedValY < †his.lbbMeasureLocationY - †his.beatHeight - 2) || (newComputedValY > †his.lbbMeasureLocationY + †his.beatHeight + 2)) {
         // make an array to find out where the new beat should be added in the beatsCollection of the measure
           d3.select(this).remove();
           console.warn('removed beat on measure');
-          ƒthis.parentMeasureModel.get('beats').remove(ƒthis.model);
-          dispatch.trigger('signatureChange.event', ƒthis.beatsInMeasure-1);
+          †his.parentMeasureModel.get('beats').remove(†his.model);
+          dispatch.trigger('signatureChange.event', †his.beatsInMeasure-1);
         }
       });
       var dragSlice = d3.behavior.drag();
       if (this.beatsInMeasure > 1) {
-        ƒthis = this;
+        †his = this;
         dragSlice.on("drag", function() {
-          var beatToChange = $('#beat'+ƒthis.cid);
+          var beatToChange = $('#beat'+†his.cid);
           var transformString = beatToChange.attr('transform').substring(10, beatToChange.attr('transform').length-1);
           var comma = transformString.indexOf(',');
           var newX = parseInt(transformString.substr(0,comma));
           var newY = parseInt(transformString.substr(comma+1));
           newX += d3.event.dx;
           newY += d3.event.dy;
-          var relativeSVGX = newX + ƒthis.circularMeasureCx;
-          var relativeSVGY = newX + ƒthis.circularMeasureCy;
+          var relativeSVGX = newX + †his.circularMeasureCx;
+          var relativeSVGY = newX + †his.circularMeasureCy;
           d3.select(this).attr('transform', 'translate(' + [ newX, newY ] + ')');
           // x and y must satisfy (x - center_x)^2 + (y - center_y)^2 >= radius^2
-          if ( Math.pow(relativeSVGX - ƒthis.circularMeasureCx, 2) + Math.pow(relativeSVGY - ƒthis.circularMeasureCy, 2) >= Math.pow(ƒthis.circularMeasureR, 2) ) {
+          if ( Math.pow(relativeSVGX - †his.circularMeasureCx, 2) + Math.pow(relativeSVGY - †his.circularMeasureCy, 2) >= Math.pow(†his.circularMeasureR, 2) ) {
             d3.select(this).remove();
-            ƒthis.parentMeasureModel.get('beats').remove(ƒthis.model);
-            dispatch.trigger('signatureChange.event', ƒthis.beatsInMeasure-2);
+            †his.parentMeasureModel.get('beats').remove(†his.model);
+            dispatch.trigger('signatureChange.event', †his.beatsInMeasure-2);
           }
         });
       }
@@ -254,11 +254,11 @@ define([
         this.beatPath.on('click', this.toggleModel);
 
         function reverse() {
-          for(i=0; i<ƒthis.measureNumberOfPoints; i++){
-              beatPath.data([this.beatUnwindingPaths[ƒthis.measureNumberOfPoints-1-i]])
+          for(i=0; i<†his.measureNumberOfPoints; i++){
+              beatPath.data([this.beatUnwindingPaths[†his.measureNumberOfPoints-1-i]])
                   .transition()
-                  .delay(ƒthis.animationDuration*i)
-                  .duration(ƒthis.animationDuration)
+                  .delay(†his.animationDuration*i)
+                  .duration(†his.animationDuration)
                   .ease('linear')
                   .attr('d', pathFunction);
           }

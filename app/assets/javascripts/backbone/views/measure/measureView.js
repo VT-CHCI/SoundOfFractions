@@ -45,7 +45,7 @@ define([
       }
 
       //registering a callback for signatureChange events.
-      dispatch.on('signatureChange.event', this.reconfigure, this);
+      // dispatch.once('signatureChange.event', this.reconfigure, this);
       //Dispatch listeners
       dispatch.on('afterUnrollAnim', this.render, this);
       dispatch.on('measureRepresentation.event', this.changeMeasureRepresentation, this);
@@ -54,10 +54,9 @@ define([
 
       _.bindAll(this, 'render');
       this.listenTo(this.measureRepresentations, 'remove', _.bind(this.render, this));  
-      this.measureRepresentations.on('add', _.bind(this.render, this));
+      this.listenTo(this.measureRepresentations, 'add', _.bind(this.render, this));  
       this.collectionOfMeasures.on('add', _.bind(this.render, this));
       this.collectionOfMeasures.on('remove', _.bind(this.render, this));
-      this.measureModel.on('change', _.bind(this.render, this));
 
       this.render();
     },
@@ -361,17 +360,6 @@ define([
     },
     reconfigure: function(options) {
       this.render();
-    },
-    addRepToMeasure: function(options) {
-      console.log('adding rep trigged in measureView');
-      // if(){      
-        var representationModel = new RepresentationModel;
-        representationModel.set('representationType', options.newRepType);
-        // Currently forcing it to add to the first measure
-        StageCollection.get(options.hTrack).get('measures').models[0].get('measureRepresentations').add(representationModel);
-        console.log('calling render with adding');
-        this.render('adding');
-      // }
     }
   });
 });
