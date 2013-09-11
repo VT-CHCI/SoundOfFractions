@@ -73,9 +73,6 @@ define([
       console.log('wmrv transitioning');
       var newRepType = $(e.target).closest('.representation').attr('data-state');
       // find the plus sign with the class '.cs' and return the id of its hTrack
-      var csLength = $('.cs').length;
-      var trLength = $('.transition-rep').length;
-      var oldRep = $('.transition-rep').closest('.measureRep').attr('data-representation');
       var hTrackID = $('.transition-rep').closest('.hTrack').attr('id');
       var hTrackCID = hTrackID.slice(7);
       var measureRepIndex = $('.transition-rep').closest('.measureRep').index();
@@ -111,6 +108,17 @@ define([
         console.log('MANUALLY adding to the instrument/measure/measureRep');
         // Currently forcing it to add to the first measure
         StageCollection.get(cid).get('measures').models[0].get('measureRepresentations').add(representationModel);
+      }
+      if ($('.transition-rep').length) {
+        console.log('MANUALLY transitioning');
+        var hTrackID = $('.transition-rep').closest('.hTrack').attr('id');
+        var hTrackCID = hTrackID.slice(7);
+        var measureRepIndex = $('.transition-rep').closest('.measureRep').index();
+        var measureRepID = $('.transition-rep').closest('.measureRep').attr('id');
+        var measureRepCID = measureRepID.slice(12);
+        $('.transition-rep').removeClass('transition-rep');
+        var measureRepColl = StageCollection.get(hTrackCID).get('measures').models[0].get('measureRepresentations').get(measureRepCID).transition(newRepType);
+
       }
     }
 

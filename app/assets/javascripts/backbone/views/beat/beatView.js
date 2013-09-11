@@ -47,8 +47,8 @@ define([
       for (i=0 ; i<this.beatNumberOfPoints ; i++){
         this.beatPath.data([this.finalBeatUnwindingPaths[i]])
             .transition()
-            .delay(this.animationDuration*i)
-            .duration(this.animationDuration)
+            .delay(this.transitionDuration*i)
+            .duration(this.transitionDuration)
             .ease('linear')
             .attr('cx', this.finalBeatUnwindingPaths[i].cx)
             .attr('cy', this.finalBeatUnwindingPaths[i].cy)
@@ -257,8 +257,8 @@ define([
           for(i=0; i<ƒthis.measureNumberOfPoints; i++){
               beatPath.data([this.beatUnwindingPaths[ƒthis.measureNumberOfPoints-1-i]])
                   .transition()
-                  .delay(ƒthis.animationDuration*i)
-                  .duration(ƒthis.animationDuration)
+                  .delay(ƒthis.transitionDuration*i)
+                  .duration(ƒthis.transitionDuration)
                   .ease('linear')
                   .attr('d', pathFunction);
           }

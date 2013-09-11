@@ -256,6 +256,7 @@ define([
       console.log('clicked the plus sign');
     },
     manuallPress: function(e) {
+      // p = 112
       if (e.keyCode == 112) {
         $('.icon-plus')[1].parentElement.classList.add('cs');
       } 

@@ -45,9 +45,9 @@ define([
       }
 
       //registering a callback for signatureChange events.
-      // dispatch.once('signatureChange.event', this.reconfigure, this);
+      dispatch.on('signatureChange.event', this.reconfigure, this);
       //Dispatch listeners
-      dispatch.on('afterUnrollAnim', this.render, this);
+      dispatch.once('afterTransition', this.render, this);
       dispatch.on('measureRepresentation.event', this.changeMeasureRepresentation, this);
       dispatch.on('unroll.event', this.unroll, this);
       dispatch.on('tempoChange.event', this.adjustRadius, this);
@@ -153,7 +153,8 @@ define([
         var timeIncrement = 500; // in ms
         var margin = {top: 20, left: 60};
         var lineDivision = linearLineLength/measureNumberOfPoints;
-        var animationDuration = 3000/measureNumberOfPoints;
+        var transitionDuration = 3000/measureNumberOfPoints;
+        var animationStageDuration = 500;
 
       // Audio
         //Measure
@@ -222,7 +223,7 @@ define([
         // (when representation button changes, the current representation template will get updated)
         // compile the template for a measure
 
-        var measureRepViewParamaters = {
+        var measureRepViewParameters = {
           // HTrack
           hTrackEl: this.hTrackEl,
           hTrack: this.parent,
@@ -288,10 +289,10 @@ define([
           circleStates: circleStates,
           measureNumberOfPoints: this.measureNumberOfPoints,
           pathFunction: this.circlePath,
-          animationDuration: animationDuration
+          transitionDuration: transitionDuration,
+          animationStageDuration: animationStageDuration
         };
-
-        new MeasureRepView(measureRepViewParamaters);
+        new MeasureRepView(measureRepViewParameters);
       }, this);
 
       return this;

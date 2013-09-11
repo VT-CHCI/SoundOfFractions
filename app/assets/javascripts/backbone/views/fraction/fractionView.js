@@ -90,7 +90,7 @@ define([
       mixedNumerator = numerator-(whole*denominator);
       // percent = numerator / denominator * 100;
       decimal = (numerator / denominator).toFixed(2);
-      var fractionTemplateParamaters = {
+      var fractionTemplateParameters = {
         numerator: numerator,
         denominator: denominator,
         mixedNumerator: mixedNumerator,
@@ -98,7 +98,7 @@ define([
         decimal: decimal
       };
 
-      var compiledTemplate = _.template( this.representations[this.currentFractionRepresentation], fractionTemplateParamaters );
+      var compiledTemplate = _.template( this.representations[this.currentFractionRepresentation], fractionTemplateParameters );
 
       // find the plus sign we put in there, and right before it, put in the rendered template
       //console.log(compiledTemplate);
