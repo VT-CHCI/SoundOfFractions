@@ -70,32 +70,32 @@ define([
     */
     render: function(options){
       if(options) {
-        var †his = this;
+        var ƒthis = this;
         // for each of the measures (V1 should only have 1 Measure)
         _.each(this.hTrack.get('measures').models, function(measure, index) {
           new MeasureView({
-            collectionOfMeasures: †his.hTrack.get('measures'),
-            parent: †his.hTrack,
-            parentEl: '#hTrack-'+†his.hTrack.cid,
-            model: †his.hTrack.get('measures').models[index],
+            collectionOfMeasures: ƒthis.hTrack.get('measures'),
+            parent: ƒthis.hTrack,
+            parentEl: '#hTrack-'+ƒthis.hTrack.cid,
+            model: ƒthis.hTrack.get('measures').models[index],
             currentMeasureRepresentation: options.representation
           });
         });
       } else {
-        var †his = this;
+        var ƒthis = this;
         // for each of the measures (V1 should only have 1 Measure)
         _.each(this.hTrack.get('measures').models, function(measure, index) {
           new MeasureView({
-            collectionOfMeasures: †his.hTrack.get('measures'),
+            collectionOfMeasures: ƒthis.hTrack.get('measures'),
             measureRepresentations: measure.get('measureRepresentations'),
-            parent: †his.hTrack,
-            parentEl: '#measure-container-'+†his.hTrack.cid,
-            hTrackEl: '#hTrack-'+†his.hTrack.cid,
-            model: †his.hTrack.get('measures').models[index],
+            parent: ƒthis.hTrack,
+            parentEl: '#measure-container-'+ƒthis.hTrack.cid,
+            hTrackEl: '#hTrack-'+ƒthis.hTrack.cid,
+            model: ƒthis.hTrack.get('measures').models[index],
             measureModel: measure,
-            defaultMeasureRepresentation: †his.defaultMeasureRepresentation,
+            defaultMeasureRepresentation: ƒthis.defaultMeasureRepresentation,
             measureIndex: index,
-            measureCount: †his.hTrack.get('measures').models.length
+            measureCount: ƒthis.hTrack.get('measures').models.length
           });
         });
 

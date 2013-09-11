@@ -230,7 +230,7 @@ define([
          });
     },
     toggleAnimation: function(state, duration, signature, maxMeasures){
-      var †his = this;
+      var ƒthis = this;
       // TODO why bring in signature to have it reset
       //signature = $(this.el).find('.measure').eq(0).find('.beat').length;
       signature = this.hTrack.get('signature');
@@ -288,7 +288,7 @@ define([
       }
     },
     unrollPie: function(options) {
-      var †his = this;
+      var ƒthis = this;
       var svgContainer = d3.select('#svg-'+this.measureRepModel.cid);
       svgContainer.attr('width', this.linearDivWidth+this.circularMeasureR*2 );
 //      svgContainer.attr('height', parseInt(svgContainer.attr('height'))+deltaHeight );
@@ -308,10 +308,10 @@ define([
           .data([]).exit().remove();
       }, this.animationDuration*(this.measureNumberOfPoints+1));
       setTimeout(function(){
-        †his.remove();
-        // †his.render();
-        dispatch.trigger('afterUnrollAnim', †his);
-        // †his.
+        ƒthis.remove();
+        // ƒthis.render();
+        // dispatch.trigger('afterUnrollAnim', ƒthis);
+        ƒthis.parent.render();
       }, this.animationDuration*(this.measureNumberOfPoints+2));
     },
     rollupPie: function() {
@@ -326,7 +326,7 @@ define([
     },
     render: function(){
       console.log('mR render');
-      var †his = this;
+      var ƒthis = this;
 
       this.$el.attr('id', 'merasure-rep-' + this.measureRepModel.cid);
 
@@ -431,13 +431,13 @@ define([
           ghost:true,
           // animate: true,
           start: function(e, ui) {
-            †his.circleStart(e, ui);
+            ƒthis.circleStart(e, ui);
           },
           resize: function( e, ui ) {
-            †his.circleResizeCallback(e, ui);
+            ƒthis.circleResizeCallback(e, ui);
           },
           stop: function(e, ui) {
-            †his.circleStop(e, ui);
+            ƒthis.circleStop(e, ui);
           }  
         });
 
@@ -469,13 +469,13 @@ define([
           maxHeight: 180, 
           minHeight: 180,
           start: function(e, ui) {
-            †his.linearStart(e, ui);
+            ƒthis.linearStart(e, ui);
           },
           resize: function( e, ui ) {
-            †his.linearResizeCallback(e, ui);
+            ƒthis.linearResizeCallback(e, ui);
           },
           stop: function(e, ui) {
-            †his.linearStop(e, ui);
+            ƒthis.linearStop(e, ui);
           }  
         });
 
@@ -508,13 +508,13 @@ define([
         $(this.el).resizable({ 
           aspectRatio: true,
           start: function(e, ui) {
-            †his.circleStart(e, ui);
+            ƒthis.circleStart(e, ui);
           },
           resize: function( e, ui ) {
-            †his.circleResizeCallback(e, ui);
+            ƒthis.circleResizeCallback(e, ui);
           },
           stop: function(e, ui) {
-            †his.circleStop(e, ui);
+            ƒthis.circleStop(e, ui);
           }  
         });
 
@@ -549,13 +549,13 @@ define([
           maxHeight: 180, 
           minHeight: 180,
           start: function(e, ui) {
-            †his.linearStart(e, ui);
+            ƒthis.linearStart(e, ui);
           },
           resize: function( e, ui ) {
-            †his.linearResizeCallback(e, ui);
+            ƒthis.linearResizeCallback(e, ui);
           },
           stop: function(e, ui) {
-            †his.linearStop(e, ui);
+            ƒthis.linearStop(e, ui);
           }  
         });
       }
