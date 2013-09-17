@@ -11,12 +11,9 @@ define([
   'backbone/views/stage/stageView',
   'backbone/views/slider/tempoSliderView',
   'backbone/views/transport/transportView',
-  'backbone/views/button/fractionRepresentionView',
   'backbone/views/button/wholeMeasureRepresentationView',
   'backbone/views/button/measureTransformationView',
-  'backbone/views/recorder/recorderView',
   'backbone/views/button/tapTempoView',
-  'backbone/views/button/doallView',
   'backbone/views/button/remainingInstrumentGeneratorView',
   'backbone/views/label/systemLabelContainerView',
   'app/log',
@@ -25,7 +22,7 @@ define([
   'backbone/views/song/index_view',
   'backbone/views/song/show_view',
   'backbone/views/song/edit_view'
-], function($, _, Backbone, mainHomeView, beatsPerMeasureSliderView, StageView, tempoSliderView, transportView, fractionRepresentionView, wholeMeasureRepresentationView, measureTransformationView, recorderView, tapTempoView, doallView, remainingInstrumentGeneratorView, systemLabelContainerView, log, songsCollection, songsViewNew, songsViewIndex, songsViewShow, songsViewEdit ){
+], function($, _, Backbone, mainHomeView, beatsPerMeasureSliderView, StageView, tempoSliderView, transportView, wholeMeasureRepresentationView, measureTransformationView, tapTempoView, remainingInstrumentGeneratorView, systemLabelContainerView, log, songsCollection, songsViewNew, songsViewIndex, songsViewShow, songsViewEdit ){
 
   var BBRouter = Backbone.Router.extend({
     // songs: {},
@@ -55,11 +52,6 @@ define([
       // bottom
 
       // unused/old/deprecated
-      tapTempoView.render();
-      doallView.render();
-      recorderView.render();
-      tempoSliderView.render();
-      // fractionRepresentionView.render();
       // remainingInstrumentGeneratorView.render();
     },
 

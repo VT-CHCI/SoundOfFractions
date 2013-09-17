@@ -10,13 +10,12 @@ define([
   'backbone/models/state',
   'backbone/collections/representations',
   'backbone/views/measure/measureView',
-  'backbone/views/fraction/fractionView',
   'backbone/views/menu/instrumentDropDownView',
   'backbone/views/slider/beatsPerMeasureSliderView',
   'backbone/views/button/deleteInstrumentView',
   'app/dispatch',
   'app/log'
-], function($, _, Backbone, HTrackModel, StateModel, RepresentationsCollection, MeasureView, FractionRepresentationView, InstrumentDropDownView, BPMSliderView, DeleteInstrumentView, dispatch, log){
+], function($, _, Backbone, HTrackModel, StateModel, RepresentationsCollection, MeasureView,  InstrumentDropDownView, BPMSliderView, DeleteInstrumentView, dispatch, log){
   return Backbone.View.extend({
     // this is needed to recalculate a beat's size
     el: $('.hTrack'),
@@ -57,9 +56,6 @@ define([
       // dispatch.on('toggleAnimation.event', this.toggleAnimation, this);
       dispatch.on('signatureChange.event', this.updateModelSignature, this);
       dispatch.on('instrumentChanged.event', this.changeInstrument, this);
-
-      // dispatch.on('fractionRepresentation.event', this.recalculateFraction, this);
-      // dispatch.on('beatClicked.event', this.recalculateFraction, this);
 
       this.render();
     },
@@ -114,13 +110,6 @@ define([
           el: '#delete-hTrack-'+this.hTrack.cid,
           parentCID: this.hTrack.cid
         });
-
-        // new FractionRepresentationView({
-        //   collection:this.hTrack.get('measures'),
-        //   parent: this.hTrack,
-        //   el:'#fraction'+this.hTrack.cid,
-        //   defaultFractionRepresentation: this.defaultFractionRepresentation
-        // });
       }
       // $(this.el).draggable({ axis: "y", containment: "#middle-left-column" });
       return this;
