@@ -1,3 +1,8 @@
+.record-button:hover {
+  color: green;
+  font-weight: bold;
+}
+
 svg {
   /*height: 100%;*/
   /*width: 100%*/
@@ -221,9 +226,6 @@ svg.line {
 
 }
 
-#record {
-  float: left;
-}
 /* ==========================================================================
    Author's custom styles
    ========================================================================== */
@@ -402,15 +404,6 @@ svg.line {
   /*border: 1px solid #e3e3e3*/
   /*padding-bottom: 15px;*/
   /*margin: 0 auto;*/
-  cursor: pointer;
-}
-
-#record {
-  width: 100px;
-  height: 100px;
-  padding-bottom: 15px;
-  margin-left: 15%;
-  margin-right: 2%;
   cursor: pointer;
 }
 

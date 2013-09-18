@@ -47,7 +47,6 @@ define([
       //registering a callback for signatureChange events.
       dispatch.on('signatureChange.event', this.reconfigure, this);
       //Dispatch listeners
-      dispatch.once('afterTransition', this.render, this);
       dispatch.on('measureRepresentation.event', this.changeMeasureRepresentation, this);
       dispatch.on('unroll.event', this.unroll, this);
       dispatch.on('tempoChange.event', this.adjustRadius, this);
@@ -55,6 +54,7 @@ define([
       _.bindAll(this, 'render');
       this.listenTo(this.measureRepresentations, 'remove', _.bind(this.render, this));  
       this.listenTo(this.measureRepresentations, 'add', _.bind(this.render, this));  
+      this.listenTo(this.model, 'change:transitioned', _.bind(this.render, this));  
       this.collectionOfMeasures.on('add', _.bind(this.render, this));
       this.collectionOfMeasures.on('remove', _.bind(this.render, this));
 
@@ -154,7 +154,7 @@ define([
         var margin = {top: 20, left: 60};
         var lineDivision = linearLineLength/measureNumberOfPoints;
         var transitionDuration = 3000/measureNumberOfPoints;
-        var animationStageDuration = 500;
+        var animationIntervalDuration = 1000;
 
       // Audio
         //Measure
@@ -290,7 +290,7 @@ define([
           measureNumberOfPoints: this.measureNumberOfPoints,
           pathFunction: this.circlePath,
           transitionDuration: transitionDuration,
-          animationStageDuration: animationStageDuration
+          animationIntervalDuration: animationIntervalDuration
         };
         new MeasureRepView(measureRepViewParameters);
       }, this);

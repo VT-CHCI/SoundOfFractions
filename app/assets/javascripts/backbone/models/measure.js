@@ -14,11 +14,16 @@ define([
   var MeasureModel = Backbone.Model.extend({
     beats: BeatsCollection,
     measureRepresentations: RepresentationsCollection,
+    transitioned: 0,
     defaults: {
       originalScale: 1,
       scale: 1
     },
     initialize: function(){
+    },
+    transition: function(){
+      this.set({transitioned : this.transitioned+1});
+      window.csf = this;
     }
   });
   return MeasureModel;

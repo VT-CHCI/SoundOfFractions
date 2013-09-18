@@ -13,11 +13,13 @@ define([
     initialize: function(options){
       this.representationType = options.representationType;
       this.previousRepresentationType = undefined;
+      this.transitions = 0;
     },
     transition: function(newRep){
       this.set({
         previousRepresentationType: this.representationType,
-        representationType: newRep
+        representationType: newRep,
+        transitions: this.transitions+1
       });
     }
   });
