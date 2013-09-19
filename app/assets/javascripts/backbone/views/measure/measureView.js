@@ -64,52 +64,52 @@ define([
       // We want to be above 30, but below 90 to avoid computational and animation delay
       switch (n){
         case 1:
-          this.measureNumberOfPoints = 60;
+          this.transitionNumberOfPoints = 40;
           break;
         case 2:
-          this.measureNumberOfPoints = 60;
+          this.transitionNumberOfPoints = 40;
           break;
         case 3:
-          this.measureNumberOfPoints = 60;
+          this.transitionNumberOfPoints = 42;
           break;
         case 4:
-          this.measureNumberOfPoints = 60;
+          this.transitionNumberOfPoints = 40;
           break;
         case 5:
-          this.measureNumberOfPoints = 60;
+          this.transitionNumberOfPoints = 40;
           break;
         case 6:
-          this.measureNumberOfPoints = 60;
+          this.transitionNumberOfPoints = 42;
           break;
         case 7:
-          this.measureNumberOfPoints = 63;
+          this.transitionNumberOfPoints = 42;
           break;
         case 8:
-          this.measureNumberOfPoints = 64;
+          this.transitionNumberOfPoints = 40;
           break;
         case 9:
-          this.measureNumberOfPoints = 63;
+          this.transitionNumberOfPoints = 45;
           break;
         case 10:
-          this.measureNumberOfPoints = 60;
+          this.transitionNumberOfPoints = 40;
           break;
         case 11:
-          this.measureNumberOfPoints = 66;
+          this.transitionNumberOfPoints = 44;
           break;
         case 12:
-          this.measureNumberOfPoints = 60;
+          this.transitionNumberOfPoints = 48;
           break;
         case 13:
-          this.measureNumberOfPoints = 65;
+          this.transitionNumberOfPoints = 39;
           break;
         case 14:
-          this.measureNumberOfPoints = 56;
+          this.transitionNumberOfPoints = 42;
           break;
         case 15:
-          this.measureNumberOfPoints = 60;
+          this.transitionNumberOfPoints = 45;
           break;
         case 16:
-          this.measureNumberOfPoints = 64;
+          this.transitionNumberOfPoints = 48;
           break;
       }
     },
