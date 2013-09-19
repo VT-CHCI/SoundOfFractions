@@ -45,7 +45,7 @@ define([
       } else {
         this.hTrack = new HTrackModel;
       }
-      // allow the letter p to click the first plus sign
+      // allow the letter a to click the first plus sign
       _.bindAll(this, 'manuallPress');
       $(document).bind('keypress', this.manuallPress);
       // this.hTrack.representations = new RepresentationsCollection;
@@ -245,8 +245,8 @@ define([
       console.log('clicked the plus sign');
     },
     manuallPress: function(e) {
-      // p = 112
-      if (e.keyCode == 112) {
+      // a = 97
+      if (e.keyCode == 97) {
         $('.icon-plus')[1].parentElement.classList.add('cs');
       } 
     },

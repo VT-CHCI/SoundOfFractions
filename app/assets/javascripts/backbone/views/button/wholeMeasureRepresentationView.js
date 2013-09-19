@@ -82,9 +82,9 @@ define([
       var measureRepColl = StageCollection.get(hTrackCID).get('measures').models[0].get('measureRepresentations').get(measureRepCID).transition(newRepType);
       // dispatch.trigger('transition.event', {oldRep: oldRep, newRep:newRepType } );
     },
-    // a:97 b:98 l:108 i:105 r:114
+    // g:103 b:98 l:108 i:105 r:114
     manuallPress: function(e) {
-      if (e.keyCode == 97) {
+      if (e.keyCode == 103) {
         var newRepType = 'audio';
       } else if (e.keyCode == 98) {
         var newRepType = 'bead';

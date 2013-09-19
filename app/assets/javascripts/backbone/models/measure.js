@@ -21,9 +21,8 @@ define([
     },
     initialize: function(){
     },
-    transition: function(){
+    increaseTransitionCount: function(){
       this.set({transitioned : this.transitioned+1});
-      window.csf = this;
     }
   });
   return MeasureModel;

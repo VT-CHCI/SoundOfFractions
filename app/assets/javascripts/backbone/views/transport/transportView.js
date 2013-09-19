@@ -28,6 +28,10 @@ define([
       //registering our stopPlay() method on stopRequest events.
       dispatch.on('measureRepresentation.event', this.stopPlay, this);
       dispatch.on('stopRequest.event', this.stopPlay, this);
+
+      // allow the letter p to click the first plus sign
+      _.bindAll(this, 'manuallPress');
+      $(document).bind('keypress', this.manuallPress);
     },
 
     /*
@@ -94,7 +98,12 @@ define([
         console.log('now paused');
       }
     },
-
+    manuallPress: function(e) {
+      // p = 112
+      if (e.keyCode == 112) {
+        this.el.click();
+      } 
+    },
     render: function() {
       $(this.el).html(transportPlayTemplate);
       $(this.el).draggable({ axis: "y",containment: "#middle-right-column" });

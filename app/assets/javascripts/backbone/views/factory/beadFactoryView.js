@@ -42,9 +42,9 @@ define([
       var beatR = this.beatR;
       beatFactoryParameters.beatR = beatR;
 
-      var lineData = $.map(Array(this.measureNumberOfPoints), function (d, i) {
+      var lineData = $.map(Array(this.transitionNumberOfPoints), function (d, i) {
         var y = 0;
-        var x = i * this.linearLineLength / (this.measureNumberOfPoints - 1)
+        var x = i * this.linearLineLength / (this.transitionNumberOfPoints - 1)
         return {x: x, y: y}
       });
       var pathFunction = d3.svg.line()

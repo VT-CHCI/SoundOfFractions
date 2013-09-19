@@ -141,7 +141,6 @@ define([
         var circularMeasureCy = (cY+vertDivPadding)*scale;
         var circularMeasureR = this.circularMeasureR*scale;
         this.calculateNumberOfPoints(this.collectionOfMeasures.models[0].get('beats').models.length);
-        var measureNumberOfPoints = this.measureNumberOfPoints;
         var circularDivWidth = 2*circularMeasureR + horzDivPadding*2 + cX*this.scale; 
         var circularDivHeight = 2*circularMeasureR + vertDivPadding*2 + cY*this.scale; 
       // Linear
@@ -149,11 +148,12 @@ define([
         var linearDivWidth = linearLineLength + horzDivPadding;
         var linearDivHeight = 25 + vertDivPadding;
       // Transition
+        var transitionNumberOfPoints = this.transitionNumberOfPoints;
         var firstBeatStart = 0; // in s
         var timeIncrement = 500; // in ms
         var margin = {top: 20, left: 60};
-        var lineDivision = linearLineLength/measureNumberOfPoints;
-        var transitionDuration = 3000/measureNumberOfPoints;
+        var lineDivision = linearLineLength/transitionNumberOfPoints;
+        var transitionDuration = 3000/transitionNumberOfPoints;
         var animationIntervalDuration = 1000;
 
       // Audio
@@ -193,18 +193,18 @@ define([
         var beatFactoryWidth = 50;
 
       var circleStates = [];
-      for (i=0; i<measureNumberOfPoints; i++){
+      for (i=0; i<transitionNumberOfPoints; i++){
           // circle portion
-          var circleState = $.map(Array(measureNumberOfPoints), function (d, j) {
+          var circleState = $.map(Array(transitionNumberOfPoints), function (d, j) {
             // margin.left + measureRadius
-            var x = circularMeasureCx + lineDivision*i + circularMeasureR * Math.sin(2 * j * Math.PI / (measureNumberOfPoints - 1));
+            var x = circularMeasureCx + lineDivision*i + circularMeasureR * Math.sin(2 * j * Math.PI / (transitionNumberOfPoints - 1));
             // margin.top + measureRadius
-            var y =  circularMeasureCy - circularMeasureR * Math.cos(2 * j * Math.PI / (measureNumberOfPoints - 1));
+            var y =  circularMeasureCy - circularMeasureR * Math.cos(2 * j * Math.PI / (transitionNumberOfPoints - 1));
             return { x: x, y: y};
           })
-          circleState.splice(measureNumberOfPoints-i);
+          circleState.splice(transitionNumberOfPoints-i);
           //line portion
-          var lineState = $.map(Array(measureNumberOfPoints), function (d, j) {
+          var lineState = $.map(Array(transitionNumberOfPoints), function (d, j) {
              // margin.left + measureRadius
             var x = circularMeasureCx + lineDivision*j;
             // margin.top
@@ -269,7 +269,7 @@ define([
           lbbMeasureLocationX: lbbMeasureLocationX,
           lbbMeasureLocationY: lbbMeasureLocationY,
           // Bead
-          measureNumberOfPoints: measureNumberOfPoints,
+          transitionNumberOfPoints: transitionNumberOfPoints,
           //Number Line
           xOffset: linearLineLength/this.model.get('beats').models.length / 2,
           yOffset: lbbMeasureHeight / 2,
@@ -287,7 +287,7 @@ define([
           measureColor: COLORS.hexColors[COLORS.colorIndices.WHITE],
           // Transition
           circleStates: circleStates,
-          measureNumberOfPoints: this.measureNumberOfPoints,
+          transitionNumberOfPoints: this.transitionNumberOfPoints,
           pathFunction: this.circlePath,
           transitionDuration: transitionDuration,
           animationIntervalDuration: animationIntervalDuration

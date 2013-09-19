@@ -18,7 +18,12 @@ define([
     transition: function(newRep){
       this.set({
         previousRepresentationType: this.representationType,
-        representationType: newRep,
+        representationType: newRep
+      });
+    },
+    increaseTransitionCount: function(){
+      console.log('in mR increase count');
+      this.set({
         transitions: this.transitions+1
       });
     }
