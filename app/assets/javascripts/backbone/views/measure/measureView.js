@@ -50,11 +50,12 @@ define([
       dispatch.on('measureRepresentation.event', this.changeMeasureRepresentation, this);
       dispatch.on('unroll.event', this.unroll, this);
       dispatch.on('tempoChange.event', this.adjustRadius, this);
+      dispatch.on('reRenderMeasure.event', this.render, this);
 
       _.bindAll(this, 'render');
       this.listenTo(this.measureRepresentations, 'remove', _.bind(this.render, this));  
       this.listenTo(this.measureRepresentations, 'add', _.bind(this.render, this));  
-      this.listenTo(this.model, 'change:transitioned', _.bind(this.render, this));  
+
       this.collectionOfMeasures.on('add', _.bind(this.render, this));
       this.collectionOfMeasures.on('remove', _.bind(this.render, this));
 

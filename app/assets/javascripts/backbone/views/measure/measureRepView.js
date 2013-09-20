@@ -54,8 +54,6 @@ define([
       dispatch.on('unroll.event', this.unroll, this);
       dispatch.on('toggleAnimation.event', this.toggleAnimation, this);
 
-      // this.model.bind('change', _.bind(this.transition, this));
-      // this.listenTo(this.model, 'change', _.bind(this.transition, this));
       this.listenTo(this.model, 'change', this.transition, this);
       this.listenTo(this.parentMeasureModel, 'change', _.bind(this.render, this));  
 
@@ -515,13 +513,15 @@ define([
       }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration*3 );
       setTimeout(function(){
         // this sets the transition count on the model itself, which the beatView is listening to
-        ƒthis.parentMeasureModel.increaseTransitionCount();
+        dispatch.trigger('reRenderMeasure.event', this);
+        // ƒthis.parentMeasureModel.increaseTransitionCount();
       }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration*4 );
     },
     lineToBead: function(options) {
       var ƒthis = this;
       var svgContainer = d3.select('#svg-'+this.measureRepModel.cid)
-        .attr('width', this.linearDivWidth+this.circularMeasureR*2 );
+        .attr('width', this.linearDivWidth+this.circularMeasureR*2 )
+        .attr('height', this.linearDivHeight+this.circularMeasureR*2 );
       var beatHolder = d3.select('#beat-holder-'+this.measureRepModel.cid);
       var lineBeats = beatHolder.selectAll('.line-beat');
       setTimeout(function(){
@@ -552,7 +552,8 @@ define([
         }
       }, this.transitionDuration + this.animationIntervalDuration*5);
       setTimeout(function(){
-        ƒthis.parentMeasureModel.increaseTransitionCount();
+        // ƒthis.parentMeasureModel.increaseTransitionCount();
+        dispatch.trigger('reRenderMeasure.event', this);
       }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration*6 );
     },
     render: function(){
