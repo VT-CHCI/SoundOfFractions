@@ -81,15 +81,18 @@ define([
             this.measurePassingToBeatViewParameters.reverse = true;
             this.measurePassingToBeatViewParameters.X1 = this.lbbMeasureLocationX +(this.beatWidth*(index));
             this.measurePassingToBeatViewParameters.X2 = this.lbbMeasureLocationX +(this.beatWidth*(index));
+          } else if (options.type == 'bar') {
+            this.measurePassingToBeatViewParameters.reverse = true;
+            this.measurePassingToBeatViewParameters.beatBBX = this.lbbMeasureLocationX +(this.beatWidth*(index)+this.circularMeasureCx-this.horzDivPadding/2);
           }
         } else {        
           this.measurePassingToBeatViewParameters.X1 = this.lbbMeasureLocationX +(this.beatWidth*(index));
           this.measurePassingToBeatViewParameters.X2 = this.lbbMeasureLocationX +(this.beatWidth*(index));
+          this.measurePassingToBeatViewParameters.beatBBX = this.lbbMeasureLocationX +(this.beatWidth*(index));
         }
         this.measurePassingToBeatViewParameters.model = beat;
         this.measurePassingToBeatViewParameters.singleBeat = '#beat'+beat.cid;
         this.measurePassingToBeatViewParameters.beatIndex = index;
-        this.measurePassingToBeatViewParameters.beatBBX = this.lbbMeasureLocationX +(this.beatWidth*(index));
         this.measurePassingToBeatViewParameters.beatStartAngle = ((360 / this.beatsInMeasure)*index);
         this.measurePassingToBeatViewParameters.beatStartTime = this.firstBeatStart+(index)*(this.timeIncrement/1000);
         this.measurePassingToBeatViewParameters.color = index;
@@ -294,15 +297,15 @@ define([
       console.log(this.oldW, this.oldH, ui.size.width, ui.size.height)
       this.parentMeasureModel.set('scale', this.scale);
     },
-    d3AudioAnimate: function(target, dur, selected) {
-      var target = d3.select(target);
-      var originalOpacity = parseInt(target.attr('opacity'));
+    audioAnimate: function(target, dur, selected) {
+      var d3Target = d3.select(target);
+      var originalOpacity = target.getAttribute('opacity');
       if(selected == true){
         var newOpacity = 1;
       } else {
         var newOpacity = originalOpacity;
       }
-      target.transition()
+      d3Target.transition()
         .attr('opacity', newOpacity )
         .duration(1)
         .each('end',function() {                   // as seen above
@@ -313,7 +316,7 @@ define([
               .duration(1);                      // .each("end" construct here.
          });
     },
-    d3BeadAnimate: function(target, dur) {
+    beadAnimate: function(target, dur) {
       var target = d3.select(target);
       var originalCX = parseInt(target.attr('cx'));
       var newCX = originalCX + 10;
@@ -327,7 +330,7 @@ define([
               .duration(dur);                  // .each("end" construct here.
          });
     },
-    d3LineAnimate: function(target, dur) {
+    lineAnimate: function(target, dur) {
       var target = d3.select(target);
       var originalX = parseInt(target.attr('x1'));
       var newX = originalX + 10;
@@ -343,7 +346,7 @@ define([
               .duration(dur);                  // .each("end" construct here.
          });
     },
-    d3PieAnimate: function(target, dur) {
+    pieAnimate: function(target, dur) {
       var target = d3.select(target);
       target.transition()
         .attr('transform', 'translate(10,0)' )
@@ -355,7 +358,7 @@ define([
               .duration(dur);                  // .each("end" construct here.
          });
     },
-    d3BarAnimate: function(target, dur) {
+    barAnimate: function(target, dur) {
       var target = d3.select(target);
       var originalX = parseInt(target.attr('x'));
       var newX = originalX + 10;
@@ -402,19 +405,19 @@ define([
               if (self.currentRepresentationType == 'audio'){
                 var beats = $('#measure-rep-'+self.measureRepModel.cid).find('.audio-beat');
                 var selected = self.parentMeasureModel.get('beats').models[counter].get('selected');
-                self.d3AudioAnimate(beats.eq(counter)[0], dur/2, selected);
+                self.audioAnimate(beats.eq(counter)[0], dur/2, selected);
               } else if (self.currentRepresentationType == 'bead'){
                 var beats = $('#measure-rep-'+self.measureRepModel.cid).find('.bead-beat');
-                self.d3BeadAnimate(beats.eq(counter)[0], dur/2);
+                self.beadAnimate(beats.eq(counter)[0], dur/2);
               } else if (self.currentRepresentationType == 'line'){
                 var beats = $('#measure-rep-'+self.measureRepModel.cid).find('.line-beat');
-                self.d3LineAnimate(beats.eq(counter)[0], dur/2);
+                self.lineAnimate(beats.eq(counter)[0], dur/2);
               } else if (self.currentRepresentationType == 'pie'){
                 var beats = $('#measure-rep-'+self.measureRepModel.cid).find('.pie-beat');
-                self.d3PieAnimate(beats.eq(counter)[0], dur/2);
+                self.pieAnimate(beats.eq(counter)[0], dur/2);
               } else if (self.currentRepresentationType == 'bar'){
                 var beats = $('#measure-rep-'+self.measureRepModel.cid).find('.bar-beat');
-                self.d3BarAnimate(beats.eq(counter)[0], dur/2);
+                self.barAnimate(beats.eq(counter)[0], dur/2);
               }
             }
             if (counter < (signature*maxMeasures-1)) {
@@ -485,13 +488,14 @@ define([
       infiniteLine.remove();
     },
     beadToLine: function(options) {
+      console.log('btl');
       var ƒthis = this;
       var svgContainer = d3.select('#svg-'+this.measureRepModel.cid)
             .attr('width', this.linearDivWidth+this.circularMeasureR*2 );
       var beatHolder = d3.select('#beat-holder-'+this.measureRepModel.cid);
       var beadBeats = beatHolder.selectAll('.bead-beat');
 
-      dispatch.trigger('lineToBead.event', ƒthis);
+      dispatch.trigger('beatTransition.event', ƒthis);
       for(i=0; i<this.transitionNumberOfPoints; i++){
         this.circlePath.data([this.circleStates[i]])
           .transition()
@@ -517,7 +521,66 @@ define([
         // ƒthis.parentMeasureModel.increaseTransitionCount();
       }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration*4 );
     },
+    beadToBar: function(){
+      console.log('btr');
+      var ƒthis = this;
+      var svgContainer = d3.select('#svg-'+this.measureRepModel.cid)
+            .attr('width', this.linearDivWidth+this.circularMeasureR*2 );
+      var beatHolder = d3.select('#beat-holder-'+this.measureRepModel.cid);
+      var beadBeats = beatHolder.selectAll('.bead-beat');
+      var circlePath = $('#svg-'+this.measureRepModel.cid + ' .circle-path');
+
+      dispatch.trigger('beatTransition.event', ƒthis);
+      for(i=0; i<this.transitionNumberOfPoints; i++){
+        this.circlePath.data([this.circleStates[i]])
+          .transition()
+            .delay(this.transitionDuration*i)
+            .duration(this.transitionDuration)
+            .ease('linear')
+            .attr('d', this.pathFunction)
+      };
+      setTimeout(function(){
+        ƒthis.makeBeats({secondary:true, type:'bar'});
+        $('.bead-beat').fadeOut(this.animationIntervalDuration);
+        circlePath.fadeOut(this.animationIntervalDuration);
+      }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration);
+      setTimeout(function(){
+        beadBeats.remove();
+      }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration*2 );
+      setTimeout(function(){
+        ƒthis.moveSecondaryLeft();
+      }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration*3 );
+      setTimeout(function(){
+        // this sets the transition count on the model itself, which the beatView is listening to
+        dispatch.trigger('reRenderMeasure.event', this);
+        // ƒthis.parentMeasureModel.increaseTransitionCount();
+      }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration*4 );
+    },
+    beadToPie: function(){
+      console.log('btp');
+      var ƒthis = this;
+      var svgContainer = d3.select('#svg-'+this.measureRepModel.cid);
+      var beatHolder = d3.select('#beat-holder-'+this.measureRepModel.cid);
+      var beadBeats = beatHolder.selectAll('.bead-beat');
+      var circlePath = $('#svg-'+this.measureRepModel.cid + ' .circle-path');
+
+      setTimeout(function(){
+        ƒthis.makeBeats({secondary:true, type:'pie'});
+        $('.bead-beat').fadeOut(this.animationIntervalDuration);
+        // circlePath.fadeOut(this.animationIntervalDuration);
+      }, this.animationIntervalDuration);
+      setTimeout(function(){
+        beadBeats.remove();
+      }, this.animationIntervalDuration*2 );
+      setTimeout(function(){
+        // this sets the transition count on the model itself, which the beatView is listening to
+        dispatch.trigger('reRenderMeasure.event', this);
+        // ƒthis.parentMeasureModel.increaseTransitionCount();
+      }, this.animationIntervalDuration*3 );
+
+    },
     lineToBead: function(options) {
+      console.log('ltb');
       var ƒthis = this;
       var svgContainer = d3.select('#svg-'+this.measureRepModel.cid)
         .attr('width', this.linearDivWidth+this.circularMeasureR*2 )
@@ -537,7 +600,7 @@ define([
         lineBeats.remove();
       }, this.transitionDuration + this.animationIntervalDuration*4 );
       setTimeout(function(){
-        dispatch.trigger('lineToBead.event', ƒthis);
+        dispatch.trigger('beatTransition.event', ƒthis);
         for(i=0; i<ƒthis.transitionNumberOfPoints; i++){
           ƒthis.actualMeasureLinePath.data([ƒthis.circleStates[ƒthis.transitionNumberOfPoints-1-i]])
             .transition()
@@ -836,7 +899,9 @@ define([
         } else if(this.model.get('representationType') == 'line'){
           this.beadToLine();
         } else if(this.model.get('representationType') == 'pie'){
+          this.beadToPie();
         } else if(this.model.get('representationType') == 'bar'){
+          this.beadToBar();
         }
       } else if(this.model.get('previousRepresentationType') == 'line'){
         if (this.model.get('representationType') == 'audio'){

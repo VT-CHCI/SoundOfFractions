@@ -133,7 +133,7 @@ define([
       // General
         var originalScale = this.originalScale;
         var scale = this.scale;
-        var vertDivPadding = 25;
+        var vertDivPadding = 0;
         var horzDivPadding = 25;
       // Circular
         var cX = 100;
@@ -178,7 +178,7 @@ define([
         var circularBeadBeatRadius = 8;
       //Number Line
         var lineHashHeight = 30;
-        var numberLineY = 50;
+        var numberLineY = 25 + vertDivPadding;
       // Bar
         //Measure
         var lbbMeasureLocationX = 15; // 5%
@@ -197,18 +197,14 @@ define([
       for (i=0; i<transitionNumberOfPoints; i++){
           // circle portion
           var circleState = $.map(Array(transitionNumberOfPoints), function (d, j) {
-            // margin.left + measureRadius
             var x = circularMeasureCx + lineDivision*i + circularMeasureR * Math.sin(2 * j * Math.PI / (transitionNumberOfPoints - 1));
-            // margin.top + measureRadius
             var y =  circularMeasureCy - circularMeasureR * Math.cos(2 * j * Math.PI / (transitionNumberOfPoints - 1));
             return { x: x, y: y};
           })
           circleState.splice(transitionNumberOfPoints-i);
           //line portion
           var lineState = $.map(Array(transitionNumberOfPoints), function (d, j) {
-             // margin.left + measureRadius
             var x = circularMeasureCx + lineDivision*j;
-            // margin.top
             var y =  circularMeasureCy - circularMeasureR;
             return { x: x, y: y};
           })

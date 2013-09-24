@@ -55,10 +55,10 @@ define([
       this.manuallyCreatedMeasureRepresentationCollection = new RepresentationsCollection;
       this.manuallyCreatedMeasureRepresentationCollection.add(this.manuallyCreatedRepresentationModel);
       // add a bead rep
-      this.manuallyCreatedRepresentationModel = new RepresentationModel({representationType:'line'});
+      this.manuallyCreatedRepresentationModel = new RepresentationModel({representationType:'bead'});
       this.manuallyCreatedMeasureRepresentationCollection.add(this.manuallyCreatedRepresentationModel);
       // add a line rep
-      this.manuallyCreatedRepresentationModel = new RepresentationModel({representationType:'bead'});
+      this.manuallyCreatedRepresentationModel = new RepresentationModel({representationType:'line'});
       this.manuallyCreatedMeasureRepresentationCollection.add(this.manuallyCreatedRepresentationModel);
 
       this.manuallyCreatedMeasuresCollection = new MeasuresCollection;
@@ -149,7 +149,6 @@ define([
     },
 
     render: function(options){
-      console.log(this.stage.models);
       if(options) {
         console.log('render: stageView.js with options');
         var counter = $('.hTrack').size();

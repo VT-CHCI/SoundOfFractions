@@ -41,7 +41,8 @@ define([
         console.error('should not be in here!');
         this.model = new BeatModel;
       }
-      dispatch.on('lineToBead.event', this.transition, this);
+
+      dispatch.on('beatTransition.event', this.transition, this);
 
       this.listenTo(this.parentMeasureRepModel, 'change:transitions', this.transition, this);
 
@@ -298,7 +299,6 @@ define([
             .call(dragBead);
 
         this.BEAT.on('click', this.toggleModel);
-
       } else if (this.currentRepresentationType == 'line'){
         this.BEAT = this.beatContainer
             .append('line')
@@ -316,7 +316,6 @@ define([
             .call(dragLine);
 
         this.BEAT.on('click', this.toggleModel);
-
       } else if (this.currentRepresentationType == 'pie'){
         var arc = d3.svg.arc()
           .innerRadius(0)
@@ -338,7 +337,6 @@ define([
           .call(dragSlice);
           // .attr('class', 'pie-beat')
         this.BEAT.on('click', this.toggleModel);
-
       } else if (this.currentRepresentationType == 'audio'){
         this.BEAT = this.beatContainer
             .insert('circle', ':first-child')
@@ -351,7 +349,6 @@ define([
             .attr('opacity', this.opacityForAudio)
             .attr('transform', 'translate(0,0)')
             // NO click handler to prevent the user from editing in the audio Rep
-
       } else if (this.currentRepresentationType == 'bar'){
         this.BEAT = this.beatContainer
             .append('rect')
@@ -435,6 +432,7 @@ define([
           this.unRoll();
         } else if(this.parentMeasureRepModel.get('representationType') == 'pie'){
         } else if(this.parentMeasureRepModel.get('representationType') == 'bar'){
+          this.unRoll();
         }
       } else if(this.parentMeasureRepModel.get('previousRepresentationType') == 'line'){
         if (this.parentMeasureRepModel.get('representationType') == 'audio'){
