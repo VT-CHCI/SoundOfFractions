@@ -426,6 +426,7 @@ define([
 
     // addInstrumentWithPattern
     addInstrument: function(options) {
+      var tempo;
       if (options.beatPattern){
         //this is creating the new instrument htrack.
 
@@ -440,7 +441,7 @@ define([
           }
           this.manuallyCreatedMeasureBeatsCollection.add(beat);            
         }
-
+        tempo = options.bpm;
       } else {
         //this is creating the new instrument htrack.
 
@@ -450,6 +451,7 @@ define([
         for (var i = 0; i < 6; i++) {
           this.manuallyCreatedMeasureBeatsCollection.add();
         }
+        tempo = 120;
       }
       // add an instrument rep
       this.manuallyCreatedRepresentationModel = new RepresentationModel({representationType:'audio'});
@@ -466,12 +468,12 @@ define([
         label: this.unusedInstrumentsModel.getDefault(options.instrument, 'label'),
         type: this.unusedInstrumentsModel.getDefault(options.instrument, 'type'),
         img: this.unusedInstrumentsModel.getDefault(options.instrument, 'image'),
-        mute: false,
+        // mute: false,
         sample: this.unusedInstrumentsModel.getDefault(options.instrument, 'sample'),
         measures: this.manuallyCreatedMeasuresCollection,
         signature: this.manuallyCreatedMeasuresCollection.models[0].get('beats').length,
         active: true,
-        tempo: options.bpm //bpm
+        tempo: tempo //bpm
       };
 
       this.stage = StageCollection.add(newInstrumentToAdd);
