@@ -15,7 +15,7 @@ define([
       label: 'snare',
       type: 'sn',
       img: 'ofAsnare',
-      mute: false,
+      // mute: false, maybe not getting used?
       sample: 'shhh',
       measures: MeasuresCollection,
       active: true,

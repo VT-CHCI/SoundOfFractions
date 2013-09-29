@@ -47,7 +47,7 @@ define([
       // this creates 1 measure, and addes beats and the representations to itself
       this.manuallyCreatedMeasureBeatsCollection = new BeatsCollection;
       //for each beat - also change signature below
-      for (var i = 0; i < 6; i++) {
+      for (var i = 0; i < 3; i++) {
         this.manuallyCreatedMeasureBeatsCollection.add();
       }
       // add an audio rep
@@ -55,6 +55,9 @@ define([
       this.manuallyCreatedMeasureRepresentationCollection = new RepresentationsCollection;
       this.manuallyCreatedMeasureRepresentationCollection.add(this.manuallyCreatedRepresentationModel);
       // add a bead rep
+      this.manuallyCreatedRepresentationModel = new RepresentationModel({representationType:'bar'});
+      this.manuallyCreatedMeasureRepresentationCollection.add(this.manuallyCreatedRepresentationModel);
+      // add a line rep
       this.manuallyCreatedRepresentationModel = new RepresentationModel({representationType:'bead'});
       this.manuallyCreatedMeasureRepresentationCollection.add(this.manuallyCreatedRepresentationModel);
       // add a line rep
@@ -69,7 +72,7 @@ define([
         label: 'Snare',
         type: 'sn',
         img: 'snare.png',
-        mute: false,
+        // mute: false,
         sample: '808_sn.m4a',
         measures: this.manuallyCreatedMeasuresCollection,
         signature: this.manuallyCreatedMeasuresCollection.models[0].get('beats').length,
@@ -117,7 +120,7 @@ define([
         hTrack.set('label', stage[i].label);
         hTrack.set('type', stage[i].type);
         hTrack.set('img', stage[i].img);
-        hTrack.set('mute', stage[i].mute);
+        // hTrack.set('mute', stage[i].mute);
         hTrack.set('sample', stage[i].sample);
         hTrack.set('active', stage[i].active);
         hTrack.set('signature', stage[i].signature);
@@ -149,6 +152,7 @@ define([
     },
 
     render: function(options){
+      window.csf = this;
       if(options) {
         console.log('render: stageView.js with options');
         var counter = $('.hTrack').size();
@@ -230,7 +234,6 @@ define([
           //determining the duration for each beat.
           var beatDuration = 60 / tempo * StateModel.get('signature') / (numBeats);
           _.each(measure.get('beats').models, function(beat) {
-
             /* if we need to trigger a sound at this beat
               we push a duration onto the duration array.
               if not, increment our deadSpace variable,
@@ -241,11 +244,9 @@ define([
               //deadspace is a beat that is not getting played
               hTrackDurations[i].push(deadSpace);
               deadSpace = deadSpace + beatDuration;
-
             } else {
               deadSpace = deadSpace + beatDuration;
             }
-
           }, this);
         }, this);
         i++;
@@ -392,7 +393,7 @@ define([
       //we use the maximum number of measures, and the global tempo
       //to determine the duration (in ms) of one loop of the sequencer.
       var duration = StateModel.get('signature') * 60 / StateModel.get('tempo') * maxMeasures * 1000;
-      console.warn(duration);
+      console.warn('totale Duration: '+ duration);
       if (this.intervalID) {
         //if we are already playing, we stop and trigger the
         //animation to stop.
@@ -448,7 +449,7 @@ define([
         // this creates 1 measure, and addes beats and the representations to itself
         this.manuallyCreatedMeasureBeatsCollection = new BeatsCollection;
         //for each beat - also change signature below
-        for (var i = 0; i < 6; i++) {
+        for (var i = 0; i < 2; i++) {
           this.manuallyCreatedMeasureBeatsCollection.add();
         }
         tempo = 120;

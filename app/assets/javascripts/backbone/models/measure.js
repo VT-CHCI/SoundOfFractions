@@ -23,6 +23,9 @@ define([
     },
     increaseTransitionCount: function(){
       this.set({transitioned : this.transitioned+1});
+    },
+    setScale: function(newScale){
+      this.set({scale : newScale});
     }
   });
   return MeasureModel;

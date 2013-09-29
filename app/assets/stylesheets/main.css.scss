@@ -14,6 +14,10 @@ svg {
 .hTrack .measure-container .measure:first-of-type .remove-measure{
   display: none;
 }
+/*Until we get multiple measures*/
+.hTrack .measure-container .measure:first-of-type .add-measure{
+  display: none;
+}
 
 /*Thanks to sammy for this idea*/
 .cs i{
@@ -235,7 +239,7 @@ svg.line {
   padding: 0px 5px 0px;
 }
 .login li a{
-  // margin: 0px 0px 0px;
+  margin: 0px 0px 0px;
 }
 #bpm-slider input {
 	width: 100%;
@@ -246,7 +250,8 @@ svg.line {
 }
 
 .measure {
-	border: solid 1px grey;
+  /*until we get multiple measures*/
+	/*border: solid 1px grey;*/
   border-radius: 3px;
 	padding: 0 5px 5px 5px;
 	display: inline-block;
@@ -325,7 +330,7 @@ svg.line {
   right: 0;
   font-size: 50px;
   height: 50px;
-  // width: 7%;
+  width: 7%;
   text-align: center;
 }
 
@@ -344,10 +349,10 @@ svg.line {
 }
 
 .hTrack-container .count .whole {
-  dis1: block;
+  display: block;
   margin: 15px auto 25px auto;
   font-size: 80px;
-  // margin-bottom: 12px;
+  margin-bottom: 12px;
 }
 
 .hTrack-container .count .denominator {

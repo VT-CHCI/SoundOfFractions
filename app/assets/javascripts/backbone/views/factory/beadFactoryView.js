@@ -128,9 +128,9 @@ define([
           for ( i=0 ; i < ƒthis.beatsInMeasure ; i++ ) {
             refArray.push((ƒthis.linearLineLength/ƒthis.beatsInMeasure)*i+ƒthis.beatWidth);
           }
-          var newIndex = _.sortedIndex(refArray, parseInt(newComputedValX)+ƒthis.beatFactoryWidth/2);
+          var newIndex = _.sortedIndex(refArray, parseInt(newComputedValX)+ƒthis.beatFactoryBarWidth/2);
           console.log(refArray)
-          console.log(parseInt(newComputedValX)+ƒthis.beatFactoryWidth/2)
+          console.log(parseInt(newComputedValX)+ƒthis.beatFactoryBarWidth/2)
           ƒthis.parentMeasureModel.get('beats').add(new BeatModel({selected:true}), {at: newIndex})
           dispatch.trigger('signatureChange.event', ƒthis.beatsInMeasure+1);
         }
@@ -232,8 +232,8 @@ define([
             .append('rect')
             .attr('x', this.x)
             .attr('y', this.y)
-            .attr('width', this.beatFactoryWidth)
-            .attr('height', this.beatHeight)
+            .attr('width', this.beatFactoryBarWidth)
+            .attr('height', this.beatFactoryBarHeight)
             // Calling the click handler here doesn't work for some reason
             // .on('click', function(){console.log('beat container click handler')})
             .attr('class', 'factory-beat d3')

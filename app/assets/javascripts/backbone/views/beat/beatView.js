@@ -452,6 +452,7 @@ define([
       } else if(this.parentMeasureRepModel.get('previousRepresentationType') == 'bar'){
         if (this.parentMeasureRepModel.get('representationType') == 'audio'){
         } else if(this.parentMeasureRepModel.get('representationType') == 'bead'){
+          this.rollUp();
         } else if(this.parentMeasureRepModel.get('representationType') == 'line'){
         } else if(this.parentMeasureRepModel.get('representationType') == 'pie'){
         } else if(this.parentMeasureRepModel.get('representationType') == 'bar'){

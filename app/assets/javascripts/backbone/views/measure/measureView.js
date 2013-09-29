@@ -55,6 +55,7 @@ define([
       _.bindAll(this, 'render');
       this.listenTo(this.measureRepresentations, 'remove', _.bind(this.render, this));  
       this.listenTo(this.measureRepresentations, 'add', _.bind(this.render, this));  
+      this.model.on('change:scale', _.bind(this.render, this));
 
       this.collectionOfMeasures.on('add', _.bind(this.render, this));
       this.collectionOfMeasures.on('remove', _.bind(this.render, this));
@@ -115,8 +116,8 @@ define([
       }
     },
     render: function(){
-      console.log('m render');
       this.scale = this.measureModel.get('scale');
+      console.log('m render with scale of: '+this.scale);
       // Make a template for the measure and append the MeasureTemplate to the measure area in the hTrack
       var measureTemplateParameters = {
         mCID: this.model.cid,
@@ -191,7 +192,8 @@ define([
         var beatWidth = linearLineLength/this.model.get('beats').length;
         var beatHeight = lbbMeasureHeight - 2*linearBeatYPadding;
         var beatBBY = linearBeatYPadding + lbbMeasureLocationY;
-        var beatFactoryWidth = 50;
+        var beatFactoryBarWidth = 30;
+        var beatFactoryBarHeight = 15;
 
       var circleStates = [];
       for (i=0; i<transitionNumberOfPoints; i++){
@@ -277,7 +279,8 @@ define([
           // Bar
           measureWidth: lbbMeasureWidth,
           beatWidth: beatWidth,
-          beatFactoryWidth: beatFactoryWidth,
+          beatFactoryBarWidth: beatFactoryBarWidth,
+          beatFactoryBarHeight: beatFactoryBarHeight,
           beatBBY: beatBBY,
           beatHeight: beatHeight,
           measureHeight: lbbMeasureHeight,
