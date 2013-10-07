@@ -56,14 +56,15 @@ define([
       dispatch.on('resized.event', this.destroy, this);
 
       this.listenTo(this.model, 'change', this.transition, this);
-      this.listenTo(this.parentMeasureModel, 'change', _.bind(this.render, this));  
+      // this.listenTo(this.parentMeasureModel, 'change', _.bind(this.render, this));  
 
       this.render();
     },
     destroy: function(){
       console.log('destroying');
       console.log($(this.el));
-      $(this.el).remove();
+      // $(this.el).remove();
+      this.remove();
     },
     makeBeats: function(options){
       if (!options){
@@ -205,13 +206,13 @@ define([
     },
     circleStart: function(e, ui) {
       console.log('circle start');
-      console.log(this.oldW)
       if(this.oldW === undefined){
         console.log('this.oldW is undefined');
         this.oldW = ui.originalSize.width;
         this.oldH = ui.originalSize.height;
       }
-      // because I don't know how to compute the arc from a point, I generate the pie slices and then move them as a group.  Thus we have to get the group's transform translate, and store the number, so that when we scale the slices in the next func(), we also translate them the origianl amount, otherwise when we are scaling it, the slices are not translated, and the origin is 0,0
+      console.log(this.oldW)
+      // because I don't know how to compute the arc from a point, I generate the pie slices and then move them as a group.  Thus we have to get the group's transform translate, and store the number, so that when we scale the slices in the next func(), we also translate them the original amount, otherwise when we are scaling it, the slices are not translated, and the origin is 0,0
       if (this.pieTranslate == undefined){
         this.pieTranslate = d3.select('#svg-'+this.measureRepModel.cid).select('g').attr('transform')
       }
@@ -220,14 +221,18 @@ define([
     circleResizeCallback: function( e, ui ) {
       console.log(this.oldW, this.oldH, ui.size.width, ui.size.height)
       // console.log(e, ui)
-      var newW = ui.size.width;
-      var newH = ui.size.height;
+      var newW = Math.floor(ui.size.width);
+      var newH = Math.floor(ui.size.height);
       var deltaWidth = newW - this.oldW;
       var deltaHeight = newH - this.oldH;
       var deltaRatio = deltaWidth/this.oldW;
       var svgContainer = d3.select('#svg-'+this.measureRepModel.cid);
-      svgContainer.attr('width', parseInt(svgContainer.attr('width'))+deltaWidth );
-      svgContainer.attr('height', parseInt(svgContainer.attr('height'))+deltaHeight );
+      console.log(deltaWidth, deltaHeight);
+      // To handle a wierd issue with the svgContainer reducing faster than the resize, we only want to grow the container when the measureRep is increased
+      if ( deltaWidth>0 || deltaHeight>0 ){
+        svgContainer.attr('width', parseInt(svgContainer.attr('width'))+deltaWidth );
+        svgContainer.attr('height', parseInt(svgContainer.attr('height'))+deltaHeight );
+      }
       if(this.model.get('representationType') == 'bead'){
         var circlePath = svgContainer.select('path');
         var scale = circlePath.attr('transform').slice(6, circlePath.attr('transform').length-1);
@@ -256,7 +261,7 @@ define([
       this.oldH = ui.size.height;
       console.log(this.oldW, this.oldH, ui.size.width, ui.size.height);
       console.log(this.parent.measureRepresentations.models);
-      dispatch.trigger('resized.event', this);
+      dispatch.trigger('resized.event'+, this);
 
       this.parentMeasureModel.setScale(this.scale);
     },
@@ -800,6 +805,8 @@ define([
         // JQ-UI resizable
         this.$el.resizable({ 
           aspectRatio: true,
+          // To keep the number Math.Floored
+          grid:1,
           // ghost:true,
           // animate: true,
           start: function(e, ui) {
@@ -843,6 +850,7 @@ define([
         $(this.el).resizable({ 
           maxHeight: 180, 
           minHeight: 180,
+          grid:1,
           start: function(e, ui) {
             ƒthis.linearStart(e, ui);
           },
@@ -870,6 +878,7 @@ define([
         // JQ-UI resizable
         $(this.el).resizable({ 
           aspectRatio: true,
+          grid:1,
           start: function(e, ui) {
             ƒthis.circleStart(e, ui);
           },
@@ -923,6 +932,7 @@ define([
           // aspectRatio: true,
           maxHeight: 180, 
           minHeight: 180,
+          grid:1,
           start: function(e, ui) {
             ƒthis.linearStart(e, ui);
           },

@@ -173,7 +173,7 @@ define([
         });
       } else {
         console.log('render: stageView.js');
-        $(this.el).html('');
+        $(this.el).empty();
 
         var counter = 0;
 
