@@ -56,14 +56,15 @@ define([
       dispatch.on('resized.event', this.destroy, this);
 
       this.listenTo(this.model, 'change', this.transition, this);
-      this.listenTo(this.parentMeasureModel, 'change', _.bind(this.render, this));  
+      // this.listenTo(this.parentMeasureModel, 'change', _.bind(this.render, this));  
 
       this.render();
     },
     destroy: function(){
       console.log('destroying');
       console.log($(this.el));
-      $(this.el).remove();
+      // $(this.el).remove();
+      this.remove();
     },
     makeBeats: function(options){
       if (!options){
