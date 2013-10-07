@@ -60,11 +60,11 @@ define([
 
       this.render();
     },
-    destroy: function(){
-      console.log('destroying');
-      console.log($(this.el));
-      // $(this.el).remove();
-      this.remove();
+    destroy: function(options){
+      if (options.cid == this.parentMeasureModel.cid){
+        console.log('destroying');
+        this.remove();
+      }
     },
     makeBeats: function(options){
       if (!options){
@@ -260,8 +260,7 @@ define([
       this.oldW = ui.size.width;
       this.oldH = ui.size.height;
       console.log(this.oldW, this.oldH, ui.size.width, ui.size.height);
-      console.log(this.parent.measureRepresentations.models);
-      dispatch.trigger('resized.event'+, this);
+      dispatch.trigger('resized.event', { cid: this.parentMeasureModel.cid });
 
       this.parentMeasureModel.setScale(this.scale);
     },

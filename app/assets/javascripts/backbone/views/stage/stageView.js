@@ -50,9 +50,10 @@ define([
       for (var i = 0; i < 3; i++) {
         this.manuallyCreatedMeasureBeatsCollection.add();
       }
+      //make a collection
+      this.manuallyCreatedMeasureRepresentationCollection = new RepresentationsCollection;
       // add an audio rep
       this.manuallyCreatedRepresentationModel = new RepresentationModel({representationType:'audio'});
-      this.manuallyCreatedMeasureRepresentationCollection = new RepresentationsCollection;
       this.manuallyCreatedMeasureRepresentationCollection.add(this.manuallyCreatedRepresentationModel);
       // add a bead rep
       this.manuallyCreatedRepresentationModel = new RepresentationModel({representationType:'bead'});
