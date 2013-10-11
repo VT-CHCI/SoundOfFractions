@@ -394,9 +394,11 @@ define([
     },
     toggleAnimation: function(state, duration, signature, maxMeasures){
       var ƒthis = this;
+      console.log('SP: '+this.hTrack.cid +' '+signature);
       // TODO why bring in signature to have it reset
       //signature = $(this.el).find('.measure').eq(0).find('.beat').length;
-      signature = this.hTrack.get('signature');
+      signature = this.parentMeasureModel.get('beats').length;
+      console.log('SA: '+this.hTrack.cid +' '+signature);
 
       //dur is time of one beat.
       var dur = duration/signature/maxMeasures;

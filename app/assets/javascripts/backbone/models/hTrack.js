@@ -17,6 +17,7 @@ define([
       img: 'ofAsnare',
       // mute: false, maybe not getting used?
       sample: 'shhh',
+      gain: 1,
       measures: MeasuresCollection,
       active: true,
       signature: 0, //initially set to zero, but set in the init of StageView

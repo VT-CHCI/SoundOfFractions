@@ -87,12 +87,21 @@ define([
       this.gainNodeList = new Array();
       this.muteGainNodeList = new Array();
 
-      //use our webaudio context to creat two gain nodes
+      //use our webaudio context to create two gain nodes
       //for each hTrack.
       for (var i = 0; i < this.stage.models.length; i++) {
         this.gainNodeList[i] = this.context.createGainNode();
+        if (i == 0){
+          // Trying to reduce the snare instrument's volume
+          // this.sineWave = this.context.createOscillator();
+          // this.sineWave.frequency.value = 900;
+          // this.sineWave.connect(this.gainNodeList[i]);
+          this.gainNodeList[i].gain.value = .2;
+          // this.sineWave.noteOn(0);
+        }
         this.muteGainNodeList[i] = this.context.createGainNode();
       };
+window.csf = this.gainNodeList;
 
       this.intervalID = null; //time is a function of measures and tempo (4 * 60/tempo * measures)
 
@@ -153,7 +162,6 @@ define([
     },
 
     render: function(options){
-      window.csf = this;
       if(options) {
         console.log('render: stageView.js with options');
         var counter = $('.hTrack').size();
@@ -264,6 +272,7 @@ define([
       intervals for each hTrack.
     */
     playSound: function(durations){
+      var ƒthis = this;
       console.log('Playing sound!');
       var hTrackToPlayIterator = 0;
       var startTime = this.context.currentTime; //this is important (check docs for explanation)
@@ -273,6 +282,9 @@ define([
           //this is called for each 'duration' in the duration array,
           //which is every activated beat and its associated duration between
           //it and the next activated beat.
+
+          var gN = this.gainNodeList[hTrackToPlayIterator];
+
           play(
             this,
             this.context,
@@ -300,12 +312,12 @@ define([
           specGainNode -> this gain node controls envelope generation for sustained instruments.
           muteGainNode -> this gain node controls the muting of `hTrack`s.
       */
-      function play(self, context, hTrack, buffer, time, gainNode, specGainNode, muteGainNode, hTrackTempo) {
 
+      function play(self, context, hTrack, buffer, time, gainNode, specGainNode, muteGainNode, hTrackTempo) {
         //a buffer source is what can actually generate audio.
         source = context.createBufferSource();
         source.buffer = buffer;
-
+// debugger;
         /* here we make a series of connections to set up the signal flow
            of the audio through each of the three gain nodes.
            the final result looks like:
@@ -316,8 +328,9 @@ define([
         source.connect(specGainNode);
         specGainNode.connect(muteGainNode);
         muteGainNode.connect(gainNode);
+// debugger;
         gainNode.connect(context.destination);
-        specGainNode.gain.value = 1;
+        // specGainNode.gain.value = 1;
 
         //calulating the duration of one beat.
         var duration =  (60 / hTrackTempo);
@@ -329,10 +342,10 @@ define([
         //makes sustained instruments play for only the duration of one beat.
         //this reduces pops and clicks from the signal being abruptly
         //stopped and started.
-        specGainNode.gain.linearRampToValueAtTime(0, time);
-        specGainNode.gain.linearRampToValueAtTime(1, time + 0.005);
-        specGainNode.gain.linearRampToValueAtTime(1, time + (duration - 0.005));
-        specGainNode.gain.linearRampToValueAtTime(0, time + duration);
+        // specGainNode.gain.linearRampToValueAtTime(0, time);
+        // specGainNode.gain.linearRampToValueAtTime(1, time + 0.005);
+        // specGainNode.gain.linearRampToValueAtTime(1, time + (duration - 0.005));
+        // specGainNode.gain.linearRampToValueAtTime(0, time + duration);
 
         //we call noteOff to stop the sound after the duration of one beat.
         source.noteOff(time + duration);
@@ -459,6 +472,8 @@ define([
       this.manuallyCreatedRepresentationModel = new RepresentationModel({representationType:'audio'});
       // this.manuallyCreatedRepresentationModel.set('representationType', 'audio');
       this.manuallyCreatedMeasureRepresentationCollection = new RepresentationsCollection;
+      this.manuallyCreatedMeasureRepresentationCollection.add(this.manuallyCreatedRepresentationModel);
+      this.manuallyCreatedRepresentationModel = new RepresentationModel({representationType:'bead'});
       this.manuallyCreatedMeasureRepresentationCollection.add(this.manuallyCreatedRepresentationModel);
 
       // Make a htrack
