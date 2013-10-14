@@ -206,6 +206,20 @@ define([
     },
     circleStart: function(e, ui) {
       console.log('circle start');
+
+      // Set the current circle's opacity lower, and draw another one to be resized
+      this.circlePath.attr('opacity', .4);
+      var svgContainer = d3.select('#svg-'+this.measureRepModel.cid);
+      var circlePath = svgContainer
+          .insert('path', ':first-child')
+          .data([this.circleStates[0]])
+          .attr('d', this.pathFunction)
+          .attr('stroke', 'black')
+          .attr('opacity', 1)
+          .attr('class', 'circle')
+          .attr('class', 'circle-path')
+          .attr('transform', 'scale('+this.originalScale+','+this.originalScale+')');
+
       if(this.oldW === undefined){
         console.log('this.oldW is undefined');
         this.oldW = ui.originalSize.width;
@@ -234,6 +248,7 @@ define([
         svgContainer.attr('height', parseInt(svgContainer.attr('height'))+deltaHeight );
       }
       if(this.model.get('representationType') == 'bead'){
+
         var circlePath = svgContainer.select('path');
         var scale = circlePath.attr('transform').slice(6, circlePath.attr('transform').length-1);
         this.scale = (this.originalScale+deltaRatio);
@@ -266,6 +281,21 @@ define([
     },
     linearStart: function(e, ui) {
       console.log('linear start');
+
+      // Set the current circle's opacity lower, and draw another one to be resized
+      this.actualMeasureLinePath.attr('opacity', .4);
+      var svgContainer = d3.select('#svg-'+this.measureRepModel.cid);
+      var actualMeasureLinePath = svgContainer
+          .insert('path', ':first-child')
+          .data([this.circleStates[this.transitionNumberOfPoints-1]])
+          .attr('d', this.pathFunction)
+          .attr('stroke', 'black')
+          .attr('opacity', 1)
+          .attr('class', 'line')
+          .attr('class', 'line-path')
+          .attr('transform', 'scale('+this.originalScale+','+this.originalScale+')')
+          .attr('transform', 'translate('+(this.circularMeasureR*-2-10)+',0)');
+
       console.log(this.oldW)
       if(this.oldW === undefined){
         console.log('this.oldW is undefined');
@@ -280,11 +310,12 @@ define([
       var newW = ui.size.width;
       var newH = ui.size.height;
       var deltaWidth = newW - this.oldW;
-      var deltaHeight = newH - this.oldH;
       var deltaRatio = deltaWidth/this.oldW;
       var svgContainer = d3.select('#svg-'+this.measureRepModel.cid);
-      svgContainer.attr('width', parseInt(svgContainer.attr('width'))+deltaWidth );
-      // svgContainer.attr('height', parseInt(svgContainer.attr('height'))+deltaHeight );
+      if ( deltaWidth>0 ){
+        svgContainer.attr('width', parseInt(svgContainer.attr('width'))+deltaWidth*3 );
+      }
+
       if(this.model.get('representationType') == 'line'){
         var linePath = svgContainer.select('path');
         var beatLines = svgContainer.select('g');
