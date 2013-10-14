@@ -1060,48 +1060,48 @@ define([
       var PRT = this.model.get('previousRepresentationType');
       var CRT = this.model.get('representationType');
 
-      if (this.model.get('previousRepresentationType') == 'audio'){
-        if (this.model.get('representationType') == 'audio'){
-        } else if(this.model.get('representationType') == 'bead'){
-        } else if(this.model.get('representationType') == 'line'){
-        } else if(this.model.get('representationType') == 'pie'){
-        } else if(this.model.get('representationType') == 'bar'){
+      if (PRT == 'audio'){
+        if (CRT == 'audio'){
+        } else if(CRT == 'bead'){
+        } else if(CRT == 'line'){
+        } else if(CRT == 'pie'){
+        } else if(CRT == 'bar'){
         }
-      } else if(this.model.get('previousRepresentationType') == 'bead'){
-        if (this.model.get('representationType') == 'audio'){
-        } else if(this.model.get('representationType') == 'bead'){
-        } else if(this.model.get('representationType') == 'line'){
+      } else if(PRT == 'bead'){
+        if (CRT == 'audio'){
+        } else if(CRT == 'bead'){
+        } else if(CRT == 'line'){
           this.beadToLine();
-        } else if(this.model.get('representationType') == 'pie'){
+        } else if(CRT == 'pie'){
           this.beadToPie();
-        } else if(this.model.get('representationType') == 'bar'){
+        } else if(CRT == 'bar'){
           this.beadToBar();
         }
-      } else if(this.model.get('previousRepresentationType') == 'line'){
-        if (this.model.get('representationType') == 'audio'){
-        } else if(this.model.get('representationType') == 'bead'){
+      } else if(PRT == 'line'){
+        if (CRT == 'audio'){
+        } else if(CRT == 'bead'){
           this.lineToBead();
-        } else if(this.model.get('representationType') == 'line'){
-        } else if(this.model.get('representationType') == 'pie'){
+        } else if(CRT == 'line'){
+        } else if(CRT == 'pie'){
           this.lineToPie();
-        } else if(this.model.get('representationType') == 'bar'){
+        } else if(CRT == 'bar'){
           this.lineToBar();
         }
-      } else if(this.model.get('previousRepresentationType') == 'pie'){
-        if (this.model.get('representationType') == 'audio'){
-        } else if(this.model.get('representationType') == 'bead'){
-        } else if(this.model.get('representationType') == 'line'){
-        } else if(this.model.get('representationType') == 'pie'){
-        } else if(this.model.get('representationType') == 'bar'){
+      } else if(PRT == 'pie'){
+        if (CRT == 'audio'){
+        } else if(CRT == 'bead'){
+        } else if(CRT == 'line'){
+        } else if(CRT == 'pie'){
+        } else if(CRT == 'bar'){
         }
-      } else if(this.model.get('previousRepresentationType') == 'bar'){
-        if (this.model.get('representationType') == 'audio'){
-        } else if(this.model.get('representationType') == 'bead'){
+      } else if(PRT == 'bar'){
+        if (CRT == 'audio'){
+        } else if(CRT == 'bead'){
           this.barToBead();
-        } else if(this.model.get('representationType') == 'line'){
+        } else if(CRT == 'line'){
           this.barToLine();
-        } else if(this.model.get('representationType') == 'pie'){
-        } else if(this.model.get('representationType') == 'bar'){
+        } else if(CRT == 'pie'){
+        } else if(CRT == 'bar'){
         }
       }
     },
