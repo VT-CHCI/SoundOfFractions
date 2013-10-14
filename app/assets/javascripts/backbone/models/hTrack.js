@@ -25,7 +25,9 @@ define([
       instrumentMenu: RemainingInstrumentGenerator,
       tempo: '' //bpm
     },
-    initialize: function(){
+    initialize: function(options){
+      console.log('initing the hTrackModel with these options: ');
+      console.log(options);
     }
   });
   return HTrackModel;
