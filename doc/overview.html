@@ -1,0 +1,854 @@
+<p><link rel="stylesheet" href="/Users/dejanew/Dropbox/dev/SoundOfFractions/doc/md.css"></p>
+
+<p>What constitutes a whole?</p>
+
+<p>Additive factory // This is a factory that has beats that are readily available to be placed into a song
+ + beats //There should be beats of different sizes/lengths</p>
+
+<h2 id="entities">Entities</h2>
+
+<ul>
+<li>component / sheet/tab/track?
+
+<ul>
+<li>instrument</li>
+<li>name // a name of the instrument</li>
+<li>icon //an image that symbolizes the instrument</li>
+<li>sound/sample // a unique sound, that sounds the length of a beat, and has other attenuation properties based on the ordered number of the beat</li>
+<li>music sections</li>
+<li>measure (Â¿defined by beats with certain properties?) //Comprised of a one or more beats</li>
+<li>fraction represntation section //this is where the fraction representation area is placed</li>
+</ul></li>
+<li>assignment //created by a teacher, is a series of steps/questions/activities that should help teach, test, and assess a student to a new idea or thought
+
+<ul>
+<li>goal //the activities purpose or end state as described by the teacher</li>
+<li>questions //The appropriate questions being asked to the students at the appropriate times during their interaction</li>
+<li>assessment //an auto checking function() that checks if the student completed the task, and to what degree, and reports the results to the appropriate places {db tables/views/logs}</li>
+</ul></li>
+<li>beat //a visual and audio represented portion of a measure/song, that can be played, rested,</li>
+<li>song //A sample of beats played at a specific temp0 created by the student</li>
+<li>measure representation //A step higher than a beat, but still a graphical way of representing the properties of a measure of a song</li>
+<li>beat representation //A graphical way of representing the audio song’s beats {audio/h-bar/v-bar/pie/bead/numberLine}</li>
+<li>fraction representation //One of the standard ways of representing a fraction {fraction/percentage/decimal/mixedNumber}</li>
+<li>beats per measure //This can be set manually, or calculated automatically, or even questioned to the student user</li>
+<li>tempo //Tempo, a rate, should be defined in distance/time so that it is consistent across representations</li>
+<li>play //toggle the animations and the sounds ON</li>
+<li>auto-rotate/play // whether or not to loop</li>
+<li>pause // Pause the Music and the animation, allowing for resuming at the same point upon clicking pause again</li>
+<li>factory // a place where you can always retrieve something</li>
+<li>stop //Stop the music and the animation, and reset the play position to the beginning</li>
+<li>box? {mold/cast/window/template/view/perspective/perception/viewport/movement/module/section} //an element that contains other entities that can be moved as one collection</li>
+<li>navbar // a simple navigation bar, specific to the type of user
+
+<ul>
+<li>menu // a menu that is based on the type of user</li>
+<li>student // this should have assignments</li>
+<li>teacher // this should have students, progress, CRUD assignments</li>
+<li>login // an area to login and logout and access profile info</li>
+<li>list of songs // a list of songs that the user has saved</li>
+<li>list of participants in class //a list of other users in proximity set by class</li>
+</ul></li>
+<li>question area // a place where questions can be asked to the students
+
+<ul>
+<li>question // questions from the teacher’s preset scenario, and in revolving access so the student can build on and come back to</li>
+<li>answer area // a place where the student will type their answer</li>
+</ul></li>
+<li>live interactive feedback // an alert or area that shows live information, such as a when a beat is tapped by the student, which count the song is on, or other immediate feedback needed of attributes</li>
+<li>construction sandbox // where the teacher makes the different assignments/tasks by allowing certain entities or representations visible, and certain functions possible</li>
+<li>performance review or grades // an overview of each student that the teacher teaches and their metrics within the program</li>
+</ul>
+
+<h2 id="fractionrepresentations">Fraction Representations</h2>
+
+<ul>
+<li>type // {none/proper,improper fraction/mixed number/decimal/percentage/query challenge }
+
+<ul>
+<li>none //blank area</li>
+<li>proper/improper // y/z</li>
+<li>mixed number // X y/z</li>
+<li>decimal // <em>.</em>*</li>
+<li>degree of precision?
++percentage // **%</li>
+<li>degree of precision?</li>
+<li>query challenge //the student is asked to enter the amount in a particular form</li>
+</ul></li>
+<li>auto calculation? // the auto calculation should count beats? rests? both?</li>
+</ul>
+
+<h2 id="measurebeatrepresentations">Measure/Beat Representations</h2>
+
+<ul>
+<li><p>audio // a single circle that pulses at each beat</p></li>
+<li><p>vertical bar</p></li>
+<li><p>bar</p></li>
+<li><p>number line</p></li>
+<li><p>pie</p></li>
+<li><p>bead</p></li>
+<li><p>group</p>
+
+<pre><code>*   3 x 3 matrix for 9 beats per measure
+</code></pre>
+
+<ul>
+<li>9 randomly presented beats (non-overlaying)</li>
+</ul></li>
+<li><p>transition // an animation that is triggered to show what is conserved in each representation</p>
+
+<pre><code>*   from
+
+*   to
+
+*   audio
+
+*   number line
+
+    *   move the single beat along a linear path, and as each beat pulses, have it remain in the place it started pulsing
+*   the line is drawn as the single beat moves along its path
+*   then add the markers
+</code></pre>
+
+<ul>
+<li><p>bead</p>
+
+<pre><code>*   move the single beat along a circular path, and as each beat pulses, have it remain in the place it started pulsing
+</code></pre>
+
+<ul>
+<li>the circular line is drawn as the single beat moves along its path</li>
+</ul></li>
+<li><p>bar</p>
+
+<ul>
+<li><p>number line</p>
+
+<ul>
+<li>transition the beats to whatever number line representation is</li>
+</ul></li>
+<li><p>add the markers</p></li>
+</ul></li>
+<li><p>number line</p>
+
+<ul>
+<li><p>bar</p>
+
+<ul>
+<li>remove the markers</li>
+</ul></li>
+<li><p>transition the beats into the bar representation</p></li>
+</ul></li>
+<li><p>pie
+ +</p></li>
+</ul></li>
+<li><p>radial</p></li>
+<li><p>bead</p></li>
+<li><p>number line</p></li>
+<li><p>unroll to straight line, then add markers</p></li>
+<li><p>The circumference is equal to the length of the line</p></li>
+<li><p>bar</p></li>
+<li><p>unroll to straight line, then stretch the beat beads into the squares</p></li>
+<li><p>pie</p></li>
+<li><p>stretch the beads to the pie slices</p></li>
+<li><p>audio</p></li>
+<li><p>unroll to straight line, the overlap the beats into one circle</p></li>
+</ul>
+
+<h2 id="attributes">Attributes</h2>
+
+<ul>
+<li><p>count // current beat in song</p></li>
+<li><p>labels</p>
+
+<pre><code>*   counting numbers // count beats within the measure
+</code></pre>
+
+<ul>
+<li>fractions // auto calc area</li>
+</ul></li>
+</ul>
+
+<h2 id="currentuservisiblefunctions">Current User Visible Functions</h2>
+
+<table>
+<colgroup>
+<col style="text-align:left;"/>
+<col style="text-align:left;"/>
+<col style="text-align:left;"/>
+<col style="text-align:left;"/>
+<col style="text-align:left;"/>
+</colgroup>
+
+<thead>
+<tr>
+	<th style="text-align:left;">Name</th>
+	<th style="text-align:left;">Applied To</th>
+	<th style="text-align:left;">Notes</th>
+	<th style="text-align:left;">Visisble?</th>
+	<th style="text-align:left;">DnD?</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+	<td style="text-align:left;">add</td>
+	<td style="text-align:left;">instrument/measure</td>
+	<td style="text-align:left;">With one specific but changeable instrument</td>
+	<td style="text-align:left;">Yes</td>
+	<td style="text-align:left;">Yes</td>
+</tr>
+<tr>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;">beat</td>
+	<td style="text-align:left;">Make an entirely new model &amp; view of an instrument/song/measure</td>
+	<td style="text-align:left;">Yes</td>
+	<td style="text-align:left;">Yes</td>
+</tr>
+<tr>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;">Drag and Drop a beat(not in Audio Version)</td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;"></td>
+</tr>
+<tr>
+	<td style="text-align:left;">delete</td>
+	<td style="text-align:left;">instrument/measure</td>
+	<td style="text-align:left;">Delete the model and associated view(s) for a specific song</td>
+	<td style="text-align:left;">Yes</td>
+	<td style="text-align:left;"></td>
+</tr>
+<tr>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;">beat</td>
+	<td style="text-align:left;">Delete the model and associated view(s) for a specific beat</td>
+	<td style="text-align:left;">Yes</td>
+	<td style="text-align:left;"></td>
+</tr>
+<tr>
+	<td style="text-align:left;">edit</td>
+	<td style="text-align:left;">Song name</td>
+	<td style="text-align:left;">Change the song name</td>
+	<td style="text-align:left;">Yes</td>
+	<td style="text-align:left;"></td>
+</tr>
+<tr>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;">set-up</td>
+	<td style="text-align:left;">by teacher only (More Design Work)</td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;"></td>
+</tr>
+<tr>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;">instruement sound</td>
+	<td style="text-align:left;">Change the instruemnt sound and associated picture</td>
+	<td style="text-align:left;">Yes</td>
+	<td style="text-align:left;"></td>
+</tr>
+<tr>
+	<td style="text-align:left;">record</td>
+	<td style="text-align:left;">song/measure/instrument</td>
+	<td style="text-align:left;">The user taps the desk/mic and captures a beat pattern in one measure in the audio rep <strong>ONLY</strong></td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;"></td>
+</tr>
+<tr>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;">A delay should occur to allow the user to set up and sync with the recording if it doesn&#8217;t start with a beat</td>
+	<td style="text-align:left;">yes</td>
+	<td style="text-align:left;"></td>
+</tr>
+<tr>
+	<td style="text-align:left;">help</td>
+	<td style="text-align:left;">How To / Information</td>
+	<td style="text-align:left;">Popovers and or Search Query</td>
+	<td style="text-align:left;">Yes</td>
+	<td style="text-align:left;"></td>
+</tr>
+<tr>
+	<td style="text-align:left;">save/save-as</td>
+	<td style="text-align:left;">Song</td>
+	<td style="text-align:left;">The user must click &#8220;save&#8221; to save. Fork after clicking a button &#8220;save as&#8221;</td>
+	<td style="text-align:left;">Yes</td>
+	<td style="text-align:left;"></td>
+</tr>
+<tr>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;">Set-up</td>
+	<td style="text-align:left;"><strong>More Design Work</strong></td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;"></td>
+</tr>
+<tr>
+	<td style="text-align:left;">load / open</td>
+	<td style="text-align:left;">song</td>
+	<td style="text-align:left;">select from a list the songs or assignments by name, and it load the configuration</td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;"></td>
+</tr>
+<tr>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;">set-up</td>
+	<td style="text-align:left;">select from a list the songs or assignments by name, and it load the configuration</td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;"></td>
+</tr>
+<tr>
+	<td style="text-align:left;">un/mute</td>
+	<td style="text-align:left;">line</td>
+	<td style="text-align:left;">un/mutes the particular line</td>
+	<td style="text-align:left;">Yes</td>
+	<td style="text-align:left;"></td>
+</tr>
+<tr>
+	<td style="text-align:left;">toggle</td>
+	<td style="text-align:left;">beat</td>
+	<td style="text-align:left;">does/nt play the audio of a beat, and changes the beat’s graphical rep accordingly</td>
+	<td style="text-align:left;">Yes</td>
+	<td style="text-align:left;"></td>
+</tr>
+<tr>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;">song</td>
+	<td style="text-align:left;">Plays all unmuted lines</td>
+	<td style="text-align:left;">Yes</td>
+	<td style="text-align:left;">Yes</td>
+</tr>
+<tr>
+	<td style="text-align:left;">move(able)</td>
+	<td style="text-align:left;">song</td>
+	<td style="text-align:left;">move the entire song window around</td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;">Yes</td>
+</tr>
+<tr>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;">line</td>
+	<td style="text-align:left;">move the arangement of the line around</td>
+	<td style="text-align:left;">¿?</td>
+	<td style="text-align:left;">Yes</td>
+</tr>
+<tr>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;">measure representation</td>
+	<td style="text-align:left;">change the order of the measure representations</td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;">Yes</td>
+</tr>
+<tr>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;">set-up</td>
+	<td style="text-align:left;"><strong>More Design Work</strong></td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;">Yes</td>
+</tr>
+<tr>
+	<td style="text-align:left;">phoropter</td>
+	<td style="text-align:left;">representations</td>
+	<td style="text-align:left;">The arangement of the represenations of measure in a line</td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;"></td>
+</tr>
+<tr>
+	<td style="text-align:left;">transform</td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;">in place transformation of a representation form one to another</td>
+	<td style="text-align:left;">Yes</td>
+	<td style="text-align:left;"></td>
+</tr>
+<tr>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;">bead - line - bead</td>
+	<td style="text-align:left;">Transform a measure rep between the bead and linear reps</td>
+	<td style="text-align:left;">Yes</td>
+	<td style="text-align:left;"></td>
+</tr>
+<tr>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;">pie - line - pie</td>
+	<td style="text-align:left;">Transform a measure rep between the pie and linear reps</td>
+	<td style="text-align:left;">Yes</td>
+	<td style="text-align:left;"></td>
+</tr>
+<tr>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;">bead - pie - bead</td>
+	<td style="text-align:left;">Transform a measure rep between the bead and pie reps</td>
+	<td style="text-align:left;">Yes</td>
+	<td style="text-align:left;"></td>
+</tr>
+<tr>
+	<td style="text-align:left;">sign in/up</td>
+	<td style="text-align:left;">student/teacher/admin</td>
+	<td style="text-align:left;">Log in, or sign up</td>
+	<td style="text-align:left;">Yes</td>
+	<td style="text-align:left;">No</td>
+</tr>
+<tr>
+	<td style="text-align:left;">extend / shrink</td>
+	<td style="text-align:left;">measure duration</td>
+	<td style="text-align:left;">increase the radius/diameter of the measure in a circular form, or the length in a linear form</td>
+	<td style="text-align:left;">Yes</td>
+	<td style="text-align:left;"></td>
+</tr>
+<tr>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;">shrink the radius/diameter of the measure in a circular form, or the length in a linear form</td>
+	<td style="text-align:left;">Yes</td>
+	<td style="text-align:left;"></td>
+</tr>
+<tr>
+	<td style="text-align:left;">place</td>
+	<td style="text-align:left;">labels on song</td>
+	<td style="text-align:left;">allow the user to drag and drop labels form a label factory (with predefined labels or blank areas for user generated labels) to appropriate places for teacher assessment:</td>
+	<td style="text-align:left;">Yes</td>
+	<td style="text-align:left;">Yes</td>
+</tr>
+<tr>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;">one, two, three, &#8230;</td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;"></td>
+</tr>
+<tr>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;">whole, half, third, fourth, fifth, &#8230;</td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;"></td>
+</tr>
+<tr>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;">1, 2, 3, 4, 5, &#8230; /(over) 1, 2, 3, 4, 5, &#8230;</td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;"></td>
+</tr>
+<tr>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;">one-fifth (multiple of these)</td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;"></td>
+</tr>
+<tr>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;">two-fifths (proper fractions)</td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;"></td>
+</tr>
+<tr>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;">20%</td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;"></td>
+</tr>
+<tr>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;">.20</td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;"></td>
+</tr>
+<tr>
+	<td style="text-align:left;">export</td>
+	<td style="text-align:left;">song (audio)</td>
+	<td style="text-align:left;">download the audio song to the computer</td>
+	<td style="text-align:left;">Yes</td>
+	<td style="text-align:left;"></td>
+</tr>
+<tr>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;">student performance</td>
+	<td style="text-align:left;">the student metrics in CSV</td>
+	<td style="text-align:left;">Yes</td>
+	<td style="text-align:left;"></td>
+</tr>
+</tbody>
+</table>
+<h2 id="currentstructurefunctions">Current Structure Functions</h2>
+
+<table>
+ <tbody><tr>
+ <th>Name </th>
+ <th>Applied to </th>
+ <th>Notes </th>
+ <th>Menu Item </th>
+ <th>DnD-able </th>
+ </tr>
+ <tr>
+ <td> create </td>
+ <td>
+
+*   song
+*   assignment (by the teacher)
+ </td>
+ <td> The user creates a song or sets up an assignment, and it is created when they hit “save” or “save as”. This is accomplished by the first instance of saving</td>
+ <td>Yes</td>
+ <td></td>
+ </tr>
+ <tr>
+ <td> record / capture </td>
+ <td>
+
+*   tapping the desk and capturing beats
+ </td>
+ <td> The computer records a sound</td>
+ <td></td>
+ <td></td>
+ </tr>
+ <tr>
+ <td> set </td>
+ <td>
+
+*   tempo (Â¿?)
+*   beats per measure
+*   representations
+ </td>
+ <td> setting a specific value for these attributes</td>
+ <td></td>
+ <td> </td>
+ </tr>
+ <tr>
+ <td> animate </td>
+ <td>
+
+*   beat animation (simultaneously with the sound)
+*   representation transformation
+ </td>
+ <td> a graphical animation to show the playing or change between, tied to the play button of a saong.instrument measure</td>
+ <td></td>
+ <td> </td>
+ </tr>
+ <tr>
+ <td> moveable </td>
+ <td>
+
+*   measure
+*   beat
+*   insturment
+ </td>
+ <td> these are moveable</td>
+ <td></td>
+ <td> </td>
+ </tr>
+ <tr>
+ <td> pick up </td>
+ <td>
+
+*   beat
+*   measure
+*   insturment
+ </td>
+ <td> these are moveable, and thus can be picked up</td>
+ <td></td>
+ <td> </td>
+ </tr>
+ <tr>
+ <td> drag </td>
+ <td>
+
+*   beat
+*   measure
+*   representation
+*   insturment
+ </td>
+ <td> these are dragable when picked up</td>
+ <td></td>
+ <td>DnD</td>
+ </tr>
+ <tr>
+ <td> drop </td>
+ <td>
+
+*   beat
+*   measure
+*   insturment
+ </td>
+ <td> these are dropped after dragging</td>
+ <td></td>
+ <td>DnD</td>
+ </tr>
+ <tr>
+ <td> focus / selection </td>
+ <td>
+
+*   component
+*   measure
+*   instrument
+ </td>
+ <td> these can be focused on/selected and then other specific functions can be performed on the entity</td>
+ <td></td>
+ <td>DnD</td>
+ </tr>
+ <tr>
+ <td> deselect </td>
+ <td>
+
+*   component
+*   measure
+*   instrument
+ </td>
+ <td> auto deselects when another seleciton is made. allow not to select anything on the page (Â¿play music instead?)</td>
+ <td></td>
+ <td> </td>
+ </tr>
+ <tr>
+ <td> auto-space </td>
+ <td>
+
+*   beats
+ </td>
+ <td> sets the spacing of the beats to equidistance in the measure</td>
+ <td>Yes</td>
+ <td> </td>
+ </tr>
+ <tr>
+ <td> transition </td>
+ <td>
+
+*   measure
+ </td>
+ <td> a specific animation from one representation to another
+
+*   unroll
+*   roll-up
+ </td>
+ <td>Yes</td>
+ <td> </td>
+ </tr>
+ <tr>
+ <td> replication </td>
+ <td>
+
+*   measure
+*   NOT AN INSTRUMENT, so the same sound CAN be tied to a graphical representation
+ </td>
+ <td> an additional representation is created that is the same beat pattern of the “parent” measure representation</td>
+ <td></td>
+ <td> </td>
+ </tr>
+ <tr>
+ <td> export </td>
+ <td>
+
+*   song
+*   student performance
+ </td>
+ <td>download the audio song to the computer, or the student metrics in CSV</td>
+ <td></td>
+ <td> </td>
+ </tr>
+ <tr>
+ <td> logging </td>
+ <td>
+
+*   representation changes
+*   beat additions
+*   beat removals
+ </td>
+ <td>review the student metrics on the webpage</td>
+ <td></td>
+ <td> </td>
+ </tr>
+ </tbody></table>
+
+<h2 id="futureorunimplementedfunctions">Future or Unimplemented Functions</h2>
+
+<table>
+ <tbody><tr>
+ <th>Name </th>
+ <th>Applied to </th>
+ <th>Notes </th>
+ <th>Menu Item </th>
+ <th>DnD-able </th>
+ </tr>
+ <tr>
+ <td> moveable </td>
+ <td>
+
+*   measure
+*   beat
+*   insturment
+ </td>
+ <td> these are moveable</td>
+ <td></td>
+ <td> </td>
+ </tr>
+ <tr>
+ <td> orient </td>
+ <td>
+
+*   circular representation(bead, radial, pie)
+ </td>
+ <td> these are oriented so the first beat is at 12 oclock</td>
+ <td></td>
+ <td> </td>
+ </tr>
+ <tr>
+ <td> share </td>
+ <td>
+
+*   song
+ </td>
+ <td> allow a song to be shared with classmates, school, or other users </td>
+ <td>Yes</td>
+ <td> </td>
+ </tr>
+ <tr>
+ <td> import </td>
+ <td>
+
+*   music
+ </td>
+ <td> import a music file and have the beats displayed in the representation of their choosing </td>
+ <td></td>
+ <td> </td>
+ </tr>
+ <tr>
+ <td> arrange </td>
+ <td>
+
+*   instruments
+*   measures
+ </td>
+ <td>predefined arrangements for all of the entities (similar to how you can view file systems)</td>
+ <td></td>
+ <td> </td>
+ </tr>
+ <tr>
+ <td> sort </td>
+ <td>
+
+*   beats in the factory
+ </td>
+ <td>sortation allowed by size, color(order), length (Â¿?)</td>
+ <td></td>
+ <td> </td>
+ </tr>
+ <tr>
+ <td> system labels </td>
+ <td>
+
+*   instruments
+*   representations
+ </td>
+ <td>predefined labels that can be toggled or used to help identify certain attirbutes to the user(Â¿?)</td>
+ <td></td>
+ <td> </td>
+ </tr>
+ <tr>
+ <td> user placed labels </td>
+ <td>Empty Labels to be filled in by the user</td>
+ <td>allow the user to drag and drop labels form a label factory to appropriate places for teacher assessment:</td>
+ <td></td>
+ <td></td>
+ </tr>
+ <tr>
+ <td> review </td>
+ <td>
+
+*   student performance
+ </td>
+ <td>review the student metrics on the webpage</td>
+ <td></td>
+ <td> </td>
+ </tr>
+ </tbody></table>
+
+<h2 id="math">Math</h2>
+
+<ul>
+<li><p>add</p>
+
+<pre><code>*   beat
+</code></pre>
+
+<ul>
+<li>beat after the {third position}</li>
+<li>beat {20%, 40%, 50% after the {first, second, third beat}</li>
+</ul></li>
+<li><p>subtract</p>
+
+<pre><code>*   beat
+</code></pre>
+
+<ul>
+<li>first {half, quarter, fifth}</li>
+</ul></li>
+<li><p>divide</p>
+
+<pre><code>*   half time
+</code></pre></li>
+<li><p>multiply
++double time</p></li>
+</ul>
+
+<h2 id="music">Music</h2>
+
+<ul>
+<li><p>compare</p>
+
+<pre><code>*   song {a, b} from yourself
+</code></pre>
+
+<ul>
+<li>song a from yourself to song a of a classmate</li>
+</ul></li>
+<li><p>compose</p>
+
+<pre><code>*   song yourself
+</code></pre>
+
+<ul>
+<li>song with a classmate</li>
+</ul></li>
+</ul>
+
+<h2 id="generalfeatures">General features</h2>
+
+<ul>
+<li><p>metrics</p>
+
+<pre><code>*   most beats in a song
+</code></pre>
+
+<ul>
+<li>longest song (time)</li>
+<li>most worked on (diff between created and updated? or sessions?)</li>
+</ul></li>
+<li><p>awards completed assignments</p></li>
+<li><p>teaching give awards for completing simple tasks used to introduce the program</p></li>
+</ul>
+
+<h2 id="outsideoftheprogram">Outside of the program</h2>
+
+<ul>
+<li><p>users {student/teacher/admin} //the people using the program</p></li>
+<li><p>tapping fingers/drumsticks/clapping/slapping //an embodied interaction by the student to compose their own music song, with tapping the desk or a key</p></li>
+<li><p>counting internal / outloud / paper</p></li>
+<li><p>student</p>
+
+<pre><code>*   intended user
+</code></pre>
+
+<ul>
+<li>completes assignments made by the teacher</li>
+<li>has a playground with full functionality</li>
+</ul></li>
+<li><p>class all students in one class(~15–35 students in one meeting)</p></li>
+<li><p>school all students/classes in a school</p></li>
+<li><p>district all schools in an area</p></li>
+<li><p>teacher can make assignments and program states</p></li>
+<li><p>partner another student, that completes the task(s) with the student</p></li>
+<li><p>group students that complete the task(s) together</p></li>
+</ul>
+
+<h2 id="conserved">Conserved</h2>

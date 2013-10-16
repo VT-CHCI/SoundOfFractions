@@ -1,253 +1,518 @@
+<link rel="stylesheet" href="/Users/dejanew/Dropbox/dev/SoundOfFractions/doc/md.css">
+
 What constitutes a whole?
 
-additive palette
-// This is a factory that has beats that are readily available to be placed into a song
-  beats
-  //There should be beats of different sizes/lengths
+Additive factory // This is a factory that has beats that are readily available to be placed into a song
+ + beats //There should be beats of different sizes/lengths
 
-entities
-  component / sheet/tab/track?
-    instrument
-      name
-      // a name of the instrument
-      icon
-      //an image that symbolizes the instrument
-      sound/sample
-      // a unique sound, that sounds the length of a beat, and has other attenuation properties based on the ordered number of the beat
-    music sections
-      measure (¿defined by beats with certain properties?)
-      //Comprised of a one or more beats
-    fraction represntation section
-    //this is where the fraction representation area is placed
+## Entities
 
-  assignment
-  //created by a teacher, is a series of steps/questions/activities that should help teach, test, and assess a student to a new idea or thought
-    goal
-    //the activities purpose or end state as described by the teacher
-    questions
-    //The appropriate questions being asked to the students at the appropriate times during their interaction
-    assessment
-    //an auto checking function() that checks if the student completed the task, and to what degree, and reports the results to the appropriate places {db tables/views/logs}
-  beat
-  //a visual and audio represented portion of a measure/song, that can be played, rested, 
-  song
-  //A sample of beats played at a specific temp0 created by the student
-  measure representation
-  //A step higher than a beat, but still a graphical way of representing the properties of a measure of a song
-  beat representation
-  //A graphical way of representing the audio song's beats {audio/h-bar/v-bar/pie/bead/numberLine}
-  fraction representation
-  //One of the standard ways of representing a fraction {fraction/percentage/decimal/mixedNumber}
-  beats per measure
-  //This can be set manually, or calculated automatically, or even questioned to the student user
-  tempo
-  //Tempo, a rate, should be defined in distance/time so that it is consistent across representations
-  play
-  //toggle the animations and the sounds ON
-  auto-rotate/play
-  // whether or not to loop
-  pause
-  // Pause the Music and the animation, allowing for resuming at the same point upon clicking pause again
-  factory 
-  // a place where you can always retrieve something
-  stop
-  //Stop the music and the animation, and reset the play position to the beginning
-  box? {mold/cast/window/template/view/perspective/perception/viewport/movement/module/section}
-  //an element that contains other entities that can be moved as one collection
-  navbar
-  // a simple navigation bar, specific to the type of user
-    menu
-    // a menu that is based on the type of user
-      student
-      // this should have assignments
-      teacher
-      // this should have students, progress, CRUD assignments
-    login
-    // an area to login and logout and access profile info
-    list of songs
-    //a list of songs that the user has saved
-    list of participants in class
-    //a list of other users in proximity set by class
-  question area
-  // a place where questions can be asked to the students
-    question
-    // questions from the teacher's preset scenario, and in revolving access so the student can build on and come back to
-    answer area
-    // a place where the student will type their answer
-  live interactive feedback
-  // an alert or area that shows live information, such as a when a beat is tapped by the student, which count the song is on, or other immediate feedback needed of attributes
-  construction sandbox
-  // where the teacher makes the different assignments/tasks by allowing certain entities or representations visible, and certain functions possible
-  performance review / grades
-  // an overview of each student that the teacher teaches and their metrics within the program
+*   component / sheet/tab/track?
+    *   instrument
+    *   name // a name of the instrument
+    *   icon //an image that symbolizes the instrument
+    *   sound/sample // a unique sound, that sounds the length of a beat, and has other attenuation properties based on the ordered number of the beat
+    *   music sections
+    *   measure (Â¿defined by beats with certain properties?) //Comprised of a one or more beats
+    *   fraction represntation section //this is where the fraction representation area is placed
+*   assignment //created by a teacher, is a series of steps/questions/activities that should help teach, test, and assess a student to a new idea or thought
+    *   goal //the activities purpose or end state as described by the teacher
+    *   questions //The appropriate questions being asked to the students at the appropriate times during their interaction
+    *   assessment //an auto checking function() that checks if the student completed the task, and to what degree, and reports the results to the appropriate places {db tables/views/logs}
+*   beat //a visual and audio represented portion of a measure/song, that can be played, rested,
+*   song //A sample of beats played at a specific temp0 created by the student
+*   measure representation //A step higher than a beat, but still a graphical way of representing the properties of a measure of a song
+*   beat representation //A graphical way of representing the audio song’s beats {audio/h-bar/v-bar/pie/bead/numberLine}
+*   fraction representation //One of the standard ways of representing a fraction {fraction/percentage/decimal/mixedNumber}
+*   beats per measure //This can be set manually, or calculated automatically, or even questioned to the student user
+*   tempo //Tempo, a rate, should be defined in distance/time so that it is consistent across representations
+*   play //toggle the animations and the sounds ON
+*   auto-rotate/play // whether or not to loop
+*   pause // Pause the Music and the animation, allowing for resuming at the same point upon clicking pause again
+*   factory // a place where you can always retrieve something
+*   stop //Stop the music and the animation, and reset the play position to the beginning
+*   box? {mold/cast/window/template/view/perspective/perception/viewport/movement/module/section} //an element that contains other entities that can be moved as one collection
+*   navbar // a simple navigation bar, specific to the type of user
+    *   menu // a menu that is based on the type of user
+    *   student // this should have assignments
+    *   teacher // this should have students, progress, CRUD assignments
+    *   login // an area to login and logout and access profile info
+    *   list of songs // a list of songs that the user has saved
+    *   list of participants in class //a list of other users in proximity set by class
+*   question area // a place where questions can be asked to the students
+    *   question // questions from the teacher’s preset scenario, and in revolving access so the student can build on and come back to
+    *   answer area // a place where the student will type their answer
+*   live interactive feedback // an alert or area that shows live information, such as a when a beat is tapped by the student, which count the song is on, or other immediate feedback needed of attributes
+*   construction sandbox // where the teacher makes the different assignments/tasks by allowing certain entities or representations visible, and certain functions possible
+*   performance review or grades // an overview of each student that the teacher teaches and their metrics within the program
 
-fraction representations
-  type
-  // {none/proper,improper fraction/mixed number/decimal/percentage/query challenge }
-    none
-    //blank area
-    proper/improper
-    // y/z
-    mixed number
-    // X y/z
-    decimal
-    // *.**
-    // degree of precision?
-    percentage
-    // **%
-    // degree of precision?
-    query challenge
-    //the student is asked to enter the amount in a particular form
-  auto calculation?
-    // the auto calculation should be 
+## Fraction Representations
 
-measure/beat representations
-  audio
-  // a single circle that pulses at each beat
-  vertical bar
-  bar
-  number line
-  pie
-  bead
-  group
-  // 3 x 3 matrix for 9 beats per measure
-  // 9 randomly presented beats (non-overlaying)
-  transition
-  // an animation that is triggered to show what is conserved in each representation
-    from
-      to
-    audio
-      number line
-      // move the single beat along a linear path, and as each beat pulses, have it remain in the place it started pulsing
-      // the line is drawn as the single beat moves along its path
-      // then add the markers
-      bead
-      // move the single beat along a circular path, and as each beat pulses, have it remain in the place it started pulsing
-      // the circular line is drawn as the single beat moves along its path
-    bar
-      number line
-      // transition the beats to whatever number line representation is
-      // add the markers
-    number line
-      bar
-      // remove the markers
-      // transition the beats into the bar representation
-    pie
-      // 
-    radial
-    bead
-      number line
-      // unroll to straight line, then add markers
-      // The circumference is equal to the length of the line
+*   type // {none/proper,improper fraction/mixed number/decimal/percentage/query challenge }
+    *   none //blank area
+    *   proper/improper // y/z
+    *   mixed number // X y/z
+    *   decimal // _._*
+    *   degree of precision?
++percentage // **%
+    *   degree of precision?
+    *   query challenge //the student is asked to enter the amount in a particular form
+*   auto calculation? // the auto calculation should count beats? rests? both?
 
-      bar
-      // unroll to straight line, then stretch the beat beads into the squares
-      pie
-      // stretch the beads to the pie slices
-      audio
-      // unroll to straight line, the overlap the beats into one circle
+## Measure/Beat Representations
 
-attributes
-  count
-  // current beat in song
-  labels 
-    counting numbers
-    // count beats within the measure
-    fractions
-    // auto calc area
+*   audio // a single circle that pulses at each beat
+*   vertical bar
+*   bar
+*   number line
+*   pie
+*   bead
+*   group
 
-functions
-  add                     measure/beat/instrument
-  delete                  song/measure/instrument/beat
-  edit                    song/beat/assignment
-  create                  song/assignment
-  capture
-  // by tapping space bar for one instrument
-  // tapping a specific key for a specific instrument
-  // tapping the desk and capturing beats
-  set                     tempo
-  record                  song
-  save/update             song/assignment
-  // Fork or auto-save?
-  load/open               song/assignment
-  mute                    instrument/beat
-  unmute                  instrument/beat
-  animate                 beat/representation transformation
-  play(sound)             song{beats}
-  move                    measure/beat/instrument
-  pick up                 beat/measure/instrument
-  drag                    beat/measure/instrument/panel-box
-  place                   beat/measure/instrument
-  orient                  beat(radial representations)
-  focus                   component/instrument/measure/¿box?
-  share                   song
-  auto-space              equidistant beats
-  download                song
-  phoropter               beat/measure/properties of
-  // look at the same thing but with multiple images of the same thing, but in different format/representation.
-  select                  state on
-  deselect                state off
-  // the ability to not select anything on the page
-  sign in                 application
-  sign out                application
-  sign up                 application
-  unroll                  measure(bead)
-  //transition from radial to linear forms
-  roll                    measure(bead)
-  //transition from linear to radial forms
-  extend                  measure/beat
-  //increase the radius/diameter of the measure in a circular form, or the length in a linear form
-  shrink                  measure/beat
-  //shirnk the radius/diameter of the measure in a circular form, or the length in a linear form
-  compare                 representations
-  sort (beats in pallet)  by size/length/color/
-  logging                 representation changes/ 
-  look at information     measure/instrument/song/button
-  compare                 {other students/teacher prepared}song/measure/beat/fraction/attributes
-  export                  song/student performance
-  review                  student performance
+        *   3 x 3 matrix for 9 beats per measure
+    *   9 randomly presented beats (non-overlaying)
+*   transition // an animation that is triggered to show what is conserved in each representation
 
-math
-  add
-  // beat
-  // beat after the {third position}
-  // beat {20%, 40%, 50% after the {first, second, third beat}
-  subtract
-  // beat
-  // first {half, quarter, fifth}
-  divide
-  // half time
-  multiply
-  // double time
-music
-  compare
-  // song {a, b} from yourself
-  // song a from yourself to song a of a classmate
-  compose
-  // song yourself
-  // song with a classmate
+        *   from
 
-general features
-  metrics                  most beats in a song
-                           longest song (time)
-                           most worked on (diff between created and updated? or sessions?)
-  awards                   completed assignments
-  teaching                 give awards for completing simple tasks used to introduce the program
+        *   to
 
-outside of the program
-  users {student/teacher/admin}
-  //the people using the program
-  tapping     fingers/drumsticks/clapping/slapping
-  //an embodied interaction by the student to compose their own music song, with tapping the desk or a key
-  counting    internal / outloud / paper
-  student     intended user
-              completes assignments made by the teacher
-              has a playground with full functionality
-  class       all students in one class(~15-35 students in one meeting)
-  school      all students/classes in a school
-  district    all schools in an area
-  teacher     can make assignments and program states
-  partner     another student, that completes the task(s) with the student
-  group       students that complete the task(s) together
+        *   audio
 
-conserved
+        *   number line
+
+            *   move the single beat along a linear path, and as each beat pulses, have it remain in the place it started pulsing
+        *   the line is drawn as the single beat moves along its path
+        *   then add the markers
+    *   bead
+
+            *   move the single beat along a circular path, and as each beat pulses, have it remain in the place it started pulsing
+        *   the circular line is drawn as the single beat moves along its path
+    *   bar
+
+        *   number line
+
+            *   transition the beats to whatever number line representation is
+        *   add the markers
+    *   number line
+
+        *   bar
+
+            *   remove the markers
+        *   transition the beats into the bar representation
+    *   pie
+ +
++ radial
++ bead
+ + number line
+ + unroll to straight line, then add markers
+ + The circumference is equal to the length of the line
+ + bar
+ + unroll to straight line, then stretch the beat beads into the squares
+ + pie
+ + stretch the beads to the pie slices
+ + audio
+ + unroll to straight line, the overlap the beats into one circle
+
+## Attributes
+
+*   count // current beat in song
+*   labels
+
+        *   counting numbers // count beats within the measure
+    *   fractions // auto calc area
+
+## Current User Visible Functions
+
+|       Name      |        Applied To       |                                                                                    Notes                                                                                    | Visisble? | DnD? |
+| --------------- | ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ---- |
+| add             | instrument/measure      | With one specific but changeable instrument                                                                                                                                 | Yes       | Yes  |
+|                 | beat                    | Make an entirely new model & view of an instrument/song/measure                                                                                                             | Yes       | Yes  |
+|                 |                         | Drag and Drop a beat(not in Audio Version)                                                                                                                                  |           |      |
+| delete          | instrument/measure      | Delete the model and associated view(s) for a specific song                                                                                                                 | Yes       |      |
+|                 | beat                    | Delete the model and associated view(s) for a specific beat                                                                                                                 | Yes       |      |
+| edit            | Song name               | Change the song name                                                                                                                                                        | Yes       |      |
+|                 | set-up                  | by teacher only (More Design Work)                                                                                                                                          |           |      |
+|                 | instruement sound       | Change the instruemnt sound and associated picture                                                                                                                          | Yes       |      |
+| record          | song/measure/instrument | The user taps the desk/mic and captures a beat pattern in one measure in the audio rep **ONLY**                                                                             |           |      |
+|                 |                         | A delay should occur to allow the user to set up and sync with the recording if it doesn't start with a beat                                                                | yes       |      |
+| help            | How To / Information    | Popovers and or Search Query                                                                                                                                                | Yes       |      |
+| save/save-as    | Song                    | The user must click "save" to save. Fork after clicking a button "save as"                                                                                                  | Yes       |      |
+|                 | Set-up                  | **More Design Work**                                                                                                                                                        |           |      |
+| load / open     | song                    | select from a list the songs or assignments by name, and it load the configuration                                                                                          |           |      |
+|                 | set-up                  | select from a list the songs or assignments by name, and it load the configuration                                                                                          |           |      |
+| un/mute         | line                    | un/mutes the particular line                                                                                                                                                | Yes       |      |
+| toggle          | beat                    | does/nt play the audio of a beat, and changes the beat’s graphical rep accordingly                                                                                          | Yes       |      |
+|                 | song                    | Plays all unmuted lines                                                                                                                                                     | Yes       | Yes  |
+| move(able)      | song                    | move the entire song window around                                                                                                                                          |           | Yes  |
+|                 | line                    | move the arangement of the line around                                                                                                                                      | ¿?        | Yes  |
+|                 | measure representation  | change the order of the measure representations                                                                                                                             |           | Yes  |
+|                 | set-up                  | **More Design Work**                                                                                                                                                        |           | Yes  |
+| phoropter       | representations         | The arangement of the represenations of measure in a line                                                                                                                   |           |      |
+| transform       |                         | in place transformation of a representation form one to another                                                                                                             | Yes       |      |
+|                 | bead - line - bead      | Transform a measure rep between the bead and linear reps                                                                                                                    | Yes       |      |
+|                 | pie - line - pie        | Transform a measure rep between the pie and linear reps                                                                                                                     | Yes       |      |
+|                 | bead - pie - bead       | Transform a measure rep between the bead and pie reps                                                                                                                       | Yes       |      |
+| sign in/up      | student/teacher/admin   | Log in, or sign up                                                                                                                                                          | Yes       | No   |
+| extend / shrink | measure duration        | increase the radius/diameter of the measure in a circular form, or the length in a linear form                                                                              | Yes       |      |
+|                 |                         | shrink the radius/diameter of the measure in a circular form, or the length in a linear form                                                                                | Yes       |      |
+| place           | labels on song          | allow the user to drag and drop labels form a label factory (with predefined labels or blank areas for user generated labels) to appropriate places for teacher assessment: | Yes       | Yes  |
+|                 |                         | one, two, three, ...                                                                                                                                                        |           |      |
+|                 |                         | whole, half, third, fourth, fifth, ...                                                                                                                                      |           |      |
+|                 |                         | 1, 2, 3, 4, 5, ... /(over) 1, 2, 3, 4, 5, ...                                                                                                                               |           |      |
+|                 |                         | one-fifth (multiple of these)                                                                                                                                               |           |      |
+|                 |                         | two-fifths (proper fractions)                                                                                                                                               |           |      |
+|                 |                         | 20%                                                                                                                                                                         |           |      |
+|                 |                         | .20                                                                                                                                                                         |           |      |
+| export          | song (audio)            | download the audio song to the computer                                                                                                                                     | Yes       |      |
+|                 | student performance     | the student metrics in CSV                                                                                                                                                  | Yes       |      |
+| Hot key(switch) | instrument              |                                                                                                                                                                             |           |      |
+| Scramble        | Labels                  | Scramble them into a non uniform arrangement                                                                                                                                | Yes       | No   |
+|                 |                         |                                                                                                                                                                             |           |      |
+
+## Current Structure Functions
+
+<table>
+ <tbody><tr>
+ <th>Name </th>
+ <th>Applied to </th>
+ <th>Notes </th>
+ <th>Menu Item </th>
+ <th>DnD-able </th>
+ </tr>
+ <tr>
+ <td> create </td>
+ <td>
+
+*   song
+*   assignment (by the teacher)
+ </td>
+ <td> The user creates a song or sets up an assignment, and it is created when they hit “save” or “save as”. This is accomplished by the first instance of saving</td>
+ <td>Yes</td>
+ <td></td>
+ </tr>
+ <tr>
+ <td> record / capture </td>
+ <td>
+
+*   tapping the desk and capturing beats
+ </td>
+ <td> The computer records a sound</td>
+ <td></td>
+ <td></td>
+ </tr>
+ <tr>
+ <td> set </td>
+ <td>
+
+*   tempo (Â¿?)
+*   beats per measure
+*   representations
+ </td>
+ <td> setting a specific value for these attributes</td>
+ <td></td>
+ <td> </td>
+ </tr>
+ <tr>
+ <td> animate </td>
+ <td>
+
+*   beat animation (simultaneously with the sound)
+*   representation transformation
+ </td>
+ <td> a graphical animation to show the playing or change between, tied to the play button of a saong.instrument measure</td>
+ <td></td>
+ <td> </td>
+ </tr>
+ <tr>
+ <td> moveable </td>
+ <td>
+
+*   measure
+*   beat
+*   insturment
+ </td>
+ <td> these are moveable</td>
+ <td></td>
+ <td> </td>
+ </tr>
+ <tr>
+ <td> pick up </td>
+ <td>
+
+*   beat
+*   measure
+*   insturment
+ </td>
+ <td> these are moveable, and thus can be picked up</td>
+ <td></td>
+ <td> </td>
+ </tr>
+ <tr>
+ <td> drag </td>
+ <td>
+
+*   beat
+*   measure
+*   representation
+*   insturment
+ </td>
+ <td> these are dragable when picked up</td>
+ <td></td>
+ <td>DnD</td>
+ </tr>
+ <tr>
+ <td> drop </td>
+ <td>
+
+*   beat
+*   measure
+*   insturment
+ </td>
+ <td> these are dropped after dragging</td>
+ <td></td>
+ <td>DnD</td>
+ </tr>
+ <tr>
+ <td> focus / selection </td>
+ <td>
+
+*   component
+*   measure
+*   instrument
+ </td>
+ <td> these can be focused on/selected and then other specific functions can be performed on the entity</td>
+ <td></td>
+ <td>DnD</td>
+ </tr>
+ <tr>
+ <td> deselect </td>
+ <td>
+
+*   component
+*   measure
+*   instrument
+ </td>
+ <td> auto deselects when another seleciton is made. allow not to select anything on the page (Â¿play music instead?)</td>
+ <td></td>
+ <td> </td>
+ </tr>
+ <tr>
+ <td> auto-space </td>
+ <td>
+
+*   beats
+ </td>
+ <td> sets the spacing of the beats to equidistance in the measure</td>
+ <td>Yes</td>
+ <td> </td>
+ </tr>
+ <tr>
+ <td> transition </td>
+ <td>
+
+*   measure
+ </td>
+ <td> a specific animation from one representation to another
+
+*   unroll
+*   roll-up
+ </td>
+ <td>Yes</td>
+ <td> </td>
+ </tr>
+ <tr>
+ <td> replication </td>
+ <td>
+
+*   measure
+*   NOT AN INSTRUMENT, so the same sound CAN be tied to a graphical representation
+ </td>
+ <td> an additional representation is created that is the same beat pattern of the “parent” measure representation</td>
+ <td></td>
+ <td> </td>
+ </tr>
+ <tr>
+ <td> export </td>
+ <td>
+
+*   song
+*   student performance
+ </td>
+ <td>download the audio song to the computer, or the student metrics in CSV</td>
+ <td></td>
+ <td> </td>
+ </tr>
+ <tr>
+ <td> logging </td>
+ <td>
+
+*   representation changes
+*   beat additions
+*   beat removals
+ </td>
+ <td>review the student metrics on the webpage</td>
+ <td></td>
+ <td> </td>
+ </tr>
+ </tbody></table>
+
+## Future or Unimplemented Functions
+
+<table>
+ <tbody><tr>
+ <th>Name </th>
+ <th>Applied to </th>
+ <th>Notes </th>
+ <th>Menu Item </th>
+ <th>DnD-able </th>
+ </tr>
+ <tr>
+ <td> moveable </td>
+ <td>
+
+*   measure
+*   beat
+*   insturment
+ </td>
+ <td> these are moveable</td>
+ <td></td>
+ <td> </td>
+ </tr>
+ <tr>
+ <td> orient </td>
+ <td>
+
+*   circular representation(bead, radial, pie)
+ </td>
+ <td> these are oriented so the first beat is at 12 oclock</td>
+ <td></td>
+ <td> </td>
+ </tr>
+ <tr>
+ <td> share </td>
+ <td>
+
+*   song
+ </td>
+ <td> allow a song to be shared with classmates, school, or other users </td>
+ <td>Yes</td>
+ <td> </td>
+ </tr>
+ <tr>
+ <td> import </td>
+ <td>
+
+*   music
+ </td>
+ <td> import a music file and have the beats displayed in the representation of their choosing </td>
+ <td></td>
+ <td> </td>
+ </tr>
+ <tr>
+ <td> arrange </td>
+ <td>
+
+*   instruments
+*   measures
+ </td>
+ <td>predefined arrangements for all of the entities (similar to how you can view file systems)</td>
+ <td></td>
+ <td> </td>
+ </tr>
+ <tr>
+ <td> sort </td>
+ <td>
+
+*   beats in the factory
+ </td>
+ <td>sortation allowed by size, color(order), length (Â¿?)</td>
+ <td></td>
+ <td> </td>
+ </tr>
+ <tr>
+ <td> system labels </td>
+ <td>
+
+*   instruments
+*   representations
+ </td>
+ <td>predefined labels that can be toggled or used to help identify certain attirbutes to the user(Â¿?)</td>
+ <td></td>
+ <td> </td>
+ </tr>
+ <tr>
+ <td> user placed labels </td>
+ <td>Empty Labels to be filled in by the user</td>
+ <td>allow the user to drag and drop labels form a label factory to appropriate places for teacher assessment:</td>
+ <td></td>
+ <td></td>
+ </tr>
+ <tr>
+ <td> review </td>
+ <td>
+
+*   student performance
+ </td>
+ <td>review the student metrics on the webpage</td>
+ <td></td>
+ <td> </td>
+ </tr>
+ </tbody></table>
+
+## Math
+
+*   add
+
+        *   beat
+    *   beat after the {third position}
+    *   beat {20%, 40%, 50% after the {first, second, third beat}
+*   subtract
+
+        *   beat
+    *   first {half, quarter, fifth}
+*   divide
+
+        *   half time
+*   multiply
++double time
+
+## Music
+
+*   compare
+
+        *   song {a, b} from yourself
+    *   song a from yourself to song a of a classmate
+*   compose
+
+        *   song yourself
+    *   song with a classmate
+
+## General features
+
+*   metrics
+
+        *   most beats in a song
+    *   longest song (time)
+    *   most worked on (diff between created and updated? or sessions?)
+*   awards completed assignments
+*   teaching give awards for completing simple tasks used to introduce the program
+
+## Outside of the program
+
+*   users {student/teacher/admin} //the people using the program
+*   tapping fingers/drumsticks/clapping/slapping //an embodied interaction by the student to compose their own music song, with tapping the desk or a key
+*   counting internal / outloud / paper
+*   student
+
+        *   intended user
+    *   completes assignments made by the teacher
+    *   has a playground with full functionality
+*   class all students in one class(~15–35 students in one meeting)
+*   school all students/classes in a school
+*   district all schools in an area
+*   teacher can make assignments and program states
+*   partner another student, that completes the task(s) with the student
+*   group students that complete the task(s) together
+
+## Conserved
