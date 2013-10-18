@@ -561,17 +561,19 @@ define([
       var beadBeats = beatHolder.selectAll('.bead-beat');
 
       dispatch.trigger('beatTransition.event', ƒthis);
-      for(i=0; i<this.transitionNumberOfPoints; i++){
-        this.circlePath.data([this.circleStates[i]])
+
+      for(i=0; i<ƒthis.transitionNumberOfPoints; i++){
+        ƒthis.circlePath.data([ƒthis.circleStates[i]])
           .transition()
-            .delay(this.transitionDuration*i)
-            .duration(this.transitionDuration)
+            .delay(ƒthis.transitionDuration*i)
+            .duration(ƒthis.transitionDuration)
             .ease('linear')
-            .attr('d', this.pathFunction)
-      };
+            .attr('d', ƒthis.pathFunction)
+      }
+
       setTimeout(function(){
         ƒthis.makeBeats({secondary:true, type:'line'});
-        $('#beat-holder-'+this.measureRepModel.cid+' .bead-beat').fadeOut(this.animationIntervalDuration);
+        $('#beat-holder-'+ƒthis.measureRepModel.cid+' .bead-beat').fadeOut(ƒthis.animationIntervalDuration);
       }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration);
       setTimeout(function(){
         beadBeats.remove();
@@ -1088,9 +1090,10 @@ define([
       console.log('transitioning a rep');
     },
     transition: function(){
+      console.log('in transition func() of measureRepView');
       var PRT = this.model.get('previousRepresentationType');
       var CRT = this.model.get('representationType');
-
+      console.log(PRT, CRT);
       if (PRT == 'audio'){
         if (CRT == 'audio'){
         } else if(CRT == 'bead'){
@@ -1111,6 +1114,7 @@ define([
       } else if(PRT == 'line'){
         if (CRT == 'audio'){
         } else if(CRT == 'bead'){
+          console.log('about to get called');
           this.lineToBead();
         } else if(CRT == 'line'){
         } else if(CRT == 'pie'){

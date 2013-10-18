@@ -43,7 +43,7 @@ define([
       } else {
         console.error('Should not be in here: NO Measure!');
       }
-
+      this.newMeasureRepViews = [];
       //registering a callback for signatureChange events.
       dispatch.on('signatureChange.event', this.reconfigure, this);
       //Dispatch listeners
@@ -127,6 +127,12 @@ define([
       var compiledMeasureTemplate = _.template( MeasureTemplate, measureTemplateParameters );
       
       // If we are adding a rep, clear the current reps, then add the template
+      while(this.newMeasureRepViews.length >0) {
+        var deleting = this.newMeasureRepViews.pop();
+        deleting.stopListening();
+        delete deleting;
+      }
+
       $(this.el).html('');
       $(this.el).append( compiledMeasureTemplate )
 
@@ -292,9 +298,9 @@ define([
           transitionDuration: transitionDuration,
           animationIntervalDuration: animationIntervalDuration
         };
-        new MeasureRepView(measureRepViewParameters);
+        this.newMeasureRepViews.push(new MeasureRepView(measureRepViewParameters));
       }, this);
-
+      console.log(this.newMeasureRepViews);
       return this;
     },
 
