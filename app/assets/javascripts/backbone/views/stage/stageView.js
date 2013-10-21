@@ -284,8 +284,6 @@ window.csf = this.gainNodeList;
           //which is every activated beat and its associated duration between
           //it and the next activated beat.
 
-          var gN = this.gainNodeList[hTrackToPlayIterator];
-
           play(
             this,
             this.context,
@@ -318,7 +316,6 @@ window.csf = this.gainNodeList;
         //a buffer source is what can actually generate audio.
         source = context.createBufferSource();
         source.buffer = buffer;
-// debugger;
         /* here we make a series of connections to set up the signal flow
            of the audio through each of the three gain nodes.
            the final result looks like:
@@ -329,7 +326,6 @@ window.csf = this.gainNodeList;
         source.connect(specGainNode);
         specGainNode.connect(muteGainNode);
         muteGainNode.connect(gainNode);
-// debugger;
         gainNode.connect(context.destination);
         // specGainNode.gain.value = 1;
 
@@ -407,7 +403,7 @@ window.csf = this.gainNodeList;
 
       //we use the maximum number of measures, and the global tempo
       //to determine the duration (in ms) of one loop of the sequencer.
-      var duration = StateModel.get('signature') * 60 / StateModel.get('tempo') * maxMeasures * 1000;
+      // var duration = StateModel.get('signature') * 60 / StateModel.get('tempo') * maxMeasures * 1000;
       console.warn('totale Duration: '+ duration);
       if (this.intervalID) {
         //if we are already playing, we stop and trigger the
@@ -436,7 +432,7 @@ window.csf = this.gainNodeList;
         //we set the masterGainNode to 1, turning on master output.
         this.masterGainNode.gain.value = 1;
 
-        dispatch.trigger('toggleAnimation.event', 'on', duration, StateModel.get('signature'), maxMeasures);
+        dispatch.trigger('toggleAnimation.event', 'on', maxMeasures);
       }
     },
 

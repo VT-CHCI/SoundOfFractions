@@ -368,6 +368,7 @@ define([
          });
     },
     beadAnimate: function(target, dur) {
+
       var target = d3.select(target);
       var originalCX = parseInt(target.attr('cx'));
       var newCX = originalCX + 10;
@@ -423,13 +424,17 @@ define([
               .duration(dur);                  // .each("end" construct here.
          });
     },
-    toggleAnimation: function(state, duration, signature, maxMeasures){
+    toggleAnimation: function(state, maxMeasures){
+      console.error('MM ',state, duration, signature, maxMeasures );
       var ƒthis = this;
-      console.log('SP: '+this.hTrack.cid +' '+signature);
       // TODO why bring in signature to have it reset
+      // I think until signature is broken out to each hTrack measure, that is why we reset each measureRepView's signature
+      // console.log('SP: '+this.hTrack.cid +' '+signature);
       //signature = $(this.el).find('.measure').eq(0).find('.beat').length;
-      signature = this.parentMeasureModel.get('beats').length;
-      console.log('SA: '+this.hTrack.cid +' '+signature);
+      var signature = this.parentMeasureModel.get('beats').length;
+      var duration = signature * 60 / this.hTrack.get('tempo') * maxMeasures * 1000;
+      console.error('dur', duration);
+      // console.log('SA: '+this.hTrack.cid +' '+signature);
 
       //dur is time of one beat.
       var dur = duration/signature/maxMeasures;
@@ -438,7 +443,7 @@ define([
       // go through the measure(s) first without animation
       var counter = 0-(signature*maxMeasures-1);
 
-      //when playing is stoped we stop the animation.
+      //when playing is stopped we stop the animation.
       if (state == 'off') {
         clearInterval(this.animationIntervalID);
         this.animationIntervalID = null;
@@ -479,8 +484,7 @@ define([
               counter = 0;
             }
           }
-        })(this), dur); //duration should be set to something else
-        //this.animationWrapper(counter, beats, signature, maxMeasures, duration);
+        })(this), dur); 
       }
     },
     movePrimaryLeft: function() {
