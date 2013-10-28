@@ -368,6 +368,7 @@ define([
          });
     },
     beadAnimate: function(target, dur) {
+
       var target = d3.select(target);
       var originalCX = parseInt(target.attr('cx'));
       var newCX = originalCX + 10;
@@ -435,7 +436,7 @@ define([
       // go through the measure(s) first without animation
       var counter = 0-(signature*maxMeasures-1);
 
-      //when playing is stoped we stop the animation.
+      //when playing is stopped we stop the animation.
       if (state == 'off') {
         clearInterval(this.animationIntervalID);
         this.animationIntervalID = null;
