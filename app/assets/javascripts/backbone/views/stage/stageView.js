@@ -242,7 +242,7 @@ window.csf = this.gainNodeList;
         _.each(hTrack.get('measures').models, function(measure) {
           numBeats = measure.get('beats').length;
           //determining the duration for each beat.
-          var beatDuration = 60 / tempo * StateModel.get('signature') / (numBeats);
+          var beatDuration = 60 / tempo * hTrack.get('signature') / (numBeats);
           _.each(measure.get('beats').models, function(beat) {
             /* if we need to trigger a sound at this beat
               we push a duration onto the duration array.
@@ -398,17 +398,23 @@ window.csf = this.gainNodeList;
 
       //first we determine the number of the measures in
       //the hTrack with the most measures.
-      var maxMeasures = 0;
+      var maxDuration = 0;
       _.each(this.stage.models, function(hTrack) {
-        if(maxMeasures < hTrack.get('measures').length) {
-          maxMeasures = hTrack.get('measures').length;
+        var tempo = hTrack.get('tempo');
+        var measuresCount = hTrack.get('measures').length;
+        var beats = hTrack.get('signature');
+        var currentInstrumentDuration = tempo*measuresCount*beats*60/1000;
+        
+
+        if(maxDuration < currentInstrumentDuration) {
+          maxDuration = currentInstrumentDuration;
         }
       }, this);
 
       //we use the maximum number of measures, and the global tempo
       //to determine the duration (in ms) of one loop of the sequencer.
-      var duration = StateModel.get('signature') * 60 / StateModel.get('tempo') * maxMeasures * 1000;
-      console.warn('totale Duration: '+ duration);
+      var duration = maxDuration;
+      console.warn('totale Duration: '+ maxDuration);
       if (this.intervalID) {
         //if we are already playing, we stop and trigger the
         //animation to stop.
@@ -436,7 +442,7 @@ window.csf = this.gainNodeList;
         //we set the masterGainNode to 1, turning on master output.
         this.masterGainNode.gain.value = 1;
 
-        dispatch.trigger('toggleAnimation.event', 'on', duration, StateModel.get('signature'), maxMeasures);
+        dispatch.trigger('toggleAnimation.event', 'on', maxDuration);
       }
     },
 

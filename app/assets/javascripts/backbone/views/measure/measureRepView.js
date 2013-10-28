@@ -423,16 +423,13 @@ define([
               .duration(dur);                  // .each("end" construct here.
          });
     },
-    toggleAnimation: function(state, duration, signature, maxMeasures){
+    toggleAnimation: function(state, maxDuration){
       var ƒthis = this;
-      console.log('SP: '+this.hTrack.cid +' '+signature);
-      // TODO why bring in signature to have it reset
-      //signature = $(this.el).find('.measure').eq(0).find('.beat').length;
-      signature = this.parentMeasureModel.get('beats').length;
-      console.log('SA: '+this.hTrack.cid +' '+signature);
+      var signature = this.parentMeasureModel.get('beats').length;
+      console.log('Signature: '+this.hTrack.cid +' '+signature);
 
       //dur is time of one beat.
-      var dur = duration/signature/maxMeasures;
+      var dur = maxDuration/signature/maxMeasures;
 
       var totalNumberOfBeats = signature*maxMeasures;
       // go through the measure(s) first without animation
@@ -479,8 +476,7 @@ define([
               counter = 0;
             }
           }
-        })(this), dur); //duration should be set to something else
-        //this.animationWrapper(counter, beats, signature, maxMeasures, duration);
+        })(this), maxDuration); //duration should be set to something else
       }
     },
     movePrimaryLeft: function() {
