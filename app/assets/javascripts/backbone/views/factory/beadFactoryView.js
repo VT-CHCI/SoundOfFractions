@@ -80,8 +80,8 @@ define([
             refArray.push((360/ƒthis.beatsInMeasure)*i);
           }
           var newIndex = _.sortedIndex(refArray, angleAtNewBeat);
-          ƒthis.parentMeasureModel.get('beats').add(new BeatModel({selected:true}), {at: newIndex})
-          dispatch.trigger('signatureChange.event', ƒthis.beatsInMeasure+1);
+          var newBeat = new BeatModel({selected:true});
+          ƒthis.parentMeasureModel.addBeatToBeatsCollection(newBeat, newIndex);
         }
       });
       var dragLine = d3.behavior.drag();
@@ -105,10 +105,10 @@ define([
           for ( i=0 ; i < ƒthis.beatsInMeasure ; i++ ) {
             refArray.push((ƒthis.linearLineLength/ƒthis.beatsInMeasure)*i);
           }
-          console.log(refArray)
+          console.log(refArray);
           var newIndex = _.sortedIndex(refArray, newComputedValX1);
-          ƒthis.parentMeasureModel.get('beats').add(new BeatModel({selected:true}), {at: newIndex})
-          dispatch.trigger('signatureChange.event', ƒthis.beatsInMeasure+1);
+          var newBeat = new BeatModel({selected:true});
+          ƒthis.parentMeasureModel.addBeatToBeatsCollection(newBeat, newIndex);
         }
       });
       var dragBar = d3.behavior.drag();
@@ -129,10 +129,10 @@ define([
             refArray.push((ƒthis.linearLineLength/ƒthis.beatsInMeasure)*i+ƒthis.beatWidth);
           }
           var newIndex = _.sortedIndex(refArray, parseInt(newComputedValX)+ƒthis.beatFactoryBarWidth/2);
-          console.log(refArray)
-          console.log(parseInt(newComputedValX)+ƒthis.beatFactoryBarWidth/2)
-          ƒthis.parentMeasureModel.get('beats').add(new BeatModel({selected:true}), {at: newIndex})
-          dispatch.trigger('signatureChange.event', ƒthis.beatsInMeasure+1);
+          console.log(refArray);
+          console.log(parseInt(newComputedValX)+ƒthis.beatFactoryBarWidth/2);
+          var newBeat = new BeatModel({selected:true});
+          ƒthis.parentMeasureModel.addBeatToBeatsCollection(newBeat, newIndex);
         }
       });
       var dragPie = d3.behavior.drag();
@@ -165,8 +165,8 @@ define([
             refArray.push(((360/ƒthis.beatsInMeasure)*i)+((360/ƒthis.beatsInMeasure)/2));
           }
           var newIndex = _.sortedIndex(refArray, angleAtNewBeat);
-          ƒthis.parentMeasureModel.get('beats').add(new BeatModel({selected:true}), {at: newIndex})
-          dispatch.trigger('signatureChange.event', ƒthis.beatsInMeasure+1);
+          var newBeat = new BeatModel({selected:true});
+          ƒthis.parentMeasureModel.addBeatToBeatsCollection(newBeat, newIndex);
         }
       });
 

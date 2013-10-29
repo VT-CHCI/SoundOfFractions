@@ -8,8 +8,9 @@ define([
   'underscore',
   'backbone',
   'backbone/collections/measures',
-  'backbone/models/remainingInstrumentGenerator'
-], function(_, Backbone, MeasuresCollection, RemainingInstrumentGenerator ) {
+  'backbone/models/remainingInstrumentGenerator',
+  'app/dispatch'
+], function(_, Backbone, MeasuresCollection, RemainingInstrumentGenerator, dispatch ) {
   var HTrackModel = Backbone.Model.extend({
     defaults: {
       label: 'snare',
@@ -28,6 +29,14 @@ define([
     initialize: function(options){
       console.log('initing the hTrackModel with these options: ');
       console.log(options);
+
+      // I need to listen to the beat collection length on the measure model of the measure collection
+      dispatch.on('signatureChange.event', this.updateModelSignature, this);
+
+    },
+    updateModelSignature: function(){
+      console.log('updating htrack signature to '+(this.get('measures').models[0].get('beats').length));
+      this.set('signature', this.get('measures').models[0].get('beats').length);
     }
   });
   return HTrackModel;

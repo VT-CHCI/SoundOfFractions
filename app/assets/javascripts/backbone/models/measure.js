@@ -8,9 +8,11 @@
 define([
   'underscore',
   'backbone',
+  'backbone/models/beat',
   'backbone/collections/beats',
-  'backbone/collections/representations'
-], function(_, Backbone, BeatsCollection, RepresentationsCollection) {
+  'backbone/collections/representations',
+  'app/dispatch'
+], function(_, Backbone, BeatModel, BeatsCollection, RepresentationsCollection, dispatch) {
   var MeasureModel = Backbone.Model.extend({
     beats: BeatsCollection,
     measureRepresentations: RepresentationsCollection,
@@ -26,6 +28,12 @@ define([
     },
     setScale: function(newScale){
       this.set({scale : newScale});
+    },
+    addBeatToBeatsCollection: function(newBeat, newIndex){
+      console.log('gfret');
+      // ƒthis.parentMeasureModel.get('beats').add(new BeatModel({selected:true}), {at: newIndex})
+      this.get('beats').add(newBeat, {at:newIndex});
+      dispatch.trigger('signatureChange.event', this);
     }
   });
   return MeasureModel;

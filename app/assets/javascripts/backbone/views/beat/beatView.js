@@ -275,7 +275,7 @@ define([
           if ( Math.pow(relativeSVGX - ƒthis.circularMeasureCx, 2) + Math.pow(relativeSVGY - ƒthis.circularMeasureCy, 2) >= Math.pow(ƒthis.circularMeasureR, 2) ) {
             d3.select(this).remove();
             ƒthis.parentMeasureModel.get('beats').remove(ƒthis.model);
-            dispatch.trigger('signatureChange.event', ƒthis.beatsInMeasure-2);
+            dispatch.trigger('signatureChange.event', ƒthis.beatsInMeasure-1);
           }
         });
       }
