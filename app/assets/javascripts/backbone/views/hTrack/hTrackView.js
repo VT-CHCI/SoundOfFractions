@@ -54,7 +54,6 @@ define([
 
       //registering our handlers for serveral events.
       // dispatch.on('toggleAnimation.event', this.toggleAnimation, this);
-      dispatch.on('signatureChange.event', this.updateModelSignature, this);
       dispatch.on('instrumentChanged.event', this.changeInstrument, this);
 
       this.render();
@@ -115,11 +114,6 @@ define([
       return this;
     },
 
-    updateModelSignature: function(val){
-      if($('#hTrack'+this.hTrack.cid).hasClass('selected')) {
-        this.hTrack.set('signature', val);
-      }
-    },
     /*
       This is called when the user clicks on the icon of this hTrack
       which has the css class 'control'
