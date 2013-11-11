@@ -10,7 +10,7 @@ define([
   'backbone/views/slider/beatsPerMeasureSliderView',
   'backbone/views/stage/stageView',
   'backbone/views/slider/tempoSliderView',
-  'backbone/views/transport/transportView',
+  'backbone/views/conductor/conductorView',
   'backbone/views/button/wholeMeasureRepresentationView',
   'backbone/views/button/remainingInstrumentGeneratorView',
   'backbone/views/label/systemLabelContainerView',
@@ -20,7 +20,7 @@ define([
   'backbone/views/song/index_view',
   'backbone/views/song/show_view',
   'backbone/views/song/edit_view'
-], function($, _, Backbone, mainHomeView, beatsPerMeasureSliderView, StageView, tempoSliderView, transportView, wholeMeasureRepresentationView, remainingInstrumentGeneratorView, systemLabelContainerView, log, songsCollection, songsViewNew, songsViewIndex, songsViewShow, songsViewEdit ){
+], function($, _, Backbone, mainHomeView, beatsPerMeasureSliderView, StageView, tempoSliderView, conductorView, wholeMeasureRepresentationView, remainingInstrumentGeneratorView, systemLabelContainerView, log, songsCollection, songsViewNew, songsViewIndex, songsViewShow, songsViewEdit ){
 
   var BBRouter = Backbone.Router.extend({
     // songs: {},
@@ -39,7 +39,7 @@ define([
       mainHomeView.render();
 
       // top side
-      transportView.render();
+      conductorView.render();
       wholeMeasureRepresentationView.render();
       // measureTransformationView.render();
 
@@ -68,7 +68,7 @@ define([
       wholeMeasureRepresentationView.render();
       measureTransformationView.render();
       tempoSliderView.render();
-      transportView.render();
+      conductorView.render();
       recorderView.render();
     },
 

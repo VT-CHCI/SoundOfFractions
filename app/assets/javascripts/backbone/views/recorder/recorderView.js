@@ -1,4 +1,4 @@
-// Filename: views/transport/transportView.js
+// Filename: views/conductor/conductorView.js
 /*
     This is the TransportView.
     It is in charge of the Transport or play/stop button.

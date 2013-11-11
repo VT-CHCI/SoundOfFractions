@@ -5,6 +5,7 @@ gem 'rails', '4.0.0.rc2'
 group :development, :test do
   gem 'railroady'
   gem 'sqlite3'
+  gem 'jasmine'
   # For linux support
   gem 'therubyracer'
 end

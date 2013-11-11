@@ -10,7 +10,7 @@ define([
   'underscore',
   'backbone',
   'app/dispatch',
-  'backbone/models/transport'
+  'backbone/models/conductor'
 ], function(_, Backbone, dispatch, TransportModel) {
   var state = Backbone.Model.extend({
     defaults: {
@@ -288,7 +288,7 @@ define([
       if(this.TransportModel.isPlaying) {
         dispatch.trigger('togglePlay.event');
       }
-      $('#transport').click();
+      $('#conductor').click();
       this.isTapping = true;
       if(window.tapIntervalID) {
         window.clearInterval(tapIntervalID);

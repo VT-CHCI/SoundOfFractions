@@ -1,4 +1,4 @@
-// Filename: views/transport/transportView.js
+// Filename: views/conductor/conductorView.js
 /*
     This is the TransportView.
     It is in charge of the Transport or play/stop button.
@@ -7,23 +7,23 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'backbone/models/transport',
-  'text!backbone/templates/transport/play.html',
-  'text!backbone/templates/transport/stop.html',
+  'backbone/models/conductor',
+  'text!backbone/templates/conductor/play.html',
+  'text!backbone/templates/conductor/stop.html',
   'app/dispatch',
   'app/log'
-], function($, _, Backbone, TransportModel, transportPlayTemplate, transportStopTemplate, dispatch, log){
+], function($, _, Backbone, TransportModel, conductorPlayTemplate, conductorStopTemplate, dispatch, log){
 
   var TransportView = Backbone.View.extend({
-    el : $("#transport"), // Specifies the DOM element which this view handles
+    el : $("#conductor"), // Specifies the DOM element which this view handles
 
-    //registering our toggle() method for backbone click events.
+    //registering our conductor() method for backbone click events.
     events : {
-      "click" : "toggle"
+      "click" : "conductor"
     },
 
     initialize: function() {
-      this.transportModel = new TransportModel;
+      this.conductorModel = new TransportModel;
 
       //registering our stopPlay() method on stopRequest events.
       dispatch.on('measureRepresentation.event', this.stopPlay, this);
@@ -41,12 +41,11 @@ define([
       Also, this creates a string representation of
       the entire song and sends it to the logging system.
     */
-    toggle: function() {
-      if(!this.transportModel.get('isPlaying')) {
-        dispatch.trigger('togglePlay.event', 'on');
-        this.transportModel.set('isPlaying', true);
+    conductor: function() {
+      if(!this.conductorModel.get('isPlaying')) {
+        this.conductorModel.play();
 
-        var compiledTemplate = _.template( transportStopTemplate );
+        var compiledTemplate = _.template( conductorStopTemplate );
         $(this.el).html( compiledTemplate );
 
         $(this.el).removeClass('play');
@@ -68,10 +67,11 @@ define([
         log.sendLog([[3, "Started playing music: "+name]]);
       }
       else {
-        dispatch.trigger('togglePlay.event', 'off');
-        this.transportModel.set('isPlaying', false);
+        this.conductorModel.play();
+        // dispatch.trigger('togglePlay.event', 'off');
+        // this.conductorModel.set('isPlaying', false);
 
-        var compiledTemplate = _.template( transportPlayTemplate );
+        var compiledTemplate = _.template( conductorPlayTemplate );
         $(this.el).html( compiledTemplate );
 
         $(this.el).removeClass('pause');
@@ -90,9 +90,9 @@ define([
       it always causes stoppage, and does no logging.
     */
     stopPlay: function(val) {
-      if(this.transportModel.get('isPlaying')) {
+      if(this.conductorModel.get('isPlaying')) {
         dispatch.trigger('togglePlay.event', 'off');
-        this.transportModel.set('isPlaying', false);
+        this.conductorModel.set('isPlaying', false);
         $(this.el).
         $(this.el).addClass('play');
         console.log('now paused');
@@ -105,7 +105,7 @@ define([
       } 
     },
     render: function() {
-      $(this.el).html(transportPlayTemplate);
+      $(this.el).html(conductorPlayTemplate);
       $(this.el).draggable({ axis: "y",containment: "#middle-right-column" });
       return this;
     }
