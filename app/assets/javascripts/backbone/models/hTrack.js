@@ -28,7 +28,6 @@ define([
     },
     initialize: function(options){
       console.log('initing the hTrackModel with these options: ');
-      console.log(options);
 
       // I need to listen to the beat collection length on the measure model of the measure collection
       dispatch.on('signatureChange.event', this.updateModelSignature, this);

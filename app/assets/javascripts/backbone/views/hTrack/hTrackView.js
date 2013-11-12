@@ -8,6 +8,7 @@ define([
   'backbone',
   'backbone/models/hTrack',
   'backbone/models/state',
+  'backbone/models/conductor',
   'backbone/collections/representations',
   'backbone/views/measure/measureView',
   'backbone/views/menu/instrumentDropDownView',
@@ -15,7 +16,7 @@ define([
   'backbone/views/button/deleteInstrumentView',
   'app/dispatch',
   'app/log'
-], function($, _, Backbone, HTrackModel, StateModel, RepresentationsCollection, MeasureView,  InstrumentDropDownView, BPMSliderView, DeleteInstrumentView, dispatch, log){
+], function($, _, Backbone, HTrackModel, StateModel, ConductorModel, RepresentationsCollection, MeasureView,  InstrumentDropDownView, BPMSliderView, DeleteInstrumentView, dispatch, log){
   return Backbone.View.extend({
     // this is needed to recalculate a beat's size
     el: $('.hTrack'),
@@ -24,8 +25,7 @@ define([
     //the first is for toggling the hTrack's muted state.
     //the second is for setting this hTrack in focus (or selected).
     events : {
-      'click .control' : 'toggleMute',
-      'click .hTrack-container' : 'toggleSelection',
+      'click .control' : 'toggleMuteDisplay',
       'click .addMeasureRep' : 'addRepresentationToHTrack'
     },
 
@@ -52,9 +52,29 @@ define([
       // this.animationIntervalID = null;
       // this.hTrack.set('currentBeat',0);
 
-      //registering our handlers for serveral events.
-      // dispatch.on('toggleAnimation.event', this.toggleAnimation, this);
       dispatch.on('instrumentChanged.event', this.changeInstrument, this);
+      dispatch.on('conductor.event', this.togglePlay, this);
+      dispatch.on('togglePlay.event', this.togglePlay, this);
+
+      //creating two arrays to hold our gain nodes.
+      //the first is for sustained-note sounds,
+      //the second is for the muting of individual 'hTrack's.
+      this.gainNodeList = new Array();
+      this.muteGainNodeList = new Array();
+      this.context = new webkitAudioContext();
+      this.bufferList = new Array();
+      this.masterGainNode = this.context.createGainNode();
+
+      //use our webaudio context to create two gain nodes for the hTrack.
+      this.gainNodeList = this.context.createGainNode();
+      this.muteGainNodeList = this.context.createGainNode();
+      if (options.type =='sn'){
+        // Trying to reduce the snare instrument's volume
+        console.log('adjusted the snare gain to .2');
+        this.gainNodeList.gain.value = .2;
+      }
+
+      this.intervalID = null; //time is a function of measures and tempo (4 * 60/tempo * measures)
 
       this.render();
     },
@@ -110,7 +130,10 @@ define([
           parentCID: this.hTrack.cid
         });
       }
+
+      this.loadAudio(this.context, this.hTrack.get('sample'), this.bufferList );
       // $(this.el).draggable({ axis: "y", containment: "#middle-left-column" });
+      
       return this;
     },
 
@@ -125,7 +148,7 @@ define([
 
       This also sends a log message.
     */
-    toggleMute: function(){
+    toggleMuteDisplay: function(){
       this.hTrack.set('active', !this.hTrack.get('active'));
       if (this.gainNode.gain.value == 1) {
         this.gainNode.gain.value = 0;
@@ -141,99 +164,6 @@ define([
         log.sendLog([[2, "hTrack unmuted: "+"hTrack"+this.hTrack.cid]]);
       }
     },
-
-    /*
-      This is the animation that occurs when the sequencer is being played.
-      This is triggered by toggleAnimation events.
-
-      This controls the css animation of each beat.
-    */
-    toggleAnimation: function(state, duration, signature, maxMeasures){
-      // TODO why bring in signature to have it reset
-      //signature = $(this.el).find('.measure').eq(0).find('.beat').length;
-      signature = this.hTrack.get('signature');
-
-      //duration is of one beat.
-      var dur = duration/signature/maxMeasures;
-
-      //this is the SVG animation of a beat being played.
-      this.d3AudioAnimate = function(target) {
-        var target = d3.select('.audio-beat');
-        console.log(target);
-        target.transition()
-          .attr('x', target.attr('x')+ 10)
-          .duration(dur)
-      };
-      this.d3BeadAnimate = function(target) {
-        var target = d3.select('.bead-beat');
-        console.log(target);
-        target.transition()
-          .attr('x', target.attr('x')+ 10)
-          .duration(1000)
-      };
-      this.d3LineAnimate = function(target) {
-        var target = d3.select('.line-beat');
-        console.log(target);
-        target.transition()
-          .attr('x', target.attr('x')+ 10)
-          .duration(1000)
-      };
-      this.d3PieAnimate = function(target) {
-        var target = d3.select('.pie-beat');
-        console.log(target);
-        target.transition()
-          .attr('x', target.attr('x')+ 10)
-          .duration(1000)
-      };
-      this.d3BarAnimate = function(target) {
-        var target = d3.select('.bar-beat');
-        console.log(target);
-        target.transition()
-          .attr('x', target.attr('x')+ 10)
-          .duration(1000)
-      };
-
-      var beats = $(this.el).find('.beat');
-      var counter = 0-(signature*maxMeasures-1);
-
-      //when playing is stoped we stop the animation.
-      if (state == 'off') {
-        clearInterval(this.animationIntervalID);
-        this.animationIntervalID = null;
-
-        console.log('stopped animation');
-      }
-      else {
-        console.log('starting animation', dur);
-
-        // this sets the time interval that each animation should take,
-        // and then calls animate on each beat with the appropriate
-        // timing interval.
-        this.animationIntervalID = setInterval((function(self) {
-          console.warn(self)
-          return function() {
-            if (counter >= 0 && counter < beats.length)
-              self.hTrack.set('currentBeat',counter);
-              if (self.defaultMeasureRepresentation == 'audio'){
-                self.d3AudioAnimate(beats.eq(counter).children().first()[0]);
-              } else if (self.defaultMeasureRepresentation == 'bead'){
-                self.d3BeadAnimate(beats.eq(counter).children().first()[0]);
-              } else if (self.defaultMeasureRepresentation == 'line'){
-                self.d3LineAnimate(beats.eq(counter).children().first()[0]);
-              } else if (self.defaultMeasureRepresentation == 'pie'){
-                self.d3PieAnimate(beats.eq(counter).children().first()[0]);
-              } else if (self.defaultMeasureRepresentation == 'bar'){
-                self.d3BarAnimate(beats.eq(counter).children().first()[0]);
-              }
-            if (counter < (signature*maxMeasures-1))
-              counter ++;
-            else
-              counter = 0;
-          }
-        })(this), dur); //duration should be set to something else
-        //this.animationWrapper(counter, beats, signature, maxMeasures, duration);
-      }
-    },
     addRepresentationToHTrack: function(e) {
       e.srcElement.parentElement.classList.add('cs');
       console.log('clicked the plus sign');
@@ -244,26 +174,207 @@ define([
         $('.icon-plus')[1].parentElement.classList.add('cs');
       } 
     },
-    animationWrapper: function(counter, beats, signature, maxMeasures, duration) {
-      console.warn('ANIMATION WRAPPER CALLED');
-      if (counter >= 0 && counter < beats.length)
-        this.animate(beats.eq(counter).children().first()[0]);
-      if (counter < (signature*maxMeasures-1))
-        counter ++;
-      else {
-        counter = 0;
+    togglePlay: function(maxDuration){
+      var tempo = this.hTrack.get('tempo');
+      var measures = this.hTrack.get('measures');
+      var selectedBeats = 0;
+        // debugger;
+      _.each(measures.models, function(measure) {
+          _.each(measure.get('beats').models, function(beat) {
+            if (beat.get('selected')) {
+              selectedBeats ++;
+            }
+          }, this);
+      }, this);
+      var beats = this.hTrack.get('signature');
+      var currentInstrumentDuration = measures.length*beats/tempo*60.0*1000.0 ;
+
+      //we use the maximum number of measures, and the global tempo
+      //to determine the duration (in ms) of one loop of the sequencer.
+      var duration = currentInstrumentDuration;
+      // if (!ConductorModel.get('isPlaying')) {
+      if (this.intervalID) {
+        //if we are already playing, we stop and trigger the
+        //animation to stop.
+        console.log('togglePlay: off');
+        dispatch.trigger('toggleAnimation.event', 'off');
+
+        clearInterval(this.intervalID);
+        this.intervalID = null;
+
+        // ConductorModel.clearAllIntervals();
+        //we set the masterGainNode to zero, which mutes all output.
+        this.masterGainNode.gain.value = 0;
+      } else {
+        //if we are not playing, we start the playback of audio
+        //and trigger an event to start the animation.
+        console.log('togglePlay: on');
+console.error('Tempo:', tempo, '|', 'Measures:', measures.length, '|', selectedBeats, 'beats selected of ', beats, '|', 'instrument duration:', currentInstrumentDuration);
+
+        //we call playLoop() with our calculated duration to initialize
+        //and play the audio.
+        //this.playLoop();
+        this.intervalID = setInterval((function(self) {
+        // ConductorModel.addInterval( setInterval((function(self) {
+          return function() {
+            self.playLoop(); 
+          } 
+        })(this), maxDuration);
+        // })(this), duration), this.hTrack.get('label'));
+        // ConductorModel.addInterval(this.intervalID);
+        //we set the masterGainNode to 1, turning on master output.
+        this.masterGainNode.gain.value = 1;
+
+        dispatch.trigger('toggleAnimation.event', 'on', duration);
       }
-      this.animationIntervalID = setTimeout(this.animationWrapper, duration);
+    },
+    /*
+      This function generates a 2d array
+      of time durations that determine when the playback
+      of each beat on each hTrack should occur.
+    */
+    playLoop: function(){
+      var deadSpace = 0;
+
+      //create an array to hold durations.
+      var beatTimes = new Array();
+
+      _.each(this.hTrack.get('measures').models, function(measure) {
+        //determining the duration for each beat.
+        var beatDuration = 60 / this.hTrack.get('tempo');
+        _.each(measure.get('beats').models, function(beat) {
+          /* if we need to trigger a sound at this beat
+            we push a duration onto the duration array.
+            if not, increment our deadSpace variable,
+            by the beat duration,
+            which will make subsequent durations longer.
+          */
+          if (beat.get('selected')) {
+            //deadspace is a beat that is not getting played
+            beatTimes.push(deadSpace);
+          } else {
+          }
+          deadSpace += beatDuration;
+        }, this);
+      }, this);
+      //Lastly, we call playSound() with our completed
+      //beatTimes array.
+      this.playSound(beatTimes);
     },
 
-    //This is called when the hTrack is clicked anywhere to bring
-    //the hTrack into focus as selected.
-    toggleSelection: function(){
-      $('#hTrack-container-'+this.hTrack.cid).toggleClass('selected');
+    /*
+      This triggers the playback of sounds at the appropriate
+      intervals for each hTrack.
+    */
+    playSound: function(duration){
+      console.log('Playing sound!');
 
-      //we trigger this event to cause the beats per measure slider and
-      //beat bars to update based on which hTrack is selected.
-      // dispatch.trigger('bPMSlider.event', {signature: this.hTrack.get('signature'), name: this.hTrack.get('label') } );
+      var startTime = this.context.currentTime; //this is important (check docs for explanation)
+
+      _.each(duration, function(time) { // beats or deadspace start times
+        //we call play on each hTrack, passing in a lot of information.
+        //which is every activated beat and its associated duration between
+        //it and the next activated beat.
+
+        //calulating the duration of one beat. Should be in s, not ms
+        var hTrackTempo = this.hTrack.get('tempo');
+        var beatDuration =  (60 / hTrackTempo);
+
+        play(
+          this,
+          this.context,
+          this.bufferList,
+          startTime+time, //startTime is the current time you request to play + the beat start time
+          this.masterGainNode,
+          this.gainNodeList,
+          this.muteGainNodeList,
+          hTrackTempo,
+          beatDuration
+        );
+      }, this);
+
+
+      /*
+        This is where all the magic happens for the audio.
+
+        Parameters are:
+          self -> a reference to this StageView instance.
+          context -> a reference to the webaudio context.
+          buffer -> the buffer that has been loaded with the appropriate audio file.
+          time -> the duration that this playback is to last.
+          gainNode -> this is the masterGainNode of this StageView
+          specGainNode -> this gain node controls envelope generation for sustained instruments.
+          muteGainNode -> this gain node controls the muting of `hTrack`s.
+      */
+
+      function play(self, context, buffer, time, gainNode, specGainNode, muteGainNode, hTrackTempo, beatDuration) {
+        //a buffer source is what can actually generate audio.
+        source = context.createBufferSource();
+        source.buffer = buffer;
+        /* here we make a series of connections to set up the signal flow
+           of the audio through each of the three gain nodes.
+           the final result looks like:
+
+           source->specGainNode->muteGainNode->masterGainNode->your ears
+
+        */
+        source.connect(specGainNode);
+        specGainNode.connect(muteGainNode);
+        muteGainNode.connect(gainNode);
+        gainNode.connect(context.destination);
+        // specGainNode.gain.value = 1;
+
+
+        //note on causes the playback to start.
+        source.noteOn(time, 0, beatDuration);
+        console.error(time, beatDuration, hTrackTempo);
+        //these calls are used to generate an envelope that
+        //makes sustained instruments play for only the beatDuration of one beat.
+        //this reduces pops and clicks from the signal being abruptly
+        //stopped and started.
+        // specGainNode.gain.linearRampToValueAtTime(0, time);
+        // specGainNode.gain.linearRampToValueAtTime(1, time + 0.005);
+        // specGainNode.gain.linearRampToValueAtTime(1, time + (beatDuration - 0.005));
+        // specGainNode.gain.linearRampToValueAtTime(0, time + beatDuration);
+
+        //we call noteOff to stop the sound after the beatDuration of one beat.
+        source.noteOff(time + beatDuration);
+      }
+
+    },
+    loadAudio: function(context, url, bufferList){
+      var ƒthis = this;
+      console.log("Loading...", url);
+      // Load buffer asynchronously
+      var request = new XMLHttpRequest();
+      request.open("GET", App.assets.path(url), true);
+      request.responseType = "arraybuffer";
+
+      request.onload = function() {
+        // Asynchronously decode the audio file data in request.response
+        context.decodeAudioData(
+          request.response,
+          function(buffer) {
+            if (!buffer) {
+              alert('error decoding file data: ' + url);
+              return;
+            }
+            //place the decoded buffer into the bufferList
+            ƒthis.bufferList = buffer;
+          },
+          function(error) {
+            console.error('decodeAudioData error', error);
+          }
+        );
+      }
+
+      request.onerror = function() {
+        alert('BufferLoader: XHR error');
+      }
+
+      request.send();
+      console.log()
     }
+
   });
 });

@@ -426,58 +426,86 @@ define([
     },
     toggleAnimation: function(state, maxDuration){
       var ƒthis = this;
+
       var signature = this.parentMeasureModel.get('beats').length;
-      console.log('Signature: '+this.hTrack.cid +' '+signature);
-
+      var tempo = this.hTrack.get('tempo');
+      var measuresCount = this.hTrack.get('measures').length;
+      var beats = this.hTrack.get('signature');
+      var currentInstrumentDuration = measuresCount*beats/tempo*60.0*1000.0;
       //dur is time of one beat.
-      var dur = maxDuration/signature/maxMeasures;
+      var dur = currentInstrumentDuration/measuresCount/beats;
 
-      var totalNumberOfBeats = signature*maxMeasures;
+      var totalNumberOfBeats = signature*measuresCount;
       // go through the measure(s) first without animation
-      var counter = 0-(signature*maxMeasures-1);
+      var beatCounter = 0-(signature*measuresCount-1);
+      var measureCounter = 0;
+      var waitCounter = false;
+      function calculateWaiting(){
+        var result = null;
+        if ( beatCounter*dur == currentInstrumentDuration && currentInstrumentDuration < maxDuration ){
+          waitCounter = true;
+        } else {
+          waitCounter = false;
+        }
+      };
 
       //when playing is stopped we stop the animation.
       if (state == 'off') {
+        console.log('stopped animation');
         clearInterval(this.animationIntervalID);
         this.animationIntervalID = null;
-
-        console.log('stopped animation');
-      }
-      else {
-        console.log('starting animation', dur);
-
+        clearInterval(this.beatAnimationIntervalID);
+        this.beatAnimationIntervalID = null;
+      } else {
+        console.log('starting animation', tempo, dur, currentInstrumentDuration, maxDuration);
         // this sets the time interval that each animation should take,
-        // and then calls animate on each beat with the appropriate
-        // timing interval.
+        // and then calls animate on each beat with the appropriate timing interval.
         // Self is the parent hTrack
-        this.animationIntervalID = setInterval((function(self) {
-          return function() {
-            if (counter >= 0 && counter < totalNumberOfBeats) {
-              if (self.currentRepresentationType == 'audio'){
-                var beats = $('#measure-rep-'+self.measureRepModel.cid).find('.audio-beat');
-                var selected = self.parentMeasureModel.get('beats').models[counter].get('selected');
-                self.audioAnimate(beats.eq(counter)[0], dur/2, selected);
-              } else if (self.currentRepresentationType == 'bead'){
-                var beats = $('#measure-rep-'+self.measureRepModel.cid).find('.bead-beat');
-                self.beadAnimate(beats.eq(counter)[0], dur/2);
-              } else if (self.currentRepresentationType == 'line'){
-                var beats = $('#measure-rep-'+self.measureRepModel.cid).find('.line-beat');
-                self.lineAnimate(beats.eq(counter)[0], dur/2);
-              } else if (self.currentRepresentationType == 'pie'){
-                var beats = $('#measure-rep-'+self.measureRepModel.cid).find('.pie-beat');
-                self.pieAnimate(beats.eq(counter)[0], dur/2);
-              } else if (self.currentRepresentationType == 'bar'){
-                var beats = $('#measure-rep-'+self.measureRepModel.cid).find('.bar-beat');
-                self.barAnimate(beats.eq(counter)[0], dur/2);
-              }
-            }
-            if (counter < (signature*maxMeasures-1)) {
-              counter ++;
-            } else {
-              counter = 0;
-            }
-          }
-        })(this), maxDuration); //duration should be set to something else
+//         this.animationIntervalID = setInterval((function(self) {
+//           return function() {
+
+//             this.beatAnimationIntervalID = setInterval((function(self) {
+//               return function() {
+// console.log('beatCounter:', beatCounter);
+//                 if (waitCounter == false){            
+// console.log('getting in waitCounter:', waitCounter);
+                  
+//                   if (beatCounter >= 0 && beatCounter < totalNumberOfBeats) {
+// console.log('getting in beatCounter and transitionNumberOfPoints');
+// console.log(self.currentRepresentationType);
+//                     if (self.currentRepresentationType == 'audio'){
+//                       var beats = $('#measure-rep-'+self.measureRepModel.cid).find('.audio-beat');
+//                       var selected = self.parentMeasureModel.get('beats').models[beatCounter].get('selected');
+//                       self.audioAnimate(beats.eq(beatCounter)[0], dur, selected);
+//                     } else if (self.currentRepresentationType == 'bead'){
+//                       var beats = $('#measure-rep-'+self.measureRepModel.cid).find('.bead-beat');
+//                       self.beadAnimate(beats.eq(beatCounter)[0], dur/2);
+//                     } else if (self.currentRepresentationType == 'line'){
+//                       var beats = $('#measure-rep-'+self.measureRepModel.cid).find('.line-beat');
+//                       self.lineAnimate(beats.eq(beatCounter)[0], dur/2);
+//                     } else if (self.currentRepresentationType == 'pie'){
+//                       var beats = $('#measure-rep-'+self.measureRepModel.cid).find('.pie-beat');
+//                       self.pieAnimate(beats.eq(beatCounter)[0], dur/2);
+//                     } else if (self.currentRepresentationType == 'bar'){
+//                       var beats = $('#measure-rep-'+self.measureRepModel.cid).find('.bar-beat');
+//                       self.barAnimate(beats.eq(beatCounter)[0], dur/2);
+//                     }
+//                   }
+//                   //Increase the beatCounter until all of the beats have played, then reset the beatCounter
+//                   if (beatCounter < (totalNumberOfBeats-1)) {
+//                     beatCounter ++;
+//                   } else {
+//                     beatCounter = 0;
+//                   }
+//                   calculateWaiting();
+//                 } else {
+//                   // Waiting tillthe longest measure is complete
+//                   console.log('waiting until the longer instrument is done playing');
+//                 }
+//               };
+//             })(this), dur); //dur is the cycle at which every beat should be animating/lasting
+//           };
+//         })(this), maxDuration); //maxDuration is the cycle at which every measure rep should be waiting for to repeat
       }
     },
     movePrimaryLeft: function() {
@@ -1101,6 +1129,7 @@ define([
       } else if(PRT == 'bead'){
         if (CRT == 'audio'){
         } else if(CRT == 'bead'){
+          //keep it bead, do nothing
         } else if(CRT == 'line'){
           this.beadToLine();
         } else if(CRT == 'pie'){
@@ -1111,9 +1140,9 @@ define([
       } else if(PRT == 'line'){
         if (CRT == 'audio'){
         } else if(CRT == 'bead'){
-          console.log('about to get called');
           this.lineToBead();
         } else if(CRT == 'line'){
+          //keep it line, do nothing
         } else if(CRT == 'pie'){
           this.lineToPie();
         } else if(CRT == 'bar'){
@@ -1122,9 +1151,13 @@ define([
       } else if(PRT == 'pie'){
         if (CRT == 'audio'){
         } else if(CRT == 'bead'){
+          //TODO
         } else if(CRT == 'line'){
+          //TODO
         } else if(CRT == 'pie'){
+          //keep it pie, do nothing
         } else if(CRT == 'bar'){
+          //TODO
         }
       } else if(PRT == 'bar'){
         if (CRT == 'audio'){
@@ -1133,7 +1166,9 @@ define([
         } else if(CRT == 'line'){
           this.barToLine();
         } else if(CRT == 'pie'){
+          //TODO
         } else if(CRT == 'bar'){
+          //keep it bar, do nothing
         }
       }
     },

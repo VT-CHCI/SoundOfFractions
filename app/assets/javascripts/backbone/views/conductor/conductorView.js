@@ -1,6 +1,6 @@
 // Filename: views/conductor/conductorView.js
 /*
-    This is the TransportView.
+    This is the ConductorView.
     It is in charge of the Transport or play/stop button.
 */
 define([
@@ -12,9 +12,9 @@ define([
   'text!backbone/templates/conductor/stop.html',
   'app/dispatch',
   'app/log'
-], function($, _, Backbone, TransportModel, conductorPlayTemplate, conductorStopTemplate, dispatch, log){
+], function($, _, Backbone, ConductorModel, conductorPlayTemplate, conductorStopTemplate, dispatch, log){
 
-  var TransportView = Backbone.View.extend({
+  var ConductorView = Backbone.View.extend({
     el : $("#conductor"), // Specifies the DOM element which this view handles
 
     //registering our conductor() method for backbone click events.
@@ -23,7 +23,7 @@ define([
     },
 
     initialize: function() {
-      this.conductorModel = new TransportModel;
+      this.conductorModel = ConductorModel;
 
       //registering our stopPlay() method on stopRequest events.
       dispatch.on('measureRepresentation.event', this.stopPlay, this);
@@ -43,6 +43,7 @@ define([
     */
     conductor: function() {
       if(!this.conductorModel.get('isPlaying')) {
+        
         this.conductorModel.play();
 
         var compiledTemplate = _.template( conductorStopTemplate );
@@ -67,7 +68,7 @@ define([
         log.sendLog([[3, "Started playing music: "+name]]);
       }
       else {
-        this.conductorModel.play();
+        this.conductorModel.stop();
         // dispatch.trigger('togglePlay.event', 'off');
         // this.conductorModel.set('isPlaying', false);
 
@@ -110,5 +111,5 @@ define([
       return this;
     }
   });
-  return new TransportView();
+  return new ConductorView();
 });

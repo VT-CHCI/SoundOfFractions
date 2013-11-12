@@ -19,28 +19,23 @@ define([
   'backbone/models/representation',
   'backbone/models/remainingInstrumentGenerator',
   'backbone/models/state',
+  'backbone/models/conductor',
   'backbone/views/button/remainingInstrumentGeneratorView',
   'backbone/views/hTrack/hTrackView',
   'text!backbone/templates/hTrack/hTrack.html',
   'app/dispatch'
-], function($, _, Backbone, BeatsCollection, MeasuresCollection, RepresentationsCollection, StageCollection, BeatModel, MeasureModel, HTrackModel, RepresentationModel, RemainingInstrumentGeneratorModel, StateModel, RemainingInstrumentGeneratorView, HTrackView, HTrackTemplate, dispatch){
+], function($, _, Backbone, BeatsCollection, MeasuresCollection, RepresentationsCollection, StageCollection, BeatModel, MeasureModel, HTrackModel, RepresentationModel, RemainingInstrumentGeneratorModel, StateModel, ConductorModel, RemainingInstrumentGeneratorView, HTrackView, HTrackTemplate, dispatch){
   var StageView = Backbone.View.extend({
     el: $('#sof-composition-area'),
 
     initialize: function(){
-      //this context variable gives us access to all of the
-      //web audio api methods/objects.
-      this.context = new webkitAudioContext();
-      this.bufferList = new Array();
 
-      // set the songs unused instruments
+      // set the song's unused instruments
       this.unusedInstrumentsModel = RemainingInstrumentGeneratorModel;
 
-      //this gainNode controls the volume of the entire audio output.
-      //we use it to toggle play/stop.
-      this.masterGainNode = this.context.createGainNode();
-
       this.stage = StageCollection;
+      // set the song's conductor
+      this.conductor = ConductorModel;
 
       //this is creating the snare hTrack.
 
@@ -81,34 +76,6 @@ define([
         active: true,
         tempo: 120 //bpm
       });
-
-      //creating two arrays to hold our gain nodes.
-      //the first is for sustained-note sounds,
-      //the second is for the muting of individual 'hTrack's.
-      this.gainNodeList = new Array();
-      this.muteGainNodeList = new Array();
-
-      //use our webaudio context to create two gain nodes
-      //for each hTrack.
-      for (var i = 0; i < this.stage.models.length; i++) {
-        this.gainNodeList[i] = this.context.createGainNode();
-        if (i == 0){
-          // Trying to reduce the snare instrument's volume
-          // this.sineWave = this.context.createOscillator();
-          // this.sineWave.frequency.value = 900;
-          // this.sineWave.connect(this.gainNodeList[i]);
-          this.gainNodeList[i].gain.value = .2;
-          // this.sineWave.noteOn(0);
-        }
-        this.muteGainNodeList[i] = this.context.createGainNode();
-      };
-window.csf = this.gainNodeList;
-
-      this.intervalID = null; //time is a function of measures and tempo (4 * 60/tempo * measures)
-
-      //register the handler for togglePlay events.
-      dispatch.on('togglePlay.event', this.togglePlay, this);
-      dispatch.on('tempoChange.event', this.updateTempo, this);
 
       dispatch.on('instrumentAddedToCompositionArea.event', this.addInstrument, this);
       dispatch.on('instrumentDeletedFromCompositionArea.event', this.deleteInstrument, this);
@@ -166,8 +133,6 @@ window.csf = this.gainNodeList;
       if(options) {
         console.log('render: stageView.js with options');
         var counter = $('.hTrack').size();
-        //loading the audio files into the bufferList.
-        this.loadAudio(this.context, options.sample, this.bufferList, counter );
 
         //compiling our template.
         var compiledTemplate = _.template( HTrackTemplate, {hTrack: this.stage.models[this.stage.models.length-1], type: this.stage.models[this.stage.models.length-1].get('type')} );
@@ -177,7 +142,7 @@ window.csf = this.gainNodeList;
         var hTrackView = new HTrackView({
           hTrack: this.stage.models[this.stage.models.length-1],
           el: '#hTrack-'+this.stage.models[this.stage.models.length-1].cid, 
-          gainNode: this.muteGainNodeList[counter],
+          // gainNode: this.muteGainNodeList[counter],
           unusedInstrumentsModel: this.unusedInstrumentsModel,
           type: this.stage.models[this.stage.models.length-1].get('type')
         });
@@ -189,8 +154,6 @@ window.csf = this.gainNodeList;
 
         //we have to render each one of our `hTrack`s.
         _.each(this.stage.models, function(hTrack) {
-          //loading the audio files into the bufferList.
-          this.loadAudio(this.context, hTrack.get('sample'), this.bufferList, counter );
 
           //compiling our template.
           var compiledTemplate = _.template( HTrackTemplate, {hTrack: hTrack, type: hTrack.get('type')} );
@@ -200,7 +163,7 @@ window.csf = this.gainNodeList;
           var hTrackView = new HTrackView({
             hTrack: hTrack,
             el: '#hTrack-'+hTrack.cid, 
-            gainNode: this.muteGainNodeList[counter],
+            // gainNode: this.muteGainNodeList[counter],
             unusedInstrumentsModel: this.unusedInstrumentsModel,
             type: hTrack.get('type')
           });
@@ -215,231 +178,6 @@ window.csf = this.gainNodeList;
         var instrumentSelectorView = RemainingInstrumentGeneratorView;
 
         return this;
-      }
-    },
-
-    /*
-      This function generates a 2d array
-      of time durations that determine when the playback
-      of each beat on each hTrack should occur.
-    */
-    playLoop: function(){
-      var tempo = StateModel.get('tempo');
-      var numBeats = 0;
-      var i = 0;
-
-      var deadSpace = 0;
-
-      //create an array to hold arrays of durations.
-      var hTrackDurations = new Array();
-
-      //looping over each hTrack in the stage.
-      _.each(this.stage.models, function(hTrack) {
-
-        //create a duration array for this hTrack.
-        hTrackDurations[i] = new Array();
-
-        _.each(hTrack.get('measures').models, function(measure) {
-          numBeats = measure.get('beats').length;
-          //determining the duration for each beat.
-          var beatDuration = 60 / tempo * hTrack.get('signature') / (numBeats);
-          _.each(measure.get('beats').models, function(beat) {
-            /* if we need to trigger a sound at this beat
-              we push a duration onto the duration array.
-              if not, increment our deadSpace variable,
-              by the beat duration,
-              which will make subsequent durations longer.
-            */
-            if (beat.get('selected')) {
-              //deadspace is a beat that is not getting played
-              hTrackDurations[i].push(deadSpace);
-              deadSpace = deadSpace + beatDuration;
-            } else {
-              deadSpace = deadSpace + beatDuration;
-            }
-          }, this);
-        }, this);
-        i++;
-        // Reset the deadspace for the next hTrack
-        deadSpace = 0;
-      }, this);
-      //Lastly, we call playSound() with our completed
-      //hTrackDurations 2d array.
-      this.playSound(hTrackDurations);
-    },
-
-    /*
-      This triggers the playback of sounds at the appropriate
-      intervals for each hTrack.
-    */
-    playSound: function(durations){
-      var ƒthis = this;
-      console.log('Playing sound!');
-      var hTrackToPlayIterator = 0;
-      var startTime = this.context.currentTime; //this is important (check docs for explanation)
-      _.each(durations, function(duration) { // hTrack array
-        _.each(duration, function(time) { // beats or deadspace start times
-          //we call play on each hTrack, passing in a lot of information.
-          //this is called for each 'duration' in the duration array,
-          //which is every activated beat and its associated duration between
-          //it and the next activated beat.
-
-          play(
-            this,
-            this.context,
-            this.stage.at(hTrackToPlayIterator),
-            this.bufferList[hTrackToPlayIterator],
-            startTime+time, //startTime is the current time you request to play + the beat start time
-            this.masterGainNode,
-            this.gainNodeList[hTrackToPlayIterator],
-            this.muteGainNodeList[hTrackToPlayIterator],
-            this.stage.models[[hTrackToPlayIterator]].get('tempo')
-          );
-        }, this);
-        hTrackToPlayIterator++;
-      }, this);
-
-      /*
-        This is where all the magic happens for the audio.
-
-        Parameters are:
-          self -> a reference to this StageView instance.
-          context -> a reference to the webaudio context.
-          buffer -> the buffer that has been loaded with the appropriate audio file.
-          time -> the duration that this playback is to last.
-          gainNode -> this is the masterGainNode of this StageView
-          specGainNode -> this gain node controls envelope generation for sustained instruments.
-          muteGainNode -> this gain node controls the muting of `hTrack`s.
-      */
-
-      function play(self, context, hTrack, buffer, time, gainNode, specGainNode, muteGainNode, hTrackTempo) {
-        //a buffer source is what can actually generate audio.
-        source = context.createBufferSource();
-        source.buffer = buffer;
-        /* here we make a series of connections to set up the signal flow
-           of the audio through each of the three gain nodes.
-           the final result looks like:
-
-           source->specGainNode->muteGainNode->masterGainNode->your ears
-
-        */
-        source.connect(specGainNode);
-        specGainNode.connect(muteGainNode);
-        muteGainNode.connect(gainNode);
-        gainNode.connect(context.destination);
-        // specGainNode.gain.value = 1;
-
-        //calulating the duration of one beat.
-        var duration =  (60 / hTrackTempo);
-
-        //note on causes the playback to start.
-        source.noteOn(time, 0, duration);
-        console.error(time);
-        //these calls are used to generate an envelope that
-        //makes sustained instruments play for only the duration of one beat.
-        //this reduces pops and clicks from the signal being abruptly
-        //stopped and started.
-        // specGainNode.gain.linearRampToValueAtTime(0, time);
-        // specGainNode.gain.linearRampToValueAtTime(1, time + 0.005);
-        // specGainNode.gain.linearRampToValueAtTime(1, time + (duration - 0.005));
-        // specGainNode.gain.linearRampToValueAtTime(0, time + duration);
-
-        //we call noteOff to stop the sound after the duration of one beat.
-        source.noteOff(time + duration);
-      }
-
-    },
-
-    /*
-      This function loads the audio files for each hTrack
-      and loads them into the buffer list.
-    */
-    loadAudio: function(context, url, bufferList, index){
-      console.log("Loading...", url);
-      // Load buffer asynchronously
-      var request = new XMLHttpRequest();
-      request.open("GET", App.assets.path(url), true);
-      request.responseType = "arraybuffer";
-
-      request.onload = function() {
-        // Asynchronously decode the audio file data in request.response
-        context.decodeAudioData(
-          request.response,
-          function(buffer) {
-            if (!buffer) {
-              alert('error decoding file data: ' + url);
-              return;
-            }
-            //place the decoded buffer into the bufferList
-            bufferList[index] = buffer;
-          },
-          function(error) {
-            console.error('decodeAudioData error', error);
-          }
-        );
-      }
-
-      request.onerror = function() {
-        alert('BufferLoader: XHR error');
-      }
-
-      request.send();
-    },
-
-
-    /*
-      This is triggered by togglePlay events.
-    */
-    togglePlay: function(val){
-
-      //first we determine the number of the measures in
-      //the hTrack with the most measures.
-      var maxDuration = 0;
-      _.each(this.stage.models, function(hTrack) {
-        var tempo = hTrack.get('tempo');
-        var measuresCount = hTrack.get('measures').length;
-        var beats = hTrack.get('signature');
-        var currentInstrumentDuration = tempo*measuresCount*beats*60/1000;
-        
-
-        if(maxDuration < currentInstrumentDuration) {
-          maxDuration = currentInstrumentDuration;
-        }
-      }, this);
-
-      //we use the maximum number of measures, and the global tempo
-      //to determine the duration (in ms) of one loop of the sequencer.
-      // var duration = StateModel.get('signature') * 60 / StateModel.get('tempo') * maxMeasures * 1000;
-      var duration = maxDuration;
-      console.warn('totale Duration: '+ maxDuration);
-      if (this.intervalID) {
-        //if we are already playing, we stop and trigger the
-        //animation to stop.
-        console.log('togglePlay: off');
-        dispatch.trigger('toggleAnimation.event', 'off');
-
-        clearInterval(this.intervalID);
-        this.intervalID = null;
-        //we set the masterGainNode to zero, which mutes all output.
-        this.masterGainNode.gain.value = 0;
-      } else {
-        //if we are not playing, we start the playback of audio
-        //and trigger an event to start the animation.
-        console.log('togglePlay: on');
-
-        //we call playLoop() with our calculated duration to initialize
-        //and play the audio.
-        //this.playLoop();
-        this.intervalID = setInterval((function(self) {
-          return function() {
-            self.playLoop(); 
-          } 
-        })(this),
-        duration);
-        //we set the masterGainNode to 1, turning on master output.
-        this.masterGainNode.gain.value = 1;
-
-        dispatch.trigger('toggleAnimation.event', 'on', maxDuration);
       }
     },
 
@@ -499,10 +237,6 @@ window.csf = this.gainNodeList;
       };
 
       this.stage = StageCollection.add(newInstrumentToAdd);
-
-      // Add the gain nodes for the music for the new instrument
-      this.gainNodeList[this.stage.models.length-1] = this.context.createGainNode();
-      this.muteGainNodeList[this.stage.models.length-1] = this.context.createGainNode();
 
       this.render(newInstrumentToAdd);
     },
