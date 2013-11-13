@@ -59,19 +59,19 @@ define([
       //creating two arrays to hold our gain nodes.
       //the first is for sustained-note sounds,
       //the second is for the muting of individual 'hTrack's.
-      this.gainNodeList = new Array();
+      this.gainNode = new Array();
       this.muteGainNodeList = new Array();
       this.context = new webkitAudioContext();
       this.bufferList = new Array();
       this.masterGainNode = this.context.createGainNode();
 
       //use our webaudio context to create two gain nodes for the hTrack.
-      this.gainNodeList = this.context.createGainNode();
+      this.gainNode = this.context.createGainNode();
       this.muteGainNodeList = this.context.createGainNode();
       if (options.type =='sn'){
         // Trying to reduce the snare instrument's volume
         console.log('adjusted the snare gain to .2');
-        this.gainNodeList.gain.value = .2;
+        this.gainNode.gain.value = .2;
       }
 
       this.intervalID = null; //time is a function of measures and tempo (4 * 60/tempo * measures)
@@ -197,8 +197,9 @@ define([
         //if we are already playing, we stop and trigger the
         //animation to stop.
         console.log('togglePlay: off');
+        // This stops the animations 
         dispatch.trigger('toggleAnimation.event', 'off');
-
+        //This stops the Audio
         clearInterval(this.intervalID);
         this.intervalID = null;
 
@@ -229,9 +230,9 @@ console.error('Tempo:', tempo, '|', 'Measures:', measures.length, '|', selectedB
       }
     },
     /*
-      This function generates a 2d array
+      This function generates an array
       of time durations that determine when the playback
-      of each beat on each hTrack should occur.
+      of each beat on this hTrack should occur.
     */
     playLoop: function(){
       var deadSpace = 0;
@@ -266,12 +267,12 @@ console.error('Tempo:', tempo, '|', 'Measures:', measures.length, '|', selectedB
       This triggers the playback of sounds at the appropriate
       intervals for each hTrack.
     */
-    playSound: function(duration){
+    playSound: function(beatTimes){
       console.log('Playing sound!');
 
       var startTime = this.context.currentTime; //this is important (check docs for explanation)
 
-      _.each(duration, function(time) { // beats or deadspace start times
+      _.each(beatTimes, function(beatTime) { // beats or deadspace start times
         //we call play on each hTrack, passing in a lot of information.
         //which is every activated beat and its associated duration between
         //it and the next activated beat.
@@ -284,9 +285,9 @@ console.error('Tempo:', tempo, '|', 'Measures:', measures.length, '|', selectedB
           this,
           this.context,
           this.bufferList,
-          startTime+time, //startTime is the current time you request to play + the beat start time
+          startTime+beatTime, //startTime is time you clicked 'play' | beatTime is the elapsed time to from the start time
           this.masterGainNode,
-          this.gainNodeList,
+          this.gainNode,
           this.muteGainNodeList,
           hTrackTempo,
           beatDuration
