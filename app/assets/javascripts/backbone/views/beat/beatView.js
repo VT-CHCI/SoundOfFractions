@@ -279,6 +279,7 @@ define([
           }
         });
       }
+      
       if (this.currentRepresentationType == 'bead') {
         this.BEAT = this.beatContainer
             .append('circle')

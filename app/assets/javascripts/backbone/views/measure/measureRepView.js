@@ -76,8 +76,9 @@ define([
           this.measurePassingToBeatViewParameters.secondary = options.secondary;
         }
       }
+
       // for each beat in this measure
-      _.each(this.parentMeasureModel.get('beats').models, function(beat, index) {
+      _.all(this.parentMeasureModel.get('beats').models, function(beat, index) {
         // create a Beatview
         this.measurePassingToBeatViewParameters.currentRepresentationType = this.model.get('representationType');
         if (options){
@@ -110,8 +111,13 @@ define([
         this.measurePassingToBeatViewParameters.beatStartAngle = ((360 / this.beatsInMeasure)*index);
         this.measurePassingToBeatViewParameters.beatStartTime = this.firstBeatStart+(index)*(this.timeIncrement/1000);
         this.measurePassingToBeatViewParameters.color = index;
-
+        // TODO DELETE THE VIEWS when we re-render
         new BeatView(this.measurePassingToBeatViewParameters);
+        if (this.currentRepresentationType == 'audio') {
+          return false;
+        } else {
+          return true;
+        }
       }, this);
     },
     beatFactoryParameters : function(options){
@@ -186,7 +192,8 @@ define([
         audioBeatCy: this.audioBeatCy,
         audioBeatR: this.audioBeatR,
         colorForAudio: this.colorForAudio,
-        opacityForAudio: .2/this.beatsInMeasure
+        // opacityForAudio: .2/this.beatsInMeasure
+        opacityForAudio: .2
       }
     },
     templateParameters : function(options){
@@ -368,6 +375,7 @@ define([
               .duration(1);                      // .each("end" construct here.
          });
     },
+    //dur is half of the beat length
     beadAnimate: function(target, dur) {
 
       var target = d3.select(target);
@@ -380,8 +388,14 @@ define([
           d3.select(this).                         // this is the object 
             transition()                           // a new transition!
               .attr('cx', originalCX )    // we could have had another
-              .duration(dur);                  // .each("end" construct here.
+              .duration((dur*7.0)/8.0);                  // .each("end" construct here.
          });
+        // .each('end',function() {                   // as seen above
+        //   d3.select(this).                         // this is the object 
+        //     transition()                           // a new transition!
+        //       .attr('cx', originalCX )    // we could have had another
+        //       .duration(dur+);                  // .each("end" construct here.
+        //  });
     },
     lineAnimate: function(target, dur) {
       var target = d3.select(target);
@@ -496,7 +510,7 @@ define([
             var beats = $('#measure-rep-'+this.measureRepModel.cid).find('.audio-beat');
             // A boolean value if the beat is selected
             var selected = this.parentMeasureModel.get('beats').models[counter].get('selected');
-            this.audioAnimate(beats.eq(counter)[0], dur/2.0, selected);
+            this.audioAnimate(beats.eq(0)[0], dur/2.0, selected);
           } else if (this.currentRepresentationType == 'bead'){
             var beats = $('#measure-rep-'+this.measureRepModel.cid).find('.bead-beat');
             this.beadAnimate(beats.eq(counter)[0], dur/2.0);
@@ -522,7 +536,7 @@ define([
                 var beats = $('#measure-rep-'+self.measureRepModel.cid).find('.audio-beat');
                 // A boolean value if the beat is selected
                 var selected = self.parentMeasureModel.get('beats').models[counter].get('selected');
-                self.audioAnimate(beats.eq(counter)[0], dur/2.0, selected);
+                self.audioAnimate(beats.eq(0)[0], dur/2.0, selected);
               } else if (self.currentRepresentationType == 'bead'){
                 var beats = $('#measure-rep-'+self.measureRepModel.cid).find('.bead-beat');
                 self.beadAnimate(beats.eq(counter)[0], dur/2.0);
