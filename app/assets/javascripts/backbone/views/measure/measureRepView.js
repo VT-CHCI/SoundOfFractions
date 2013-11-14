@@ -41,6 +41,7 @@ define([
             .y(function (d) {return d.y;})
             .interpolate('basis'); // bundle | basis | linear | cardinal are also options
         this.pathFunction = pathFunction;
+        this.context = new webkitAudioContext();
 
         // allow the letter p to click the first plus sign
         _.bindAll(this, 'manuallPress');
@@ -374,7 +375,7 @@ define([
       var newCX = originalCX + 10;
       target.transition()
         .attr('cx', newCX )
-        .duration(dur)
+        .duration(dur/8.0)
         .each('end',function() {                   // as seen above
           d3.select(this).                         // this is the object 
             transition()                           // a new transition!
@@ -424,89 +425,127 @@ define([
               .duration(dur);                  // .each("end" construct here.
          });
     },
-    toggleAnimation: function(state, maxDuration){
+    toggleAnimation: function(state){
       var ƒthis = this;
 
+      //TODO USE signature or beats
       var signature = this.parentMeasureModel.get('beats').length;
+      var beats = this.hTrack.get('signature');
+      
       var tempo = this.hTrack.get('tempo');
       var measuresCount = this.hTrack.get('measures').length;
-      var beats = this.hTrack.get('signature');
       var currentInstrumentDuration = measuresCount*beats/tempo*60.0*1000.0;
       //dur is time of one beat.
       var dur = currentInstrumentDuration/measuresCount/beats;
+      var calcDur = 1000/(tempo/60);
 
       var totalNumberOfBeats = signature*measuresCount;
       // go through the measure(s) first without animation
-      var beatCounter = 0-(signature*measuresCount-1);
+      var counter = 0;
       var measureCounter = 0;
-      var waitCounter = false;
-      function calculateWaiting(){
-        var result = null;
-        if ( beatCounter*dur == currentInstrumentDuration && currentInstrumentDuration < maxDuration ){
-          waitCounter = true;
-        } else {
-          waitCounter = false;
-        }
-      };
 
       //when playing is stopped we stop the animation.
       if (state == 'off') {
         console.log('stopped animation');
         clearInterval(this.animationIntervalID);
         this.animationIntervalID = null;
-        clearInterval(this.beatAnimationIntervalID);
-        this.beatAnimationIntervalID = null;
       } else {
-        console.log('starting animation', tempo, dur, currentInstrumentDuration, maxDuration);
+        // console.log('starting animation', tempo, dur, currentInstrumentDuration);
+
+        // function clearAnimationIntervalID() {
+        //   console.log('stopped animation with func() call');
+        //   clearInterval(this.animationIntervalID);
+        //   this.animationIntervalID = null;
+        // }
+
         // this sets the time interval that each animation should take,
         // and then calls animate on each beat with the appropriate timing interval.
         // Self is the parent hTrack
-//         this.animationIntervalID = setInterval((function(self) {
-//           return function() {
+        // var startTime = this.context.currentTime; //this is important (check docs for explanation)
+        // console.error('animation starttime:', startTime);
 
-//             this.beatAnimationIntervalID = setInterval((function(self) {
-//               return function() {
-// console.log('beatCounter:', beatCounter);
-//                 if (waitCounter == false){            
-// console.log('getting in waitCounter:', waitCounter);
-                  
-//                   if (beatCounter >= 0 && beatCounter < totalNumberOfBeats) {
-// console.log('getting in beatCounter and transitionNumberOfPoints');
-// console.log(self.currentRepresentationType);
-//                     if (self.currentRepresentationType == 'audio'){
-//                       var beats = $('#measure-rep-'+self.measureRepModel.cid).find('.audio-beat');
-//                       var selected = self.parentMeasureModel.get('beats').models[beatCounter].get('selected');
-//                       self.audioAnimate(beats.eq(beatCounter)[0], dur, selected);
-//                     } else if (self.currentRepresentationType == 'bead'){
-//                       var beats = $('#measure-rep-'+self.measureRepModel.cid).find('.bead-beat');
-//                       self.beadAnimate(beats.eq(beatCounter)[0], dur/2);
-//                     } else if (self.currentRepresentationType == 'line'){
-//                       var beats = $('#measure-rep-'+self.measureRepModel.cid).find('.line-beat');
-//                       self.lineAnimate(beats.eq(beatCounter)[0], dur/2);
-//                     } else if (self.currentRepresentationType == 'pie'){
-//                       var beats = $('#measure-rep-'+self.measureRepModel.cid).find('.pie-beat');
-//                       self.pieAnimate(beats.eq(beatCounter)[0], dur/2);
-//                     } else if (self.currentRepresentationType == 'bar'){
-//                       var beats = $('#measure-rep-'+self.measureRepModel.cid).find('.bar-beat');
-//                       self.barAnimate(beats.eq(beatCounter)[0], dur/2);
-//                     }
-//                   }
-//                   //Increase the beatCounter until all of the beats have played, then reset the beatCounter
-//                   if (beatCounter < (totalNumberOfBeats-1)) {
-//                     beatCounter ++;
-//                   } else {
-//                     beatCounter = 0;
-//                   }
-//                   calculateWaiting();
-//                 } else {
-//                   // Waiting tillthe longest measure is complete
-//                   console.log('waiting until the longer instrument is done playing');
-//                 }
-//               };
-//             })(this), dur); //dur is the cycle at which every beat should be animating/lasting
-//           };
-//         })(this), maxDuration); //maxDuration is the cycle at which every measure rep should be waiting for to repeat
+        // if (this.currentRepresentationType == 'audio'){
+        //   var beats = $('#measure-rep-'+this.measureRepModel.cid).find('.audio-beat');
+        //   var counter = 0;
+        //   var self = this;
+        //   window.csa = this;
+        //   _.each( beats, function(beat, index, ƒthis) {
+        //     window.csf = ƒthis;
+        //     window.csd = this;
+        //     debugger;
+        //     setTimeout(function(self){
+        //       var selected = self.parentMeasureModel.get('beats').models[index].get('selected');
+        //       self.audioAnimate(beats.eq(index)[0], dur/2, selected);
+        //     }, (dur*index) );
+        //     counter ++;
+        //   })
+        // } else if (this.currentRepresentationType == 'bead'){
+        //   var beats = $('#measure-rep-'+this.measureRepModel.cid).find('.bead-beat');
+        //   var counter = 0;
+        //   var self = this;
+        //   _.each( beats, function(beat, index, self) {
+        //     setTimeout(function(self){
+        //       self.beadAnimate(beats.eq(counter)[0], dur/2);
+        //     }, (dur*index) );
+        //     counter ++;
+        //   })
+        // }
+        if (counter >= 0 && counter < totalNumberOfBeats) {
+          if (this.currentRepresentationType == 'audio'){
+            //TODO 
+            var beats = $('#measure-rep-'+this.measureRepModel.cid).find('.audio-beat');
+            // A boolean value if the beat is selected
+            var selected = this.parentMeasureModel.get('beats').models[counter].get('selected');
+            this.audioAnimate(beats.eq(counter)[0], dur/2.0, selected);
+          } else if (this.currentRepresentationType == 'bead'){
+            var beats = $('#measure-rep-'+this.measureRepModel.cid).find('.bead-beat');
+            this.beadAnimate(beats.eq(counter)[0], dur/2.0);
+          } else if (this.currentRepresentationType == 'line'){
+            var beats = $('#measure-rep-'+this.measureRepModel.cid).find('.line-beat');
+            this.lineAnimate(beats.eq(counter)[0], dur/2.0);
+          } else if (this.currentRepresentationType == 'pie'){
+            var beats = $('#measure-rep-'+this.measureRepModel.cid).find('.pie-beat');
+            this.pieAnimate(beats.eq(counter)[0], dur/2.0);
+          } else if (this.currentRepresentationType == 'bar'){
+            var beats = $('#measure-rep-'+this.measureRepModel.cid).find('.bar-beat');
+            this.barAnimate(beats.eq(counter)[0], dur/2.0);
+          }
+          counter ++;
+        }
+
+        this.animationIntervalID = setInterval((function(self) {
+          return function() {
+            // If we havenb't animated all of the beats in the measureRep
+            if (counter >= 0 && counter < totalNumberOfBeats) {
+              if (self.currentRepresentationType == 'audio'){
+                //TODO 
+                var beats = $('#measure-rep-'+self.measureRepModel.cid).find('.audio-beat');
+                // A boolean value if the beat is selected
+                var selected = self.parentMeasureModel.get('beats').models[counter].get('selected');
+                self.audioAnimate(beats.eq(counter)[0], dur/2.0, selected);
+              } else if (self.currentRepresentationType == 'bead'){
+                var beats = $('#measure-rep-'+self.measureRepModel.cid).find('.bead-beat');
+                self.beadAnimate(beats.eq(counter)[0], dur/2.0);
+              } else if (self.currentRepresentationType == 'line'){
+                var beats = $('#measure-rep-'+self.measureRepModel.cid).find('.line-beat');
+                self.lineAnimate(beats.eq(counter)[0], dur/2.0);
+              } else if (self.currentRepresentationType == 'pie'){
+                var beats = $('#measure-rep-'+self.measureRepModel.cid).find('.pie-beat');
+                self.pieAnimate(beats.eq(counter)[0], dur/2.0);
+              } else if (self.currentRepresentationType == 'bar'){
+                var beats = $('#measure-rep-'+self.measureRepModel.cid).find('.bar-beat');
+                self.barAnimate(beats.eq(counter)[0], dur/2.0);
+              }
+              counter ++;
+            }
+          }
+        })(this), dur); //duration should be set to something else
       }
+    },
+    clearAnimationIntervalID: function() {
+        console.log('stopped animation with func() call');
+        clearInterval(this.animationIntervalID);
+        this.animationIntervalID = null;
     },
     movePrimaryLeft: function() {
       var beatHolder = d3.select('#beat-holder-'+this.measureRepModel.cid)

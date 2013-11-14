@@ -30,8 +30,9 @@ define([
     stop: function() {
       // console.log('in the conductor model stop');
       this.set('isPlaying', false);
-      this.clearAllIntervals();
       dispatch.trigger('conductor.event');
+      // This stops the animations 
+      dispatch.trigger('toggleAnimation.event', 'off');
     },
     addInterval: function(setInterval, hTrackLabel){
       console.warn(hTrackLabel);
@@ -43,7 +44,6 @@ define([
         clearInterval(intervalID);
         intervalID = null;
         this.get('setIntervalArray').splice(index, 1);
-        window.csf = this.get('setIntervalArray');
       }, this);
     },
     calculateMaxDuration: function() {
@@ -59,7 +59,6 @@ define([
           }
       }, this);
       this.maxDuration = maxDuration;
-      console.error(this.maxDuration);
     }
   });
   

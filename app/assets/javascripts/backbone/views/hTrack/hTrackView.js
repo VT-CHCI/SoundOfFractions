@@ -54,7 +54,7 @@ define([
 
       dispatch.on('instrumentChanged.event', this.changeInstrument, this);
       dispatch.on('conductor.event', this.togglePlay, this);
-      dispatch.on('togglePlay.event', this.togglePlay, this);
+      // dispatch.on('togglePlay.event', this.togglePlay, this);
 
       //creating two arrays to hold our gain nodes.
       //the first is for sustained-note sounds,
@@ -197,8 +197,11 @@ define([
         //if we are already playing, we stop and trigger the
         //animation to stop.
         console.log('togglePlay: off');
+
+        // Moved this to the conductor
         // This stops the animations 
         dispatch.trigger('toggleAnimation.event', 'off');
+
         //This stops the Audio
         clearInterval(this.intervalID);
         this.intervalID = null;
@@ -214,20 +217,26 @@ console.error('Tempo:', tempo, '|', 'Measures:', measures.length, '|', selectedB
 
         //we call playLoop() with our calculated duration to initialize
         //and play the audio.
-        //this.playLoop();
+        // this.playLoop();
+        this.beginAnimation();
+//TODO POtentially put plaLoop and beginAnimation up here until the setInterval starts
         this.intervalID = setInterval((function(self) {
         // ConductorModel.addInterval( setInterval((function(self) {
           return function() {
-            self.playLoop(); 
-          } 
+            // self.playLoop();
+            self.beginAnimation();
+          }
         })(this), maxDuration);
         // })(this), duration), this.hTrack.get('label'));
         // ConductorModel.addInterval(this.intervalID);
         //we set the masterGainNode to 1, turning on master output.
         this.masterGainNode.gain.value = 1;
 
-        dispatch.trigger('toggleAnimation.event', 'on', duration);
       }
+    },
+    beginAnimation: function(){
+      this.playLoop();
+      dispatch.trigger('toggleAnimation.event', 'on');
     },
     /*
       This function generates an array
@@ -253,13 +262,11 @@ console.error('Tempo:', tempo, '|', 'Measures:', measures.length, '|', selectedB
           if (beat.get('selected')) {
             //deadspace is a beat that is not getting played
             beatTimes.push(deadSpace);
-          } else {
           }
           deadSpace += beatDuration;
         }, this);
       }, this);
-      //Lastly, we call playSound() with our completed
-      //beatTimes array.
+      //Lastly, we call playSound() with our completed beatTimes array.
       this.playSound(beatTimes);
     },
 
@@ -268,7 +275,7 @@ console.error('Tempo:', tempo, '|', 'Measures:', measures.length, '|', selectedB
       intervals for each hTrack.
     */
     playSound: function(beatTimes){
-      console.log('Playing sound!');
+      // console.log('Playing sound!');
 
       var startTime = this.context.currentTime; //this is important (check docs for explanation)
 
@@ -328,7 +335,8 @@ console.error('Tempo:', tempo, '|', 'Measures:', measures.length, '|', selectedB
 
         //note on causes the playback to start.
         source.noteOn(time, 0, beatDuration);
-        console.error(time, beatDuration, hTrackTempo);
+  // console.error(time, beatDuration, hTrackTempo);
+
         //these calls are used to generate an envelope that
         //makes sustained instruments play for only the beatDuration of one beat.
         //this reduces pops and clicks from the signal being abruptly

@@ -43,7 +43,11 @@ define([
       this.manuallyCreatedMeasureBeatsCollection = new BeatsCollection;
       //for each beat - also change signature below
       for (var i = 0; i < 3; i++) {
-        this.manuallyCreatedMeasureBeatsCollection.add();
+        if (i == 0){
+          this.manuallyCreatedMeasureBeatsCollection.add([{selected: true}]);
+        } else {
+          this.manuallyCreatedMeasureBeatsCollection.add();
+        }
       }
       //make a collection
       this.manuallyCreatedMeasureRepresentationCollection = new RepresentationsCollection;
@@ -206,7 +210,11 @@ define([
         this.manuallyCreatedMeasureBeatsCollection = new BeatsCollection;
         //for each beat - also change signature below
         for (var i = 0; i < 2; i++) {
-          this.manuallyCreatedMeasureBeatsCollection.add();
+          if (i == 0){
+            this.manuallyCreatedMeasureBeatsCollection.add([{selected: true}]);
+          } else {
+            this.manuallyCreatedMeasureBeatsCollection.add();
+          }
         }
         tempo = 120;
       }
