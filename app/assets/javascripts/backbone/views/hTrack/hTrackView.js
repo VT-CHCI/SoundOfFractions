@@ -227,11 +227,10 @@ console.error('Tempo:', tempo, '|', 'Measures:', measures.length, '|', selectedB
             self.beginAnimation();
           }
         })(this), maxDuration);
-        // })(this), duration), this.hTrack.get('label'));
-        // ConductorModel.addInterval(this.intervalID);
+        // TODO We could potentially call set interval on the hTrack beat length, so that as a user clicks a yet to be played beat that is also unselected, it could be played instead of waiting for the next go around like it is currently
+
         //we set the masterGainNode to 1, turning on master output.
         this.masterGainNode.gain.value = 1;
-
       }
     },
     beginAnimation: function(){

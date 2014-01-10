@@ -26,6 +26,7 @@ define([
         }
         if (options.secondary){
           this.secondaryClasses = 'secondaryBeat ';
+          dispatch.on('beatTransition.event', this.transition, this);
         } else {
           this.secondaryClasses = '';
         }
@@ -35,6 +36,12 @@ define([
         this.opacity = this.getOpacityNumber(options.opacity);
         this.beatCenterPosition = {};
         this.BEAT;
+        // var pathFunction = d3.svg.line()
+        //     .x(function (d) {return d.x;})
+        //     .y(function (d) {return d.y;})
+        //     .interpolate('basis'); // bundle | basis | linear | cardinal are also options
+        // this.pathFunction = pathFunction;
+
         _.bindAll(this, 'toggleModel');
         this.listenTo(this.model, 'change', _.bind(this.toggleOpacity, this));
       } else {
@@ -42,7 +49,6 @@ define([
         this.model = new BeatModel;
       }
 
-      dispatch.on('beatTransition.event', this.transition, this);
 
       this.listenTo(this.parentMeasureRepModel, 'change:transitions', this.transition, this);
 
@@ -66,18 +72,41 @@ define([
       console.log('rollup');
       var currentBeat = d3.select('.secondaryBeat');
       for(i=0; i<this.transitionNumberOfPoints; i++){
-        // console.log(this.beatLineToBeadPaths[i].cx, this.beatLineToBeadPaths[i].cy)
-        // console.log('beat: '+this.beatIndex+' '+this.beatLineToBeadPaths[i].cx,this.beatLineToBeadPaths[i].cy )
-          // this.beatPath.data([this.finalBeatUnwindingPaths[this.beatNumberOfPoints-1-i]])
-          // this.BEAT.data([this.beatBeadToLinePaths[this.transitionNumberOfPoints-1-i]])
           this.BEAT.data([this.beatLineToBeadPaths[i]])
               .transition()
               .delay(this.transitionDuration*i)
-              // .delay(this.transitionDuration*i + this.animationIntervalDuration*5)
               .duration(this.transitionDuration)
               .ease('linear')
               .attr('cx', this.beatLineToBeadPaths[i].cx)
               .attr('cy', this.beatLineToBeadPaths[i].cy)
+      }
+    },
+    rollUpLines: function() {
+      console.log('rollup');
+      // var currentBeat = d3.select('.secondaryBeat');
+      console.warn(this);
+      for(i=0; i<this.transitionNumberOfPoints; i++){
+          var x = this.transitionNumberOfPoints-i;
+          this.BEAT.data([this.lineStatesRollup[i]])
+              .transition()
+              .delay(this.transitionDuration*i)
+              .duration(this.transitionDuration)
+              .ease('linear')
+              .attr('d', this.pathFunction)
+      }
+    },
+    unrollLines: function() {
+      console.log('unroll');
+      // var currentBeat = d3.select('.secondaryBeat');
+      console.warn(this);
+      for(i=0; i<this.transitionNumberOfPoints; i++){
+          var x = this.transitionNumberOfPoints-i;
+          this.BEAT.data([this.lineStatesUnrolling[i]])
+              .transition()
+              .delay(this.transitionDuration*i)
+              .duration(this.transitionDuration)
+              .ease('linear')
+              .attr('d', this.pathFunction)
       }
     },
 
@@ -288,15 +317,14 @@ define([
             .attr('cx', this.x1)
             .attr('cy', this.y1)
             .attr('r', this.circularBeadBeatRadius)
-            // Calling the click handler here doesn't work for some reason
-            // .on('click', function(){console.log('beat container click handler')})
             .attr('transform', 'translate(0,0)')
             // This is the path that the beat will follow when un/roll is clicked
             .data([this.beatUnwindingPaths[0]])
-            // .attr('d', pathFunction)
             .attr('fill', COLORS.hexColors[this.color])
             .attr('stroke', 'black')
             .style('opacity', this.getOpacityNumber(this.model.get('selected')))
+            // Calling the click handler here doesn't work for some reason
+            // .on('click', function(){console.log('beat container click handler')})
             .call(dragBead);
 
         this.BEAT.on('click', this.toggleModel);
@@ -304,19 +332,53 @@ define([
         this.BEAT = this.beatContainer
             .append('line')
             .attr('id', 'beat'+this.cid)
-            .attr('class', 'beat d3 line-beat')
+            .attr('class', this.secondaryClasses + 'beat d3 line-beat')
             .attr('x1', this.X1)
             .attr('y1', this.Y1)
             .attr('x2', this.X2)
             .attr('y2', this.Y2)
-            // This is the path that the beat will follow when un/roll is clicked
-            // .attr('d', pathFunction)
             .attr('stroke', COLORS.hexColors[this.color])
             .attr('opacity', this.getOpacityNumber(this.model.get('selected')))
             .attr('stroke-width', 4)
             .call(dragLine);
 
         this.BEAT.on('click', this.toggleModel);
+      } else if (this.currentRepresentationType == 'lineRolling'){
+        // console.error(this.lineStatesUnrolling);
+        this.beatContainer
+          // .attr('transform', 'translate('+this.circularMeasureCx+','+this.circularMeasureCy+')')
+
+        this.BEAT = this.beatContainer
+          .append('path', ':first-child')
+        // BEAT
+          .attr('id', 'beat'+this.cid)
+          .attr('class', this.secondaryClasses + 'beat d3 lineRolling')
+          .data([this.lineStatesUnrolling[this.lineStatesUnrolling.length-1]])
+          .attr('d', this.pathFunction)
+          // .attr('d', this.lineStatesUnrolling[this.lineStatesUnrolling.length])
+          .attr('stroke', COLORS.hexColors[this.color])
+          .attr('opacity', this.getOpacityNumber(this.model.get('selected')))
+          .attr('stroke-width', 4)
+          // .attr('fill', COLORS.hexColors[this.color])
+          .attr('transform', 'translate(0,0)') ;
+      } else if (this.currentRepresentationType == 'lineUnrolling'){
+        // console.error(this.lineStatesUnrolling);
+        this.beatContainer
+          // .attr('transform', 'translate('+this.circularMeasureCx+','+this.circularMeasureCy+')')
+
+        this.BEAT = this.beatContainer
+          .append('path', ':first-child')
+        // BEAT
+          .attr('id', 'beat'+this.cid)
+          .attr('class', this.secondaryClasses + 'beat d3 lineRolling')
+          .data([this.lineStatesRollup[this.lineStatesUnrolling.length-1]])
+          .attr('d', this.pathFunction)
+          // .attr('d', this.lineStatesUnrolling[this.lineStatesUnrolling.length])
+          .attr('stroke', COLORS.hexColors[this.color])
+          .attr('opacity', this.getOpacityNumber(this.model.get('selected')))
+          .attr('stroke-width', 4)
+          // .attr('fill', COLORS.hexColors[this.color])
+          .attr('transform', 'translate(0,0)') ;
       } else if (this.currentRepresentationType == 'pie'){
         var arc = d3.svg.arc()
           .innerRadius(0)
@@ -329,20 +391,19 @@ define([
           .append('path', ':first-child')
         // BEAT
           .attr('id', 'beat'+this.cid)
-          .attr('class', 'beat d3 pie-beat')
+          .attr('class', this.secondaryClasses + 'beat d3 pie-beat')
           .attr('d', arc)
           .attr('stroke', 'black')
           .attr('opacity', this.getOpacityNumber(this.model.get('selected')))
           .attr('fill', COLORS.hexColors[this.color])
           .attr('transform', 'translate(0,0)')
           .call(dragSlice);
-          // .attr('class', 'pie-beat')
         this.BEAT.on('click', this.toggleModel);
       } else if (this.currentRepresentationType == 'audio'){
         this.BEAT = this.beatContainer
             .insert('circle', ':first-child')
             .attr('id', 'beat'+this.cid)
-            .attr('class', 'beat d3 audio-beat')
+            .attr('class', this.secondaryClasses + 'beat d3 audio-beat')
             .attr('cx', this.audioMeasureCx)
             .attr('cy', this.audioMeasureCy)
             .attr('r', this.audioMeasureR)
@@ -354,7 +415,7 @@ define([
         this.BEAT = this.beatContainer
             .append('rect')
             .attr('id', 'beat'+this.cid)
-            .attr('class', 'beat d3 bar-beat')
+            .attr('class', this.secondaryClasses + 'beat d3 bar-beat')
             .attr('x', this.beatBBX)
             .attr('y', this.beatBBY)
             .attr('width', this.beatWidth)
@@ -441,12 +502,14 @@ define([
           this.rollUp();
         } else if(this.parentMeasureRepModel.get('representationType') == 'line'){
         } else if(this.parentMeasureRepModel.get('representationType') == 'pie'){
+          this.rollUpLines();
         } else if(this.parentMeasureRepModel.get('representationType') == 'bar'){
         }
       } else if(this.parentMeasureRepModel.get('previousRepresentationType') == 'pie'){
         if (this.parentMeasureRepModel.get('representationType') == 'audio'){
         } else if(this.parentMeasureRepModel.get('representationType') == 'bead'){
         } else if(this.parentMeasureRepModel.get('representationType') == 'line'){
+          this.unrollLines();
         } else if(this.parentMeasureRepModel.get('representationType') == 'pie'){
         } else if(this.parentMeasureRepModel.get('representationType') == 'bar'){
         }

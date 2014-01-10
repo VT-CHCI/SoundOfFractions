@@ -1,3 +1,8 @@
+
+.lineRolling {
+  fill: none;
+}
+
 .record-button:hover {
   color: green;
   font-weight: bold;
@@ -115,7 +120,7 @@ svg {
   padding: 5px;
 }
 
-#system-label-group .btn {
+.stamp {
   padding: 1px  3px;
 }
 
@@ -176,7 +181,7 @@ select {
 }
 
 .circle-path {
-  stroke-width:3;
+  stroke-width: 2;
   fill:none;
 }
 
@@ -435,9 +440,9 @@ svg.line {
 
 
 #system-label-container {
-  margin: 0px auto 10px auto;
+  /*margin: 0px auto 10px auto;*/
   text-align: center;
-  width: 100%;
+  /*width: 100%;*/
   background-color: whitesmoke;
   border: 1px solid #e3e3e3
 }

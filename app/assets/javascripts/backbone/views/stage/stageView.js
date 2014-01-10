@@ -55,7 +55,7 @@ define([
       this.manuallyCreatedRepresentationModel = new RepresentationModel({representationType:'audio'});
       this.manuallyCreatedMeasureRepresentationCollection.add(this.manuallyCreatedRepresentationModel);
       // add a bead rep
-      this.manuallyCreatedRepresentationModel = new RepresentationModel({representationType:'bead'});
+      this.manuallyCreatedRepresentationModel = new RepresentationModel({representationType:'pie'});
       this.manuallyCreatedMeasureRepresentationCollection.add(this.manuallyCreatedRepresentationModel);
       // add a line rep
       // this.manuallyCreatedRepresentationModel = new RepresentationModel({representationType:'bead'});
