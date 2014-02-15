@@ -464,7 +464,7 @@ define([
          });
     },
     toggleAnimation: function(state){
-      var ƒthis = this;
+      var ¥this = this;
 
       //TODO USE signature or beats
       var signature = this.parentMeasureModel.get('beats').length;
@@ -507,8 +507,8 @@ define([
         //   var counter = 0;
         //   var self = this;
         //   window.csa = this;
-        //   _.each( beats, function(beat, index, ƒthis) {
-        //     window.csf = ƒthis;
+        //   _.each( beats, function(beat, index, ¥this) {
+        //     window.csf = ¥this;
         //     window.csd = this;
         //     debugger;
         //     setTimeout(function(self){
@@ -656,50 +656,50 @@ define([
     },
     beadToLine: function(options) {
       console.log('btl');
-      var ƒthis = this;
+      var ¥this = this;
       var svgContainer = d3.select('#svg-'+this.measureRepModel.cid)
             .attr('width', this.linearDivWidth+this.circularMeasureR*2 );
       var beatHolder = d3.select('#beat-holder-'+this.measureRepModel.cid);
       var beadBeats = beatHolder.selectAll('.bead-beat');
 
-      dispatch.trigger('beatTransition.event', ƒthis);
+      dispatch.trigger('beatTransition.event', ¥this);
 
-      for(i=0; i<ƒthis.transitionNumberOfPoints; i++){
-        ƒthis.circlePath.data([ƒthis.circleStates[i]])
+      for(i=0; i<¥this.transitionNumberOfPoints; i++){
+        ¥this.circlePath.data([¥this.circleStates[i]])
           .transition()
-            .delay(ƒthis.transitionDuration*i)
-            .duration(ƒthis.transitionDuration)
+            .delay(¥this.transitionDuration*i)
+            .duration(¥this.transitionDuration)
             .ease('linear')
-            .attr('d', ƒthis.pathFunction)
+            .attr('d', ¥this.pathFunction)
       }
 
       setTimeout(function(){
-        ƒthis.makeBeats({secondary:true, type:'line'});
-        $('#beat-holder-'+ƒthis.measureRepModel.cid+' .bead-beat').fadeOut(ƒthis.animationIntervalDuration);
+        ¥this.makeBeats({secondary:true, type:'line'});
+        $('#beat-holder-'+¥this.measureRepModel.cid+' .bead-beat').fadeOut(¥this.animationIntervalDuration);
       }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration);
       setTimeout(function(){
         beadBeats.remove();
-        ƒthis.addInfiniteLine();
+        ¥this.addInfiniteLine();
       }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration*2 );
       setTimeout(function(){
-        ƒthis.moveSecondaryLeft('bead');
+        ¥this.moveSecondaryLeft('bead');
       }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration*3 );
       setTimeout(function(){
         // this sets the transition count on the model itself, which the beatView is listening to
         dispatch.trigger('reRenderMeasure.event', this);
-        // ƒthis.parentMeasureModel.increaseTransitionCount();
+        // ¥this.parentMeasureModel.increaseTransitionCount();
       }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration*4 );
     },
     beadToBar: function(){
       console.log('btr');
-      var ƒthis = this;
+      var ¥this = this;
       var svgContainer = d3.select('#svg-'+this.measureRepModel.cid)
             .attr('width', this.linearDivWidth+this.circularMeasureR*2 );
       var beatHolder = d3.select('#beat-holder-'+this.measureRepModel.cid);
       var beadBeats = beatHolder.selectAll('.bead-beat');
       var circlePath = $('#svg-'+this.measureRepModel.cid + ' .circle-path');
 
-      dispatch.trigger('beatTransition.event', ƒthis);
+      dispatch.trigger('beatTransition.event', ¥this);
       for(i=0; i<this.transitionNumberOfPoints; i++){
         this.circlePath.data([this.circleStates[i]])
           .transition()
@@ -709,7 +709,7 @@ define([
             .attr('d', this.pathFunction)
       };
       setTimeout(function(){
-        ƒthis.makeBeats({secondary:true, type:'bar'});
+        ¥this.makeBeats({secondary:true, type:'bar'});
         $('.bead-beat').fadeOut(this.animationIntervalDuration);
         circlePath.fadeOut(this.animationIntervalDuration);
       }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration);
@@ -717,24 +717,24 @@ define([
         beadBeats.remove();
       }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration*2 );
       setTimeout(function(){
-        ƒthis.moveSecondaryLeft('bead');
+        ¥this.moveSecondaryLeft('bead');
       }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration*3 );
       setTimeout(function(){
         // this sets the transition count on the model itself, which the beatView is listening to
         dispatch.trigger('reRenderMeasure.event', this);
-        // ƒthis.parentMeasureModel.increaseTransitionCount();
+        // ¥this.parentMeasureModel.increaseTransitionCount();
       }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration*4 );
     },
     beadToPie: function(){
       console.log('bti');
-      var ƒthis = this;
+      var ¥this = this;
       var svgContainer = d3.select('#svg-'+this.measureRepModel.cid);
       var beatHolder = d3.select('#beat-holder-'+this.measureRepModel.cid);
       var beadBeats = beatHolder.selectAll('.bead-beat');
       var circlePath = $('#svg-'+this.measureRepModel.cid + ' .circle-path');
 
       setTimeout(function(){
-        ƒthis.makeBeats({secondary:true, type:'pie'});
+        ¥this.makeBeats({secondary:true, type:'pie'});
         $('.bead-beat').fadeOut(this.animationIntervalDuration);
         // circlePath.fadeOut(this.animationIntervalDuration);
       }, this.animationIntervalDuration);
@@ -744,58 +744,58 @@ define([
       setTimeout(function(){
         // this sets the transition count on the model itself, which the beatView is listening to
         dispatch.trigger('reRenderMeasure.event', this);
-        // ƒthis.parentMeasureModel.increaseTransitionCount();
+        // ¥this.parentMeasureModel.increaseTransitionCount();
       }, this.animationIntervalDuration*3 );
     },
     lineToBar: function(){
       console.log('ltr');
-      var ƒthis = this;
+      var ¥this = this;
       var svgContainer = d3.select('#svg-'+this.measureRepModel.cid);
       var beatHolder = d3.select('#beat-holder-'+this.measureRepModel.cid);
       var lineBeats = beatHolder.selectAll('.line-beat');
       setTimeout(function(){
-        ƒthis.removeInfiniteLine();
-        ƒthis.moveSecondaryLeft();
+        ¥this.removeInfiniteLine();
+        ¥this.moveSecondaryLeft();
       }, this.animationIntervalDuration );
       setTimeout(function(){
-        ƒthis.makeBeats({secondary:true, type:'bar'});
-        $('#beat-holder-'+ƒthis.measureRepModel.cid+' .line-beat').fadeOut(this.animationIntervalDuration);
-        $('#svg-'+ƒthis.measureRepModel.cid+' .line-path').fadeOut(this.animationIntervalDuration);
+        ¥this.makeBeats({secondary:true, type:'bar'});
+        $('#beat-holder-'+¥this.measureRepModel.cid+' .line-beat').fadeOut(this.animationIntervalDuration);
+        $('#svg-'+¥this.measureRepModel.cid+' .line-path').fadeOut(this.animationIntervalDuration);
       }, this.animationIntervalDuration*2 );
       setTimeout(function(){
-        // ƒthis.parentMeasureModel.increaseTransitionCount();
+        // ¥this.parentMeasureModel.increaseTransitionCount();
         dispatch.trigger('reRenderMeasure.event', this);
       }, this.animationIntervalDuration*3 );
     },
     lineToBead: function(options) {
       console.log('ltb');
-      var ƒthis = this;
+      var ¥this = this;
       var svgContainer = d3.select('#svg-'+this.measureRepModel.cid)
         .attr('width', this.linearDivWidth+this.circularMeasureR*2 )
         .attr('height', this.linearDivHeight+this.circularMeasureR*2 );
       var beatHolder = d3.select('#beat-holder-'+this.measureRepModel.cid);
       var lineBeats = beatHolder.selectAll('.line-beat');
       setTimeout(function(){
-        ƒthis.movePrimaryRight();
+        ¥this.movePrimaryRight();
       }, this.transitionDuration + this.animationIntervalDuration );
       setTimeout(function(){
-        ƒthis.removeInfiniteLine();
+        ¥this.removeInfiniteLine();
       }, this.transitionDuration + this.animationIntervalDuration*2 );
       setTimeout(function(){
-        ƒthis.makeBeats({secondary:true, type:'bead'});
+        ¥this.makeBeats({secondary:true, type:'bead'});
       }, this.transitionDuration + this.animationIntervalDuration*3 );
       setTimeout(function(){
         lineBeats.remove();
       }, this.transitionDuration + this.animationIntervalDuration*4 );
       setTimeout(function(){
-        dispatch.trigger('beatTransition.event', ƒthis);
-        for(i=0; i<ƒthis.transitionNumberOfPoints; i++){
-          ƒthis.actualMeasureLinePath.data([ƒthis.circleStates[ƒthis.transitionNumberOfPoints-1-i]])
+        dispatch.trigger('beatTransition.event', ¥this);
+        for(i=0; i<¥this.transitionNumberOfPoints; i++){
+          ¥this.actualMeasureLinePath.data([¥this.circleStates[¥this.transitionNumberOfPoints-1-i]])
             .transition()
-              .delay(ƒthis.transitionDuration*i)
-              .duration(ƒthis.transitionDuration)
+              .delay(¥this.transitionDuration*i)
+              .duration(¥this.transitionDuration)
               .ease('linear')
-              .attr('d', ƒthis.pathFunction)
+              .attr('d', ¥this.pathFunction)
               .attr('stroke', 'black')
               .attr('opacity', 1)
               .attr('class', 'circle')
@@ -803,13 +803,13 @@ define([
         }
       }, this.transitionDuration + this.animationIntervalDuration*5);
       setTimeout(function(){
-        // ƒthis.parentMeasureModel.increaseTransitionCount();
+        // ¥this.parentMeasureModel.increaseTransitionCount();
         dispatch.trigger('reRenderMeasure.event', this);
       }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration*6 );
     },
     lineToPie: function(){
       console.log('lti');
-      var ƒthis = this;
+      var ¥this = this;
       var svgContainer = d3.select('#svg-'+this.measureRepModel.cid)
         // Adjust the measureRep container to accomodate the line rep
         .attr('width', this.linearDivWidth+this.circularMeasureR*2 )
@@ -818,23 +818,23 @@ define([
       var lineBeats = beatHolder.selectAll('.line-beat');
       var lineMeasure = svgContainer.selectAll('.line-path');
       setTimeout(function(){
-        ƒthis.movePrimaryRight();
+        ¥this.movePrimaryRight();
       }, this.transitionDuration + this.animationIntervalDuration );
       setTimeout(function(){
-        ƒthis.removeInfiniteLine();
+        ¥this.removeInfiniteLine();
       }, this.transitionDuration + this.animationIntervalDuration*2 );
       setTimeout(function(){
-        ƒthis.makeBeats({secondary:true, type:'lineRolling'});
+        ¥this.makeBeats({secondary:true, type:'lineRolling'});
       }, this.transitionDuration + this.animationIntervalDuration*3 );
       setTimeout(function(){
         lineBeats.remove();
         lineMeasure.remove();
       }, this.transitionDuration + this.animationIntervalDuration*4 );
       setTimeout(function(){
-        dispatch.trigger('beatTransition.event', ƒthis);
+        dispatch.trigger('beatTransition.event', ¥this);
       }, this.transitionDuration + this.animationIntervalDuration*5);
       setTimeout(function(){
-        ƒthis.makeBeats({secondary:true, type:'pie'});
+        ¥this.makeBeats({secondary:true, type:'pie'});
       }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration*6 );
       setTimeout(function(){
         dispatch.trigger('reRenderMeasure.event', this);
@@ -842,55 +842,55 @@ define([
     },
     barToLine: function(){
       console.log('rtl');
-      var ƒthis = this;
+      var ¥this = this;
       var svgContainer = d3.select('#svg-'+this.measureRepModel.cid);
       var beatHolder = d3.select('#beat-holder-'+this.measureRepModel.cid);
       setTimeout(function(){
-        ƒthis.removeBarBox();
-        ƒthis.makeBeats();
-        $('#beat-holder-'+ƒthis.measureRepModel.cid+' .bar-beat').fadeOut(this.animationIntervalDuration);
+        ¥this.removeBarBox();
+        ¥this.makeBeats();
+        $('#beat-holder-'+¥this.measureRepModel.cid+' .bar-beat').fadeOut(this.animationIntervalDuration);
       }, this.animationIntervalDuration );
       setTimeout(function(){
-        ƒthis.addInfiniteLine();
+        ¥this.addInfiniteLine();
       }, this.animationIntervalDuration*2 );
       setTimeout(function(){
-        // ƒthis.parentMeasureModel.increaseTransitionCount();
+        // ¥this.parentMeasureModel.increaseTransitionCount();
         dispatch.trigger('reRenderMeasure.event', this);
       }, this.animationIntervalDuration*3 );      
     },
     barToBead: function(){
       console.log('rtb');
       console.log(this.actualMeasureLinePath);
-      var ƒthis = this;
+      var ¥this = this;
       var svgContainer = d3.select('#svg-'+this.measureRepModel.cid)
         .attr('width', this.linearDivWidth+this.circularMeasureR*2 )
         .attr('height', this.linearDivHeight+this.circularMeasureR*2 );
       var beatHolder = d3.select('#beat-holder-'+this.measureRepModel.cid);
       setTimeout(function(){
-        ƒthis.removeBarBox();
-        ƒthis.moveSecondaryLeft();
+        ¥this.removeBarBox();
+        ¥this.moveSecondaryLeft();
       }, this.animationIntervalDuration );
       setTimeout(function(){
-        $('#beat-holder-'+ƒthis.measureRepModel.cid+' .bar-beat').fadeOut(this.animationIntervalDuration);
-        ƒthis.makeBeats({secondary:true, type:'bead' });
+        $('#beat-holder-'+¥this.measureRepModel.cid+' .bar-beat').fadeOut(this.animationIntervalDuration);
+        ¥this.makeBeats({secondary:true, type:'bead' });
       }, this.animationIntervalDuration*2 );
       setTimeout(function(){
-        var actualMeasureLinePath = d3.select('#svg-'+ƒthis.measureRepModel.cid+' .hidden-line-path')
+        var actualMeasureLinePath = d3.select('#svg-'+¥this.measureRepModel.cid+' .hidden-line-path')
           .transition()
             .attr('stroke', 'black');
       }, this.animationIntervalDuration*3 );
       setTimeout(function(){
-        ƒthis.moveSecondaryRight('options');
+        ¥this.moveSecondaryRight('options');
       }, this.animationIntervalDuration*4 );
       setTimeout(function(){
-        dispatch.trigger('beatTransition.event', ƒthis);
-        for(i=0; i<ƒthis.transitionNumberOfPoints; i++){
-          ƒthis.actualMeasureLinePath.data([ƒthis.circleStates[ƒthis.transitionNumberOfPoints-1-i]])
+        dispatch.trigger('beatTransition.event', ¥this);
+        for(i=0; i<¥this.transitionNumberOfPoints; i++){
+          ¥this.actualMeasureLinePath.data([¥this.circleStates[¥this.transitionNumberOfPoints-1-i]])
             .transition()
-              .delay(ƒthis.transitionDuration*i)
-              .duration(ƒthis.transitionDuration)
+              .delay(¥this.transitionDuration*i)
+              .duration(¥this.transitionDuration)
               .ease('linear')
-              .attr('d', ƒthis.pathFunction)
+              .attr('d', ¥this.pathFunction)
               .attr('stroke', 'black')
               .attr('opacity', 1)
               .attr('class', 'circle')
@@ -898,13 +898,13 @@ define([
         }
       }, this.animationIntervalDuration*5 );      
       setTimeout(function(){
-        ƒthis.parentMeasureModel.increaseTransitionCount();
+        ¥this.parentMeasureModel.increaseTransitionCount();
         dispatch.trigger('reRenderMeasure.event', this);
       }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration*6 );      
     },
     pieToLine: function(){
       console.log('itl');
-      var ƒthis = this;
+      var ¥this = this;
       var svgContainer = d3.select('#svg-'+this.measureRepModel.cid)
         // Adjust the measureRep container to accomodate the line rep
         .attr('width', this.linearDivWidth+this.circularMeasureR*2 )
@@ -913,7 +913,7 @@ define([
       var pieBeats = beatHolder.selectAll('.pie-beat');
       var circlePath = svgContainer.selectAll('.circle-path');
       setTimeout(function(){
-        ƒthis.makeBeats({secondary:true, type:'lineUnrolling'});
+        ¥this.makeBeats({secondary:true, type:'lineUnrolling'});
         circlePath.remove();
       }, this.transitionDuration + this.animationIntervalDuration );
       setTimeout(function(){
@@ -922,13 +922,13 @@ define([
         pieBeats.remove();
       }, this.transitionDuration + this.animationIntervalDuration*3 );
       setTimeout(function(){
-        ƒthis.addInfiniteLine();
+        ¥this.addInfiniteLine();
       }, this.transitionDuration + this.animationIntervalDuration*4 );
       setTimeout(function(){
-        dispatch.trigger('beatTransition.event', ƒthis);
+        dispatch.trigger('beatTransition.event', ¥this);
       }, this.transitionDuration + this.animationIntervalDuration*5);
       setTimeout(function(){
-        ƒthis.makeBeats({secondary:true, type:'pie'});
+        ¥this.makeBeats({secondary:true, type:'pie'});
       }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration*6 );
       setTimeout(function(){
         dispatch.trigger('reRenderMeasure.event', this);
@@ -936,7 +936,7 @@ define([
     },
     render: function(){
       console.log('mR render');
-      var ƒthis = this;
+      var ¥this = this;
 
       //set the el for JQ-UI Drag
       // may not be needed
@@ -971,13 +971,13 @@ define([
           // ghost:true,
           // animate: true,
           start: function(e, ui) {
-            ƒthis.circleStart(e, ui);
+            ¥this.circleStart(e, ui);
           },
           resize: function( e, ui ) {
-            ƒthis.circleResizeCallback(e, ui);
+            ¥this.circleResizeCallback(e, ui);
           },
           stop: function(e, ui) {
-            ƒthis.circleStop(e, ui);
+            ¥this.circleStop(e, ui);
           }  
         });
 
@@ -1013,13 +1013,13 @@ define([
           minHeight: 180,
           grid:1,
           start: function(e, ui) {
-            ƒthis.linearStart(e, ui);
+            ¥this.linearStart(e, ui);
           },
           resize: function( e, ui ) {
-            ƒthis.linearResizeCallback(e, ui);
+            ¥this.linearResizeCallback(e, ui);
           },
           stop: function(e, ui) {
-            ƒthis.linearStop(e, ui);
+            ¥this.linearStop(e, ui);
           }  
         });
       } else if (this.model.get('representationType') == 'pie'){
@@ -1041,13 +1041,13 @@ define([
           aspectRatio: true,
           grid:1,
           start: function(e, ui) {
-            ƒthis.circleStart(e, ui);
+            ¥this.circleStart(e, ui);
           },
           resize: function( e, ui ) {
-            ƒthis.circleResizeCallback(e, ui);
+            ¥this.circleResizeCallback(e, ui);
           },
           stop: function(e, ui) {
-            ƒthis.circleStop(e, ui);
+            ¥this.circleStop(e, ui);
           }  
         });
       } else if (this.model.get('representationType') == 'audio'){
@@ -1077,14 +1077,14 @@ define([
             this.box = box;
         var actualMeasureLinePath = svgContainer
             .insert('path', ':first-child')
-            .data([ƒthis.circleStates[ƒthis.transitionNumberOfPoints-1]])
-            .attr('d', ƒthis.pathFunction)
+            .data([¥this.circleStates[¥this.transitionNumberOfPoints-1]])
+            .attr('d', ¥this.pathFunction)
             .attr('stroke', 'none')
             .attr('opacity', 1)
             .attr('class', 'line')
             .attr('class', 'hidden-line-path')
-            .attr('transform', 'scale('+ƒthis.originalScale+','+ƒthis.originalScale+')')
-            .attr('transform', 'translate('+(ƒthis.circularMeasureR*-2-10)+',0)');
+            .attr('transform', 'scale('+¥this.originalScale+','+¥this.originalScale+')')
+            .attr('transform', 'translate('+(¥this.circularMeasureR*-2-10)+',0)');
             this.actualMeasureLinePath = actualMeasureLinePath;
 
 
@@ -1095,13 +1095,13 @@ define([
           minHeight: 180,
           grid:1,
           start: function(e, ui) {
-            ƒthis.linearStart(e, ui);
+            ¥this.linearStart(e, ui);
           },
           resize: function( e, ui ) {
-            ƒthis.linearResizeCallback(e, ui);
+            ¥this.linearResizeCallback(e, ui);
           },
           stop: function(e, ui) {
-            ƒthis.linearStop(e, ui);
+            ¥this.linearStop(e, ui);
           }  
         });
       }

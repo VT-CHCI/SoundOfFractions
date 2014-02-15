@@ -69,24 +69,24 @@ define([
 
       if (this.hasGetUserMedia()) {
         console.log("we do have user media access.");
-        var ƒthis = this;
+        var ¥this = this;
         navigator.webkitGetUserMedia({audio: true}, function(stream) {
-          var microphone = ƒthis.context.createMediaStreamSource(stream);
-          ƒthis.microphone = microphone;
-          ƒthis.micGain = ƒthis.context.createGainNode();
-          ƒthis.micGain.gain = ƒthis.micLevel;
-          ƒthis.jsNode = ƒthis.context.createScriptProcessor(512, 2, 2);
-          ƒthis.microphone.connect(ƒthis.micGain);
-          ƒthis.microphone.connect(ƒthis.context.destination);   
-          ƒthis.micGain.connect(ƒthis.jsNode);
-          ƒthis.jsNode.connect(ƒthis.context.destination);
-          ƒthis.prevTime = new Date().getTime();
-          ƒthis.jsNode.onaudioprocess = (function() {
+          var microphone = ¥this.context.createMediaStreamSource(stream);
+          ¥this.microphone = microphone;
+          ¥this.micGain = ¥this.context.createGainNode();
+          ¥this.micGain.gain = ¥this.micLevel;
+          ¥this.jsNode = ¥this.context.createScriptProcessor(512, 2, 2);
+          ¥this.microphone.connect(¥this.micGain);
+          ¥this.microphone.connect(¥this.context.destination);   
+          ¥this.micGain.connect(¥this.jsNode);
+          ¥this.jsNode.connect(¥this.context.destination);
+          ¥this.prevTime = new Date().getTime();
+          ¥this.jsNode.onaudioprocess = (function() {
             return function(e) {
-              ƒthis.analyze(e);
+              ¥this.analyze(e);
             };
           }());
-          ƒthis.waveform = new Float32Array(ƒthis.jsNode.bufferSize);   
+          ¥this.waveform = new Float32Array(¥this.jsNode.bufferSize);   
         }, this.onFailSoHard);
       } 
       else {
@@ -150,27 +150,27 @@ define([
             window.clearInterval(window.waitIntervalID);
             this.waitCount = 0;
           }
-          var ƒthis = this;
+          var ¥this = this;
           window.waitIntervalID = window.setInterval(function() {
             // If the user stops beating for *n* times, we stop listening to the tapping automatically
-            // *n* is represented by ƒthis.waitCount
-            console.warn('waitCount: ' + ƒthis.waitCount);
-            if(ƒthis.waitCount == 2) {
-              ƒthis.isWaiting = false;
-              ƒthis.waitCount = 0;
+            // *n* is represented by ¥this.waitCount
+            console.warn('waitCount: ' + ¥this.waitCount);
+            if(¥this.waitCount == 2) {
+              ¥this.isWaiting = false;
+              ¥this.waitCount = 0;
 
-              ƒthis.mainCounter = 0;
-              ƒthis.isRecording = true;
-              for(var i = 0; i < ƒthis.signature; i++) {
-                ƒthis.finalMeasureBeatTimeIntervals50.push(ƒthis.roundTo50(ƒthis.timeIntervals[i]));
-                ƒthis.finalMeasureBeatTimeIntervals100.push(ƒthis.roundTo100(ƒthis.timeIntervals[i]));
-                ƒthis.finalMeasureBeatTimeIntervals150.push(ƒthis.roundTo150(ƒthis.timeIntervals[i]));
-                ƒthis.finalMeasureBeatTimeIntervals200.push(ƒthis.roundTo200(ƒthis.timeIntervals[i]));
-                ƒthis.finalMeasureBeatTimeIntervals250.push(ƒthis.roundTo250(ƒthis.timeIntervals[i]));
-                ƒthis.beatArray[i] = 0;
+              ¥this.mainCounter = 0;
+              ¥this.isRecording = true;
+              for(var i = 0; i < ¥this.signature; i++) {
+                ¥this.finalMeasureBeatTimeIntervals50.push(¥this.roundTo50(¥this.timeIntervals[i]));
+                ¥this.finalMeasureBeatTimeIntervals100.push(¥this.roundTo100(¥this.timeIntervals[i]));
+                ¥this.finalMeasureBeatTimeIntervals150.push(¥this.roundTo150(¥this.timeIntervals[i]));
+                ¥this.finalMeasureBeatTimeIntervals200.push(¥this.roundTo200(¥this.timeIntervals[i]));
+                ¥this.finalMeasureBeatTimeIntervals250.push(¥this.roundTo250(¥this.timeIntervals[i]));
+                ¥this.beatArray[i] = 0;
               }
-              // ƒthis.finalMeasureBeatTimeIntervals[ƒthis.finalMeasureBeatTimeIntervals.length-1] = ƒthis.roundTo100(ƒthis.lastTimeDelta);
-              console.warn(ƒthis.finalMeasureBeatTimeIntervals100);
+              // ¥this.finalMeasureBeatTimeIntervals[¥this.finalMeasureBeatTimeIntervals.length-1] = ¥this.roundTo100(¥this.lastTimeDelta);
+              console.warn(¥this.finalMeasureBeatTimeIntervals100);
               // [0, 800, 200, 1000, 800, 700] 
               var mdc = function(o){
                   if(!o.length)
@@ -182,7 +182,7 @@ define([
 
               var diffBeats = [];
               //var beats = [ 0, 800, 200, 1000, 800, 800 ];
-              var beats = ƒthis.finalMeasureBeatTimeIntervals100;
+              var beats = ¥this.finalMeasureBeatTimeIntervals100;
 
               //Greatest Common Divisor of the beats
               var gcd = mdc(beats);
@@ -200,23 +200,23 @@ define([
               }
               diffBeats.splice(16);
               console.log(diffBeats);
-              dispatch.trigger('signatureChange.event', ƒthis.signature);
+              dispatch.trigger('signatureChange.event', ¥this.signature);
               //show the BPM
-              var bpm = 1000 / ƒthis.average * 60;
+              var bpm = 1000 / ¥this.average * 60;
               dispatch.trigger('newInstrumentTempoRecorded', {instrument:'hh', beatPattern:diffBeats, bpm:bpm});
 
-              ƒthis.isTapping = false;
-              ƒthis.countIn = 1;
-              ƒthis.set('baseTempo', bpm);
-              // ƒthis.set('tempo', bpm);
-              ƒthis.set('signature', ƒthis.signature);
+              ¥this.isTapping = false;
+              ¥this.countIn = 1;
+              ¥this.set('baseTempo', bpm);
+              // ¥this.set('tempo', bpm);
+              ¥this.set('signature', ¥this.signature);
               // $('#tap-tempo').click();
               $('#tempo-slider-input').val(1);
               // dispatch.trigger('tempoChange.event', bpm);
               dispatch.trigger('stopRecording.event');
               window.clearInterval(waitIntervalID);
             }
-            ƒthis.waitCount++;
+            ¥this.waitCount++;
           }, this.average);
           this.countIn++;
         }
@@ -258,24 +258,24 @@ define([
 
       if (this.hasGetUserMedia()) {
         console.log("we do have user media access.");
-        var ƒthis = this;
+        var ¥this = this;
         navigator.webkitGetUserMedia({audio: true}, function(stream) {
-          var microphone = ƒthis.context.createMediaStreamSource(stream);
-          ƒthis.microphone = microphone;
-          ƒthis.micGain = ƒthis.context.createGainNode();
-          ƒthis.micGain.gain = ƒthis.micLevel;
-          ƒthis.jsNode = ƒthis.context.createScriptProcessor(512, 2, 2);
-          ƒthis.microphone.connect(ƒthis.micGain);
-          ƒthis.microphone.connect(ƒthis.context.destination);   
-          ƒthis.micGain.connect(ƒthis.jsNode);
-          ƒthis.jsNode.connect(ƒthis.context.destination);
-          ƒthis.prevTime = new Date().getTime();
-          ƒthis.jsNode.onaudioprocess = (function() {
+          var microphone = ¥this.context.createMediaStreamSource(stream);
+          ¥this.microphone = microphone;
+          ¥this.micGain = ¥this.context.createGainNode();
+          ¥this.micGain.gain = ¥this.micLevel;
+          ¥this.jsNode = ¥this.context.createScriptProcessor(512, 2, 2);
+          ¥this.microphone.connect(¥this.micGain);
+          ¥this.microphone.connect(¥this.context.destination);   
+          ¥this.micGain.connect(¥this.jsNode);
+          ¥this.jsNode.connect(¥this.context.destination);
+          ¥this.prevTime = new Date().getTime();
+          ¥this.jsNode.onaudioprocess = (function() {
             return function(e) {
-              ƒthis.analyze(e);
+              ¥this.analyze(e);
             };
           }());
-          ƒthis.waveform = new Float32Array(ƒthis.jsNode.bufferSize);   
+          ¥this.waveform = new Float32Array(¥this.jsNode.bufferSize);   
         }, this.onFailSoHard);
       } 
       else {
@@ -301,24 +301,24 @@ define([
 
       if (this.hasGetUserMedia()) {
         console.log("we do have user media access.");
-        var ƒthis = this;
+        var ¥this = this;
         navigator.webkitGetUserMedia({audio: true}, function(stream) {
-          var microphone = ƒthis.context.createMediaStreamSource(stream);
-          ƒthis.microphone = microphone;
-          ƒthis.micGain = ƒthis.context.createGainNode();
-          ƒthis.micGain.gain = ƒthis.micLevel;
-          ƒthis.jsNode = ƒthis.context.createScriptProcessor(512, 2, 2);
-          ƒthis.microphone.connect(ƒthis.micGain);
-          ƒthis.microphone.connect(ƒthis.context.destination);
-          ƒthis.micGain.connect(ƒthis.jsNode);
-          ƒthis.jsNode.connect(ƒthis.context.destination);
-          ƒthis.prevTime = new Date().getTime();
-          ƒthis.jsNode.onaudioprocess = (function() {
+          var microphone = ¥this.context.createMediaStreamSource(stream);
+          ¥this.microphone = microphone;
+          ¥this.micGain = ¥this.context.createGainNode();
+          ¥this.micGain.gain = ¥this.micLevel;
+          ¥this.jsNode = ¥this.context.createScriptProcessor(512, 2, 2);
+          ¥this.microphone.connect(¥this.micGain);
+          ¥this.microphone.connect(¥this.context.destination);
+          ¥this.micGain.connect(¥this.jsNode);
+          ¥this.jsNode.connect(¥this.context.destination);
+          ¥this.prevTime = new Date().getTime();
+          ¥this.jsNode.onaudioprocess = (function() {
             return function(e) {
-              ƒthis.analyze(e);
+              ¥this.analyze(e);
             };
           }());
-          ƒthis.waveform = new Float32Array(ƒthis.jsNode.bufferSize);   
+          ¥this.waveform = new Float32Array(¥this.jsNode.bufferSize);   
         }, this.onFailSoHard);
       } 
       else {
