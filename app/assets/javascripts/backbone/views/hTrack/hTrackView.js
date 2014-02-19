@@ -85,32 +85,32 @@ define([
     */
     render: function(options){
       if(options) {
-        var ƒthis = this;
+        var ¥this = this;
         // for each of the measures (V1 should only have 1 Measure)
         _.each(this.hTrack.get('measures').models, function(measure, index) {
           new MeasureView({
-            collectionOfMeasures: ƒthis.hTrack.get('measures'),
-            parent: ƒthis.hTrack,
-            parentEl: '#hTrack-'+ƒthis.hTrack.cid,
-            model: ƒthis.hTrack.get('measures').models[index],
+            collectionOfMeasures: ¥this.hTrack.get('measures'),
+            parent: ¥this.hTrack,
+            parentEl: '#hTrack-'+¥this.hTrack.cid,
+            model: ¥this.hTrack.get('measures').models[index],
             currentMeasureRepresentation: options.representation
           });
         });
       } else {
-        var ƒthis = this;
+        var ¥this = this;
         // for each of the measures (V1 should only have 1 Measure)
         _.each(this.hTrack.get('measures').models, function(measure, index) {
           new MeasureView({
-            collectionOfMeasures: ƒthis.hTrack.get('measures'),
+            collectionOfMeasures: ¥this.hTrack.get('measures'),
             measureRepresentations: measure.get('measureRepresentations'),
-            parent: ƒthis.hTrack,
-            parentEl: '#measure-container-'+ƒthis.hTrack.cid,
-            hTrackEl: '#hTrack-'+ƒthis.hTrack.cid,
-            model: ƒthis.hTrack.get('measures').models[index],
+            parent: ¥this.hTrack,
+            parentEl: '#measure-container-'+¥this.hTrack.cid,
+            hTrackEl: '#hTrack-'+¥this.hTrack.cid,
+            model: ¥this.hTrack.get('measures').models[index],
             measureModel: measure,
-            defaultMeasureRepresentation: ƒthis.defaultMeasureRepresentation,
+            defaultMeasureRepresentation: ¥this.defaultMeasureRepresentation,
             measureIndex: index,
-            measureCount: ƒthis.hTrack.get('measures').models.length
+            measureCount: ¥this.hTrack.get('measures').models.length
           });
         });
 
@@ -351,7 +351,7 @@ console.error('Tempo:', tempo, '|', 'Measures:', measures.length, '|', selectedB
 
     },
     loadAudio: function(context, url, bufferList){
-      var ƒthis = this;
+      var ¥this = this;
       console.log("Loading...", url);
       // Load buffer asynchronously
       var request = new XMLHttpRequest();
@@ -368,7 +368,7 @@ console.error('Tempo:', tempo, '|', 'Measures:', measures.length, '|', selectedB
               return;
             }
             //place the decoded buffer into the bufferList
-            ƒthis.bufferList = buffer;
+            ¥this.bufferList = buffer;
           },
           function(error) {
             console.error('decodeAudioData error', error);

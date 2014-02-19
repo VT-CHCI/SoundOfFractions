@@ -38,8 +38,7 @@ define([
         revert: 'invalid',
         helper: 'clone',
         drag: function( event, ui ) {
-          // console.log(ui.position.left);
-          // console.log(ui.position.top);
+          
         }
       });
 
