@@ -1,0 +1,20 @@
+<!-- You can put straight HTML in here -->
+<div class="btn span12 play"><i class="icon-play icon-2x"></i></div>
+
+<!-- Or you can put Dynamic content in here -->
+<!-- Anytime you see '<%= something %>', you will need to have passed in the variable 'something' 
+     to the template when you declare an underscore template
+     var compiledTemplate = _.template( HTMLTemplateToFill, ParametersPassingIn );
+-->
+
+<div id="hTrack-<%= hTrack.cid %>" class="hTrack well container-fluid" data-state="<%= type %>">
+  <div class="htrack-info pull-left">
+    <div id="delete-hTrack-<%= hTrack.cid %>" class="delete-instrument"></div>
+    <!-- If you need access back out to Rails land, use App.assests.foobar -->
+    <img src="<%= App.assets.path(hTrack.get('img'))%>" class="img-circle hTrack-image">
+    <div class="control unmute"><i class="icon-volume-up"></i></div>
+    <div id="instrument-selector-<%= hTrack.cid %>" class="change-instrument"></div>
+  </div>
+  <div id="measure-container-<%= hTrack.cid %>" class="measure-container pull-left"></div>
+  <div class="addMeasureRep pull-right"><i class="icon-plus"></i></div>
+</div>
