@@ -31,7 +31,7 @@ define([
     },
     addBeatToBeatsCollection: function(newBeat, newIndex){
       console.log('gfret');
-      // ¥this.parentMeasureModel.get('beats').add(new BeatModel({selected:true}), {at: newIndex})
+      // µthis.parentMeasureModel.get('beats').add(new BeatModel({selected:true}), {at: newIndex})
       this.get('beats').add(newBeat, {at:newIndex});
       dispatch.trigger('signatureChange.event', this);
     }
