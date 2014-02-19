@@ -64,10 +64,12 @@ define([
       // this.manuallyCreatedRepresentationModel = new RepresentationModel({representationType:'line'});
       // this.manuallyCreatedMeasureRepresentationCollection.add(this.manuallyCreatedRepresentationModel);
 
+      // Create a Measures Collection, and add the beats and representations
       this.manuallyCreatedMeasuresCollection = new MeasuresCollection;
       this.manuallyCreatedMeasuresCollection.add({
         beats: this.manuallyCreatedMeasureBeatsCollection, measureRepresentations: this.manuallyCreatedMeasureRepresentationCollection});
 
+      // Add an instrument to the stage
       this.stage = StageCollection.add({
         label: 'Snare',
         type: 'sn',
@@ -81,12 +83,15 @@ define([
         tempo: 120 //bpm
       });
 
+      // Dispatch handlers
       dispatch.on('instrumentAddedToCompositionArea.event', this.addInstrument, this);
       dispatch.on('instrumentDeletedFromCompositionArea.event', this.deleteInstrument, this);
       dispatch.on('newInstrumentTempoRecorded', this.addInstrument, this);
+
       StateModel.set('stage', this.stage);
     },
 
+    // This is for building a song from the database, after a user has saved a song
     build: function(song) {
       console.log('starting building...');
       console.log('song');
@@ -178,6 +183,7 @@ define([
           counter++;
         }, this);
 
+        // After all the instruments are rendered
         // Render the RemainingInstrumentGeneratorView
         var instrumentSelectorView = RemainingInstrumentGeneratorView;
 
@@ -188,10 +194,9 @@ define([
     // addInstrumentWithPattern
     addInstrument: function(options) {
       var tempo;
+      //this is creating the new instrument htrack with a tempo from a recording
       if (options.beatPattern){
-        //this is creating the new instrument htrack.
-
-        // this creates 1 measure, and addes beats and the representations to itself
+        // this creates 1 measure, and adds beats and the representations to itself
         this.manuallyCreatedMeasureBeatsCollection = new BeatsCollection;
         //for each beat - also change signature below
         for (var i = 0; i < options.beatPattern.length; i++) {
@@ -235,7 +240,6 @@ define([
         label: this.unusedInstrumentsModel.getDefault(options.instrument, 'label'),
         type: this.unusedInstrumentsModel.getDefault(options.instrument, 'type'),
         img: this.unusedInstrumentsModel.getDefault(options.instrument, 'image'),
-        // mute: false,
         gain: this.unusedInstrumentsModel.getDefault(options.instrument, 'gain'),
         sample: this.unusedInstrumentsModel.getDefault(options.instrument, 'sample'),
         measures: this.manuallyCreatedMeasuresCollection,
@@ -249,6 +253,7 @@ define([
       this.render(newInstrumentToAdd);
     },
 
+    // We want to delete an instrument form the view, as well as from the instrument generator
     deleteInstrument: function(instrument) {
       console.warn('in StageView deleteInstrument');
       console.log('deleting : ' + instrument.instrument);

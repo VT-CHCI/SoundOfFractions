@@ -22,10 +22,10 @@ define([
     el: $('.hTrack'),
 
     //registering two handlers for backbone's click events.
-    //the first is for toggling the hTrack's muted state.
-    //the second is for setting this hTrack in focus (or selected).
     events : {
+      // for toggling the hTrack's muted state.
       'click .control' : 'toggleMuteDisplay',
+      // for setting this hTrack in focus (or selected).
       'click .addMeasureRep' : 'addRepresentationToHTrack'
     },
 
@@ -38,6 +38,8 @@ define([
       individual muting of this hTrack in the web audio API.
     */
     initialize: function(options){
+      // Many variables get passed in.  We attach those variable with this function, so for each variable:
+      // this.something = options.something; 
       if (options) {
         for (var key in options) {
           this[key] = options[key];
@@ -48,18 +50,14 @@ define([
       // allow the letter a to click the first plus sign
       _.bindAll(this, 'manuallPress');
       $(document).bind('keypress', this.manuallPress);
-      // this.hTrack.representations = new RepresentationsCollection;
-      // this.animationIntervalID = null;
-      // this.hTrack.set('currentBeat',0);
 
       dispatch.on('instrumentChanged.event', this.changeInstrument, this);
       dispatch.on('conductor.event', this.togglePlay, this);
-      // dispatch.on('togglePlay.event', this.togglePlay, this);
 
       //creating two arrays to hold our gain nodes.
-      //the first is for sustained-note sounds,
-      //the second is for the muting of individual 'hTrack's.
+      // for sustained-note sounds,
       this.gainNode = new Array();
+      // for the muting of individual 'hTrack's.
       this.muteGainNodeList = new Array();
       this.context = new webkitAudioContext();
       this.bufferList = new Array();
@@ -74,7 +72,8 @@ define([
         this.gainNode.gain.value = .2;
       }
 
-      this.intervalID = null; //time is a function of measures and tempo (4 * 60/tempo * measures)
+      //time is a function of measures and tempo (4 * 60/tempo * measures)
+      this.intervalID = null; 
 
       this.render();
     },
@@ -84,6 +83,7 @@ define([
       a new MeasureView which gets rendered instead.
     */
     render: function(options){
+      // If we are loading a song
       if(options) {
         var µthis = this;
         // for each of the measures (V1 should only have 1 Measure)
@@ -96,6 +96,7 @@ define([
             currentMeasureRepresentation: options.representation
           });
         });
+      // For a song from scratch
       } else {
         var µthis = this;
         // for each of the measures (V1 should only have 1 Measure)
@@ -114,6 +115,7 @@ define([
           });
         });
 
+        // Create an instrument selector
         new InstrumentDropDownView({
           unusedInstrumentsModel: this.unusedInstrumentsModel,
           collection: this.hTrack.get('measures'),
@@ -123,6 +125,7 @@ define([
           unusedInstrumentsModel: this.unusedInstrumentsModel
         });
 
+        // Create the delete view
         new DeleteInstrumentView({
           collection: this.hTrack.get('measures'),
           parent: this.hTrack,
@@ -131,7 +134,10 @@ define([
         });
       }
 
+      // Bind the Webkit Audio stuff to where it needs to go
       this.loadAudio(this.context, this.hTrack.get('sample'), this.bufferList );
+
+      // If we want to drag it
       // $(this.el).draggable({ axis: "y", containment: "#middle-left-column" });
       
       return this;
@@ -150,35 +156,45 @@ define([
     */
     toggleMuteDisplay: function(){
       this.hTrack.set('active', !this.hTrack.get('active'));
+      // it is NOT muted
       if (this.gainNode.gain.value == 1) {
+        // Mute it
         this.gainNode.gain.value = 0;
+        // Show it
         $(this.el).find('.control').removeClass('unmute').addClass('mute');
         $(this.el+ ' .control').html('<i class="icon-volume-off"></i>');
+        // Log it
         log.sendLog([[2, "hTrack muted: "+"hTrack"+this.hTrack.cid]]);
-
+      // it is muted
       } else {
+        // Unmute it
         this.gainNode.gain.value = 1;
+        // Show it
         $(this.el).find('.control').removeClass('mute').addClass('unmute');
         $(this.el+ ' .control').html('<i class="icon-volume-up"></i>');
-
+        // log it
         log.sendLog([[2, "hTrack unmuted: "+"hTrack"+this.hTrack.cid]]);
       }
     },
+    // To add a representation to a measure, we first add the class '.cs' to the htrack to know which measure of which HTrack to add it to
     addRepresentationToHTrack: function(e) {
       e.srcElement.parentElement.classList.add('cs');
       console.log('clicked the plus sign');
     },
+    // Shortcuts a for 'add'
     manuallPress: function(e) {
       // a = 97
       if (e.keyCode == 97) {
         $('.icon-plus')[1].parentElement.classList.add('cs');
       } 
     },
+    // When the conductor tells us to stop or play
     togglePlay: function(maxDuration){
       var tempo = this.hTrack.get('tempo');
       var measures = this.hTrack.get('measures');
       var selectedBeats = 0;
-        // debugger;
+
+      // We calculate the longest instrument time length, based on tempo and number of beats, and use this to calculate the loop parameter maxDuration
       _.each(measures.models, function(measure) {
           _.each(measure.get('beats').models, function(beat) {
             if (beat.get('selected')) {
@@ -192,16 +208,14 @@ define([
       //we use the maximum number of measures, and the global tempo
       //to determine the duration (in ms) of one loop of the sequencer.
       var duration = currentInstrumentDuration;
-      // if (!ConductorModel.get('isPlaying')) {
-      if (this.intervalID) {
-        //if we are already playing, we stop and trigger the
-        //animation to stop.
-        console.log('togglePlay: off');
 
+      //if we are already playing
+      if (this.intervalID) {
+        // we stop and trigger the animation to stop.
+        console.log('togglePlay: off');
         // Moved this to the conductor
         // This stops the animations 
         dispatch.trigger('toggleAnimation.event', 'off');
-
         //This stops the Audio
         clearInterval(this.intervalID);
         this.intervalID = null;
@@ -209,17 +223,17 @@ define([
         // ConductorModel.clearAllIntervals();
         //we set the masterGainNode to zero, which mutes all output.
         this.masterGainNode.gain.value = 0;
+      // if we are not playing
       } else {
-        //if we are not playing, we start the playback of audio
+        // we start the playback of audio
         //and trigger an event to start the animation.
         console.log('togglePlay: on');
-console.error('Tempo:', tempo, '|', 'Measures:', measures.length, '|', selectedBeats, 'beats selected of ', beats, '|', 'instrument duration:', currentInstrumentDuration);
+        console.warn('Tempo:', tempo, '|', 'Measures:', measures.length, '|', selectedBeats, 'beats selected of ', beats, '|', 'instrument duration:', currentInstrumentDuration);
 
-        //we call playLoop() with our calculated duration to initialize
-        //and play the audio.
-        // this.playLoop();
+        // We call the beginAnimation for the playLoop && the dispatch trigger
         this.beginAnimation();
-//TODO POtentially put plaLoop and beginAnimation up here until the setInterval starts
+//TODO Potentially put playLoop and beginAnimation up here until the setInterval starts
+        // after each loop duration of maxDuration, play itself again
         this.intervalID = setInterval((function(self) {
         // ConductorModel.addInterval( setInterval((function(self) {
           return function() {
@@ -233,10 +247,16 @@ console.error('Tempo:', tempo, '|', 'Measures:', measures.length, '|', selectedB
         this.masterGainNode.gain.value = 1;
       }
     },
+
     beginAnimation: function(){
       this.playLoop();
       dispatch.trigger('toggleAnimation.event', 'on');
     },
+
+    // WARNING!!!!
+    // BELOW THIS INVOLVES THE SUNCHRONIZATION, TIMING, AND PLAYING OF AUDIO AND ANIMATIONS
+    // CAREFUL!!!!
+
     /*
       This function generates an array
       of time durations that determine when the playback
@@ -276,7 +296,8 @@ console.error('Tempo:', tempo, '|', 'Measures:', measures.length, '|', selectedB
     playSound: function(beatTimes){
       // console.log('Playing sound!');
 
-      var startTime = this.context.currentTime; //this is important (check docs for explanation)
+      //this is important (check docs for explanation)
+      var startTime = this.context.currentTime; 
 
       _.each(beatTimes, function(beatTime) { // beats or deadspace start times
         //we call play on each hTrack, passing in a lot of information.
@@ -291,7 +312,8 @@ console.error('Tempo:', tempo, '|', 'Measures:', measures.length, '|', selectedB
           this,
           this.context,
           this.bufferList,
-          startTime+beatTime, //startTime is time you clicked 'play' | beatTime is the elapsed time to from the start time
+          //startTime is time you clicked 'play' | beatTime is the elapsed time to from the startTime
+          startTime+beatTime, 
           this.masterGainNode,
           this.gainNode,
           this.muteGainNodeList,
@@ -323,7 +345,6 @@ console.error('Tempo:', tempo, '|', 'Measures:', measures.length, '|', selectedB
            the final result looks like:
 
            source->specGainNode->muteGainNode->masterGainNode->your ears
-
         */
         source.connect(specGainNode);
         specGainNode.connect(muteGainNode);
@@ -331,10 +352,9 @@ console.error('Tempo:', tempo, '|', 'Measures:', measures.length, '|', selectedB
         gainNode.connect(context.destination);
         // specGainNode.gain.value = 1;
 
-
         //note on causes the playback to start.
         source.noteOn(time, 0, beatDuration);
-  // console.error(time, beatDuration, hTrackTempo);
+        // console.error(time, beatDuration, hTrackTempo);
 
         //these calls are used to generate an envelope that
         //makes sustained instruments play for only the beatDuration of one beat.
@@ -350,6 +370,7 @@ console.error('Tempo:', tempo, '|', 'Measures:', measures.length, '|', selectedB
       }
 
     },
+    // We can load the audio using the Webkit audio
     loadAudio: function(context, url, bufferList){
       var µthis = this;
       console.log("Loading...", url);
@@ -381,7 +402,6 @@ console.error('Tempo:', tempo, '|', 'Measures:', measures.length, '|', selectedB
       }
 
       request.send();
-      console.log()
     }
 
   });
