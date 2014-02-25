@@ -702,8 +702,10 @@ define([
       var beadBeats = beatHolder.selectAll('.bead-beat');
       var circlePath = $('#svg-'+this.measureRepModel.cid + ' .circle-path');
 
-      // Unroll
+      // beat transition Unroll
+      console.warn(µthis);
       dispatch.trigger('beatTransition.event', µthis);
+      // measure transition
       for(i=0; i<this.transitionNumberOfPoints; i++){
         this.circlePath.data([this.circleStates[i]])
           .transition()

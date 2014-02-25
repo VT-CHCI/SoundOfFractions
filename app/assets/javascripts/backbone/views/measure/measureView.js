@@ -317,7 +317,7 @@ define([
         this.newMeasureRepViews.push(new MeasureRepView(measureRepViewParameters));
       }, this);
       // All of the views together
-      console.log(this.newMeasureRepViews);
+      console.warn(this.newMeasureRepViews);
       return this;
     },
 
