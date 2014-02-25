@@ -1,7 +1,7 @@
 # This removes the extra logging in rails that is not advantageous (assets from the asset pipeline)
   
 if Rails.env.development?
-  Rails.application.assets.logger = Logger.new('/dev/null')
+  Rails.application.assets.logger = Logger.new('C:\Users\Daniel\Documents\Dev\SoundOfFractions\log\development.log')
   Rails::Rack::Logger.class_eval do
     def call_with_quiet_assets(env)
       previous_level = Rails.logger.level

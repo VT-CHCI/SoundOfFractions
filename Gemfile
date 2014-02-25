@@ -7,7 +7,7 @@ group :development, :test do
   gem 'sqlite3'
   gem 'jasmine'
   # For linux support
-  gem 'therubyracer'
+  # gem 'therubyracer'
 end
 
 group :production do

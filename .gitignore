@@ -2,3 +2,4 @@
 *.sublime-workspace
 tmp/
 vendor/
+log/
