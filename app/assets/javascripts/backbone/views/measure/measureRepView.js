@@ -858,7 +858,7 @@ define([
       }, this.transitionDuration + this.animationIntervalDuration*4 );
       // send the beat transition event 
       setTimeout(function(){
-        dispatch.trigger('beatTransition.event', µthis);
+        dispatch.trigger('secondaryBeatTransition.event', µthis);
       }, this.transitionDuration + this.animationIntervalDuration*5);
       // make the secondart pie beats
       setTimeout(function(){
@@ -1145,19 +1145,18 @@ define([
             .attr('transform', 'scale('+this.originalScale+','+this.originalScale+')');
             this.box = box;
 
-        // I dont think this is needed, even for transitions
-        // var actualMeasureLinePath = svgContainer
-        //     .insert('path', ':first-child')
-        //     .data([µthis.circleStates[µthis.transitionNumberOfPoints-1]])
-        //     .attr('d', µthis.pathFunction)
-        //     .attr('stroke', 'none')
-        //     .attr('opacity', 1)
-        //     .attr('class', 'line')
-        //     .attr('class', 'hidden-line-path')
-        //     .attr('transform', 'scale('+µthis.originalScale+','+µthis.originalScale+')')
-        //     .attr('transform', 'translate('+(µthis.circularMeasureR*-2-10)+',0)');
-        // // Attach it to the view
-        // this.actualMeasureLinePath = actualMeasureLinePath;
+        var actualMeasureLinePath = svgContainer
+            .insert('path', ':first-child')
+            .data([µthis.circleStates[µthis.transitionNumberOfPoints-1]])
+            .attr('d', µthis.pathFunction)
+            .attr('stroke', 'none')
+            .attr('opacity', 1)
+            .attr('class', 'line')
+            .attr('class', 'hidden-line-path')
+            .attr('transform', 'scale('+µthis.originalScale+','+µthis.originalScale+')')
+            .attr('transform', 'translate('+(µthis.circularMeasureR*-2-10)+',0)');
+        // Attach it to the view
+        this.actualMeasureLinePath = actualMeasureLinePath;
 
         // JQ-UI resizable
         $(this.el).resizable({ 
