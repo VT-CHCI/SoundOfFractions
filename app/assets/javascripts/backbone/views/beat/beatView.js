@@ -18,7 +18,7 @@ define([
        'click' : 'toggleModel'
      },
     //The constructor takes options because these views are created
-    //by measuresView objects.
+    //by measureRepsView objects.
     initialize: function(options){
       if (options) {
         for (var key in options) {
@@ -27,7 +27,7 @@ define([
         // If it is a secondary beat, ie during transitions
         if (options.secondary){
           this.secondaryClasses = 'secondaryBeat ';
-          dispatch.on('beatTransition.event', this.transition, this);
+          dispatch.on('secondaryBeatTransition.event', this.transition, this);
         } else {
           this.secondaryClasses = '';
         }

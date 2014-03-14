@@ -56,7 +56,6 @@ define([
       var newRepType = $(e.target).closest('.representation').attr('data-state');
       // find the plus sign with the class '.cs' and return the id of its hTrack
       var csLength = $('.cs').length;
-      var trLength = $('.transition-rep').length;
       var oldRep = $('.transition-rep').closest('.measureRep').attr('data-representation');
       var hTrackID = $('.cs').closest('.hTrack').attr('id');
       var cid = hTrackID.slice(7);
