@@ -862,7 +862,6 @@ define([
       }, this.transitionDuration + this.animationIntervalDuration*4 );
       // // send the beat transition event 
       setTimeout(function(){
-        console.warn(µthis);
         dispatch.trigger('secondaryBeatTransition.event', µthis);
       }, this.transitionDuration + this.animationIntervalDuration*5);
       // // make the secondart pie beats

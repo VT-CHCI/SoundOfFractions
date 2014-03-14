@@ -1,3 +1,4 @@
+
 .lineRolling {
   fill: none;
 }
@@ -14,6 +15,11 @@ svg {
 .measure .measureRep:first-of-type .remove-measure-rep{
   display: none;
 }
+
+.measure .measureRep.measure-audio:not(:first-of-type) .record-button{
+ display: none;
+}
+
 .hTrack .measure-container .measure:first-of-type .remove-measure{
   display: none;
 }
@@ -45,7 +51,7 @@ svg {
 }
 
 .measureRep {
-  /*height: 200px;*/
+  height: 200px;
   border: solid 1px grey;
   border-radius: 3px;
   display: inline-block;
