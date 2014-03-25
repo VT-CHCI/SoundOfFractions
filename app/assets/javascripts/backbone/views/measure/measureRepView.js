@@ -118,7 +118,8 @@ define([
               this.measurePassingToBeatViewParameters.currentRepresentationType = 'lineRolling';
             }
             if (options.type == 'lineUnrolling') {
-              this.measurePassingToBeatViewParameters.currentRepresentationType = 'lineUnrolling';
+/*              debugger;
+*/              this.measurePassingToBeatViewParameters.currentRepresentationType = 'lineUnrolling';
             }
           }
         // Normal beat params
@@ -752,13 +753,10 @@ define([
       // remove the bead beats
       setTimeout(function(){
         beadBeats.remove();
-      }, this.animationIntervalDuration*2 );
       // re-render
-      setTimeout(function(){
         // this sets the transition count on the model itself, which the beatView is listening to
         dispatch.trigger('reRenderMeasure.event', this);
-        // µthis.parentMeasureModel.increaseTransitionCount();
-      }, this.animationIntervalDuration*3 );
+      }, this.animationIntervalDuration*2 );
     },
     lineToBar: function(){
       console.log('ltr');
@@ -982,6 +980,43 @@ define([
       setTimeout(function(){
         dispatch.trigger('reRenderMeasure.event', this);
       }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration*7 );
+    },
+    
+    pieToBead: function(){
+      console.log('itb');
+      var µthis = this;
+      var svgContainer = d3.select('#svg-'+this.measureRepModel.cid);
+      var beatHolder = d3.select('#beat-holder-'+this.measureRepModel.cid);
+      var pieBeats = beatHolder.selectAll('.pie-beat');
+      var circlePath = $('#svg-'+this.measureRepModel.cid + ' .circle-path');
+
+      // Make the secondary bead beats and fade the pie beats
+      setTimeout(function(){
+        µthis.makeBeats({secondary:true, type:'lineUnrolling'});
+        $('.pie-beat').fadeOut(this.animationIntervalDuration);
+        circlePath.fadeOut(this.animationIntervalDuration);
+
+        }, this.animationIntervalDuration);
+      
+      setTimeout(function(){
+        pieBeats.remove();
+        $('.lineUnrolling').fadeOut(this.animationIntervalDuration);
+        //µthis.makeBeats({secondary:true, type:'bead'});
+      }, this.animationIntervalDuration*2 );      
+
+      setTimeout(function(){
+        circlePath.fadeIn(this.animationIntervalDuration);
+
+      }, this.animationIntervalDuration*3 );
+      // re-render
+        // this sets the transition count on the model itself, which the beatView is listening to
+/*      setTimeout(function(){
+        var secondaryBeatHolder = d3.select('#secondary-beat-holder-'+µthis.measureRepModel.cid);
+        var lineUnrollingBeats = secondaryBeatHolder.selectAll('.lineUnrolling');
+
+        dispatch.trigger('reRenderMeasure.event', this);
+        // µthis.parentMeasureModel.increaseTransitionCount();
+      }, this.animationIntervalDuration*4 );*/
     },
 
     render: function(){
@@ -1343,7 +1378,7 @@ define([
       } else if(PRT == 'pie'){
         if (CRT == 'audio'){
         } else if(CRT == 'bead'){
-          //TODO
+          this.pieToBead();
         } else if(CRT == 'line'){
           this.pieToLine();
         } else if(CRT == 'pie'){
