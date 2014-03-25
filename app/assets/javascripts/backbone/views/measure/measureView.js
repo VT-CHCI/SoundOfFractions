@@ -172,11 +172,11 @@ define([
       // Transition
         var transitionNumberOfPoints = this.transitionNumberOfPoints;
         var firstBeatStart = 0; // in s
-        var timeIncrement = 500; // in ms
+        var timeIncrement = 250; // in ms
         var margin = {top: 20, left: 60};
         var lineDivision = linearLineLength/transitionNumberOfPoints;
-        var transitionDuration = 3000/transitionNumberOfPoints;
-        var animationIntervalDuration = 1000;
+        var transitionDuration = 1500/transitionNumberOfPoints;
+        var animationIntervalDuration = 500;
 
       // Audio
         //Measure

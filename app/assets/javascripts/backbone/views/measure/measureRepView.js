@@ -56,6 +56,7 @@ define([
       dispatch.on('toggleAnimation.event', this.toggleAnimation, this);
       dispatch.on('resized.event', this.destroy, this);
 
+
       this.listenTo(this.model, 'change', this.transition, this);
 
       this.render();
@@ -318,6 +319,7 @@ define([
       console.log(this.oldW, this.oldH, ui.size.width, ui.size.height);
       dispatch.trigger('resized.event', { cid: this.parentMeasureModel.cid });
 
+
       this.parentMeasureModel.setScale(this.scale);
     },
     // STARTING a linear drag {number line or bar}
@@ -386,10 +388,12 @@ define([
     // AFTER a linear drag stops
     linearStop: function(e, ui) {
       console.log('linear adjusted scale by : ' + this.scale);
-      console.log(this.oldW, this.oldH, ui.size.width, ui.size.height)
+      console.log(this.oldW, this.oldH, ui.size.width, ui.size.height);
       this.oldW = ui.size.width;
       this.oldH = ui.size.height;
-      console.log(this.oldW, this.oldH, ui.size.width, ui.size.height)
+      console.log(this.oldW, this.oldH, ui.size.width, ui.size.height);
+      dispatch.trigger('resized.event', { cid: this.parentMeasureModel.cid });
+
       this.parentMeasureModel.set('scale', this.scale);
     },
     // Making a targeted 'Audio' beat animate
@@ -685,12 +689,12 @@ define([
       }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration*2 );
       // move entire portion to the left
       setTimeout(function(){
-        µthis.moveSecondaryLeft('bead');
+        // µthis.moveSecondaryLeft('bead');
       }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration*3 );
       // rerender everythign to get the facotry as well
       setTimeout(function(){
         // this sets the transition count on the model itself, which the beatView is listening to
-        dispatch.trigger('reRenderMeasure.event', this);
+        // dispatch.trigger('reRenderMeasure.event', this);
         // µthis.parentMeasureModel.increaseTransitionCount();
       }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration*4 );
     },
@@ -854,15 +858,15 @@ define([
         lineBeats.remove();
         lineMeasure.remove();
       }, this.transitionDuration + this.animationIntervalDuration*4 );
-      // send the beat transition event 
+      // // send the beat transition event 
       setTimeout(function(){
         dispatch.trigger('secondaryBeatTransition.event', µthis);
       }, this.transitionDuration + this.animationIntervalDuration*5);
-      // make the secondart pie beats
+      // // make the secondart pie beats
       setTimeout(function(){
         µthis.makeBeats({secondary:true, type:'pie'});
       }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration*6 );
-      // re-render
+      // // re-render
       setTimeout(function(){
         dispatch.trigger('reRenderMeasure.event', this);
       }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration*7 );
@@ -970,11 +974,11 @@ define([
       }, this.transitionDuration + this.animationIntervalDuration*4 );
       // send the beatView event
       setTimeout(function(){
-        dispatch.trigger('beatTransition.event', µthis);
+        dispatch.trigger('secondaryBeatTransition.event', µthis);
       }, this.transitionDuration + this.animationIntervalDuration*5);
       // Make the tertiary/secondary pie beats
       setTimeout(function(){
-        µthis.makeBeats({secondary:true, type:'pie'});
+        µthis.makeBeats({secondary:true, type:'line'});
       }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration*6 );
       // re-render
       setTimeout(function(){
@@ -1057,7 +1061,6 @@ define([
           aspectRatio: true,
           // To keep the number Math.Floored
           grid:1,
-          // ghost:true,
           // animate: true,
           start: function(e, ui) {
             µthis.circleStart(e, ui);
