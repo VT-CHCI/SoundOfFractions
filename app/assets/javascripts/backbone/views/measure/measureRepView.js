@@ -944,6 +944,46 @@ define([
         dispatch.trigger('reRenderMeasure.event', this);
       }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration*6 );      
     },
+
+   /* barToPie: function(){
+      console.log('rti');
+      console.log(this.actualMeasureLinePath);
+      var µthis = this;
+      var svgContainer = d3.select('#svg-'+this.measureRepModel.cid)
+        .attr('width', this.linearDivWidth+this.circularMeasureR*2 )
+        .attr('height', this.linearDivHeight+this.circularMeasureR*2 );
+      var beatHolder = d3.select('#beat-holder-'+this.measureRepModel.cid);
+
+      // remove the measure bounding bar box and move the secondary left to align with the new beats
+      setTimeout(function(){
+        µthis.removeBarBox();
+        µthis.moveSecondaryLeft();
+      }, this.animationIntervalDuration );
+
+      // fade out the bar beats
+      setTimeout(function(){
+        $('#beat-holder-'+µthis.measureRepModel.cid+' .bar-beat').fadeOut(this.animationIntervalDuration);
+      }, this.animationIntervalDuration*2 );
+
+      // make the seconadry line rolling beats
+      setTimeout(function(){
+        µthis.makeBeats({secondary:true, type:'lineRolling'});
+      }, this.transitionDuration + this.animationIntervalDuration*3 );
+
+      // // send the beat transition event 
+      setTimeout(function(){
+        dispatch.trigger('secondaryBeatTransition.event', µthis);
+      }, this.transitionDuration + this.animationIntervalDuration*4);
+      // // make the secondart pie beats
+      setTimeout(function(){
+        µthis.makeBeats({secondary:true, type:'pie'});
+      }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration*5 );
+      // // re-render
+      setTimeout(function(){
+        dispatch.trigger('reRenderMeasure.event', this);
+      }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationInterv );
+    },*/
+
     pieToLine: function(){
       console.log('itl');
       var µthis = this;
@@ -1396,7 +1436,7 @@ define([
         } else if(CRT == 'line'){
           this.barToLine();
         } else if(CRT == 'pie'){
-          //TODO
+          //this.barToPie();
         } else if(CRT == 'bar'){
           //keep it bar, do nothing
         }
