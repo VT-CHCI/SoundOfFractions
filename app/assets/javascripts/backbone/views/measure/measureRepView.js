@@ -945,7 +945,7 @@ define([
       }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration*6 );      
     },
 
-   /* barToPie: function(){
+   barToPie: function(){
       console.log('rti');
       console.log(this.actualMeasureLinePath);
       var µthis = this;
@@ -982,7 +982,7 @@ define([
       setTimeout(function(){
         dispatch.trigger('reRenderMeasure.event', this);
       }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationInterv );
-    },*/
+    },
 
     pieToLine: function(){
       console.log('itl');
@@ -1436,7 +1436,7 @@ define([
         } else if(CRT == 'line'){
           this.barToLine();
         } else if(CRT == 'pie'){
-          //this.barToPie();
+          this.barToPie();
         } else if(CRT == 'bar'){
           //keep it bar, do nothing
         }
