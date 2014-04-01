@@ -20,6 +20,7 @@ define([
     //The constructor takes options because these views are created
     //by measureRepsView objects.
     initialize: function(options){
+      console.log(options);
       if (options) {
         for (var key in options) {
           this[key] = options[key];
@@ -37,6 +38,7 @@ define([
         this.opacity = this.getOpacityNumber(options.opacity);
         this.beatCenterPosition = {};
         this.BEAT;
+        console.log(this);
         // var pathFunction = d3.svg.line()
         //     .x(function (d) {return d.x;})
         //     .y(function (d) {return d.y;})
@@ -46,6 +48,7 @@ define([
         _.bindAll(this, 'toggleModel');
         this.listenTo(this.model, 'change', _.bind(this.toggleOpacity, this));
         dispatch.on('beatTransition.event', this.transition, this);
+        dispatch.on('secondaryBeatTransition.event', this.transition, this);
       } else {
         console.error('beatView(init): should not be in here!');
       }
@@ -525,6 +528,7 @@ define([
           this.rollUp();
         } else if(this.parentMeasureRepModel.get('representationType') == 'line'){
         } else if(this.parentMeasureRepModel.get('representationType') == 'pie'){
+          this.rollUpLines();
         } else if(this.parentMeasureRepModel.get('representationType') == 'bar'){
         }
       }
