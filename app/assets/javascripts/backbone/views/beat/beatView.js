@@ -314,8 +314,6 @@ define([
           }
         });
       }
-      
-      console.error(this.currentRepresentationType);
       // Make the bead beat
       if (this.currentRepresentationType == 'bead') {
         this.BEAT = this.beatContainer
