@@ -317,10 +317,11 @@ define([
       this.oldW = ui.size.width;
       this.oldH = ui.size.height;
       console.log(this.oldW, this.oldH, ui.size.width, ui.size.height);
-      dispatch.trigger('resized.event', { cid: this.parentMeasureModel.cid });
-
+      
+      // dispatch.trigger('resized.event', { cid: this.parentMeasureModel.cid });
 
       this.parentMeasureModel.setScale(this.scale);
+
     },
     // STARTING a linear drag {number line or bar}
     linearStart: function(e, ui) {
@@ -392,7 +393,7 @@ define([
       this.oldW = ui.size.width;
       this.oldH = ui.size.height;
       console.log(this.oldW, this.oldH, ui.size.width, ui.size.height);
-      dispatch.trigger('resized.event', { cid: this.parentMeasureModel.cid });
+      // dispatch.trigger('resized.event', { cid: this.parentMeasureModel.cid });
 
       this.parentMeasureModel.set('scale', this.scale);
     },
