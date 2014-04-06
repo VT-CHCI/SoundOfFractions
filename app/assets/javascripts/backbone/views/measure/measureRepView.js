@@ -139,7 +139,7 @@ define([
         this.measurePassingToBeatViewParameters.lineStatesUnrolling = this.lineStatesUnrolling;
         this.measurePassingToBeatViewParameters.lineStatesRollup = this.lineStatesRollup;
         // TODO DELETE THE VIEWS when we re-render
-        console.warn(this.measurePassingToBeatViewParameters);
+        //console.warn(this.measurePassingToBeatViewParameters);
         new BeatView(this.measurePassingToBeatViewParameters);
         if (this.currentRepresentationType == 'audio') {
           return false;
@@ -946,7 +946,7 @@ define([
       }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration*6 );      
     },
 
-   /* barToPie: function(){
+   barToPie: function(){
       console.log('rti');
       console.log(this.actualMeasureLinePath);
       var µthis = this;
@@ -971,19 +971,23 @@ define([
         µthis.makeBeats({secondary:true, type:'lineRolling'});
       }, this.transitionDuration + this.animationIntervalDuration*3 );
 
-      // // send the beat transition event 
+      setTimeout(function(){
+        µthis.moveSecondaryRight();
+      }, this.transitionDuration + this.animationIntervalDuration*4 );
+
+      // send the beat transition event 
       setTimeout(function(){
         dispatch.trigger('secondaryBeatTransition.event', µthis);
-      }, this.transitionDuration + this.animationIntervalDuration*4);
-      // // make the secondart pie beats
-      setTimeout(function(){
-        µthis.makeBeats({secondary:true, type:'pie'});
-      }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration*5 );
-      // // re-render
-      setTimeout(function(){
-        dispatch.trigger('reRenderMeasure.event', this);
-      }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationInterv );
-    },*/
+      }, this.transitionDuration + this.animationIntervalDuration*5);
+      // // // make the secondart pie beats
+      // setTimeout(function(){
+      //   µthis.makeBeats({secondary:true, type:'pie'});
+      // }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration*5 );
+      // // // re-render
+      // setTimeout(function(){
+      //   dispatch.trigger('reRenderMeasure.event', this);
+      // }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationInterv );
+    },
 
     pieToLine: function(){
       console.log('itl');
@@ -1437,7 +1441,7 @@ define([
         } else if(CRT == 'line'){
           this.barToLine();
         } else if(CRT == 'pie'){
-          //this.barToPie();
+          this.barToPie();
         } else if(CRT == 'bar'){
           //keep it bar, do nothing
         }
