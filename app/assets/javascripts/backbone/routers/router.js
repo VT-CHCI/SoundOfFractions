@@ -45,7 +45,7 @@ define([
 
       // middle
       StageView.render();
-      systemLabelContainerView.render();
+      // systemLabelContainerView.render();
 
       // bottom
 

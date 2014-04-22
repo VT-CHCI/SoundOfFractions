@@ -30,50 +30,40 @@ define([
     },
 
     initialize: function(options){
-      // if we're being created by a HTrackView, we are passed in options.
-      // Many variables get passed in.  We attach those variable with this function, so for each variable:
-      // this.something = options.something; 
+      //if we're being created by a HTrackView, we are
+      //passed in options.
       if (options) {
         for (var key in options) {
           this[key] = options[key];
         }
-        // This is the scaling to start scaling with.
         this.originalScale = this.measureModel.get('originalScale');
         this.circularMeasureR = 51; // 8 pxs per bead plus 1 px border = 10
                                     // 10 * 16 = 160/pi = 51
-        // we attach to the DOM of the measure container from our parent measure
         this.el = '#measure-container-'+options.parent.cid;
-      // Error catching
       } else {
         console.error('Should not be in here: NO Measure!');
       }
-      // We use this to make sure we are deleting all the views later
-      // TODO this is buggy. we need to figure out how to delete properly via backbone views
       this.newMeasureRepViews = [];
-
-      //Dispatch listeners
+      //registering a callback for signatureChange events.
       dispatch.on('signatureChange.event', this.reconfigure, this);
+      //Dispatch listeners
       dispatch.on('measureRepresentation.event', this.changeMeasureRepresentation, this);
       dispatch.on('unroll.event', this.unroll, this);
       dispatch.on('tempoChange.event', this.adjustRadius, this);
       dispatch.on('reRenderMeasure.event', this.render, this);
 
-      // this bindall method is thor the remainging listeners, per StackOverflow suggestions
       _.bindAll(this, 'render');
-      // when we add or delete a meauserRep
       this.listenTo(this.measureRepresentations, 'remove', _.bind(this.render, this));  
       this.listenTo(this.measureRepresentations, 'add', _.bind(this.render, this));  
       this.model.on('change:scale', _.bind(this.render, this));
 
-      // This is for version2, when we add or delete a measure
       this.collectionOfMeasures.on('add', _.bind(this.render, this));
       this.collectionOfMeasures.on('remove', _.bind(this.render, this));
 
       this.render();
     },
-    // We need to calculate the number of points for animation transitions
-    // We want to be above 30 for fluidity, but below 90 to avoid computational and animation delay
     calculateNumberOfPoints: function(n) {
+      // We want to be above 30, but below 90 to avoid computational and animation delay
       switch (n){
         case 1:
           this.transitionNumberOfPoints = 40;
@@ -128,15 +118,12 @@ define([
     render: function(){
       this.scale = this.measureModel.get('scale');
       console.log('m render with scale of: '+this.scale);
-
       // Make a template for the measure and append the MeasureTemplate to the measure area in the hTrack
-      // Get some parameters for the template
       var measureTemplateParameters = {
         mCID: this.model.cid,
         measureCount: this.measureCount,
         measureNumberOfBeats: this.model.get('beats').length
       };
-      // compile the template
       var compiledMeasureTemplate = _.template( MeasureTemplate, measureTemplateParameters );
       
       // If we are adding a rep, clear the current reps, then add the template
@@ -145,9 +132,8 @@ define([
         deleting.stopListening();
         delete deleting;
       }
-      // clear the html
+
       $(this.el).html('');
-      // append the new completed compiled template
       $(this.el).append( compiledMeasureTemplate )
 
       // Constant Variables throughout the representations
@@ -172,11 +158,11 @@ define([
       // Transition
         var transitionNumberOfPoints = this.transitionNumberOfPoints;
         var firstBeatStart = 0; // in s
-        var timeIncrement = 250; // in ms
+        var timeIncrement = 500; // in ms
         var margin = {top: 20, left: 60};
         var lineDivision = linearLineLength/transitionNumberOfPoints;
-        var transitionDuration = 1500/transitionNumberOfPoints;
-        var animationIntervalDuration = 500;
+        var transitionDuration = 3000/transitionNumberOfPoints;
+        var animationIntervalDuration = 1000;
 
       // Audio
         //Measure
@@ -215,7 +201,6 @@ define([
         var beatFactoryBarWidth = 30;
         var beatFactoryBarHeight = 15;
 
-      // This is what calculates the different states of circles and lines throughout an animation of a circle to a line or a line to a circle
       var circleStates = [];
       for (i=0; i<transitionNumberOfPoints; i++){
           // circle portion
@@ -241,8 +226,8 @@ define([
       // for each rep in the measuresCollection
       _.each(this.measureRepresentations.models, function(rep, repIndex) {
         // (when representation button changes, the current representation template will get updated)
+        // compile the template for a measure
 
-        // get parameters for the template for a measure
         var measureRepViewParameters = {
           // HTrack
           hTrackEl: this.hTrackEl,
@@ -313,17 +298,13 @@ define([
           transitionDuration: transitionDuration,
           animationIntervalDuration: animationIntervalDuration
         };
-        //This part is the hack      This is where we create a measureRepView for each one using the paramaters
         this.newMeasureRepViews.push(new MeasureRepView(measureRepViewParameters));
       }, this);
-      // All of the views together
-      console.warn(this.newMeasureRepViews);
+      console.log(this.newMeasureRepViews);
       return this;
     },
 
     /*
-      Version 1 should not support multiple measures, but we have it for when we will
-
       This is called when the user clicks on the plus to add a new measure.
 
       It creates a new measure and adds it to the hTrack.
@@ -357,7 +338,6 @@ define([
     },
 
     /*
-      Again, Version 1 should not support multiple measures, but we have it for when we will
       This is called when the user clicks on the minus to remove a measure.
     */
     removeMeasure: function(ev){
@@ -385,7 +365,6 @@ define([
         dispatch.trigger('signatureChange.event', this.parent.get('signature'));
       }
     },
-    // This is called when the signature of a measure is changed
     reconfigure: function(options) {
       this.render();
     }

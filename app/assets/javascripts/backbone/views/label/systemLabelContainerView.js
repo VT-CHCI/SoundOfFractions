@@ -32,14 +32,7 @@ define([
       var minNumerator = 0;
       var maxNumerator = 16;
       var minDenominator = 1;
-      var maxDenominator = 9;
-      
-      // Symbols
-      this.systemLabelCollection.add({
-        label: '/',
-        type: 'symbol-label system-label'
-      })
-
+      var maxDenominator = 16;
       // whole numbers
       for( i=0 ; i < maxDenominator+1 ; i++ ) {
         this.systemLabelCollection.add({
@@ -48,16 +41,16 @@ define([
         })
       }
       // proper fractions
-      // for( i=minNumerator ; i <= maxNumerator ; i++ ) {
-      //   for( j=minDenominator ; j <= maxDenominator ; j++ ) {
-      //     if (i <= j) {          
-      //       this.systemLabelCollection.add({
-      //         label: String(i) + '/' + String(j),
-      //         type: 'proper-fraction-label system-label'
-      //       })
-      //     }
-      //   }
-      // }
+      for( i=minNumerator ; i <= maxNumerator ; i++ ) {
+        for( j=minDenominator ; j <= maxDenominator ; j++ ) {
+          if (i <= j) {          
+            this.systemLabelCollection.add({
+              label: String(i) + '/' + String(j),
+              type: 'proper-fraction-label system-label'
+            })
+          }
+        }
+      }
 
       $(this.el).html(SystemLabelContainerGroup);
 
