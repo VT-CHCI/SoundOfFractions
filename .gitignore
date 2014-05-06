@@ -1,5 +1,9 @@
 *.sublime-project
 *.sublime-workspace
 tmp/
-log/*
 vendor/
+doc/Poster 2014.jpg
+doc/Poster 2014.tif
+doc/Poster 2014.png
+doc/Poster 2014.pdf
+log/development.log
