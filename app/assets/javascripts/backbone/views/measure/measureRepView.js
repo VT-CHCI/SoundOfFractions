@@ -721,11 +721,8 @@ define([
         ƒthis.removeInfiniteLine();
       }, this.transitionDuration + this.animationIntervalDuration*2 );
       setTimeout(function(){
-        ƒthis.makeBeats({secondary:true, type:'pie'});
-      }, this.transitionDuration + this.animationIntervalDuration*3 );
-      setTimeout(function(){
         lineBeats.remove();
-      }, this.transitionDuration + this.animationIntervalDuration*4 );
+      }, this.transitionDuration + this.animationIntervalDuration*3 );
       setTimeout(function(){
         dispatch.trigger('beatTransition.event', ƒthis);
         for(i=0; i<ƒthis.transitionNumberOfPoints; i++){
@@ -740,7 +737,10 @@ define([
               .attr('class', 'circle')
               .attr('class', 'circle-path');
         }
-      }, this.transitionDuration + this.animationIntervalDuration*5);
+      }, this.transitionDuration + this.animationIntervalDuration*4);
+      setTimeout(function(){
+        ƒthis.makeBeats({secondary:true, type:'pie'});
+      }, this.transitionDuration + this.animationIntervalDuration*8 );
       setTimeout(function(){
         // ƒthis.parentMeasureModel.increaseTransitionCount();
         dispatch.trigger('reRenderMeasure.event', this);
