@@ -24,8 +24,10 @@ define([
         for (var key in options) {
           this[key] = options[key];
         }
+        // If it is a secondary beat, ie during transitions
         if (options.secondary){
           this.secondaryClasses = 'secondaryBeat ';
+          dispatch.on('beatTransition.event', this.transition, this);
         } else {
           this.secondaryClasses = '';
         }
@@ -35,20 +37,24 @@ define([
         this.opacity = this.getOpacityNumber(options.opacity);
         this.beatCenterPosition = {};
         this.BEAT;
+        // var pathFunction = d3.svg.line()
+        //     .x(function (d) {return d.x;})
+        //     .y(function (d) {return d.y;})
+        //     .interpolate('basis'); // bundle | basis | linear | cardinal are also options
+        // this.pathFunction = pathFunction;
+
         _.bindAll(this, 'toggleModel');
         this.listenTo(this.model, 'change', _.bind(this.toggleOpacity, this));
       } else {
-        console.error('should not be in here!');
-        this.model = new BeatModel;
+        console.error('beatView(init): should not be in here!');
       }
 
-      dispatch.on('beatTransition.event', this.transition, this);
 
       this.listenTo(this.parentMeasureRepModel, 'change:transitions', this.transition, this);
 
       this.render();
     },
-
+    // the function that handles unrolling of beads
     unRoll: function() {
       console.log('INNER unRoll');
       for (i=0 ; i<this.transitionNumberOfPoints ; i++){
@@ -61,29 +67,54 @@ define([
             .attr('cy', this.beatBeadToLinePaths[i].cy)
       }
     },
-
+    // the function that handles rolling up of beads
     rollUp: function() {
       console.log('rollup');
       var currentBeat = d3.select('.secondaryBeat');
       for(i=0; i<this.transitionNumberOfPoints; i++){
-        // console.log(this.beatLineToBeadPaths[i].cx, this.beatLineToBeadPaths[i].cy)
-        // console.log('beat: '+this.beatIndex+' '+this.beatLineToBeadPaths[i].cx,this.beatLineToBeadPaths[i].cy )
-          // this.beatPath.data([this.finalBeatUnwindingPaths[this.beatNumberOfPoints-1-i]])
-          // this.BEAT.data([this.beatBeadToLinePaths[this.transitionNumberOfPoints-1-i]])
           this.BEAT.data([this.beatLineToBeadPaths[i]])
               .transition()
               .delay(this.transitionDuration*i)
-              // .delay(this.transitionDuration*i + this.animationIntervalDuration*5)
               .duration(this.transitionDuration)
               .ease('linear')
               .attr('cx', this.beatLineToBeadPaths[i].cx)
               .attr('cy', this.beatLineToBeadPaths[i].cy)
       }
     },
+    // the function that handles rolling up of colored lines
+    rollUpLines: function() {
+      console.log('rollup');
+      // var currentBeat = d3.select('.secondaryBeat');
+      console.warn(this);
+      for(i=0; i<this.transitionNumberOfPoints; i++){
+          var x = this.transitionNumberOfPoints-i;
+          this.BEAT.data([this.lineStatesRollup[i]])
+              .transition()
+              .delay(this.transitionDuration*i)
+              .duration(this.transitionDuration)
+              .ease('linear')
+              .attr('d', this.pathFunction)
+      }
+    },
+    // the function that handles unrolling of colored lines
+    unrollLines: function() {
+      console.log('unroll');
+      // var currentBeat = d3.select('.secondaryBeat');
+      console.warn(this);
+      for(i=0; i<this.transitionNumberOfPoints; i++){
+          var x = this.transitionNumberOfPoints-i;
+          this.BEAT.data([this.lineStatesUnrolling[i]])
+              .transition()
+              .delay(this.transitionDuration*i)
+              .duration(this.transitionDuration)
+              .ease('linear')
+              .attr('d', this.pathFunction)
+      }
+    },
 
     //We use css classes to control the color of the beat.
     render: function(){
-      var ƒthis = this;
+      var µthis = this;
 
       // x center of a bead or first x of pie piece
       if (this.currentRepresentationType == 'pie') {
@@ -116,23 +147,22 @@ define([
       };
 
       //Circular Bead
-
       this.beatUnwindingPaths = [];
       for (i=0; i<this.circleStates.length; i++){
-        var circleState = $.map(Array(ƒthis.transitionNumberOfPoints), function (d, j) {
-          var cx = (ƒthis.circleStates[i][Math.floor((ƒthis.beatIndex/ƒthis.beatsInMeasure)*(ƒthis.transitionNumberOfPoints))].x) + ƒthis.circularBeadBeatRadius * Math.sin(2 * j * Math.PI / (ƒthis.transitionNumberOfPoints - 1));
+        var circleState = $.map(Array(µthis.transitionNumberOfPoints), function (d, j) {
+          var cx = (µthis.circleStates[i][Math.floor((µthis.beatIndex/µthis.beatsInMeasure)*(µthis.transitionNumberOfPoints))].x) + µthis.circularBeadBeatRadius * Math.sin(2 * j * Math.PI / (µthis.transitionNumberOfPoints - 1));
 
         //circle portion
-        // var circleState = $.map(Array(ƒthis.transitionNumberOfPoints), function (d, j) {
-          // var cx = ƒthis.circularMeasureCx + ƒthis.lineDivision*i + ƒthis.circularMeasureR * Math.sin(2 * j * Math.PI / (ƒthis.transitionNumberOfPoints - 1));
-          var cy = ƒthis.circularMeasureCy - ƒthis.circularMeasureR * Math.cos(2 * j * Math.PI / (ƒthis.transitionNumberOfPoints - 1));
+        // var circleState = $.map(Array(µthis.transitionNumberOfPoints), function (d, j) {
+          // var cx = µthis.circularMeasureCx + µthis.lineDivision*i + µthis.circularMeasureR * Math.sin(2 * j * Math.PI / (µthis.transitionNumberOfPoints - 1));
+          var cy = µthis.circularMeasureCy - µthis.circularMeasureR * Math.cos(2 * j * Math.PI / (µthis.transitionNumberOfPoints - 1));
           return { cx: cx, cy: cy};
         });
-        circleState.splice(ƒthis.transitionNumberOfPoints-i);
+        circleState.splice(µthis.transitionNumberOfPoints-i);
         //line portion
-        var lineState = $.map(Array(ƒthis.transitionNumberOfPoints), function (d, j) {
-          var cx = ƒthis.circularMeasureCx + ƒthis.lineDivision*j;
-          var cy =  ƒthis.circularMeasureCy - ƒthis.circularMeasureR;
+        var lineState = $.map(Array(µthis.transitionNumberOfPoints), function (d, j) {
+          var cx = µthis.circularMeasureCx + µthis.lineDivision*j;
+          var cy =  µthis.circularMeasureCy - µthis.circularMeasureR;
           return { cx: cx, cy: cy};
         });
         lineState.splice(i);
@@ -164,8 +194,8 @@ define([
       this.beatLineToBeadPaths = [];
       for (i=0; i<this.circleStates.length; i++){
         var beatCoordinatesAlongTransition = [];
-          beatCoordinatesAlongTransition.cx = (ƒthis.beatUnwindingPaths[i][Math.floor((ƒthis.beatIndex/ƒthis.beatsInMeasure)*(ƒthis.transitionNumberOfPoints))].cx);
-          beatCoordinatesAlongTransition.cy = (ƒthis.beatUnwindingPaths[i][Math.floor((ƒthis.beatIndex/ƒthis.beatsInMeasure)*(ƒthis.transitionNumberOfPoints))].cy);
+          beatCoordinatesAlongTransition.cx = (µthis.beatUnwindingPaths[i][Math.floor((µthis.beatIndex/µthis.beatsInMeasure)*(µthis.transitionNumberOfPoints))].cx);
+          beatCoordinatesAlongTransition.cy = (µthis.beatUnwindingPaths[i][Math.floor((µthis.beatIndex/µthis.beatsInMeasure)*(µthis.transitionNumberOfPoints))].cy);
         this.beatBeadToLinePaths.push(beatCoordinatesAlongTransition);
         this.beatLineToBeadPaths.unshift(beatCoordinatesAlongTransition);
       };
@@ -182,15 +212,16 @@ define([
           .interpolate('basis'); // bundle | basis | linear | cardinal are also options
       this.pathFunction = pathFunction;
 
+      // Allow a bead to be dragged
       var dragBead = d3.behavior.drag();
       // to prevent the dragging of a one beat measure
       if (this.beatsInMeasure > 1) {
-        ƒthis = this;
+        µthis = this;
         dragBead.on("drag", function() {
-          ƒthis = ƒthis;
+          µthis = µthis;
             // console.log(parseInt(d3.select(this).attr("cx")) + ' <:> ' + parseInt(d3.select(this).attr("cy")));
             // console.log(d3.event.dx + ' : ' + d3.event.dy);
-          // Formula for circle beats, utilizing cx and cy
+            // Formula for circle beats, utilizing cx and cy
             //                        |-----Current Value--------|   |-----Delta value----\
             var newSettingX = parseInt(d3.select(this).attr("cx")) + parseInt(d3.event.dx);
             var newSettingY = parseInt(d3.select(this).attr("cy")) + parseInt(d3.event.dy);
@@ -201,19 +232,20 @@ define([
             // Inside: x and y must satisfy (x - center_x)^2 + (y - center_y)^2 < radius^2
             // Outside: x and y must satisfy (x - center_x)^2 + (y - center_y)^2 > radius^2
             // On: x and y must satisfy (x - center_x)^2 + (y - center_y)^2 == radius^2
-            if ( Math.pow(newComputedValX - ƒthis.circularMeasureCx, 2) + Math.pow(newComputedValY - ƒthis.circularMeasureCy, 2) > Math.pow(ƒthis.circularMeasureR+15,2) ) {
+            if ( Math.pow(newComputedValX - µthis.circularMeasureCx, 2) + Math.pow(newComputedValY - µthis.circularMeasureCy, 2) > Math.pow(µthis.circularMeasureR+15,2) ) {
               d3.select(this).remove();
               console.warn('removed beat on measure');
-              ƒthis.parentMeasureModel.get('beats').remove(ƒthis.model);
-              dispatch.trigger('signatureChange.event', ƒthis.beatsInMeasure-1);
+              µthis.parentMeasureModel.get('beats').remove(µthis.model);
+              dispatch.trigger('signatureChange.event', µthis.beatsInMeasure-1);
             }
         });
       }
+      // allow a line to be dragged
       var dragLine = d3.behavior.drag();
       if (this.beatsInMeasure > 1) {
-        ƒthis = this;
+        µthis = this;
         dragLine.on('drag', function(d) {
-          ƒthis = ƒthis;
+          µthis = µthis;
           var newSettingX1 = parseInt(d3.select(this).attr("x1")) + parseInt(d3.event.dx);
           var newSettingY1 = parseInt(d3.select(this).attr("y1")) + parseInt(d3.event.dy);
           var newSettingX2 = parseInt(d3.select(this).attr("x2")) + parseInt(d3.event.dx);
@@ -223,21 +255,22 @@ define([
           d3.select(this).attr("x2", newSettingX2);
           d3.select(this).attr("y2", newSettingY2);
           var newCenterX1 = d3.select(this).attr('x1');
-          var newCenterY1 = parseInt(d3.select(this).attr('y1')) + parseInt(ƒthis.lineHashHeight/2);
-          // Above: newCenterY1 < ƒthis.numberLineY
-          // AboveByN: newCenterY1 < ƒthis.numberLineY - N
-          // On : newCenterY1 = ƒthis.numberLineY
-          // Below: newCenterY1 > ƒthis.numberLineY
-          // BelowByN: newCenterY1 > ƒthis.numberLineY + N
-          if ((newCenterY1 < ƒthis.numberLineY - 20) || (newCenterY1 > ƒthis.numberLineY + 20)) {
+          var newCenterY1 = parseInt(d3.select(this).attr('y1')) + parseInt(µthis.lineHashHeight/2);
+          // Above: newCenterY1 < µthis.numberLineY
+          // AboveByN: newCenterY1 < µthis.numberLineY - N
+          // On : newCenterY1 = µthis.numberLineY
+          // Below: newCenterY1 > µthis.numberLineY
+          // BelowByN: newCenterY1 > µthis.numberLineY + N
+          if ((newCenterY1 < µthis.numberLineY - 20) || (newCenterY1 > µthis.numberLineY + 20)) {
             // make an array to find out where the new beat should be added in the beatsCollection of the measure
             d3.select(this).remove();
             console.warn('removed beat on measure');
-            ƒthis.parentMeasureModel.get('beats').remove(ƒthis.model);
-            dispatch.trigger('signatureChange.event', ƒthis.beatsInMeasure-1);
+            µthis.parentMeasureModel.get('beats').remove(µthis.model);
+            dispatch.trigger('signatureChange.event', µthis.beatsInMeasure-1);
           }
         });
       }
+      // Allow a bar to be dragged
       var dragBar = d3.behavior.drag();
       dragBar.on('drag', function(d) {
         var newSettingX = parseInt(d3.select(this).attr("x")) + parseInt(d3.event.dx);
@@ -249,36 +282,38 @@ define([
         // Above: newComputedValY1 must be above line y
         // On : newComputedValY1 must be on the line y
         // Below: newComputedValY1 must be below the line y
-        if ((newComputedValY < ƒthis.lbbMeasureLocationY - ƒthis.beatHeight - 2) || (newComputedValY > ƒthis.lbbMeasureLocationY + ƒthis.beatHeight + 2)) {
+        if ((newComputedValY < µthis.lbbMeasureLocationY - µthis.beatHeight - 2) || (newComputedValY > µthis.lbbMeasureLocationY + µthis.beatHeight + 2)) {
         // make an array to find out where the new beat should be added in the beatsCollection of the measure
           d3.select(this).remove();
           console.warn('removed beat on measure');
-          ƒthis.parentMeasureModel.get('beats').remove(ƒthis.model);
-          dispatch.trigger('signatureChange.event', ƒthis.beatsInMeasure-1);
+          µthis.parentMeasureModel.get('beats').remove(µthis.model);
+          dispatch.trigger('signatureChange.event', µthis.beatsInMeasure-1);
         }
       });
+// allow a pie slice to be dragged
       var dragSlice = d3.behavior.drag();
       if (this.beatsInMeasure > 1) {
-        ƒthis = this;
+        µthis = this;
         dragSlice.on("drag", function() {
-          var beatToChange = $('#beat'+ƒthis.cid);
+          var beatToChange = $('#beat'+µthis.cid);
           var transformString = beatToChange.attr('transform').substring(10, beatToChange.attr('transform').length-1);
           var comma = transformString.indexOf(',');
           var newX = parseInt(transformString.substr(0,comma));
           var newY = parseInt(transformString.substr(comma+1));
           newX += d3.event.dx;
           newY += d3.event.dy;
-          var relativeSVGX = newX + ƒthis.circularMeasureCx;
-          var relativeSVGY = newX + ƒthis.circularMeasureCy;
+          var relativeSVGX = newX + µthis.circularMeasureCx;
+          var relativeSVGY = newX + µthis.circularMeasureCy;
           d3.select(this).attr('transform', 'translate(' + [ newX, newY ] + ')');
           // x and y must satisfy (x - center_x)^2 + (y - center_y)^2 >= radius^2
-          if ( Math.pow(relativeSVGX - ƒthis.circularMeasureCx, 2) + Math.pow(relativeSVGY - ƒthis.circularMeasureCy, 2) >= Math.pow(ƒthis.circularMeasureR, 2) ) {
+          if ( Math.pow(relativeSVGX - µthis.circularMeasureCx, 2) + Math.pow(relativeSVGY - µthis.circularMeasureCy, 2) >= Math.pow(µthis.circularMeasureR, 2) ) {
             d3.select(this).remove();
-            ƒthis.parentMeasureModel.get('beats').remove(ƒthis.model);
-            dispatch.trigger('signatureChange.event', ƒthis.beatsInMeasure-1);
+            µthis.parentMeasureModel.get('beats').remove(µthis.model);
+            dispatch.trigger('signatureChange.event', µthis.beatsInMeasure-1);
           }
         });
       }
+      // Make the bead beat
       if (this.currentRepresentationType == 'bead') {
         this.BEAT = this.beatContainer
             .append('circle')
@@ -287,35 +322,72 @@ define([
             .attr('cx', this.x1)
             .attr('cy', this.y1)
             .attr('r', this.circularBeadBeatRadius)
-            // Calling the click handler here doesn't work for some reason
-            // .on('click', function(){console.log('beat container click handler')})
             .attr('transform', 'translate(0,0)')
             // This is the path that the beat will follow when un/roll is clicked
             .data([this.beatUnwindingPaths[0]])
-            // .attr('d', pathFunction)
             .attr('fill', COLORS.hexColors[this.color])
             .attr('stroke', 'black')
             .style('opacity', this.getOpacityNumber(this.model.get('selected')))
+            // Calling the click handler here doesn't work for some reason
+            // .on('click', function(){console.log('beat container click handler')})
             .call(dragBead);
-
+        // if you click on it, toggle its opactiy, selection, and the model through the toggeModel()
         this.BEAT.on('click', this.toggleModel);
+      // Draw the line beat
       } else if (this.currentRepresentationType == 'line'){
         this.BEAT = this.beatContainer
             .append('line')
             .attr('id', 'beat'+this.cid)
-            .attr('class', 'beat d3 line-beat')
+            .attr('class', this.secondaryClasses + 'beat d3 line-beat')
             .attr('x1', this.X1)
             .attr('y1', this.Y1)
             .attr('x2', this.X2)
             .attr('y2', this.Y2)
-            // This is the path that the beat will follow when un/roll is clicked
-            // .attr('d', pathFunction)
             .attr('stroke', COLORS.hexColors[this.color])
             .attr('opacity', this.getOpacityNumber(this.model.get('selected')))
             .attr('stroke-width', 4)
             .call(dragLine);
-
+        // if you click on it, toggle its opactiy, selection, and the model through the toggeModel()
         this.BEAT.on('click', this.toggleModel);
+      // Draw the lines for rolling
+      } else if (this.currentRepresentationType == 'lineRolling'){
+        // console.error(this.lineStatesUnrolling);
+        this.beatContainer
+          // .attr('transform', 'translate('+this.circularMeasureCx+','+this.circularMeasureCy+')')
+
+        this.BEAT = this.beatContainer
+          .append('path', ':first-child')
+        // BEAT
+          .attr('id', 'beat'+this.cid)
+          .attr('class', this.secondaryClasses + 'beat d3 lineRolling')
+          .data([this.lineStatesUnrolling[this.lineStatesUnrolling.length-1]])
+          .attr('d', this.pathFunction)
+          // .attr('d', this.lineStatesUnrolling[this.lineStatesUnrolling.length])
+          .attr('stroke', COLORS.hexColors[this.color])
+          .attr('opacity', this.getOpacityNumber(this.model.get('selected')))
+          .attr('stroke-width', 4)
+          // .attr('fill', COLORS.hexColors[this.color])
+          .attr('transform', 'translate(0,0)') ;
+      // draw the lines for unrolling
+      } else if (this.currentRepresentationType == 'lineUnrolling'){
+        // console.error(this.lineStatesUnrolling);
+        this.beatContainer
+          // .attr('transform', 'translate('+this.circularMeasureCx+','+this.circularMeasureCy+')')
+
+        this.BEAT = this.beatContainer
+          .append('path', ':first-child')
+        // BEAT
+          .attr('id', 'beat'+this.cid)
+          .attr('class', this.secondaryClasses + 'beat d3 lineRolling')
+          .data([this.lineStatesRollup[this.lineStatesUnrolling.length-1]])
+          .attr('d', this.pathFunction)
+          // .attr('d', this.lineStatesUnrolling[this.lineStatesUnrolling.length])
+          .attr('stroke', COLORS.hexColors[this.color])
+          .attr('opacity', this.getOpacityNumber(this.model.get('selected')))
+          .attr('stroke-width', 4)
+          // .attr('fill', COLORS.hexColors[this.color])
+          .attr('transform', 'translate(0,0)') ;
+      // Draw the pie slice beats
       } else if (this.currentRepresentationType == 'pie'){
         var arc = d3.svg.arc()
           .innerRadius(0)
@@ -328,20 +400,21 @@ define([
           .append('path', ':first-child')
         // BEAT
           .attr('id', 'beat'+this.cid)
-          .attr('class', 'beat d3 pie-beat')
+          .attr('class', this.secondaryClasses + 'beat d3 pie-beat')
           .attr('d', arc)
           .attr('stroke', 'black')
           .attr('opacity', this.getOpacityNumber(this.model.get('selected')))
           .attr('fill', COLORS.hexColors[this.color])
           .attr('transform', 'translate(0,0)')
           .call(dragSlice);
-          // .attr('class', 'pie-beat')
+        // if you click on it, toggle its opactiy, selection, and the model through the toggeModel()
         this.BEAT.on('click', this.toggleModel);
+      // Draw the audio beat
       } else if (this.currentRepresentationType == 'audio'){
         this.BEAT = this.beatContainer
             .insert('circle', ':first-child')
             .attr('id', 'beat'+this.cid)
-            .attr('class', 'beat d3 audio-beat')
+            .attr('class', this.secondaryClasses + 'beat d3 audio-beat')
             .attr('cx', this.audioMeasureCx)
             .attr('cy', this.audioMeasureCy)
             .attr('r', this.audioMeasureR)
@@ -349,11 +422,12 @@ define([
             .attr('opacity', this.opacityForAudio)
             .attr('transform', 'translate(0,0)')
             // NO click handler to prevent the user from editing in the audio Rep
+      // Draw the bar beats
       } else if (this.currentRepresentationType == 'bar'){
         this.BEAT = this.beatContainer
             .append('rect')
             .attr('id', 'beat'+this.cid)
-            .attr('class', 'beat d3 bar-beat')
+            .attr('class', this.secondaryClasses + 'beat d3 bar-beat')
             .attr('x', this.beatBBX)
             .attr('y', this.beatBBY)
             .attr('width', this.beatWidth)
@@ -363,25 +437,15 @@ define([
             .attr('opacity', this.getOpacityNumber(this.model.get('selected')))
             .attr('fill', COLORS.hexColors[this.color])
             .call(dragBar);
-
+        // if you click on it, toggle its opactiy, selection, and the model through the toggeModel()
         this.BEAT.on('click', this.toggleModel);
       }
       return this;
     },
-
+    // change the reps, and keep track of the old one
     changeBeatRepresentation: function(representation) {
       this.previousRepresentationType = this.currentRepresentationType;
       this.currentRepresentationType = representation;
-    },
-
-    // Depricated
-    // sets the Color based on CSS between selected and not-selected
-    getSelectionBooleanCSS: function(){
-      if (this.model.get('selected')) {
-        return 'ON';
-      } else {
-        return 'OFF';
-      }
     },
 
     // sets the opacity between selected and not-selected
@@ -417,6 +481,7 @@ define([
       // re-rendering all beats, think it should only rerender itself, but w/e
       d3.select('#beat'+this.cid).style('opacity', this.getOpacityNumber(this.model.get('selected')))
     },
+    // manage the transitions from one rep to another
     transition: function(){
       if (this.parentMeasureRepModel.get('previousRepresentationType') == 'audio'){
         if (this.parentMeasureRepModel.get('representationType') == 'audio'){
@@ -440,12 +505,14 @@ define([
           this.rollUp();
         } else if(this.parentMeasureRepModel.get('representationType') == 'line'){
         } else if(this.parentMeasureRepModel.get('representationType') == 'pie'){
+          this.rollUpLines();
         } else if(this.parentMeasureRepModel.get('representationType') == 'bar'){
         }
       } else if(this.parentMeasureRepModel.get('previousRepresentationType') == 'pie'){
         if (this.parentMeasureRepModel.get('representationType') == 'audio'){
         } else if(this.parentMeasureRepModel.get('representationType') == 'bead'){
         } else if(this.parentMeasureRepModel.get('representationType') == 'line'){
+          this.unrollLines();
         } else if(this.parentMeasureRepModel.get('representationType') == 'pie'){
         } else if(this.parentMeasureRepModel.get('representationType') == 'bar'){
         }

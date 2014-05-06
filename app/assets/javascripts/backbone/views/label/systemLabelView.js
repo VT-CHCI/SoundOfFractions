@@ -34,7 +34,13 @@ define([
       $(this.parentEl).append( compiledTemplate );
 
       // JQuery-UI draggable
-      $('.system-label').draggable();
+      $('.system-label').draggable({
+        revert: 'invalid',
+        helper: 'clone',
+        drag: function( event, ui ) {
+          
+        }
+      });
 
       return this;
     }

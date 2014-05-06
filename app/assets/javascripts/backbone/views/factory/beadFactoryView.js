@@ -32,7 +32,7 @@ define([
     },
 
     render: function(){
-      var ƒthis = this;
+      var µthis = this;
       var beatFactoryParameters = {
         beat: this.model,
         color: this.beatColor
@@ -63,8 +63,8 @@ define([
         // Inside: x and y must satisfy (x - center_x)^2 + (y - center_y)^2 < radius^2
         // Outside: x and y must satisfy (x - center_x)^2 + (y - center_y)^2 > radius^2
         // On: x and y must satisfy (x - center_x)^2 + (y - center_y)^2 == radius^2
-        if ( Math.pow(newComputedValX - ƒthis.circularMeasureCx, 2) + Math.pow(newComputedValY - ƒthis.circularMeasureCy, 2) <= Math.pow(ƒthis.circularMeasureR,2) ) {
-          var center = {x: ƒthis.circularMeasureCx, y:ƒthis.circularMeasureCy};
+        if ( Math.pow(newComputedValX - µthis.circularMeasureCx, 2) + Math.pow(newComputedValY - µthis.circularMeasureCy, 2) <= Math.pow(µthis.circularMeasureR,2) ) {
+          var center = {x: µthis.circularMeasureCx, y:µthis.circularMeasureCy};
           //give it two points, the center, and the new beat location, once it is on or inside the circle
           function angle(center, p1) {
             var p0 = {x: center.x, y: center.y - Math.sqrt(Math.abs(p1.x - center.x) * Math.abs(p1.x - center.x)
@@ -76,12 +76,12 @@ define([
 
           // make an array to find out where the new beat should be added in the beatsCollection of the measure
           var refArray = [];
-          for ( i=0 ; i < ƒthis.beatsInMeasure ; i++ ) {
-            refArray.push((360/ƒthis.beatsInMeasure)*i);
+          for ( i=0 ; i < µthis.beatsInMeasure ; i++ ) {
+            refArray.push((360/µthis.beatsInMeasure)*i);
           }
           var newIndex = _.sortedIndex(refArray, angleAtNewBeat);
           var newBeat = new BeatModel({selected:true});
-          ƒthis.parentMeasureModel.addBeatToBeatsCollection(newBeat, newIndex);
+          µthis.parentMeasureModel.addBeatToBeatsCollection(newBeat, newIndex);
         }
       });
       var dragLine = d3.behavior.drag();
@@ -99,16 +99,16 @@ define([
         // Above: newComputedValY1 must be above line y
         // On : newComputedValY1 must be on the line y
         // Below: newComputedValY1 must be below the line y
-        if ( newComputedValY1 < ƒthis.numberLineY ) {
+        if ( newComputedValY1 < µthis.numberLineY ) {
           // make an array to find out where the new beat should be added in the beatsCollection of the measure
           var refArray = [];
-          for ( i=0 ; i < ƒthis.beatsInMeasure ; i++ ) {
-            refArray.push((ƒthis.linearLineLength/ƒthis.beatsInMeasure)*i);
+          for ( i=0 ; i < µthis.beatsInMeasure ; i++ ) {
+            refArray.push((µthis.linearLineLength/µthis.beatsInMeasure)*i);
           }
           console.log(refArray);
           var newIndex = _.sortedIndex(refArray, newComputedValX1);
           var newBeat = new BeatModel({selected:true});
-          ƒthis.parentMeasureModel.addBeatToBeatsCollection(newBeat, newIndex);
+          µthis.parentMeasureModel.addBeatToBeatsCollection(newBeat, newIndex);
         }
       });
       var dragBar = d3.behavior.drag();
@@ -122,22 +122,22 @@ define([
         // Above: newComputedValY1 must be above line y
         // On : newComputedValY1 must be on the line y
         // Below: newComputedValY1 must be below the line y
-        if ( newComputedValY < ƒthis.lbbMeasureLocationY + ƒthis.beatHeight ) {
+        if ( newComputedValY < µthis.lbbMeasureLocationY + µthis.beatHeight ) {
           // make an array to find out where the new beat should be added in the beatsCollection of the measure
           var refArray = [];
-          for ( i=0 ; i < ƒthis.beatsInMeasure ; i++ ) {
-            refArray.push((ƒthis.linearLineLength/ƒthis.beatsInMeasure)*i+ƒthis.beatWidth);
+          for ( i=0 ; i < µthis.beatsInMeasure ; i++ ) {
+            refArray.push((µthis.linearLineLength/µthis.beatsInMeasure)*i+µthis.beatWidth);
           }
-          var newIndex = _.sortedIndex(refArray, parseInt(newComputedValX)+ƒthis.beatFactoryBarWidth/2);
+          var newIndex = _.sortedIndex(refArray, parseInt(newComputedValX)+µthis.beatFactoryBarWidth/2);
           console.log(refArray);
-          console.log(parseInt(newComputedValX)+ƒthis.beatFactoryBarWidth/2);
+          console.log(parseInt(newComputedValX)+µthis.beatFactoryBarWidth/2);
           var newBeat = new BeatModel({selected:true});
-          ƒthis.parentMeasureModel.addBeatToBeatsCollection(newBeat, newIndex);
+          µthis.parentMeasureModel.addBeatToBeatsCollection(newBeat, newIndex);
         }
       });
       var dragPie = d3.behavior.drag();
       dragPie.on('drag', function() {
-        var beatToChange = $('#factory-beat'+ƒthis.cid);
+        var beatToChange = $('#factory-beat'+µthis.cid);
         if(beatToChange.length >= 1) {
           var transformString = beatToChange.attr('transform').substring(10, beatToChange.attr('transform').length-1);
           var comma = transformString.indexOf(',');
@@ -148,8 +148,8 @@ define([
           d3.select(this).attr('transform', 'translate(' + [ newX, newY ] + ')');
         }
         
-        if ( Math.pow(newX - ƒthis.circularMeasureCx, 2) + Math.pow(newY - ƒthis.circularMeasureCy, 2) <= Math.pow(ƒthis.circularMeasureR,2) ) {
-          var center = {x: ƒthis.circularMeasureCx, y:ƒthis.circularMeasureCy};
+        if ( Math.pow(newX - µthis.circularMeasureCx, 2) + Math.pow(newY - µthis.circularMeasureCy, 2) <= Math.pow(µthis.circularMeasureR,2) ) {
+          var center = {x: µthis.circularMeasureCx, y:µthis.circularMeasureCy};
           //give it two points, the center, and the new beat location, once it is on or inside the circle
           function angle(center, p1) {
             var p0 = {x: center.x, y: center.y - Math.sqrt(Math.abs(p1.x - center.x) * Math.abs(p1.x - center.x)
@@ -161,12 +161,12 @@ define([
 
           // make an array to find out where the new beat should be added in the beatsCollection of the measure
           var refArray = [];
-          for ( i=0 ; i < ƒthis.beatsInMeasure ; i++ ) {
-            refArray.push(((360/ƒthis.beatsInMeasure)*i)+((360/ƒthis.beatsInMeasure)/2));
+          for ( i=0 ; i < µthis.beatsInMeasure ; i++ ) {
+            refArray.push(((360/µthis.beatsInMeasure)*i)+((360/µthis.beatsInMeasure)/2));
           }
           var newIndex = _.sortedIndex(refArray, angleAtNewBeat);
           var newBeat = new BeatModel({selected:true});
-          ƒthis.parentMeasureModel.addBeatToBeatsCollection(newBeat, newIndex);
+          µthis.parentMeasureModel.addBeatToBeatsCollection(newBeat, newIndex);
         }
       });
 
