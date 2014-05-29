@@ -45,6 +45,7 @@ define([
 
         _.bindAll(this, 'toggleModel');
         this.listenTo(this.model, 'change', _.bind(this.toggleOpacity, this));
+        dispatch.on('beatTransition.event', this.transition, this);
       } else {
         console.error('beatView(init): should not be in here!');
       }
