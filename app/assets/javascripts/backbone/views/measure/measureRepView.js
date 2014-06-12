@@ -62,6 +62,7 @@ define([
     },
     // This is a bad way of handling view deletion, but idk better
     destroy: function(options){
+      console.warn(options);
       if (options.cid == this.parentMeasureModel.cid){
         console.log('destroying');
         this.remove();
@@ -318,6 +319,10 @@ define([
       dispatch.trigger('resized.event', { cid: this.parentMeasureModel.cid });
 
       this.parentMeasureModel.setScale(this.scale);
+      
+      console.log(this.parent);
+      //Break css constraints to allow scaling of mRV container
+      $('.measureRep').css('height','auto');
     },
     // STARTING a linear drag {number line or bar}
     linearStart: function(e, ui) {
@@ -390,6 +395,8 @@ define([
       this.oldH = ui.size.height;
       console.log(this.oldW, this.oldH, ui.size.width, ui.size.height)
       this.parentMeasureModel.set('scale', this.scale);
+      //Break css constraints to allow scaling of mRV container
+      $('.measureRep').css('height','auto');
     },
     // Making a targeted 'Audio' beat animate
     audioAnimate: function(target, dur, selected) {

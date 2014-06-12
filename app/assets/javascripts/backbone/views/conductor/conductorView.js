@@ -107,7 +107,7 @@ define([
     },
     render: function() {
       $(this.el).html(conductorPlayTemplate);
-      $(this.el).draggable({ axis: "y",containment: "#middle-right-column" });
+      //$(this.el).draggable({ axis: "y", containment: "#body-container"/*"#middle-right-column"*/ });
       return this;
     }
   });
