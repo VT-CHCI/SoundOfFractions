@@ -26,8 +26,9 @@ define([
         }
         // If it is a secondary beat, ie during transitions
         if (options.secondary){
+          console.warn(options);
           this.secondaryClasses = 'secondaryBeat ';
-          dispatch.on('beatTransition.event', this.transition, this);
+          dispatch.on('secondaryBeatTransition.event', this.transition, this);
         } else {
           this.secondaryClasses = '';
         }

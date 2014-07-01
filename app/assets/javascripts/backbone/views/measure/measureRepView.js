@@ -100,6 +100,16 @@ define([
               this.measurePassingToBeatViewParameters.X1 = this.lbbMeasureLocationX +(this.beatWidth*(index));
               this.measurePassingToBeatViewParameters.X2 = this.lbbMeasureLocationX +(this.beatWidth*(index));
             }
+          } else if (options.type == 'beadCircle') {
+            // reverse says whether the beads should be unrolled or not
+            this.measurePassingToBeatViewParameters.reverse = false;
+            if (options.movedToRight){
+              this.measurePassingToBeatViewParameters.X1 = this.lbbMeasureLocationX +(this.beatWidth*(index+1));
+              this.measurePassingToBeatViewParameters.X2 = this.lbbMeasureLocationX +(this.beatWidth*(index+1));
+            } else {
+              this.measurePassingToBeatViewParameters.X1 = this.lbbMeasureLocationX +(this.beatWidth*(index));
+              this.measurePassingToBeatViewParameters.X2 = this.lbbMeasureLocationX +(this.beatWidth*(index));
+            }
           } else if (options.type == 'bar') {
             this.measurePassingToBeatViewParameters.reverse = true;
             this.measurePassingToBeatViewParameters.beatBBX = this.lbbMeasureLocationX +(this.beatWidth*(index)+this.circularMeasureCx-this.horzDivPadding/2);
@@ -138,7 +148,7 @@ define([
         this.measurePassingToBeatViewParameters.lineStatesUnrolling = this.lineStatesUnrolling;
         this.measurePassingToBeatViewParameters.lineStatesRollup = this.lineStatesRollup;
         // TODO DELETE THE VIEWS when we re-render
-        console.warn(this.measurePassingToBeatViewParameters);
+      if(options){console.error(this.measurePassingToBeatViewParameters);}
         new BeatView(this.measurePassingToBeatViewParameters);
         if (this.currentRepresentationType == 'audio') {
           return false;
@@ -963,6 +973,71 @@ define([
         µthis.makeBeats({secondary:true, type:'lineUnrolling'});
         circlePath.remove();
       }, this.transitionDuration + this.animationIntervalDuration );
+      // remove the pie beats
+      setTimeout(function(){
+        pieBeats.remove();
+      }, this.transitionDuration + this.animationIntervalDuration*2 );
+      // add the infinite line
+      setTimeout(function(){
+        µthis.addInfiniteLine();
+      }, this.transitionDuration + this.animationIntervalDuration*3 );
+      // send the beatView event
+      setTimeout(function(){
+        dispatch.trigger('secondaryBeatTransition.event', µthis);
+      }, this.transitionDuration + this.animationIntervalDuration*4);
+      // Make the tertiary/secondary pie beats
+      // setTimeout(function(){
+      //   µthis.makeBeats({secondary:true, type:'line'});
+      // }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration*5 );
+      // // re-render
+      // setTimeout(function(){
+      //   dispatch.trigger('reRenderMeasure.event', this);
+      // }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration*6 );
+    },
+    pieToBead: function(){
+      console.log('itb');
+      var µthis = this;
+      var svgContainer = d3.select('#svg-'+this.measureRepModel.cid)
+      var beatHolder = d3.select('#beat-holder-'+this.measureRepModel.cid);
+      var pieBeats = beatHolder.selectAll('.pie-beat');
+      //var circlePath = svgContainer.selectAll('.circle-path');
+      var circlePath = $('#svg-'+this.measureRepModel.cid + ' .circle-path');
+
+      // Make the secondary bead beats and fade the pie beats
+      setTimeout(function(){
+        µthis.makeBeats({secondary:true, type:'lineUnrolling'});
+        $('.pie-beat').fadeOut(this.animationIntervalDuration);
+      }, this.animationIntervalDuration);
+      setTimeout(function(){
+        µthis.makeBeats({secondary:true, type:'beadCircle'});
+      }, this.animationIntervalDuration*2);
+      //remove the pie beats
+      setTimeout(function(){
+        pieBeats.remove();
+      }, this.animationIntervalDuration*3 );
+      // re-render
+      setTimeout(function(){
+        // this sets the transition count on the model itself, which the beatView is listening to
+        dispatch.trigger('reRenderMeasure.event', this);
+      }, this.animationIntervalDuration*4 );
+    },
+    pieToBar: function(){
+      console.log('itr');
+      var µthis = this;
+      var svgContainer = d3.select('#svg-'+this.measureRepModel.cid)
+        // Adjust the measureRep container to accomodate the line rep
+        .attr('width', this.linearDivWidth+this.circularMeasureR*2 )
+        // .attr('height', this.linearDivHeight+this.circularMeasureR*2 );
+      var beatHolder = d3.select('#beat-holder-'+this.measureRepModel.cid);
+      var pieBeats = beatHolder.selectAll('.pie-beat');
+      var circlePath = svgContainer.selectAll('.circle-path');
+
+      // make the secondary line-Unrolling beats, and remove the circle measure
+      setTimeout(function(){
+        µthis.makeBeats({secondary:true, type:'lineUnrolling'});
+        $('.pie-beat').fadeOut(this.animationIntervalDuration);
+        circlePath.remove();
+      }, this.transitionDuration + this.animationIntervalDuration );
       // dunno
       setTimeout(function(){
         // 
@@ -973,7 +1048,7 @@ define([
       }, this.transitionDuration + this.animationIntervalDuration*3 );
       // add the infinite line
       setTimeout(function(){
-        µthis.addInfiniteLine();
+        //µthis.addInfiniteLine();
       }, this.transitionDuration + this.animationIntervalDuration*4 );
       // send the beatView event
       setTimeout(function(){
@@ -981,12 +1056,55 @@ define([
       }, this.transitionDuration + this.animationIntervalDuration*5);
       // Make the tertiary/secondary pie beats
       setTimeout(function(){
-        µthis.makeBeats({secondary:true, type:'pie'});
+        µthis.makeBeats({secondary:true, type:'bar'});
       }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration*6 );
       // re-render
       setTimeout(function(){
         dispatch.trigger('reRenderMeasure.event', this);
       }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration*7 );
+      // console.log('itr');
+      // var µthis = this;
+      // var svgContainer = d3.select('#svg-'+this.measureRepModel.cid)
+      //       .attr('width', this.linearDivWidth+this.circularMeasureR*2 );
+      // var beatHolder = d3.select('#beat-holder-'+this.measureRepModel.cid);
+      // var pieBeats = beatHolder.selectAll('.pie-beat');
+      // var circlePath = $('#svg-'+this.measureRepModel.cid + ' .circle-path');
+
+      // // Unroll
+      // dispatch.trigger('beatTransition.event', µthis);
+      // for(i=0; i<this.transitionNumberOfPoints; i++){
+      //   this.circlePath.data([this.circleStates[i]])
+      //     .transition()
+      //       .delay(this.transitionDuration*i)
+      //       .duration(this.transitionDuration)
+      //       .ease('linear')
+      //       .attr('d', this.pathFunction)
+      // };
+      // // make the new bar beats and fade the old bead beats and the circle measure
+      // setTimeout(function(){
+      //   µthis.makeBeats({secondary:true, type:'lineUnrolling'});
+      //   $('.pie-beat').fadeOut(this.animationIntervalDuration);
+      //   circlePath.fadeOut(this.animationIntervalDuration);
+      // }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration);
+      // setTimeout(function(){
+      //   µthis.makeBeats({secondary:true, type:'bar'});
+      //   $('.pie-beat').fadeOut(this.animationIntervalDuration);
+      //   circlePath.fadeOut(this.animationIntervalDuration);
+      // }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration*2 );
+      // // remove the bead beats
+      // setTimeout(function(){
+      //   pieBeats.remove();
+      // }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration*3 );
+      // // move the secondary left to align itself with the new bar position
+      // setTimeout(function(){
+      //   µthis.moveSecondaryLeft('pie');
+      // }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration*4 );
+      // // re-render
+      // setTimeout(function(){
+      //   // this sets the transition count on the model itself, which the beatView is listening to
+      //   dispatch.trigger('reRenderMeasure.event', this);
+      //   // µthis.parentMeasureModel.increaseTransitionCount();
+      // }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration*5 );
     },
 
     render: function(){
@@ -1278,6 +1396,7 @@ define([
 
         //send a log event showing the removal.
         log.sendLog([[3, 'Removed a measure representation: ' + this.cid]]);
+        console.log('Removed measureRep ' + this.cid + ", " + measureModelCid);
     },
     // This is triggered by signatureChange events.
     reconfigure: function(signature) {
@@ -1349,13 +1468,13 @@ define([
       } else if(PRT == 'pie'){
         if (CRT == 'audio'){
         } else if(CRT == 'bead'){
-          //TODO
+          this.pieToBead();
         } else if(CRT == 'line'){
           this.pieToLine();
         } else if(CRT == 'pie'){
           //keep it pie, do nothing
         } else if(CRT == 'bar'){
-          //TODO
+          this.pieToBar();
         }
       } else if(PRT == 'bar'){
         if (CRT == 'audio'){
