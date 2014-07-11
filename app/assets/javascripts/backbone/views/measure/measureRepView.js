@@ -77,6 +77,9 @@ define([
         if (options.secondary){
           this.measurePassingToBeatViewParameters.beatContainer = '#secondary-beat-holder-'+this.measureRepModel.cid;
           this.measurePassingToBeatViewParameters.secondary = options.secondary;
+        } else if (options.tertiary){
+          this.measurePassingToBeatViewParameters.beatContainer = '#tertiary-beat-holder-'+this.measureRepModel.cid;
+          this.measurePassingToBeatViewParameters.tertiary = options.tertiary;
         }
       }
 
@@ -84,6 +87,20 @@ define([
       _.all(this.parentMeasureModel.get('beats').models, function(beat, index) {
         // create a Beatview
         this.measurePassingToBeatViewParameters.currentRepresentationType = this.model.get('representationType');
+
+        // Linestates must be defined here to propagate through transitions
+        this.lineStatesUnrolling = [];
+        this.lineStatesRollup = [];
+        var sliceLength = this.transitionNumberOfPoints/this.beatsInMeasure;
+        for ( var i=0 ; i<this.transitionNumberOfPoints ; i++ ){
+          var startIndex = (index*sliceLength);// - subtractor;
+          var inner = this.circleStates[i].slice(startIndex, startIndex+sliceLength);
+          this.lineStatesUnrolling.push(inner);
+          this.lineStatesRollup.splice(0,0,inner);
+        }
+          // For each subsequent line, we need to start at the last point of the previous line
+          // var subtractor = (index==0) ? 0 : 1 ;
+
         // transition beat params
         if (options){
           if (options.type == 'line') {
@@ -113,24 +130,10 @@ define([
           } else if (options.type == 'bar') {
             this.measurePassingToBeatViewParameters.reverse = true;
             this.measurePassingToBeatViewParameters.beatBBX = this.lbbMeasureLocationX +(this.beatWidth*(index)+this.circularMeasureCx-this.horzDivPadding/2);
-          } else if (options.type == 'lineRolling' || options.type == 'lineUnrolling') {
-            this.lineStatesUnrolling = [];
-            this.lineStatesRollup = [];
-            var sliceLength = this.transitionNumberOfPoints/this.beatsInMeasure;
-            for ( var i=0 ; i<this.transitionNumberOfPoints ; i++ ){
-              var startIndex = (index*sliceLength);// - subtractor;
-              var inner = this.circleStates[i].slice(startIndex, startIndex+sliceLength);
-              this.lineStatesUnrolling.push(inner);
-              this.lineStatesRollup.splice(0,0,inner);
-              // For each subsequent line, we need to start at the last point of the previous line
-              // var subtractor = (index==0) ? 0 : 1 ;
-            }
-            if (options.type == 'lineRolling') {
+          } else if (options.type == 'lineRolling') {
               this.measurePassingToBeatViewParameters.currentRepresentationType = 'lineRolling';
-            }
-            if (options.type == 'lineUnrolling') {
+          } else if (options.type == 'lineUnrolling') {
               this.measurePassingToBeatViewParameters.currentRepresentationType = 'lineUnrolling';
-            }
           }
         // Normal beat params
         } else {        
@@ -668,6 +671,19 @@ define([
       var barBox = d3.select('#svg-'+this.measureRepModel.cid + ' .bar-box');
       barBox.remove();      
     },
+    addBeadMeasurePath: function() {
+      var circlePath = svgContainer
+            .insert('path', ':first-child')
+            .data([this.circleStates[0]])
+            .attr('d', this.pathFunction)
+            .attr('stroke', 'black')
+            .attr('opacity', 1)
+            .attr('class', 'circle')
+            .attr('class', 'circle-path')
+            .attr('transform', 'scale('+this.originalScale+','+this.originalScale+')');
+        // Attach it to the view
+        this.circlePath = circlePath;
+    },
 
     // TRANSITIONS
     beadToLine: function(options) {
@@ -735,20 +751,12 @@ define([
         $('.bead-beat').fadeOut(this.animationIntervalDuration);
         circlePath.fadeOut(this.animationIntervalDuration);
       }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration);
-      // remove the bead beats
-      setTimeout(function(){
-        beadBeats.remove();
-      }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration*2 );
-      // move the secondary left to align itself with the new bar position
-      setTimeout(function(){
-        µthis.moveSecondaryLeft('bead');
-      }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration*3 );
       // re-render
       setTimeout(function(){
         // this sets the transition count on the model itself, which the beatView is listening to
         dispatch.trigger('reRenderMeasure.event', this);
         // µthis.parentMeasureModel.increaseTransitionCount();
-      }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration*4 );
+      }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration*2 );
     },
     beadToPie: function(){
       console.log('bti');
@@ -786,7 +794,7 @@ define([
         µthis.removeInfiniteLine();
         µthis.moveSecondaryLeft();
       }, this.animationIntervalDuration );
-      // make the seconadry bar beats and fade out the line paths beats
+      // make the secondary bar beats and fade out the line paths beats
       setTimeout(function(){
         µthis.makeBeats({secondary:true, type:'bar'});
         $('#beat-holder-'+µthis.measureRepModel.cid+' .line-beat').fadeOut(this.animationIntervalDuration);
@@ -873,11 +881,12 @@ define([
       }, this.transitionDuration + this.animationIntervalDuration*4 );
       // send the beat transition event 
       setTimeout(function(){
-        dispatch.trigger('beatTransition.event', µthis);
+        dispatch.trigger('secondaryBeatTransition.event', µthis);
       }, this.transitionDuration + this.animationIntervalDuration*5);
-      // make the secondart pie beats
+      // make the secondary pie beats
       setTimeout(function(){
-        µthis.makeBeats({secondary:true, type:'pie'});
+        µthis.makeBeats({tertiary:true, type:'pie'});
+        $('.lineRolling').fadeOut(µthis.animationIntervalDuration);
       }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration*6 );
       // re-render
       setTimeout(function(){
@@ -918,28 +927,22 @@ define([
       // remove the measure bounding bar box and move the secondary left to align with the new beats
       setTimeout(function(){
         µthis.removeBarBox();
-        µthis.moveSecondaryLeft();
+        µthis.movePrimaryRight();
+        µthis.moveSecondaryRight('options');
       }, this.animationIntervalDuration );
-      // fade out the bar beats, and make the secondary bead beats
+      // Make bead beats and show measure path while fading out bar beats
       setTimeout(function(){
-        $('#beat-holder-'+µthis.measureRepModel.cid+' .bar-beat').fadeOut(this.animationIntervalDuration);
         µthis.makeBeats({secondary:true, type:'bead' });
-      }, this.animationIntervalDuration*2 );
-      // Show the measure circle
-      setTimeout(function(){
         var actualMeasureLinePath = d3.select('#svg-'+µthis.measureRepModel.cid+' .hidden-line-path')
           .transition()
             .attr('stroke', 'black');
-      }, this.animationIntervalDuration*3 );
-      // move the secondary right to align
-      setTimeout(function(){
-        µthis.moveSecondaryRight('options');
-      }, this.animationIntervalDuration*4 );
-      // send the beatView event, and rollup
+        $('#beat-holder-'+µthis.measureRepModel.cid+' .bar-beat').fadeOut(this.animationIntervalDuration);
+      }, this.animationIntervalDuration*2 );
+      //Roll measure path
       setTimeout(function(){
         dispatch.trigger('beatTransition.event', µthis);
         for(i=0; i<µthis.transitionNumberOfPoints; i++){
-          µthis.actualMeasureLinePath.data([µthis.circleStates[µthis.transitionNumberOfPoints-1-i]])
+          µthis.actualMeasureLinePath.data([µthis.circleStates[µthis.transitionNumberOfPoints-1-i]])  //actualMeasurePath is undefined
             .transition()
               .delay(µthis.transitionDuration*i)
               .duration(µthis.transitionDuration)
@@ -950,49 +953,52 @@ define([
               .attr('class', 'circle')
               .attr('class', 'circle-path');
         }
-      }, this.animationIntervalDuration*5 ); 
+      }, this.animationIntervalDuration*3 ); 
       // re-render
       setTimeout(function(){
         µthis.parentMeasureModel.increaseTransitionCount();
         dispatch.trigger('reRenderMeasure.event', this);
-      }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration*6 );      
+      }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration*4 );      
     },
-    pieToLine: function(){
-      console.log('itl');
+    barToPie: function(){
+      console.log('rti');
+      console.log(this.actualMeasureLinePath);
       var µthis = this;
       var svgContainer = d3.select('#svg-'+this.measureRepModel.cid)
-        // Adjust the measureRep container to accomodate the line rep
         .attr('width', this.linearDivWidth+this.circularMeasureR*2 )
-        // .attr('height', this.linearDivHeight+this.circularMeasureR*2 );
+        .attr('height', this.linearDivHeight+this.circularMeasureR*2 );
       var beatHolder = d3.select('#beat-holder-'+this.measureRepModel.cid);
-      var pieBeats = beatHolder.selectAll('.pie-beat');
-      var circlePath = svgContainer.selectAll('.circle-path');
-
-      // make the secondary line-Unrolling beats, and remove the circle measure
+      var barBeats = beatHolder.selectAll('.bar-beat');
+      
+      // remove the measure bounding bar box and move the secondary left to align with the new beats
       setTimeout(function(){
-        µthis.makeBeats({secondary:true, type:'lineUnrolling'});
-        circlePath.remove();
-      }, this.transitionDuration + this.animationIntervalDuration );
-      // remove the pie beats
+        µthis.removeBarBox();
+        µthis.movePrimaryRight();
+      }, this.animationIntervalDuration );
+      // fade out the bar beats, and make the secondary bead beats
       setTimeout(function(){
-        pieBeats.remove();
-      }, this.transitionDuration + this.animationIntervalDuration*2 );
-      // add the infinite line
+        $('#beat-holder-'+µthis.measureRepModel.cid+' .bar-beat').fadeOut(this.animationIntervalDuration);
+        µthis.makeBeats({secondary:true, type:'lineRolling' });
+      }, this.animationIntervalDuration*2 );
+      // send the beat transition event 
       setTimeout(function(){
-        µthis.addInfiniteLine();
-      }, this.transitionDuration + this.animationIntervalDuration*3 );
-      // send the beatView event
-      setTimeout(function(){
+        // barBeats.remove();
         dispatch.trigger('secondaryBeatTransition.event', µthis);
-      }, this.transitionDuration + this.animationIntervalDuration*4);
-      // Make the tertiary/secondary pie beats
-      // setTimeout(function(){
-      //   µthis.makeBeats({secondary:true, type:'line'});
-      // }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration*5 );
-      // // re-render
-      // setTimeout(function(){
-      //   dispatch.trigger('reRenderMeasure.event', this);
-      // }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration*6 );
+      }, this.transitionDuration + this.animationIntervalDuration*3);
+      // make the secondary pie beats
+      setTimeout(function(){
+        µthis.makeBeats({tertiary:true, type:'pie'});
+        //The following selection methods all work, but here is why I'm using jQuery:
+          //http://stackoverflow.com/questions/24685881/manipulating-an-object-in-a-settimeout-function-that-was-created-by-a-previous-s
+        // $(d3.selectAll('.lineRolling')).fadeOut(500);
+        $('.lineRolling').fadeOut(µthis.animationIntervalDuration);
+        // d3.selectAll('.lineRolling').remove();
+      }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration*4 );
+      //re-render
+      setTimeout(function(){
+        µthis.parentMeasureModel.increaseTransitionCount();
+        dispatch.trigger('reRenderMeasure.event', this);
+      }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration*5 );     
     },
     pieToBead: function(){
       console.log('itb');
@@ -1010,16 +1016,59 @@ define([
       }, this.animationIntervalDuration);
       setTimeout(function(){
         µthis.makeBeats({secondary:true, type:'beadCircle'});
+        pieBeats.remove();
       }, this.animationIntervalDuration*2);
       //remove the pie beats
-      setTimeout(function(){
-        pieBeats.remove();
-      }, this.animationIntervalDuration*3 );
+      // setTimeout(function(){
+      //   pieBeats.remove();
+      // }, this.animationIntervalDuration*3 );
       // re-render
       setTimeout(function(){
         // this sets the transition count on the model itself, which the beatView is listening to
         dispatch.trigger('reRenderMeasure.event', this);
-      }, this.animationIntervalDuration*4 );
+      }, this.animationIntervalDuration*3 );
+    },
+    pieToLine: function(){
+      console.log('itl');
+      var µthis = this;
+      var svgContainer = d3.select('#svg-'+this.measureRepModel.cid)
+        // Adjust the measureRep container to accomodate the line rep
+        .attr('width', this.linearDivWidth+this.circularMeasureR*2 )
+        // .attr('height', this.linearDivHeight+this.circularMeasureR*2 );
+      var beatHolder = d3.select('#beat-holder-'+this.measureRepModel.cid);
+      var pieBeats = beatHolder.selectAll('.pie-beat');
+      var circlePath = svgContainer.selectAll('.circle-path');
+
+      // make the secondary line-Unrolling beats, and remove the circle measure
+      setTimeout(function(){
+        µthis.makeBeats({secondary:true, type:'lineUnrolling'});
+        $('.pie-beat').fadeOut(this.animationIntervalDuration);
+        circlePath.remove();
+      }, this.transitionDuration + this.animationIntervalDuration );
+      // remove the pie beats
+      setTimeout(function(){
+        pieBeats.remove();
+      }, this.transitionDuration + this.animationIntervalDuration*2 );
+      // add the infinite line
+      setTimeout(function(){
+        µthis.addInfiniteLine();
+      }, this.transitionDuration + this.animationIntervalDuration*3 );
+      // send the beatView event
+      setTimeout(function(){
+        dispatch.trigger('secondaryBeatTransition.event', µthis);
+      }, this.transitionDuration + this.animationIntervalDuration*4);
+      // Make the tertiary/secondary line beats
+      setTimeout(function(){
+         µthis.makeBeats({secondary:true, type:'line'});
+      }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration*5 );
+      //Delete the lineUnrolling beats
+      setTimeout(function(){
+         $('.lineRolling').fadeOut(µthis.animationIntervalDuration);
+      }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration*6 );
+      // re-render
+      setTimeout(function(){
+        dispatch.trigger('reRenderMeasure.event', this);
+      }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration*7 );
     },
     pieToBar: function(){
       console.log('itr');
@@ -1038,73 +1087,25 @@ define([
         $('.pie-beat').fadeOut(this.animationIntervalDuration);
         circlePath.remove();
       }, this.transitionDuration + this.animationIntervalDuration );
-      // dunno
-      setTimeout(function(){
-        // 
-      }, this.transitionDuration + this.animationIntervalDuration*2 );
       // remove the pie beats
-      setTimeout(function(){
-        pieBeats.remove();
-      }, this.transitionDuration + this.animationIntervalDuration*3 );
-      // add the infinite line
-      setTimeout(function(){
-        //µthis.addInfiniteLine();
-      }, this.transitionDuration + this.animationIntervalDuration*4 );
+      // setTimeout(function(){
+      //   pieBeats.remove();
+      // }, this.transitionDuration + this.animationIntervalDuration*2 );
       // send the beatView event
       setTimeout(function(){
-        dispatch.trigger('beatTransition.event', µthis);
-      }, this.transitionDuration + this.animationIntervalDuration*5);
+        dispatch.trigger('secondaryBeatTransition.event', µthis);
+        //dispatch.trigger('beatTransition.event', µthis);
+      }, this.transitionDuration + this.animationIntervalDuration*2);
       // Make the tertiary/secondary pie beats
       setTimeout(function(){
-        µthis.makeBeats({secondary:true, type:'bar'});
-      }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration*6 );
+        µthis.makeBeats({tertiary:true, type:'bar'});
+        //Not sure why this is now lineRolling, but that's how it is in the DOM...
+        $('.lineRolling').fadeOut(µthis.animationIntervalDuration);
+      }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration*3 );
       // re-render
       setTimeout(function(){
         dispatch.trigger('reRenderMeasure.event', this);
-      }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration*7 );
-      // console.log('itr');
-      // var µthis = this;
-      // var svgContainer = d3.select('#svg-'+this.measureRepModel.cid)
-      //       .attr('width', this.linearDivWidth+this.circularMeasureR*2 );
-      // var beatHolder = d3.select('#beat-holder-'+this.measureRepModel.cid);
-      // var pieBeats = beatHolder.selectAll('.pie-beat');
-      // var circlePath = $('#svg-'+this.measureRepModel.cid + ' .circle-path');
-
-      // // Unroll
-      // dispatch.trigger('beatTransition.event', µthis);
-      // for(i=0; i<this.transitionNumberOfPoints; i++){
-      //   this.circlePath.data([this.circleStates[i]])
-      //     .transition()
-      //       .delay(this.transitionDuration*i)
-      //       .duration(this.transitionDuration)
-      //       .ease('linear')
-      //       .attr('d', this.pathFunction)
-      // };
-      // // make the new bar beats and fade the old bead beats and the circle measure
-      // setTimeout(function(){
-      //   µthis.makeBeats({secondary:true, type:'lineUnrolling'});
-      //   $('.pie-beat').fadeOut(this.animationIntervalDuration);
-      //   circlePath.fadeOut(this.animationIntervalDuration);
-      // }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration);
-      // setTimeout(function(){
-      //   µthis.makeBeats({secondary:true, type:'bar'});
-      //   $('.pie-beat').fadeOut(this.animationIntervalDuration);
-      //   circlePath.fadeOut(this.animationIntervalDuration);
-      // }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration*2 );
-      // // remove the bead beats
-      // setTimeout(function(){
-      //   pieBeats.remove();
-      // }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration*3 );
-      // // move the secondary left to align itself with the new bar position
-      // setTimeout(function(){
-      //   µthis.moveSecondaryLeft('pie');
-      // }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration*4 );
-      // // re-render
-      // setTimeout(function(){
-      //   // this sets the transition count on the model itself, which the beatView is listening to
-      //   dispatch.trigger('reRenderMeasure.event', this);
-      //   // µthis.parentMeasureModel.increaseTransitionCount();
-      // }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration*5 );
+      }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration*4 );
     },
 
     render: function(){
@@ -1254,6 +1255,7 @@ define([
         var svgContainer = d3.select('#svg-'+this.measureRepModel.cid)
             .attr('width', this.linearDivWidth)
             .attr('height', this.linearDivHeight);
+        var  secondaryBeatHolder = d3.select('#secondary-beat-holder-'+this.measureRepModel.cid);
         // Make a Box that holds the smaller beat bars
         var box = svgContainer
             .insert('rect', ':first-child')
@@ -1268,19 +1270,19 @@ define([
             .attr('transform', 'scale('+this.originalScale+','+this.originalScale+')');
             this.box = box;
 
-        // I dont think this is needed, even for transitions
-        // var actualMeasureLinePath = svgContainer
-        //     .insert('path', ':first-child')
-        //     .data([µthis.circleStates[µthis.transitionNumberOfPoints-1]])
-        //     .attr('d', µthis.pathFunction)
-        //     .attr('stroke', 'none')
-        //     .attr('opacity', 1)
-        //     .attr('class', 'line')
-        //     .attr('class', 'hidden-line-path')
-        //     .attr('transform', 'scale('+µthis.originalScale+','+µthis.originalScale+')')
-        //     .attr('transform', 'translate('+(µthis.circularMeasureR*-2-10)+',0)');
-        // // Attach it to the view
-        // this.actualMeasureLinePath = actualMeasureLinePath;
+
+        var actualMeasureLinePath = secondaryBeatHolder
+            .insert('path', ':last-child')
+            .data([µthis.circleStates[µthis.transitionNumberOfPoints-1]])
+            .attr('d', µthis.pathFunction)
+            .attr('stroke', 'none')
+            .attr('opacity', 1)
+            .attr('class', 'line')
+            .attr('class', 'hidden-line-path')
+            .attr('transform', 'scale('+µthis.originalScale+','+µthis.originalScale+')')
+            .attr('transform', 'translate('+(µthis.circularMeasureR*-2-10)+',0)');
+        // Attach it to the view
+        this.actualMeasureLinePath = actualMeasureLinePath;
 
         // JQ-UI resizable
         $(this.el).resizable({ 
@@ -1483,7 +1485,7 @@ define([
         } else if(CRT == 'line'){
           this.barToLine();
         } else if(CRT == 'pie'){
-          //TODO
+          this.barToPie();
         } else if(CRT == 'bar'){
           //keep it bar, do nothing
         }

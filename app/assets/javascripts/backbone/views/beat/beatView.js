@@ -485,6 +485,9 @@ define([
     },
     // manage the transitions from one rep to another
     transition: function(){
+      console.log('BeatView transition');
+      console.log(this.parentMeasureRepModel.get('previousRepresentationType'));
+      console.log(this.parentMeasureRepModel.get('representationType'));
       if (this.parentMeasureRepModel.get('previousRepresentationType') == 'audio'){
         if (this.parentMeasureRepModel.get('representationType') == 'audio'){
         } else if(this.parentMeasureRepModel.get('representationType') == 'bead'){
@@ -517,6 +520,7 @@ define([
           this.unrollLines();
         } else if(this.parentMeasureRepModel.get('representationType') == 'pie'){
         } else if(this.parentMeasureRepModel.get('representationType') == 'bar'){
+          this.unrollLines();
         }
       } else if(this.parentMeasureRepModel.get('previousRepresentationType') == 'bar'){
         if (this.parentMeasureRepModel.get('representationType') == 'audio'){
@@ -524,6 +528,7 @@ define([
           this.rollUp();
         } else if(this.parentMeasureRepModel.get('representationType') == 'line'){
         } else if(this.parentMeasureRepModel.get('representationType') == 'pie'){
+          this.rollUpLines();
         } else if(this.parentMeasureRepModel.get('representationType') == 'bar'){
         }
       }
