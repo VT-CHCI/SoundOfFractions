@@ -21,6 +21,8 @@ define([
   var WholeMeasureRepresentationView = Backbone.View.extend({
     el : $("#measure-representation"), // Specifies the DOM element which this view handles
 
+    firstRep: true,
+
     events : {
       'click .representation' : 'addOrTransition'
     },
@@ -66,8 +68,9 @@ define([
       console.log('adding to the instrument/measure/measureRep');
       // Currently forcing it to add to the first measure
       var measureRepColl = StageCollection.get(cid).get('measures').models[0].get('measureRepresentations');
-      measureRepColl.add(representationModel);
+      measureRepColl.add(representationModel);   
       // dispatch.trigger('addMeasureRepresentation.event', { newRepType: newRepType, hTrackID: hTrackID, hTrack: cid} );
+      this.isFirstRep();
     },
     transitionRep: function(e){
       console.log('wmrv transitioning');
@@ -120,8 +123,21 @@ define([
         var measureRepColl = StageCollection.get(hTrackCID).get('measures').models[0].get('measureRepresentations').get(measureRepCID).transition(newRepType);
 
       }
+      this.isFirstRep();
+    },
+
+    //The frist mRV added to the measure should conform to the .measureRep css class' height attribute. Subsequent additions should not for scaling purposes.
+    isFirstRep: function(){
+      if (this.firstRep) {
+        this.firstRep = false;
+        //console.log("This is the first mRV");
+      } else {
+        $('.measureRep').css('height', 'auto');
+        //console.log("This is not the first mRV");
+      }
     }
 
   });
+
   return new WholeMeasureRepresentationView();
 });
