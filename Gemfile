@@ -31,6 +31,7 @@ gem 'better_errors', '>= 0.2.0', :group => :development
 gem 'binding_of_caller', '>= 0.6.8', :group => :development
 gem 'd3_rails'
 gem 'font-awesome-sass-rails'
+gem 'marionette-rails'
 
 # for a better way of looking at the rake routes by calling rake color_routes in the console
 gem 'color_routes'

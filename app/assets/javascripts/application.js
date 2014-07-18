@@ -18,16 +18,15 @@ console.log('Application.js Started');
 require([
 
   // Load our "app" module and pass it to our definition function
-  'SOF',
-  'jquery'
+  'SOF'
 
   // Some plugins have to be loaded in order due to their non AMD compliance
   // Because these scripts are not "modules" they do not pass any values to the definition function below
-], function(Application, $){
+], function(Application){
   console.log("Application initializing...");
 
 
-  // The "app" dependency 'SOF' is passed in as "App"
+  // The "app" dependency 'SOF' is passed in as "Application"
   // Again, the other dependencies passed in are not "AMD" therefore don't pass a parameter to this function
   Application.initialize(App.songs);
   console.log("Application Fully initialized");

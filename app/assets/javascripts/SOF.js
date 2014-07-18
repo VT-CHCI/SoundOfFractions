@@ -6,8 +6,9 @@ define([
   'backbone',
   'backbone/routers/router',  // Request router.js
   'd3',
-  'jquery-ui'
-], function($, _, Backbone, Router, d3, $){
+  'jquery-ui',
+  'backbone.marionette'
+], function($, _, Backbone, Router, d3, $, Marionette){
   var initialize = function(options){
 
     console.log('SOF => In Initialize, initializing Router:');
