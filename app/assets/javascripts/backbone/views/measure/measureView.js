@@ -18,9 +18,10 @@ define([
   'backbone/views/measure/measureRepView',
   'text!backbone/templates/measure/measure.html',
   'app/colors',
+  'app/general',
   'app/dispatch',
   'app/log'
-], function($, _, Backbone, BeatsCollection, StageCollection, RepresentationsCollection, MeasureModel, StateModel, RepresentationModel, BeatView, BeadFactoryView, MeasureRepView, MeasureTemplate, COLORS, dispatch, log){
+], function($, _, Backbone, BeatsCollection, StageCollection, RepresentationsCollection, MeasureModel, StateModel, RepresentationModel, BeatView, BeadFactoryView, MeasureRepView, MeasureTemplate, COLORS, General, dispatch, log){
   return Backbone.View.extend({
 
     //registering click events to add and remove measures.
@@ -74,62 +75,11 @@ define([
       this.collectionOfMeasures.on('add', _.bind(this.render, this));
       this.collectionOfMeasures.on('remove', _.bind(this.render, this));
 
+      this.transitionNumberOfPoints = General.transitionNumberOfPoints(this.collectionOfMeasures.models[0].get('beats').models.length);
+
       this.render();
     },
-    // We need to calculate the number of points for animation transitions
-    // We want to be above 30 for fluidity, but below 90 to avoid computational and animation delay
-    calculateNumberOfPoints: function(n) {
-      switch (n){
-        case 1:
-          this.transitionNumberOfPoints = 40;
-          break;
-        case 2:
-          this.transitionNumberOfPoints = 40;
-          break;
-        case 3:
-          this.transitionNumberOfPoints = 42;
-          break;
-        case 4:
-          this.transitionNumberOfPoints = 40;
-          break;
-        case 5:
-          this.transitionNumberOfPoints = 40;
-          break;
-        case 6:
-          this.transitionNumberOfPoints = 42;
-          break;
-        case 7:
-          this.transitionNumberOfPoints = 42;
-          break;
-        case 8:
-          this.transitionNumberOfPoints = 40;
-          break;
-        case 9:
-          this.transitionNumberOfPoints = 45;
-          break;
-        case 10:
-          this.transitionNumberOfPoints = 40;
-          break;
-        case 11:
-          this.transitionNumberOfPoints = 44;
-          break;
-        case 12:
-          this.transitionNumberOfPoints = 48;
-          break;
-        case 13:
-          this.transitionNumberOfPoints = 39;
-          break;
-        case 14:
-          this.transitionNumberOfPoints = 42;
-          break;
-        case 15:
-          this.transitionNumberOfPoints = 45;
-          break;
-        case 16:
-          this.transitionNumberOfPoints = 48;
-          break;
-      }
-    },
+
     render: function(){
       this.scale = this.measureModel.get('scale');
       console.log('m render with scale of: '+this.scale);
@@ -167,7 +117,6 @@ define([
         var circularMeasureCx = (cX+horzDivPadding)*scale;
         var circularMeasureCy = (cY+vertDivPadding)*scale;
         var circularMeasureR = this.circularMeasureR*scale;
-        this.calculateNumberOfPoints(this.collectionOfMeasures.models[0].get('beats').models.length);
         var circularDivWidth = 2*circularMeasureR + horzDivPadding*2 + cX*this.scale; 
         var circularDivHeight = 2*circularMeasureR + vertDivPadding*2 + cY*this.scale; 
       // Linear
