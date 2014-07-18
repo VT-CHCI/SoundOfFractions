@@ -53,6 +53,8 @@ define([
 
       dispatch.on('instrumentChanged.event', this.changeInstrument, this);
       dispatch.on('conductor.event', this.togglePlay, this);
+      // dispatch.listenTo(this, 'instrumentChanged.event', this.changeInstrument);
+      // dispatch.listenTo(this, 'conductor.event', this.togglePlay);
 
       //creating two arrays to hold our gain nodes.
       // for sustained-note sounds,

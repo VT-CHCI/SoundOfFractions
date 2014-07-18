@@ -51,14 +51,20 @@ define([
         console.error('measureRepView(init): Should not be in here!');
       }
       //Dispatch listeners
-      dispatch.on('signatureChange.event', this.reconfigure, this);
-      dispatch.on('unroll.event', this.unroll, this);
-      dispatch.on('toggleAnimation.event', this.toggleAnimation, this);
-      dispatch.on('resized.event', this.destroy, this);
+      // dispatch.on('signatureChange.event', this.reconfigure, this);
+      // dispatch.on('unroll.event', this.unroll, this);
+      // dispatch.on('toggleAnimation.event', this.toggleAnimation, this);
+      // dispatch.on('resized.event', this.destroy, this);
+      this.listenTo(dispatch, 'signatureChange.event', this.reconfigure);
+      this.listenTo(dispatch, 'unroll.event', this.unroll);
+      this.listenTo(dispatch, 'toggleAnimation.event', this.toggleAnimation);
+      this.listenTo(dispatch, 'resized.event', this.destroy);
 
       this.listenTo(this.model, 'change', this.transition, this);
 
       this.render();
+
+      window.pm = this;
     },
     // This is a bad way of handling view deletion, but idk better
     destroy: function(options){
@@ -151,9 +157,10 @@ define([
         this.measurePassingToBeatViewParameters.lineStatesUnrolling = this.lineStatesUnrolling;
         this.measurePassingToBeatViewParameters.lineStatesRollup = this.lineStatesRollup;
         // TODO DELETE THE VIEWS when we re-render
-      if(options){console.error(this.measurePassingToBeatViewParameters);}
+      //if(options){console.error(this.measurePassingToBeatViewParameters);}
+      console.log('Making new beats');
         new BeatView(this.measurePassingToBeatViewParameters);
-        if (this.currentRepresentationType == 'audio') {
+        if (this.model.get('representationType') == 'audio') {
           return false;
         } else {
           return true;
@@ -436,6 +443,7 @@ define([
     beadAnimate: function(target, dur) {
 
       var target = d3.select(target);
+      console.log(target, dur);
       var originalCX = parseInt(target.attr('cx'));
       var newCX = originalCX + 10;
       target.transition()
@@ -503,6 +511,7 @@ define([
     // This toggles the animation, not the sound
     // The state is passed in from the toggleAnimation.event
     toggleAnimation: function(state){
+      console.log(state);
       var µthis = this;
 
 //TODO USE signature or beats
@@ -531,7 +540,8 @@ define([
         // If there are beats to be animated, play each in sequence, keeping a count as we go along
         // The first set is play the song from the get go
         if (counter >= 0 && counter < totalNumberOfBeats) {
-          if (this.currentRepresentationType == 'audio'){
+          console.log('Animating ' + this.measureRepModel.cid + ' ' + this.model.get('representationType'));
+          if (this.model.get('representationType') == 'audio'){
             //TODO 
             var beats = $('#measure-rep-'+this.measureRepModel.cid).find('.audio-beat');
             // A boolean value if the beat is selected
@@ -539,19 +549,19 @@ define([
             // TODO, find a better way to animate the audio beats
             // Animate the Audio beat
             this.audioAnimate(beats.eq(0)[0], dur/2.0, selected);
-          } else if (this.currentRepresentationType == 'bead'){
+          } else if (this.model.get('representationType') == 'bead'){
             var beats = $('#measure-rep-'+this.measureRepModel.cid).find('.bead-beat');
             // Animate the Bead beat
             this.beadAnimate(beats.eq(counter)[0], dur/2.0);
-          } else if (this.currentRepresentationType == 'line'){
+          } else if (this.model.get('representationType') == 'line'){
             var beats = $('#measure-rep-'+this.measureRepModel.cid).find('.line-beat');
             // Animate the Line beat
             this.lineAnimate(beats.eq(counter)[0], dur/2.0);
-          } else if (this.currentRepresentationType == 'pie'){
+          } else if (this.model.get('representationType') == 'pie'){
             var beats = $('#measure-rep-'+this.measureRepModel.cid).find('.pie-beat');
             // Animate the Pie beat
             this.pieAnimate(beats.eq(counter)[0], dur/2.0);
-          } else if (this.currentRepresentationType == 'bar'){
+          } else if (this.model.get('representationType') == 'bar'){
             var beats = $('#measure-rep-'+this.measureRepModel.cid).find('.bar-beat');
             // Animate the Bar beat
             this.barAnimate(beats.eq(counter)[0], dur/2.0);
@@ -562,24 +572,24 @@ define([
         // the second set is for the loops
         this.animationIntervalID = setInterval((function(self) {
           return function() {
-            // If we havenb't animated all of the beats in the measureRep
+            // If we haven't animated all of the beats in the measureRep
             if (counter >= 0 && counter < totalNumberOfBeats) {
-              if (self.currentRepresentationType == 'audio'){
+              if (self.model.get('representationType') == 'audio'){
                 //TODO 
                 var beats = $('#measure-rep-'+self.measureRepModel.cid).find('.audio-beat');
                 // A boolean value if the beat is selected
                 var selected = self.parentMeasureModel.get('beats').models[counter].get('selected');
                 self.audioAnimate(beats.eq(0)[0], dur/2.0, selected);
-              } else if (self.currentRepresentationType == 'bead'){
+              } else if (self.model.get('representationType') == 'bead'){
                 var beats = $('#measure-rep-'+self.measureRepModel.cid).find('.bead-beat');
                 self.beadAnimate(beats.eq(counter)[0], dur/2.0);
-              } else if (self.currentRepresentationType == 'line'){
+              } else if (self.model.get('representationType') == 'line'){
                 var beats = $('#measure-rep-'+self.measureRepModel.cid).find('.line-beat');
                 self.lineAnimate(beats.eq(counter)[0], dur/2.0);
-              } else if (self.currentRepresentationType == 'pie'){
+              } else if (self.model.get('representationType') == 'pie'){
                 var beats = $('#measure-rep-'+self.measureRepModel.cid).find('.pie-beat');
                 self.pieAnimate(beats.eq(counter)[0], dur/2.0);
-              } else if (self.currentRepresentationType == 'bar'){
+              } else if (self.model.get('representationType') == 'bar'){
                 var beats = $('#measure-rep-'+self.measureRepModel.cid).find('.bar-beat');
                 self.barAnimate(beats.eq(counter)[0], dur/2.0);
               }
@@ -1386,19 +1396,33 @@ define([
     removeRepresentation: function(ev){
       // if ($('#measure'+this.measuresCollection.models[0].cid).parent()) {
         //removing the last measure isn't allowed.
-        if(this.measureRepresentations.length == 1) {
-          console.log('Can\'t remove the last representation!');
-          return;
-        }
-        console.log('removed representation');
+        // if(this.measureRepresentations.length == 1) {
+        //   console.log('Can\'t remove the last representation!');
+        //   return;
+        // }
+        // console.log('removed representation');
 
-        var measureModelCid = ev.srcElement.parentElement.parentElement.parentElement.id.slice(12);
-        //we remove the measureRep and get its model.
-        this.measureRepresentations.remove(measureModelCid);
+        // var measureModelCid = ev.srcElement.parentElement.parentElement.parentElement.id.slice(12);
+        // //we remove the measureRep and get its model.
+        // // this.measureRepresentations.remove(measureModelCid);
+        
+        // this.measureRepresentations.remove(measureModelCid).destroy();
+        // d3.select('#beat-holder-'+this.measureRepModel.cid).selectAll('.bead-beat').remove();
+        //this.$el.remove();
+        this.remove();
+        this.unbind();
+        this.model.destroy();
+        //dispatch.off('toggleAnimation.event', this.toggleAnimation, this);  //This doesn't seem to do anything...
+        // dispatch.off(null, null, this); //Nor does this
+        // dispatch.stopListening(this);  //Or this
+        // this.off();  //Or this
+        // this.stopListening(); //Or this
+        // dispatch.unbind('toggleAnimation.event');  //This unbinds for all mrVs, not just this one...
+        // dispatch.off();  //As does this
 
         //send a log event showing the removal.
-        log.sendLog([[3, 'Removed a measure representation: ' + this.cid]]);
-        console.log('Removed measureRep ' + this.cid + ", " + measureModelCid);
+        // log.sendLog([[3, 'Removed a measure representation: ' + this.cid]]);
+        // console.log('Removed measureRep ' + this.cid + ", " + measureModelCid);
     },
     // This is triggered by signatureChange events.
     reconfigure: function(signature) {
