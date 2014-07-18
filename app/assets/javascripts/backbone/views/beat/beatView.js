@@ -8,7 +8,7 @@ define([
   'underscore',
   'backbone',
   'backbone/models/beat',
-  'colors',
+  'app/colors',
   'app/dispatch',
   'app/log'
 ], function($, _, Backbone, BeatModel, COLORS, dispatch, log){

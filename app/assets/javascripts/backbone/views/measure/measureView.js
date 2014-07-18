@@ -17,7 +17,7 @@ define([
   'backbone/views/factory/beadFactoryView',
   'backbone/views/measure/measureRepView',
   'text!backbone/templates/measure/measure.html',
-  'colors',
+  'app/colors',
   'app/dispatch',
   'app/log'
 ], function($, _, Backbone, BeatsCollection, StageCollection, RepresentationsCollection, MeasureModel, StateModel, RepresentationModel, BeatView, BeadFactoryView, MeasureRepView, MeasureTemplate, COLORS, dispatch, log){
