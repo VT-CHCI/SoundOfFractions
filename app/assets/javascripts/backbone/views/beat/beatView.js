@@ -28,8 +28,7 @@ define([
         if (options.secondary){
           console.warn(options);
           this.secondaryClasses = 'secondaryBeat ';
-          // dispatch.on('secondaryBeatTransition.event', this.transition, this);
-          dispatch.listenTo(this, 'secondaryBeatTransition.event', this.transition);
+          dispatch.on('secondaryBeatTransition.event', this.transition, this);
         } else {
           this.secondaryClasses = '';
         }
@@ -48,7 +47,6 @@ define([
         _.bindAll(this, 'toggleModel');
         this.listenTo(this.model, 'change', _.bind(this.toggleOpacity, this));
         dispatch.on('beatTransition.event', this.transition, this);
-          // dispatch.listenTo(this, 'beatTransition.event', this.transition);
       } else {
         console.error('beatView(init): should not be in here!');
       }

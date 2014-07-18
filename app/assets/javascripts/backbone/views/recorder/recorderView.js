@@ -22,7 +22,6 @@ define([
 
     initialize: function() {
       dispatch.on('togglePlay.event', this.playToggled, this);
-      // dispatch.listenTo(this, 'togglePlay.event', this.playToggled);
 
     },
 

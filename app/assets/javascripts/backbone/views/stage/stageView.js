@@ -87,9 +87,6 @@ define([
       dispatch.on('instrumentAddedToCompositionArea.event', this.addInstrument, this);
       dispatch.on('instrumentDeletedFromCompositionArea.event', this.deleteInstrument, this);
       dispatch.on('newInstrumentTempoRecorded', this.addInstrument, this);
-      // dispatch.listenTo(this, 'instrumentAddedToCompositionArea.event', this.addInstrument);
-      // dispatch.listenTo(this, 'instrumentDeletedFromCompositionArea.event', this.deleteInstrument);
-      // dispatch.listenTo(this, 'newInstrumentTempoRecorded', this.addInstrument);
 
       StateModel.set('stage', this.stage);
     },

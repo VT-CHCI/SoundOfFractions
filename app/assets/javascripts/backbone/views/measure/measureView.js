@@ -57,11 +57,6 @@ define([
       dispatch.on('unroll.event', this.unroll, this);
       dispatch.on('tempoChange.event', this.adjustRadius, this);
       dispatch.on('reRenderMeasure.event', this.render, this);
-      // dispatch.listenTo(this, 'signatureChange.event', this.reconfigure);
-      // dispatch.listenTo(this, 'measureRepresentation.event', this.changeMeasureRepresentation);
-      // dispatch.listenTo(this, 'unroll.event', this.unroll);
-      // dispatch.listenTo(this, 'tempoChange.event', this.adjustRadius);
-      // dispatch.listenTo(this, 'reRenderMeasure.event', this.render);
 
       // this bindall method is thor the remainging listeners, per StackOverflow suggestions
       _.bindAll(this, 'render');

@@ -33,10 +33,8 @@ define([                                           // These are file paths
       this.conductorModel = ConductorModel;
 
       //registering our stopPlay() method on stopRequest events.
-      // dispatch.on('measureRepresentation.event', this.stopPlay, this);
-      // dispatch.on('stopRequest.event', this.stopPlay, this);
-      dispatch.listenTo(this, 'measureRepresentation.event', this.stopPlay);
-      dispatch.listenTo(this, 'stopRequest.event', this.stopPlay);
+      dispatch.on('measureRepresentation.event', this.stopPlay, this);
+      dispatch.on('stopRequest.event', this.stopPlay, this);
 
       // This binds all keypresses on teh webpage to this View, allow the letter p to click the first plus sign
       _.bindAll(this, 'manuallPress');

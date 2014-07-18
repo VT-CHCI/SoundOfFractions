@@ -26,8 +26,7 @@ define([
 
     initialize: function() {
       //register a handler for sliderChange events.
-      // dispatch.on('bPMSlider.event', this.setVal, this);
-      dispatch.listenTo(this, 'bPMSlider.event', this.setVal);
+      dispatch.on('bPMSlider.event', this.setVal, this);
     },
 
     //this is called when the slider is changed
