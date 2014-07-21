@@ -51,8 +51,10 @@ define([
       _.bindAll(this, 'manuallPress');
       $(document).bind('keypress', this.manuallPress);
 
-      dispatch.on('instrumentChanged.event', this.changeInstrument, this);
-      dispatch.on('conductor.event', this.togglePlay, this);
+      // dispatch.on('instrumentChanged.event', this.changeInstrument, this);
+      this.listenTo(dispatch, 'instrumentChanged.event', this.changeInstrument);
+      // dispatch.on('conductor.event', this.togglePlay, this);
+      this.listenTo(dispatch, 'conductor.event', this.togglePlay);
 
       //creating two arrays to hold our gain nodes.
       // for sustained-note sounds,

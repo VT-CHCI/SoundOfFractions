@@ -448,12 +448,12 @@ define([
       var newCX = originalCX + 10;
       target.transition()
         .attr('cx', newCX )
-        .duration(dur/8.0)
+        .duration(dur/2.0)
         .each('end',function() {                   // as seen above
           d3.select(this).                         // this is the object 
             transition()                           // a new transition!
               .attr('cx', originalCX )    // we could have had another
-              .duration(dur/8.0);                  // .each("end" construct here.
+              .duration(dur/2.0);                  // .each("end" construct here.
               // .duration((dur*7.0)/8.0);                  // .each("end" construct here.
          });
         // .each('end',function() {                   // as seen above

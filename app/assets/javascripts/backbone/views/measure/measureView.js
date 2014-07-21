@@ -52,11 +52,16 @@ define([
       this.newMeasureRepViews = [];
 
       //Dispatch listeners
-      dispatch.on('signatureChange.event', this.reconfigure, this);
-      dispatch.on('measureRepresentation.event', this.changeMeasureRepresentation, this);
-      dispatch.on('unroll.event', this.unroll, this);
-      dispatch.on('tempoChange.event', this.adjustRadius, this);
-      dispatch.on('reRenderMeasure.event', this.render, this);
+      // dispatch.on('signatureChange.event', this.reconfigure, this);
+      // dispatch.on('measureRepresentation.event', this.changeMeasureRepresentation, this);
+      // dispatch.on('unroll.event', this.unroll, this);
+      // dispatch.on('tempoChange.event', this.adjustRadius, this);
+      // dispatch.on('reRenderMeasure.event', this.render, this);
+      this.listenTo(dispatch, 'signatureChange.event', this.reconfigure);
+      this.listenTo(dispatch, 'measureRepresentation.event', this.changeMeasureRepresentation);
+      this.listenTo(dispatch, 'unroll.event', this.unroll);
+      this.listenTo(dispatch, 'tempoChange.event', this.adjustRadius);
+      this.listenTo(dispatch, 'reRenderMeasure.event', this.render);
 
       // this bindall method is thor the remainging listeners, per StackOverflow suggestions
       _.bindAll(this, 'render');

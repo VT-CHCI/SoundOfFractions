@@ -84,9 +84,12 @@ define([
       });
 
       // Dispatch handlers
-      dispatch.on('instrumentAddedToCompositionArea.event', this.addInstrument, this);
-      dispatch.on('instrumentDeletedFromCompositionArea.event', this.deleteInstrument, this);
-      dispatch.on('newInstrumentTempoRecorded', this.addInstrument, this);
+      // dispatch.on('instrumentAddedToCompositionArea.event', this.addInstrument, this);
+      this.listenTo(dispatch, 'instrumentAddedToCompositionArea.event', this.addInstrument);
+      // dispatch.on('instrumentDeletedFromCompositionArea.event', this.deleteInstrument, this);
+      this.listenTo(dispatch, 'instrumentDeletedFromCompositionArea.event', this.deleteInstrument);
+      // dispatch.on('newInstrumentTempoRecorded', this.addInstrument, this);
+      this.listenTo(dispatch, 'newInstrumentTempoRecorded', this.addInstrument);
 
       StateModel.set('stage', this.stage);
     },

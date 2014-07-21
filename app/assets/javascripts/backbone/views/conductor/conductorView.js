@@ -26,8 +26,10 @@ define([
       this.conductorModel = ConductorModel;
 
       //registering our stopPlay() method on stopRequest events.
-      dispatch.on('measureRepresentation.event', this.stopPlay, this);
-      dispatch.on('stopRequest.event', this.stopPlay, this);
+      // dispatch.on('measureRepresentation.event', this.stopPlay, this);
+      this.listenTo(dispatch,'measureRepresentation.event', this.stopPlay);
+      // dispatch.on('stopRequest.event', this.stopPlay, this);
+      this.listenTo(dispatch,'stopRequest.event', this.stopPlay);
 
       // allow the letter p to click the first plus sign
       _.bindAll(this, 'manuallPress');
