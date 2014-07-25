@@ -14,6 +14,9 @@ define([
       this.representationType = options.representationType;
       this.previousRepresentationType = undefined;
       this.transitions = 0;
+      //The following variables are used for scaling purposes
+      this.originalContentW = undefined;
+      this.newContentW = undefined;
     },
     transition: function(newRep){
       this.set('previousRepresentationType', this.get('representationType'));
