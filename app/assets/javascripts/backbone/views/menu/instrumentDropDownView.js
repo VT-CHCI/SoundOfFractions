@@ -28,9 +28,7 @@ define([
 
       this.render();
 
-      // dispatch.on('instrumentChanged.event', this.instrumentChanged, this);
       this.listenTo(dispatch, 'instrumentChanged.event', this.instrumentChanged);
-      // dispatch.on('reRenderInstrumentDropDown.event', this.render, this);
       this.listenTo(dispatch, 'reRenderInstrumentDropDown.event', this.render);
 
       // dispatch.on('instrumentAddedToCompostionArea.event', this.updateRemove, this);

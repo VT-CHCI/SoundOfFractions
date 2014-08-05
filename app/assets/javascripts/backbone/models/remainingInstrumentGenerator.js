@@ -39,8 +39,6 @@ define([
         this.instrumentLookup = this.defaults.instrumentLookup;
       }
 
-      // dispatch.on('addInstrumentToGeneratorModel.event', this.addInstrument, this);
-      // dispatch.on('removeInstrumentFromGeneratorModel.event', this.removeInstrument, this);
       this.listenTo(dispatch, 'addInstrumentToGeneratorModel.event', this.addInstrument);
       this.listenTo(dispatch, 'removeInstrumentFromGeneratorModel.event', this.removeInstrument);
     },

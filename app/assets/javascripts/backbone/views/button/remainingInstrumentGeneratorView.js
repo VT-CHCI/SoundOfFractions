@@ -33,9 +33,7 @@ define([
       _.bindAll(this, 'manuallPress');
       $(document).bind('keypress', this.manuallPress);
 
-      // dispatch.on('instrumentChanged.event', this.render, this);
       this.listenTo(dispatch, 'instrumentChanged.event', this.render);
-      // dispatch.on('reRenderInstrumentGenerator.event', this.render, this);
       this.listenTo(dispatch,'reRenderInstrumentGenerator.event', this.render);
 
       this.render();
@@ -72,7 +70,7 @@ define([
       // $(this.el).html(remainingInstrumentGeneratorTemplate);
 
       // JQuery-UI draggable
-      $(this.el).draggable({ axis: "y", containment: "#middle-left-column" });
+      // $(this.el).draggable({ axis: "y", containment: "#middle-left-column" });
 
       return this;
     },

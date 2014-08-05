@@ -2,6 +2,7 @@
 /*
   This is the MeasureView.
   This is contained in a HTrackView.
+  It is the container for the measureRepresentations
 */
 define([
   'jquery',
@@ -52,11 +53,6 @@ define([
       this.newMeasureRepViews = [];
 
       //Dispatch listeners
-      // dispatch.on('signatureChange.event', this.reconfigure, this);
-      // dispatch.on('measureRepresentation.event', this.changeMeasureRepresentation, this);
-      // dispatch.on('unroll.event', this.unroll, this);
-      // dispatch.on('tempoChange.event', this.adjustRadius, this);
-      // dispatch.on('reRenderMeasure.event', this.render, this);
       this.listenTo(dispatch, 'signatureChange.event', this.reconfigure);
       this.listenTo(dispatch, 'measureRepresentation.event', this.changeMeasureRepresentation);
       this.listenTo(dispatch, 'unroll.event', this.unroll);
@@ -145,11 +141,14 @@ define([
       var compiledMeasureTemplate = _.template( MeasureTemplate, measureTemplateParameters );
       
       // If we are adding a rep, clear the current reps, then add the template
+      //--------------------------------------------------------------------------------------------------------------
+      // This section is the view deletion hack. So far we have been unable to delete views without this
       while(this.newMeasureRepViews.length >0) {
         var deleting = this.newMeasureRepViews.pop();
         deleting.stopListening();
         delete deleting;
       }
+      //--------------------------------------------------------------------------------------------------------------
       // clear the html
       $(this.el).html('');
       // append the new completed compiled template
@@ -319,12 +318,12 @@ define([
           animationIntervalDuration: animationIntervalDuration
         };
         //This part is the hack      This is where we create a measureRepView for each one using the paramaters
-        this.newMeasureRepViews.push(new MeasureRepView(measureRepViewParameters));
+        this.newMeasureRepViews.push(new MeasureRepView(measureRepViewParameters)); //-------------------------
+         //This is what we should be doing instead, assuming backbone view deletion worked as expected
+        // new MeasureRepView(measureRepViewParameters);
       }, this);
       // All of the views together
-      console.log(this.newMeasureRepViews);
-
-      window.mrc = this;
+      // console.log(this.newMeasureRepViews);
 
       return this;
     },

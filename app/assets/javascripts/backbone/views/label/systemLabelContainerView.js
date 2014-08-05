@@ -62,7 +62,7 @@ define([
       $(this.el).html(SystemLabelContainerGroup);
 
       // JQuery-UI draggable
-      $(this.el).draggable({ axis: "y",containment: "#middle-right-column" });
+      // $(this.el).draggable({ axis: "y",containment: "#middle-right-column" });
 
       // //we have to render each one of our labels
       _.each(this.systemLabelCollection.models, function(lbl, i) {

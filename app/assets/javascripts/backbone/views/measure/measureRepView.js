@@ -1,7 +1,8 @@
 // Filename: views/measure/measureRepView.js
 /*
   This is the MeasureRepView.
-  This is contained in a MeasureView.
+  This is contained in a MeasureView. (There can be many contained in a MeasureView)
+  This is the representation of a musical measure of beats. It contains BeatViews to represent each beat in the measure.
 */
 define([
   'jquery', 'underscore', 'backbone',
@@ -51,10 +52,9 @@ define([
         console.error('measureRepView(init): Should not be in here!');
       }
       //Dispatch listeners
-      // dispatch.on('signatureChange.event', this.reconfigure, this);
-      // dispatch.on('unroll.event', this.unroll, this);
-      // dispatch.on('toggleAnimation.event', this.toggleAnimation, this);
-      // dispatch.on('resized.event', this.destroy, this);
+      // All listeners have been changed from dispatch.on( ...) to this.listenTo(dispatch, ...) to make it easier to sever ties between the listener and the triggerer.
+      // dispatch.on requires calling off(...) corresponding to each object's events, whereas calling this.remove() makes a built-in call to this.stopListening(),
+      // which unbinds this object from all events to which it had been listening.
       this.listenTo(dispatch, 'signatureChange.event', this.reconfigure);
       this.listenTo(dispatch, 'unroll.event', this.unroll);
       this.listenTo(dispatch, 'toggleAnimation.event', this.toggleAnimation);
@@ -63,8 +63,6 @@ define([
       this.listenTo(this.model, 'change', this.transition, this);
 
       this.render();
-
-      window.pm = this;
     },
     // This is a bad way of handling view deletion, but idk better
     destroy: function(options){
@@ -75,8 +73,9 @@ define([
       }
     },
     // This is abstracted out so we can just call makeBeats() when needed
+    // Called whenever new beats are created
     makeBeats: function(options){
-      // Setting which container the beats go in, primary for first rendering, seconary for transitions
+      // Setting which container the beats go in, primary for first rendering, secondary for transitions
       if (!options){
         this.measurePassingToBeatViewParameters.beatContainer = '#beat-holder-'+this.measureRepModel.cid;
       } else {
@@ -157,7 +156,6 @@ define([
         this.measurePassingToBeatViewParameters.lineStatesUnrolling = this.lineStatesUnrolling;
         this.measurePassingToBeatViewParameters.lineStatesRollup = this.lineStatesRollup;
         // TODO DELETE THE VIEWS when we re-render
-      //if(options){console.error(this.measurePassingToBeatViewParameters);}
       console.log('Making new beats');
         new BeatView(this.measurePassingToBeatViewParameters);
         if (this.model.get('representationType') == 'audio') {
@@ -279,13 +277,14 @@ define([
           .attr('class', 'circle-path')
           .attr('transform', 'scale('+this.originalScale+','+this.originalScale+')');
 
-      if(this.model.get('originalContentW') === undefined){
+      //Store the original size of the content inside the measureRepView (i.e. the path)
+      if(this.model.get('originalContentW') == undefined){
         console.log('this.model.originalContentW is undefined');
-        this.model.set('originalContentW', $('#svg-'+this.measureRepModel.cid+' path')[0].getBoundingClientRect().width);
+        this.model.set('originalContentW', 101.72576904296875);   //This is the initial width given the current starting size of the measureRepView
       }
+      //Store the current size of the content
       this.oldW = ui.originalSize.width;
       this.oldH = ui.originalSize.height;
-      // console.log('Starting width: '+this.oldW+', model: '+this.model.get('newW'));
       // because I don't know how to compute the arc from a point, I generate the pie slices and then move them as a group.  Thus we have to get the group's transform translate, and store the number, so that when we scale the slices in the next func(), we also translate them the original amount, otherwise when we are scaling it, the slices are not translated, and the origin is 0,0
       if (this.pieTranslate == undefined){
         this.pieTranslate = d3.select('#svg-'+this.measureRepModel.cid).select('g').attr('transform')
@@ -297,7 +296,6 @@ define([
       console.log(this.oldW, this.oldH, ui.size.width, ui.size.height)
       var newW = Math.floor(ui.size.width);
       this.model.set('newContentW', $('#svg-'+this.measureRepModel.cid+' path')[0].getBoundingClientRect().width);
-      // console.log(this.model.get('newW'));
       var newH = Math.floor(ui.size.height);
       var deltaWidth = newW - this.oldW;
       var deltaHeight = newH - this.oldH;
@@ -325,17 +323,13 @@ define([
     // AFTER dragging stops on a circle
     circleStop: function(e, ui) {
       console.log('circle: adjusted scale by : ' + this.scale);
-      // console.log('Final width: ' + Math.floor(ui.size.width) + ', model: ' + this.model.get('newW'));
-      // console.log('Adjusted scale : ' + (1 + (this.model.get('newW') - this.model.get('oldW')) / this.model.get('oldW')));
-      console.log(this.oldW, this.oldH, ui.size.width, ui.size.height)
-      // this.oldW = ui.size.width;
-      // this.oldH = ui.size.height;
-      // console.log(this.oldW, this.oldH, ui.size.width, ui.size.height);
+      console.log(this.oldW, this.oldH, ui.size.width, ui.size.height);
       dispatch.trigger('resized.event', { cid: this.parentMeasureModel.cid });
       //Use the content size rather than the container size because rendering adjusts the
       //container size after scaling has been performed, which messes with subsequent
       //scaling if based off of container size.
       this.parentMeasureModel.setScale(this.originalScale + (this.model.get('newContentW') - this.model.get('originalContentW')) / this.model.get('originalContentW'));
+      // this.parentMeasureModel.setScale(this.originalScale + (this.model.get('newContentW') - this.originalContentW) / this.originalContentW);
       
       console.log(this.parent);
       //Break css constraints to allow scaling of mRV container
@@ -359,19 +353,19 @@ define([
           .attr('transform', 'scale('+this.originalScale+','+this.originalScale+')')
           .attr('transform', 'translate('+(this.circularMeasureR*-2.5+10)+',0)');
 
-      console.log(this.oldW)
+      //Store the original size of the content inside the measureRepView (i.e. the path)
       if(this.model.get('originalContentW') === undefined){
         console.log('this.model.originalContentW is undefined');
-        this.model.set('originalContentW', $('#svg-'+this.measureRepModel.cid+' path')[0].getBoundingClientRect().width);
+        this.model.set('originalContentW', 312.8128662109375);   //This is the initial width given the current starting size of the measureRepView
       }
+      //Store the current size of the content
       this.oldW = ui.originalSize.width;
       this.oldH = ui.originalSize.height;
-      console.log(this.oldW, this.oldH, ui.size.width, ui.size.height)
+      console.log(this.oldW, this.oldH, ui.size.width, ui.size.height);
     },
     // DURING a linear drag
     linearResizeCallback: function( e, ui ) {
-      console.log(this.oldW, this.oldH, ui.size.width, ui.size.height)
-      // console.log(e, ui)
+      console.log(this.oldW, this.oldH, ui.size.width, ui.size.height);
       var newW = ui.size.width;
       this.model.set('newContentW', $('#svg-'+this.measureRepModel.cid+' path')[0].getBoundingClientRect().width);
       var newH = ui.size.height;
@@ -393,7 +387,6 @@ define([
         linePath
             .attr('transform',
               "scale(" + this.scale + ', 1) translate(' + (this.circularMeasureR * -2 + 10) + ')'
-              // "scale(" + this.scale + ', 1) translate(' + (this.circularMeasureR * -2.2) + ')'
             );
         beatLines
               .attr('transform', 'scale(' + this.scale + ',' + 1 + ')');
@@ -417,10 +410,9 @@ define([
     linearStop: function(e, ui) {
       console.log('linear adjusted scale by : ' + this.scale);
       console.log(this.oldW, this.oldH, ui.size.width, ui.size.height)
-      // this.oldW = ui.size.width;
-      // this.oldH = ui.size.height;
-      // console.log(this.oldW, this.oldH, ui.size.width, ui.size.height)
+
       this.parentMeasureModel.setScale(this.originalScale + (this.model.get('newContentW') - this.model.get('originalContentW')) / this.model.get('originalContentW'));
+      
       //Break css constraints to allow scaling of mRV container
       $('.measureRep').css('height','auto');
     },
@@ -454,7 +446,7 @@ define([
       var newCX = originalCX + 10;
       target.transition()
         .attr('cx', newCX )
-        .duration(dur/2.0)
+        .duration(dur/2.0)        //This was dur/8.0, but that had issues with the VM
         .each('end',function() {                   // as seen above
           d3.select(this).                         // this is the object 
             transition()                           // a new transition!
@@ -532,7 +524,6 @@ define([
       var calcDur = 1000/(tempo/60);
 
       var totalNumberOfBeats = signature*measuresCount;
-      // go through the measure(s) first without animation
       var counter = 0;
       var measureCounter = 0;
 
@@ -1200,8 +1191,8 @@ define([
             .attr('opacity', 1)
             .attr('class', 'line')
             .attr('class', 'line-path')
-            .attr('transform', 'translate('+(this.circularMeasureR * -2 + 10)+',0)');
-            // .attr('transform', 'translate('+(this.circularMeasureR*-2.25)+',0)');
+            // .attr('transform', 'translate('+this.lbbMeasureLocationX +(this.beatWidth*(index))+',0)');
+            .attr('transform', 'translate('+(this.circularMeasureR * -2)+',0)');
         // attach it to the view
         this.actualMeasureLinePath = actualMeasureLinePath;
 
@@ -1284,7 +1275,7 @@ define([
             .attr('stroke-width', 1)
             .attr('fill', 'white')
             .attr('transform', 'scale('+this.originalScale+','+this.originalScale+')');
-            this.box = box;
+        this.box = box;
 
 
         var actualMeasureLinePath = secondaryBeatHolder
@@ -1326,6 +1317,7 @@ define([
           var newDiv = $(ui.helper).clone(false)
             .removeClass('ui-draggable-dragging')
             .css({position:'absolute', left:event.offsetX, top:event.offsetY}); 
+            // .css({position:'absolute', left:event.offsetX-7, top:event.offsetY+15}); 
           $(this).append(newDiv);
         }
       });
@@ -1337,7 +1329,7 @@ define([
 
       return this;
     },
-    // This makes the bead factory in each measureRep
+    // This makes the beat factory in each measureRep
     makeBeatFactory: function(){
       // Bead
       if (this.model.get('representationType') == 'bead') {
@@ -1400,6 +1392,7 @@ define([
       This is called when the user clicks on the minus to remove a measureRep.
     */
     removeRepresentation: function(ev){
+      /* Previous code. I kept it here because I didn't know if we wanted to reuse any of it later. */
       // if ($('#measure'+this.measuresCollection.models[0].cid).parent()) {
         //removing the last measure isn't allowed.
         // if(this.measureRepresentations.length == 1) {
@@ -1408,17 +1401,19 @@ define([
         // }
         // console.log('removed representation');
 
+        /* This is accomplished by this.model.destroy(), but this also fires a collection remove event.
+            I don't think that event is being listened to anywhere, but I believe that is the difference*/
         // var measureModelCid = ev.srcElement.parentElement.parentElement.parentElement.id.slice(12);
         // //we remove the measureRep and get its model.
         // // this.measureRepresentations.remove(measureModelCid);
         
-        // this.measureRepresentations.remove(measureModelCid).destroy();
-        // d3.select('#beat-holder-'+this.measureRepModel.cid).selectAll('.bead-beat').remove();
-        //this.$el.remove();
-        this.remove();
-        this.unbind();
-        this.model.destroy();
-        //dispatch.off('toggleAnimation.event', this.toggleAnimation, this);  //This doesn't seem to do anything...
+      /* New attempts to delete the view by doing things the Backbone way */
+        this.remove();          // Removes the view from the DOM and calls stopListening() to unbind this view from events it is listening to
+        this.unbind();          // Unbinds the view from events that it triggers
+        this.model.destroy();   // Deletes the model, which causes the model to be removed from measureRepresentations
+        $('.measureRep').css('height', 'auto');  //Breaks height constraints on remaining measureReps to avoid clipping when this is removed
+      //Failed attempts, for future reference
+        // dispatch.off('toggleAnimation.event', this.toggleAnimation, this);  //This doesn't seem to do anything...
         // dispatch.off(null, null, this); //Nor does this
         // dispatch.stopListening(this);  //Or this
         // this.off();  //Or this
@@ -1428,7 +1423,6 @@ define([
 
         //send a log event showing the removal.
         // log.sendLog([[3, 'Removed a measure representation: ' + this.cid]]);
-        // console.log('Removed measureRep ' + this.cid + ", " + measureModelCid);
     },
     // This is triggered by signatureChange events.
     reconfigure: function(signature) {

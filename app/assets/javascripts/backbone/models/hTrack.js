@@ -30,7 +30,6 @@ define([
       console.log('initing the hTrackModel with these options: ');
 
       // I need to listen to the beat collection length on the measure model of the measure collection
-      // dispatch.on('signatureChange.event', this.updateModelSignature, this);
       this.listenTo(dispatch, 'signatureChange.event', this.updateModelSignature);
 
     },

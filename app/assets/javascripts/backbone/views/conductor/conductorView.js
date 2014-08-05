@@ -26,9 +26,7 @@ define([
       this.conductorModel = ConductorModel;
 
       //registering our stopPlay() method on stopRequest events.
-      // dispatch.on('measureRepresentation.event', this.stopPlay, this);
       this.listenTo(dispatch,'measureRepresentation.event', this.stopPlay);
-      // dispatch.on('stopRequest.event', this.stopPlay, this);
       this.listenTo(dispatch,'stopRequest.event', this.stopPlay);
 
       // allow the letter p to click the first plus sign
@@ -55,17 +53,17 @@ define([
         $(this.el).addClass('pause');
         console.log('now playing');
 
-        name = '';
-        $('.hTrack').each(function(index) {
-          name = name + index + ':';
-          $(this).children('.measure').children('.beat').children().each(function() {
-            if ($(this).attr('class') == 'ON')
-              name = name + 1;
-            else
-              name = name + 0;
-          });
-          name = name + ','
-        });
+        // name = '';
+        // $('.hTrack').each(function(index) {
+        //   name = name + index + ':';
+        //   $(this).children('.measure').children('.beat').children().each(function() {
+        //     if ($(this).attr('class') == 'ON')
+        //       name = name + 1;
+        //     else
+        //       name = name + 0;
+        //   });
+        //   name = name + ','
+        // });
 
         log.sendLog([[3, "Started playing music: "+name]]);
       }

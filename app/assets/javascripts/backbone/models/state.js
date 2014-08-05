@@ -45,11 +45,6 @@ define([
 
       this.context = new window.webkitAudioContext();
 
-      // dispatch.on('doall.event', this.recordTempoAndPattern, this);
-      // dispatch.on('recordClicked.event', this.recordButtonClicked, this);
-      // dispatch.on('tappingTempo.event', this.tapTempoClicked, this);
-      // dispatch.on('stopRecording.event', this.stopRecording, this);
-      // dispatch.on('tempoDetected.event', this.stopRecording, this);
       this.listenTo(dispatch, 'doall.event', this.recordTempoAndPattern);
       this.listenTo(dispatch, 'recordClicked.event', this.recordButtonClicked);
       this.listenTo(dispatch, 'tappingTempo.event', this.tapTempoClicked);

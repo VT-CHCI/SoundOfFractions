@@ -21,7 +21,7 @@ define([
   var WholeMeasureRepresentationView = Backbone.View.extend({
     el : $("#measure-representation"), // Specifies the DOM element which this view handles
 
-    firstRep: true,
+    firstRep: true, //Used to determine whether this is the first rep for scaling purposes
 
     events : {
       'click .representation' : 'addOrTransition'
@@ -70,6 +70,7 @@ define([
       var measureRepColl = StageCollection.get(cid).get('measures').models[0].get('measureRepresentations');
       measureRepColl.add(representationModel);   
       // dispatch.trigger('addMeasureRepresentation.event', { newRepType: newRepType, hTrackID: hTrackID, hTrack: cid} );
+      //Check if this is the first rep for scaling purposes
       this.isFirstRep();
     },
     transitionRep: function(e){
@@ -123,10 +124,11 @@ define([
         var measureRepColl = StageCollection.get(hTrackCID).get('measures').models[0].get('measureRepresentations').get(measureRepCID).transition(newRepType);
 
       }
+      //Check if this is the first rep for scaling purposes
       this.isFirstRep();
     },
 
-    //The frist mRV added to the measure should conform to the .measureRep css class' height attribute. Subsequent additions should not for scaling purposes.
+    //The first mRV added to the measure should conform to the .measureRep css class' height attribute. Subsequent additions should not for scaling purposes.
     isFirstRep: function(){
       if (this.firstRep) {
         this.firstRep = false;

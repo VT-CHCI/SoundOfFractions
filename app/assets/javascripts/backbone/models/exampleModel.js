@@ -38,7 +38,6 @@ define([                                            // These are file paths
       console.log('initing the hTrackModel with these options: ');
 
       // Here, the model is listening for a signatureChange event, and when that even occurs, we run the updateModelSignature function, and pass in the paramaters as 'this'.
-      //dispatch.on('signatureChange.event', this.updateModelSignature, this);
       this.listenTo(dispatch, 'signatureChange.event', this.updateModelSignature);
 
     },
