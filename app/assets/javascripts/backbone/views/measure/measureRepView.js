@@ -1316,8 +1316,7 @@ define([
         drop: function( event, ui ) {
           var newDiv = $(ui.helper).clone(false)
             .removeClass('ui-draggable-dragging')
-            .css({position:'absolute', left:event.offsetX, top:event.offsetY}); 
-            // .css({position:'absolute', left:event.offsetX-7, top:event.offsetY+15}); 
+            .css({position:'absolute', left:event.offsetX - (window.event.x - ui.offset.left), top:event.offsetY + 26 - (window.event.y - ui.offset.top)}); //Where 26 is the height of the stamp draggable
           $(this).append(newDiv);
         }
       });
