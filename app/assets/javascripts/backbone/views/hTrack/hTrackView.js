@@ -61,11 +61,11 @@ define([
       this.muteGainNodeList = new Array();
       this.context = new webkitAudioContext();
       this.bufferList = new Array();
-      this.masterGainNode = this.context.createGainNode();
+      this.masterGainNode = this.context.createGain();
 
       //use our webaudio context to create two gain nodes for the hTrack.
-      this.gainNode = this.context.createGainNode();
-      this.muteGainNodeList = this.context.createGainNode();
+      this.gainNode = this.context.createGain();
+      this.muteGainNodeList = this.context.createGain();
       if (options.type =='sn'){
         // Trying to reduce the snare instrument's volume
         console.log('adjusted the snare gain to .2');
