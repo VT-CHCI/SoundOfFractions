@@ -73,7 +73,7 @@ define([
         navigator.webkitGetUserMedia({audio: true}, function(stream) {
           var microphone = µthis.context.createMediaStreamSource(stream);
           µthis.microphone = microphone;
-          µthis.micGain = µthis.context.createGainNode();
+          µthis.micGain = µthis.context.createGain();
           µthis.micGain.gain = µthis.micLevel;
           µthis.jsNode = µthis.context.createScriptProcessor(512, 2, 2);
           µthis.microphone.connect(µthis.micGain);
@@ -262,7 +262,7 @@ define([
         navigator.webkitGetUserMedia({audio: true}, function(stream) {
           var microphone = µthis.context.createMediaStreamSource(stream);
           µthis.microphone = microphone;
-          µthis.micGain = µthis.context.createGainNode();
+          µthis.micGain = µthis.context.createGain();
           µthis.micGain.gain = µthis.micLevel;
           µthis.jsNode = µthis.context.createScriptProcessor(512, 2, 2);
           µthis.microphone.connect(µthis.micGain);
@@ -305,7 +305,7 @@ define([
         navigator.webkitGetUserMedia({audio: true}, function(stream) {
           var microphone = µthis.context.createMediaStreamSource(stream);
           µthis.microphone = microphone;
-          µthis.micGain = µthis.context.createGainNode();
+          µthis.micGain = µthis.context.createGain();
           µthis.micGain.gain = µthis.micLevel;
           µthis.jsNode = µthis.context.createScriptProcessor(512, 2, 2);
           µthis.microphone.connect(µthis.micGain);
