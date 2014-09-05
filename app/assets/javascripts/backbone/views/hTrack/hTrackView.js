@@ -352,8 +352,8 @@ define([
         gainNode.connect(context.destination);
         // specGainNode.gain.value = 1;
 
-        //note on causes the playback to start.
-        source.noteOn(time, 0, beatDuration);
+        //start causes the playback to start.
+        source.start(time, 0, beatDuration);
         // console.error(time, beatDuration, hTrackTempo);
 
         //these calls are used to generate an envelope that
@@ -365,8 +365,8 @@ define([
         // specGainNode.gain.linearRampToValueAtTime(1, time + (beatDuration - 0.005));
         // specGainNode.gain.linearRampToValueAtTime(0, time + beatDuration);
 
-        //we call noteOff to stop the sound after the beatDuration of one beat.
-        source.noteOff(time + beatDuration);
+        //we call stop to stop the sound after the beatDuration of one beat.
+        source.stop(time + beatDuration);
       }
 
     },
