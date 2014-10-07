@@ -69,8 +69,7 @@ define([
 
       // $(this.el).html(remainingInstrumentGeneratorTemplate);
 
-      // JQuery-UI draggable
-      $(this.el).draggable({ axis: "y", containment: "#middle-left-column" });
+    
 
       return this;
     },
