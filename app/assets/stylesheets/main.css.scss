@@ -37,6 +37,11 @@ svg {
   background: none;
   box-shadow: none;
 }
+
+.measure .measureRep.measure-audio .delta{
+  display: none;
+}
+
 .add-measure {
   color: gray;
 }
