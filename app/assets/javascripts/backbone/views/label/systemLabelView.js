@@ -34,11 +34,18 @@ define([
       $(this.parentEl).append( compiledTemplate );
 
       // JQuery-UI draggable
-      $('.system-label').draggable({
+      $('.stamp').draggable({
         revert: 'invalid',
         helper: 'clone',
+        appendTo: 'body',
         drag: function( event, ui ) {
-          
+          // dispatch.trigger('drag.event', event);
+          console.log(event);
+          StateModel.set('offsetX', event.offsetX);
+          StateModel.set('offsetY', event.offsetY);
+          console.log(ui);
+          console.log(event.offsetX, event.offsetY);
+          console.log(ui.offset.left, ui.offset.top);
         }
       });
 
