@@ -521,6 +521,7 @@ define([
       var counter = 0;
       var measureCounter = 0;
 
+      this.retrievedRepresentationType = this.model.get('representationType');
       //when playing is stopped we stop the animation.
       if (state == 'off') {
         console.log('stopped animation');
@@ -531,7 +532,7 @@ define([
         // If there are beats to be animated, play each in sequence, keeping a count as we go along
         // The first set is play the song from the get go
         if (counter >= 0 && counter < totalNumberOfBeats) {
-          if (this.currentRepresentationType == 'audio'){
+          if (this.retrievedRepresentationType == 'audio'){
             //TODO 
             var beats = $('#measure-rep-'+this.measureRepModel.cid).find('.audio-beat');
             // A boolean value if the beat is selected
@@ -539,19 +540,19 @@ define([
             // TODO, find a better way to animate the audio beats
             // Animate the Audio beat
             this.audioAnimate(beats.eq(0)[0], dur/2.0, selected);
-          } else if (this.currentRepresentationType == 'bead'){
+          } else if (this.retrievedRepresentationType == 'bead'){
             var beats = $('#measure-rep-'+this.measureRepModel.cid).find('.bead-beat');
             // Animate the Bead beat
             this.beadAnimate(beats.eq(counter)[0], dur/2.0);
-          } else if (this.currentRepresentationType == 'line'){
+          } else if (this.retrievedRepresentationType == 'line'){
             var beats = $('#measure-rep-'+this.measureRepModel.cid).find('.line-beat');
             // Animate the Line beat
             this.lineAnimate(beats.eq(counter)[0], dur/2.0);
-          } else if (this.currentRepresentationType == 'pie'){
+          } else if (this.retrievedRepresentationType == 'pie'){
             var beats = $('#measure-rep-'+this.measureRepModel.cid).find('.pie-beat');
             // Animate the Pie beat
             this.pieAnimate(beats.eq(counter)[0], dur/2.0);
-          } else if (this.currentRepresentationType == 'bar'){
+          } else if (this.retrievedRepresentationType == 'bar'){
             var beats = $('#measure-rep-'+this.measureRepModel.cid).find('.bar-beat');
             // Animate the Bar beat
             this.barAnimate(beats.eq(counter)[0], dur/2.0);
@@ -564,22 +565,22 @@ define([
           return function() {
             // If we havenb't animated all of the beats in the measureRep
             if (counter >= 0 && counter < totalNumberOfBeats) {
-              if (self.currentRepresentationType == 'audio'){
+              if (self.retrievedRepresentationType == 'audio'){
                 //TODO 
                 var beats = $('#measure-rep-'+self.measureRepModel.cid).find('.audio-beat');
                 // A boolean value if the beat is selected
                 var selected = self.parentMeasureModel.get('beats').models[counter].get('selected');
                 self.audioAnimate(beats.eq(0)[0], dur/2.0, selected);
-              } else if (self.currentRepresentationType == 'bead'){
+              } else if (self.retrievedRepresentationType == 'bead'){
                 var beats = $('#measure-rep-'+self.measureRepModel.cid).find('.bead-beat');
                 self.beadAnimate(beats.eq(counter)[0], dur/2.0);
-              } else if (self.currentRepresentationType == 'line'){
+              } else if (self.retrievedRepresentationType == 'line'){
                 var beats = $('#measure-rep-'+self.measureRepModel.cid).find('.line-beat');
                 self.lineAnimate(beats.eq(counter)[0], dur/2.0);
-              } else if (self.currentRepresentationType == 'pie'){
+              } else if (self.retrievedRepresentationType == 'pie'){
                 var beats = $('#measure-rep-'+self.measureRepModel.cid).find('.pie-beat');
                 self.pieAnimate(beats.eq(counter)[0], dur/2.0);
-              } else if (self.currentRepresentationType == 'bar'){
+              } else if (self.retrievedRepresentationType == 'bar'){
                 var beats = $('#measure-rep-'+self.measureRepModel.cid).find('.bar-beat');
                 self.barAnimate(beats.eq(counter)[0], dur/2.0);
               }
