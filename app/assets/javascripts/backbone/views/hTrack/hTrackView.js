@@ -13,10 +13,9 @@ define([
   'backbone/views/measure/measureView',
   'backbone/views/menu/instrumentDropDownView',
   'backbone/views/slider/beatsPerMeasureSliderView',
-  'backbone/views/button/deleteInstrumentView',
   'app/dispatch',
   'app/log'
-], function($, _, Backbone, HTrackModel, StateModel, ConductorModel, RepresentationsCollection, MeasureView,  InstrumentDropDownView, BPMSliderView, DeleteInstrumentView, dispatch, log){
+], function($, _, Backbone, HTrackModel, StateModel, ConductorModel, RepresentationsCollection, MeasureView,  InstrumentDropDownView, BPMSliderView, dispatch, log){
   return Backbone.View.extend({
     // this is needed to recalculate a beat's size
     el: $('.hTrack'),
@@ -26,7 +25,9 @@ define([
       // for toggling the hTrack's muted state.
       'click .control' : 'toggleMuteDisplay',
       // for setting this hTrack in focus (or selected).
-      'click .addMeasureRep' : 'addRepresentationToHTrack'
+      'click .addMeasureRep' : 'addRepresentationToHTrack',
+      // when the delete instrument button is clicked, remove this hTrack
+      'click .delete-instrument' : 'removeHTrack'
     },
 
     /*
@@ -402,6 +403,16 @@ define([
       }
 
       request.send();
+    },
+    removeHTrack: function(e) {
+      var instrument = $(e.currentTarget).closest('.hTrack').data().state;
+      console.log('in removeHTrack deleteInstrumentFromCompositionArea() of ' + instrument);
+      dispatch.trigger('addInstrumentToGeneratorModel.event', instrument);
+      dispatch.trigger('instrumentDeletedFromCompositionArea.event', { instrument:instrument, model:this.parentCID });
+      dispatch.trigger('reRenderInstrumentGenerator.event', instrument);
+      console.log("Removing hTrack" + this);
+      this.hTrack.destroy();
+      this.remove();
     }
 
   });

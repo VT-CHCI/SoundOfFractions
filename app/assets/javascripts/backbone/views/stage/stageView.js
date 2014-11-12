@@ -263,7 +263,7 @@ define([
       this.stage.remove(instrument.model);
       console.warn(this.stage);
 
-      this.render();
+      // this.render();
     }
   });
   return new StageView();

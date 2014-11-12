@@ -1,14 +1,10 @@
 <div id="hTrack-<%= hTrack.cid %>" class="hTrack well container-fluid" data-state="<%= type %>">
-  <!-- <h4><%= hTrack.get('label') %></h4> -->
   <div class="htrack-info pull-left">
-    <div id="delete-hTrack-<%= hTrack.cid %>" class="delete-instrument"></div>
+    <div id="delete-hTrack-<%= hTrack.cid %>"><i class="icon-remove delete-instrument"></i></div>
     <img src="<%= App.assets.path(hTrack.get('img'))%>" class="img-circle hTrack-image">
     <div class="control unmute"><i class="icon-volume-up"></i></div>
     <div id="instrument-selector-<%= hTrack.cid %>" class="change-instrument"></div>
-    <!-- <span class="control unmute">X</span> -->
   </div>
-  <!-- <div id="hTrack<%= hTrack.cid %>" class="hTrack well"></div> -->
   <div id="measure-container-<%= hTrack.cid %>" class="measure-container pull-left"></div>
-  <!-- <div id="fraction<%= hTrack.cid %>" class="count"></div> -->
   <div class="addMeasureRep pull-right"><i class="icon-plus"></i></div>
 </div>
