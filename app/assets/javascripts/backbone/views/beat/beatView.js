@@ -420,9 +420,9 @@ define([
             .attr('cx', this.audioMeasureCx)
             .attr('cy', this.audioMeasureCy)
             .attr('r', this.audioMeasureR)
-            .attr('fill', this.colorForAudio)
-            .attr('opacity', this.opacityForAudio)
-            .attr('transform', 'translate(0,0)')
+            .attr('fill', this.initialColorForAudio);
+            // .attr('opacity', this.opacityForAudio);
+            // .attr('transform', 'translate(0,0)')
             // NO click handler to prevent the user from editing in the audio Rep
       // Draw the bar beats
       } else if (this.currentRepresentationType == 'bar'){
@@ -532,6 +532,17 @@ define([
         } else if(this.parentMeasureRepModel.get('representationType') == 'bar'){
         }
       }
-    }
+    },
+    close: function(){
+      console.log('in beatView close function');
+      this.remove();
+      this.unbind();
+      // handle other unbinding needs, here
+      _.each(this.childViews, function(childView){
+        if (childView.close){
+          childView.close();
+        }
+    })
+  }
   });
 });

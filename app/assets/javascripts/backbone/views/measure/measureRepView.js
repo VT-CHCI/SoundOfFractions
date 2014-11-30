@@ -50,6 +50,9 @@ define([
       } else {
         console.error('measureRepView(init): Should not be in here!');
       }
+
+      this.childViews = [];
+
       //Dispatch listeners
       dispatch.on('signatureChange.event', this.reconfigure, this);
       dispatch.on('unroll.event', this.unroll, this);
@@ -85,7 +88,6 @@ define([
 
       // for each beat in this measureRep
       _.all(this.parentMeasureModel.get('beats').models, function(beat, index) {
-        // create a Beatview
         this.measurePassingToBeatViewParameters.currentRepresentationType = this.model.get('representationType');
 
         // Linestates must be defined here to propagate through transitions
@@ -151,13 +153,18 @@ define([
         this.measurePassingToBeatViewParameters.lineStatesUnrolling = this.lineStatesUnrolling;
         this.measurePassingToBeatViewParameters.lineStatesRollup = this.lineStatesRollup;
         // TODO DELETE THE VIEWS when we re-render
-      if(options){console.error(this.measurePassingToBeatViewParameters);}
-        new BeatView(this.measurePassingToBeatViewParameters);
-        if (this.currentRepresentationType == 'audio') {
-          return false;
-        } else {
-          return true;
-        }
+        // if(options){console.error(this.measurePassingToBeatViewParameters);}
+        // create a Beatview
+        var newBeatView = new BeatView(this.measurePassingToBeatViewParameters);
+        this.childViews.push(newBeatView);
+        // if (this.currentRepresentationType == 'audio') {
+        //   return false;
+        // } else {
+        //   return true;
+        //   //or 
+        //   return this;
+        // }
+        return this;
       }, this);
     },
     // These are the parameters for the beat factory
@@ -234,7 +241,7 @@ define([
         audioBeatCx: this.audioBeatCx,
         audioBeatCy: this.audioBeatCy,
         audioBeatR: this.audioBeatR,
-        colorForAudio: this.colorForAudio,
+        initialColorForAudio: this.initialColorForAudio,
         // opacityForAudio: .2/this.beatsInMeasure
         opacityForAudio: .2
       }
@@ -413,22 +420,31 @@ define([
     },
     // Making a targeted 'Audio' beat animate
     audioAnimate: function(target, dur, selected) {
+      console.log('Audio animate target: ', target);
       var d3Target = d3.select(target);
-      var originalOpacity = target.getAttribute('opacity');
+      var originalFillColor = 'none';
       if(selected == true){
-        var newOpacity = 1;
+        var newFillColor = COLORS.hexColors[5];
       } else {
-        var newOpacity = originalOpacity;
+        var newFillColor = originalFillColor;
       }
+      // var originalOpacity = target.getAttribute('opacity');
+      // if(selected == true){
+      //   var newOpacity = 1;
+      // } else {
+      //   var newOpacity = originalOpacity;
+      // }
       d3Target.transition()
-        .attr('opacity', newOpacity )
-        .duration(1)
+        .attr('fill', newFillColor )
+        .duration(dur)
         .each('end',function() {                   // as seen above
           d3.select(this).                         // this is the object 
             transition()                           // a new transition!
-              .attr('opacity', originalOpacity )   // we could have had another
-              .delay(dur-1)
-              .duration(1);                      // .each("end" construct here.
+              .attr('fill', originalFillColor )   // we could have had another
+              // .delay(dur)
+              .duration(dur);                      // .each("end" construct here.
+              // .delay(dur-1)
+              // .duration(1);                      // .each("end" construct here.
          });
     },
     // Making a targeted 'Bead' beat animate
@@ -536,10 +552,13 @@ define([
             //TODO 
             var beats = $('#measure-rep-'+this.measureRepModel.cid).find('.audio-beat');
             // A boolean value if the beat is selected
+            console.log('beats: ', beats);
             var selected = this.parentMeasureModel.get('beats').models[counter].get('selected');
             // TODO, find a better way to animate the audio beats
             // Animate the Audio beat
-            this.audioAnimate(beats.eq(0)[0], dur/2.0, selected);
+            console.log('calling from first block');
+            // this.audioAnimate(beats.eq(0)[0], dur/2.0, selected);
+            this.audioAnimate(beats.eq(counter)[0], dur/2.0, selected);
           } else if (this.retrievedRepresentationType == 'bead'){
             var beats = $('#measure-rep-'+this.measureRepModel.cid).find('.bead-beat');
             // Animate the Bead beat
@@ -570,7 +589,9 @@ define([
                 var beats = $('#measure-rep-'+self.measureRepModel.cid).find('.audio-beat');
                 // A boolean value if the beat is selected
                 var selected = self.parentMeasureModel.get('beats').models[counter].get('selected');
-                self.audioAnimate(beats.eq(0)[0], dur/2.0, selected);
+                console.log('calling from second loop');
+                // self.audioAnimate(beats.eq(0)[0], dur/2.0, selected);
+                self.audioAnimate(beats.eq(counter)[0], dur/2.0, selected);
               } else if (self.retrievedRepresentationType == 'bead'){
                 var beats = $('#measure-rep-'+self.measureRepModel.cid).find('.bead-beat');
                 self.beadAnimate(beats.eq(counter)[0], dur/2.0);
@@ -1243,12 +1264,13 @@ define([
         // Find the SVG Container
         var svgContainer = d3.select('#svg-'+this.measureRepModel.cid)
         // Make a large Circle reprsenting the conatiner for all beats as they pulse
-        var circlePath = svgContainer
+        var metronomeCirlce = svgContainer
             .insert('circle', ':first-child')
             .attr('cx', this.audioMeasureCx)
             .attr('cy', this.audioMeasureCy)
             .attr('r', this.audioMeasureR)
-            .attr('fill', 'none')
+            .attr('fill', this.colorForAudio)
+            .attr('fill-opacity', 0.2)
             .attr('stroke', 'black');
       // Bar Rep
       } else if (this.model.get('representationType') == 'bar'){
@@ -1343,7 +1365,8 @@ define([
           this.measurePassingToBeatFactoryParameters.cX = this.horzDivPadding + (Math.random() * (20) - 10);
           this.measurePassingToBeatFactoryParameters.cY = (this.circularDivHeight-this.vertDivPadding-this.beatFactoryR) + (Math.random() * (20) - 10);
           this.measurePassingToBeatFactoryParameters.colorIndex = index;
-          new BeadFactoryView(this.measurePassingToBeatFactoryParameters);
+          var newBeadFactory = new BeadFactoryView(this.measurePassingToBeatFactoryParameters);
+          this.childViews.push(newBeadFactory);
         }
       // Line
       } else if (this.model.get('representationType') == 'line') {
@@ -1355,7 +1378,8 @@ define([
           this.measurePassingToBeatFactoryParameters.x2 = this.measurePassingToBeatFactoryParameters.x1;
           this.measurePassingToBeatFactoryParameters.y2 = this.measurePassingToBeatFactoryParameters.y1 + this.lineHashHeight;
           this.measurePassingToBeatFactoryParameters.colorIndex = index;
-          new BeadFactoryView(this.measurePassingToBeatFactoryParameters);
+          var newLineFactory = new BeadFactoryView(this.measurePassingToBeatFactoryParameters);
+          this.childViews.push(newLineFactory);
         }
       // Pie
       } else if (this.model.get('representationType') == 'pie') {
@@ -1365,7 +1389,8 @@ define([
           this.measurePassingToBeatFactoryParameters.cX = this.horzDivPadding + (Math.random() * (20) - 10);
           this.measurePassingToBeatFactoryParameters.cY = (this.circularDivHeight-this.vertDivPadding*3 - this.beatFactoryR*2) + (Math.random() * (30) - 20);
           this.measurePassingToBeatFactoryParameters.colorIndex = index;
-          new BeadFactoryView(this.measurePassingToBeatFactoryParameters);
+          var newPieFactory = new BeadFactoryView(this.measurePassingToBeatFactoryParameters);
+          this.childViews.push(newPieFactory);
         } 
       // Bar
       } else if (this.model.get('representationType') == 'bar') {
@@ -1376,7 +1401,8 @@ define([
           this.measurePassingToBeatFactoryParameters.y = this.numberLineY + 90 + (Math.random() * (20) - 10);
           this.measurePassingToBeatFactoryParameters.beatHeight = this.beatHeight;
           this.measurePassingToBeatFactoryParameters.colorIndex = index;
-          new BeadFactoryView(this.measurePassingToBeatFactoryParameters);
+          var newBarFactory = new BeadFactoryView(this.measurePassingToBeatFactoryParameters);
+          this.childViews.push(newBarFactory);
         }        
       }      
     },
@@ -1523,7 +1549,34 @@ define([
         dispatch.trigger('doall.event');
         this.isTapping = false;
       }
-    }
+    },
+    close: function(){
+      console.log('in measureRepView close function');
+      this.remove();
+      this.unbind();
+      if(this.onClose){
+        this.onClose();
+      }
+      // handle other unbinding needs, here
+      _.each(this.childViews, function(childView){
+        console.log('in measureRepView close function, CLOSING CHILDREN');
+        if (childView.close){
+          childView.close();
+        }
+      })
+    },
+    onClose: function(){
+      // this.model.unbind("change", this.render);
 
+      $(document).unbind('keypress', this.manuallPress);
+
+      this.unbind('signatureChange.event', this.reconfigure);
+      this.unbind('unroll.event', this.unroll);
+      this.unbind('toggleAnimation.event', this.toggleAnimation);
+      this.unbind('resized.event', this.destroy);
+      this.model.unbind('change', this.transition);
+
+    }
+ 
   });
 });

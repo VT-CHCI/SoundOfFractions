@@ -89,6 +89,7 @@ define([
       dispatch.on('newInstrumentTempoRecorded', this.addInstrument, this);
 
       StateModel.set('stage', this.stage);
+      this.masterAudioContext = new AudioContext();
     },
 
     // This is for building a song from the database, after a user has saved a song
@@ -153,7 +154,8 @@ define([
           el: '#hTrack-'+this.stage.models[this.stage.models.length-1].cid, 
           // gainNode: this.muteGainNodeList[counter],
           unusedInstrumentsModel: this.unusedInstrumentsModel,
-          type: this.stage.models[this.stage.models.length-1].get('type')
+          type: this.stage.models[this.stage.models.length-1].get('type'),
+          masterAudioContext: this.masterAudioContext
         });
       } else {
         console.log('render: stageView.js');
@@ -174,7 +176,8 @@ define([
             el: '#hTrack-'+hTrack.cid, 
             // gainNode: this.muteGainNodeList[counter],
             unusedInstrumentsModel: this.unusedInstrumentsModel,
-            type: hTrack.get('type')
+            type: hTrack.get('type'),
+            masterAudioContext: this.masterAudioContext
           });
           if(!hTrack.get('active')) {
             console.log('found a muted one');

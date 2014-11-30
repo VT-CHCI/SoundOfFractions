@@ -48,35 +48,59 @@ define([
       } else {
         this.hTrack = new HTrackModel;
       }
+
+      // Per SO? http://stackoverflow.com/questions/9522845/backbone-js-remove-all-sub-views
+      this.childViews = [];
+
       // allow the letter a to click the first plus sign
       _.bindAll(this, 'manuallPress');
       $(document).bind('keypress', this.manuallPress);
 
       dispatch.on('instrumentChanged.event', this.changeInstrument, this);
       dispatch.on('conductor.event', this.togglePlay, this);
+      dispatch.on('deleteAudioContext.event', this.deleteAudioContext, this);
 
       //creating two arrays to hold our gain nodes.
       // for sustained-note sounds,
       this.gainNode = new Array();
       // for the muting of individual 'hTrack's.
       this.muteGainNodeList = new Array();
-      this.context = new webkitAudioContext();
+      // this.context = new webkitAudioContext();
+      // this.masterAudioContext = this.masterStageAudioContext;
       this.bufferList = new Array();
-      this.masterGainNode = this.context.createGain();
+
+      this.masterGainNode = this.masterAudioContext.createGain();
 
       //use our webaudio context to create two gain nodes for the hTrack.
-      this.gainNode = this.context.createGain();
-      this.muteGainNodeList = this.context.createGain();
+      this.gainNode = this.masterAudioContext.createGain();
+      this.muteGainNodeList = this.masterAudioContext.createGain();
       if (options.type =='sn'){
         // Trying to reduce the snare instrument's volume
         console.log('adjusted the snare gain to .2');
-        this.gainNode.gain.value = .2;
+        this.gainNode.gain.value = 1;
       }
 
       //time is a function of measures and tempo (4 * 60/tempo * measures)
       this.intervalID = null; 
 
       this.render();
+    },
+
+    /*
+      This removes an audio context when an instrument is deleted.
+    */
+    deleteAudioContext: function(instrument){
+      console.log('in deleteAudioContext, not doing anyhting');
+      // console.log(instrument);
+      // if (this.type == instrument) {      
+      //   delete this.gainNode;
+      //   delete this.muteGainNodeList;
+      //   delete this.bufferList;
+      //   delete this.masterGainNode;
+      //   delete this.gainNode;
+      //   delete this.muteGainNodeList;
+      //   delete this.intervalID;
+      // }
     },
 
     /*
@@ -102,7 +126,7 @@ define([
         var µthis = this;
         // for each of the measures (V1 should only have 1 Measure)
         _.each(this.hTrack.get('measures').models, function(measure, index) {
-          new MeasureView({
+          var childView = new MeasureView({
             collectionOfMeasures: µthis.hTrack.get('measures'),
             measureRepresentations: measure.get('measureRepresentations'),
             parent: µthis.hTrack,
@@ -114,6 +138,7 @@ define([
             measureIndex: index,
             measureCount: µthis.hTrack.get('measures').models.length
           });
+          µthis.childViews.push(childView);
         });
 
         // Create an instrument selector
@@ -126,17 +151,10 @@ define([
           unusedInstrumentsModel: this.unusedInstrumentsModel
         });
 
-        // Create the delete view
-        new DeleteInstrumentView({
-          collection: this.hTrack.get('measures'),
-          parent: this.hTrack,
-          el: '#delete-hTrack-'+this.hTrack.cid,
-          parentCID: this.hTrack.cid
-        });
       }
 
       // Bind the Webkit Audio stuff to where it needs to go
-      this.loadAudio(this.context, this.hTrack.get('sample'), this.bufferList );
+      this.loadAudio(this.hTrack.get('sample'), this.bufferList );
 
       // If we want to drag it
       // $(this.el).draggable({ axis: "y", containment: "#middle-left-column" });
@@ -298,7 +316,7 @@ define([
       // console.log('Playing sound!');
 
       //this is important (check docs for explanation)
-      var startTime = this.context.currentTime; 
+      var startTime = this.masterAudioContext.currentTime; 
 
       _.each(beatTimes, function(beatTime) { // beats or deadspace start times
         //we call play on each hTrack, passing in a lot of information.
@@ -311,7 +329,7 @@ define([
 
         play(
           this,
-          this.context,
+          this.masterAudioContext,
           this.bufferList,
           //startTime is time you clicked 'play' | beatTime is the elapsed time to from the startTime
           startTime+beatTime, 
@@ -372,7 +390,7 @@ define([
 
     },
     // We can load the audio using the Webkit audio
-    loadAudio: function(context, url, bufferList){
+    loadAudio: function(url, bufferList){
       var µthis = this;
       console.log("Loading...", url);
       // Load buffer asynchronously
@@ -382,7 +400,7 @@ define([
 
       request.onload = function() {
         // Asynchronously decode the audio file data in request.response
-        context.decodeAudioData(
+        µthis.masterAudioContext.decodeAudioData(
           request.response,
           function(buffer) {
             if (!buffer) {
@@ -413,6 +431,15 @@ define([
       console.log("Removing hTrack" + this);
       this.hTrack.destroy();
       this.remove();
+      this.unbind();
+      // handle other unbinding needs, here
+      _.each(this.childViews, function(childView){
+        console.log('in hTrackView close function, CLOSING CHILDREN');
+        childView.remove();
+        if (childView.close){
+          childView.close();
+        }
+      })
     }
 
   });

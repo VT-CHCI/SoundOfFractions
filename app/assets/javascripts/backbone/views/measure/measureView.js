@@ -50,6 +50,7 @@ define([
       // We use this to make sure we are deleting all the views later
       // TODO this is buggy. we need to figure out how to delete properly via backbone views
       this.newMeasureRepViews = [];
+      this.childViews = [];
 
       //Dispatch listeners
       dispatch.on('signatureChange.event', this.reconfigure, this);
@@ -188,6 +189,7 @@ define([
         var audioBeatCy = 40;
         var audioBeatR = 12;
         var colorForAudio = COLORS.hexColors[5];
+        var initialColorForAudio = 'none';
       // Pie
         //Measure
         var measureStartAngle = 0;
@@ -277,6 +279,7 @@ define([
           audioBeatCx: audioBeatCx,
           audioBeatCy: audioBeatCy,
           audioBeatR: audioBeatR,
+          initialColorForAudio: initialColorForAudio,
           colorForAudio: colorForAudio,
           // Pie
           measureAngle: 360.0,
@@ -314,7 +317,9 @@ define([
           animationIntervalDuration: animationIntervalDuration
         };
         //This part is the hack      This is where we create a measureRepView for each one using the paramaters
-        this.newMeasureRepViews.push(new MeasureRepView(measureRepViewParameters));
+        var newView = new MeasureRepView(measureRepViewParameters);
+        this.newMeasureRepViews.push(newView);
+        this.childViews.push(newView);
       }, this);
       // All of the views together
       console.log(this.newMeasureRepViews);
@@ -388,6 +393,18 @@ define([
     // This is called when the signature of a measure is changed
     reconfigure: function(options) {
       this.render();
+    },
+    close: function(){
+      console.log('in measureView close function');
+      this.remove();
+      this.unbind();
+      // handle other unbinding needs, here
+      _.each(this.childViews, function(childView){
+        console.log('in measureView close function, CLOSING CHILDREN');
+        if (childView.close){
+          childView.close();
+        }
+      })
     }
   });
 });
