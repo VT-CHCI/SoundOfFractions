@@ -87,23 +87,6 @@ define([
     },
 
     /*
-      This removes an audio context when an instrument is deleted.
-    */
-    deleteAudioContext: function(instrument){
-      console.log('in deleteAudioContext, not doing anyhting');
-      // console.log(instrument);
-      // if (this.type == instrument) {      
-      //   delete this.gainNode;
-      //   delete this.muteGainNodeList;
-      //   delete this.bufferList;
-      //   delete this.masterGainNode;
-      //   delete this.gainNode;
-      //   delete this.muteGainNodeList;
-      //   delete this.intervalID;
-      // }
-    },
-
-    /*
       This View does not have its own html rendering, but instead creates
       a new MeasureView which gets rendered instead.
     */
