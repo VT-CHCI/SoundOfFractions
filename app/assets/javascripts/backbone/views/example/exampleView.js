@@ -116,7 +116,7 @@ define([                                           // These are file paths
     render: function() {
       // This directly uses a static template (no customization) and attaches it to the element, we assigned above on line 24
       $(this.el).html(conductorPlayTemplate);
-      $(this.el).draggable({ axis: "y",containment: "#middle-right-column" });
+      $(this.el).draggable({ axis: "y", containment: "#middle-right-column"});
       return this;
     }
   });

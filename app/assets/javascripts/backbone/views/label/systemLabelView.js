@@ -25,6 +25,7 @@ define([
     },
 
     render: function() {
+      var µthis = this;
       var params = {
         label : this.label,
         clazz : this.clazz,
@@ -34,12 +35,9 @@ define([
       $(this.parentEl).append( compiledTemplate );
 
       // JQuery-UI draggable
-      $('.system-label').draggable({
+      $('.stamp').draggable({
         revert: 'invalid',
-        helper: 'clone',
-        drag: function( event, ui ) {
-          
-        }
+        helper: 'clone'
       });
 
       return this;
