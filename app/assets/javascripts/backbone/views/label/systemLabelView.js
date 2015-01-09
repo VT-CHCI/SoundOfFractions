@@ -25,6 +25,7 @@ define([
     },
 
     render: function() {
+      var µthis = this;
       var params = {
         label : this.label,
         clazz : this.clazz,
@@ -36,17 +37,7 @@ define([
       // JQuery-UI draggable
       $('.stamp').draggable({
         revert: 'invalid',
-        helper: 'clone',
-        appendTo: 'body',
-        drag: function( event, ui ) {
-          // dispatch.trigger('drag.event', event);
-          console.log(event);
-          StateModel.set('offsetX', event.offsetX);
-          StateModel.set('offsetY', event.offsetY);
-          console.log(ui);
-          console.log(event.offsetX, event.offsetY);
-          console.log(ui.offset.left, ui.offset.top);
-        }
+        helper: 'clone'
       });
 
       return this;

@@ -40,9 +40,6 @@ define([
     render: function() {
       $(this.el).html(wholeMeasureRepresentationTemplate);
 
-      // JQuery-UI draggable
-      $(this.el).draggable();
-
       return this;
     },
     addOrTransition: function(e){
