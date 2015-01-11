@@ -12,7 +12,7 @@ define([
   var RepresentationModel = Backbone.Model.extend({
     initialize: function(options){
       this.representationType = options.representationType;
-      this.previousRepresentationType = undefined;
+      this.previousRepresentationType = 'not_yet_defined';
       this.transitions = 0;
     },
     transition: function(newRep){
