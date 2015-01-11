@@ -42,11 +42,13 @@ define([
       // this creates 1 measure, and addes beats and the representations to itself
       this.manuallyCreatedMeasureBeatsCollection = new BeatsCollection;
       //for each beat - also change signature below
-      for (var i = 0; i < 3; i++) {
+      for (var i = 0; i < 6; i++) {
+        // this.manuallyCreatedMeasureBeatsCollection.add([{selected: true}]);
         if (i == 0){
           this.manuallyCreatedMeasureBeatsCollection.add([{selected: true}]);
         } else {
-          this.manuallyCreatedMeasureBeatsCollection.add();
+          this.manuallyCreatedMeasureBeatsCollection.add([{selected: false}]);
+          // this.manuallyCreatedMeasureBeatsCollection.add();
         }
       }
       //make a collection
@@ -55,8 +57,8 @@ define([
       this.manuallyCreatedRepresentationModel = new RepresentationModel({representationType:'audio'});
       this.manuallyCreatedMeasureRepresentationCollection.add(this.manuallyCreatedRepresentationModel);
       // add a bead rep
-      // this.manuallyCreatedRepresentationModel = new RepresentationModel({representationType:'bead'});
-      // this.manuallyCreatedMeasureRepresentationCollection.add(this.manuallyCreatedRepresentationModel);
+      this.manuallyCreatedRepresentationModel = new RepresentationModel({representationType:'bead'});
+      this.manuallyCreatedMeasureRepresentationCollection.add(this.manuallyCreatedRepresentationModel);
       // add a line rep
       // this.manuallyCreatedRepresentationModel = new RepresentationModel({representationType:'line'});
       // this.manuallyCreatedMeasureRepresentationCollection.add(this.manuallyCreatedRepresentationModel);
@@ -76,7 +78,7 @@ define([
         img: 'snare.png',
         // mute: false,
         sample: '808_sn.m4a',
-        gain: .2,
+        gain: 1,
         measures: this.manuallyCreatedMeasuresCollection,
         signature: this.manuallyCreatedMeasuresCollection.models[0].get('beats').length,
         active: true,
@@ -160,12 +162,11 @@ define([
       } else {
         console.log('render: stageView.js');
         $(this.el).empty();
-
         var counter = 0;
 
         //we have to render each one of our `hTrack`s.
-        _.each(this.stage.models, function(hTrack) {
-
+        // _.each(this.stage.models, function(hTrack) {
+        _.each(this.stage.collection.models, function(hTrack) {
           //compiling our template.
           var compiledTemplate = _.template( HTrackTemplate, {hTrack: hTrack, type: hTrack.get('type')} );
           $(this.el).append( compiledTemplate );
@@ -217,22 +218,22 @@ define([
         // this creates 1 measure, and addes beats and the representations to itself
         this.manuallyCreatedMeasureBeatsCollection = new BeatsCollection;
         //for each beat - also change signature below
-        for (var i = 0; i < 2; i++) {
+        for (var i = 0; i < 6; i++) {
           if (i == 0){
             this.manuallyCreatedMeasureBeatsCollection.add([{selected: true}]);
           } else {
-            this.manuallyCreatedMeasureBeatsCollection.add();
+            this.manuallyCreatedMeasureBeatsCollection.add([{selected: true}]);
           }
         }
-        tempo = 120;
+        tempo = 240;
       }
+      this.manuallyCreatedMeasureRepresentationCollection = new RepresentationsCollection;
       // add an instrument rep
       this.manuallyCreatedRepresentationModel = new RepresentationModel({representationType:'audio'});
       // this.manuallyCreatedRepresentationModel.set('representationType', 'audio');
-      this.manuallyCreatedMeasureRepresentationCollection = new RepresentationsCollection;
       this.manuallyCreatedMeasureRepresentationCollection.add(this.manuallyCreatedRepresentationModel);
-      this.manuallyCreatedRepresentationModel = new RepresentationModel({representationType:'bead'});
-      this.manuallyCreatedMeasureRepresentationCollection.add(this.manuallyCreatedRepresentationModel);
+      // this.manuallyCreatedRepresentationModel = new RepresentationModel({representationType:'bead'});
+      // this.manuallyCreatedMeasureRepresentationCollection.add(this.manuallyCreatedRepresentationModel);
 
       // Make a htrack
       this.manuallyCreatedMeasuresCollection = new MeasuresCollection;
