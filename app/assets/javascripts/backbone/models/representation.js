@@ -1,9 +1,7 @@
 //filename: models/representation.js
 /*
   This is the representation model.
-  It is the same as a measure model, but it is just
-  representation purposes of the measure, not a collection
-  itself
+  It keeps track of what type of representation it is and was, and how many times it has been transitioned
 */
 define([
   'underscore',
@@ -18,13 +16,11 @@ define([
     transition: function(newRep){
       this.set('previousRepresentationType', this.get('representationType'));
       this.set('representationType', newRep);
-    },
-    increaseTransitionCount: function(){
-      console.log('in mR increase count');
       this.set({
-        transitions: this.transitions+1
+        transitions: this.get('transitions')+1
       });
     }
   });
+
   return RepresentationModel;
 });

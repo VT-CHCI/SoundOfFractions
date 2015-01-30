@@ -8,8 +8,8 @@ define([
 ], function(_, Backbone) {
   var LabelModel = Backbone.Model.extend({
     defaults: {
-      label: '',
-      type: ''
+      label: '', // The text such as `/` or `1` or `2`
+      type: ''   // Is it a system label or a user placed label
     },
     initialize: function(){
     },
