@@ -87,7 +87,9 @@ define([
       }
 
       // for each beat in this measureRep
+
       _.all(this.parentMeasureModel.get('beats').models, function(beat, index) {
+        console.log('beat: ', index);
         this.measurePassingToBeatViewParameters.currentRepresentationType = this.model.get('representationType');
 
         // Linestates must be defined here to propagate through transitions
@@ -420,7 +422,7 @@ define([
     },
     // Making a targeted 'Audio' beat animate
     audioAnimate: function(target, dur, selected) {
-      console.log('Audio animate target: ', target);
+      // console.log('Audio animate target: ', target);
       var d3Target = d3.select(target);
       var originalFillColor = 'none';
       if(selected == true){
@@ -545,6 +547,7 @@ define([
         this.animationIntervalID = null;
       // When playing is started, we start the animation
       } else {
+        console.log('in toggle animation starting');
         // If there are beats to be animated, play each in sequence, keeping a count as we go along
         // The first set is play the song from the get go
         if (counter >= 0 && counter < totalNumberOfBeats) {
@@ -556,7 +559,7 @@ define([
             var selected = this.parentMeasureModel.get('beats').models[counter].get('selected');
             // TODO, find a better way to animate the audio beats
             // Animate the Audio beat
-            console.log('calling from first block');
+            // console.log('calling from first block');
             // this.audioAnimate(beats.eq(0)[0], dur/2.0, selected);
             this.audioAnimate(beats.eq(counter)[0], dur/2.0, selected);
           } else if (this.retrievedRepresentationType == 'bead'){
@@ -589,7 +592,7 @@ define([
                 var beats = $('#measure-rep-'+self.measureRepModel.cid).find('.audio-beat');
                 // A boolean value if the beat is selected
                 var selected = self.parentMeasureModel.get('beats').models[counter].get('selected');
-                console.log('calling from second loop');
+                // console.log('calling from second loop');
                 // self.audioAnimate(beats.eq(0)[0], dur/2.0, selected);
                 self.audioAnimate(beats.eq(counter)[0], dur/2.0, selected);
               } else if (self.retrievedRepresentationType == 'bead'){

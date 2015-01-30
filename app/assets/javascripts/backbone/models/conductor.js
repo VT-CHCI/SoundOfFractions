@@ -25,12 +25,17 @@ define([
       // console.log('in the conductor model play');
       this.set('isPlaying', true);
       this.calculateMaxDuration();
-      dispatch.trigger('conductor.event', this.maxDuration);
+
+      // dispatch.trigger('conductor.event', this.maxDuration);
+      this.trigger('conductor.event', this.maxDuration, 'hello');
     },
     stop: function() {
-      // console.log('in the conductor model stop');
+      console.log('in the conductor model stop');
       this.set('isPlaying', false);
-      dispatch.trigger('conductor.event');
+
+      // dispatch.trigger('conductor.event');
+      this.trigger('conductor.event',['stop', this]);
+
       // This stops the animations 
       dispatch.trigger('toggleAnimation.event', 'off');
     },

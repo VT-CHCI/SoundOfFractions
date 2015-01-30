@@ -39,6 +39,8 @@ define([
       individual muting of this hTrack in the web audio API.
     */
     initialize: function(options){
+      console.log('here it is:');
+      console.log(options);
       // Many variables get passed in.  We attach those variable with this function, so for each variable:
       // this.something = options.something; 
       if (options) {
@@ -57,8 +59,10 @@ define([
       $(document).bind('keypress', this.manuallPress);
 
       dispatch.on('instrumentChanged.event', this.changeInstrument, this);
-      dispatch.on('conductor.event', this.togglePlay, this);
       dispatch.on('deleteAudioContext.event', this.deleteAudioContext, this);
+
+      // dispatch.on('conductor.event', this.togglePlay, this);
+      this.listenTo(ConductorModel, 'conductor.event', this.togglePlay);
 
       //creating two arrays to hold our gain nodes.
       // for sustained-note sounds,
@@ -106,9 +110,13 @@ define([
         });
       // For a song from scratch
       } else {
+        console.log('hTrackView render from scratch');
+        console.log(this);
+        console.log(this.hTrack);
         var µthis = this;
         // for each of the measures (V1 should only have 1 Measure)
         _.each(this.hTrack.get('measures').models, function(measure, index) {
+          console.log('got the measures model');
           var childView = new MeasureView({
             collectionOfMeasures: µthis.hTrack.get('measures'),
             measureRepresentations: measure.get('measureRepresentations'),
@@ -191,7 +199,10 @@ define([
       } 
     },
     // When the conductor tells us to stop or play
-    togglePlay: function(maxDuration){
+    togglePlay: function(maxDuration, cheese){
+
+debugger;
+
       var tempo = this.hTrack.get('tempo');
       var measures = this.hTrack.get('measures');
       var selectedBeats = 0;
@@ -217,7 +228,7 @@ define([
         console.log('togglePlay: off');
         // Moved this to the conductor
         // This stops the animations 
-        dispatch.trigger('toggleAnimation.event', 'off');
+        // dispatch.trigger('toggleAnimation.event', 'off');
         //This stops the Audio
         clearInterval(this.intervalID);
         this.intervalID = null;

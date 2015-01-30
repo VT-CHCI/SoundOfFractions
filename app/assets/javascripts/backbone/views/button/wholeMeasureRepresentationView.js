@@ -74,11 +74,13 @@ define([
       var newRepType = $(e.target).closest('.representation').attr('data-state');
       // find the plus sign with the class '.cs' and return the id of its hTrack
       var hTrackID = $('.transition-rep').closest('.hTrack').attr('id');
-      var hTrackCID = hTrackID.slice(7);
-      var measureRepIndex = $('.transition-rep').closest('.measureRep').index();
+      var hTrackCID = hTrackID.slice(7);//var HT_IDX = "whateverstring".length
+      var measureRepIndex = $('.transition-rep').closest('.measureRep').index();//TODO: remove?
       var measureRepID = $('.transition-rep').closest('.measureRep').attr('id');
       var measureRepCID = measureRepID.slice(12);
       $('.transition-rep').removeClass('transition-rep');
+
+      // //TODO: change 0 to dyn
       var measureRepColl = StageCollection.get(hTrackCID).get('measures').models[0].get('measureRepresentations').get(measureRepCID).transition(newRepType);
       // dispatch.trigger('transition.event', {oldRep: oldRep, newRep:newRepType } );
     },

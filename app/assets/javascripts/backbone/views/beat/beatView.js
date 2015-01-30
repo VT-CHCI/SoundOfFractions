@@ -116,6 +116,7 @@ define([
 
     //We use css classes to control the color of the beat.
     render: function(){
+      console.log('beatView render')
       var µthis = this;
 
       // x center of a bead or first x of pie piece
@@ -486,6 +487,7 @@ define([
     // manage the transitions from one rep to another
     transition: function(){
       console.log('BeatView transition');
+      console.log(this.parentMeasureRepModel);
       console.log(this.parentMeasureRepModel.get('previousRepresentationType'));
       console.log(this.parentMeasureRepModel.get('representationType'));
       if (this.parentMeasureRepModel.get('previousRepresentationType') == 'audio'){

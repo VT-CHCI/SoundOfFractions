@@ -145,7 +145,7 @@ define([
       if(options) {
         console.log('render: stageView.js with options');
         var counter = $('.hTrack').size();
-
+// debugger;
         //compiling our template.
         var compiledTemplate = _.template( HTrackTemplate, {hTrack: this.stage.models[this.stage.models.length-1], type: this.stage.models[this.stage.models.length-1].get('type')} );
         $(this.el).append( compiledTemplate );
