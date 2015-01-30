@@ -12,10 +12,8 @@ define([
   'backbone/collections/representations',
   'backbone/views/measure/measureView',
   'backbone/views/menu/instrumentDropDownView',
-  'backbone/views/slider/beatsPerMeasureSliderView',
-  'app/dispatch',
   'app/log'
-], function($, _, Backbone, HTrackModel, StateModel, ConductorModel, RepresentationsCollection, MeasureView,  InstrumentDropDownView, BPMSliderView, dispatch, log){
+], function($, _, Backbone, HTrackModel, StateModel, ConductorModel, RepresentationsCollection, MeasureView,  InstrumentDropDownView, log){
   return Backbone.View.extend({
     // this is needed to recalculate a beat's size
     el: $('.hTrack'),
@@ -58,8 +56,9 @@ define([
       _.bindAll(this, 'manuallPress');
       $(document).bind('keypress', this.manuallPress);
 
-      dispatch.on('instrumentChanged.event', this.changeInstrument, this);
-      dispatch.on('deleteAudioContext.event', this.deleteAudioContext, this);
+      // TODO Replace these events
+      // dispatch.on('instrumentChanged.event', this.changeInstrument, this);
+      // dispatch.on('deleteAudioContext.event', this.deleteAudioContext, this);
 
       // dispatch.on('conductor.event', this.togglePlay, this);
       this.listenTo(ConductorModel, 'conductor.event', this.togglePlay);
@@ -263,7 +262,9 @@ debugger;
 
     beginAnimation: function(){
       this.playLoop();
-      dispatch.trigger('toggleAnimation.event', 'on');
+
+      // TODO Replace these events
+      // dispatch.trigger('toggleAnimation.event', 'on');
     },
 
     // WARNING!!!!
@@ -419,9 +420,12 @@ debugger;
     removeHTrack: function(e) {
       var instrument = $(e.currentTarget).closest('.hTrack').data().state;
       console.log('in removeHTrack deleteInstrumentFromCompositionArea() of ' + instrument);
-      dispatch.trigger('addInstrumentToGeneratorModel.event', instrument);
-      dispatch.trigger('instrumentDeletedFromCompositionArea.event', { instrument:instrument, model:this.parentCID });
-      dispatch.trigger('reRenderInstrumentGenerator.event', instrument);
+
+      // TODO Replace these events
+      // dispatch.trigger('addInstrumentToGeneratorModel.event', instrument);
+      // dispatch.trigger('instrumentDeletedFromCompositionArea.event', { instrument:instrument, model:this.parentCID });
+      // dispatch.trigger('reRenderInstrumentGenerator.event', instrument);
+      
       console.log("Removing hTrack" + this);
       this.hTrack.destroy();
       this.remove();

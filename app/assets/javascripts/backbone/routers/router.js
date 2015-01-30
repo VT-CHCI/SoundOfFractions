@@ -7,20 +7,18 @@ define([
   'underscore',
   'backbone',
   'backbone/views/home/homeView',
-  'backbone/views/slider/beatsPerMeasureSliderView',
   'backbone/views/stage/stageView',
-  'backbone/views/slider/tempoSliderView',
   'backbone/views/conductor/conductorView',
   'backbone/views/button/wholeMeasureRepresentationView',
   'backbone/views/button/remainingInstrumentGeneratorView',
   'backbone/views/label/systemLabelContainerView',
-  'app/log',
   'backbone/collections/songsCollection',
   'backbone/views/song/new_view',
   'backbone/views/song/index_view',
   'backbone/views/song/show_view',
-  'backbone/views/song/edit_view'
-], function($, _, Backbone, mainHomeView, beatsPerMeasureSliderView, StageView, tempoSliderView, conductorView, wholeMeasureRepresentationView, remainingInstrumentGeneratorView, systemLabelContainerView, log, songsCollection, songsViewNew, songsViewIndex, songsViewShow, songsViewEdit ){
+  'backbone/views/song/edit_view',
+  'app/log'
+], function($, _, Backbone, mainHomeView, StageView, conductorView, wholeMeasureRepresentationView, remainingInstrumentGeneratorView, systemLabelContainerView, songsCollection, songsViewNew, songsViewIndex, songsViewShow, songsViewEdit, log){
 
   var BBRouter = Backbone.Router.extend({
     // songs: {},
@@ -41,16 +39,13 @@ define([
       // top side
       conductorView.render();
       wholeMeasureRepresentationView.render();
-      // measureTransformationView.render();
+      systemLabelContainerView.render();
 
       // middle
       StageView.render();
-      systemLabelContainerView.render();
 
       // bottom
 
-      // unused/old/deprecated
-      // remainingInstrumentGeneratorView.render();
     },
 
     index: function(){
@@ -59,6 +54,8 @@ define([
     },
 
     show: function(id){
+      alert('show');
+      console.log('BB Router => show : show');
       var currentIDSong = window.router.songs.get(id);
       console.warn(currentIDSong);
       //left side
@@ -66,8 +63,6 @@ define([
       //right side
       fractionRepresentionView.render();
       wholeMeasureRepresentationView.render();
-      measureTransformationView.render();
-      tempoSliderView.render();
       conductorView.render();
       recorderView.render();
     },

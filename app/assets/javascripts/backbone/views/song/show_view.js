@@ -13,9 +13,8 @@ define([
   'text!backbone/templates/tiny/navLoad.html',
   'text!backbone/templates/tiny/navUpdate.html',
   'text!backbone/templates/tiny/navInfo.html',
-  'app/dispatch',
   'backbone/models/state'
-], function($, _, Backbone, SongsCollection, StageCollection, songModel, unsavedSongModel, StageView, songsBodyTemplate, songNavSaveTemplate, songNavLoadTemplate, songNavUpdateTemplate, songNavInfoTemplate, dispatch, state){
+], function($, _, Backbone, SongsCollection, StageCollection, songModel, unsavedSongModel, StageView, songsBodyTemplate, songNavSaveTemplate, songNavLoadTemplate, songNavUpdateTemplate, songNavInfoTemplate, state){
   return Backbone.View.extend({
     navLoadEl: $('#nav-songs-load'),
     navUpdateEl: $('#nav-songs-update'),
@@ -30,10 +29,7 @@ define([
       this.model = options;
       console.warn(this.model);
 
-      // TODO
-      // dispatch.on('signatureChange.event', this.reconfigure, this);
       this.render();
-      // this.calcBeatWidth(state.get('signature'));
       console.log("Show View initialized");
     },
 
@@ -107,17 +103,7 @@ define([
       //TODO calcBeatWidth;
       console.log("Show View rendered");
       return this;
-    },
-
-    calcBeatWidth: function(signature) {
-      if ($(this.showBodyEl).parent().hasClass('selected')) {
-        var px = 100/$('.measure').css('width').replace(/[^-\d\.]/g, '');
-        var beatWidth = (100 - ((signature*1+1)*px))/signature;
-
-        $(this.showBodyEl).children('.beat').css({
-          'width' : beatWidth+'%'
-        });
-      }
     }
+
   });
 });

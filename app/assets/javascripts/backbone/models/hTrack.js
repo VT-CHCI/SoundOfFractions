@@ -25,9 +25,9 @@ define([
       tempo: '' //bpm
     },
     initialize: function(options){
-      console.log('initializing the hTrackModel with these options: ',options);
+      console.log('initializing the hTrackModel with these options: ', options);
       // I need to listen to the measures collection's beats collection [length] on the measure model of the measure collection
-      this.listenTo(this.measures, 'change', this.updateModelSignature);  
+      this.listenTo(this.get('measures'), 'change', this.updateModelSignature);  
 
     },
     updateModelSignature: function(){

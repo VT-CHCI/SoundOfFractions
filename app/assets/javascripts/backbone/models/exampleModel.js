@@ -9,11 +9,10 @@ define([                                            // These are file paths
   'underscore',                                     // Underscore gives us nice and easy funtions like _.each()
   'backbone',                                       // Backbone handles the MV* on the frontend
   'backbone/collections/measures',                  // Here we reference a Collection, defined in the Collections folder
-  'backbone/models/remainingInstrumentGenerator',   // Here is another Model, reference in the same Model folder
-  'app/dispatch'                                    // This is the dispatcher, which handles events for us
+  'backbone/models/remainingInstrumentGenerator'   // Here is another Model, reference in the same Model folder
 
             // We give names to the above mentioned files, as variable names.  Declaration orders much match
-], function(_, Backbone, MeasuresCollection, RemainingInstrumentGenerator, dispatch ) { 
+], function(_, Backbone, MeasuresCollection, RemainingInstrumentGenerator ) { 
   // We call the Model the name of the model, and extend it from the Backbone Model Class
   var HTrackModel = Backbone.Model.extend({
 

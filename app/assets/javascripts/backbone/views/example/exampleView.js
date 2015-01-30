@@ -13,10 +13,9 @@ define([                                           // These are file paths
   'backbone/models/conductor',                     // We reference a model to use in this View
   'text!backbone/templates/conductor/play.html',   // This is a template. It must have the text! precursor
   'text!backbone/templates/conductor/stop.html',   // This is a template. It must have the text! precursor
-  'app/dispatch',                                  // This handles event dispatching
   'app/log'                                        // This is a logger, for gathering the data we need
             // We give names to the above mentioned files, as variable names.  Declaration orders much match
-], function($, _, Backbone, ConductorModel, conductorPlayTemplate, conductorStopTemplate, dispatch, log){
+], function($, _, Backbone, ConductorModel, conductorPlayTemplate, conductorStopTemplate, log){
   // We call the View the name of the View, and extend it from the Backbone View Class
   var ConductorView = Backbone.View.extend({
     // Specifies the DOM element which this view handles

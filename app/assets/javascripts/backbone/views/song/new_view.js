@@ -7,9 +7,8 @@ define([
   'backbone/collections/stage',
   'text!backbone/templates/tiny/navSave.html',
   'backbone/models/unsavedSong',
-  'app/dispatch',
   'backbone/models/state'
-], function($, _, Backbone, SongsCollection, StageCollection, songsNewTemplate, unsavedSong, dispatch, state){
+], function($, _, Backbone, SongsCollection, StageCollection, songsNewTemplate, unsavedSong, state){
   return Backbone.View.extend({
     //WORKING
     el: $('#nav-songs-save'),
@@ -33,8 +32,6 @@ define([
         return this.render()
       });
 
-      // TODO
-      // dispatch.on('signatureChange.event', this.reconfigure, this);
       this.render();
     },
 

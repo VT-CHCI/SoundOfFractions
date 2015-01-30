@@ -10,9 +10,8 @@ define([
   'text!backbone/templates/tiny/navSave.html',
   'text!backbone/templates/tiny/navLoad.html',
   'text!backbone/templates/tiny/navNew.html',
-  'app/dispatch',
   'backbone/models/state'
-], function($, _, Backbone, SongsCollection, StageCollection, song, songsBodyTemplate, songNavSaveTemplate, songsNavLoadTemplate, songsNavNewTemplate, dispatch, state){
+], function($, _, Backbone, SongsCollection, StageCollection, song, songsBodyTemplate, songNavSaveTemplate, songsNavLoadTemplate, songsNavNewTemplate, state){
   return Backbone.View.extend({
     navLoadEl: $('#nav-songs-load'),
     navNewEl: $('#nav-songs-new'),

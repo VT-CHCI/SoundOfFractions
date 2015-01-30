@@ -3,9 +3,8 @@
 //This is the model for the generate new instrument based on what instruments are not in use
 define([
   'underscore',
-  'backbone',
-  'app/dispatch'
-], function(_, Backbone, dispatch){//, SnareImage, HiHatImage, KickDrumImage, SynthImage) {
+  'backbone'
+], function(_, Backbone){//, SnareImage, HiHatImage, KickDrumImage, SynthImage) {
   var remainingInstrumentGeneratorModel = Backbone.Model.extend({
     defaults: {
       unusedInstruments: [

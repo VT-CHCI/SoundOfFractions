@@ -9,9 +9,8 @@
 define([
   'underscore',
   'backbone',
-  'app/dispatch',
   'backbone/models/conductor'
-], function(_, Backbone, dispatch, TransportModel) {
+], function(_, Backbone, TransportModel) {
   var state = Backbone.Model.extend({
     defaults: {
       signature: 4,
@@ -43,19 +42,21 @@ define([
         console.warn('Mic Level = ' + this.micLevel);
       }
 
-      this.context = new window.webkitAudioContext();
+      this.context = new window.AudioContext();
 
-      dispatch.on('doall.event', this.recordTempoAndPattern, this);
-      dispatch.on('recordClicked.event', this.recordButtonClicked, this);
-      dispatch.on('tappingTempo.event', this.tapTempoClicked, this);
-      dispatch.on('stopRecording.event', this.stopRecording, this);
-      dispatch.on('tempoDetected.event', this.stopRecording, this);
+      // TODO Replace these events
+      // dispatch.on('doall.event', this.recordTempoAndPattern, this);
+      // dispatch.on('recordClicked.event', this.recordButtonClicked, this);
+      // dispatch.on('tappingTempo.event', this.tapTempoClicked, this);
+      // dispatch.on('stopRecording.event', this.stopRecording, this);
+      // dispatch.on('tempoDetected.event', this.stopRecording, this);
     },
 
     recordTempoAndPattern: function() {
       console.log('recordTempoAndPattern function in state');
       if(this.TransportModel.isPlaying) {
-        dispatch.trigger('togglePlay.event');
+        // TODO Replace these events
+        // dispatch.trigger('togglePlay.event');
       }
       this.isTapping = true;
       if(window.tapIntervalID) {
@@ -200,10 +201,15 @@ define([
               }
               diffBeats.splice(16);
               console.log(diffBeats);
-              dispatch.trigger('signatureChange.event', µthis.signature);
+
+              // TODO Replace these events
+              // dispatch.trigger('signatureChange.event', µthis.signature);
+
               //show the BPM
               var bpm = 1000 / µthis.average * 60;
-              dispatch.trigger('newInstrumentTempoRecorded', {instrument:'hh', beatPattern:diffBeats, bpm:bpm});
+
+              // TODO Replace these events
+              // dispatch.trigger('newInstrumentTempoRecorded', {instrument:'hh', beatPattern:diffBeats, bpm:bpm});
 
               µthis.isTapping = false;
               µthis.countIn = 1;
@@ -212,8 +218,10 @@ define([
               µthis.set('signature', µthis.signature);
               // $('#tap-tempo').click();
               $('#tempo-slider-input').val(1);
-              // dispatch.trigger('tempoChange.event', bpm);
-              dispatch.trigger('stopRecording.event');
+
+              // TODO Replace these events
+              // dispatch.trigger('stopRecording.event');
+
               window.clearInterval(waitIntervalID);
             }
             µthis.waitCount++;
@@ -244,7 +252,8 @@ define([
     tapTempoClicked: function() {
       console.log('Tap Tempo Clicked');
       if(this.TransportModel.isPlaying) {
-        dispatch.trigger('togglePlay.event');
+        // TODO Replace these events
+        // dispatch.trigger('togglePlay.event');
       }
       this.isTapping = true;
       if(window.tapIntervalID) {
@@ -286,7 +295,8 @@ define([
     recordButtonClicked: function() {
       console.log('Tap Tempo Clicked');
       if(this.TransportModel.isPlaying) {
-        dispatch.trigger('togglePlay.event');
+        // TODO Replace these events
+        // dispatch.trigger('togglePlay.event');
       }
       $('#conductor').click();
       this.isTapping = true;
