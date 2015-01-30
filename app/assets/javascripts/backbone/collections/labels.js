@@ -3,11 +3,10 @@
   This is the labels collection.
 */
 define([
-  'jquery',
   'underscore',
   'backbone',
   'backbone/models/label'
-], function($, _, Backbone, LabelModel){
+], function(_, Backbone, LabelModel){
   return Backbone.Collection.extend({
     model: LabelModel,
     initialize: function(){
