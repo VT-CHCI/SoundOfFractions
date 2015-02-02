@@ -1,10 +1,10 @@
-<div id="hTrack-<%= hTrack.cid %>" class="hTrack well container-fluid" data-state="<%= type %>">
+<div id="hTrack-<%= model.cid %>" class="hTrack well container-fluid" data-state="<%= model.type %>">
   <div class="htrack-info pull-left">
-    <div id="delete-hTrack-<%= hTrack.cid %>"><i class="icon-remove delete-instrument"></i></div>
-    <img src="<%= App.assets.path(hTrack.get('img'))%>" class="img-circle hTrack-image">
+    <div id="delete-hTrack-<%= model.cid %>"><i class="icon-remove delete-instrument"></i></div>
+    <img src="<%= App.assets.path(model.get('img'))%>" class="img-circle hTrack-image">
     <div class="control unmute"><i class="icon-volume-up"></i></div>
-    <div id="instrument-selector-<%= hTrack.cid %>" class="change-instrument"></div>
+    <div id="instrument-selector-<%= model.cid %>" class="change-instrument"></div>
   </div>
-  <div id="measure-container-<%= hTrack.cid %>" class="measure-container pull-left"></div>
+  <div id="measure-container-<%= model.cid %>" class="measure-container pull-left"></div>
   <div class="addMeasureRep pull-right"><i class="icon-plus"></i></div>
 </div>

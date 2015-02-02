@@ -40,15 +40,12 @@ define([
         this.originalScale = this.measureModel.get('originalScale');
         this.circularMeasureR = 51; // 8 pxs per bead plus 1 px border = 10
                                     // 10 * 16 = 160/pi = 51
-        // we attach to the DOM of the measure container from our parent measure
-        this.el = '#measure-container-'+options.parent.cid;
       // Error catching
       } else {
         console.error('Should not be in here: NO Measure!');
       }
       // We use this to make sure we are deleting all the views later
       // TODO this is buggy. we need to figure out how to delete properly via backbone views
-      this.newMeasureRepViews = [];
       this.childViews = [];
 
       //Dispatch listeners
@@ -71,65 +68,13 @@ define([
       this.collectionOfMeasures.on('remove', _.bind(this.render, this));
 
       this.render();
-    },
-    // We need to calculate the number of points for animation transitions
-    // We want to be above 30 for fluidity, but below 90 to avoid computational and animation delay
-    calculateNumberOfPoints: function(n) {
-      switch (n){
-        case 1:
-          this.transitionNumberOfPoints = 40;
-          break;
-        case 2:
-          this.transitionNumberOfPoints = 40;
-          break;
-        case 3:
-          this.transitionNumberOfPoints = 42;
-          break;
-        case 4:
-          this.transitionNumberOfPoints = 40;
-          break;
-        case 5:
-          this.transitionNumberOfPoints = 40;
-          break;
-        case 6:
-          this.transitionNumberOfPoints = 42;
-          break;
-        case 7:
-          this.transitionNumberOfPoints = 42;
-          break;
-        case 8:
-          this.transitionNumberOfPoints = 40;
-          break;
-        case 9:
-          this.transitionNumberOfPoints = 45;
-          break;
-        case 10:
-          this.transitionNumberOfPoints = 40;
-          break;
-        case 11:
-          this.transitionNumberOfPoints = 44;
-          break;
-        case 12:
-          this.transitionNumberOfPoints = 48;
-          break;
-        case 13:
-          this.transitionNumberOfPoints = 39;
-          break;
-        case 14:
-          this.transitionNumberOfPoints = 42;
-          break;
-        case 15:
-          this.transitionNumberOfPoints = 45;
-          break;
-        case 16:
-          this.transitionNumberOfPoints = 48;
-          break;
-      }
+
+      this.makeChildren();
     },
     render: function(){
-      this.scale = this.measureModel.get('scale');
-      console.log('m render with scale of: '+this.scale);
-
+      this.scale = this.model.get('originalScale');
+      console.log('m render with scale of: '+this.model.scale);
+debugger;
       // Make a template for the measure and append the MeasureTemplate to the measure area in the hTrack
       // Get some parameters for the template
       var measureTemplateParameters = {
@@ -137,20 +82,17 @@ define([
         measureCount: this.measureCount,
         measureNumberOfBeats: this.model.get('beats').length
       };
+      
       // compile the template
       var compiledMeasureTemplate = _.template( MeasureTemplate, measureTemplateParameters );
-      
-      // If we are adding a rep, clear the current reps, then add the template
-      while(this.newMeasureRepViews.length >0) {
-        var deleting = this.newMeasureRepViews.pop();
-        deleting.stopListening();
-        delete deleting;
-      }
       // clear the html
       $(this.el).html('');
       // append the new completed compiled template
-      $(this.el).append( compiledMeasureTemplate )
+      $(this.el).append( compiledMeasureTemplate );
 
+      return this;
+    },
+    makeChildren: function(){
       // Constant Variables throughout the representations
       // General
         var originalScale = this.originalScale;
@@ -166,6 +108,7 @@ define([
         this.calculateNumberOfPoints(this.collectionOfMeasures.models[0].get('beats').models.length);
         var circularDivWidth = 2*circularMeasureR + horzDivPadding*2 + cX*this.scale; 
         var circularDivHeight = 2*circularMeasureR + vertDivPadding*2 + cY*this.scale; 
+      debugger;
       // Linear
         var linearLineLength = 2 * circularMeasureR * Math.PI;
         var linearDivWidth = linearLineLength + horzDivPadding;
@@ -264,8 +207,8 @@ define([
           vertDivPadding: vertDivPadding,
           horzDivPadding: horzDivPadding,
           // Measure Rep
-          originalScale: this.originalScale,
-          scale: this.scale,
+          originalScale: this.model.get('originalScale'),
+          scale: this.model.get('currentScale'),
           model: rep,
           measureRepModel: rep,
           representationType: rep.get('representationType'),
@@ -318,12 +261,8 @@ define([
         };
         //This part is the hack      This is where we create a measureRepView for each one using the paramaters
         var newView = new MeasureRepView(measureRepViewParameters);
-        this.newMeasureRepViews.push(newView);
         this.childViews.push(newView);
       }, this);
-      // All of the views together
-      console.log(this.newMeasureRepViews);
-      return this;
     },
 
     /*
@@ -395,6 +334,60 @@ define([
     // This is called when the signature of a measure is changed
     reconfigure: function(options) {
       this.render();
+    },
+    // We need to calculate the number of points for animation transitions
+    // We want to be above 30 for fluidity, but below 90 to avoid computational and animation delay
+    calculateNumberOfPoints: function(n) {
+      switch (n){
+        case 1:
+          this.transitionNumberOfPoints = 40;
+          break;
+        case 2:
+          this.transitionNumberOfPoints = 40;
+          break;
+        case 3:
+          this.transitionNumberOfPoints = 42;
+          break;
+        case 4:
+          this.transitionNumberOfPoints = 40;
+          break;
+        case 5:
+          this.transitionNumberOfPoints = 40;
+          break;
+        case 6:
+          this.transitionNumberOfPoints = 42;
+          break;
+        case 7:
+          this.transitionNumberOfPoints = 42;
+          break;
+        case 8:
+          this.transitionNumberOfPoints = 40;
+          break;
+        case 9:
+          this.transitionNumberOfPoints = 45;
+          break;
+        case 10:
+          this.transitionNumberOfPoints = 40;
+          break;
+        case 11:
+          this.transitionNumberOfPoints = 44;
+          break;
+        case 12:
+          this.transitionNumberOfPoints = 48;
+          break;
+        case 13:
+          this.transitionNumberOfPoints = 39;
+          break;
+        case 14:
+          this.transitionNumberOfPoints = 42;
+          break;
+        case 15:
+          this.transitionNumberOfPoints = 45;
+          break;
+        case 16:
+          this.transitionNumberOfPoints = 48;
+          break;
+      }
     },
     close: function(){
       console.log('in measureView close function');

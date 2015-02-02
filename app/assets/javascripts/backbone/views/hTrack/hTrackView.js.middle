@@ -22,29 +22,27 @@ define([
       // for setting this hTrack in focus (or selected).
       'click .addMeasureRep' : 'addRepresentationToHTrack',
       // when the delete instrument button is clicked, remove this hTrack
-      'click .delete-instrument' : 'close',
-      'change #instruemnt-selector' : 'instrumentChanged'
+      'click .delete-instrument' : 'removeHTrack'
     },
 
     /*
       We are receiving options from stageView, where this view is
       being instantiated.
+        model: hTrack,
+        el: this.$('#instruments-collection'), 
+        masterAudioContext: this.masterAudioContext
     */
     initialize: function(options){
       console.log('here it is:');
       console.log(options);
       // Many variables get passed in.  We attach those variable with this function, so for each variable:
       // this.something = options.something; 
-      // model: hTrack,
-      // el: this.$('#instruments-collection'), 
-      // masterAudioContext: this.masterAudioContext
       if (options) {
         for (var key in options) {
           this[key] = options[key];
         }
       } else {
-        console.error('hTrackView: shouldn\'t be in here!');
-        // this.model = new HTrackModel;
+        this.hTrack = new HTrackModel;
       }
 
       // Per SO? http://stackoverflow.com/questions/9522845/backbone-js-remove-all-sub-views
@@ -55,11 +53,11 @@ define([
       $(document).bind('keypress', this.manuallPress);
 
       // TODO Replace these events
+      // dispatch.on('instrumentChanged.event', this.changeInstrument, this);
       // dispatch.on('deleteAudioContext.event', this.deleteAudioContext, this);
 
       // dispatch.on('conductor.event', this.togglePlay, this);
-      this.listenTo(ConductorModel, 'conductorStart', this.togglePlaying);
-      this.listenTo(ConductorModel, 'conductorStop', this.togglePlaying);
+      this.listenTo(ConductorModel, 'conductor.event', this.togglePlay);
 
       //creating two arrays to hold our gain nodes.
       // for sustained-note sounds,
@@ -69,6 +67,7 @@ define([
       // this.context = new webkitAudioContext();
       // this.masterAudioContext = this.masterStageAudioContext;
       this.bufferList = new Array();
+
       this.masterGainNode = this.masterAudioContext.createGain();
 
       //use our webaudio context to create two gain nodes for the hTrack.
@@ -84,27 +83,6 @@ define([
       this.intervalID = null; 
 
       this.render();
-
-      // Create an instrument selector
-
-      var µthis = this;
-      // for each of the measures (V1 should only have 1 Measure)
-      _.each(this.model.get('measures').models, function(measure, index) {
-        console.log('got the measures model');
-        var childView = new MeasureView({
-          parent: µthis.model,
-          el: '#measure-container-'+µthis.model.cid,
-          model: measure,
-          collectionOfMeasures: µthis.model.get('measures'),
-          measureRepresentations: measure.get('measureRepresentations'),
-          parentEl: '#measure-container-'+µthis.model.cid,
-          measureModel: measure,
-          defaultMeasureRepresentation: µthis.defaultMeasureRepresentation,
-          measureIndex: index,
-          measureCount: µthis.model.get('measures').models.length
-        });
-        µthis.childViews.push(childView);
-      });
     },
 
     /*
@@ -112,10 +90,7 @@ define([
       a new MeasureView which gets rendered instead.
     */
     render: function(options){
-      console.log('hTrackView render start');
-      console.log(this.$el);
-      var compiledTemplate = _.template( HTrackTemplate, {model: this.model} );
-      console.log(compiledTemplate);
+      var compiledTemplate = _.template( HTrackTemplate, {hTrackModel: this.model} );
       this.$el.append( compiledTemplate );
 
       // For a song from scratch
@@ -123,7 +98,34 @@ define([
         console.log('hTrackView render from scratch');
         console.log(this);
         console.log(this.model);
+        var µthis = this;
+        // for each of the measures (V1 should only have 1 Measure)
+        _.each(this.model.get('measures').models, function(measure, index) {
+          console.log('got the measures model');
+          var childView = new MeasureView({
+            collectionOfMeasures: µthis.model.get('measures'),
+            measureRepresentations: measure.get('measureRepresentations'),
+            parent: µthis.model,
+            parentEl: '#measure-container-'+µthis.model.cid,
+            hTrackEl: '#hTrack-'+µthis.model.cid,
+            model: µthis.model.get('measures').models[index],
+            measureModel: measure,
+            defaultMeasureRepresentation: µthis.defaultMeasureRepresentation,
+            measureIndex: index,
+            measureCount: µthis.model.get('measures').models.length
+          });
+          µthis.childViews.push(childView);
+        });
 
+        // Create an instrument selector
+        new InstrumentDropDownView({
+          unusedInstrumentsModel: this.unusedInstrumentsModel,
+          collection: this.model.get('measures'),
+          parent: this.model,
+          el: '#instrument-selector-'+this.model.cid,
+          parentCID: this.model.cid,
+          unusedInstrumentsModel: this.unusedInstrumentsModel
+        });
       // If we are loading a song
       } else {
         var µthis = this;
@@ -149,13 +151,6 @@ define([
       return this;
     },
 
-    changeInstrument: function(e){
-      console.log('selector changed: ', e);
-      var oldInstrument = $(this.el).closest('.hTrack-container').data().state;
-      var newInstrument = $(this.el).find(':selected').val();
-      console.log('oI: '+ oldInstrument + ' | nI: '+ newInstrument);
-    },
-
     /*
       This is called when the user clicks on the icon of this hTrack
       which has the css class 'control'
@@ -168,7 +163,7 @@ define([
       This also sends a log message.
     */
     toggleMuteDisplay: function(){
-      this.model.set('active', !this.model.get('active'));
+      this.hTrack.set('active', !this.hTrack.get('active'));
       // it is NOT muted
       if (this.gainNode.gain.value == 1) {
         // Mute it
@@ -177,7 +172,7 @@ define([
         $(this.el).find('.control').removeClass('unmute').addClass('mute');
         $(this.el+ ' .control').html('<i class="icon-volume-off"></i>');
         // Log it
-        log.sendLog([[2, "hTrack muted: "+"hTrack"+this.model.cid]]);
+        log.sendLog([[2, "hTrack muted: "+"hTrack"+this.hTrack.cid]]);
       // it is muted
       } else {
         // Unmute it
@@ -186,7 +181,7 @@ define([
         $(this.el).find('.control').removeClass('mute').addClass('unmute');
         $(this.el+ ' .control').html('<i class="icon-volume-up"></i>');
         // log it
-        log.sendLog([[2, "hTrack unmuted: "+"hTrack"+this.model.cid]]);
+        log.sendLog([[2, "hTrack unmuted: "+"hTrack"+this.hTrack.cid]]);
       }
     },
     // To add a representation to a measure, we first add the class '.cs' to the htrack to know which measure of which HTrack to add it to
@@ -201,13 +196,14 @@ define([
         $('.icon-plus')[1].parentElement.classList.add('cs');
       } 
     },
-    // When the conductor tells us to play
-    startPlaying: function(maxDurationOfAllInstruments){
-      console.log('hTrack startPlaying');
-      var tempo = this.model.get('tempo');
-      var measures = this.model.get('measures');
+    // When the conductor tells us to stop or play
+    togglePlay: function(maxDuration, cheese){
+
+      var tempo = this.hTrack.get('tempo');
+      var measures = this.hTrack.get('measures');
       var selectedBeats = 0;
-      // Find out how many beats are selected
+
+      // We calculate the longest instrument time length, based on tempo and number of beats, and use this to calculate the loop parameter maxDuration
       _.each(measures.models, function(measure) {
           _.each(measure.get('beats').models, function(beat) {
             if (beat.get('selected')) {
@@ -215,47 +211,57 @@ define([
             }
           }, this);
       }, this);
-      var beats = this.model.get('signature');
-      // How long this instrument plays for
+      var beats = this.hTrack.get('signature');
       var currentInstrumentDuration = measures.length*beats/tempo*60.0*1000.0 ;
 
-      // we start the playback of audio
-      //and trigger an event to start the animation.
-      console.log(this.model.label, ' music: on');
-      console.warn('Tempo:', tempo, '|', 'Measures:', measures.length, '|', selectedBeats, 'beats selected of ', beats, '|', 'instrument duration:', currentInstrumentDuration);
+      //we use the maximum number of measures, and the global tempo
+      //to determine the duration (in ms) of one loop of the sequencer.
+      var duration = currentInstrumentDuration;
 
-      // Play the sound and the animation
-      this.playSoundAndAnimation();
-      
-      //TODO Potentially put playLoop and beginAnimation up here until the setInterval starts
-      // after each loop duration of maxDurationOfAllInstruments, play itself again
-      this.intervalID = setInterval((function(self) {
-      // ConductorModel.addInterval( setInterval((function(self) {
-        return function() {
-          // self.playLoop();
-          self.beginAnimation();
-        }
-      })(this), maxDurationOfAllInstruments);
-      // TODO We could potentially call set interval on the hTrack beat length, so that as a user clicks a yet to be played beat that is also unselected, it could be played instead of waiting for the next go around like it is currently
+      //if we are already playing
+      if (this.intervalID) {
+        // we stop and trigger the animation to stop.
+        console.log('togglePlay: off');
+        // Moved this to the conductor
+        // This stops the animations 
+        // dispatch.trigger('toggleAnimation.event', 'off');
+        //This stops the Audio
+        clearInterval(this.intervalID);
+        this.intervalID = null;
 
-      //we set the masterGainNode to 1, turning on master output.
-      this.masterGainNode.gain.value = 1;
+        // ConductorModel.clearAllIntervals();
+        //we set the masterGainNode to zero, which mutes all output.
+        this.masterGainNode.gain.value = 0;
+      // if we are not playing
+      } else {
+        // we start the playback of audio
+        //and trigger an event to start the animation.
+        console.log('togglePlay: on');
+        console.warn('Tempo:', tempo, '|', 'Measures:', measures.length, '|', selectedBeats, 'beats selected of ', beats, '|', 'instrument duration:', currentInstrumentDuration);
+
+        // We call the beginAnimation for the playLoop && the dispatch trigger
+        this.beginAnimation();
+//TODO Potentially put playLoop and beginAnimation up here until the setInterval starts
+        // after each loop duration of maxDuration, play itself again
+        this.intervalID = setInterval((function(self) {
+        // ConductorModel.addInterval( setInterval((function(self) {
+          return function() {
+            // self.playLoop();
+            self.beginAnimation();
+          }
+        })(this), maxDuration);
+        // TODO We could potentially call set interval on the hTrack beat length, so that as a user clicks a yet to be played beat that is also unselected, it could be played instead of waiting for the next go around like it is currently
+
+        //we set the masterGainNode to 1, turning on master output.
+        this.masterGainNode.gain.value = 1;
+      }
     },
-    // When the conductor tells us to stop
-    stopPlaying: function(maxDuration){
-      console.log('hTrack stopPlaying');
-      //we set the masterGainNode to zero, which mutes all remaining output.
-      this.masterGainNode.gain.value = 0;
-      //This stops the Audio interval from recurring
-      clearInterval(this.intervalID);
-      this.intervalID = null;
-      // Trigger the animation to stop.
-      this.trigger('toggleAnimation', 'Off');
-    },
 
-    playSoundAndAnimation: function(){
-      this.playSoundLoop();
-      this.trigger('toggleAnimation', 'On');
+    beginAnimation: function(){
+      this.playLoop();
+
+      // TODO Replace these events
+      // dispatch.trigger('toggleAnimation.event', 'on');
     },
 
     // WARNING!!!!
@@ -267,15 +273,15 @@ define([
       of time durations that determine when the playback
       of each beat on this hTrack should occur.
     */
-    playSoundLoop: function(){
+    playLoop: function(){
       var deadSpace = 0;
 
       //create an array to hold durations.
       var beatTimes = new Array();
 
-      _.each(this.model.get('measures').models, function(measure) {
+      _.each(this.hTrack.get('measures').models, function(measure) {
         //determining the duration for each beat.
-        var beatDuration = 60 / this.model.get('tempo');
+        var beatDuration = 60 / this.hTrack.get('tempo');
         _.each(measure.get('beats').models, function(beat) {
           /* if we need to trigger a sound at this beat
             we push a duration onto the duration array.
@@ -299,6 +305,8 @@ define([
       intervals for each hTrack.
     */
     playSound: function(beatTimes){
+      // console.log('Playing sound!');
+
       //this is important (check docs for explanation)
       var startTime = this.masterAudioContext.currentTime; 
 
@@ -308,7 +316,7 @@ define([
         //it and the next activated beat.
 
         //calulating the duration of one beat. Should be in s, not ms
-        var hTrackTempo = this.model.get('tempo');
+        var hTrackTempo = this.hTrack.get('tempo');
         var beatDuration =  (60 / hTrackTempo);
 
         play(
@@ -357,6 +365,16 @@ define([
 
         //start causes the playback to start.
         source.start(time, 0, beatDuration);
+        // console.error(time, beatDuration, hTrackTempo);
+
+        //these calls are used to generate an envelope that
+        //makes sustained instruments play for only the beatDuration of one beat.
+        //this reduces pops and clicks from the signal being abruptly
+        //stopped and started.
+        // specGainNode.gain.linearRampToValueAtTime(0, time);
+        // specGainNode.gain.linearRampToValueAtTime(1, time + 0.005);
+        // specGainNode.gain.linearRampToValueAtTime(1, time + (beatDuration - 0.005));
+        // specGainNode.gain.linearRampToValueAtTime(0, time + beatDuration);
 
         //we call stop to stop the sound after the beatDuration of one beat.
         source.stop(time + beatDuration);
@@ -389,32 +407,36 @@ define([
           }
         );
       }
+
       request.onerror = function() {
         alert('BufferLoader: XHR error');
       }
+
       request.send();
     },
-    close: function(e) {
+    removeHTrack: function(e) {
+      var instrument = $(e.currentTarget).closest('.hTrack').data().state;
+      console.log('in removeHTrack deleteInstrumentFromCompositionArea() of ' + instrument);
+
       // TODO Replace these events
       // dispatch.trigger('addInstrumentToGeneratorModel.event', instrument);
       // dispatch.trigger('instrumentDeletedFromCompositionArea.event', { instrument:instrument, model:this.parentCID });
       // dispatch.trigger('reRenderInstrumentGenerator.event', instrument);
-
-      var instrument = $(e.currentTarget).closest('.hTrack').data().state;
-      console.log('in removeHTrack deleteInstrumentFromCompositionArea() of ' + instrument);
-
-      // Maybe redundant
-      this.model.destroy();
+      
+      console.log("Removing hTrack" + this);
+      this.hTrack.destroy();
       this.remove();
-
       this.unbind();
+      // handle other unbinding needs, here
       _.each(this.childViews, function(childView){
         console.log('in hTrackView close function, CLOSING CHILDREN');
+        childView.remove();
         if (childView.close){
           childView.close();
         }
       })
     }
+
   });
 });
 

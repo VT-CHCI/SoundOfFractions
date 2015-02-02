@@ -33,6 +33,8 @@ define([
       // manually clicking
       _.bindAll(this, 'manuallPress');
       $(document).bind('keypress', this.manuallPress);
+
+      this.render();
     },
 
     //no need to compile the template for this one.

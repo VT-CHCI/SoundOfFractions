@@ -8,6 +8,8 @@ define([
   'backbone',
   'backbone/views/home/homeView',
   'backbone/views/stage/stageView',
+  'backbone/views/hTrack/hTrackView',
+  'backbone/views/measure/measureView',
   'backbone/views/conductor/conductorView',
   'backbone/views/button/wholeMeasureRepresentationView',
   'backbone/views/button/remainingInstrumentGeneratorView',
@@ -18,7 +20,7 @@ define([
   'backbone/views/song/show_view',
   'backbone/views/song/edit_view',
   'app/log'
-], function($, _, Backbone, mainHomeView, StageView, conductorView, wholeMeasureRepresentationView, remainingInstrumentGeneratorView, systemLabelContainerView, songsCollection, songsViewNew, songsViewIndex, songsViewShow, songsViewEdit, log){
+], function($, _, Backbone, mainHomeView, StageView, HTrackView, MeasureView, ConductorView, WholeMeasureRepresentationView, RemainingInstrumentGeneratorView, SystemLabelContainerView, songsCollection, songsViewNew, songsViewIndex, songsViewShow, songsViewEdit, log){
 
   var BBRouter = Backbone.Router.extend({
     // songs: {},
@@ -33,19 +35,17 @@ define([
     newSong: function(){
       console.log('BB routes => new : newSong');
       var view = new songsViewNew({collection : this.songs});
-      // general
-      mainHomeView.render();
 
       // top side
-      conductorView.render();
-      wholeMeasureRepresentationView.render();
-      systemLabelContainerView.render();
+      // ConductorView.render();
+      // WholeMeasureRepresentationView.render();
+      // SystemLabelContainerView.render();
 
       // middle
-      StageView.render();
+      // StageView.render();
 
       // bottom
-
+      // RemainingInstrumentGeneratorView.render();
     },
 
     index: function(){
@@ -54,17 +54,14 @@ define([
     },
 
     show: function(id){
-      alert('show');
       console.log('BB Router => show : show');
-      var currentIDSong = window.router.songs.get(id);
-      console.warn(currentIDSong);
-      //left side
-      var view = new songsViewShow(currentIDSong);
-      //right side
-      fractionRepresentionView.render();
-      wholeMeasureRepresentationView.render();
-      conductorView.render();
-      recorderView.render();
+      // var currentIDSong = window.router.songs.get(id);
+      // console.warn(currentIDSong);
+      // //left side
+      // var view = new songsViewShow(currentIDSong);
+      // //right side
+      // WholeMeasureRepresentationView.render();
+      // ConductorView.render();
     },
 
     edit: function(id){

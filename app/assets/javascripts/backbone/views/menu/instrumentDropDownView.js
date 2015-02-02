@@ -21,17 +21,14 @@ define([
     initialize: function(options) {
       this.collection = options.collection;
       this.parent = options.parent;
-      this.el = options.el; //'#instrument-selector-'+this.hTrack.cid
-      this.remainingInstrumentGeneratorModel = options.unusedInstrumentsModel;
-      this.parentCID = options.parentCID;
 
       this.render();
-
-      dispatch.on('instrumentChanged.event', this.instrumentChanged, this);
-      dispatch.on('reRenderInstrumentDropDown.event', this.render, this);
+      console.error(this.$el);
+      // dispatch.on('instrumentChanged.event', this.instrumentChanged, this);
+      // dispatch.on('reRenderInstrumentDropDown.event', this.render, this);
 
       // dispatch.on('instrumentAddedToCompostionArea.event', this.updateRemove, this);
-      // dispatch.on('instrumentDeletedFromCompositionArea.event', this.render, this);
+      dispatch.on('instrumentDeletedFromCompositionArea.event', this.render, this);
     },
 
     instrumentChanged: function(){
@@ -68,8 +65,8 @@ define([
     render: function() {
       //compiling our template.
       var compiledTemplate = _.template( instrumentDropDownTemplate, { 
-        unusedInstruments: this.remainingInstrumentGeneratorModel.get('unusedInstruments'),
-        cid: this.parentCID
+        unusedInstruments: RemainingInstrumentGeneratorModel.get('unusedInstruments'),
+        cid: this.parent.cid
       });
       $(this.el).html( compiledTemplate );
 
@@ -170,4 +167,4 @@ define([
 //       return this;
 //     }
 //   });
-// });
+// });  

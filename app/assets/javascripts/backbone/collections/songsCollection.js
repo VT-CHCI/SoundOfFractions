@@ -10,6 +10,4 @@ define([
     initialize: function(){
     }
   });
-
-  // return new songsCollection();
 });

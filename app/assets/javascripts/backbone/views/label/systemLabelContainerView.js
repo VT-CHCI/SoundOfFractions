@@ -22,7 +22,7 @@ define([
 
     //simply creates the model.
     initialize: function() {
-
+      this.render();
     },
 
     render: function() {

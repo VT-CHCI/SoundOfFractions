@@ -62,6 +62,12 @@ define([
       this.listenTo(this.model, 'change', this.transition, this);
 
       this.render();
+
+      // make the beats
+      this.makeBeats();
+      // make a beat factory
+      this.makeBeatFactory();
+
     },
     // This is a bad way of handling view deletion, but idk better
     destroy: function(options){
@@ -1174,7 +1180,7 @@ define([
       // put in the rendered template in the measure-rep-container of the measure
       $(this.repContainerEl).append( compiledTemplate );
       this.setElement($('#measure-rep-'+this.measureRepModel.cid));
-
+debugger;
       // Bead rep
       if (this.model.get('representationType') == 'bead') {
         // find the svg container
@@ -1378,11 +1384,6 @@ define([
       //     $(this).append(newDiv);
       //   }
       // });
-
-      // make the beats
-      this.makeBeats();
-      // make a beat factory
-      this.makeBeatFactory();
 
       return this;
     },

@@ -15,6 +15,10 @@ define([
   var mainHomeView = Backbone.View.extend({
     el: $('.navbar-form button'),
 
+    initialize: function(){
+      this.render();
+    },
+
     //setting up backbone's click event to call our saveLogin() method.
     events : {
       'click' : 'saveLogin'
@@ -30,7 +34,7 @@ define([
     */
     saveLogin: function (e) {
       //we trigger an alert thanking the user for logging in.
-      $('#sof-composition-area').before('<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">×</button><strong>Thanks for logging in!</strong></div>');
+      $('#sof-stage-area').before('<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">×</button><strong>Thanks for logging in!</strong></div>');
 
       //the user's userId is stored in local storage.
       sessionStorage.setItem("userId", $('.navbar-form input').val());

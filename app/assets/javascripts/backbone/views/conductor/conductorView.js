@@ -16,12 +16,13 @@ define([
   var ConductorView = Backbone.View.extend({
     el : $("#conductor"), // Specifies the DOM element which this view handles
 
-    //registering our conductor() method for backbone click events.
+    //registering our instruct() method for backbone click events.
     events : {
-      "click" : "conductor"
+      "click" : "instruct"
     },
 
     initialize: function() {
+      console.log('ConductorView initing...')
       this.conductorModel = ConductorModel;
 
       //registering our stopPlay() method on stopRequest events.
@@ -33,6 +34,8 @@ define([
       // allow the letter p to click the first plus sign
       _.bindAll(this, 'manuallPress');
       $(document).bind('keypress', this.manuallPress);
+
+      this.render();
     },
 
     /*
@@ -42,66 +45,33 @@ define([
       Also, this creates a string representation of
       the entire song and sends it to the logging system.
     */
-    conductor: function() {
+    instruct: function() {
+      // If stoppped
       if(!this.conductorModel.get('isPlaying')) {
         
         this.conductorModel.play();
+        console.log('now playing conductor view');
 
         var compiledTemplate = _.template( conductorStopTemplate );
         $(this.el).html( compiledTemplate );
 
-        $(this.el).removeClass('play');
-        $(this.el).addClass('pause');
-        console.log('now playing');
-
-        name = '';
-        $('.hTrack').each(function(index) {
-          name = name + index + ':';
-          $(this).children('.measure').children('.beat').children().each(function() {
-            if ($(this).attr('class') == 'ON')
-              name = name + 1;
-            else
-              name = name + 0;
-          });
-          name = name + ','
-        });
-
-        log.sendLog([[3, "Started playing music: "+name]]);
-      }
-      else {
+        log.sendLog([[3, "Started playing music: "]]);
+      // If playing
+      } else {
         this.conductorModel.stop();
+        console.log('now stopping conductor view');
+
         // dispatch.trigger('togglePlay.event', 'off');
         // this.conductorModel.set('isPlaying', false);
 
         var compiledTemplate = _.template( conductorPlayTemplate );
         $(this.el).html( compiledTemplate );
 
-        $(this.el).removeClass('pause');
-        $(this.el).addClass('play');
-        console.log('now paused');
+        console.log('now stopped conductor view');
 
         log.sendLog([[3, "Stop playing music"]]);
       }
 
-    },
-
-    /*
-      This is triggered by stopRequest events.
-      
-      This is essentially the same as togglePlay, but
-      it always causes stoppage, and does no logging.
-    */
-    stopPlay: function(val) {
-      if(this.conductorModel.get('isPlaying')) {
-
-        // TODO Replace these events
-        // dispatch.trigger('togglePlay.event', 'off');
-        
-        this.conductorModel.set('isPlaying', false);
-        $(this.el).
-        $(this.el).addClass('play');
-        console.log('now paused');
-      }
     },
     manuallPress: function(e) {
       // p = 112
@@ -110,9 +80,15 @@ define([
       } 
     },
     render: function() {
+      console.log('ConductorView render');
       $(this.el).html(conductorPlayTemplate);
       //$(this.el).draggable({ axis: "y", containment: "#body-container"/*"#middle-right-column"*/ });
       return this;
+    },
+    close: function(){
+      console.log('closing Conductor View');
+      this.remove();
+      this.unbind();
     }
   });
   return new ConductorView();

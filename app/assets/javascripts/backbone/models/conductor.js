@@ -16,34 +16,31 @@ define([
       isPlaying: false,
       setIntervalArray: new Array(),
       maxDuration: null,
-      startedPlayinTime: null
+      startedPlayingTime: null
     },
     initialize: function(){
       this.stage = StageCollection;
     },
     play: function(){
-      // console.log('in the conductor model play');
+      console.log('in the conductor model play');
       // Set the model to playing
       this.set('isPlaying', true);
       // Calculate the longest instrument playing time
       this.calculateMaxDuration();
       // Trigger all instruments to start
-      this.trigger('conductorStart', this.maxDuration, 'hello');
+      this.trigger('conductorStart', this.maxDuration);
       var time = Date.now();
-      this.set('startedPlayinTime', time);
+      this.set('startedPlayingTime', time);
       // TODO SEND LOG playing, and include how long the song is (maxDuration)
     },
     stop: function() {
-      // console.log('in the conductor model stop');
+      console.log('in the conductor model stop');
       // Set the model to not playing
       this.set('isPlaying', false);
       // Trigger all instruments to stop
-      this.trigger('conductorStop', 'Stop', this);
-      // TODO Make these the same maybe or rename conductorStart and conductorStop to audioStart/Stop
-      // This stops the animations 
-      this.trigger('animationStop', 'Stop');
+      this.trigger('conductorStop', 'Stop');
       // Calculate how long they played the song
-      var totalTimePlayed = Date.now() - this.startedPlayinTime;
+      var totalTimePlayed = Date.now() - this.startedPlayingTime;
       // TODO SEND LOG stopped, how long they played, and how many times they played the full meaure (ie .8x or 3.2x)
     },
     calculateMaxDuration: function() {

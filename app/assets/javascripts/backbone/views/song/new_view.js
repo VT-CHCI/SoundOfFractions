@@ -18,7 +18,7 @@ define([
     navLoadEl: $('#nav-songs-load'),
     navNewEl: $('#nav-songs-new'),
     bodyInfoEl: $('#show-song'),
-    sofCompositionAreaEl: $('#sof-composition-area'),
+    sofCompositionAreaEl: $('#sof-stage-area'),
     navUpdateEl: $('#nav-songs-update'),
 
     initialize: function(options){
@@ -77,8 +77,7 @@ define([
 
     render: function(){
       console.log("New View rendering...");
-      $(this.sofCompositionAreaEl).html('');
-      $(this.el).html('');
+      // $(this.el).html('');
       // console.log(this.model.toJSON());
 
       //Working
