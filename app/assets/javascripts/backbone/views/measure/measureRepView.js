@@ -16,7 +16,7 @@ define([
   return Backbone.View.extend({
     //registering click events to add and remove measures.
     events : {
-      'click .remove-measure-rep' : 'removeRepresentation',
+      'click .remove-measure-rep' : 'removeRepresentationModel',
       'click .delta' : 'transitionRepresentation',
       'click .record-button' : 'recordMeasure'
     },
@@ -54,12 +54,15 @@ define([
 
       //Dispatch listeners
       // TODO Replace these events
+
+      this.listenTo(this.hTrackView, 'toggleAnimation', this.toggleAnimation)
+      // dispatch.on('toggleAnimation.event', this.toggleAnimation, this);
       // dispatch.on('signatureChange.event', this.reconfigure, this);
       // dispatch.on('unroll.event', this.unroll, this);
-      // dispatch.on('toggleAnimation.event', this.toggleAnimation, this);
       // dispatch.on('resized.event', this.destroy, this);
 
       this.listenTo(this.model, 'change', this.transition, this);
+      // this.listenTo(this.model, 'destroy', this.close, this);
 
       this.render();
 
@@ -95,7 +98,6 @@ define([
       // for each beat in this measureRep
 
       _.all(this.parentMeasureModel.get('beats').models, function(beat, index) {
-        console.log('beat: ', index);
         this.measurePassingToBeatViewParameters.currentRepresentationType = this.model.get('representationType');
 
         // Linestates must be defined here to propagate through transitions
@@ -529,6 +531,7 @@ define([
     // This toggles the animation, not the sound
     // The state is passed in from the toggleAnimation.event
     toggleAnimation: function(state){
+      console.log('state: ',state);
       var µthis = this;
 
 //TODO USE signature or beats
@@ -549,7 +552,7 @@ define([
 
       this.retrievedRepresentationType = this.model.get('representationType');
       //when playing is stopped we stop the animation.
-      if (state == 'off') {
+      if (state == 'Off') {
         console.log('stopped animation');
         clearInterval(this.animationIntervalID);
         this.animationIntervalID = null;
@@ -1180,7 +1183,7 @@ define([
       // put in the rendered template in the measure-rep-container of the measure
       $(this.repContainerEl).append( compiledTemplate );
       this.setElement($('#measure-rep-'+this.measureRepModel.cid));
-debugger;
+
       // Bead rep
       if (this.model.get('representationType') == 'bead') {
         // find the svg container
@@ -1453,22 +1456,27 @@ debugger;
     /*
       This is called when the user clicks on the minus to remove a measureRep.
     */
-    removeRepresentation: function(ev){
+    removeRepresentationModel: function(ev){
       // if ($('#measure'+this.measuresCollection.models[0].cid).parent()) {
         //removing the last measure isn't allowed.
         if(this.measureRepresentations.length == 1) {
           console.log('Can\'t remove the last representation!');
           return;
         }
+        console.log('this.model: ', this.model.cid, this.model);
+        oldModelCid = this.oldModelCid;
+        // this.model.destroy();
+        this.close();
+
         console.log('removed representation');
 
-        var measureModelCid = ev.srcElement.parentElement.parentElement.parentElement.id.slice(12);
-        //we remove the measureRep and get its model.
-        this.measureRepresentations.remove(measureModelCid);
+        // var measureModelCid = ev.srcElement.parentElement.parentElement.parentElement.id.slice(12);
+        // //we remove the measureRep and get its model.
+        // this.measureRepresentations.remove(measureModelCid);
 
         //send a log event showing the removal.
         log.sendLog([[3, 'Removed a measure representation: ' + this.cid]]);
-        console.log('Removed measureRep ' + this.cid + ", " + measureModelCid);
+        console.log('Removed measureRep ' + this.cid + ", " + oldModelCid);
     },
     // This is triggered by signatureChange events.
     reconfigure: function(signature) {
@@ -1589,10 +1597,10 @@ debugger;
       console.log('in measureRepView close function');
       this.remove();
       this.unbind();
+      // handle other unbinding needs, here
       if(this.onClose){
         this.onClose();
       }
-      // handle other unbinding needs, here
       _.each(this.childViews, function(childView){
         console.log('in measureRepView close function, CLOSING CHILDREN');
         if (childView.close){
@@ -1605,12 +1613,12 @@ debugger;
 
       $(document).unbind('keypress', this.manuallPress);
 
-      this.unbind('signatureChange.event', this.reconfigure);
-      this.unbind('unroll.event', this.unroll);
-      this.unbind('toggleAnimation.event', this.toggleAnimation);
-      this.unbind('resized.event', this.destroy);
+      // this.unbind('signatureChange.event', this.reconfigure);
+      // this.unbind('unroll.event', this.unroll);
+      // this.unbind('toggleAnimation.event', this.toggleAnimation);
+      // this.unbind('resized.event', this.destroy);
       this.model.unbind('change', this.transition);
-
+      // this.model.destroy();
     }
  
   });

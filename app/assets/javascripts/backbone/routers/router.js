@@ -1,3 +1,4 @@
+console.log('Backbone Router started');
 // Filename: router.js
 /*
   This is the main router for the backbone framework.
@@ -34,7 +35,7 @@ define([
     },
     newSong: function(){
       console.log('BB routes => new : newSong');
-      var view = new songsViewNew({collection : this.songs});
+      // var view = new songsViewNew({collection : this.songs});
 
       // top side
       // ConductorView.render();
@@ -46,6 +47,7 @@ define([
 
       // bottom
       // RemainingInstrumentGeneratorView.render();
+      console.log('BB routes: newSong Finished');
     },
 
     index: function(){

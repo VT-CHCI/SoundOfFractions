@@ -99,6 +99,7 @@ define([
           measureRepresentations: measure.get('measureRepresentations'),
           parentEl: '#measure-container-'+µthis.model.cid,
           measureModel: measure,
+          hTrackView: µthis,
           defaultMeasureRepresentation: µthis.defaultMeasureRepresentation,
           measureIndex: index,
           measureCount: µthis.model.get('measures').models.length
@@ -113,17 +114,12 @@ define([
     */
     render: function(options){
       console.log('hTrackView render start');
-      console.log(this.$el);
       var compiledTemplate = _.template( HTrackTemplate, {model: this.model} );
-      console.log(compiledTemplate);
       this.$el.append( compiledTemplate );
 
       // For a song from scratch
       if(!options) {
         console.log('hTrackView render from scratch');
-        console.log(this);
-        console.log(this.model);
-
       // If we are loading a song
       } else {
         var µthis = this;
@@ -148,7 +144,15 @@ define([
       
       return this;
     },
-
+    togglePlaying: function(message){
+      // PLaying
+      if(message === "Stop"){
+        this.stopPlaying();
+      // Stopping
+      } else {
+        this.startPlaying(message);
+      }
+    },
     changeInstrument: function(e){
       console.log('selector changed: ', e);
       var oldInstrument = $(this.el).closest('.hTrack-container').data().state;
@@ -221,19 +225,18 @@ define([
 
       // we start the playback of audio
       //and trigger an event to start the animation.
-      console.log(this.model.label, ' music: on');
+      console.log(this.model.get('label'), ' music: on');
       console.warn('Tempo:', tempo, '|', 'Measures:', measures.length, '|', selectedBeats, 'beats selected of ', beats, '|', 'instrument duration:', currentInstrumentDuration);
 
       // Play the sound and the animation
       this.playSoundAndAnimation();
       
-      //TODO Potentially put playLoop and beginAnimation up here until the setInterval starts
+      //TODO Potentially put playLoop and playSoundAndAnimation up here until the setInterval starts
       // after each loop duration of maxDurationOfAllInstruments, play itself again
       this.intervalID = setInterval((function(self) {
       // ConductorModel.addInterval( setInterval((function(self) {
         return function() {
-          // self.playLoop();
-          self.beginAnimation();
+          self.playSoundAndAnimation();
         }
       })(this), maxDurationOfAllInstruments);
       // TODO We could potentially call set interval on the hTrack beat length, so that as a user clicks a yet to be played beat that is also unselected, it could be played instead of waiting for the next go around like it is currently
@@ -242,7 +245,7 @@ define([
       this.masterGainNode.gain.value = 1;
     },
     // When the conductor tells us to stop
-    stopPlaying: function(maxDuration){
+    stopPlaying: function(){
       console.log('hTrack stopPlaying');
       //we set the masterGainNode to zero, which mutes all remaining output.
       this.masterGainNode.gain.value = 0;

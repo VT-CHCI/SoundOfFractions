@@ -135,6 +135,7 @@ define([
       })
     }
   });
+  // A singleton
   return new StageView();
 });
 

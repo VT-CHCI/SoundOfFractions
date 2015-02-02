@@ -60,7 +60,7 @@ define([
       _.bindAll(this, 'render');
       // when we add or delete a meauserRep
       this.listenTo(this.measureRepresentations, 'remove', _.bind(this.render, this));  
-      this.listenTo(this.measureRepresentations, 'add', _.bind(this.render, this));  
+      this.listenTo(this.measureRepresentations, 'add', _.bind(this.addChild, this));  
       this.model.on('change:scale', _.bind(this.render, this));
 
       // This is for version2, when we add or delete a measure
@@ -74,7 +74,6 @@ define([
     render: function(){
       this.scale = this.model.get('originalScale');
       console.log('m render with scale of: '+this.model.scale);
-debugger;
       // Make a template for the measure and append the MeasureTemplate to the measure area in the hTrack
       // Get some parameters for the template
       var measureTemplateParameters = {
@@ -92,7 +91,8 @@ debugger;
 
       return this;
     },
-    makeChildren: function(){
+    addChild: function(options){
+      var addedModel = this.model.get('measureRepresentations').last();
       // Constant Variables throughout the representations
       // General
         var originalScale = this.originalScale;
@@ -108,7 +108,173 @@ debugger;
         this.calculateNumberOfPoints(this.collectionOfMeasures.models[0].get('beats').models.length);
         var circularDivWidth = 2*circularMeasureR + horzDivPadding*2 + cX*this.scale; 
         var circularDivHeight = 2*circularMeasureR + vertDivPadding*2 + cY*this.scale; 
-      debugger;
+      // Linear
+        var linearLineLength = 2 * circularMeasureR * Math.PI;
+        var linearDivWidth = linearLineLength + horzDivPadding;
+        var linearDivHeight = 25 + vertDivPadding;
+      // Transition
+        var transitionNumberOfPoints = this.transitionNumberOfPoints;
+        var firstBeatStart = 0; // in s
+        var timeIncrement = 500; // in ms
+        var margin = {top: 20, left: 60};
+        var lineDivision = linearLineLength/transitionNumberOfPoints;
+        var transitionDuration = 3000/transitionNumberOfPoints;
+        var animationIntervalDuration = 1000;
+
+      // Audio
+        //Measure
+        var audioMeasureCx = 50;
+        var audioMeasureCy = 40;
+        var audioMeasureR = 12;
+        //Beat
+        var audioBeatCx = 50;
+        var audioBeatCy = 40;
+        var audioBeatR = 12;
+        var colorForAudio = COLORS.hexColors[5];
+        var initialColorForAudio = 'none';
+      // Pie
+        //Measure
+        var measureStartAngle = 0;
+        //Beat
+        var beatStartAngle;
+        var beatEndAngle;
+        var beatFactoryR = 30;
+      // Bead
+        var circularBeadBeatRadius = 8;
+      //Number Line
+        var lineHashHeight = 30;
+        var numberLineY = 25 + vertDivPadding;
+      // Bar
+        //Measure
+        var lbbMeasureLocationX = 15; // 5%
+        var lbbMeasureLocationY = 10;
+        var lbbMeasureWidth = linearLineLength;
+        var lbbMeasureHeight = 25;
+        //Beat
+        var linearBeatXPadding = 0;
+        var linearBeatYPadding = 0;
+        var beatWidth = linearLineLength/this.model.get('beats').length;
+        var beatHeight = lbbMeasureHeight - 2*linearBeatYPadding;
+        var beatBBY = linearBeatYPadding + lbbMeasureLocationY;
+        var beatFactoryBarWidth = 30;
+        var beatFactoryBarHeight = 15;
+
+      // This is what calculates the different states of circles and lines throughout an animation of a circle to a line or a line to a circle
+      var circleStates = [];
+      for (i=0; i<transitionNumberOfPoints; i++){
+          // circle portion
+          var circleState = $.map(Array(transitionNumberOfPoints), function (d, j) {
+            var x = circularMeasureCx + lineDivision*i + circularMeasureR * Math.sin(2 * j * Math.PI / (transitionNumberOfPoints - 1));
+            var y =  circularMeasureCy - circularMeasureR * Math.cos(2 * j * Math.PI / (transitionNumberOfPoints - 1));
+            return { x: x, y: y};
+          })
+          circleState.splice(transitionNumberOfPoints-i);
+          //line portion
+          var lineState = $.map(Array(transitionNumberOfPoints), function (d, j) {
+            var x = circularMeasureCx + lineDivision*j;
+            var y =  circularMeasureCy - circularMeasureR;
+            return { x: x, y: y};
+          })
+          lineState.splice(i);
+          //together
+          var individualState = lineState.concat(circleState);
+          circleStates.push(individualState);
+      }
+      this.circleStates = circleStates;
+
+      // get parameters for the template for a measure
+      var measureRepViewParameters = {
+        // HTrack
+        hTrackEl: this.hTrackEl,
+        hTrackView: this.hTrackView,
+        hTrack: this.parent,
+        measureCount: this.measureCount,
+        // Measure
+        parentMeasureModel: this.measureModel,
+        beatsInMeasure: this.model.get('beats').models.length,
+        parent: this,
+        parentCID: this.cid,
+        mCID: this.model.cid,
+        measureRepContainer: '#measure-rep-container-'+this.model.cid,
+        circularDivWidth: circularDivWidth,
+        circularDivHeight: circularDivHeight,
+        linearDivWidth: linearDivWidth,
+        linearDivHeight: linearDivHeight,
+        vertDivPadding: vertDivPadding,
+        horzDivPadding: horzDivPadding,
+        // Measure Rep
+        originalScale: this.model.get('originalScale'),
+        scale: this.model.get('currentScale'),
+        model: addedModel,
+        measureRepModel: addedModel,
+        representationType: addedModel.get('representationType'),
+        beatHolder:'beatHolder'+this.model.cid,
+        margin: margin,
+        measureRepresentations: this.measureRepresentations,
+        //Audio
+        audioMeasureCx: audioMeasureCx,
+        audioMeasureCy: audioMeasureCy,
+        audioMeasureR: audioMeasureR,
+        audioBeatCx: audioBeatCx,
+        audioBeatCy: audioBeatCy,
+        audioBeatR: audioBeatR,
+        initialColorForAudio: initialColorForAudio,
+        colorForAudio: colorForAudio,
+        // Pie
+        measureAngle: 360.0,
+        beatFactoryR: beatFactoryR,
+        // Circular
+        circularMeasureCx: circularMeasureCx,
+        circularMeasureCy: circularMeasureCy,
+        circularMeasureR: circularMeasureR,
+        circularBeadBeatRadius: circularBeadBeatRadius,
+        lbbMeasureLocationX: lbbMeasureLocationX,
+        lbbMeasureLocationY: lbbMeasureLocationY,
+        // Bead
+        transitionNumberOfPoints: transitionNumberOfPoints,
+        //Number Line
+        xOffset: linearLineLength/this.model.get('beats').models.length / 2,
+        yOffset: lbbMeasureHeight / 2,
+        lineHashHeight: lineHashHeight,
+        linearLineLength: linearLineLength,
+        numberLineY: numberLineY,
+        lineDivision: lineDivision,
+        // Bar
+        measureWidth: lbbMeasureWidth,
+        beatWidth: beatWidth,
+        beatFactoryBarWidth: beatFactoryBarWidth,
+        beatFactoryBarHeight: beatFactoryBarHeight,
+        beatBBY: beatBBY,
+        beatHeight: beatHeight,
+        measureHeight: lbbMeasureHeight,
+        measureColor: COLORS.hexColors[COLORS.colorIndices.WHITE],
+        // Transition
+        circleStates: circleStates,
+        transitionNumberOfPoints: this.transitionNumberOfPoints,
+        pathFunction: this.circlePath,
+        transitionDuration: transitionDuration,
+        animationIntervalDuration: animationIntervalDuration
+      };
+      //This part is the hack      This is where we create a measureRepView for each one using the paramaters
+      var newView = new MeasureRepView(measureRepViewParameters);
+      this.childViews.push(newView);
+    },
+    makeChildren: function(options){
+      // Constant Variables throughout the representations
+      // General
+        var originalScale = this.originalScale;
+        var scale = this.scale;
+        var vertDivPadding = 0;
+        var horzDivPadding = 25;
+      // Circular
+        var cX = 100;
+        var cY = 75
+        var circularMeasureCx = (cX+horzDivPadding)*scale;
+        var circularMeasureCy = (cY+vertDivPadding)*scale;
+        var circularMeasureR = this.circularMeasureR*scale;
+        this.calculateNumberOfPoints(this.collectionOfMeasures.models[0].get('beats').models.length);
+        var circularDivWidth = 2*circularMeasureR + horzDivPadding*2 + cX*this.scale; 
+        var circularDivHeight = 2*circularMeasureR + vertDivPadding*2 + cY*this.scale; 
       // Linear
         var linearLineLength = 2 * circularMeasureR * Math.PI;
         var linearDivWidth = linearLineLength + horzDivPadding;
@@ -191,6 +357,7 @@ debugger;
         var measureRepViewParameters = {
           // HTrack
           hTrackEl: this.hTrackEl,
+          hTrackView: this.hTrackView,
           hTrack: this.parent,
           measureCount: this.measureCount,
           // Measure

@@ -65,8 +65,7 @@ define([
       var representationModel = new RepresentationModel({representationType: newRepType});
       console.log('adding to the instrument/measure/measureRep');
       // Currently forcing it to add to the first measure
-      var measureRepColl = StageCollection.get(cid).get('measures').models[0].get('measureRepresentations');
-      measureRepColl.add(representationModel);   
+      StageCollection.get(cid).get('measures').models[0].get('measureRepresentations').add(representationModel);   
       // dispatch.trigger('addMeasureRepresentation.event', { newRepType: newRepType, hTrackID: hTrackID, hTrack: cid} );
       this.isFirstRep();
     },

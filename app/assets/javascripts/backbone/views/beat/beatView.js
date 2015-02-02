@@ -118,7 +118,6 @@ define([
 
     //We use css classes to control the color of the beat.
     render: function(){
-      console.log('beatView render')
       var µthis = this;
 
       // x center of a bead or first x of pie piece
@@ -542,6 +541,9 @@ define([
       this.remove();
       this.unbind();
       // handle other unbinding needs, here
+      if(this.onClose){
+        this.onClose();
+      }
       _.each(this.childViews, function(childView){
         if (childView.close){
           childView.close();

@@ -14,21 +14,21 @@
 // WARNING: THE FIRST BLANK LINE MARKS THE END OF WHAT'S TO BE PROCESSED, ANY BLANK LINE SHOULD
 // GO AFTER THE REQUIRES BELOW.
 //
-console.log('Application.js Started');
+console.log('Application.js: Started');
 require([
 
   // Load our "app" module and pass it to our definition function
-  'SOF',
-  'jquery'
+  'SOF'
 
   // Some plugins have to be loaded in order due to their non AMD compliance
   // Because these scripts are not "modules" they do not pass any values to the definition function below
-], function(SOF_Application, $){
-  console.log("SOF_Application initializing...");
+], function(SOF_Application){
+  console.log("Application.js: initializing SOF_Application...");
 
 
-  // The "app" dependency 'SOF' is passed in as "App"
+  // The "app" dependency 'SOF' is passed in as "SOF_Application"
   // Again, the other dependencies passed in are not "AMD" therefore don't pass a parameter to this function
   SOF_Application.initialize(App.songs);
-  console.log("SOF_Application Fully initialized");
+  console.log("Application.js: SOF_Application Fully initialized");
+  console.error('-----BREAK LINE FOR TESTING-----');
 });
