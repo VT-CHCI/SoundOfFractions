@@ -36,11 +36,10 @@ define([
         this.measureRepTemplateParameters = this.templateParameters(options);
         this.measurePassingToBeatFactoryParameters = this.beatFactoryParameters(options);
         // This is to create a line in d3
-        var pathFunction = d3.svg.line()
+        this.pathFunction = d3.svg.line()
             .x(function (d) {return d.x;})
             .y(function (d) {return d.y;})
             .interpolate('basis'); // bundle | basis | linear | cardinal are also options
-        this.pathFunction = pathFunction;
 
         // allow the letter p to click the first plus sign
         _.bindAll(this, 'manuallPress');
@@ -67,7 +66,7 @@ define([
       this.render();
 
       // make the beats
-      this.makeBeats();
+      // this.makeBeats();
       // make a beat factory
       this.makeBeatFactory();
 
@@ -1176,30 +1175,30 @@ define([
 
       //set the el for JQ-UI Drag
       // may not be needed
-      this.$el.attr('id', 'measure-rep-' + this.measureRepModel.cid);
+      this.$el.attr('id', 'measure-rep-' + this.model.cid);
 
       // compile the template for a representation
       var compiledTemplate = _.template( MeasureRepTemplate, this.measureRepTemplateParameters );
       // put in the rendered template in the measure-rep-container of the measure
       $(this.repContainerEl).append( compiledTemplate );
-      this.setElement($('#measure-rep-'+this.measureRepModel.cid));
+      this.setElement($('#measure-rep-'+this.model.cid));
 
       // Bead rep
       if (this.model.get('representationType') == 'bead') {
         // find the svg container
-        var svgContainer = d3.select('#svg-'+this.measureRepModel.cid)
+        var svgContainer = d3.select('#svg-'+this.model.cid)
             .attr('width', this.circularDivWidth)
             .attr('height', this.circularDivHeight);
         // add a circle representing the whole measure
         var circlePath = svgContainer
             .insert('path', ':first-child')
-            .data([this.circleStates[0]])
+            .data([this.model.get('circleStates')[0]])
             .attr('d', this.pathFunction)
             .attr('stroke', 'black')
             .attr('opacity', 1)
             .attr('class', 'circle')
             .attr('class', 'circle-path')
-            .attr('transform', 'scale('+this.originalScale+','+this.originalScale+')');
+            .attr('transform', 'scale(' + this.model.get('currentScale') + ',' + this.model.get('currentScale') + ')');
         // Attach it to the view
         this.circlePath = circlePath;
 
@@ -1223,31 +1222,31 @@ define([
       // Line Rep
       } else if (this.model.get('representationType') == 'line'){
         // Find the SVG container
-        var svgContainer = d3.select('#svg-'+this.measureRepModel.cid)
-            .attr('width', this.linearDivWidth)
-            .attr('height', this.linearDivHeight);
+        var svgContainer = d3.select('#svg-'+this.model.cid)
+            .attr('width', this.model.get('linearDivWidth'))
+            .attr('height', this.model.get('linearDivHeight'));
         // add the infinite line
         var infiniteLine = svgContainer
             .insert('line', ':first-child')
             .attr('class', 'infinite-line')
             .attr('x1', -200)
-            .attr('y1', this.numberLineY)
+            .attr('y1', this.model.get('numberLineY'))
             .attr('x2', 10000)
-            .attr('y2', this.numberLineY)
+            .attr('y2', this.model.get('numberLineY'))
             .attr('stroke', 'black')
             .attr('stroke-width', 1)
             .attr('opacity', .5)
         // Draw the Thicker line representing the measure
         var actualMeasureLinePath = svgContainer
             .insert('path', ':first-child')
-            .data([this.circleStates[this.transitionNumberOfPoints-1]])
+            .data([this.model.get('circleStates')[this.model.get('transitionNumberOfPoints')-1]])
             .attr('d', this.pathFunction)
             .attr('stroke', 'black')
             .attr('opacity', 1)
             .attr('class', 'line')
             .attr('class', 'line-path')
-            .attr('transform', 'scale('+this.originalScale+','+this.originalScale+')')
-            .attr('transform', 'translate('+(this.circularMeasureR*-2-10)+',0)');
+            .attr('transform', 'scale('+this.model.get('currentScale')+','+this.model.get('currentScale')+')')
+            .attr('transform', 'translate('+(this.model.get('circularMeasureR')*-2-10)+',0)');
         // attach it to the view
         this.actualMeasureLinePath = actualMeasureLinePath;
 
@@ -1269,19 +1268,19 @@ define([
       // Pie rep
       } else if (this.model.get('representationType') == 'pie'){
         // Find the SVG container
-        var svgContainer = d3.select('#svg-'+this.measureRepModel.cid)
-            .attr('width', this.circularDivWidth)
-            .attr('height', this.circularDivHeight);
+        var svgContainer = d3.select('#svg-'+this.model.cid)
+            .attr('width', this.model.get('circularDivWidth'))
+            .attr('height', this.model.get('circularDivHeight'));
         // Add the circle path representing the whole measure
         var circlePath = svgContainer
             .insert('path', ':first-child')
-            .data([this.circleStates[0]])
+            .data([this.model.get('circleStates')[0]])
             .attr('d', this.pathFunction)
             .attr('stroke', 'black')
             .attr('opacity', 1)
             .attr('class', 'circle')
             .attr('class', 'circle-path')
-            .attr('transform', 'scale('+this.originalScale+','+this.originalScale+')');
+            .attr('transform', 'scale('+this.model.get('currentScale')+','+this.model.get('currentScale')+')')
         // Attach it to the view
         this.circlePath = circlePath;
 
@@ -1302,48 +1301,47 @@ define([
       // Audio Rep
       } else if (this.model.get('representationType') == 'audio'){
         // Find the SVG Container
-        var svgContainer = d3.select('#svg-'+this.measureRepModel.cid)
+        var svgContainer = d3.select('#svg-'+this.model.cid)
         // Make a large Circle reprsenting the conatiner for all beats as they pulse
         var metronomeCirlce = svgContainer
             .insert('circle', ':first-child')
-            .attr('cx', this.audioMeasureCx)
-            .attr('cy', this.audioMeasureCy)
-            .attr('r', this.audioMeasureR)
-            .attr('fill', this.colorForAudio)
+            .attr('cx', this.model.get('audioMeasureCx'))
+            .attr('cy', this.model.get('audioMeasureCy'))
+            .attr('r', this.model.get('audioMeasureR'))
+            .attr('fill', this.model.get('colorForAudio'))
             .attr('fill-opacity', 0.2)
             .attr('stroke', 'black');
       // Bar Rep
       } else if (this.model.get('representationType') == 'bar'){
         // Find the SVG Container
-        var svgContainer = d3.select('#svg-'+this.measureRepModel.cid)
-            .attr('width', this.linearDivWidth)
-            .attr('height', this.linearDivHeight);
-        var  secondaryBeatHolder = d3.select('#secondary-beat-holder-'+this.measureRepModel.cid);
+        var svgContainer = d3.select('#svg-'+this.model.cid)
+            .attr('width', this.model.get('linearDivWidth'))
+            .attr('height', this.model.get('linearDivHeight'));
+        var  secondaryBeatHolder = d3.select('#secondary-beat-holder-'+this.model.cid);
         // Make a Box that holds the smaller beat bars
         var box = svgContainer
             .insert('rect', ':first-child')
             .attr('class', 'bar-box')
-            .attr('x', this.lbbMeasureLocationX)
-            .attr('y', this.lbbMeasureLocationY)
-            .attr('width', this.linearLineLength)
-            .attr('height', this.measureHeight)
+            .attr('x', this.model.get('lbbMeasureLocationX'))
+            .attr('y', this.model.get('lbbMeasureLocationY'))
+            .attr('width', this.model.get('linearLineLength'))
+            .attr('height', this.model.get('measureHeight'))
             .attr('stroke', 'black')
             .attr('stroke-width', 1)
             .attr('fill', 'white')
-            .attr('transform', 'scale('+this.originalScale+','+this.originalScale+')');
+            .attr('transform', 'scale('+this.model.get('currentScale')+','+this.model.get('currentScale')+')')
             this.box = box;
-
 
         var actualMeasureLinePath = secondaryBeatHolder
             .insert('path', ':last-child')
-            .data([µthis.circleStates[µthis.transitionNumberOfPoints-1]])
-            .attr('d', µthis.pathFunction)
+            .data([this.model.get('circleStates')[this.model.get('transitionNumberOfPoints')-1]])
+            .attr('d', this.pathFunction)
             .attr('stroke', 'none')
             .attr('opacity', 1)
             .attr('class', 'line')
             .attr('class', 'hidden-line-path')
-            .attr('transform', 'scale('+µthis.originalScale+','+µthis.originalScale+')')
-            .attr('transform', 'translate('+(µthis.circularMeasureR*-2-10)+',0)');
+            .attr('transform', 'scale('+this.model.get('currentScale')+','+this.model.get('currentScale')+')')
+            .attr('transform', 'translate('+(this.model.get('circularMeasureR')*-2-10)+',0)');
         // Attach it to the view
         this.actualMeasureLinePath = actualMeasureLinePath;
 
