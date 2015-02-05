@@ -63,9 +63,9 @@ define([
       console.log('init representation model');
       this.setDefaults();
       this.computeRemainingAttributes(options);
-      this.representationType = options.representationType;
+      this.currentRepresentationType = options.currentRepresentationType;
       this.previousRepresentationType = 'not_yet_defined';
-      
+      this.set({beatsInMeasure: options.numberOfBeats});
     },
     computeRemainingAttributes: function(options){
       // TODO number of beats....
@@ -151,7 +151,6 @@ define([
       // var tNOP = this.get('transitionNumberOfPoints');
 
       for (i=0; i<this.get('transitionNumberOfPoints'); i++){
-        console.log('gh');
         // circle portion
         µthis = this;
         var circleState = $.map(Array(this.get('transitionNumberOfPoints')), function (d, j) {
@@ -247,8 +246,8 @@ define([
       }
     },
     transition: function(newRep){
-      this.set('previousRepresentationType', this.get('representationType'));
-      this.set('representationType', newRep);
+      this.set('previousRepresentationType', this.get('currentRepresentationType'));
+      this.set('currentRepresentationType', newRep);
       this.set({
         transitions: this.get('transitions')+1
       });
