@@ -12,6 +12,5 @@ define([
     initialize: function(){
     }
   });
-
   return BeatsCollection;
 });

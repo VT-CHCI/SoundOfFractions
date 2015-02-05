@@ -25,7 +25,6 @@ define([
         this.beatColor = COLORS.hexColors[options.colorIndex];
       } else {
         console.error('should not be in here!');
-        this.model = new BeatModel;
       }
       this.render();
     },
