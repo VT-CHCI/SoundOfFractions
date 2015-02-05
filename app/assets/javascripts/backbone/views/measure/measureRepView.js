@@ -1325,7 +1325,7 @@ define([
             .attr('x', this.model.get('lbbMeasureLocationX'))
             .attr('y', this.model.get('lbbMeasureLocationY'))
             .attr('width', this.model.get('linearLineLength'))
-            .attr('height', this.model.get('measureHeight'))
+            .attr('height', this.model.get('lbbMeasureHeight'))
             .attr('stroke', 'black')
             .attr('stroke-width', 1)
             .attr('fill', 'white')
