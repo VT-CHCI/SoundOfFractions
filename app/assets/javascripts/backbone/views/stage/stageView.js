@@ -16,20 +16,110 @@ define([
   'backbone/models/representation',
   'backbone/models/state',
   'backbone/models/conductor',
+  'backbone/models/remainingInstrumentGenerator',
   'backbone/views/button/remainingInstrumentGeneratorView',
   'backbone/views/hTrack/hTrackView',
+  'lookupInstrument',
   'text!backbone/templates/hTrack/hTrack.html'
-], function($, _, Backbone, BeatsCollection, MeasuresCollection, RepresentationsCollection, StageCollection, BeatModel, MeasureModel, HTrackModel, RepresentationModel, StateModel, ConductorModel, RemainingInstrumentGeneratorView, HTrackView, HTrackTemplate){
+], function($, _, Backbone, BeatsCollection, MeasuresCollection, RepresentationsCollection, StageCollection, BeatModel, MeasureModel, HTrackModel, RepresentationModel, StateModel, ConductorModel, RemainingInstrumentGeneratorModel, RemainingInstrumentGeneratorView, HTrackView, LookupInstrument, HTrackTemplate){
   var StageView = Backbone.View.extend({
     el: $('#sof-stage-area'),
 
     initialize: function(){
-      this.stage = StageCollection;
+      this.stageCollection = StageCollection;
       // set the song's conductor
       this.conductor = ConductorModel;
+      this.masterAudioContext = new AudioContext();
+      
 
       //this is creating the snare hTrack.
 
+      // Make an snare from scratch
+      // TODO, make this correctly populate the remainingInstrumentGenerator model
+
+      // Dispatch handlers
+
+      // TODO Replace these events
+      // this.litenTo(RemainingInstrumentGeneratorModel, 'instrumentAddedToCompositionArea', this.addInstrumentWithoutPattern);
+      // dispatch.on('instrumentDeletedFromCompositionArea.event', this.deleteInstrument, this);
+      // dispatch.on('newInstrumentTempoRecorded', this.addInstrument, this);
+
+      StateModel.set('stageCollection', this.stageCollection);
+      
+      // Per SO? http://stackoverflow.com/questions/9522845/backbone-js-remove-all-sub-views
+      this.childViews = [];
+
+      this.render();
+
+      // Listeners
+      this.listenTo(RemainingInstrumentGeneratorModel, 'removedInstrumentFromUnused', this.addFromGeneratorModel);
+      RemainingInstrumentGeneratorModel.removeInstrumentFromUnused({type:'sn'});
+      
+      this.makeChildrenHtracks();
+    },
+
+    render: function(){
+      console.log('StageView render start');
+      this.$el.append('<div id="instruments-collection"></div>');
+    },
+    makeChildHTrack: function(hTrack){
+      console.log('hTrack: ', hTrack);
+      //create a hTrack view.
+      var hTrackChildView = new HTrackView({
+        model: hTrack,
+        el: '#instruments-collection', 
+        masterAudioContext: this.masterAudioContext
+      });
+      this.childViews.push(hTrackChildView)
+    },
+    makeChildrenHtracks: function() {
+      //we have to render each one of our hTrack's.
+      _.each(this.stageCollection.models, function(hTrack) {
+        this.makeChildHTrack(hTrack);
+      }, this);
+    },
+    // addInstrument With Pattern
+    addInstrumentWithPattern: function(options) {
+    },
+    makeInstrumentFromScratch: function(options) {
+      console.log('makeInstrumentFromScratch options: ', options)
+      // set up the measures, measureReps, and beats for an instruments-collection
+      this.setUpMMB();
+
+      // Add an instrument model to the stage Collection
+      var newInstrumentToAdd = {
+        label: LookupInstrument.getDefault(options.instrument, 'label'),
+        type: LookupInstrument.getDefault(options.instrument, 'type'),
+        img: LookupInstrument.getDefault(options.instrument, 'image'),
+        gain: LookupInstrument.getDefault(options.instrument, 'gain'),
+        sample: LookupInstrument.getDefault(options.instrument, 'sample'),
+        measures: this.manuallyCreatedMeasuresCollection,
+        signature: this.manuallyCreatedMeasuresCollection.models[0].get('beats').length,
+        active: true,
+        tempo: 120 //bpm
+      };
+      this.stageCollection = StageCollection.add(newInstrumentToAdd);
+    },
+    addFromGeneratorModel: function(options){
+      // Add an instrument model to the stage Collection
+      this.setUpMMB();
+      var newInstrumentToAdd = {
+        label: LookupInstrument.getDefault(options.type, 'label'),
+        type: LookupInstrument.getDefault(options.type, 'type'),
+        img: LookupInstrument.getDefault(options.type, 'image'),
+        gain: LookupInstrument.getDefault(options.type, 'gain'),
+        sample: LookupInstrument.getDefault(options.type, 'sample'),
+        measures: this.manuallyCreatedMeasuresCollection,
+        signature: this.manuallyCreatedMeasuresCollection.models[0].get('beats').length,
+        active: true,
+        tempo: 120 //bpm
+      };
+
+      this.stageCollection = StageCollection.add(newInstrumentToAdd);
+
+      this.makeChildHTrack(StageCollection.last());
+    },
+    setUpMMB: function(){
       // this creates 1 measure, and addes beats and the representations to itself
       this.manuallyCreatedMeasureBeatsCollection = new BeatsCollection;
       //for each beat - also change signature below
@@ -64,58 +154,6 @@ define([
       this.manuallyCreatedMeasuresCollection = new MeasuresCollection;
       this.manuallyCreatedMeasuresCollection.add({
         beats: this.manuallyCreatedMeasureBeatsCollection, measureRepresentations: this.manuallyCreatedMeasureRepresentationCollection});
-
-      // Add an instrument to the stage
-      this.stage = StageCollection.add({
-        label: 'Snare',
-        type: 'sn',
-        img: 'snare.png',
-        // mute: false,
-        sample: '808_sn.m4a',
-        gain: 1,
-        measures: this.manuallyCreatedMeasuresCollection,
-        signature: this.manuallyCreatedMeasuresCollection.models[0].get('beats').length,
-        active: true,
-        tempo: 120 //bpm
-      });
-
-      // Dispatch handlers
-
-      // TODO Replace these events
-      // dispatch.on('instrumentAddedToCompositionArea.event', this.addInstrument, this);
-      // dispatch.on('instrumentDeletedFromCompositionArea.event', this.deleteInstrument, this);
-      // dispatch.on('newInstrumentTempoRecorded', this.addInstrument, this);
-
-      StateModel.set('stage', this.stage);
-      this.masterAudioContext = new AudioContext();
-
-      // Per SO? http://stackoverflow.com/questions/9522845/backbone-js-remove-all-sub-views
-      this.childViews = [];
-      
-      this.render();
-
-      //we have to render each one of our hTrack's.
-      _.each(this.stage.collection.models, function(hTrack) {
-
-        //create a hTrack view.
-        var hTrackChildView = new HTrackView({
-          model: hTrack,
-          // this.$() ONLY searches down the dom from this view
-          el: '#instruments-collection', 
-          masterAudioContext: this.masterAudioContext
-        });
-        this.childViews.push(hTrackChildView)
-      }, this);
-
-    },
-
-    render: function(){
-      console.log('StageView render start');
-      this.$el.append('<div id="instruments-collection"></div>');
-    },
-
-    // addInstrumentWithPattern
-    addInstrument: function(options) {
     },
     // We want to delete an instrument form the view, as well as from the instrument generator
     deleteInstrument: function(instrument) {

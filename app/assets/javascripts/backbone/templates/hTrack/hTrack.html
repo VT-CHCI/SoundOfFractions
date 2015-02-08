@@ -1,4 +1,4 @@
-<div id="hTrack-<%= model.cid %>" class="hTrack well container-fluid" data-state="<%= model.type %>">
+<div id="hTrack-<%= model.cid %>" class="hTrack well container-fluid" data-state="<%= model.get('type') %>">
   <div class="htrack-info pull-left">
     <div id="delete-hTrack-<%= model.cid %>"><i class="icon-remove delete-instrument"></i></div>
     <img src="<%= App.assets.path(model.get('img'))%>" class="img-circle hTrack-image">

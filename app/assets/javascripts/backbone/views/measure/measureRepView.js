@@ -8,11 +8,11 @@ define([
   'backbone/collections/beats',
   'backbone/models/measure', 'backbone/models/representation', 'backbone/models/state',
   'backbone/views/beat/beatView',
-  'backbone/views/factory/beadFactoryView',
+  'backbone/views/factory/beatFactoryView',
   'text!backbone/templates/measure/measureRep.html',
   'colors',
   'app/log'
-], function($, _, Backbone, BeatsCollection, MeasureModel, RepresentationModel, StateModel, BeatView, BeadFactoryView, MeasureRepTemplate, COLORS, log){
+], function($, _, Backbone, BeatsCollection, MeasureModel, RepresentationModel, StateModel, BeatView, BeatFactoryView, MeasureRepTemplate, COLORS, log){
   return Backbone.View.extend({
     //registering click events to add and remove measures.
     events : {
@@ -31,7 +31,6 @@ define([
         // Using the new variables to attach various things to the view
         this.repContainerEl = options.measureRepContainer;
         this.currentRepresentationType = options.representationType;
-        this.beatFactoryHolder = 'beat-factory-holder-'+this.measureRepModel.cid;
         this.measurePassingToBeatViewParameters = this.beatViewParameters(options);
         this.measureRepTemplateParameters = this.templateParameters(options);
         this.measurePassingToBeatFactoryParameters = this.beatFactoryParameters(options);
@@ -54,7 +53,8 @@ define([
       //Dispatch listeners
       // TODO Replace these events
 
-      this.listenTo(this.hTrackView, 'toggleAnimation', this.toggleAnimation)
+      this.listenTo(this.hTrackView, 'toggleAnimation', this.toggleAnimation);
+      this.parentMeasureModel.get('beats').on('add', this.updateRender, this);
       // dispatch.on('toggleAnimation.event', this.toggleAnimation, this);
       // dispatch.on('signatureChange.event', this.reconfigure, this);
       // dispatch.on('unroll.event', this.unroll, this);
@@ -68,14 +68,14 @@ define([
       // make the beats
       this.makeBeats();
       // make a beat factory
-      // this.makeBeatFactory();
+      this.makeBeatFactory();
 
     },
     computeBeatViewParameters: function(beatModel, index, options){
       // Linestates must be defined here to propagate through transitions
       var lineStatesUnrolling = [];
       var lineStatesRollup = [];
-      var sliceLength = this.model.get('transitionNumberOfPoints')/this.model.get('beatsInMeasure');
+      var sliceLength = this.model.get('transitionNumberOfPoints')/this.parentMeasureModel.get('beats').models.length;
       for ( var i=0 ; i<this.model.get('transitionNumberOfPoints') ; i++ ){
         var startIndex = (index*sliceLength);// - subtractor;
         var inner = this.model.get('circleStates')[i].slice(startIndex, startIndex+sliceLength);
@@ -88,32 +88,33 @@ define([
       // transition beat params
       if (options){
         if (options.type == 'line') {
+          debugger;
           //Unsure of why horzDivPadding needs to be divided by 2, but w/e
-          this.measurePassingToBeatViewParameters.X1 = this.lbbMeasureLocationX +(this.beatWidth*(index)+this.circularMeasureCx-this.horzDivPadding/2);
-          this.measurePassingToBeatViewParameters.X2 = this.lbbMeasureLocationX +(this.beatWidth*(index)+this.circularMeasureCx-this.horzDivPadding/2);
+          this.measurePassingToBeatViewParameters.X1 = this.model.get('lbbMeasureLocationX') +(this.model.get('beatWidth')*(index)+this.model.get('circularMeasureCx')-this.model.get('horzDivPadding')/2);
+          this.measurePassingToBeatViewParameters.X2 = this.model.get('lbbMeasureLocationX') +(this.model.get('beatWidth')*(index)+this.model.get('circularMeasureCx')-this.model.get('horzDivPadding')/2);
         } else if (options.type == 'bead') {
           // reverse says whether the beads should be unrolled or not
           this.measurePassingToBeatViewParameters.reverse = true;
           if (options.movedToRight){
-            this.measurePassingToBeatViewParameters.X1 = this.lbbMeasureLocationX +(this.beatWidth*(index+1));
-            this.measurePassingToBeatViewParameters.X2 = this.lbbMeasureLocationX +(this.beatWidth*(index+1));
+            this.measurePassingToBeatViewParameters.X1 = this.model.get('lbbMeasureLocationX') +(this.model.get('beatWidth')*(index+1));
+            this.measurePassingToBeatViewParameters.X2 = this.model.get('lbbMeasureLocationX') +(this.model.get('beatWidth')*(index+1));
           } else {
-            this.measurePassingToBeatViewParameters.X1 = this.lbbMeasureLocationX +(this.beatWidth*(index));
-            this.measurePassingToBeatViewParameters.X2 = this.lbbMeasureLocationX +(this.beatWidth*(index));
+            this.measurePassingToBeatViewParameters.X1 = this.model.get('lbbMeasureLocationX') +(this.model.get('beatWidth')*(index));
+            this.measurePassingToBeatViewParameters.X2 = this.model.get('lbbMeasureLocationX') +(this.model.get('beatWidth')*(index));
           }
         } else if (options.type == 'beadCircle') {
           // reverse says whether the beads should be unrolled or not
           this.measurePassingToBeatViewParameters.reverse = false;
           if (options.movedToRight){
-            this.measurePassingToBeatViewParameters.X1 = this.lbbMeasureLocationX +(this.beatWidth*(index+1));
-            this.measurePassingToBeatViewParameters.X2 = this.lbbMeasureLocationX +(this.beatWidth*(index+1));
+            this.measurePassingToBeatViewParameters.X1 = this.model.get('lbbMeasureLocationX') +(this.model.get('beatWidth')*(index+1));
+            this.measurePassingToBeatViewParameters.X2 = this.model.get('lbbMeasureLocationX') +(this.model.get('beatWidth')*(index+1));
           } else {
-            this.measurePassingToBeatViewParameters.X1 = this.lbbMeasureLocationX +(this.beatWidth*(index));
-            this.measurePassingToBeatViewParameters.X2 = this.lbbMeasureLocationX +(this.beatWidth*(index));
+            this.measurePassingToBeatViewParameters.X1 = this.model.get('lbbMeasureLocationX') +(this.model.get('beatWidth')*(index));
+            this.measurePassingToBeatViewParameters.X2 = this.model.get('lbbMeasureLocationX') +(this.model.get('beatWidth')*(index));
           }
         } else if (options.type == 'bar') {
           this.measurePassingToBeatViewParameters.reverse = true;
-          this.measurePassingToBeatViewParameters.beatBBX = this.lbbMeasureLocationX +(this.beatWidth*(index)+this.circularMeasureCx-this.horzDivPadding/2);
+          this.measurePassingToBeatViewParameters.beatBBX = this.model.get('lbbMeasureLocationX') +(this.model.get('beatWidth')*(index)+this.model.get('circularMeasureCx')-this.model.get('horzDivPadding')/2);
         } else if (options.type == 'lineRolling') {
             this.measurePassingToBeatViewParameters.currentRepresentationType = 'lineRolling';
         } else if (options.type == 'lineUnrolling') {
@@ -127,15 +128,14 @@ define([
       }
       // All beat params
       this.measurePassingToBeatViewParameters.model = beatModel;
-      this.measurePassingToBeatViewParameters.parentRepModel = µthis.model;
+      this.measurePassingToBeatViewParameters.parentMeasureRepModel = this.model;
       this.measurePassingToBeatViewParameters.singleBeat = '#beat'+beatModel.cid;
       this.measurePassingToBeatViewParameters.beatIndex = index;
-      this.model.set({beatStartAngle: ((360 / this.beatsInMeasure)*index)});
+      this.model.set({beatStartAngle: ((360 / this.parentMeasureModel.get('beats').models.length)*index)});
       this.measurePassingToBeatViewParameters.beatStartTime = this.model.get('firstBeatStart')+(index)*(this.model.get('timeIncrement')/1000);
       this.measurePassingToBeatViewParameters.color = index;
       this.measurePassingToBeatViewParameters.lineStatesUnrolling = lineStatesUnrolling;
       this.measurePassingToBeatViewParameters.lineStatesRollup = lineStatesRollup;
-
       this.measurePassingToBeatViewParameters.circleStates = this.model.get('circleStates');
     },
     // This is a bad way of handling view deletion, but idk better
@@ -152,7 +152,6 @@ define([
       // Setting which container the beats go in, primary for first rendering, seconary for transitions
       if (!options){
         // If we aren't adding beats in the second or third container, we are basically rerendering, so we delete the children and put in a new set of beats
-        this.closeChildren();
         this.measurePassingToBeatViewParameters.beatContainer = '#beat-holder-'+this.model.cid;
       } else {
         if (options.secondary){
@@ -167,18 +166,18 @@ define([
       // for each beat in this measureRep
       µthis = this;
       _.all(this.parentMeasureModel.get('beats').models, function(beatModel, index) {
-        this.measurePassingToBeatViewParameters.currentRepresentationType = this.model.get('currentRepresentationType');
         // Make a new beat
         if(!options){
           µthis.computeBeatViewParameters(beatModel, index);
         // Make a secondary or third beat
         } else {
+          console.log(this.measurePassingToBeatViewParameters.beatContainer);
           µthis.computeBeatViewParameters(beatModel, index, options);
+          console.log(this.measurePassingToBeatViewParameters.beatContainer);
         }
-
-        // TODO DELETE THE VIEWS when we re-render
         // if(options){console.error(this.measurePassingToBeatViewParameters);}
         // create a Beatview
+        console.log(this.measurePassingToBeatViewParameters);
         var newBeatView = new BeatView(this.measurePassingToBeatViewParameters);
         this.childViews.push(newBeatView);
         // if (this.currentRepresentationType == 'audio') {
@@ -192,66 +191,28 @@ define([
       }, this);
     },
     // These are the parameters for the beat factory
-    beatFactoryParameters : function(options){
+    beatFactoryParameters: function(options){
       return {
-        // beat, number of beats, each beat's color, location, path
-        measureModel: this.measureModel,
-        beatFactoryHolder: this.beatFactoryHolder,
-        beatsInMeasure: this.beatsInMeasure,
-        remainingNumberOfBeats: 16-this.beatsInMeasure,
-        currentRepresentationType: options.model.get('currentRepresentationType'),
-        beadRadius: this.circularBeadBeatRadius,
-        colorIndex: '',
-        measureRepModel: this.model,
         parentMeasureModel: this.parentMeasureModel,
-        circularMeasureR: this.circularMeasureR,
-        circularMeasureCx: this.circularMeasureCx,
-        circularMeasureCy: this.circularMeasureCy,
-        numberLineY: this.numberLineY,
-        beatWidth: this.beatWidth,
-        beatFactoryR: this.beatFactoryR,
-        beatFactoryBarWidth: this.beatFactoryBarWidth,
-        beatFactoryBarHeight: this.beatFactoryBarHeight,
-        linearLineLength: this.linearLineLength,
-        lbbMeasureLocationY: this.lbbMeasureLocationY
+        beatFactoryHolder: '#beat-factory-holder-'+this.model.cid,
+        parentMeasureRepModel: this.model
       }
     },
     // These are the parameters for the beatView
-    beatViewParameters : function(options){
-      this.model.set({beatAngle: 360/this.model.get('beatsInMeasure')});
+    beatViewParameters: function(options){
+      this.model.set({beatAngle: 360/this.parentMeasureModel.get('beats').models.length});
       return {
         //General
+        parentMeasureRepView: this,
         parentMeasureModel: this.parentMeasureModel,
-        parentElHolder: '#beatHolder'+options.measureRepModel.cid,
         parentMeasureRepModel: this.model,
-        parentCID: this.model.cid,
-        margin : this.margin,
-        currentRepresentationType: this.model.get('currentRepresentationType'),
-        beatsInMeasure: this.beatsInMeasure,
-        pathFunction: this.pathFunction,
-        // To use the range of colors
-        // To use one color
-        // color: x,
-        timeIncrement: this.timeIncrement,
-        // Bar
-        beatHolderWidth: this.beatHolderWidth,
-        linearBeatXPadding: this.linearBeatXPadding,
-        lbbMeasureLocationY: this.lbbMeasureLocationY,
-        beatWidth: this.beatWidth,
-        beatHeight: this.beatHeight,
         // Line
         Y1: this.model.get('numberLineY') - this.model.get('lineHashHeight')/2,
         Y2: this.model.get('numberLineY') + this.model.get('lineHashHeight')/2,
-        // Circular Pie
-
-        
-        // Circular Bead
-        // Transition
-        transitionDuration: this.transitionDuration
       }
     },
     // These are the template parameters for the HTML of the MeasureRepView
-    templateParameters : function(options){
+    templateParameters: function(options){
       return {
         measureRepID: 'measure-rep-'+options.measureRepModel.cid,
         measureClasses: 'measureRep measure-'+this.model.get('currentRepresentationType'),
@@ -261,7 +222,7 @@ define([
         measureRepType: this.model.get('currentRepresentationType'),
         beatHolderID: 'beat-holder-'+this.model.cid,
         secondaryBeatHolderID: 'secondary-beat-holder-'+this.model.cid,
-        beatFactoryHolderID: this.beatFactoryHolder,
+        beatFactoryHolderID: 'beat-factory-holder-'+this.model.cid,
         measureCount: this.measureCount,
         measureRep: this.model.get('currentRepresentationType'),
         measureRepRecordID: 'record-'+this.model.cid
@@ -679,14 +640,14 @@ define([
     },
     // adds the infinite line on a number line
     addInfiniteLine: function() {
-      var svgContainer = d3.select('#svg-'+this.measureRepModel.cid);
+      var svgContainer = d3.select('#svg-'+this.model.cid);
       var infiniteLine = svgContainer
         .insert('line', ':first-child')
         .attr('class', 'infinite-line')
         .attr('x1', -200)
-        .attr('y1', this.numberLineY)
+        .attr('y1', this.model.get('numberLineY'))
         .attr('x2', 1000)
-        .attr('y2', this.numberLineY)
+        .attr('y2', this.model.get('numberLineY'))
         .attr('stroke', 'black')
         .attr('stroke-width', 1)
         .attr('opacity', .5);
@@ -719,46 +680,46 @@ define([
     beadToLine: function(options) {
       console.log('btl');
       var µthis = this;
-      var svgContainer = d3.select('#svg-'+this.measureRepModel.cid)
-            .attr('width', this.linearDivWidth+this.circularMeasureR*2 );
-      var beatHolder = d3.select('#beat-holder-'+this.measureRepModel.cid);
+      console.error(µthis);
+      var svgContainer = d3.select('#svg-'+this.model.cid)
+            .attr('width', this.model.get('linearDivWidth')+this.model.get('circularMeasureR')*2 );
+      var beatHolder = d3.select('#beat-holder-'+this.model.cid);
       var beadBeats = beatHolder.selectAll('.bead-beat');
 
       // send the event to the beatView to unroll at the same time
       // TODO Replace these events
-      // dispatch.trigger('beatTransition.event', µthis);
+      this.trigger('beatTransition');
 
       // unroll
-      for(i=0; i<µthis.transitionNumberOfPoints; i++){
-        µthis.circlePath.data([µthis.circleStates[i]])
+      for(i=0; i<this.model.get('transitionNumberOfPoints'); i++){
+        this.circlePath.data([this.model.get('circleStates')[i]])
           .transition()
-            .delay(µthis.transitionDuration*i)
-            .duration(µthis.transitionDuration)
+            .delay(this.model.get('transitionDuration')*i)
+            .duration(this.model.get('transitionDuration'))
             .ease('linear')
-            .attr('d', µthis.pathFunction)
+            .attr('d', this.pathFunction)
       }
       // make the number line beats
       setTimeout(function(){
         µthis.makeBeats({secondary:true, type:'line'});
-        $('#beat-holder-'+µthis.measureRepModel.cid+' .bead-beat').fadeOut(µthis.animationIntervalDuration);
-      }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration);
-      // remove the beads, and add the infinite line
-      setTimeout(function(){
-        beadBeats.remove();
-        µthis.addInfiniteLine();
-      }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration*2 );
-      // move entire portion to the left
-      setTimeout(function(){
-        µthis.moveSecondaryLeft('bead');
-      }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration*3 );
-      // rerender everythign to get the facotry as well
-      setTimeout(function(){
-        // this sets the transition count on the model itself, which the beatView is listening to
-        // TODO Replace these events
-        // dispatch.trigger('reRenderMeasure.event', this);
-
-        // µthis.parentMeasureModel.increaseTransitionCount();
-      }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration*4 );
+        $('#beat-holder-'+µthis.model.cid+' .bead-beat').fadeOut(µthis.model.get('animationIntervalDuration'));
+      }, this.model.get('transitionDuration')*(this.model.get('transitionNumberOfPoints')) + this.model.get('animationIntervalDuration'));
+      // // remove the beads, and add the infinite line
+      // setTimeout(function(){
+      //   beadBeats.remove();
+      //   µthis.addInfiniteLine();
+      // }, this.model.get('transitionDuration')*(this.model.get('transitionNumberOfPoints')) + this.model.get('animationIntervalDuration')*2 );
+      // // // move entire portion to the left
+      // setTimeout(function(){
+      //   // this.moveSecondaryLeft('bead');
+      // }, this.model.get('transitionDuration')*(this.model.get('transitionNumberOfPoints')) + this.model.get('animationIntervalDuration')*3 );
+      // // // rerender everythign to get the facotry as well
+      // setTimeout(function(){
+      //   // this sets the transition count on the model itself, which the beatView is listening to
+      //   // TODO Replace these events
+      //   // dispatch.trigger('reRenderMeasure.event', this);
+      //   // this.model.transition('line');
+      // }, this.model.get('transitionDuration')*(this.model.get('transitionNumberOfPoints')) + this.model.get('animationIntervalDuration')*4 );
     },
     beadToBar: function(){
       console.log('btr');
@@ -770,8 +731,7 @@ define([
       var circlePath = $('#svg-'+this.measureRepModel.cid + ' .circle-path');
 
       // Unroll
-      // TODO Replace these events
-      // dispatch.trigger('beatTransition.event', µthis);
+      this.trigger('beatTransition');
 
       for(i=0; i<this.transitionNumberOfPoints; i++){
         this.circlePath.data([this.circleStates[i]])
@@ -1165,7 +1125,7 @@ define([
     },
 
     render: function(){
-      console.log('mR render');
+      // console.log('mR render');
       var µthis = this;
 
       //set the el for JQ-UI Drag
@@ -1386,50 +1346,51 @@ define([
     // This makes the bead factory in each measureRep
     makeBeatFactory: function(){
       // Bead
+      var remainingNumberOfBeats = 16-this.parentMeasureModel.get('beats').models.length;
       if (this.model.get('currentRepresentationType') == 'bead') {
-        for (i = 0 ; i < this.measurePassingToBeatFactoryParameters.remainingNumberOfBeats ; i++){
+        for (i = 0 ; i < remainingNumberOfBeats ; i++){
           var index = 15-i;
           //Base + Math.random() * (max - min) + min;
-          this.measurePassingToBeatFactoryParameters.cX = this.horzDivPadding + (Math.random() * (20) - 10);
-          this.measurePassingToBeatFactoryParameters.cY = (this.circularDivHeight-this.vertDivPadding-this.beatFactoryR) + (Math.random() * (20) - 10);
+          this.measurePassingToBeatFactoryParameters.cX = this.model.get('horzDivPadding') + (Math.random() * (20) - 10);
+          this.measurePassingToBeatFactoryParameters.cY = (this.model.get('circularDivHeight')-this.model.get('vertDivPadding')*2-this.model.get('beatFactoryR')*2) + (Math.random() * (20) - 10);
           this.measurePassingToBeatFactoryParameters.colorIndex = index;
-          var newBeadFactory = new BeadFactoryView(this.measurePassingToBeatFactoryParameters);
+          var newBeadFactory = new BeatFactoryView(this.measurePassingToBeatFactoryParameters);
           this.childViews.push(newBeadFactory);
         }
       // Line
       } else if (this.model.get('currentRepresentationType') == 'line') {
-        for (i = 0 ; i < this.measurePassingToBeatFactoryParameters.remainingNumberOfBeats ; i++){
+        for (i = 0 ; i < remainingNumberOfBeats ; i++){
           var index = 15-i;
           //Base + Math.random() * (max - min) + min;
-          this.measurePassingToBeatFactoryParameters.x1 = this.horzDivPadding + (Math.random() * (20) - 10);
-          this.measurePassingToBeatFactoryParameters.y1 = this.numberLineY + 60 + (Math.random() * (20) - 10);
+          this.measurePassingToBeatFactoryParameters.x1 = this.model.get('horzDivPadding') + (Math.random() * (20) - 10);
+          this.measurePassingToBeatFactoryParameters.y1 = this.model.get('numberLineY') + 60 + (Math.random() * (20) - 10);
           this.measurePassingToBeatFactoryParameters.x2 = this.measurePassingToBeatFactoryParameters.x1;
-          this.measurePassingToBeatFactoryParameters.y2 = this.measurePassingToBeatFactoryParameters.y1 + this.lineHashHeight;
+          this.measurePassingToBeatFactoryParameters.y2 = this.measurePassingToBeatFactoryParameters.y1 + this.model.get('lineHashHeight');
           this.measurePassingToBeatFactoryParameters.colorIndex = index;
-          var newLineFactory = new BeadFactoryView(this.measurePassingToBeatFactoryParameters);
+          var newLineFactory = new BeatFactoryView(this.measurePassingToBeatFactoryParameters);
           this.childViews.push(newLineFactory);
         }
       // Pie
       } else if (this.model.get('currentRepresentationType') == 'pie') {
-        for (i = 0 ; i < this.measurePassingToBeatFactoryParameters.remainingNumberOfBeats ; i++){
+        for (i = 0 ; i < remainingNumberOfBeats ; i++){
           var index = 15-i;
           //Base + Math.random() * (max - min) + min;
-          this.measurePassingToBeatFactoryParameters.cX = this.horzDivPadding + (Math.random() * (20) - 10);
-          this.measurePassingToBeatFactoryParameters.cY = (this.circularDivHeight-this.vertDivPadding*3 - this.beatFactoryR*2) + (Math.random() * (30) - 20);
+          this.measurePassingToBeatFactoryParameters.cX = this.model.get('horzDivPadding') + (Math.random() * (20) - 10);
+          this.measurePassingToBeatFactoryParameters.cY = (this.model.get('circularDivHeight')-this.model.get('vertDivPadding')*3 - this.model.get('beatFactoryR')*2) + (Math.random() * (30) - 20);
           this.measurePassingToBeatFactoryParameters.colorIndex = index;
-          var newPieFactory = new BeadFactoryView(this.measurePassingToBeatFactoryParameters);
+          var newPieFactory = new BeatFactoryView(this.measurePassingToBeatFactoryParameters);
           this.childViews.push(newPieFactory);
         } 
       // Bar
       } else if (this.model.get('currentRepresentationType') == 'bar') {
-        for (i = 0 ; i < this.measurePassingToBeatFactoryParameters.remainingNumberOfBeats ; i++){
+        for (i = 0 ; i < remainingNumberOfBeats ; i++){
           var index = 15-i;
           //Base + Math.random() * (max - min) + min;
-          this.measurePassingToBeatFactoryParameters.x = this.horzDivPadding + (Math.random() * (20) - 10);
-          this.measurePassingToBeatFactoryParameters.y = this.numberLineY + 90 + (Math.random() * (20) - 10);
-          this.measurePassingToBeatFactoryParameters.beatHeight = this.beatHeight;
+          this.measurePassingToBeatFactoryParameters.x = this.model.get('horzDivPadding') + (Math.random() * (20) - 10);
+          this.measurePassingToBeatFactoryParameters.y = this.model.get('numberLineY') + 90 + (Math.random() * (20) - 10);
+          this.measurePassingToBeatFactoryParameters.beatHeight = this.model.get('beatHeight');
           this.measurePassingToBeatFactoryParameters.colorIndex = index;
-          var newBarFactory = new BeadFactoryView(this.measurePassingToBeatFactoryParameters);
+          var newBarFactory = new BeatFactoryView(this.measurePassingToBeatFactoryParameters);
           this.childViews.push(newBarFactory);
         }        
       }      
@@ -1602,6 +1563,11 @@ define([
           childView.close();
         }
       })
+    },
+    updateRender: function(){
+      console.log('getting to updateRender');
+      this.closeChildren();
+      // this.render();
     },
     onClose: function(){
       // this.model.unbind("change", this.render);

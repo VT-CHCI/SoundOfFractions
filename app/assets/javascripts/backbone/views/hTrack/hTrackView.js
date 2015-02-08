@@ -9,12 +9,13 @@ define([
   'backbone/models/hTrack',
   'backbone/models/state',
   'backbone/models/conductor',
+  'backbone/models/remainingInstrumentGenerator',
   'backbone/collections/representations',
   'backbone/views/measure/measureView',
   'backbone/views/menu/instrumentDropDownView',
   'text!backbone/templates/hTrack/hTrack.html',
   'app/log'
-], function($, _, Backbone, HTrackModel, StateModel, ConductorModel, RepresentationsCollection, MeasureView,  InstrumentDropDownView, HTrackTemplate, log){
+], function($, _, Backbone, HTrackModel, StateModel, ConductorModel, RemainingInstrumentGeneratorModel, RepresentationsCollection, MeasureView,  InstrumentDropDownView, HTrackTemplate, log){
   return Backbone.View.extend({
     events : {
       // for toggling the hTrack's muted state.
@@ -25,14 +26,12 @@ define([
       'click .delete-instrument' : 'close',
       'change #instruemnt-selector' : 'instrumentChanged'
     },
-
     /*
       We are receiving options from stageView, where this view is
       being instantiated.
     */
     initialize: function(options){
-      console.log('here it is:');
-      console.log(options);
+      console.log('hTrackView init options: ', options);
       // Many variables get passed in.  We attach those variable with this function, so for each variable:
       // this.something = options.something; 
       // model: hTrack,
@@ -92,12 +91,11 @@ define([
       _.each(this.model.get('measures').models, function(measure, index) {
         console.log('got the measures model');
         var childView = new MeasureView({
-          parent: µthis.model,
+          parentHTrackModel: µthis.model,
           el: '#measure-container-'+µthis.model.cid,
           model: measure,
           collectionOfMeasures: µthis.model.get('measures'),
           measureRepresentations: measure.get('measureRepresentations'),
-          parentEl: '#measure-container-'+µthis.model.cid,
           measureModel: measure,
           hTrackView: µthis,
           defaultMeasureRepresentation: µthis.defaultMeasureRepresentation,
@@ -114,6 +112,7 @@ define([
     */
     render: function(options){
       console.log('hTrackView render start');
+      
       var compiledTemplate = _.template( HTrackTemplate, {model: this.model} );
       this.$el.append( compiledTemplate );
 
@@ -404,6 +403,8 @@ define([
       // dispatch.trigger('reRenderInstrumentGenerator.event', instrument);
 
       var instrument = $(e.currentTarget).closest('.hTrack').data().state;
+      console.log(instrument);
+      RemainingInstrumentGeneratorModel.addInstrument({type: instrument});
       console.log('in removeHTrack deleteInstrumentFromCompositionArea() of ' + instrument);
 
       // Maybe redundant

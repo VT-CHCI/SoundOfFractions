@@ -15,8 +15,10 @@ define([
       // General
         originalScale: 1,
         currentScale: 1,
-        vertDivPadding: 0,
+        vertDivPadding: 10,
         horzDivPadding: 25,
+      // Beat Factory
+        beatFactoryAreaHeight: 250,
       // Circular
         initialCircularMeasureR: 51,  // 8 pxs per bead plus 1 px border = 10 ||| 10 * 16 = 160/pi = 51
         cX: 100,
@@ -60,12 +62,11 @@ define([
         beatFactoryBarHeight: 15,
     },
     initialize: function(options){
-      console.log('init representation model');
+      // console.log('init representation model');
       this.setDefaults();
       this.computeRemainingAttributes(options);
       this.currentRepresentationType = options.currentRepresentationType;
       this.previousRepresentationType = 'not_yet_defined';
-      this.set({beatsInMeasure: options.numberOfBeats});
     },
     computeRemainingAttributes: function(options){
       // TODO number of beats....
@@ -111,38 +112,41 @@ define([
       this.calculateCircleStates();
     },
     setDefaults: function() {
-        this.set({"originalScale": this.defaults.originalScale});
-        this.set({"currentScale": this.defaults.currentScale});
-        this.set({"vertDivPadding": this.defaults.vertDivPadding});
-        this.set({"horzDivPadding": this.defaults.horzDivPadding});
-        this.set({"initialCircularMeasureR": this.defaults.initialCircularMeasureR});
-        this.set({"cX": this.defaults.cX});
-        this.set({"cX": this.defaults.cX});
-        this.set({"marginTop": this.defaults.marginTop});
-        this.set({"marginLeft": this.defaults.marginLeft});
-        this.set({"transitions": this.defaults.transitions});
-        this.set({"animationIntervalDuration": this.defaults.animationIntervalDuration});
-        this.set({"audioMeasureCx": this.defaults.audioMeasureCx});
-        this.set({"audioMeasureCy": this.defaults.audioMeasureCy});
-        this.set({"audioMeasureR": this.defaults.audioMeasureR});
-        this.set({"audioBeatCx": this.defaults.audioBeatCx});
-        this.set({"audioBeatCy": this.defaults.audioBeatCy});
-        this.set({"audioBeatR": this.defaults.audioBeatR});
-        this.set({"audioBeatR": this.defaults.audioBeatR});
-        this.set({"initialColorForAudio": this.defaults.initialColorForAudio});
-        this.set({"measureStartAngle": this.defaults.measureStartAngle});
-        this.set({"beatStartAngle": this.defaults.beatStartAngle});
-        this.set({"beatEndAngle": this.defaults.beatEndAngle});
-        this.set({"beatFactoryR": this.defaults.beatFactoryR});
-        this.set({"circularBeadBeatRadius": this.defaults.circularBeadBeatRadius});
-        this.set({"lineHashHeight": this.defaults.lineHashHeight});
-        this.set({"lbbMeasureLocationX": this.defaults.lbbMeasureLocationX});
-        this.set({"lbbMeasureLocationY": this.defaults.lbbMeasureLocationY});
-        this.set({"lbbMeasureHeight": this.defaults.lbbMeasureHeight});
-        this.set({"linearBeatXPadding": this.defaults.linearBeatXPadding});
-        this.set({"linearBeatYPadding": this.defaults.linearBeatYPadding});
-        this.set({"beatFactoryBarWidth": this.defaults.beatFactoryBarWidth});
-        this.set({"beatFactoryBarHeight": this.defaults.beatFactoryBarHeight});
+        this.set({
+          "originalScale": this.defaults.originalScale,
+          "currentScale": this.defaults.currentScale,
+          "vertDivPadding": this.defaults.vertDivPadding,
+          "horzDivPadding": this.defaults.horzDivPadding,
+          "initialCircularMeasureR": this.defaults.initialCircularMeasureR,
+          "cX": this.defaults.cX,
+          "cX": this.defaults.cX,
+          "marginTop": this.defaults.marginTop,
+          "marginLeft": this.defaults.marginLeft,
+          "transitions": this.defaults.transitions,
+          "animationIntervalDuration": this.defaults.animationIntervalDuration,
+          "audioMeasureCx": this.defaults.audioMeasureCx,
+          "audioMeasureCy": this.defaults.audioMeasureCy,
+          "audioMeasureR": this.defaults.audioMeasureR,
+          "audioBeatCx": this.defaults.audioBeatCx,
+          "audioBeatCy": this.defaults.audioBeatCy,
+          "audioBeatR": this.defaults.audioBeatR,
+          "audioBeatR": this.defaults.audioBeatR,
+          "initialColorForAudio": this.defaults.initialColorForAudio,
+          "measureStartAngle": this.defaults.measureStartAngle,
+          "beatStartAngle": this.defaults.beatStartAngle,
+          "beatEndAngle": this.defaults.beatEndAngle,
+          "beatFactoryR": this.defaults.beatFactoryR,
+          "circularBeadBeatRadius": this.defaults.circularBeadBeatRadius,
+          "lineHashHeight": this.defaults.lineHashHeight,
+          "lbbMeasureLocationX": this.defaults.lbbMeasureLocationX,
+          "lbbMeasureLocationY": this.defaults.lbbMeasureLocationY,
+          "lbbMeasureHeight": this.defaults.lbbMeasureHeight,
+          "linearBeatXPadding": this.defaults.linearBeatXPadding,
+          "linearBeatYPadding": this.defaults.linearBeatYPadding,
+          "beatFactoryBarWidth": this.defaults.beatFactoryBarWidth,
+          "beatFactoryBarHeight": this.defaults.beatFactoryBarHeight,
+          "beatFactoryAreaHeight": this.defaults.beatFactoryAreaHeight
+        });
     },
     // This is what calculates the different states of circles and lines throughout an animation of a circle to a line or a line to a circle
     calculateCircleStates: function(){
@@ -246,6 +250,7 @@ define([
       }
     },
     transition: function(newRep){
+      console.log('rep model new repType', newRep);
       this.set('previousRepresentationType', this.get('currentRepresentationType'));
       this.set('currentRepresentationType', newRep);
       this.set({

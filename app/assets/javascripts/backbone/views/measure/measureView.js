@@ -14,12 +14,11 @@ define([
   'backbone/models/state',
   'backbone/models/representation',
   'backbone/views/beat/beatView',
-  'backbone/views/factory/beadFactoryView',
   'backbone/views/measure/measureRepView',
   'text!backbone/templates/measure/measure.html',
   'colors',
   'app/log'
-], function($, _, Backbone, BeatsCollection, StageCollection, RepresentationsCollection, MeasureModel, StateModel, RepresentationModel, BeatView, BeadFactoryView, MeasureRepView, MeasureTemplate, COLORS, log){
+], function($, _, Backbone, BeatsCollection, StageCollection, RepresentationsCollection, MeasureModel, StateModel, RepresentationModel, BeatView, MeasureRepView, MeasureTemplate, COLORS, log){
   return Backbone.View.extend({
 
     //registering click events to add and remove measures.
@@ -90,31 +89,24 @@ define([
     addChild: function(options){
       // If we are creating the children from the models already present, ie, initial load
       if(options.repIndex > -1) {      
-        console.log('options.repIndex')
         var addedModel = this.model.get('measureRepresentations').models[options.repIndex];
       // If we are just adding one, from when a new model is added to the collection, ie they create one
       } else {
-        console.log('NO oI')
         var addedModel = this.model.get('measureRepresentations').last();
       }
 
       // get parameters for the template for a measure
       var measureRepViewParameters = {
         // HTrack
-        hTrackEl: this.hTrackEl,
         hTrackView: this.hTrackView,
-        hTrack: this.parent,
+        parentHTrackModel: this.parentHTrackModel,
         measureCount: this.measureCount,
         // Measure
-        parentMeasureModel: this.measureModel,
-        beatsInMeasure: this.model.get('beats').models.length,
+        parentMeasureModel: this.model,
         parent: this,
-        parentCID: this.cid,
-        mCID: this.model.cid,
         measureRepContainer: '#measure-rep-container-'+this.model.cid,
         model: addedModel,
-        measureRepModel: addedModel,
-        beatHolder:'beatHolder'+this.model.cid,
+        measureRepModel: addedModel
       };
       //This part is the hack      This is where we create a measureRepView for each one using the paramaters
       var newView = new MeasureRepView(measureRepViewParameters);
@@ -144,7 +136,7 @@ define([
         console.log('add a measure');
         var newMeasure = new BeatsCollection;
 
-        for (var i = 0; i < this.parent.get('signature'); i++) {
+        for (var i = 0; i < this.parentHTrackModel.get('signature'); i++) {
           newMeasure.add();
         }
 
@@ -191,7 +183,7 @@ define([
         //trigger a stop request to stop playback.
         // TODO Replace these events
         // dispatch.trigger('stopRequest.event', 'off');
-        // dispatch.trigger('signatureChange.event', this.parent.get('signature'));
+        // dispatch.trigger('signatureChange.event', this.parentHTrackModel.get('signature'));
       }
     },
     // This is called when the signature of a measure is changed

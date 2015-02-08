@@ -26,6 +26,29 @@ define([
       17: "#000000",  //black
       18: "#ffffff"   //white
     }
+    // ,
+    // // Greyscale
+    // hexColors: {
+    //   0:  "#7F7F7F",   //red
+    //   1:  "#7F7F7F",   //bright green
+    //   2:  "#7F7F7F",  //blue
+    //   3:  "#7F7F7F",  //hot pink
+    //   4:  "#7F7F7F",   //light blue
+    //   5:  "#7F7F7F",   //light green
+    //   6:  "#7F7F7F",   //maroon
+    //   7:  "#7F7F7F",  //med blue
+    //   8:  "#7F7F7F",   //light orange
+    //   9:  "#7F7F7F",   //olive
+    //   10: "#7F7F7F",   //Turquoise
+    //   11: "#7F7F7F",  //magenta
+    //   12: "#7F7F7F",   //dark orange
+    //   13: "#7F7F7F",   //yellow
+    //   14: "#7F7F7F",   //michaels green
+    //   15: "#7F7F7F",  //purple
+    //   16: "#7F7F7F",  //indigo
+    //   17: "#000000",  //black
+    //   18: "#ffffff"   //white
+    // }
   };
 });
 
