@@ -32,10 +32,12 @@ define([
     },
     // This is used by the Beat Factory when a new beat is added in a specific position
     addBeatToBeatsCollection: function(newBeat, newIndex){
+      console.log('in measure model, a beat is getting added');
       // µthis.parentMeasureModel.get('beats').add(new BeatModel({selected:true}), {at: newIndex})
       this.get('beats').add(newBeat, {at:newIndex});
       // TODO We need to send an an event that the signature has changed... maybe this can be handled by the add event or change event in the collection
       //       dispatch.trigger('signatureChange.event', this);
+      this.trigger('signatureChange', this);
     }
   });
   return MeasureModel;

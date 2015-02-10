@@ -195,7 +195,7 @@ define([
       if (this.parentMeasureModel.get('beats').models.length > 1) {
         µthis = this;
         dragBead.on("drag", function() {
-          µthis = µthis;
+          // µthis = µthis;
             // console.log(parseInt(d3.select(this).attr("cx")) + ' <:> ' + parseInt(d3.select(this).attr("cy")));
             // console.log(d3.event.dx + ' : ' + d3.event.dy);
             // Formula for circle beats, utilizing cx and cy

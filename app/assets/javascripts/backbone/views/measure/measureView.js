@@ -58,6 +58,8 @@ define([
       // when we add or delete a meauserRep
       this.listenTo(this.measureRepresentations, 'remove', _.bind(this.render, this));  
       this.listenTo(this.measureRepresentations, 'add', _.bind(this.addChild, this));  
+      this.listenTo(this.model, 'signatureChange', _.bind(this.reconfigure, this));  
+      // this.listenTo(this.model, 'signatureChange', this.reconfigure);  
       this.model.on('change:scale', _.bind(this.render, this));
 
       // This is for version2, when we add or delete a measure
@@ -92,6 +94,7 @@ define([
         var addedModel = this.model.get('measureRepresentations').models[options.repIndex];
       // If we are just adding one, from when a new model is added to the collection, ie they create one
       } else {
+        console.log('Measure View add child');
         var addedModel = this.model.get('measureRepresentations').last();
       }
 
@@ -188,7 +191,20 @@ define([
     },
     // This is called when the signature of a measure is changed
     reconfigure: function(options) {
+      console.log('!!!!!! - in measureView re-render - !!!!!!!');
+      this.closeChildren();
       this.render();
+      this.makeChildren();
+    },
+    closeChildren: function(){
+      console.log('closing children from measureView');
+      // handle other unbinding needs, here
+      _.each(this.childViews, function(childView){
+        console.log('in measureView close function, CLOSING CHILDREN');
+        if (childView.close){
+          childView.close();
+        }
+      })
     },
     close: function(){
       console.log('in measureView close function');

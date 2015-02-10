@@ -61,6 +61,7 @@ define([
         // Outside: x and y must satisfy (x - center_x)^2 + (y - center_y)^2 > radius^2
         // On: x and y must satisfy (x - center_x)^2 + (y - center_y)^2 == radius^2
         if ( Math.pow(newComputedValX - µthis.parentMeasureRepModel.get('circularMeasureCx'), 2) + Math.pow(newComputedValY - µthis.parentMeasureRepModel.get('circularMeasureCy'), 2) <= Math.pow(µthis.parentMeasureRepModel.get('circularMeasureR'),2) ) {
+          console.log('inside circle');
           var center = {x: µthis.parentMeasureRepModel.get('circularMeasureCx'), y:µthis.parentMeasureRepModel.get('circularMeasureCy')};
           //give it two points, the center, and the new beat location, once it is on or inside the circle
           function angle(center, p1) {
@@ -96,7 +97,7 @@ define([
         // Above: newComputedValY1 must be above line y
         // On : newComputedValY1 must be on the line y
         // Below: newComputedValY1 must be below the line y
-        if ( newComputedValY1 < µthis.numberLineY ) {
+        if ( newComputedValY1 < µthis.parentMeasureRepModel.get('numberLineY') ) {
           // make an array to find out where the new beat should be added in the beatsCollection of the measure
           var refArray = [];
           for ( i=0 ; i < µthis.parentMeasureModel.get('beats').models.length ; i++ ) {
@@ -119,15 +120,15 @@ define([
         // Above: newComputedValY1 must be above line y
         // On : newComputedValY1 must be on the line y
         // Below: newComputedValY1 must be below the line y
-        if ( newComputedValY < µthis.lbbMeasureLocationY + µthis.beatHeight ) {
+        if ( newComputedValY < µthis.parentMeasureRepModel.get('lbbMeasureLocationY') + µthis.parentMeasureRepModel.get('beatHeight') ) {
           // make an array to find out where the new beat should be added in the beatsCollection of the measure
           var refArray = [];
           for ( i=0 ; i < µthis.parentMeasureModel.get('beats').models.length ; i++ ) {
-            refArray.push((µthis.linearLineLength/µthis.parentMeasureModel.get('beats').models.length)*i+µthis.beatWidth);
+            refArray.push((µthis.parentMeasureRepModel.get('linearLineLength')/µthis.parentMeasureModel.get('beats').models.length)*i+µthis.parentMeasureRepModel.get('beatWidth'));
           }
-          var newIndex = _.sortedIndex(refArray, parseInt(newComputedValX)+µthis.beatFactoryBarWidth/2);
+          var newIndex = _.sortedIndex(refArray, parseInt(newComputedValX)+µthis.parentMeasureRepModel.get('beatFactoryBarWidth')/2);
           console.log(refArray);
-          console.log(parseInt(newComputedValX)+µthis.beatFactoryBarWidth/2);
+          console.log(parseInt(newComputedValX)+µthis.parentMeasureRepModel.get('beatFactoryBarWidth')/2);
           var newBeat = new BeatModel({selected:true});
           µthis.parentMeasureModel.addBeatToBeatsCollection(newBeat, newIndex);
         }
@@ -145,8 +146,8 @@ define([
           d3.select(this).attr('transform', 'translate(' + [ newX, newY ] + ')');
         }
         
-        if ( Math.pow(newX - µthis.circularMeasureCx, 2) + Math.pow(newY - µthis.circularMeasureCy, 2) <= Math.pow(µthis.circularMeasureR,2) ) {
-          var center = {x: µthis.circularMeasureCx, y:µthis.circularMeasureCy};
+        if ( Math.pow(newX - µthis.parentMeasureRepModel.get('circularMeasureCx'), 2) + Math.pow(newY - µthis.parentMeasureRepModel.get('circularMeasureCy'), 2) <= Math.pow(µthis.parentMeasureRepModel.get('circularMeasureR'),2) ) {
+          var center = {x: µthis.parentMeasureRepModel.get('circularMeasureCx'), y:µthis.parentMeasureRepModel.get('circularMeasureCy')};
           //give it two points, the center, and the new beat location, once it is on or inside the circle
           function angle(center, p1) {
             var p0 = {x: center.x, y: center.y - Math.sqrt(Math.abs(p1.x - center.x) * Math.abs(p1.x - center.x)
