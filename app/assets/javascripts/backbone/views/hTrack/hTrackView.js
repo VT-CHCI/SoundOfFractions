@@ -97,7 +97,8 @@ define([
           collectionOfMeasures: µthis.model.get('measures'),
           measureRepresentations: measure.get('measureRepresentations'),
           measureModel: measure,
-          hTrackView: µthis,
+          parentHTrackModel: µthis.model,
+          parentHTrackView: µthis,
           defaultMeasureRepresentation: µthis.defaultMeasureRepresentation,
           measureIndex: index,
           measureCount: µthis.model.get('measures').models.length
@@ -126,7 +127,8 @@ define([
         _.each(this.model.get('measures').models, function(measure, index) {
           new MeasureView({
             collectionOfMeasures: µthis.model.get('measures'),
-            parent: µthis.model,
+            parentHTrackModel: µthis.model,
+            parentHTrackView: µthis,
             parentEl: '#hTrack-'+µthis.model.cid,
             model: µthis.model.get('measures').models[index],
             currentMeasureRepresentation: options.representation

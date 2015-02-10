@@ -27,7 +27,7 @@ define([
         marginTop: 20,
         marginLeft: 60,
         transitions: 0,
-        animationIntervalDuration: 1000,
+        animationIntervalDuration: 500, // 1000 is normal
       // Audio
         //Measure
         audioMeasureCx: 50,
@@ -79,12 +79,13 @@ define([
         // Transition
         firstBeatStart: 0, // in s
         timeIncrement: 500, // in ms
-        transitionDuration: 3000/this.get('transitionNumberOfPoints'),
+        transitionDuration: 1500/this.get('transitionNumberOfPoints'), // 3000 is default
         // Number Line
         numberLineY: 25 + this.get('vertDivPadding'),
         beatHeight: this.get('lbbMeasureHeight') - 2*this.get('linearBeatYPadding'),
         beatBBY: this.get('linearBeatYPadding') + this.get('lbbMeasureLocationY')
       });
+      
       this.set({
         // Linear
         linearLineLength: 2 * this.get('circularMeasureR') * Math.PI,

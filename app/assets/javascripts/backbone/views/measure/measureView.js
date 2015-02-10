@@ -98,8 +98,8 @@ define([
       // get parameters for the template for a measure
       var measureRepViewParameters = {
         // HTrack
-        hTrackView: this.hTrackView,
         parentHTrackModel: this.parentHTrackModel,
+        parentHTrackView: this.parentHTrackView,
         measureCount: this.measureCount,
         // Measure
         parentMeasureModel: this.model,
