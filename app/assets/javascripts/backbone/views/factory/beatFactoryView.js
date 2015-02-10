@@ -245,6 +245,20 @@ define([
             .call(dragBar);
       }
       return this;
+    },
+    close: function(){
+      console.log('in beatFactoryView close function');
+      this.remove();
+      this.unbind();
+      // handle other unbinding needs, here
+      if(this.onClose){
+        this.onClose();
+      }
+      _.each(this.childViews, function(childView){
+        if (childView.close){
+          childView.close();
+        }
+      })
     }
   });
   return BeatFactory;

@@ -38,6 +38,9 @@ define([
         _.bindAll(this, 'toggleModel');
         this.listenTo(this.model, 'change', _.bind(this.toggleOpacity, this));
 
+        // this.listenTo(this.model, 'destroy', this.close);
+        // this.model.on('destroy', this.close, this);
+
         // TODO Replace these events
         this.listenTo(this.parentMeasureRepView, 'beatTransition', this.transition, this);
       } else {
@@ -189,38 +192,31 @@ define([
           return {x: x, y: y}
       });
 
-      // Allow a bead to be dragged
+      // Allow a beat to be dragged
       var dragBead = d3.behavior.drag();
+      var dragLine = d3.behavior.drag();
+      var dragBar = d3.behavior.drag();
+      var dragSlice = d3.behavior.drag();
       // to prevent the dragging of a one beat measure
       if (this.parentMeasureModel.get('beats').models.length > 1) {
         µthis = this;
-        dragBead.on("drag", function() {
-          // µthis = µthis;
-            // console.log(parseInt(d3.select(this).attr("cx")) + ' <:> ' + parseInt(d3.select(this).attr("cy")));
-            // console.log(d3.event.dx + ' : ' + d3.event.dy);
-            // Formula for circle beats, utilizing cx and cy
-            //                        |-----Current Value--------|   |-----Delta value----\
-            var newSettingX = parseInt(d3.select(this).attr("cx")) + parseInt(d3.event.dx);
-            var newSettingY = parseInt(d3.select(this).attr("cy")) + parseInt(d3.event.dy);
-            d3.select(this).attr("cx", newSettingX);
-            d3.select(this).attr("cy", newSettingY);
-            var newComputedValX = d3.select(this).attr('cx');
-            var newComputedValY = d3.select(this).attr('cy');
-            // Inside: x and y must satisfy (x - center_x)^2 + (y - center_y)^2 < radius^2
-            // Outside: x and y must satisfy (x - center_x)^2 + (y - center_y)^2 > radius^2
-            // On: x and y must satisfy (x - center_x)^2 + (y - center_y)^2 == radius^2
-            if ( Math.pow(newComputedValX - µthis.circularMeasureCx, 2) + Math.pow(newComputedValY - µthis.circularMeasureCy, 2) > Math.pow(µthis.circularMeasureR+15,2) ) {
-              d3.select(this).remove();
-              console.warn('removed beat on measure');
-              µthis.parentMeasureModel.get('beats').remove(µthis.model);
-              dispatch.trigger('signatureChange.event', µthis.parentMeasureModel.get('beats').models.length-1);
-            }
+        dragBead.on("drag", function(d) {
+          // Formula for circle beats, utilizing cx and cy
+          //                        |-----Current Value--------|   |-----Delta value----|
+          var newSettingX = parseInt(d3.select(this).attr("cx")) + parseInt(d3.event.dx);
+          var newSettingY = parseInt(d3.select(this).attr("cy")) + parseInt(d3.event.dy);
+          d3.select(this).attr("cx", newSettingX);
+          d3.select(this).attr("cy", newSettingY);
+          var newComputedValX = d3.select(this).attr('cx');
+          var newComputedValY = d3.select(this).attr('cy');
+          // Inside: x and y must satisfy (x - center_x)^2 + (y - center_y)^2 < radius^2
+          // Outside: x and y must satisfy (x - center_x)^2 + (y - center_y)^2 > radius^2
+          // On: x and y must satisfy (x - center_x)^2 + (y - center_y)^2 == radius^2
+          if ( Math.pow(newComputedValX - µthis.parentMeasureRepModel.get('circularMeasureCx'), 2) + Math.pow(newComputedValY - µthis.parentMeasureRepModel.get('circularMeasureCy'), 2) > Math.pow(µthis.parentMeasureRepModel.get('circularMeasureR')+15,2) ) {
+            d3.select(this).remove();
+            µthis.parentMeasureModel.get('beats').remove(µthis.model);
+          }
         });
-      }
-      // allow a line to be dragged
-      var dragLine = d3.behavior.drag();
-      if (this.parentMeasureModel.get('beats').models.length > 1) {
-        µthis = this;
         dragLine.on('drag', function(d) {
           µthis = µthis;
           var newSettingX1 = parseInt(d3.select(this).attr("x1")) + parseInt(d3.event.dx);
@@ -232,47 +228,36 @@ define([
           d3.select(this).attr("x2", newSettingX2);
           d3.select(this).attr("y2", newSettingY2);
           var newCenterX1 = d3.select(this).attr('x1');
-          var newCenterY1 = parseInt(d3.select(this).attr('y1')) + parseInt(µthis.lineHashHeight/2);
+          var newCenterY1 = parseInt(d3.select(this).attr('y1')) + parseInt(µthis.parentMeasureRepModel.get('lineHashHeight')/2);
           // Above: newCenterY1 < µthis.numberLineY
           // AboveByN: newCenterY1 < µthis.numberLineY - N
           // On : newCenterY1 = µthis.numberLineY
           // Below: newCenterY1 > µthis.numberLineY
           // BelowByN: newCenterY1 > µthis.numberLineY + N
-          if ((newCenterY1 < µthis.numberLineY - 20) || (newCenterY1 > µthis.numberLineY + 20)) {
+          if ((newCenterY1 < µthis.parentMeasureRepModel.get('numberLineY') - 20) || (newCenterY1 > µthis.parentMeasureRepModel.get('numberLineY') + 20)) {
             // make an array to find out where the new beat should be added in the beatsCollection of the measure
+            d3.select(this).remove();
+            µthis.parentMeasureModel.get('beats').remove(µthis.model);
+          }
+        });
+        dragBar.on('drag', function(d) {
+          var newSettingX = parseInt(d3.select(this).attr("x")) + parseInt(d3.event.dx);
+          var newSettingY = parseInt(d3.select(this).attr("y")) + parseInt(d3.event.dy);
+          d3.select(this).attr("x", newSettingX);
+          d3.select(this).attr("y", newSettingY);
+          var newComputedValX = d3.select(this).attr('x');
+          var newComputedValY = d3.select(this).attr('y');
+          // Above: newComputedValY1 must be above line y
+          // On : newComputedValY1 must be on the line y
+          // Below: newComputedValY1 must be below the line y
+          if ((newComputedValY < µthis.parentMeasureRepModel.get('lbbMeasureLocationY') - µthis.parentMeasureRepModel.get('beatHeight') - 2) || (newComputedValY > µthis.parentMeasureRepModel.get('lbbMeasureLocationY') + µthis.parentMeasureRepModel.get('beatHeight') + 2)) {
+          // make an array to find out where the new beat should be added in the beatsCollection of the measure
             d3.select(this).remove();
             console.warn('removed beat on measure');
             µthis.parentMeasureModel.get('beats').remove(µthis.model);
-            dispatch.trigger('signatureChange.event', µthis.parentMeasureModel.get('beats').models.length-1);
           }
         });
-      }
-      // Allow a bar to be dragged
-      // TODO add a preventer for draggin the last beat
-      var dragBar = d3.behavior.drag();
-      dragBar.on('drag', function(d) {
-        var newSettingX = parseInt(d3.select(this).attr("x")) + parseInt(d3.event.dx);
-        var newSettingY = parseInt(d3.select(this).attr("y")) + parseInt(d3.event.dy);
-        d3.select(this).attr("x", newSettingX);
-        d3.select(this).attr("y", newSettingY);
-        var newComputedValX = d3.select(this).attr('x');
-        var newComputedValY = d3.select(this).attr('y');
-        // Above: newComputedValY1 must be above line y
-        // On : newComputedValY1 must be on the line y
-        // Below: newComputedValY1 must be below the line y
-        if ((newComputedValY < µthis.lbbMeasureLocationY - µthis.beatHeight - 2) || (newComputedValY > µthis.lbbMeasureLocationY + µthis.beatHeight + 2)) {
-        // make an array to find out where the new beat should be added in the beatsCollection of the measure
-          d3.select(this).remove();
-          console.warn('removed beat on measure');
-          µthis.parentMeasureModel.get('beats').remove(µthis.model);
-          dispatch.trigger('signatureChange.event', µthis.parentMeasureModel.get('beats').models.length-1);
-        }
-      });
-      // allow a pie slice to be dragged
-      var dragSlice = d3.behavior.drag();
-      if (this.parentMeasureModel.get('beats').models.length > 1) {
-        µthis = this;
-        dragSlice.on("drag", function() {
+        dragSlice.on("drag", function(d) {
           var beatToChange = $('#beat'+µthis.cid);
           var transformString = beatToChange.attr('transform').substring(10, beatToChange.attr('transform').length-1);
           var comma = transformString.indexOf(',');
@@ -280,14 +265,13 @@ define([
           var newY = parseInt(transformString.substr(comma+1));
           newX += d3.event.dx;
           newY += d3.event.dy;
-          var relativeSVGX = newX + µthis.circularMeasureCx;
-          var relativeSVGY = newX + µthis.circularMeasureCy;
+          var relativeSVGX = newX + µthis.parentMeasureRepModel.get('circularMeasureCx');
+          var relativeSVGY = newX + µthis.parentMeasureRepModel.get('circularMeasureCy');
           d3.select(this).attr('transform', 'translate(' + [ newX, newY ] + ')');
           // x and y must satisfy (x - center_x)^2 + (y - center_y)^2 >= radius^2
-          if ( Math.pow(relativeSVGX - µthis.circularMeasureCx, 2) + Math.pow(relativeSVGY - µthis.circularMeasureCy, 2) >= Math.pow(µthis.circularMeasureR, 2) ) {
+          if ( Math.pow(relativeSVGX - µthis.parentMeasureRepModel.get('circularMeasureCx'), 2) + Math.pow(relativeSVGY - µthis.parentMeasureRepModel.get('circularMeasureCy'), 2) >= Math.pow(µthis.parentMeasureRepModel.get('circularMeasureR'), 2) ) {
             d3.select(this).remove();
             µthis.parentMeasureModel.get('beats').remove(µthis.model);
-            dispatch.trigger('signatureChange.event', µthis.parentMeasureModel.get('beats').models.length-1);
           }
         });
       }

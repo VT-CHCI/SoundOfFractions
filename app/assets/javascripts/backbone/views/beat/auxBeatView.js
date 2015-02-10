@@ -359,7 +359,7 @@ define([
       }
     },
     close: function(){
-      console.log('in beatView close function');
+      console.log('in auxBeatView close function');
       this.remove();
       this.unbind();
       // handle other unbinding needs, here

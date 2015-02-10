@@ -58,6 +58,8 @@ define([
 
       this.listenTo(this.parentHTrackView, 'toggleAnimation', this.toggleAnimation);
       this.parentMeasureModel.get('beats').on('add', this.updateRender, this);
+      this.parentMeasureModel.get('beats').on('remove', this.updateRender, this);
+
       // dispatch.on('toggleAnimation.event', this.toggleAnimation, this);
       // dispatch.on('signatureChange.event', this.reconfigure, this);
       // dispatch.on('unroll.event', this.unroll, this);
