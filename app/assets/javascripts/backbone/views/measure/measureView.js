@@ -35,8 +35,6 @@ define([
         for (var key in options) {
           this[key] = options[key];
         }
-        this.circularMeasureR = 51; // 8 pxs per bead plus 1 px border = 10
-                                    // 10 * 16 = 160/pi = 51
       // Error catching
       } else {
         console.error('Should not be in here: NO Measure!');

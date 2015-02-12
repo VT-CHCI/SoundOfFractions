@@ -5,6 +5,7 @@
 */
 define([
   'jquery', 'underscore', 'backbone',
+  'backbone/models/measure',
   'backbone/collections/beats',
   'backbone/models/measure', 'backbone/models/representation', 'backbone/models/state',
   'backbone/views/beat/beatView',
@@ -13,7 +14,7 @@ define([
   'text!backbone/templates/measure/measureRep.html',
   'colors',
   'app/log'
-], function($, _, Backbone, BeatsCollection, MeasureModel, RepresentationModel, StateModel, BeatView, AuxBeatView, BeatFactoryView, MeasureRepTemplate, COLORS, log){
+], function($, _, Backbone, StateModel, BeatsCollection, MeasureModel, RepresentationModel, StateModel, BeatView, AuxBeatView, BeatFactoryView, MeasureRepTemplate, COLORS, log){
   return Backbone.View.extend({
     //registering click events to add and remove measures.
     events : {
@@ -41,8 +42,8 @@ define([
             .interpolate('basis'); // bundle | basis | linear | cardinal are also options
 
         // allow the letter p to click the first plus sign
-        _.bindAll(this, 'manuallPress');
-        $(document).bind('keypress', this.manuallPress);
+        _.bindAll(this, 'manualPress');
+        $(document).bind('keypress', this.manualPress);
 
       } else {
         console.error('measureRepView(init): Should not be in here!');
@@ -1374,6 +1375,7 @@ define([
     render: function(){
       // console.log('mR render');
       var µthis = this;
+      if(this.model.get('currentRepresentationType') == 'audio') {window.csf = this; window.csd = StateModel;}
 
       //set the el for JQ-UI Drag
       // may not be needed
@@ -1595,24 +1597,31 @@ define([
       }
     },
     // Shortcuts: T for transition
-    manuallPress: function(e) {
-      // t = 116, d = 100
+    manualPress: function(e) {
+      // t = 116, d = 100, w = 119, r = 114
       if (e.keyCode == 116) {
-        $('.measureRep:nth-child(5)').find('.delta').addClass('transition-rep')
+        $('.measureRep:nth-child(2)').find('.delta').addClass('transition-rep')
+      } else if (e.keyCode == 114) {
+        $('.record-button')[0].click();
       } else if (e.keyCode == 100) {
         // $('.measureRep')[1].
+      } else if (e.keyCode == 119) {
+        if(this.isTapping) {        
+          var timeTapped = new Date();
+          StateModel.recordTempoAndPatternByKeyboard(timeTapped.getTime());
+        }
       }
     },
     // Record the measure
     recordMeasure: function(button) {
       console.log('Record clicked');
       if(!this.isTapping) {
-        dispatch.trigger('doall.event');
+        // StateModel.recordTempoAndPatternByTapping();
+        StateModel.turnIsWaitingOn();
         this.isTapping = true;
       }
       else {
-        // TODO Replace these events
-        // dispatch.trigger('doall.event');
+        StateModel.turnIsWaitingOff();
         this.isTapping = false;
       }
     },
@@ -1652,7 +1661,7 @@ define([
     onClose: function(){
       // this.model.unbind("change", this.render);
 
-      $(document).unbind('keypress', this.manuallPress);
+      $(document).unbind('keypress', this.manualPress);
 
       // this.unbind('signatureChange.event', this.reconfigure);
       // this.unbind('unroll.event', this.unroll);
@@ -1661,6 +1670,5 @@ define([
       this.model.unbind('change', this.transition);
       // this.model.destroy();
     }
- 
   });
 });

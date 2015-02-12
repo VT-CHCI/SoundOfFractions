@@ -311,45 +311,8 @@ define([
             .call(dragLine);
         // if you click on it, toggle its opactiy, selection, and the model through the toggeModel()
         this.BEAT.on('click', this.toggleModel);
-      // Draw the lines for rolling
-      } else if (this.currentRepresentationType == 'lineRolling'){
-        // console.error(this.lineStatesUnrolling);
-        // this.beatContainer
-          // .attr('transform', 'translate('+this.circularMeasureCx+','+this.circularMeasureCy+')')
-        this.BEAT = this.beatContainer
-          .append('path', ':first-child')
-        // BEAT
-          .attr('id', 'beat'+this.cid)
-          .attr('class', 'beat d3 lineRolling')
-          .data([this.lineStatesUnrolling[this.lineStatesUnrolling.length-1]])
-          .attr('d', this.pathFunction)
-          // .attr('d', this.lineStatesUnrolling[this.lineStatesUnrolling.length])
-          .attr('stroke', COLORS.hexColors[this.color])
-          .attr('opacity', this.getOpacityNumber(this.model.get('selected')))
-          .attr('stroke-width', 4)
-          // .attr('fill', COLORS.hexColors[this.color])
-          .attr('transform', 'translate(0,0)') ;
-      // draw the lines for unrolling
-      } else if (this.currentRepresentationType == 'lineUnrolling'){
-        // console.error(this.lineStatesUnrolling);
-        this.beatContainer
-          // .attr('transform', 'translate('+this.circularMeasureCx+','+this.circularMeasureCy+')')
-
-        this.BEAT = this.beatContainer
-          .append('path', ':first-child')
-        // BEAT
-          .attr('id', 'beat'+this.cid)
-          .attr('class', 'beat d3 lineRolling')
-          .data([this.lineStatesRollup[this.lineStatesUnrolling.length-1]])
-          .attr('d', this.parentMeasureRepModel.get('pathFunction'))
-          // .attr('d', this.lineStatesUnrolling[this.lineStatesUnrolling.length])
-          .attr('stroke', COLORS.hexColors[this.color])
-          .attr('opacity', this.getOpacityNumber(this.model.get('selected')))
-          .attr('stroke-width', 4)
-          // .attr('fill', COLORS.hexColors[this.color])
-          .attr('transform', 'translate(0,0)') ;
       // Draw the pie slice beats
-      } else if (this.parentMeasureRepModel.get('currentRepresentationType') == 'pie' || this.currentRepresentationType == 'pie'){
+      } else if (this.parentMeasureRepModel.get('currentRepresentationType') == 'pie'){
         var arc = d3.svg.arc()
           .innerRadius(0)
           .outerRadius(this.parentMeasureRepModel.get('circularMeasureR'))
