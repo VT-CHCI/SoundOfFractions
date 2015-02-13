@@ -54,15 +54,15 @@ define([
       // this bindall method is thor the remainging listeners, per StackOverflow suggestions
       _.bindAll(this, 'render');
       // when we add or delete a meauserRep
-      this.listenTo(this.measureRepresentations, 'remove', _.bind(this.render, this));  
-      this.listenTo(this.measureRepresentations, 'add', _.bind(this.addChild, this));  
+      this.listenTo(this.model.get('measureRepresentations'), 'remove', _.bind(this.render, this));  
+      this.listenTo(this.model.get('measureRepresentations'), 'add', _.bind(this.addChild, this));  
       this.listenTo(this.model, 'signatureChange', _.bind(this.reconfigure, this));  
       // this.listenTo(this.model, 'signatureChange', this.reconfigure);  
       this.model.on('change:scale', _.bind(this.render, this));
 
       // This is for version2, when we add or delete a measure
-      this.collectionOfMeasures.on('add', _.bind(this.render, this));
-      this.collectionOfMeasures.on('remove', _.bind(this.render, this));
+      this.parentHTrackModel.get('measures').on('add', _.bind(this.render, this));
+      this.parentHTrackModel.get('measures').on('remove', _.bind(this.render, this));
 
       this.render();
 
@@ -73,7 +73,7 @@ define([
       // Get some parameters for the template
       var measureTemplateParameters = {
         mCID: this.model.cid,
-        measureCount: this.measureCount,
+        measureCount: this.parentHTrackModel.get('measures').models.length,
         measureNumberOfBeats: this.model.get('beats').length
       };
       
@@ -101,7 +101,7 @@ define([
         // HTrack
         parentHTrackModel: this.parentHTrackModel,
         parentHTrackView: this.parentHTrackView,
-        measureCount: this.measureCount,
+        // measureCount: this.measureCount,
         // Measure
         parentMeasureModel: this.model,
         parent: this,
@@ -116,7 +116,7 @@ define([
     makeChildren: function(options){
       // for each rep in the measuresCollection
       var µthis = this;
-      _.each(this.measureRepresentations.models, function(rep, repIndex) {
+      _.each(this.model.get('measureRepresentations').models, function(rep, repIndex) {
         µthis.addChild({rep: rep, repIndex: repIndex});
       }, this);
     },

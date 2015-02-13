@@ -249,7 +249,7 @@ define([
         beatHolderID: 'beat-holder-'+this.model.cid,
         secondaryBeatHolderID: 'secondary-beat-holder-'+this.model.cid,
         beatFactoryHolderID: 'beat-factory-holder-'+this.model.cid,
-        measureCount: this.measureCount,
+        measureCount: this.parentHTrackModel.get('measures').models.length,
         measureRep: this.model.get('currentRepresentationType'),
         measureRepRecordID: 'record-'+this.model.cid
       }

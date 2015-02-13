@@ -85,28 +85,26 @@ define([
 
       this.render();
 
-      // Create an instrument selector
+      this.makeChildren();
 
+    },
+    makeChild: function(options){
+      var childView = new MeasureView({
+        parentHTrackModel: this.model,
+        parentHTrackView: this,
+        el: '#measure-container-'+this.model.cid,
+        model: options.measure,
+        measureIndex: options.index
+      });
+      this.childViews.push(childView);
+    },
+    makeChildren: function(){
       var µthis = this;
       // for each of the measures (V1 should only have 1 Measure)
       _.each(this.model.get('measures').models, function(measure, index) {
-        console.log('got the measures model');
-        var childView = new MeasureView({
-          parentHTrackModel: µthis.model,
-          el: '#measure-container-'+µthis.model.cid,
-          model: measure,
-          collectionOfMeasures: µthis.model.get('measures'),
-          measureRepresentations: measure.get('measureRepresentations'),
-          parentHTrackView: µthis,
-          defaultMeasureRepresentation: µthis.defaultMeasureRepresentation,
-          measureIndex: index,
-          // Todo get rid of this
-          measureCount: µthis.model.get('measures').models.length
-        });
-        µthis.childViews.push(childView);
-      });
+        µthis.makeChild({measure: measure, index: index});
+      });      
     },
-
     /*
       This View does not have its own html rendering, but instead creates
       a new MeasureView which gets rendered instead.
