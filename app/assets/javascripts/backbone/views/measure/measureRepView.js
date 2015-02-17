@@ -165,6 +165,25 @@ define([
         this.remove();
       }
     },
+    makeMeasureRepParts: function(){
+      // Bead rep
+      if (this.model.get('currentRepresentationType') == 'bead') {
+        this.makeBeadRep();
+      // Line Rep
+      } else if (this.model.get('currentRepresentationType') == 'line'){
+        this.makeLineRep();
+      // Pie rep
+      } else if (this.model.get('currentRepresentationType') == 'pie'){
+        this.makePieRep();
+      // Audio Rep
+      } else if (this.model.get('currentRepresentationType') == 'audio'){
+        this.makeAudioRep();
+      // Bar Rep
+      } else if (this.model.get('currentRepresentationType') == 'bar'){
+        this.makeBarRep();
+      }
+      this.addDroppable();
+    },
     // This is abstracted out so we can just call makeBeats() when needed
     // If there are options, it is for the second or third part for transitions {secondary:true, type:'line'}
     makeBeats: function(options){
@@ -690,6 +709,7 @@ define([
         .attr('stroke', 'black')
         .attr('stroke-width', 1)
         .attr('opacity', .5);
+      this.infiniteLine = infiniteLine;
     },
     addMeasureLinePath: function() {
       var svgContainer = d3.select('#svg-'+this.model.cid);
@@ -703,11 +723,12 @@ define([
           .attr('class', 'line-path')
           .attr('transform', 'scale('+this.model.get('currentScale')+','+this.model.get('currentScale')+')')
           .attr('transform', 'translate('+(this.model.get('circularMeasureR')*-2-10)+',0)');
+      this.addMeasureLinePath = actualMeasurePath;
     },
     // removes the infinite line on the number line
     removeInfiniteLine: function() {
-      var infiniteLine = d3.select('#svg-'+this.model.cid + ' .infinite-line');
-      infiniteLine.remove();
+      // var infiniteLine = d3.select('#svg-'+this.model.cid + ' .infinite-line');
+      this.infiniteLine.remove();
     },
     // removes the measure box on a bar
     removeBarBox: function() {
@@ -752,26 +773,20 @@ define([
       }
       // Second Stage
       setTimeout(function(){
-        console.log(µthis.childPrimaryViews.length, µthis.childSecondaryViews.length, µthis.childTertiaryViews.length, µthis.childFactoryViews.length)
         // make the number line beats
         µthis.makeBeats({secondary:true, type:'line'});
-        console.log(µthis.childPrimaryViews.length, µthis.childSecondaryViews.length, µthis.childTertiaryViews.length, µthis.childFactoryViews.length)
         // Fade out the beads
-        // $('#beat-holder-'+µthis.model.cid+' .bead-beat').fadeOut(µthis.model.get('animationIntervalDuration'));
+        $('#beat-holder-'+µthis.model.cid+' .bead-beat').fadeOut(µthis.model.get('animationIntervalDuration'));
       }, this.model.get('transitionDuration')*(this.model.get('transitionNumberOfPoints')) + this.model.get('animationIntervalDuration'));
       // Third Stage
       setTimeout(function(){
-        console.log(µthis.childPrimaryViews.length, µthis.childSecondaryViews.length, µthis.childTertiaryViews.length, µthis.childFactoryViews.length)
         // remove the primary bead views
         µthis.removeSpecificChildren(µthis.childPrimaryViews);
-        console.log(µthis.childPrimaryViews.length, µthis.childSecondaryViews.length, µthis.childTertiaryViews.length, µthis.childFactoryViews.length)
-        // beadBeats.remove();
         // add the infinite line
         µthis.addInfiniteLine();
       }, this.model.get('transitionDuration')*(this.model.get('transitionNumberOfPoints')) + this.model.get('animationIntervalDuration')*2 );
       // Fourth Stage
       setTimeout(function(){
-        console.log(µthis.childPrimaryViews.length, µthis.childSecondaryViews.length, µthis.childTertiaryViews.length, µthis.childFactoryViews.length)
         // move entire portion to the left
         µthis.moveSecondaryLeft('bead');
       }, this.model.get('transitionDuration')*(this.model.get('transitionNumberOfPoints')) + this.model.get('animationIntervalDuration')*3 );
@@ -805,7 +820,7 @@ define([
         // make the new bar beats
         µthis.makeBeats({secondary:true, type:'bar'});
         // fade the old bead beats 
-        // $('#beat-holder-'+µthis.model.cid+' .bead-beat').fadeOut(µthis.model.get('animationIntervalDuration'));
+        $('#beat-holder-'+µthis.model.cid+' .bead-beat').fadeOut(µthis.model.get('animationIntervalDuration'));
         // fade circle measure (the unrolling line)
         circlePath.fadeOut(µthis.model.get('animationIntervalDuration'));
       }, this.model.get('transitionDuration')*(this.model.get('transitionNumberOfPoints')) + this.model.get('animationIntervalDuration'));
@@ -813,11 +828,11 @@ define([
       setTimeout(function(){
         // move entire portion to the left
         µthis.moveSecondaryLeft();
+        // remove the primary bead views
+        µthis.removeSpecificChildren(µthis.childPrimaryViews);
       }, this.model.get('transitionDuration')*(this.model.get('transitionNumberOfPoints')) + this.model.get('animationIntervalDuration')*2 );
       // Fourth Stage
       setTimeout(function(){
-        // remove the primary bead views
-        µthis.removeSpecificChildren(µthis.childPrimaryViews);
         // re-render
         µthis.updateRender();
       }, this.model.get('transitionDuration')*(this.model.get('transitionNumberOfPoints')) + this.model.get('animationIntervalDuration')*3 );
@@ -990,7 +1005,6 @@ define([
     },
     barToBead: function(){
       console.log('rtb');
-      console.log(this.actualMeasureLinePath);
       var µthis = this;
       var svgContainer = d3.select('#svg-'+this.model.cid)
         .attr('width', this.model.get('linearDivWidth')+this.model.get('circularMeasureR')*2 )
@@ -1036,7 +1050,6 @@ define([
     },
     barToPie: function(){
       console.log('rti');
-      console.log(this.actualMeasureLinePath);
       var µthis = this;
       var svgContainer = d3.select('#svg-'+this.model.cid)
         .attr('width', this.model.get('linearDivWidth')+this.model.get('circularMeasureR')*2 )
@@ -1211,30 +1224,14 @@ define([
           .attr('transform', 'scale(' + this.model.get('currentScale') + ',' + this.model.get('currentScale') + ')');
       // Attach it to the view
       this.circlePath = circlePath;
-
-      // JQ-UI resizable
-      this.$el.resizable({ 
-        aspectRatio: true,
-        // To keep the number Math.Floored
-        grid:1,
-        // ghost:true,
-        // animate: true,
-        start: function(e, ui) {
-          µthis.circleStart(e, ui);
-        },
-        resize: function( e, ui ) {
-          µthis.circleResizeCallback(e, ui);
-        },
-        stop: function(e, ui) {
-          µthis.circleStop(e, ui);
-        }  
-      });
+      // Attach the resizable callbacks
+      this.circleResizable();
     },
     makeLineRep: function(){
       // Find the SVG container
       var svgContainer = d3.select('#svg-'+this.model.cid)
           .attr('width', this.model.get('linearDivWidth'))
-          .attr('height', this.model.get('linearDivHeight'));
+          // .attr('height', this.model.get('linearDivHeight'));
       // add the infinite line
       var infiniteLine = svgContainer
           .insert('line', ':first-child')
@@ -1259,22 +1256,7 @@ define([
           .attr('transform', 'translate('+(this.model.get('circularMeasureR')*-2-10)+',0)');
       // attach it to the view
       this.actualMeasureLinePath = actualMeasureLinePath;
-
-      // JQ-UI resizable
-      $(this.el).resizable({ 
-        maxHeight: 180, 
-        minHeight: 180,
-        grid:1,
-        start: function(e, ui) {
-          µthis.linearStart(e, ui);
-        },
-        resize: function( e, ui ) {
-          µthis.linearResizeCallback(e, ui);
-        },
-        stop: function(e, ui) {
-          µthis.linearStop(e, ui);
-        }  
-      });
+      this.linearResizable();
     },
     makePieRep: function(){
       // Find the SVG container
@@ -1293,21 +1275,7 @@ define([
           .attr('transform', 'scale('+this.model.get('currentScale')+','+this.model.get('currentScale')+')')
       // Attach it to the view
       this.circlePath = circlePath;
-
-      // JQ-UI resizable
-      $(this.el).resizable({ 
-        aspectRatio: true,
-        grid:1,
-        start: function(e, ui) {
-          µthis.circleStart(e, ui);
-        },
-        resize: function( e, ui ) {
-          µthis.circleResizeCallback(e, ui);
-        },
-        stop: function(e, ui) {
-          µthis.circleStop(e, ui);
-        }  
-      });
+      this.circleResizable();
     },
     makeBarRep: function(){
       // Find the SVG Container
@@ -1341,23 +1309,7 @@ define([
           .attr('transform', 'translate('+(this.model.get('circularMeasureR')*-2-10)+',0)');
       // Attach it to the view
       this.actualMeasureLinePath = actualMeasureLinePath;
-
-      // JQ-UI resizable
-      $(this.el).resizable({ 
-        // aspectRatio: true,
-        maxHeight: 180, 
-        minHeight: 180,
-        grid:1,
-        start: function(e, ui) {
-          µthis.linearStart(e, ui);
-        },
-        resize: function( e, ui ) {
-          µthis.linearResizeCallback(e, ui);
-        },
-        stop: function(e, ui) {
-          µthis.linearStop(e, ui);
-        }  
-      });
+      this.linearResizable();
     },
     makeAudioRep: function(){
       // Find the SVG Container
@@ -1377,9 +1329,10 @@ define([
       var µthis = this;
       if(this.model.get('currentRepresentationType') == 'audio') {window.csf = this; window.csd = StateModel;}
 
+      // TODO see if this can be removed
       //set the el for JQ-UI Drag
       // may not be needed
-      this.$el.attr('id', 'measure-rep-' + this.model.cid);
+      // this.$el.attr('id', 'measure-rep-' + this.model.cid);
 
       // compile the template for a representation
       var compiledTemplate = _.template( MeasureRepTemplate, this.measureRepTemplateParameters );
@@ -1387,30 +1340,7 @@ define([
       $(this.repContainerEl).append( compiledTemplate );
       this.setElement($('#measure-rep-'+this.model.cid));
 
-      // Bead rep
-      if (this.model.get('currentRepresentationType') == 'bead') {
-        this.makeBeadRep();
-      // Line Rep
-      } else if (this.model.get('currentRepresentationType') == 'line'){
-        this.makeLineRep();
-      // Pie rep
-      } else if (this.model.get('currentRepresentationType') == 'pie'){
-        this.makePieRep();
-      // Audio Rep
-      } else if (this.model.get('currentRepresentationType') == 'audio'){
-        this.makeAudioRep();
-      // Bar Rep
-      } else if (this.model.get('currentRepresentationType') == 'bar'){
-        this.makeBarRep();
-      }
-
-      // JQ Droppable
-      $(this.el).droppable({
-        accept: '.stamp',
-        drop: function(event, ui) {
-         $(this).append(ui.helper.clone());
-        }
-      });
+      this.makeMeasureRepParts();
 
       return this;
     },
@@ -1484,13 +1414,11 @@ define([
     removeRepresentationModel: function(ev){
       // if ($('#measure'+this.measuresCollection.models[0].cid).parent()) {
         //removing the last measure isn't allowed.
-        if(this.measureRepresentations.length == 1) {
+        if(this.parentMeasureModel.measureRepresentations.length == 1) {
           console.log('Can\'t remove the last representation!');
           return;
         }
         console.log('this.model: ', this.model.cid, this.model);
-        oldModelCid = this.oldModelCid;
-        // this.model.destroy();
         this.close();
 
         console.log('removed representation');
@@ -1501,7 +1429,7 @@ define([
 
         //send a log event showing the removal.
         log.sendLog([[3, 'Removed a measure representation: ' + this.cid]]);
-        console.log('Removed measureRep ' + this.cid + ", " + oldModelCid);
+        console.log('Removed measureRep ' + this.cid + ", ");
     },
     // This is triggered by signatureChange events.
     reconfigure: function(signature) {
@@ -1625,6 +1553,51 @@ define([
         this.isTapping = false;
       }
     },
+    circleResizable: function() {
+      // JQ-UI resizable
+      $(this.el).resizable({ 
+        aspectRatio: true,
+        // To keep the number Math.Floored
+        grid:1,
+        // ghost:true,
+        // animate: true,
+        start: function(e, ui) {
+          µthis.circleStart(e, ui);
+        },
+        resize: function( e, ui ) {
+          µthis.circleResizeCallback(e, ui);
+        },
+        stop: function(e, ui) {
+          µthis.circleStop(e, ui);
+        }  
+      });
+    },
+    linearResizable: function() {
+      // JQ-UI resizable
+      $(this.el).resizable({ 
+        maxHeight: 180, 
+        minHeight: 180,
+        grid:1,
+        start: function(e, ui) {
+          µthis.linearStart(e, ui);
+        },
+        resize: function( e, ui ) {
+          µthis.linearResizeCallback(e, ui);
+        },
+        stop: function(e, ui) {
+          µthis.linearStop(e, ui);
+        }  
+      });
+    },
+    addDroppable: function(){
+      // JQ Droppable
+      $(this.el).droppable({
+        accept: '.stamp',
+        drop: function(event, ui) {
+         $(this).append(ui.helper.clone());
+        }
+      });
+    },
     close: function(){
       console.log('in measureRepView close function');
       this.remove();
@@ -1636,13 +1609,9 @@ define([
     },
     closeAllChildren: function(){
       console.log('in measureRepView close function, CLOSING ALL CHILDREN');
-      console.log('in measureRepView close function, closing PRIMARY children');
       this.removeSpecificChildren(this.childPrimaryViews);
-      console.log('in measureRepView close function, closing SECONDARY children');
       this.removeSpecificChildren(this.childSecondaryViews);
-      console.log('in measureRepView close function, closing TERTIARY children');
       this.removeSpecificChildren(this.childTertiaryViews);
-      console.log('in measureRepView close function, closing FACTORY children');
       this.removeSpecificChildren(this.childFactoryViews);
     },
     removeSpecificChildren: function(childViews){
@@ -1653,10 +1622,35 @@ define([
         }
       })
     },
+    removeMeasureRepParts: function(){
+      if(this.circlePath){this.circlePath.remove()};
+      if(this.infiniteLine){this.infiniteLine.remove()};
+    },
     updateRender: function(){
       console.log('getting to updateRender');
       this.closeAllChildren();
-      // this.render();
+      this.removeMeasureRepParts();
+      this.makeMeasureRepParts();
+      // make the beats
+      this.makeBeats();
+      // make a beat factory
+      this.makeBeatFactory();
+      // update the classes and the data-representation type
+      this.updateDivInfo();
+    },
+    updateDivInfo: function(){
+      this.$el.resizable('destroy');
+      this.$el.droppable('destroy');
+      this.$el.attr('class','measureRep measure-'+this.model.get('currentRepresentationType'));
+      this.$el.attr('data-representation', this.model.get('currentRepresentationType'));
+      var crt = this.model.get('currentRepresentationType') ;
+      if (crt == 'line' || crt == 'bar'){
+        this.linearResizable();
+      } else if (crt == 'bead' || crt == 'pie'){
+        this.circleResizable();
+      }
+      // Add the droppable again
+      this.addDroppable();
     },
     onClose: function(){
       // this.model.unbind("change", this.render);

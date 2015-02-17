@@ -20,6 +20,7 @@ define([
     //by measuresView objects.
     initialize: function(options){
       if (options) {
+
         for (var key in options) {
           this[key] = options[key];
         }
@@ -29,8 +30,7 @@ define([
             .interpolate('basis'); // bundle | basis | linear | cardinal are also options
 
         this.beatContainer = d3.select(this.beatContainer);
-        // this.measureBeatHolder = options.parentElHolder;
-        this.el = options.singleBeat;
+
         this.opacity = this.getOpacityNumber(options.opacity);
         this.beatCenterPosition = {};
         this.BEAT;
@@ -213,7 +213,7 @@ define([
           // Outside: x and y must satisfy (x - center_x)^2 + (y - center_y)^2 > radius^2
           // On: x and y must satisfy (x - center_x)^2 + (y - center_y)^2 == radius^2
           if ( Math.pow(newComputedValX - µthis.parentMeasureRepModel.get('circularMeasureCx'), 2) + Math.pow(newComputedValY - µthis.parentMeasureRepModel.get('circularMeasureCy'), 2) > Math.pow(µthis.parentMeasureRepModel.get('circularMeasureR')+15,2) ) {
-            d3.select(this).remove();
+            // d3.select(this).remove();
             µthis.parentMeasureModel.get('beats').remove(µthis.model);
           }
         });
@@ -290,11 +290,7 @@ define([
             .attr('fill', COLORS.hexColors[this.color])
             .attr('stroke', 'black')
             .style('opacity', this.getOpacityNumber(this.model.get('selected')))
-            // Calling the click handler here doesn't work for some reason
-            // .on('click', function(){console.log('beat container click handler')})
             .call(dragBead);
-        // if you click on it, toggle its opactiy, selection, and the model through the toggeModel()
-        this.BEAT.on('click', this.toggleModel);
       // Draw the line beat
       } else if (this.parentMeasureRepModel.get('currentRepresentationType') == 'line'){
         this.BEAT = this.beatContainer
@@ -309,8 +305,6 @@ define([
             .attr('opacity', this.getOpacityNumber(this.model.get('selected')))
             .attr('stroke-width', 4)
             .call(dragLine);
-        // if you click on it, toggle its opactiy, selection, and the model through the toggeModel()
-        this.BEAT.on('click', this.toggleModel);
       // Draw the pie slice beats
       } else if (this.parentMeasureRepModel.get('currentRepresentationType') == 'pie'){
         var arc = d3.svg.arc()
@@ -331,8 +325,6 @@ define([
           .attr('fill', COLORS.hexColors[this.color])
           .attr('transform', 'translate(0,0)')
           .call(dragSlice);
-        // if you click on it, toggle its opactiy, selection, and the model through the toggeModel()
-        this.BEAT.on('click', this.toggleModel);
       // Draw the audio beat
       } else if (this.parentMeasureRepModel.get('currentRepresentationType') == 'audio'){
         this.BEAT = this.beatContainer
@@ -345,7 +337,6 @@ define([
             .attr('fill', this.parentMeasureRepModel.get('initialColorForAudio'));
             // .attr('opacity', this.opacityForAudio);
             // .attr('transform', 'translate(0,0)')
-            // NO click handler to prevent the user from editing in the audio Rep
       // Draw the bar beats
       } else if (this.parentMeasureRepModel.get('currentRepresentationType') == 'bar'){
         console.warn(this.beatBBX);
@@ -362,9 +353,9 @@ define([
             .attr('opacity', this.getOpacityNumber(this.model.get('selected')))
             .attr('fill', COLORS.hexColors[this.color])
             .call(dragBar);
-        // if you click on it, toggle its opactiy, selection, and the model through the toggeModel()
-        this.BEAT.on('click', this.toggleModel);
       }
+      // This is so Backbone knows what element it is so when we call close, it removes the appropriate DOM element
+      this.setElement($('#beat'+this.cid));
       return this;
     },
     // change the reps, and keep track of the old one
@@ -398,6 +389,7 @@ define([
       5. triggers a beatClicked event.
     */
     toggleModel: function(){
+      console.log('Getting in the TOGGLE MODEL!!!!!!');
       //switch the selected boolean value on the model
       this.model.set('selected', !this.model.get('selected'));
       // log.sendLog([[1, "beat" + this.model.cid + " toggled: "+!bool]]);
@@ -457,18 +449,13 @@ define([
       }
     },
     close: function(){
-      console.log('in beatView close function');
+      // debugger;
       this.remove();
       this.unbind();
       // handle other unbinding needs, here
       if(this.onClose){
         this.onClose();
       }
-      _.each(this.childViews, function(childView){
-        if (childView.close){
-          childView.close();
-        }
-      })
     },
     onClose: function(){
       this.model.unbind('change', this.toggleOpacity);

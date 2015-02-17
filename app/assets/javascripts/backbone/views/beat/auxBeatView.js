@@ -291,6 +291,7 @@ define([
             .attr('opacity', this.getOpacityNumber(this.opacity))
             .attr('fill', COLORS.hexColors[this.color]);
       }
+      this.setElement($('#beat'+this.cid));
       return this;
     },
     // sets the opacity between selected and not-selected
@@ -359,18 +360,12 @@ define([
       }
     },
     close: function(){
-      console.log('in auxBeatView close function');
       this.remove();
       this.unbind();
       // handle other unbinding needs, here
       if(this.onClose){
         this.onClose();
       }
-      _.each(this.childViews, function(childView){
-        if (childView.close){
-          childView.close();
-        }
-      })
     },
     onClose: function(){
       this.model.unbind('change', this.toggleOpacity);

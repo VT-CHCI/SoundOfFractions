@@ -101,7 +101,6 @@ define([
         // HTrack
         parentHTrackModel: this.parentHTrackModel,
         parentHTrackView: this.parentHTrackView,
-        // measureCount: this.measureCount,
         // Measure
         parentMeasureModel: this.model,
         parent: this,
@@ -207,7 +206,6 @@ define([
     close: function(){
       console.log('in measureView close function');
       this.remove();
-      this.unbind();
       // handle other unbinding needs, here
       _.each(this.childViews, function(childView){
         console.log('in measureView close function, CLOSING CHILDREN');

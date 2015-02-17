@@ -19,9 +19,12 @@ define([
     },
     initialize: function(options){
       if (options) {
-        this.unusedInstruments = options.unusedInstruments;
+        // This will be for when we load songs.....
+        if(options.unusedInstruments) {
+          this.set('unusedInstruments', options.unusedInstruments);
+        }
       } else {
-        this.unusedInstruments = this.defaults.unusedInstruments;
+        this.set('unusedInstruments', this.defaults.unusedInstruments);
       }
       this.instrumentLookup = LookupInstrument;
 
@@ -30,7 +33,6 @@ define([
     },
     removeInstrumentFromUnused: function(removedInstrument) {
       console.log('in remainingInstrumentGeneratorModel removeInstrument()');
-
       // remove the item from the array
       var remove = function(arr, from) {
           // Based on John Resig's article (MIT Licensed)
@@ -41,10 +43,10 @@ define([
       };
       var found = false;
       // Got through each of the instruments
-      for (i = 0; i < this.unusedInstruments.length ; ++i) {
+      for (i = 0; i < this.get('unusedInstruments').length ; ++i) {
         // If the one we want to remove from the remaining parts matches one type available, remove it
-        if (this.unusedInstruments[i].type == removedInstrument.type) {
-            remove(this.unusedInstruments, i);
+        if (this.get('unusedInstruments')[i].type == removedInstrument.type) {
+            remove(this.get('unusedInstruments'), i);
             console.warn('removing Instrument: '+ removedInstrument.type + ' from generatorModel');
             this.trigger('removedInstrumentFromUnused', {type: removedInstrument.type});
             found = true;
@@ -59,8 +61,11 @@ define([
       // Get the label name of the instrument to be added back to the generator
       var newLabel = LookupInstrument.getDefault(addedInstrument.type, 'label');
       console.log(newLabel);
-      this.unusedInstruments.push({ label: newLabel, type: addedInstrument });
-      console.warn('addedInstrument: '+ addedInstrument + ' to generatorModel' );
+      // We have to use a slice method to get a deep copy of the unused instrument so Backbone will recognize the change
+      var newUnused = this.get('unusedInstruments').slice();
+      newUnused.push({ label: newLabel, type: addedInstrument.type });
+      this.set('unusedInstruments', newUnused );
+      console.warn('addedInstrument: '+ addedInstrument.type + ' to generatorModel' );
     }
   });
   // This is a Singleton

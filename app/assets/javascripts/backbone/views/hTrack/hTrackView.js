@@ -24,7 +24,7 @@ define([
       // for setting this hTrack in focus (or selected).
       'click .addMeasureRep' : 'addRepresentationToHTrack',
       // when the delete instrument button is clicked, remove this hTrack
-      'click .delete-instrument' : 'close'
+      'click .delete-instrument' : 'removeInstrument'
     },
     /*
       We are receiving options from stageView, where this view is
@@ -34,12 +34,12 @@ define([
       console.log('hTrackView init options: ', options);
       // Many variables get passed in.  We attach those variable with this function, so for each variable:
       // this.something = options.something; 
-      // model: hTrack,
-      // el: this.$('#instruments-collection'), 
-      // masterAudioContext: this.masterAudioContext
       if (options) {
         for (var key in options) {
           this[key] = options[key];
+        }
+        if(options.instrumentContainer){
+          this.el = options.instrumentContainer;
         }
       } else {
         console.error('hTrackView: shouldn\'t be in here!');
@@ -86,7 +86,6 @@ define([
       this.render();
 
       this.makeChildren();
-
     },
     makeChild: function(options){
       var childView = new MeasureView({
@@ -111,29 +110,30 @@ define([
     */
     render: function(options){
       console.log('hTrackView render start');
-      
       var compiledTemplate = _.template( HTrackTemplate, {model: this.model} );
-      this.$el.append( compiledTemplate );
+      $('#instruments-collection').append( compiledTemplate );
+      this.setElement($('#hTrack-'+this.model.cid));
 
-      // For a song from scratch
-      if(!options) {
-        console.log('hTrackView render from scratch');
-      // If we are loading a song
-      } else {
-        var µthis = this;
-        // for each of the measures (V1 should only have 1 Measure)
-        _.each(this.model.get('measures').models, function(measure, index) {
-          new MeasureView({
-            collectionOfMeasures: µthis.model.get('measures'),
-            parentHTrackModel: µthis.model,
-            parentHTrackView: µthis,
-            parentEl: '#hTrack-'+µthis.model.cid,
-            model: µthis.model.get('measures').models[index],
-            currentMeasureRepresentation: options.representation
-          });
-        });
+      // // For a song from scratch
+      // if(!options) {
+      //   console.log('hTrackView render from scratch');
+      // // If we are loading a song
+      // } else {
+      //   var µthis = this;
+      //   // for each of the measures (V1 should only have 1 Measure)
+      //   _.each(this.model.get('measures').models, function(measure, index) {
+      //     new MeasureView({
+      //       collectionOfMeasures: µthis.model.get('measures'),
+      //       parentHTrackModel: µthis.model,
+      //       parentHTrackView: µthis,
+      //       parentEl: '#hTrack-'+µthis.model.cid,
+      //       model: µthis.model.get('measures').models[index],
+      //       currentMeasureRepresentation: options.representation
+      //     });
+      //   });
 
-      }
+      // }
+
 
       // Bind the Webkit Audio stuff to where it needs to go
       this.loadAudio(this.model.get('sample'), this.bufferList );
@@ -396,19 +396,21 @@ define([
       }
       request.send();
     },
-    close: function(e) {
+    removeInstrument: function(e){
+      // Add to the Remaining instrument model
+      var instrument = $(e.currentTarget).closest('.hTrack').data().state;
+      console.log(instrument);
+      RemainingInstrumentGeneratorModel.addInstrument({type:instrument});
+      this.close();
+
+      // 'this' isn't the clicked element. It will always be the first element in the stage collection, since they all share the same $el.  so we have to find it in the collection and call model.destroy on that.  Then the view will destroy b/c of the listener?
+      // this.stageCollection.where({type: instrument})[0].destroy(); 
+    },
+    close: function() {
       // TODO Replace these events
       // dispatch.trigger('addInstrumentToGeneratorModel.event', instrument);
       // dispatch.trigger('instrumentDeletedFromCompositionArea.event', { instrument:instrument, model:this.parentCID });
       // dispatch.trigger('reRenderInstrumentGenerator.event', instrument);
-
-      var instrument = $(e.currentTarget).closest('.hTrack').data().state;
-      console.log(instrument);
-      RemainingInstrumentGeneratorModel.addInstrument({type: instrument});
-      console.log('in hTrack close of ' + instrument);
-
-      // 'this' isn't the clicked element. It will always be the first element in the stage collection, since they all share the same $el.  so we have to find it in the collection and call model.destroy on that.  Then the view will destroy b/c of the listener?
-      this.stageCollection.where({type: instrument})[0].destroy();
       
       // Maybe redundant
       this.model.destroy();

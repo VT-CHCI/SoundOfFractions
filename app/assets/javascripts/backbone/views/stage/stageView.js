@@ -31,16 +31,9 @@ define([
       this.conductor = ConductorModel;
       this.masterAudioContext = new AudioContext();
       
-
-      //this is creating the snare hTrack.
-
-      // Make an snare from scratch
-      // TODO, make this correctly populate the remainingInstrumentGenerator model
-
       // Dispatch handlers
 
       // TODO Replace these events
-      // this.litenTo(RemainingInstrumentGeneratorModel, 'instrumentAddedToCompositionArea', this.addInstrumentWithoutPattern);
       // dispatch.on('instrumentDeletedFromCompositionArea.event', this.deleteInstrument, this);
       // dispatch.on('newInstrumentTempoRecorded', this.addInstrument, this);
 
@@ -52,7 +45,10 @@ define([
       this.render();
 
       // Listeners
+      // When an instrument is clicked in the Genrerator, we call this function to compile and add it
       this.listenTo(RemainingInstrumentGeneratorModel, 'removedInstrumentFromUnused', this.addFromGeneratorModel);
+
+      // This kicks off and adds the snare to the 
       RemainingInstrumentGeneratorModel.removeInstrumentFromUnused({type:'sn'});
       
       this.makeChildrenHtracks();
@@ -67,7 +63,6 @@ define([
       //create a hTrack view.
       var hTrackChildView = new HTrackView({
         model: hTrack,
-        el: '#instruments-collection', 
         masterAudioContext: this.masterAudioContext
       });
       this.childViews.push(hTrackChildView)

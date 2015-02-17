@@ -54,29 +54,22 @@ define([
     addInstrumentToCompositionAreaByButton: function(e) {
       console.log('in remainingInstrumentGeneratorView addInstrumentToCompositionArea()');
       // Instrument type   'sn'|'hh'|'kd'
-      var instrument = $(e.currentTarget)[0].id.slice(15);
-      // update model
-      // TODO Replace these events\t
-      this.model.removeInstrumentFromUnused({type:instrument});
+      var type = $(e.currentTarget).attr('data-type');
+      // this.model.addInstrument({type:type});
+      this.model.removeInstrumentFromUnused({type:type});
       // update the dropdown menus in each htrack
       // TODO Replace these events
       // dispatch.trigger('reRenderInstrumentDropDown.event', instrument);
-      //add the instrument to the Composition-Area and re-render
-
-      // TODO Replace these events
-      // not sure if we need this now
-      // this.trigger('instrumentAddedToCompositionArea', {instrument:instrument} );
-
       this.render();
 
-      log.sendLog([[2, "instrument added: "+instrument]]);
+      log.sendLog([[2, "instrument added: "+type]]);
     },
     addInstrumentToCompositionAreaByCall: function(instrument){
-      debugger;
       this.model.removeInstrumentFromUnused(instrument);
       this.render();
     },
     render: function() {
+      console.log('remainingInstrumentGeneratorView RENDER ()')
       var uI = this.model.get('unusedInstruments');
       //compiling our template.
       var compiledTemplate = _.template( remainingInstrumentGeneratorTemplate, {reps: uI, len: uI.length} );
