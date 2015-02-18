@@ -119,7 +119,6 @@ define([
       this.manuallyCreatedMeasureBeatsCollection = new BeatsCollection;
       //for each beat - also change signature below
       for (var i = 0; i < 6; i++) {
-        // this.manuallyCreatedMeasureBeatsCollection.add([{selected: true}]);
         if (i == 0){
           this.manuallyCreatedMeasureBeatsCollection.add([{selected: true}]);
         } else {

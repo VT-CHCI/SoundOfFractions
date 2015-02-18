@@ -1325,7 +1325,6 @@ define([
           .attr('stroke', 'black');
     },
     render: function(){
-      // console.log('mR render');
       var µthis = this;
       if(this.model.get('currentRepresentationType') == 'audio') {window.csf = this; window.csd = StateModel;}
 
@@ -1594,7 +1593,18 @@ define([
       $(this.el).droppable({
         accept: '.stamp',
         drop: function(event, ui) {
-         $(this).append(ui.helper.clone());
+          var µthis = this;
+          var newDiv = $('<div class="btn stamped dropped"></div>')
+            .text(ui.draggable.text())
+            .draggable({
+              stop: function(event0, ui0) {
+                if (this.offsetLeft < 0 || this.offsetLeft > µthis.offsetWidth || this.offsetTop < 0 || this.offsetTop > µthis.offsetHeight) {
+                  this.remove();
+                }
+              }
+            })
+            .appendTo(this)
+            .css({position:"absolute", left:ui.offset.left-this.offsetLeft, top:ui.offset.top-this.offsetTop});
         }
       });
     },
