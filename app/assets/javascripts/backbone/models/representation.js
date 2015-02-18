@@ -68,6 +68,9 @@ define([
       this.currentRepresentationType = options.currentRepresentationType;
       this.previousRepresentationType = 'not_yet_defined';
     },
+    updateModelInfo: function(options){
+      this.computeRemainingAttributes(options);
+    },
     computeRemainingAttributes: function(options){
       // TODO number of beats....
       this.calculateNumberOfPoints(options.numberOfBeats);
@@ -76,6 +79,8 @@ define([
         circularMeasureCx: this.get('cX')+this.get('horzDivPadding')*this.get('currentScale'),
         circularMeasureCy: this.get('cY')+this.get('vertDivPadding')*this.get('currentScale'),
         circularMeasureR: this.get('initialCircularMeasureR')*this.get('currentScale'),
+        // Pie
+        beatAngle: 360/options.numberOfBeats,
         // Transition
         firstBeatStart: 0, // in s
         timeIncrement: 500, // in ms

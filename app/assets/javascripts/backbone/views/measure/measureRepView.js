@@ -77,7 +77,7 @@ define([
       this.makeBeatFactory();
 
     },
-    computeNormalBeatViewParameters: function(beatModel, index){      
+    computeNormalBeatViewParameters: function(beatModel, index){
       this.measurePassingToBeatViewParameters.X1 = this.model.get('lbbMeasureLocationX') +(this.model.get('beatWidth')*(index));
       this.measurePassingToBeatViewParameters.X2 = this.model.get('lbbMeasureLocationX') +(this.model.get('beatWidth')*(index));
       // this.model.set({beatBBX: this.model.get('lbbMeasureLocationX') +(this.model.get('beatWidth')*(index))});
@@ -148,7 +148,7 @@ define([
         console.error('Should not be in here! mRV computeTransitionBeatViewParameters')
       }
       // All beat params
-      this.measurePassingToBeatViewParameters.parentMeasureReppietolineModel = this.model;
+      this.measurePassingToBeatViewParameters.parentMeasureRepModel = this.model;
       this.measurePassingToBeatViewParameters.beatIndex = index;
       this.model.set({beatStartAngle: ((360 / this.parentMeasureModel.get('beats').models.length)*index)});
       this.measurePassingToBeatViewParameters.beatStartTime = this.model.get('firstBeatStart')+(index)*(this.model.get('timeIncrement')/1000);
@@ -208,19 +208,19 @@ define([
         if(!options){
           µthis.computeNormalBeatViewParameters(beatModel, index);
           // create a Beatview
-          var newBeatView = new BeatView(this.measurePassingToBeatViewParameters);
-          this.childPrimaryViews.push(newBeatView);
+          var newBeatView = new BeatView(µthis.measurePassingToBeatViewParameters);
+          µthis.childPrimaryViews.push(newBeatView);
         // Make a secondary or third beat
         } else if(options.secondary){
           µthis.computeTransitionBeatViewParameters(beatModel, index, options);
           // create a Secondary Beatview
-          var newBeatView = new AuxBeatView(this.measurePassingToBeatViewParameters);
-          this.childSecondaryViews.push(newBeatView);
+          var newBeatView = new AuxBeatView(µthis.measurePassingToBeatViewParameters);
+          µthis.childSecondaryViews.push(newBeatView);
         } else if(options.tertiary){
           µthis.computeTransitionBeatViewParameters(beatModel, index, options);
           // create a Tertirary Beatview
-          var newBeatView = new AuxBeatView(this.measurePassingToBeatViewParameters);
-          this.childTertiaryViews.push(newBeatView);          
+          var newBeatView = new AuxBeatView(µthis.measurePassingToBeatViewParameters);
+          µthis.childTertiaryViews.push(newBeatView);          
         } else {
           console.error('Should NOT be in here: measureRepView beat making, not primary, secondary, or tertiary beat');
         }
@@ -1614,6 +1614,7 @@ define([
       this.removeSpecificChildren(this.childTertiaryViews);
       this.removeSpecificChildren(this.childFactoryViews);
     },
+    // We have to abstract this out so when we are doing transitions, we can get rid of specific views
     removeSpecificChildren: function(childViews){
       console.log('Closing specific child views: ', childViews);
       _.each(childViews, function(childView){
@@ -1630,6 +1631,8 @@ define([
       console.log('getting to updateRender');
       this.closeAllChildren();
       this.removeMeasureRepParts();
+      // TODO Make the model listen to the parent collection change
+      this.model.updateModelInfo({currentRepresentationType:this.model.get('currentRepresentationType'), numberOfBeats: this.parentMeasureModel.get('beats').length});
       this.makeMeasureRepParts();
       // make the beats
       this.makeBeats();
@@ -1638,8 +1641,13 @@ define([
       // update the classes and the data-representation type
       this.updateDivInfo();
     },
+    // This is called when rerender a measureRepView and this way it stays in the same order
     updateDivInfo: function(){
-      this.$el.resizable('destroy');
+      // Since audio reps can't be resized
+      if(!this.model.get('currentRepresentationType') == 'audio'){
+        console.log('not audio');
+        this.$el.resizable('destroy');      
+      }
       this.$el.droppable('destroy');
       this.$el.attr('class','measureRep measure-'+this.model.get('currentRepresentationType'));
       this.$el.attr('data-representation', this.model.get('currentRepresentationType'));
