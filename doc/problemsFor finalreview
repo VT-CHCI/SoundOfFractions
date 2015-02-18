@@ -1,0 +1,8 @@
+problems
+dispatch handling of rerendering and deleting children. esp during 
+
+this.model.bind('change', this.render, this);
+this.model.on('change', this.render, this);
+Yes, they are equivalent. However, bind (and unbind) are only kept for backwards compability. You should use on.
+
+Hope this helps!
