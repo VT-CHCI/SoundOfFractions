@@ -1307,24 +1307,20 @@ define([
       $(this.el).droppable({
         accept: '.stamp',
         drop: function(event, ui) {
-         $(this).append(ui.helper.clone());
-          // $('<div class="btn stamp dropped"></div>')
-          //   .text(ui.draggable.text())
-          //   .appendTo(this)
-          //   .css({position:"absolute", left:ui.offset.left-this.offsetLeft, top:ui.offset.top-this.offsetTop});
+            var µthis = this;
+            var newDiv = $('<div class="btn stamped dropped"></div>')
+              .text(ui.draggable.text())
+              .draggable({
+                stop: function(event0, ui0) {
+                  if (this.offsetLeft < 0 || this.offsetLeft > µthis.offsetWidth || this.offsetTop < 0 || this.offsetTop > µthis.offsetHeight) {
+                    this.remove();
+                  }
+                }
+              })
+              .appendTo(this)
+              .css({position:"absolute", left:ui.offset.left-this.offsetLeft, top:ui.offset.top-this.offsetTop});
         }
       });
-
-      // $(this.el).droppable({
-      //   accept: '.stamp',
-      //   // hoverClass: "ui-state-highlight",
-      //   drop: function( event, ui ) {
-      //     var newDiv = $(ui.helper).clone(false)
-      //       .removeClass('ui-draggable-dragging')
-      //       .css({position:'absolute', left:event.offsetX, top:event.offsetY}); 
-      //     $(this).append(newDiv);
-      //   }
-      // });
 
       // make the beats
       this.makeBeats();

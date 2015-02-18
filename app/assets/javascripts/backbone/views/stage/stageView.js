@@ -42,7 +42,7 @@ define([
       // this creates 1 measure, and addes beats and the representations to itself
       this.manuallyCreatedMeasureBeatsCollection = new BeatsCollection;
       //for each beat - also change signature below
-      for (var i = 0; i < 3; i++) {
+      for (var i = 0; i < 6; i++) {
         if (i == 0){
           this.manuallyCreatedMeasureBeatsCollection.add([{selected: true}]);
         } else {
@@ -55,8 +55,8 @@ define([
       this.manuallyCreatedRepresentationModel = new RepresentationModel({representationType:'audio'});
       this.manuallyCreatedMeasureRepresentationCollection.add(this.manuallyCreatedRepresentationModel);
       // add a bead rep
-      // this.manuallyCreatedRepresentationModel = new RepresentationModel({representationType:'bead'});
-      // this.manuallyCreatedMeasureRepresentationCollection.add(this.manuallyCreatedRepresentationModel);
+      this.manuallyCreatedRepresentationModel = new RepresentationModel({representationType:'bead'});
+      this.manuallyCreatedMeasureRepresentationCollection.add(this.manuallyCreatedRepresentationModel);
       // add a line rep
       // this.manuallyCreatedRepresentationModel = new RepresentationModel({representationType:'line'});
       // this.manuallyCreatedMeasureRepresentationCollection.add(this.manuallyCreatedRepresentationModel);
