@@ -310,10 +310,8 @@ define([
     },
     // manage the transitions from one rep to another
     transition: function(){
-      console.log('gh');
       var PRT = this.parentMeasureRepModel.get('previousRepresentationType');
       var CRT = this.parentMeasureRepModel.get('currentRepresentationType');
-      console.log(PRT, CRT);
       if (PRT == 'audio'){
         if (CRT == 'audio'){
         } else if(CRT == 'bead'){

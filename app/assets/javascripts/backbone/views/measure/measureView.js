@@ -56,7 +56,7 @@ define([
       // when we add or delete a meauserRep
       this.listenTo(this.model.get('measureRepresentations'), 'remove', _.bind(this.render, this));  
       this.listenTo(this.model.get('measureRepresentations'), 'add', _.bind(this.addChild, this));  
-      this.listenTo(this.model, 'signatureChange', _.bind(this.reconfigure, this));  
+      this.listenTo(this.model.get('beats'), 'add remove', _.bind(this.reconfigure, this));  
       // this.listenTo(this.model, 'signatureChange', this.reconfigure);  
       this.model.on('change:scale', _.bind(this.render, this));
 

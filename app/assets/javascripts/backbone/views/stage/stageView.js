@@ -129,19 +129,19 @@ define([
       //make a collection
       this.manuallyCreatedMeasureRepresentationCollection = new RepresentationsCollection;
       // add an audio rep
-      this.manuallyCreatedRepresentationModel = new RepresentationModel({currentRepresentationType:'audio', numberOfBeats: this.manuallyCreatedMeasureBeatsCollection.length});
+      this.manuallyCreatedRepresentationModel = new RepresentationModel({currentRepresentationType:'audio', sisterBeatsCollection:this.manuallyCreatedMeasureBeatsCollection});
       this.manuallyCreatedMeasureRepresentationCollection.add(this.manuallyCreatedRepresentationModel);
       // add a bead rep
-      this.manuallyCreatedRepresentationModel = new RepresentationModel({currentRepresentationType:'bead', numberOfBeats: this.manuallyCreatedMeasureBeatsCollection.length});
+      this.manuallyCreatedRepresentationModel = new RepresentationModel({currentRepresentationType:'bead', sisterBeatsCollection:this.manuallyCreatedMeasureBeatsCollection});
       this.manuallyCreatedMeasureRepresentationCollection.add(this.manuallyCreatedRepresentationModel);
       // add a line rep
-      this.manuallyCreatedRepresentationModel = new RepresentationModel({currentRepresentationType:'line', numberOfBeats: this.manuallyCreatedMeasureBeatsCollection.length});
+      this.manuallyCreatedRepresentationModel = new RepresentationModel({currentRepresentationType:'line', sisterBeatsCollection:this.manuallyCreatedMeasureBeatsCollection});
       this.manuallyCreatedMeasureRepresentationCollection.add(this.manuallyCreatedRepresentationModel);
       // add a pie rep
-      this.manuallyCreatedRepresentationModel = new RepresentationModel({currentRepresentationType:'pie', numberOfBeats: this.manuallyCreatedMeasureBeatsCollection.length});
+      this.manuallyCreatedRepresentationModel = new RepresentationModel({currentRepresentationType:'pie', sisterBeatsCollection:this.manuallyCreatedMeasureBeatsCollection});
       this.manuallyCreatedMeasureRepresentationCollection.add(this.manuallyCreatedRepresentationModel);
       // add a bar rep
-      this.manuallyCreatedRepresentationModel = new RepresentationModel({currentRepresentationType:'bar', numberOfBeats: this.manuallyCreatedMeasureBeatsCollection.length});
+      this.manuallyCreatedRepresentationModel = new RepresentationModel({currentRepresentationType:'bar', sisterBeatsCollection:this.manuallyCreatedMeasureBeatsCollection});
       this.manuallyCreatedMeasureRepresentationCollection.add(this.manuallyCreatedRepresentationModel);
 
       // Create a Measures Collection, and add the beats and representations

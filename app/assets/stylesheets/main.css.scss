@@ -1,25 +1,16 @@
-
 .lineRolling {
   fill: none;
 }
-
 .record-button:hover {
   color: green;
   font-weight: bold;
 }
-
-svg {
-  /*height: 100%;*/
-  /*width: 100%*/
-}
 .measure .measureRep:first-of-type .remove-measure-rep{
+  visibility: hidden;
+}
+.measure .measureRep.measureRep-audio:not(:first-of-type) .record-button{
   display: none;
 }
-
-.measure .measureRep.measure-audio:not(:first-of-type) .record-button{
-  display: none;
-}
-
 .hTrack .measure-container .measure:first-of-type .remove-measure{
   display: none;
 }
@@ -27,9 +18,11 @@ svg {
 .hTrack .measure-container .measure:first-of-type .add-measure{
   display: none;
 }
-
 /*Thanks to sammy for this idea*/
 .cs i{
+  color: green;
+}
+.hover-green{
   color: green;
 }
 .delta.btn{
@@ -37,11 +30,9 @@ svg {
   background: none;
   box-shadow: none;
 }
-
-.measure .measureRep.measure-audio .delta{
-  display: none;
+.measure .measureRep.measureRep-audio .delta{
+  visibility: hidden;
 }
-
 .add-measure {
   color: gray;
 }
@@ -54,7 +45,6 @@ svg {
 .remove-measure:hover {
   color: red;
 }
-
 .measureRep {
   height: 200px;
   border: solid 1px grey;
@@ -92,8 +82,9 @@ svg {
 .change-instrument {
   width: 135px;  
 }
+/*For the top row*/
 .representation[data-state="line"] svg {
-  margin-left: -65px;
+  margin-left: -100px;
 }
 .representation[data-state="pie"] svg {
   margin-left: 15px;
@@ -104,10 +95,11 @@ svg {
 .representation[data-state="audio"] svg {
   margin-left: 5px;
 }
+
 .resize-measure-pull{
-  /*visibility: hidden; */
-  /*position: relative;*/
-  /*top: -40px;*/
+  /*visibility: hidden; 
+  /*position: relative;
+  /*top: -40px;
   -webkit-transform: rotate(90deg); 
   -moz-transform: rotate(90deg);
   -o-transform: rotate(90deg);
@@ -117,28 +109,23 @@ svg {
 }
 .remove-measure-rep {
   color: grey;
+  margin-right: 3px;
   padding: 3px;
 }
-
 #measure-representation-buttons button {
   font-size: 10px;
   /*padding-left: 5px;*/
 }
-
 #system-label-group {
   padding: 5px;
 }
-
 .stamp {
   padding: 1px  3px;
 }
-
 .stamped {
   padding: 1px  3px;
 }
-
-.hTrack.well {
-  
+.hTrack.well { 
   padding: 10px;
   margin-bottom: 10px;
   min-height: 164px;
@@ -232,23 +219,22 @@ select {
 }
 svg.audio {
   height: 124px;
+  width: 100px;
 }
-svg.bar {
+/*svg.bar {
   height: 150px;
 }
 svg.pie {
-  /*height: 150px;*/
+  height: 150px;
 }
-/*svg.bead {*/
-  /*height: 150px;*/
-  /*width: 165px;*/
-/*}*/
+svg.bead {
+  height: 172px;
+}
 svg.line {
   height: 150px;
   position: relative;
-
 }
-
+*/
 /* ==========================================================================
    Author's custom styles
    ========================================================================== */
@@ -286,23 +272,6 @@ svg.line {
   /*resize: both;*/
   /*overflow: auto;*/
 }
-.measure-audio {
-  width: 100px;
-}
-.measure-bead {
-  /*min-width: 200px;*/
-  /*height: 145px;*/
-}
-.measure-line {
-  /*width: 400px;*/
-}
-.measure-pie {
-  /*width: 200px;*/
-}
-.measure-bar {
-  /*width: 400px;*/
-}
-
 .measure .title {
 	clear: both;
 	display: block;

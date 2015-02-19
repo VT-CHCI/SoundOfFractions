@@ -16,13 +16,13 @@ define([
         originalScale: 1,
         currentScale: 1,
         vertDivPadding: 10,
-        horzDivPadding: 25,
+        horzDivPadding: 15,
       // Beat Factory
         beatFactoryAreaHeight: 250,
       // Circular
         initialCircularMeasureR: 51,  // 8 pxs per bead plus 1 px border = 10 ||| 10 * 16 = 160/pi = 51
         cX: 100,
-        cY: 75,
+        cY: 100,
       // Transition
         marginTop: 20,
         marginLeft: 60,
@@ -53,7 +53,7 @@ define([
       // Bar
         //Measure
         lbbMeasureLocationX: 15, // ~5%
-        lbbMeasureLocationY: 10,
+        lbbMeasureLocationY: 40,
         lbbMeasureHeight: 25,
         //Beat
         linearBeatXPadding: 0,
@@ -64,29 +64,34 @@ define([
     initialize: function(options){
       // console.log('init representation model');
       this.setDefaults();
-      this.computeRemainingAttributes(options);
-      this.currentRepresentationType = options.currentRepresentationType;
-      this.previousRepresentationType = 'not_yet_defined';
+      this.set('previousRepresentationType', 'not_yet_defined');
+      this.set('currentRepresentationType', options.currentRepresentationType);
+      this.set('sisterBeatsCollection', options.sisterBeatsCollection);
+      this.updateInformation();
+
+      // When the sster collection of beats changes in length (ie the add or remove a beat in the collection), we need to redo all of the calculations
+      this.listenTo(this.get('sisterBeatsCollection'), 'add remove', this.updateInformation)
     },
-    updateModelInfo: function(options){
-      this.computeRemainingAttributes(options);
+    updateInformation: function(){
+      this.computeRemainingAttributes();
     },
-    computeRemainingAttributes: function(options){
+    computeRemainingAttributes: function(){
+      console.error();
       // TODO number of beats....
-      this.calculateNumberOfPoints(options.numberOfBeats);
+      this.calculateNumberOfPoints(this.get('sisterBeatsCollection').length);
       this.set({
         //Circular
         circularMeasureCx: this.get('cX')+this.get('horzDivPadding')*this.get('currentScale'),
         circularMeasureCy: this.get('cY')+this.get('vertDivPadding')*this.get('currentScale'),
         circularMeasureR: this.get('initialCircularMeasureR')*this.get('currentScale'),
         // Pie
-        beatAngle: 360/options.numberOfBeats,
+        beatAngle: 360/this.get('sisterBeatsCollection').length,
         // Transition
         firstBeatStart: 0, // in s
         timeIncrement: 500, // in ms
         transitionDuration: 1500/this.get('transitionNumberOfPoints'), // 3000 is default
         // Number Line
-        numberLineY: 25 + this.get('vertDivPadding'),
+        numberLineY: this.get('vertDivPadding')*this.get('currentScale') + this.get('cY')-this.get('initialCircularMeasureR'),
         beatHeight: this.get('lbbMeasureHeight') - 2*this.get('linearBeatYPadding'),
         beatBBY: this.get('linearBeatYPadding') + this.get('lbbMeasureLocationY')
       });
@@ -97,12 +102,16 @@ define([
       });
       // These have to be set after the above as they have dependencies, and I am unsure if they fire in order....
       this.set({
-        circularDivWidth: 2*this.get('circularMeasureR') + this.get('horzDivPadding')*2 + this.get('cX')*this.get('currentScale'), 
+        //                 |---- Diameter --------------|   |- horizontal padding on sides ---|  |- center X offset ---|
+        circularDivWidth:  2*this.get('circularMeasureR') + 2*this.get('horzDivPadding') +       this.get('cX')*this.get('currentScale'), 
         //Circular
-        circularDivHeight: 2*this.get('circularMeasureR') + this.get('vertDivPadding')*2 + this.get('cY')*this.get('currentScale'),
+        //                 |---- Diameter --------------|   |- horizontal padding on sides ---|
+        circularDivHeight: 200,
+        // circularDivHeight: 2*this.get('circularMeasureR') + this.get('vertDivPadding') +         this.get('cY')*this.get('currentScale'),
         // Linear
         linearDivWidth: this.get('linearLineLength') + this.get('horzDivPadding'),
-        linearDivHeight: 25 + this.get('vertDivPadding'),
+        linearDivHeight: 200,
+        // linearDivHeight: 25 + this.get('vertDivPadding'),
         lineDivision: this.get('linearLineLength')/this.get('transitionNumberOfPoints'),
         // Transition
         // Line
@@ -111,7 +120,7 @@ define([
         // TODO number of beats
         // TODO, set up a listener for this when it changes
         // beatWidth: this.get('linearLineLength')/this.model.get('beats').length;
-        beatWidth: this.get('linearLineLength')/options.numberOfBeats
+        beatWidth: this.get('linearLineLength')/this.get('sisterBeatsCollection').length
 
       });
       // Has to be at the end for all the stuff it uses...
@@ -255,13 +264,14 @@ define([
           break;
       }
     },
-    transition: function(newRep){
+    transition: function(newRep, numberOfBeats){
       console.log('rep model new repType', newRep);
       this.set('previousRepresentationType', this.get('currentRepresentationType'));
       this.set('currentRepresentationType', newRep);
       this.set({
         transitions: this.get('transitions')+1
       });
+      this.computeRemainingAttributes({numberOfBeats: numberOfBeats});
     }
   });
 
