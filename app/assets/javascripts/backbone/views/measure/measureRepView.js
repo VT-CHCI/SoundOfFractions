@@ -244,30 +244,27 @@ define([
 
       var µthis = this;
       var svgContainer = d3.select('#svg-'+this.model.cid)
-      var xButton = svgContainer
+      var buttonArea = svgContainer
           .append('g', ':first-child');
-      xButton.append('text')
+      buttonArea.append('text')
           .attr('class', 'remove-measure-rep')
           .attr('x', deleteXLocation)
           .attr('y', this.model.get('vertDivPadding'))
           .attr('dy', '.35em')
           .text('X')
           .on('click', function(){µthis.removeRepresentationModel()})
-          // .on("mouseover", function(){ console.log('gh'); this.classList.add('hover-green');})
-          // .on("mouseout", function(){ console.log('hg'); return xButton.style("color", "grey");});
+          .on("mouseover", function(){ return buttonArea.select('text').attr('stroke', 'red');})
+          .on("mouseout", function(){ return buttonArea.select('text').attr('stroke', 'black');});
 
-     var tButton = svgContainer
-          .append('g', ':first-child');
-      xButton.append('text')
-          .attr('class', 'remove-measure-rep')
+      buttonArea.append('text')
+          .attr('class', 'delta')
           .attr('x', this.model.get('horzDivPadding'))
           .attr('y', this.model.get('vertDivPadding'))
           .attr('dy', '.35em')
-          .text('T')
+          .text('Δ')
           .on('click', function(){µthis.transitionRepresentation()})
-          // .on("mouseover", function(){ console.log('gh'); this.classList.add('hover-green');})
-          // .on("mouseout", function(){ console.log('hg'); return xButton.style("color", "grey");});
-
+          // .on("mouseover", function(){ return this.select('text').attr('stroke', '#00ff00');})
+          // .on("mouseout", function(){ return this.select('text').attr('stroke', 'black');});
     },
     // These are the parameters for the beat factory
     beatFactoryParameters: function(options){
@@ -1561,10 +1558,11 @@ define([
     manualPress: function(e) {
       // t = 116, d = 100, w = 119, r = 114
       if (e.keyCode == 116) {
-        if(!$('.measureRep:nth-child(2)').find('.delta').hasClass('transition-rep')){      
-          $('.measureRep:nth-child(2)').find('.delta').addClass('transition-rep')
+        if(!$('.measureRep:nth-child(2)').hasClass('transition-rep')){      
+          $('.measureRep:nth-child(2)').addClass('transition-rep')
+          $('.measureRep:nth-child(2)').find('.delta').click();
         } else {
-          $('.measureRep:nth-child(2)').find('.delta').removeClass('transition-rep')
+          $('.measureRep:nth-child(2)').removeClass('transition-rep')
         }
       } else if (e.keyCode == 114) {
         $('.record-button')[0].click();

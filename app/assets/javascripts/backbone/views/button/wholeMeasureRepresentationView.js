@@ -63,7 +63,7 @@ define([
       $('.cs').removeClass('cs'); 
       //trigger the Measure representation addition
       var sisterBeatsCollection = StageCollection.get(cid).get('measures').models[0].get('beats');
-      var representationModel = new RepresentationModel({representationType: newRepType, sisterBeatsCollection: sisterBeatsCollection});
+      var representationModel = new RepresentationModel({currentRepresentationType: newRepType, sisterBeatsCollection: sisterBeatsCollection});
       console.log('adding to the instrument/measure/measureRep');
       // Currently forcing it to add to the first measure
       StageCollection.get(cid).get('measures').models[0].get('measureRepresentations').add(representationModel);   
@@ -106,9 +106,7 @@ define([
         var cid = hTrackID.slice(7);
         $('.cs').removeClass('cs'); 
         var sisterBeatsCollection = StageCollection.get(cid).get('measures').models[0].get('beats');
-        var representationModel = new RepresentationModel({representationType: newRepType, sisterBeatsCollection: sisterBeatsCollection});
-        // representationModel.representationType = newRepType;
-
+        var representationModel = new RepresentationModel({currentRepresentationType: newRepType, sisterBeatsCollection: sisterBeatsCollection});
         console.log('MANUALLY adding to the instrument/measure/measureRep');
         // Currently forcing it to add to the first measure
         StageCollection.get(cid).get('measures').models[0].get('measureRepresentations').add(representationModel);
@@ -124,20 +122,7 @@ define([
         var measureRepColl = StageCollection.get(hTrackCID).get('measures').models[0].get('measureRepresentations').get(measureRepCID).transition(newRepType);
 
       }
-      // this.isFirstRep();
     },
-
-    // //The frist mRV added to the measure should conform to the .measureRep css class' height attribute. Subsequent additions should not for scaling purposes.
-    // isFirstRep: function(){
-    //   if (this.firstRep) {
-    //     this.firstRep = false;
-    //     //console.log("This is the first mRV");
-    //   } else {
-    //     $('.measureRep').css('height', 'auto');
-    //     //console.log("This is not the first mRV");
-    //   }
-    // }
-
   });
 
   return new WholeMeasureRepresentationView();
