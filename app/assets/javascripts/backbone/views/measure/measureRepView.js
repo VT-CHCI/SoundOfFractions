@@ -165,7 +165,6 @@ define([
     },
     makeMeasureRepParts: function(){
       // Bead rep
-      console.error(this.model.get('currentRepresentationType'));
       if (this.model.get('currentRepresentationType') == 'bead') {
         this.makeBeadRep();
       // Line Rep

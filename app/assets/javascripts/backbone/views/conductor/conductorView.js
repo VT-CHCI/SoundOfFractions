@@ -61,9 +61,6 @@ define([
         this.conductorModel.stop();
         console.log('now stopping conductor view');
 
-        // dispatch.trigger('togglePlay.event', 'off');
-        // this.conductorModel.set('isPlaying', false);
-
         var compiledTemplate = _.template( conductorPlayTemplate );
         $(this.el).html( compiledTemplate );
 

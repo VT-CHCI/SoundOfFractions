@@ -51,7 +51,7 @@ define([
       // This kicks off and adds the snare to the 
       RemainingInstrumentGeneratorModel.removeInstrumentFromUnused({type:'sn'});
       
-      this.makeChildrenHtracks();
+      this.makeChildrenHTracks();
     },
 
     render: function(){
@@ -67,7 +67,7 @@ define([
       });
       this.childViews.push(hTrackChildView)
     },
-    makeChildrenHtracks: function() {
+    makeChildrenHTracks: function() {
       //we have to render each one of our hTrack's.
       _.each(this.stageCollection.models, function(hTrack) {
         this.makeChildHTrack(hTrack);

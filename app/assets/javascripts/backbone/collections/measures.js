@@ -7,11 +7,10 @@ define([
   'backbone',
   'backbone/models/measure'
 ], function(_, Backbone, MeasureModel){
-  return Backbone.Collection.extend({
+  var MeasuresCollection = Backbone.Collection.extend({
     model: MeasureModel,
     initialize: function(){
     }
-  });
-
-  // return new measuresCollection();
+   });
+  return MeasuresCollection;
 });
