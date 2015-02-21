@@ -1,14 +1,14 @@
-modules:
-  - name: 'backbone'
-  - name: 'routers'
+# modules:
+#   - name: 'backbone'
+#   - name: 'routers'
 
-shim:
-  'underscore':
-    deps: ['jquery']
-    exports: '_'
-  'backbone':
-    deps: ['underscore', 'jquery']
-    exports: 'Backbone'
-  'jquery-ui':
-    deps: ['jquery']
-    exports: '$$'
+# shim:
+#   'underscore':
+#     deps: ['jquery']
+#     exports: '_'
+#   'backbone':
+#     deps: ['underscore', 'jquery']
+#     exports: 'Backbone'
+#   'jquery-ui':
+#     deps: ['jquery']
+#     exports: '$$'

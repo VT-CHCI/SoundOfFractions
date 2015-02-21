@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sound Of Fractions</title>
+
+  <link href="stylesheets/application.css" rel="stylesheet">
+  <link href="stylesheets/main.css" rel="stylesheet">
+  <link href="stylesheets/bootstrap.min.css" rel="stylesheet">
+  <link href="stylesheets/bootstrap-theme.min.css" rel="stylesheet">
+  <link href="stylesheets/jquery-ui-1.10.3.custom.min.css" rel="stylesheet">
+  <link href="stylesheets/application.css" rel="stylesheet">
+  <link href="stylesheets/jquery-ui.structure.min.css" rel="stylesheet">
+  <link href="stylesheets/jquery-ui.theme.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+</head>
+<body>
+  <!-- Navigation -->
+  <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container-fluid">
+        <ul class="nav" role="navigation">
+          <li class="brand">Sound of Fractions</li>
+          <%= render 'layouts/shared/loadOrSaveSong' %>
+        </ul>
+        <ul class="nav pull-right login" role="navigation">
+          <%= render 'layouts/shared/login' %>
+        </ul>
+      </div> <!-- End Container-fluid -->
+    </div> <!-- End Navbar-inner -->
+  </div> <!-- End Navbar -->
+  <!-- Navbar messages -->
+  <div class="row-fluid" id="rails-alerts">
+  </div>
+  <!-- End Navigation -->
+  <!-- TODO, BROWSER Check for CHROME -->
+  <!--   <p class="disclaimer">Due to the technologies used for this project, please use <a href="https://www.google.com/intl/en/chrome/">Google Chrome</a>.</p>
+    <script type="text/javascript">alert('Due to the technologies used for this project, please use Google Chrome')</script>
+   -->
+  <div class="container-fluid">
+    <div class="row-fluid">
+      <!-- Top Row -->
+      <div id="top-row" class="row-fluid">
+        <div id="conductor" class="play span1"></div>
+        <div id="system-label-container" class="span3 offset1"></div>
+        <div id="measure-representation" class="span6 offset1"></div>
+      </div>
+      <hr class="light-hr">
+      <!-- Middle Row -->
+      <div id="middle-row" class="row-fluid">
+        <div id="middle-left-column" class="span12">
+          <div id="show-song">
+          </div>
+          <div id="sof-stage-area">
+            <div id="sample-messages"></div>
+          </div>
+          <div id="instrument-generator-holder" class="span5">
+          </div>
+        </div>
+      <!-- <div id="middle-right-column" class="span2"></div> -->
+      </div>
+      <!-- Bottom Row -->
+      <div id="bottom-row" class="row-fluid">
+      </div>
+      <hr>
+    </div>
+  <!-- Footer -->
+  <footer>
+  </footer>
+  <script data-main="javascripts/application" src="javascripts/vendor/require.min.js"></script>
+</body>
+</html>

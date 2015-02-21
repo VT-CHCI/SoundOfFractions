@@ -1,4 +1,8 @@
-extern
-node_modules
+#*
+*.o
+*.pyc
+*~
+extern/
+node_modules/
 tmp
-vendor
+vendor/

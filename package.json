@@ -1,0 +1,10 @@
+{
+  "name": "SoundOfFractions",
+  "version": "0.0.0",
+  "dependencies": {
+    "express": "^4.11.2",
+    "mysql": "^2.5.4",
+    "rsvp": "^3.0.17",
+    "sequelize": "^2.0.3"
+  }
+}
