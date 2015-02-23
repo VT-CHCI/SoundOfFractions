@@ -27,7 +27,7 @@ define([
         marginTop: 20,
         marginLeft: 60,
         transitions: 0,
-        animationIntervalDuration: 500, // 1000 is normal
+        animationIntervalDuration: 200, // 1000 is normal
       // Audio
         //Measure
         audioMeasureCx: 50,

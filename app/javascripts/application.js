@@ -14,17 +14,33 @@
 // WARNING: THE FIRST BLANK LINE MARKS THE END OF WHAT'S TO BE PROCESSED, ANY BLANK LINE SHOULD
 // GO AFTER THE REQUIRES BELOW.
 //
+    // 'jquery': 'vendor/jquery-2.1.3.min',
+
 console.log('Application.js: Started');
 
 require.config({
-  shim: {
-    'bootstrap' : { 'deps' :['jquery'] }
-  },
   paths: {
-    bootstrap: 'vendor/bootstrap.min',
-    jquery: 'vendor/jquery-2.1.3.min',
-    underscore: 'vendor/underscore-min',
-    bbone: 'vendor/backbone-min'
+    'jquery': ['//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min','vendor/jquery-2.1.3.min'],
+    'bootstrap': ['//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min','vendor/bootstrap.min'],
+    'underscore': 'vendor/underscore-min',
+    'bbone': 'vendor/backbone-min',
+    'login': 'login'
+  },
+  shim: {
+    'bootstrap':            { deps: ['jquery'] },
+    'login':                { deps: ['jquery'] },
+    'bootstrap/affix':      { deps: ['jquery'], exports: '$.fn.affix' }, 
+    'bootstrap/alert':      { deps: ['jquery'], exports: '$.fn.alert' },
+    'bootstrap/button':     { deps: ['jquery'], exports: '$.fn.button' },
+    'bootstrap/carousel':   { deps: ['jquery'], exports: '$.fn.carousel' },
+    'bootstrap/collapse':   { deps: ['jquery'], exports: '$.fn.collapse' },
+    'bootstrap/dropdown':   { deps: ['jquery'], exports: '$.fn.dropdown' },
+    'bootstrap/modal':      { deps: ['jquery'], exports: '$.fn.modal' },
+    'bootstrap/popover':    { deps: ['jquery'], exports: '$.fn.popover' },
+    'bootstrap/scrollspy':  { deps: ['jquery'], exports: '$.fn.scrollspy' },
+    'bootstrap/tab':        { deps: ['jquery'], exports: '$.fn.tab' },
+    'bootstrap/tooltip':    { deps: ['jquery'], exports: '$.fn.tooltip' },
+    'bootstrap/transition': { deps: ['jquery'], exports: '$.fn.transition' }
   }
 });
 
@@ -40,11 +56,25 @@ require([
 ], function($, _, Backbone, SOF_Application){
   console.log("Application.js: initializing SOF_Application...");
 
-
   // The "app" dependency 'SOF' is passed in as "SOF_Application"
   // Again, the other dependencies passed in are not "AMD" therefore don't pass a parameter to this function
   // SOF_Application.initialize(personResults);
   SOF_Application.initialize();
+
+  $(function(){
+    console.log('getting here');
+    $('#modal-login, #last-close-button, #first-close-button').on('click', function(){
+      $('#my-modal').modal('toggle');
+    })
+    $('#my-modal').on('hidden.bs.modal', function (e) {
+      window.modalOpen = false;
+    })
+    $('#my-modal').on('shown.bs.modal', function (e) {
+      $('#login-name').focus();
+      window.modalOpen = true;
+    })
+  });
+
   console.log("Application.js: SOF_Application Fully initialized");
   console.error('-----BREAK LINE FOR TESTING-----');
 });

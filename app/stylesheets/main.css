@@ -1,6 +1,32 @@
-body { padding-top: 75px; height: 100%; }
-
-/*for development only*/
+.measureRep{
+  min-height: 1px;
+  min-width: 1px;
+}
+/*.measureRep-line{
+  height: 200px;
+  width: 200px;
+  background-color: orange;
+}
+.measureRep{
+  height: 200px;
+  width: 200px;
+  background-color: blue;
+}
+.measureRep-bead svg{
+  height: 200px;
+  width: 200px;
+  background-color: red;
+}
+.measureRep-line svg{
+  height: 200px;
+  width: 200px;
+  background-color: red;
+}
+*/
+.show-grid{
+  margin-bottom:15px
+}
+/*for development only
 .navbar .nav > li > a {
   float: left!important;
 }

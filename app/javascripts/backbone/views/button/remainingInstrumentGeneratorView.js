@@ -10,8 +10,9 @@ define([
   'backbone/models/remainingInstrumentGenerator',
   'backbone/views/stage/stageView',
   'text!backbone/templates/button/remainingInstrumentGenerator.html',
+  'text!backbone/templates/button/remainingInstrumentButton.html',
   'log'
-], function($, _, Backbone, RemainingInstrumentGeneratorModel, StageView, remainingInstrumentGeneratorTemplate, log){
+], function($, _, Backbone, RemainingInstrumentGeneratorModel, StageView, remainingInstrumentGeneratorTemplate, remainingInstrumentButtonTemplate, log){
 
   var RemainingInstrumentGeneratorView = Backbone.View.extend({
     el: $('#instrument-generator-holder'), // Specifies the DOM element which this view handles
@@ -70,15 +71,20 @@ define([
     },
     render: function() {
       console.log('remainingInstrumentGeneratorView RENDER ()')
+
       var uI = this.model.get('unusedInstruments');
       //compiling our template.
-      this.$el.html();
-      if (uI.length>0){      
-        for(var i = 0; i<uI.length; i++){
-          var unused = uI[i];
-          var compiledTemplate = _.template(remainingInstrumentGeneratorTemplate);
-          $(this.el).append( compiledTemplate({type: unused.type, label:unused.label}));
-        }
+      this.$el.html('');
+      if (uI.length>0){
+        var compiledTemplate = _.template(remainingInstrumentGeneratorTemplate);
+        this.$el.append( compiledTemplate() );
+      } else {
+        this.$el.html('');
+      }
+      for(var i = 0; i<uI.length; i++){
+        var unused = uI[i];
+        var compiledButtonTemplate = _.template(remainingInstrumentButtonTemplate);
+        $('#remaining-instrument-generator').append( compiledButtonTemplate({type: unused.type, label:unused.label}));
       }
       return this;
     },

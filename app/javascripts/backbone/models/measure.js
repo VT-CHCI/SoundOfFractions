@@ -9,9 +9,10 @@ define([
   'underscore',
   'bbone',
   'backbone/models/beat',
+  'backbone/models/conductor',
   'backbone/collections/beats',
   'backbone/collections/representations'
-], function(_, Backbone, BeatModel, BeatsCollection, RepresentationsCollection) {
+], function(_, Backbone, BeatModel, ConductorModel, BeatsCollection, RepresentationsCollection) {
   var MeasureModel = Backbone.Model.extend({
     beats: BeatsCollection,
     measureRepresentations: RepresentationsCollection,
@@ -22,6 +23,12 @@ define([
     //   currentScale: 1
     // },
     initialize: function(){
+      this.listenTo(this.get('beats'), 'add remove', this.toggle);
+    },
+    toggle: function(){
+      if(ConductorModel.get('isPlaying')){
+        ConductorModel.stop();
+      }
     },
     increaseTransitionCount: function(){
       this.set({transitioned : this.transitioned+1});

@@ -301,6 +301,7 @@ define([
             .attr('y1', this.Y1)
             .attr('x2', this.X2)
             .attr('y2', this.Y2)
+            .attr('transform', 'translate(0,0)')
             .attr('stroke', COLORS.hexColors[this.color])
             .attr('opacity', this.getOpacityNumber(this.model.get('selected')))
             .attr('stroke-width', 4)

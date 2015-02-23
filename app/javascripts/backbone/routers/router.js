@@ -19,11 +19,9 @@ define([
   'backbone/views/song/new_view',
   'backbone/views/song/index_view',
   'backbone/views/song/show_view',
-  // 'backbone/views/song/edit_view',
+  'backbone/views/song/edit_view',
   'log'
-], function($, _, Backbone, mainHomeView, StageView, HTrackView, MeasureView, ConductorView, WholeMeasureRepresentationView, RemainingInstrumentGeneratorView, SystemLabelContainerView, songsCollection, songsViewNew, songsViewIndex, songsViewShow,
-  // songsViewEdit,
-  log){
+], function($, _, Backbone, mainHomeView, StageView, HTrackView, MeasureView, ConductorView, WholeMeasureRepresentationView, RemainingInstrumentGeneratorView, SystemLabelContainerView, songsCollection, songsViewNew, songsViewIndex, songsViewShow, songsViewEdit, log){
 
   var BBRouter = Backbone.Router.extend({
     // songs: {},

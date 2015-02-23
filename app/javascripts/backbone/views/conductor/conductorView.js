@@ -71,6 +71,9 @@ define([
 
     },
     manuallPress: function(e) {
+      if(window.modalOpen){
+        return;
+      }
       // p = 112
       if (e.keyCode == 112) {
         this.el.click();

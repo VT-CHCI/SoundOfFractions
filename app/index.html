@@ -11,58 +11,81 @@
   <link href="stylesheets/application.css" rel="stylesheet">
   <link href="stylesheets/jquery-ui.structure.min.css" rel="stylesheet">
   <link href="stylesheets/jquery-ui.theme.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  <link href="stylesheets/font-awesome.min.css" rel="stylesheet">
 </head>
 <body>
   <!-- Navigation -->
-  <div class="navbar navbar-inverse navbar-fixed-top">
-    <div class="navbar-inner">
-      <div class="container-fluid">
-        <ul class="nav" role="navigation">
-          <li class="brand">Sound of Fractions</li>
-          <%= render 'layouts/shared/loadOrSaveSong' %>
-        </ul>
-        <ul class="nav pull-right login" role="navigation">
-          <%= render 'layouts/shared/login' %>
-        </ul>
-      </div> <!-- End Container-fluid -->
-    </div> <!-- End Navbar-inner -->
-  </div> <!-- End Navbar -->
-  <!-- Navbar messages -->
-  <div class="row-fluid" id="rails-alerts">
-  </div>
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">Sound Of Fractions</a>
+      </div>
+      <div class="nav navbar-nav navbar-right">
+          <button id="modal-login" type="button" class="btn btn-default">Login</button>
+      </div>
+    </div><!-- /.container-fluid -->
+  </nav>
   <!-- End Navigation -->
+
   <!-- TODO, BROWSER Check for CHROME -->
   <!--   <p class="disclaimer">Due to the technologies used for this project, please use <a href="https://www.google.com/intl/en/chrome/">Google Chrome</a>.</p>
     <script type="text/javascript">alert('Due to the technologies used for this project, please use Google Chrome')</script>
    -->
-  <div class="container-fluid">
-    <div class="row-fluid">
-      <!-- Top Row -->
-      <div id="top-row" class="row-fluid">
-        <div id="conductor" class="play span1"></div>
-        <div id="system-label-container" class="span3 offset1"></div>
-        <div id="measure-representation" class="span6 offset1"></div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="my-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button id="first-close-button" type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel">Login to Sound Of Fractions</h4>
+        </div>
+        <div class="modal-body">
+          <div>
+            Name: <input id="login-name" type="text" name="login" value="" placeholder="login with your silly name :)">          
+          </div>
+          <div>
+            Password: <input id="pwd" type="password" name="password" value="" placeholder="Password">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button id+"last-close-button" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button id="login-submit" type="button" class="btn btn-primary">Login</button>
+        </div>
       </div>
-      <hr class="light-hr">
+    </div>
+  </div>
+
+
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Top Row -->
+      <div id="top-row" class="row show-grid">
+        <div id="conductor" class="play col-sm-1"></div>
+        <div id="system-label-container" class="col-sm-3 col-sm-offset-1"></div>
+        <div id="measure-representation" class="col-sm-6 col-sm-offset-1"></div>
+      </div>
       <!-- Middle Row -->
-      <div id="middle-row" class="row-fluid">
-        <div id="middle-left-column" class="span12">
+      <div id="middle-row" class="row">
+        <div id="middle-left-column" class="col-sm-12">
           <div id="show-song">
           </div>
           <div id="sof-stage-area">
             <div id="sample-messages"></div>
           </div>
-          <div id="instrument-generator-holder" class="span5">
+          <div id="instrument-generator-holder" class="col-sm-5">
           </div>
         </div>
-      <!-- <div id="middle-right-column" class="span2"></div> -->
+      <!-- <div id="middle-right-column" class="col-sm-2"></div> -->
       </div>
       <!-- Bottom Row -->
-      <div id="bottom-row" class="row-fluid">
+      <div id="bottom-row" class="row">
       </div>
-      <hr>
     </div>
+  </div>
+
+  <hr class="light-hr">
+
   <!-- Footer -->
   <footer>
   </footer>

@@ -1,6 +1,12 @@
 var express = require('express');
+var bodyParser = require('body-parser');
 var app = express();
+
 app.use(express.static(__dirname + '/app'));
+
+// for body parser
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }))
 
 var RSVP = require('rsvp');
 
@@ -212,28 +218,21 @@ function start(options) {
       });
   });
 
-  // app.post('/api/login', function (req, res) {
-  //   if (req.body.hasOwnProperty('user') && req.body.hasOwnProperty('pwHash')) {
-        // }, Person.find({
-        // where: {
-        //   silly_name: req.body.user,
-        //   password_hash: req.body.pwHash
-        // }, 
-    // } else {
-      // res.status(400).send('login requires a user and pwhash');
-    // }
-  app.get('/api/login/:user/:pwHash', function (req, res) {
+  app.post('/api/login', function (req, res) {
+    console.log('Getting a login request with a body of: ');
+    console.log(req.body);
+    if (req.body.hasOwnProperty('uname') && req.body.hasOwnProperty('pwHash')) {
       Person.find({
         where: {
-          silly_name: req.params.user,
-          password_hash: req.params.pwHash
+          silly_name: req.body.uname,
+          password_hash: req.body.pwHash
         },
         include: [
           Song,
           Role,
           ClassSection,
           Setting
-        ],
+        ]
       })
         .then(function(personResults) {
           if (personResults.rowCount === 0) {
@@ -242,12 +241,40 @@ function start(options) {
             res.status(200).send(personResults);
           }
         })
-        .catch(function (error){      
-          res.status(400).send('login requires a proper user and pwhash: ' + error);
-        })
+        .catch(function(error){
+            res.status(400).send('some other error');
+        });
+    } else {
+      res.status(400).send('login requires a uname and pwhash');
+    }
   });
+  // Testing if the login and pwd has is working to get the info from the database
+  // app.get('/api/login/:user/:pwHash', function (req, res) {
+  //     Person.find({
+  //       where: {
+  //         silly_name: req.params.user,
+  //         password_hash: req.params.pwHash
+  //       },
+  //       include: [
+  //         Song,
+  //         Role,
+  //         ClassSection,
+  //         Setting
+  //       ],
+  //     })
+  //       .then(function(personResults) {
+  //         if (personResults.rowCount === 0) {
+  //           res.status(400).send('user not found');
+  //         } else {
+  //           res.status(200).send(personResults);
+  //         }
+  //       })
+  //       .catch(function (error){      
+  //         res.status(400).send('login requires a proper user and pwhash: ' + error);
+  //       })
+  // });
 
-  var server = app.listen(3000, function() {
+  var server = app.listen(80, function() {
       console.log('Listening on port %d', server.address().port);
   });
 }

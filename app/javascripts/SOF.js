@@ -6,8 +6,10 @@ define([
   'bbone',
   'backbone/routers/router',  // Request router.js
   'vendor/d3.min',
-  'vendor/jquery-ui.min'
-], function($, _, Backbone, Router, d3, $){
+  'vendor/jquery-ui.min',
+  'bootstrap',
+  'login'
+], function($, _, Backbone, Router, d3, $, bootstrap, login){
   var initialize = function(options){
     console.log('SOF.js: In Initialize, initializing Router:');
     console.log('SOF.js: options : ', options);
