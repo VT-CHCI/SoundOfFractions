@@ -25,6 +25,10 @@
 }
 */
 
+.new-instrument-btn{
+  margin-left: 10px;
+  margin-right: 10px;
+}
 .nav.navbar-nav.pull-right{
   margin-top: 8px;
 }
