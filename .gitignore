@@ -1,7 +1,6 @@
 *.sublime-project
 *.sublime-workspace
 tmp/
-vendor/
 doc/Poster 2014.jpg
 doc/Poster 2014.tif
 doc/Poster 2014.png

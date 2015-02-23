@@ -1,6 +1,14 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var app = express();
+var RSVP = require('rsvp');
+
+
+var Sequelize = require('sequelize'),
+                          // ('database', 'username', 'password');
+  sequelize = new Sequelize('sof', 'sof', 'sof', {
+  logging: function () {} //this says not to log sff w/ db. not a good idea generally
+});
 
 app.use(express.static(__dirname + '/app'));
 
@@ -8,13 +16,7 @@ app.use(express.static(__dirname + '/app'));
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
 
-var RSVP = require('rsvp');
 
-var Sequelize = require('sequelize'),
-                            // ('database', 'username', 'password');
-  sequelize = new Sequelize('sof', 'sof', 'sof', {
-    logging: function () {} //this says not to log sff w/ db. not a good idea generally
-  });
 
 // For manual queries
 // var connection = mysql.createConnection({
