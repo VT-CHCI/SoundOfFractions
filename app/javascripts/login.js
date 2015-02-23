@@ -20,6 +20,10 @@ $('#login-submit').click(function(){
     .done(function(data){
       console.log('success');
       console.log(data);
+      // dismiss the modal
+      // store the data (locally)
+      // make a cookie,
+        
     })
     .fail(function(data){
       console.error('fail');

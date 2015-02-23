@@ -1,3 +1,4 @@
+/*Trying to figure out the resizing issue with deleteing reps after transitions*/
 .measureRep{
   min-height: 1px;
   min-width: 1px;
@@ -23,6 +24,10 @@
   background-color: red;
 }
 */
+
+.nav.navbar-nav.pull-right{
+  margin-top: 8px;
+}
 .show-grid{
   margin-bottom:15px
 }
