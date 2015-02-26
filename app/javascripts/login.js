@@ -1,5 +1,3 @@
-// http://localhost:3000/api/login/specialorange/912ec803b2ce49e4a541068d495ab570
-
 $('#login-submit').click(function(){
   // TODO Check that the inputs are valid
   var uname = $('#login-name').val();
@@ -29,5 +27,4 @@ $('#login-submit').click(function(){
       console.error('fail');
       console.log(data);
     })
-
 });

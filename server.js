@@ -71,7 +71,7 @@ var Setting = sequelize.define('setting', {
 
 var Song = sequelize.define('song', {
   title: Sequelize.STRING,
-  content: Sequelize.STRING
+  content: Sequelize.TEXT
 });
 
 var AssignmentClass = sequelize.define('assignment_class',{
@@ -191,7 +191,7 @@ function start(options) {
                       where: {              
                         title: 'Song 1',
                         // content: 'JSON'
-                        content: '{"stage":[{"label":"Snare","img":"snare.png","mute":false,"sample":"808_sd.m4a","measures":[{"beats":[{"selected":true},{"selected":true},{"selected":true},{"selected":true}],"label":"0/4","numberOfBeats":0,"divisions":8}],"active":true,"signature":4,"representation":"fraction"},{"label":"Hi Hat","img":"hihat.png","mute":true,"sample":"808_chh.m4a","measures":[{"beats":[{"selected":false},{"selected":false},{"selected":false},{"selected":false}],"label":"0/4","numberOfBeats":0,"divisions":8}],"active":true,"signature":4,"representation":"fraction"},{"label":"Kick Drum","img":"kick.png","mute":true,"sample":"808_bd.m4a","measures":[{"beats":[{"selected":false},{"selected":false},{"selected":false},{"selected":false}],"label":"0/4","numberOfBeats":0,"divisions":8}],"active":true,"signature":4,"representation":"fraction"},{"label":"Synth","img":"synth.png","mute":true,"sample":"ambass.mp3","measures":[{"beats":[{"selected":false},{"selected":false},{"selected":false},{"selected":false}],"label":"0/4","numberOfBeats":0,"divisions":8}],"active":true,"signature":4,"representation":"fraction"}]}'
+                        content: '{"stage":[{"htrack":[{"label":"sn","measure":[{"beats":[{"selected":true},{"selected":true},{"selected":false},{"selected":true}],"measureRepresentations":[{"currentRepresentationType":"audio"},{"currentRepresentationType":"bead"},{"currentRepresentationType":"line"}]}]}]},{"htrack":[{"label":"hh","measure":[{"beats":[{"selected":true},{"selected":true},{"selected":false},{"selected":true},{"selected":true},{"selected":false}],"measureRepresentations":[{"currentRepresentationType":"audio"},{"currentRepresentationType":"bead"}]}]}]}]}'
                       }
                     })
                       .spread(function (newlyCreatedSong, created){
@@ -276,7 +276,8 @@ function start(options) {
   //       })
   // });
 
-  var server = app.listen(80, function() {
+  // var server = app.listen(80, function() {
+  var server = app.listen(3000, function() {
       console.log('Listening on port %d', server.address().port);
   });
 }

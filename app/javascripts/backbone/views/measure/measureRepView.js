@@ -1401,6 +1401,8 @@ define([
           this.measurePassingToBeatFactoryParameters.cX = this.model.get('horzDivPadding') +       15            +(Math.random() * (20) - 10);
           this.measurePassingToBeatFactoryParameters.cY = (this.model.get('circularDivHeight')-this.model.get('vertDivPadding')*3 - this.model.get('beatFactoryR')) + (Math.random() * (30) - 20);
           this.measurePassingToBeatFactoryParameters.colorIndex = index;
+          this.measurePassingToBeatFactoryParameters.circularMeasureCx = this.model.get('circularMeasureCx');
+          this.measurePassingToBeatFactoryParameters.circularMeasureCy = this.model.get('circularMeasureCy');
           var newPieFactory = new BeatFactoryView(this.measurePassingToBeatFactoryParameters);
           this.childFactoryViews.push(newPieFactory);
         } 
@@ -1660,7 +1662,6 @@ define([
     },
     // We have to abstract this out so when we are doing transitions, we can get rid of specific views
     removeSpecificChildren: function(childViews){
-      console.log('Closing specific child views: ', childViews);
       _.each(childViews, function(childView){
         if (childView.close){
           childView.close();
@@ -1709,6 +1710,9 @@ define([
       $('#beat-holder-'+this.model.cid).attr('transform', 'translate(0,0)')
       $('#secondary-beat-holder-'+this.model.cid).attr('transform', 'translate(0,0)')
       $('#tertiary-beat-holder-'+this.model.cid).attr('transform', 'translate(0,0)')
+
+
+
 
       
       var crt = this.model.get('currentRepresentationType') ;

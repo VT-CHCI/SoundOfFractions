@@ -340,7 +340,6 @@ define([
             // .attr('transform', 'translate(0,0)')
       // Draw the bar beats
       } else if (this.parentMeasureRepModel.get('currentRepresentationType') == 'bar'){
-        console.warn(this.beatBBX);
         this.BEAT = this.beatContainer
             .append('rect')
             .attr('id', 'beat'+this.cid)

@@ -141,9 +141,16 @@ define([
           var comma = transformString.indexOf(',');
           var newX = parseInt(transformString.substr(0,comma));
           var newY = parseInt(transformString.substr(comma+1));
+
+
+          var deltaX = newX - µthis.parentMeasureRepModel.get('circularMeasureCx');
+          var deltaY = newY - µthis.parentMeasureRepModel.get('circularMeasureCy');
+
+          var angleInDegrees = Math.atan2(deltaY, deltaX) * 180 / Math.PI;
+          var diffAngle = angleInDegrees - 90;
           newX += d3.event.dx;
           newY += d3.event.dy;
-          d3.select(this).attr('transform', 'translate(' + [ newX, newY ] + ')');
+          d3.select(this).attr('transform', 'translate(' + [ newX, newY ] + ')rotate('+ diffAngle +')');
         }
         
         if ( Math.pow(newX - µthis.parentMeasureRepModel.get('circularMeasureCx'), 2) + Math.pow(newY - µthis.parentMeasureRepModel.get('circularMeasureCy'), 2) <= Math.pow(µthis.parentMeasureRepModel.get('circularMeasureR'),2) ) {
