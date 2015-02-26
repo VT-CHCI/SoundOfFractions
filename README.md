@@ -6,7 +6,7 @@
 
 This project is a web app that uses Javascript, Web Audio API, Node, D3, Backbone, Jquery, Underscore, and lots of rythym! Web Audio is only accessible via a compatible browser (currently (2/15) only Chrome).
 
-For a single page demo click [here](http://compthink.cs.vt.edu).
+For a single page demo click [here](http://compthink.cs.vt.edu) or [here](http://compthink.cs.vt.edu:3000). (Sorry, we sometimes need to switch ports for various reasons).
 
 Previous version were built Using Ruby on Rails.   Check the Master branch for working versions.
 
@@ -28,3 +28,24 @@ To transition a representation, click the delta sign in the upper left of a repr
 ## Future Plans ##
 
 This project is currently a work in progress.  We have additional features we would like to implement as well as lesson plans we want to develop.  We are currently keeping track of code related bugs and feature requests through github.  If you are interested in developing a lesson plan, or have a lesson plan that could utilize this application please let us know!
+
+
+
+Setting up the mysql server:
+
+Once logged into the compthink server, run and enter pwd
+  mysql -u root -p
+Create a user with 
+  CREATE USER 'newuser'@'localhost' IDENTIFIED BY 'password';
+Grant permissions with 
+  GRANT ALL PRIVILEGES ON * . * TO 'newuser'@'localhost';
+Flush the privelegas with:
+  FLUSH PRIVILEGES;
+
+Create a db:
+Once logged into the compthink server, run and enter pwd
+  mysql -u root -p
+Create the db with Or better with second command to prevent erros or possible duplicatges)
+  CREATE DATABASE new_database;
+  CREATE DATABASE IF NOT EXISTS new_database;
+  
