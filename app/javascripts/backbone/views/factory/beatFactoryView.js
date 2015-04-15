@@ -21,6 +21,7 @@ define([
         for (var key in options) {
           this[key] = options[key];
         }
+        // Set to [17] for black, and [18] for white]
         this.beatColor = COLORS.hexColors[options.colorIndex];
       } else {
         console.error('should not be in here!');
@@ -141,7 +142,6 @@ define([
           var comma = transformString.indexOf(',');
           var newX = parseInt(transformString.substr(0,comma));
           var newY = parseInt(transformString.substr(comma+1));
-
 
           var deltaX = newX - µthis.parentMeasureRepModel.get('circularMeasureCx');
           var deltaY = newY - µthis.parentMeasureRepModel.get('circularMeasureCy');

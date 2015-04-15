@@ -28,16 +28,13 @@ define([
         // this.measureBeatHolder = options.parentElHolder;
         this.el = options.singleBeat;
         this.opacity = this.getOpacityNumber(options.opacity);
-        this.beatCenterPosition = {};
-        this.BEAT;
 
-        // TODO Replace these events
         this.listenTo(this.parentMeasureRepView, 'beatTransition', this.transition, this);
       } else {
         console.error('auxBeatView(init): should not be in here!');
       }
 
-      this.listenTo(this.parentMeasureRepModel, 'change:transitions', this.transition, this);
+      // this.listenTo(this.parentMeasureRepModel, 'change:transitions', this.transition, this);
 
       this.render();
     },

@@ -199,7 +199,7 @@ define([
       // for each beat in this measureRep
       µthis = this;
       _.all(this.parentMeasureModel.get('beats').models, function(beatModel, index) {
-        // Make a new beat
+        // Make a new set of beats
         if(!options){
           µthis.computeNormalBeatViewParameters(beatModel, index);
           // create a Beatview
@@ -690,7 +690,7 @@ define([
       // var actualMeasureLinePath = d3.select(this.actualMeasureLinePath)
         .transition()
           .attr('transform', 'translate(0,0)')
-          .duration(this.transitionDuration);
+          .duration(this.model.get('transitionDuration'));
     },
     // move the second set of beats left, ie after bead rolls up to a line
     moveSecondaryLeft: function(options) {
@@ -959,7 +959,7 @@ define([
       setTimeout(function(){
         µthis.removeInfiniteLine();
       }, this.model.get('transitionDuration') + this.model.get('animationIntervalDuration')*2 );
-      // // make the seconadry line rollgin beats
+      // make the seconadry line rolling beats
       setTimeout(function(){
         µthis.makeBeats({secondary:true, type:'lineRolling'});
       }, this.model.get('transitionDuration') + this.model.get('animationIntervalDuration')*3 );
@@ -975,13 +975,13 @@ define([
       // make the secondary pie beats
       setTimeout(function(){
         µthis.makeBeats({tertiary:true, type:'pie'});
-        // $('.lineRolling').fadeOut(µthis.model.get('animationIntervalDuration'));
+        $('.lineRolling').fadeOut(µthis.model.get('animationIntervalDuration'));
       }, this.model.get('transitionDuration')*(this.model.get('transitionNumberOfPoints')) + this.model.get('animationIntervalDuration')*6 );
       // re-render
       setTimeout(function(){
         // rerender everything to get the factory as well
         µthis.updateRender();
-      }, this.transitionDuration*(this.transitionNumberOfPoints) + this.animationIntervalDuration*7 );
+      }, this.model.get('transitionDuration')*(this.model.get('transitionNumberOfPoints')) + this.model.get('animationIntervalDuration')*7 );
     },
     barToLine: function(){
       console.log('rtl');
@@ -1299,7 +1299,8 @@ define([
     makeBarRep: function(){
       // Find the SVG Container
       var svgContainer = d3.select('#svg-'+this.model.cid)
-          .attr('width', this.model.get('linearDivWidth'))
+          // the 15 is because the circle path line may not be exact on the line rep, and its easier just to add a buffer on this bar rep
+          .attr('width', this.model.get('linearDivWidth')+15)
           .attr('height', this.model.get('linearDivHeight'));
       var  secondaryBeatHolder = d3.select('#secondary-beat-holder-'+this.model.cid);
       // Make a Box that holds the smaller beat bars
@@ -1345,7 +1346,6 @@ define([
     },
     render: function(){
       var µthis = this;
-      if(this.model.get('currentRepresentationType') == 'audio') {window.csf = this; window.csd = StateModel;}
 
       // TODO see if this can be removed
       //set the el for JQ-UI Drag
@@ -1360,6 +1360,11 @@ define([
       this.setElement($('#measure-rep-'+this.model.cid));
 
       this.makeMeasureRepParts();
+
+      if(this.model.get('currentRepresentationType') === 'line'){
+        window.csf = this.model;      
+        console.warn(this.model.get('linearLineLength'));
+      }
 
       return this;
     },
@@ -1561,7 +1566,6 @@ define([
       if (e.keyCode == 116) {
         if(!$('.measureRep:nth-child(2)').hasClass('transition-rep')){      
           $('.measureRep:nth-child(2)').addClass('transition-rep')
-          $('.measureRep:nth-child(2)').find('.delta').click();
         } else {
           $('.measureRep:nth-child(2)').removeClass('transition-rep')
         }
@@ -1608,6 +1612,7 @@ define([
       });
     },
     linearResizable: function() {
+      // this.setElement($('#measure-rep-'+this.model.cid));
       // JQ-UI resizable
       this.$el.resizable({ 
         maxHeight: 180, 
@@ -1630,7 +1635,7 @@ define([
         accept: '.stamp',
         drop: function(event, ui) {
           var µthis = this;
-          var newDiv = $('<div class="btn stamped dropped"></div>')
+          var newDiv = $('<div class="dbtn stamped dropped"></div>')
             .text(ui.draggable.text())
             .draggable({
               stop: function(event0, ui0) {
@@ -1660,7 +1665,7 @@ define([
       this.removeSpecificChildren(this.childTertiaryViews);
       this.removeSpecificChildren(this.childFactoryViews);
     },
-    // We have to abstract this out so when we are doing transitions, we can get rid of specific views
+    // We have to abstract this out so when we are doing transitions, we can get rid of specific views as needed
     removeSpecificChildren: function(childViews){
       _.each(childViews, function(childView){
         if (childView.close){
@@ -1689,13 +1694,45 @@ define([
         this.$el.width(this.model.get('circularDivWidth'));
         this.$el.height(this.model.get('circularDivHeight'));
       }
-
+// debugger;
       // make the beats
       this.makeBeats();
       // make a beat factory
       this.makeBeatFactory();
       // update the classes and the data-representation type
       this.updateDivInfo();
+      // remove and replace the div in its place to ensure rendering
+      // this.trigger('removeReplace', 'test');
+
+      $elemDivs = $(this.el)
+      var originals = [];
+      var dimensions = [];
+      $elemDivs.each(function() {
+        // Clone original, keeping event handlers and any children elements
+        dimensions.push({
+          width: $(this).width(),
+          height: $(this).height()
+        });
+// debugger;
+        originals.push($(this).clone(true)); 
+        // Create placeholder for original content
+        $(this).replaceWith('<div id="original_' + originals.length + '"></div>');
+        // $(this).replaceWith('<div id="original_' + originals.length + '" style="width:'+dimensions[dimensions.length].width+'px; height:'+dimensions[dimensions.length].height+'px"></div>');
+      });
+
+      // Replace placeholders with original content
+      // for (var i = 0; i < originals.length; i++) {
+      //  $('#original_' + (i + 1)).replaceWith(originals[i]);
+      // };
+
+      setTimeout(function(){
+        // Replace placeholders with original content
+        for (var i = 0; i < originals.length; i++) {
+         $('#original_' + (i + 1)).replaceWith(originals[i]);
+        };
+      }, 1 );
+
+
     },
     // This is called when rerender a measureRepView and this way it stays in the same order
     updateDivInfo: function(){
@@ -1707,14 +1744,10 @@ define([
       this.$el.droppable('destroy');
       this.$el.attr('class','measureRep measureRep-'+this.model.get('currentRepresentationType'));
       this.$el.attr('data-representation', this.model.get('currentRepresentationType'));
-      $('#beat-holder-'+this.model.cid).attr('transform', 'translate(0,0)')
-      $('#secondary-beat-holder-'+this.model.cid).attr('transform', 'translate(0,0)')
-      $('#tertiary-beat-holder-'+this.model.cid).attr('transform', 'translate(0,0)')
+      // $('#beat-holder-'+this.model.cid).attr('transform', 'translate(0,0)')
+      // $('#secondary-beat-holder-'+this.model.cid).attr('transform', 'translate(0,0)')
+      // $('#tertiary-beat-holder-'+this.model.cid).attr('transform', 'translate(0,0)')
 
-
-
-
-      
       var crt = this.model.get('currentRepresentationType') ;
       if (crt === 'line' || crt === 'bar'){
         this.linearResizable();

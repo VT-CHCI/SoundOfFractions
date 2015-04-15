@@ -43,26 +43,17 @@ define([
       // TODO this is buggy. we need to figure out how to delete properly via backbone views
       this.childViews = [];
 
-      //Dispatch listeners
-      // TODO Replace these events
-      // dispatch.on('signatureChange.event', this.reconfigure, this);
-      // dispatch.on('measureRepresentation.event', this.changeMeasureRepresentation, this);
-      // dispatch.on('unroll.event', this.unroll, this);
-      // dispatch.on('tempoChange.event', this.adjustRadius, this);
-      // dispatch.on('reRenderMeasure.event', this.render, this);
-
       // this bindall method is thor the remainging listeners, per StackOverflow suggestions
       _.bindAll(this, 'render');
       // when we add or delete a meauserRep
       this.listenTo(this.model.get('measureRepresentations'), 'remove', _.bind(this.render, this));  
       this.listenTo(this.model.get('measureRepresentations'), 'add', _.bind(this.addChild, this));  
       this.listenTo(this.model.get('beats'), 'add remove', _.bind(this.reconfigure, this));  
-      // this.listenTo(this.model, 'signatureChange', this.reconfigure);  
       this.model.on('change:scale', _.bind(this.render, this));
 
       // This is for version2, when we add or delete a measure
-      this.parentHTrackModel.get('measures').on('add', _.bind(this.render, this));
-      this.parentHTrackModel.get('measures').on('remove', _.bind(this.render, this));
+      // this.parentHTrackModel.get('measures').on('add', _.bind(this.render, this));
+      // this.parentHTrackModel.get('measures').on('remove', _.bind(this.render, this));
 
       this.render();
 
@@ -111,6 +102,7 @@ define([
       //This part is the hack      This is where we create a measureRepView for each one using the paramaters
       var newView = new MeasureRepView(measureRepViewParameters);
       this.childViews.push(newView);
+      this.listenTo(newView, 'removeReplace', this.removeReplace);  
     },
     makeChildren: function(options){
       // for each rep in the measuresCollection
@@ -185,6 +177,29 @@ define([
         // dispatch.trigger('stopRequest.event', 'off');
         // dispatch.trigger('signatureChange.event', this.parentHTrackModel.get('signature'));
       }
+    },
+    removeReplace: function(msg){
+      // get all the measureReps in this measure
+      // $elemDivs = $(this.el + ' .measureRep')
+      // var originals = [];
+      // $elemDivs.each(function() {
+      //   // Clone original, keeping event handlers and any children elements
+      //   originals.push($(this).clone(true)); 
+      //   // Create placeholder for original content
+      //   $(this).replaceWith('<div id="original_' + originals.length + '"></div>');
+      // });
+
+      // // // Replace placeholders with original content
+      // // for (var i = 0; i < originals.length; i++) {
+      // //  $('#original_' + (i + 1)).replaceWith(originals[i]);
+      // // };
+
+      // setTimeout(function(){
+      //   // Replace placeholders with original content
+      //   for (var i = 0; i < originals.length; i++) {
+      //    $('#original_' + (i + 1)).replaceWith(originals[i]);
+      //   };
+      // }, 1 );
     },
     // This is called when the signature of a measure is changed
     reconfigure: function(options) {

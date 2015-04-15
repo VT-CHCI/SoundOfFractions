@@ -25,6 +25,13 @@
 }
 */
 
+.ui-draggable{
+  z-index: 1; 
+}
+#brand-logo {
+  height: 50px;
+  margin-right: 10px;
+}
 .new-instrument-btn{
   margin-left: 10px;
   margin-right: 10px;
@@ -35,12 +42,12 @@
 .show-grid{
   margin-bottom:15px
 }
-/*for development only
-.navbar .nav > li > a {
-  float: left!important;
-}
 .lineRolling {
   fill: none;
+}
+*//*for development only
+.navbar .nav > li > a {
+  float: left!important;
 }
 .record-button:hover {
   color: green;
@@ -55,11 +62,6 @@
 .hTrack .measure-container .measure:first-of-type .remove-measure{
   display: none;
 }
-/*Until we get multiple measures*/
-.hTrack .measure-container .measure:first-of-type .add-measure{
-  display: none;
-}
-/*Thanks to sammy for this idea*/
 .cs i{
   color: green;
 }
@@ -73,6 +75,12 @@
 }
 .measure .measureRep.measureRep-audio .delta{
   visibility: hidden;
+}
+/*Until we get multiple measures
+/*Thanks to sammy for this idea*/
+/*.hTrack .measure-container .measure:first-of-type .add-measure{*/
+.add-measure {
+  display: none;
 }
 .add-measure {
   color: gray;

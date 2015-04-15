@@ -32,22 +32,17 @@ define([
         this.beatContainer = d3.select(this.beatContainer);
 
         this.opacity = this.getOpacityNumber(options.opacity);
-        this.beatCenterPosition = {};
-        this.BEAT;
+        // this.beatCenterPosition = {};
 
         _.bindAll(this, 'toggleModel');
         this.listenTo(this.model, 'change', _.bind(this.toggleOpacity, this));
 
-        // this.listenTo(this.model, 'destroy', this.close);
-        // this.model.on('destroy', this.close, this);
-
-        // TODO Replace these events
         this.listenTo(this.parentMeasureRepView, 'beatTransition', this.transition, this);
       } else {
         console.error('beatView(init): should not be in here!');
       }
 
-      this.listenTo(this.parentMeasureRepModel, 'change:transitions', this.transition, this);
+      // this.listenTo(this.parentMeasureRepModel, 'change:transitions', this.transition, this);
 
       this.render();
     },
