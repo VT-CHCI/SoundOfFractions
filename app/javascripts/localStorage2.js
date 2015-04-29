@@ -1,5 +1,3 @@
-
-
 // Local storage.js -> See bottom of page for discussion of structure
 //See links below for information on storing objects in HTML5 local storage
 //https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API/Using_the_Web_Storage_API
@@ -11,9 +9,11 @@ define([
   'jquery', 'underscore', 'bbone',
   'backbone/collections/stage'
 ], function($, _, Backbone, StageCollection){
-	return LocalStorage = {
-		initialize: function(){
-			if (this.checkStorageSupport()) {
+	var ls = Backbone.Model.extend( {
+		initialize: function() {
+			//window.petey = StageCollection;
+			var cache;
+			if (checkStorageSupport()) {
 				console.log("Congrats, your browser supports HTML5 local storage!");
 				// If a session does not already exist, initialize data
 				if (!localStorage.getItem('UID')) {	
@@ -32,7 +32,7 @@ define([
 					console.log("Loading previous session");
 					if (!JSON.parse(localStorage.getItem('wasSaved'))) {
 						console.log("Last session has unsaved data");
-						this.logStorage("Logging unsaved storage");
+						clickStorageButton(true);
 					}
 
 					//Clear action lists and login stuff? Or continue with where we left off?
@@ -41,7 +41,27 @@ define([
 			else {
 				console.error("Your browser does not support HTML5 local storage.");
 			}
+
+
+			// Register button functions
+			$("#clear-storage").click(function() {
+				clickClearButton();
+			});
+			$("#log-storage").click(function() {
+				clickLogButton();
+			});
+
+			$("#set-storage").click(function() {
+				clickStorageButton(true);
+			});
+
+			$("#fail-storage").click(function() {
+				clickStorageButton(false);
+			}
 		},
+
+
+		// Functions --------------------------------------------------------------
 
 		//Check browser support for HTML5 local storage
 		checkStorageSupport: function() {
@@ -53,10 +73,13 @@ define([
 			}
 		},
 
-		// Send local storage data to server with the specified log message
-		logStorage: function(message) {
-			console.log("Logging to server");
-			localStorage.setItem('action', message);
+
+		// Send local storage data to server, prompting the server to fail or succeed based on the bool parameter shouldSucceed
+		// -> We'll remove the shouldSucceed param for production, this is just for debugging purposes to simulate failure behavior
+		clickStorageButton: function(shouldSucceed) {
+			console.log("You clicked the set storage button");
+
+			shouldSucceed ? localStorage.setItem('action', 'Clicked set storage button') : localStorage.setItem('action', 'Clicked failed storage button');
 			//localStorage.setItem('currentState', JSON.stringify(window.csf.stageCollection));		// Currently is always undefined...
 		    localStorage.setItem('wasSaved', JSON.stringify(false));
 			console.log(localStorage);
@@ -67,14 +90,15 @@ define([
 		      type: 'POST',
 		      crossDomain: true,	//Delete for production
 		      data: {
-		      	header: "SSSSSSSSSSSSSSSSSSSSS " + this.getTimestamp() + " TTTTTTTTTTTTTTTTTTTTTTTTTTT",
+		      	header: "SSSSSSSSSSSSSSSSSSSSS " + getTimestamp() + " TTTTTTTTTTTTTTTTTTTTTTTTTTT",
+		      	Succeed:			shouldSucceed,
 		        //UID: 				localStorage.getItem('UID'),
-		        Action: 			localStorage.getItem('action'),				// Current interaction
-		        SavedActions: 		localStorage.getItem('savedActions'),		// Previous interactions that have been logged
-		        UnsavedActions: 	localStorage.getItem('unsavedActions'),		// Previous interactions that have not been logged
+		        SavedActions: 		localStorage.getItem('savedActions'),
+		        UnsavedActions: 	localStorage.getItem('unsavedActions'),
+		        Action: 			localStorage.getItem('action'),
 		        //WasSaved: 			localStorage.getItem('wasSaved'),
 		        //CurrentState:		localStorage.getItem('currentState'),
-		      	footer: "EEEEEEEEEEEEEEEEEEEEE " + this.getTimestamp() + " NNNNNNNNNNNNNNNNNNNNNNNNNNN"
+		      	footer: "EEEEEEEEEEEEEEEEEEEEE " + getTimestamp() + " NNNNNNNNNNNNNNNNNNNNNNNNNNN"
 		      }
 		    })
 		      .done(function(data){
@@ -87,23 +111,75 @@ define([
 		        if (localStorage.getItem('unsavedActions') != '') {
 		        	localStorage.setItem('unsavedActions', localStorage.getItem('unsavedActions') + ', ');
 		        }
-		        // Save the action list
 		        localStorage.setItem('savedActions', localStorage.getItem('savedActions') + localStorage.getItem('unsavedActions') + localStorage.getItem('action'));
 		        localStorage.setItem('unsavedActions', '');
 		        localStorage.setItem('action', '');
 		        localStorage.setItem('wasSaved', JSON.stringify(true));
 		      })
 		      .fail(function(data){
-		        console.error('failure on local storage');
+		        console.error('fail on local storage');
 		        console.log(data);
 
 		        if (localStorage.getItem('unsavedActions') != '') {
 		        	localStorage.setItem('unsavedActions', localStorage.getItem('unsavedActions') + ', ');
 		        }
-		        // Log the interaction as unsaved
 		        localStorage.setItem('unsavedActions', localStorage.getItem('unsavedActions') + localStorage.getItem('action'));
 		        localStorage.setItem('action', '');
 		      })
+		},
+		
+		// Clear the action contents of the local storage and have server print a divider line
+		// Mostly just for debugging, to make the server easier to read
+		clickClearButton: function() {
+			console.log("You clicked the clear storage button");
+			localStorage.setItem('savedActions', '');
+			localStorage.setItem('unsavedActions', '');
+			localStorage.setItem('action', '');
+			localStorage.setItem('wasSaved', JSON.stringify(true));
+
+			$.ajax({
+		      url: '/api/clearstorage/',
+		      type: 'POST',
+		      crossDomain: true,	//Delete for production
+		      data: {
+		      	divider: "-----------------------------------------------------------"
+		      }
+			})		
+		      	.done(function(data){
+		      		console.log("Local storage cleared");
+		        	console.log(data);
+		      	})		
+		      	.fail(function(data){
+		      		console.log("Failed to clear local storage");
+		        	console.log(data);
+		      	})
+		},
+		
+		// Prompt the server to print out the current state of the local storage ---> (not the currentstate value, the current state...)
+		// Mostly just for debugging, since after a request to send to server we then change the local storage based on the request result
+		clickLogButton: function() {
+			console.log("You clicked the log storage button");
+
+			$.ajax({
+		      url: '/api/logstorage/',
+		      type: 'POST',
+		      crossDomain: true,	//Delete for production
+		      data: {
+		      	header: "SSSSSSSSSSSSSSSSSSSSS " + getTimestamp() + " TTTTTTTTTTTTTTTTTTTTTTTTTTT",
+		        SavedActions: 		localStorage.getItem('savedActions'),
+		        UnsavedActions: 	localStorage.getItem('unsavedActions'),
+		        Action: 			localStorage.getItem('action'),
+		      	footer: "EEEEEEEEEEEEEEEEEEEEE " + getTimestamp() + " NNNNNNNNNNNNNNNNNNNNNNNNNNN"
+		      }
+			})		
+		      	.done(function(data){
+		      		console.log("Local storage logged");
+		        	console.log(data);
+		      	})		
+		      	.fail(function(data){
+		      		console.log("Failed to log local storage");
+		        	console.log(data);
+		      	})
 		},
 
 		// Return the current date and time as a formatted date object
@@ -111,7 +187,10 @@ define([
 			var now = new Date();
 			return $.datepicker.formatDate('yy/mm/dd', now) + " " + now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds();
 		}
-	};
+	});
+	
+	// This is a singleton
+	return new ls();
 });
 
 

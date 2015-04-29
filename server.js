@@ -298,7 +298,7 @@ function start(options) {
     console.log('Local storage updated: ');
     console.log(req.body);
     //if (req.body.hasOwnProperty('UID')) {            // What exactly should we check to verify the request?
-    if (req.body.hasOwnProperty('Succeed') && req.body.Succeed == 'true') {
+    if (req.body.hasOwnProperty('Action') && req.body.Action != '') {
       var message = {
         text: 'Saved local storage'
       };
@@ -309,6 +309,7 @@ function start(options) {
     }
   });
 
+  /* // For debugging
   app.post('/api/clearstorage', function (req, res) {
     console.log('Local storage cleared: ');
     console.log(req.body);
@@ -326,6 +327,7 @@ function start(options) {
       };
       res.status(200).send(message);
   });
+*/
 
 
   var server = app.listen(80, function() {

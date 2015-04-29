@@ -7,8 +7,9 @@ define([
   'jquery',
   'underscore',
   'bbone',
-  'colors'
-], function($, _, Backbone, COLORS) {
+  'colors',
+  'localStorage'
+], function($, _, Backbone, COLORS, LocalStorage) {
   var RepresentationModel = Backbone.Model.extend({
     defaults: {
       // Constant Variables throughout the representations
@@ -272,6 +273,7 @@ define([
         transitions: this.get('transitions')+1
       });
       this.computeRemainingAttributes({numberOfBeats: numberOfBeats});
+      LocalStorage.logStorage("Transitioned a rep from " + this.get('previousRepresentationType') + " to " + this.get('currentRepresentationType'));
     }
   });
 
