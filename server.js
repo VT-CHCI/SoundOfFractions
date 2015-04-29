@@ -71,7 +71,7 @@ var Setting = sequelize.define('setting', {
 
 var Song = sequelize.define('song', {
   title: Sequelize.STRING,
-  content: Sequelize.STRING
+  content: Sequelize.TEXT
 });
 
 var AssignmentClass = sequelize.define('assignment_class',{
@@ -167,7 +167,7 @@ function start(options) {
                         })
                           .spread(function (newlyCreatedClassSection, created) {
                             // ClassPerson
-                            return newlyCreatedClassSection.addPerson(newlyCreatedPerson)
+                            return newlyCreatedClassSection.addPerson( )
                               .then(function(){
                                 // Assignment
                                 return Assignment.findOrCreate({
@@ -190,8 +190,12 @@ function start(options) {
                     return Song.findOrCreate({
                       where: {              
                         title: 'Song 1',
+                        content: 'Petey'
                         // content: 'JSON'
-                        content: '{"stage":[{"label":"Snare","img":"snare.png","mute":false,"sample":"808_sd.m4a","measures":[{"beats":[{"selected":true},{"selected":true},{"selected":true},{"selected":true}],"label":"0/4","numberOfBeats":0,"divisions":8}],"active":true,"signature":4,"representation":"fraction"},{"label":"Hi Hat","img":"hihat.png","mute":true,"sample":"808_chh.m4a","measures":[{"beats":[{"selected":false},{"selected":false},{"selected":false},{"selected":false}],"label":"0/4","numberOfBeats":0,"divisions":8}],"active":true,"signature":4,"representation":"fraction"},{"label":"Kick Drum","img":"kick.png","mute":true,"sample":"808_bd.m4a","measures":[{"beats":[{"selected":false},{"selected":false},{"selected":false},{"selected":false}],"label":"0/4","numberOfBeats":0,"divisions":8}],"active":true,"signature":4,"representation":"fraction"},{"label":"Synth","img":"synth.png","mute":true,"sample":"ambass.mp3","measures":[{"beats":[{"selected":false},{"selected":false},{"selected":false},{"selected":false}],"label":"0/4","numberOfBeats":0,"divisions":8}],"active":true,"signature":4,"representation":"fraction"}]}'
+                        //content: '{"stage":[{"htrack":[{"label":"sn","measure":[{"beats":[{"selected":true},{"selected":true},{"selected":false},{"selected":true}],"measureRepresentations":[{"currentRepresentationType":"audio"},{"currentRepresentationType":"bead"},{"currentRepresentationType":"line"}]}]}]},{"htrack":[{"label":"hh","measure":[{"beats":[{"selected":true},{"selected":true},{"selected":false},{"selected":true},{"selected":true},{"selected":false}],"measureRepresentations":[{"currentRepresentationType":"audio"},{"currentRepresentationType":"bead"}]}]}]}]}'
+                        //content: '{"stage":[{"htrack":[{"label":"sn","measure":[{"beats":[{"selected":true},{"selected":true},{"selected":false},{"selected":true}],"measureRepresentations":[{"currentRepresentationType":"audio"},{"currentRepresentationType":"bead"},{"currentRepresentationType":"line"}]}]}]},{"htrack":[{"label":"hh","measure":[{"beats":[{"selected":true},{"selected":true},{"selected":false},{"selected":true},{"selected":true},{"selected":false}],"measureRepresentations":[{"currentRepresentationType":"audio"},{"currentRepresentationType":"bead"}]}]}]}]}'
+
+
                       }
                     })
                       .spread(function (newlyCreatedSong, created){
@@ -250,6 +254,20 @@ function start(options) {
       res.status(400).send('login requires a uname and pwhash');
     }
   });
+
+  app.post('/api/loginwithbox', function (req, res) {
+    console.log('Getting a login request with a body of: ');
+    console.log(req.body);
+    if (req.body.hasOwnProperty('uname') && req.body.hasOwnProperty('pwHash') && req.body.hasOwnProperty('chbox')) {
+      var message = {
+        text: 'You checked the box'
+      };
+      res.status(200).send(message);
+    } else {
+      res.status(400).send('login requires a uname and pwhash and checkbox checked');
+    }
+  });
+  
   // Testing if the login and pwd has is working to get the info from the database
   // app.get('/api/login/:user/:pwHash', function (req, res) {
   //     Person.find({
@@ -275,6 +293,40 @@ function start(options) {
   //         res.status(400).send('login requires a proper user and pwhash: ' + error);
   //       })
   // });
+
+  app.post('/api/setstorage', function (req, res) {
+    console.log('Local storage updated: ');
+    console.log(req.body);
+    //if (req.body.hasOwnProperty('UID')) {            // What exactly should we check to verify the request?
+    if (req.body.hasOwnProperty('Succeed') && req.body.Succeed == 'true') {
+      var message = {
+        text: 'Saved local storage'
+      };
+      res.status(200).send(message);
+    } else {
+      //res.status(400).send('bad data for local storage');
+      res.status(400).send(req.body);
+    }
+  });
+
+  app.post('/api/clearstorage', function (req, res) {
+    console.log('Local storage cleared: ');
+    console.log(req.body);
+      var message = {
+        text: 'Cleared local storage'
+      };
+      res.status(200).send(message);
+  });
+
+  app.post('/api/logstorage', function (req, res) {
+    console.log('Local storage current state: ');
+    console.log(req.body);
+      var message = {
+        text: 'Printed local storage'
+      };
+      res.status(200).send(message);
+  });
+
 
   var server = app.listen(80, function() {
       console.log('Listening on port %d', server.address().port);

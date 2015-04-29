@@ -26,6 +26,8 @@ define([
         console.error('Should not be in here: Beat Model Toggle, `selected` is no longer boolean');
       }
       // MAYBE send a log
+
+      // I don't think this function is being used -> see beatView line 392
     }
   });
   return BeatModel;

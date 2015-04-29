@@ -1,10 +1,13 @@
 {
   "name": "SoundOfFractions",
   "version": "0.0.0",
+  "type" : "git",
+  "url" : "git://github.com/VT-CHCI/SoundOfFractions.git",
   "dependencies": {
     "body-parser": "^1.12.0",
     "express": "^4.11.2",
     "mysql": "^2.5.4",
+    "node-cache": "^1.1.0",
     "rsvp": "^3.0.17",
     "sequelize": "^2.0.3"
   }
