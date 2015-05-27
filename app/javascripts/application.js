@@ -24,7 +24,8 @@ require.config({
     'bootstrap': ['//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min','vendor/bootstrap.min'],
     'underscore': 'vendor/underscore-min',
     'bbone': 'vendor/backbone-min',
-    'login': 'login'
+    'login': 'login',
+    'localStorage': 'localStorage'
   },
   shim: {
     'bootstrap':            { deps: ['jquery'] },

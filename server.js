@@ -3,7 +3,6 @@ var bodyParser = require('body-parser');
 var app = express();
 var RSVP = require('rsvp');
 
-
 var Sequelize = require('sequelize'),
                           // ('database', 'username', 'password');
   sequelize = new Sequelize('sof', 'sof', 'sof', {
@@ -15,8 +14,6 @@ app.use(express.static(__dirname + '/app'));
 // for body parser
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
-
-
 
 // For manual queries
 // var connection = mysql.createConnection({
@@ -167,7 +164,7 @@ function start(options) {
                         })
                           .spread(function (newlyCreatedClassSection, created) {
                             // ClassPerson
-                            return newlyCreatedClassSection.addPerson(newlyCreatedPerson)
+                            return newlyCreatedClassSection.addPerson( )
                               .then(function(){
                                 // Assignment
                                 return Assignment.findOrCreate({
@@ -190,8 +187,11 @@ function start(options) {
                     return Song.findOrCreate({
                       where: {              
                         title: 'Song 1',
+                        // content: 'Petey'
                         // content: 'JSON'
-                        content: '{"stage":[{"htrack":[{"label":"sn","measure":[{"beats":[{"selected":true},{"selected":true},{"selected":false},{"selected":true}],"measureRepresentations":[{"currentRepresentationType":"audio"},{"currentRepresentationType":"bead"},{"currentRepresentationType":"line"}]}]}]},{"htrack":[{"label":"hh","measure":[{"beats":[{"selected":true},{"selected":true},{"selected":false},{"selected":true},{"selected":true},{"selected":false}],"measureRepresentations":[{"currentRepresentationType":"audio"},{"currentRepresentationType":"bead"}]}]}]}]}'
+                        content: '{"stage":[{"htrack":[{"label":"sn","measure":[{"beats":[{"selected":true},{"selected":true},{"selected":false},{"selected":true}],"measureRepresentations":[{"currentRepresentationType":"audio"},{"currentRepresentationType":"bead"},{"currentRepresentationType":"line"}]}]}]},{"htrack":[{"label":"hh","measure":[{"beats":[{"selected":true},{"selected":true},{"selected":false},{"selected":true},{"selected":true},{"selected":false}],"measureRepresentations":[{"currentRepresentationType":"audio"},{"currentRepresntationType":"bead"}]}]}]}]}'
+                        // content: '{"stage":[{"htrack":[{"label":"sn","measure":[{"beats":[{"selected":true},{"selected":true},{"selected":false},{"selected":true}],"measureRepresentations":[{"currentRepresentationType":"audio"},{"currentRepresentationType":"bead"},{"currentRepresentationType":"line"}]}]}]},{"htrack":[{"label":"hh","measure":[{"beats":[{"selected":true},{"selected":true},{"selected":false},{"selected":true},{"selected":true},{"selected":false}],"measureRepresentations":[{"currentRepresentationType":"audio"},{"currentRepresentationType":"bead"}]}]}]}]}'
+                        //content: '{"stage":[{"htrack":[{"label":"sn","measure":[{"beats":[{"selected":true},{"selected":true},{"selected":false},{"selected":true}],"measureRepresentations":[{"currentRepresentationType":"audio"},{"currentRepresentationType":"bead"},{"currentRepresentationType":"line"}]}]}]},{"htrack":[{"label":"hh","measure":[{"beats":[{"selected":true},{"selected":true},{"selected":false},{"selected":true},{"selected":true},{"selected":false}],"measureRepresentations":[{"currentRepresentationType":"audio"},{"currentRepresentationType":"bead"}]}]}]}]}'
                       }
                     })
                       .spread(function (newlyCreatedSong, created){
@@ -250,6 +250,34 @@ function start(options) {
       res.status(400).send('login requires a uname and pwhash');
     }
   });
+
+  app.post('/api/loginwithbox', function (req, res) {
+    console.log('Getting a login request with a body of: ');
+    console.log(req.body);
+    if (req.body.hasOwnProperty('uname') && req.body.hasOwnProperty('pwHash') && req.body.hasOwnProperty('chbox')) {
+      var message = {
+        text: 'You checked the box'
+      };
+      res.status(200).send(message);
+    } else {
+      res.status(400).send('login requires a uname and pwhash and checkbox checked');
+    }
+  });
+  
+  app.post('/api/setstorage', function (req, res) {
+    console.log('Local storage updated: ');
+    console.log(req.body);
+    //if (req.body.hasOwnProperty('UID')) {            // What exactly should we check to verify the request?
+    if (req.body.hasOwnProperty('Action') && req.body.Action != '') {
+      var message = {
+        text: 'Saved local storage'
+      };
+      res.status(200).send(message);
+    } else {
+      //res.status(400).send('bad data for local storage');
+      res.status(400).send(req.body);
+    }
+  });
   // Testing if the login and pwd has is working to get the info from the database
   // app.get('/api/login/:user/:pwHash', function (req, res) {
   //     Person.find({
@@ -276,27 +304,29 @@ function start(options) {
   //       })
   // });
 
-  // var server = app.listen(80, function() {
+  /* // For debugging
+  app.post('/api/clearstorage', function (req, res) {
+    console.log('Local storage cleared: ');
+    console.log(req.body);
+      var message = {
+        text: 'Cleared local storage'
+      };
+      res.status(200).send(message);
+  });
+
+  app.post('/api/logstorage', function (req, res) {
+    console.log('Local storage current state: ');
+    console.log(req.body);
+      var message = {
+        text: 'Printed local storage'
+      };
+      res.status(200).send(message);
+  });
+*/
+
   var server = app.listen(3000, function() {
       console.log('Listening on port %d', server.address().port);
   });
 }
 
-
 start();
-
-// models.Tweet.findAll({
-//     include: [
-//       models.User,
-//       {
-//         model: models.Media
-//       }
-//     ],
-
-//   })
-//     .then(function (tweets) {
-//       res.status(200).json(tweets);
-//     })
-//     .catch(function (error) {
-//       res.status(404).send(error);
-//     });

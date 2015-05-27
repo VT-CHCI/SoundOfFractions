@@ -8,8 +8,9 @@ define([
   'vendor/d3.min',
   'vendor/jquery-ui.min',
   'bootstrap',
-  'login'
-], function($, _, Backbone, Router, d3, $, bootstrap, login){
+  'login',
+  'localStorage'
+], function($, _, Backbone, Router, d3, $, bootstrap, login, localStorage){
   var initialize = function(options){
     console.log('SOF.js: In Initialize, initializing Router:');
     if(options) {

@@ -20,14 +20,16 @@ define([
   'backbone/views/button/remainingInstrumentGeneratorView',
   'backbone/views/hTrack/hTrackView',
   'lookupInstrument',
+  'localStorage',
   'text!backbone/templates/hTrack/hTrack.html'
-], function($, _, Backbone, BeatsCollection, MeasuresCollection, RepresentationsCollection, StageCollection, BeatModel, MeasureModel, HTrackModel, RepresentationModel, StateModel, ConductorModel, RemainingInstrumentGeneratorModel, RemainingInstrumentGeneratorView, HTrackView, LookupInstrument, HTrackTemplate){
+], function($, _, Backbone, BeatsCollection, MeasuresCollection, RepresentationsCollection, StageCollection, BeatModel, MeasureModel, HTrackModel, RepresentationModel, StateModel, ConductorModel, RemainingInstrumentGeneratorModel, RemainingInstrumentGeneratorView, HTrackView, LookupInstrument, LocalStorage, HTrackTemplate){
   var StageView = Backbone.View.extend({
     el: $('#sof-stage-area'),
 
     initialize: function(){
       this.stageCollection = StageCollection;
       // set the song's conductor
+      LocalStorage.initialize();
       this.conductor = ConductorModel;
       this.masterAudioContext = new AudioContext();
       
