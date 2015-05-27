@@ -62,7 +62,6 @@ require([
   SOF_Application.initialize();
 
   $(function(){
-    console.log('getting here');
     $('#modal-login, #last-close-button, #first-close-button').on('click', function(){
       $('#my-modal').modal('toggle');
     })

@@ -45,13 +45,21 @@
 .lineRolling {
   fill: none;
 }
-*//*for development only
-.navbar .nav > li > a {
-  float: left!important;
-}
 .record-button:hover {
   color: green;
   font-weight: bold;
+}
+[data-representation="audio"] {
+  position: relative;
+}
+.record-div {
+  position: absolute;
+  bottom: 10px;
+  left: 5px;
+}
+/* for development only
+.navbar .nav > li > a {
+  float: left!important;
 }
 .measure .measureRep:first-of-type .remove-measure-rep{
   visibility: hidden;

@@ -236,6 +236,8 @@ define([
         var deleteXLocation = this.model.get('linearDivWidth') - this.model.get('horzDivPadding');
       } else if (crt === 'bead' || crt === 'pie'){
         var deleteXLocation = this.model.get('circularDivWidth') - this.model.get('horzDivPadding');
+      } else if (crt === 'audio'){
+        var deleteXLocation = this.model.get('circularDivWidth')/3;
       }
 
       var µthis = this;

@@ -12,7 +12,9 @@ define([
 ], function($, _, Backbone, Router, d3, $, bootstrap, login){
   var initialize = function(options){
     console.log('SOF.js: In Initialize, initializing Router:');
-    console.log('SOF.js: options : ', options);
+    if(options) {
+      console.log('SOF.js: options : ', options);
+    }
     // Pass in the Initialized Router module and call it's
     // initialize function, giving it the (options) application.js,
     // which is 'App.songs' from assets.js.erb
