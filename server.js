@@ -3,7 +3,6 @@ var bodyParser = require('body-parser');
 var app = express();
 var RSVP = require('rsvp');
 
-
 var Sequelize = require('sequelize'),
                           // ('database', 'username', 'password');
   sequelize = new Sequelize('sof', 'sof', 'sof', {
@@ -15,8 +14,6 @@ app.use(express.static(__dirname + '/app'));
 // for body parser
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
-
-
 
 // For manual queries
 // var connection = mysql.createConnection({
@@ -330,26 +327,9 @@ function start(options) {
 */
 
 
-  var server = app.listen(80, function() {
+  var server = app.listen(3000, function() {
       console.log('Listening on port %d', server.address().port);
   });
 }
 
-
 start();
-
-// models.Tweet.findAll({
-//     include: [
-//       models.User,
-//       {
-//         model: models.Media
-//       }
-//     ],
-
-//   })
-//     .then(function (tweets) {
-//       res.status(200).json(tweets);
-//     })
-//     .catch(function (error) {
-//       res.status(404).send(error);
-//     });
