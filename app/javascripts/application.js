@@ -25,7 +25,8 @@ require.config({
     'underscore': 'vendor/underscore-min',
     'bbone': 'vendor/backbone-min',
     'login': 'login',
-    'localStorage': 'localStorage'
+    'localStorage': 'localStorage',
+    'crypto-js': 'vendor/crypto-js/crypto-js'
   },
   shim: {
     'bootstrap':            { deps: ['jquery'] },

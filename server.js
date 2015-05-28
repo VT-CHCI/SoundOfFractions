@@ -2,6 +2,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var app = express();
 var RSVP = require('rsvp');
+var CryptoJS = require('crypto-js');
 
 var Sequelize = require('sequelize'),
                           // ('database', 'username', 'password');
@@ -136,12 +137,12 @@ function start(options) {
                 email: 'asdf@asdf.com',
                 sign_in_count:  0,
                 silly_name: 'specialorange',
-                // asdf
+                // password  : 'asdf'
                 password_hash: '912ec803b2ce49e4a541068d495ab570'
               }
             })
               .spread(function (newlyCreatedPerson, created) {
-                // PersonRold
+                // PersonRole
                 return newlyCreatedPerson.setSetting(newlyCreatedSetting)
                   .then(function(){              
                     // Role
@@ -223,11 +224,14 @@ function start(options) {
   app.post('/api/login', function (req, res) {
     console.log('Getting a login request with a body of: ');
     console.log(req.body);
-    if (req.body.hasOwnProperty('uname') && req.body.hasOwnProperty('pwHash')) {
+    if (req.body.hasOwnProperty('uname') && req.body.hasOwnProperty('pwd')) {
+      var pwdHash = CryptoJS.MD5(req.body.pwd); // this is a word grouping of 4 words, and needs to be converted to a string
+      pwdHash = pwdHash.toString(CryptoJS.enc.Hex);
+
       Person.find({
         where: {
           silly_name: req.body.uname,
-          password_hash: req.body.pwHash
+          password_hash: pwdHash
         },
         include: [
           Song,
@@ -244,7 +248,7 @@ function start(options) {
           }
         })
         .catch(function(error){
-            res.status(400).send('some other error');
+            res.status(400).send('some other error, error: ' + error);
         });
     } else {
       res.status(400).send('login requires a uname and pwhash');
@@ -252,7 +256,7 @@ function start(options) {
   });
 
   app.post('/api/loginwithbox', function (req, res) {
-    console.log('Getting a login request with a body of: ');
+    console.log('Getting a login request to checkbox with a body of: ');
     console.log(req.body);
     if (req.body.hasOwnProperty('uname') && req.body.hasOwnProperty('pwHash') && req.body.hasOwnProperty('chbox')) {
       var message = {

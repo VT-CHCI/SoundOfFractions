@@ -1,5 +1,3 @@
-
-
 // Local storage.js -> See bottom of page for discussion of structure
 //See links below for information on storing objects in HTML5 local storage
 //https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API/Using_the_Web_Storage_API

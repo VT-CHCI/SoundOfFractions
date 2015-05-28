@@ -1364,7 +1364,6 @@ define([
       this.makeMeasureRepParts();
 
       if(this.model.get('currentRepresentationType') === 'line'){
-        window.csf = this.model;      
         console.warn(this.model.get('linearLineLength'));
       }
 

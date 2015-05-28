@@ -199,10 +199,13 @@ define([
     },
     // Shortcuts a for 'add'
     manuallPress: function(e) {
-      // a = 97
-      if (e.keyCode == 97) {
-        $('.icon-plus')[1].parentElement.classList.add('cs');
-      } 
+      // For when the login modal is open
+      if(!$('.modal-body')){      
+        // a = 97
+        if (e.keyCode == 97) {
+          $('.icon-plus')[1].parentElement.classList.add('cs');
+        } 
+      }
     },
     // When the conductor tells us to play
     startPlaying: function(maxDurationOfAllInstruments){
