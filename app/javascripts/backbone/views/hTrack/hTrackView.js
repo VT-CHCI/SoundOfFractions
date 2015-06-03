@@ -215,11 +215,11 @@ define([
       var selectedBeats = 0;
       // Find out how many beats are selected
       _.each(measures.models, function(measure) {
-          _.each(measure.get('beats').models, function(beat) {
-            if (beat.get('selected')) {
-              selectedBeats ++;
-            }
-          }, this);
+        _.each(measure.get('beats').models, function(beat) {
+          if (beat.get('selected')) {
+            selectedBeats ++;
+          }
+        }, this);
       }, this);
       var beats = this.model.get('signature');
       // How long this instrument plays for
@@ -399,6 +399,8 @@ define([
       }
       request.send();
     },
+    // END AUDIO PLAYING CODE
+
     removeInstrument: function(e){
       // Add to the Remaining instrument model
       var instrument = $(e.currentTarget).closest('.hTrack').data().state;

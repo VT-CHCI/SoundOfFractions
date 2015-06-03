@@ -7,17 +7,19 @@
 
 define([
   'jquery', 'underscore', 'bbone',
-  'backbone/collections/stage'
-], function($, _, Backbone, StageCollection){
+  'backbone/collections/stage', 'node-uuid'
+], function($, _, Backbone, StageCollection, NodeUUID){
 	return LocalStorage = {
 		initialize: function(){
 			if (this.checkStorageSupport()) {
 				console.log("Congrats, your browser supports HTML5 local storage!");
+				console.warn('LOCAL STORAGE UUID: ', localStorage.getItem('UID'));
 				// If a session does not already exist, initialize data
 				if (!localStorage.getItem('UID')) {	
 					console.log("Starting new session");
 					localStorage.clear();
-					localStorage.setItem('UID', "This is where a uid goes");
+					this.makeUID();
+					console.warn('LOCAL STORAGE UUID: ', localStorage.getItem('UID'));
 					// localStorage.setItem('sillyname', "specialorange");
 					// localStorage.setItem('md5pwhash', "-wq9r8aghfoaiuwnrth9puaw4");
 					localStorage.setItem('savedActions', "");
@@ -53,7 +55,7 @@ define([
 
 		// Send local storage data to server with the specified log message
 		logStorage: function(message) {
-			console.log("Logging to server");
+			console.log("Logging to server, message: ", message);
 			localStorage.setItem('action', message);
 			//localStorage.setItem('currentState', JSON.stringify(window.csf.stageCollection));		// Currently is always undefined...
 		    localStorage.setItem('wasSaved', JSON.stringify(false));
@@ -66,17 +68,18 @@ define([
 		      crossDomain: true,	//Delete for production
 		      data: {
 		      	header: "SSSSSSSSSSSSSSSSSSSSS " + this.getTimestamp() + " TTTTTTTTTTTTTTTTTTTTTTTTTTT",
-		        //UID: 				localStorage.getItem('UID'),
-		        Action: 			localStorage.getItem('action'),				// Current interaction
-		        SavedActions: 		localStorage.getItem('savedActions'),		// Previous interactions that have been logged
-		        UnsavedActions: 	localStorage.getItem('unsavedActions'),		// Previous interactions that have not been logged
+		        UID: 						localStorage.getItem('UID'),
+		        UserLoggedIn: 	localStorage.getItem('UserLoggedIn'),
+		        Action: 				localStorage.getItem('action'),				// Current interaction
+		        SavedActions: 	localStorage.getItem('savedActions'),		// Previous interactions that have been logged
+		        UnsavedActions:	localStorage.getItem('unsavedActions'),		// Previous interactions that have not been logged
 		        //WasSaved: 			localStorage.getItem('wasSaved'),
 		        //CurrentState:		localStorage.getItem('currentState'),
 		      	footer: "EEEEEEEEEEEEEEEEEEEEE " + this.getTimestamp() + " NNNNNNNNNNNNNNNNNNNNNNNNNNN"
 		      }
 		    })
 		      .done(function(data){
-		        console.log('success on local storage');
+		        console.log('Success sending to log message to the server');
 		        console.log(data);
 
 		        if (localStorage.getItem('savedActions') != '') {
@@ -92,7 +95,7 @@ define([
 		        localStorage.setItem('wasSaved', JSON.stringify(true));
 		      })
 		      .fail(function(data){
-		        console.error('failure on local storage');
+		        console.error('FAILURE sending to log message to the server');
 		        console.log(data);
 
 		        if (localStorage.getItem('unsavedActions') != '') {
@@ -103,30 +106,24 @@ define([
 		        localStorage.setItem('action', '');
 		      })
 		},
-
 		// Return the current date and time as a formatted date object
 		getTimestamp: function() {
 			var now = new Date();
-			return $.datepicker.formatDate('yy/mm/dd', now) + " " + now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds();
+			return now;
+			// return $.datepicker.formatDate('yy/mm/dd', now) + " " + now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds();
+		},
+		// Generate a uniqui id
+		makeUID: function() {
+			localStorage.setItem('UID', NodeUUID());
+		},
+		setUserLoggedIn: function(userLoggedIn) {
+			localStorage.setItem('UserLoggedIn', userLoggedIn);
 		}
 	};
 });
 
-
-
-
 // Timestamping
 //http://stackoverflow.com/questions/221294/how-do-you-get-a-timestamp-in-javascript
-
-
-
-
-
-
-
-
-
-
 
 /*
 	We want to save every interaciton the user has to our local storage object so we can see what they do.
@@ -135,30 +132,24 @@ define([
 
 	We want to accomplish this by linking a user's actions with a UID, generated the first time they open the window.
 		-> This UID is separate from their login info, i.e. instead of designating a user, it designates the machine/browser the user is working on.
-			-> Though the user's login name will become associated with a UID by virtue of using the same machine
-				-> The user's login name may be associated with many UID's if they login from multiple machines or clear their cache
+		-> Though the user's login name will become associated with a UID by virtue of using the same machine
+		-> The user's login name may be associated with many UID's if they login from multiple machines or clear their cache
 
 	The Local Storage object should hold the following members:
-		- UID							This identifies the machine/browser as described above.
+		- UID									This identifies the machine/browser as described above.
 		- Login info					This identifies the user. This may or may not be present, depending on whether the user is logged in.
-											Consists of a silly name and a pwd hash
+													Consists of a silly name and a pwd hash
 		- Interaction lists				Each list is a concatenated string that represents the list of interactions the user has made with the application.
-											When a user interacts with the application, the action is set as the Action object and then a request is made to post
-											to the server. If the post is unsuccesful, this Action is then added to the UnsavedActionsList. If it is successful,
-											the UnsavedActionsList and the Action are added to the SavedActionsList.
-											Each time an interaction is received, it is added to this string so that the whole user session is sent every time we log.
-		- Saved on server boolean		This boolean represents whether the data was saved to the server the last time we logged.
-											It may not have been if the server loses connection between the time the user completes an interaction and the request is sent,
-											e.g. if they close the window. We must then check for this every time the user loads the page to see whether the last request
-											made was successful before the session ended. If not* we should have retained information from last session and must resend it
-											before setting up the new local storage object (i.e. clearing the interaction list, checking login info, etc.).
-											To do this, we set the bool to true after every successful post and false at the beginning of every request.
-												*and also check if it has been an hour+ since last interaction as a timeout check?
-												What purpose would this serve since the page gets reset anyway?
+													When a user interacts with the application, the action is set as the Action object and then a request is made to post to the server. If the post is unsuccesful, this Action is then added to the UnsavedActionsList. If it is successful, the UnsavedActionsList and the Action are added to the SavedActionsList.
+													Each time an interaction is received, it is added to this string so that the whole user session is sent every time we log.
+		- Saved on server 		This boolean represents whether the data was saved to the server the last time we logged.
+													It may not have been saved, say if the server loses connection between the time the user completes an interaction and the request is sent,
+													e.g. if they close the window. We must then check for this every time the user loads the page to see whether the last request made was successful before the session ended. If not* we should have retained information from last session and must resend it before setting up the new local storage object (i.e. clearing the interaction list, checking login info, etc.).
+													To do this, we set the bool to true after every successful post and false at the beginning of every request.
+													*and also check if it has been an hour+ since last interaction as a timeout check?
+													What purpose would this serve since the page gets reset anyway?
 		- Stage collection				This allows us to rebuild the application to match this specific state
 */
 
-
-
 // Questions
-//		- How do we treat logging if the user has multiple tabs of the application open?
+//	- How do we treat logging if the user has multiple tabs of the application open?

@@ -12,8 +12,8 @@ define([
   'backbone/models/conductor',
   'backbone/collections/beats',
   'backbone/collections/representations',
-  'localStorage'
-], function(_, Backbone, BeatModel, ConductorModel, BeatsCollection, RepresentationsCollection, LocalStorage) {
+  'logging'
+], function(_, Backbone, BeatModel, ConductorModel, BeatsCollection, RepresentationsCollection, Logging) {
   var MeasureModel = Backbone.Model.extend({
     beats: BeatsCollection,
     measureRepresentations: RepresentationsCollection,
@@ -43,7 +43,7 @@ define([
       console.log('in measure model, a beat is getting added at index: ', newIndex);
       this.get('beats').add(newBeat, {at:newIndex});
       // interaction log
-     LocalStorage.logStorage("Added a beat");
+     Logging.logStorage("Added a beat");
     }
   });
   return MeasureModel;

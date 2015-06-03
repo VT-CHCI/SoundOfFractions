@@ -3,10 +3,15 @@ var bodyParser = require('body-parser');
 var app = express();
 var RSVP = require('rsvp');
 var CryptoJS = require('crypto-js');
+var uuid = require('node-uuid');
+var cookieParser = require('cookie-parser');
+// var cookie = require('cookie');
+
+app.use(cookieParser());
 
 var Sequelize = require('sequelize'),
                           // ('database', 'username', 'password');
-  sequelize = new Sequelize('sof', 'sof', 'sof', {
+  sequelize = new Sequelize('sof',        'sof',      'sof', {
   logging: function () {} //this says not to log sff w/ db. not a good idea generally
 });
 
@@ -14,7 +19,7 @@ app.use(express.static(__dirname + '/app'));
 
 // for body parser
 // parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({ extended: false }));
 
 // For manual queries
 // var connection = mysql.createConnection({
@@ -38,6 +43,10 @@ app.use(bodyParser.urlencoded({ extended: false }))
 //   };
 //   return promise;
 // }
+
+var UID = sequelize.define('uid', {
+  name: Sequelize.STRING
+});
 
 var Assignment = sequelize.define('assignment', {
   name: Sequelize.STRING,
@@ -94,9 +103,12 @@ Person.hasOne(Setting);
 Song.belongsTo(Person);
 Person.hasMany(Song);
 
-function start(options) {
+function start() {
   var promise = new RSVP.Promise(function (resolve, reject) {
     return Person.sync()
+      .then(function() {
+        return UID.sync();
+      })
       .then(function() {
         return Role.sync();
       })
@@ -220,117 +232,175 @@ function start(options) {
         console.error('problem syncing with db in START:', error);
       });
   });
-
-  app.post('/api/login', function (req, res) {
-    console.log('Getting a login request with a body of: ');
-    console.log(req.body);
-    if (req.body.hasOwnProperty('uname') && req.body.hasOwnProperty('pwd')) {
-      var pwdHash = CryptoJS.MD5(req.body.pwd); // this is a word grouping of 4 words, and needs to be converted to a string
-      pwdHash = pwdHash.toString(CryptoJS.enc.Hex);
-
-      Person.find({
-        where: {
-          silly_name: req.body.uname,
-          password_hash: pwdHash
-        },
-        include: [
-          Song,
-          Role,
-          ClassSection,
-          Setting
-        ]
-      })
-        .then(function(personResults) {
-          if (personResults.rowCount === 0) {
-            res.status(400).send('user not found');
-          } else {
-            res.status(200).send(personResults);
-          }
-        })
-        .catch(function(error){
-            res.status(400).send('some other error, error: ' + error);
-        });
-    } else {
-      res.status(400).send('login requires a uname and pwhash');
-    }
-  });
-
-  app.post('/api/loginwithbox', function (req, res) {
-    console.log('Getting a login request to checkbox with a body of: ');
-    console.log(req.body);
-    if (req.body.hasOwnProperty('uname') && req.body.hasOwnProperty('pwHash') && req.body.hasOwnProperty('chbox')) {
-      var message = {
-        text: 'You checked the box'
-      };
-      res.status(200).send(message);
-    } else {
-      res.status(400).send('login requires a uname and pwhash and checkbox checked');
-    }
-  });
-  
-  app.post('/api/setstorage', function (req, res) {
-    console.log('Local storage updated: ');
-    console.log(req.body);
-    //if (req.body.hasOwnProperty('UID')) {            // What exactly should we check to verify the request?
-    if (req.body.hasOwnProperty('Action') && req.body.Action != '') {
-      var message = {
-        text: 'Saved local storage'
-      };
-      res.status(200).send(message);
-    } else {
-      //res.status(400).send('bad data for local storage');
-      res.status(400).send(req.body);
-    }
-  });
-  // Testing if the login and pwd has is working to get the info from the database
-  // app.get('/api/login/:user/:pwHash', function (req, res) {
-  //     Person.find({
-  //       where: {
-  //         silly_name: req.params.user,
-  //         password_hash: req.params.pwHash
-  //       },
-  //       include: [
-  //         Song,
-  //         Role,
-  //         ClassSection,
-  //         Setting
-  //       ],
-  //     })
-  //       .then(function(personResults) {
-  //         if (personResults.rowCount === 0) {
-  //           res.status(400).send('user not found');
-  //         } else {
-  //           res.status(200).send(personResults);
-  //         }
-  //       })
-  //       .catch(function (error){      
-  //         res.status(400).send('login requires a proper user and pwhash: ' + error);
-  //       })
-  // });
-
-  /* // For debugging
-  app.post('/api/clearstorage', function (req, res) {
-    console.log('Local storage cleared: ');
-    console.log(req.body);
-      var message = {
-        text: 'Cleared local storage'
-      };
-      res.status(200).send(message);
-  });
-
-  app.post('/api/logstorage', function (req, res) {
-    console.log('Local storage current state: ');
-    console.log(req.body);
-      var message = {
-        text: 'Printed local storage'
-      };
-      res.status(200).send(message);
-  });
-*/
-
-  var server = app.listen(3000, function() {
-      console.log('Listening on port %d', server.address().port);
-  });
 }
 
-start();
+var server = app.listen(3000, function() {
+  var host = server.address().address;
+  var port = server.address().port;
+
+  console.log('App listening at localhost:%s', port);
+  // console.log('Listening on port %d', server.address().port);
+  start();
+});
+
+app.get('/', function(req, res) {
+  console.log('XXXXXX new listener XXXXXX');
+  console.log(req);
+  console.log(req.cookies);
+  if(req.headers.cookie){ 
+    // This parses the cookies into a usable array
+    var incoming_cookies = cookie.parse(req.headers.cookie);
+
+    Person.find({
+      where: {
+        silly_name: incoming_cookies.silly_name
+      },
+      include: [
+        Song,
+        Role,
+        ClassSection,
+        Setting
+      ]
+    })
+      .then(function(personResults) {
+        if (personResults.rowCount === 0) {
+          console.log('user not found');
+          res.status(400).send('user not found');
+        } else {
+          // if (incoming_cookies.silly_name === req.body.uname) {
+          if (incoming_cookies.silly_name) {
+            res.cookie('UID', req.body.uid, {maxAge: 10800000});
+            res.cookie('silly_name', req.body.uname, {maxAge: 10800000});
+            console.log('Starting with a cookie log in');
+            res.status(200).send(personResults);
+          } else {
+            console.log('Some other problem with cookies');
+            res.cookie('UID', req.body.uid, {maxAge: 10800000});
+            res.cookie('silly_name', req.body.uname, {maxAge: 10800000});
+            res.status(400).send('Some other problem with cookies');
+          }
+          // res.status(200).send(personResults);
+        }
+      })
+      .catch(function(error){
+          res.status(400).send('some other error in starting, error: ' + error);
+      });
+  } else {
+    res.cookie('UID', req.body.uid, {maxAge: 10800000});
+    res.cookie('silly_name', req.body.uname, {maxAge: 10800000});      
+    res.status(200).send('Starting from scratch.');
+  }
+});
+
+app.post('/api/login', function (req, res) {
+  console.log('Getting a login request with a body of: ');
+  console.log(req.body);
+  // var lists = cookieParser.JSONCookies(req.headers.cookie);
+  if (req.body.hasOwnProperty('uname') && req.body.hasOwnProperty('pwd')) {
+    var pwdHash = CryptoJS.MD5(req.body.pwd); // this is a word grouping of 4 words, and needs to be converted to a string
+    pwdHash = pwdHash.toString(CryptoJS.enc.Hex);
+
+    Person.find({
+      where: {
+        silly_name: req.body.uname,
+        password_hash: pwdHash
+      },
+      include: [
+        Song,
+        Role,
+        ClassSection,
+        Setting
+      ]
+    })
+      .then(function(personResults) {
+        if (personResults.rowCount === 0) {
+          res.status(400).send('user not found');
+        } else {
+          console.log('Logging in at \'/api/login\', and sending a cookie.');
+          res.cookie('UID', req.body.uid, {maxAge: 10800000});
+          res.cookie('silly_name', req.body.uname, {maxAge: 10800000});
+          res.status(200).send(personResults);
+          // if they are already logged in from the cookie, reset the cookie date expiration
+        }
+      })
+      .catch(function(error){
+          res.status(400).send('some other error in logging in, error: ' + error);
+      });
+  } else {
+    res.status(400).send('login requires a uname and pwhash');
+  }
+});
+
+app.post('/api/loginwithbox', function (req, res) {
+  console.log('Getting a login request to checkbox with a body of: ');
+  console.log(req.body);
+  if (req.body.hasOwnProperty('uname') && req.body.hasOwnProperty('pwHash') && req.body.hasOwnProperty('chbox')) {
+    var message = {
+      text: 'You checked the box'
+    };
+    res.status(200).send(message);
+  } else {
+    res.status(400).send('login requires a uname and pwhash and checkbox checked');
+  }
+});
+
+app.post('/api/setstorage', function (req, res) {
+  console.log('Logging request at ' + new Date() + ': ');
+  console.log(req.body);
+  //if (req.body.hasOwnProperty('UID')) {            // What exactly should we check to verify the request?
+  if (req.body.hasOwnProperty('Action') && req.body.Action != '') {
+    var message = {
+      text: 'Saved logging on the server',
+      action: req.body.Action
+    };
+    res.status(200).send(message);
+  } else {
+    //res.status(400).send('bad data for local storage');
+    res.status(400).send(req.body);
+  }
+});
+
+// Testing if the login and pwd has is working to get the info from the database
+// app.get('/api/login/:user/:pwHash', function (req, res) {
+//     Person.find({
+//       where: {
+//         silly_name: req.params.user,
+//         password_hash: req.params.pwHash
+//       },
+//       include: [
+//         Song,
+//         Role,
+//         ClassSection,
+//         Setting
+//       ],
+//     })
+//       .then(function(personResults) {
+//         if (personResults.rowCount === 0) {
+//           res.status(400).send('user not found');
+//         } else {
+//           res.status(200).send(personResults);
+//         }
+//       })
+//       .catch(function (error){      
+//         res.status(400).send('login requires a proper user and pwhash: ' + error);
+//       })
+// });
+/* // For debugging
+app.post('/api/clearstorage', function (req, res) {
+  console.log('Local storage cleared: ');
+  console.log(req.body);
+    var message = {
+      text: 'Cleared local storage'
+    };
+    res.status(200).send(message);
+});
+
+app.post('/api/logstorage', function (req, res) {
+  console.log('Local storage current state: ');
+  console.log(req.body);
+    var message = {
+      text: 'Printed local storage'
+    };
+    res.status(200).send(message);
+});
+*/
