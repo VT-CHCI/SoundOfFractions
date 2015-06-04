@@ -1048,7 +1048,6 @@ define([
       }, this.model.get('animationIntervalDuration')*3 ); 
       // re-render
       setTimeout(function(){
-        µthis.parentMeasureModel.increaseTransitionCount();
         // TODO Replace these events
         // dispatch.trigger('reRenderMeasure.event', this);
       }, this.model.get('transitionDuration')*(this.model.get('transitionNumberOfPoints')) + this.model.get('animationIntervalDuration')*4 );      
@@ -1088,7 +1087,6 @@ define([
       }, this.model.get('transitionDuration')*(this.model.get('transitionNumberOfPoints')) + this.model.get('animationIntervalDuration')*4 );
       //re-render
       setTimeout(function(){
-        µthis.parentMeasureModel.increaseTransitionCount();
         // TODO Replace these events
         // dispatch.trigger('reRenderMeasure.event', this);
       }, this.model.get('transitionDuration')*(this.model.get('transitionNumberOfPoints')) + this.model.get('animationIntervalDuration')*5 );     
@@ -1507,6 +1505,10 @@ define([
       console.log('in transition func() of measureRepView');
       var PRT = this.model.get('previousRepresentationType');
       var CRT = this.model.get('currentRepresentationType');
+      // Increase the count for this particular representation
+      this.model.set('transitionNumber', this.model.get('transitionNumber') + 1 );
+      // Increase the count for the parent measure model
+      this.parentMeasureModel.increaseTransitionCount();
       console.log(PRT, CRT);
       if (PRT == 'audio'){
         if (CRT == 'audio'){

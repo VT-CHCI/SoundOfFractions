@@ -13,29 +13,19 @@ define([
 		initialize: function(){
 			if (this.checkStorageSupport()) {
 				console.log("Congrats, your browser supports HTML5 local storage!");
-				console.warn('LOCAL STORAGE UUID: ', localStorage.getItem('UID'));
-				// If a session does not already exist, initialize data
-				if (!localStorage.getItem('UID')) {	
-					console.log("Starting new session");
-					localStorage.clear();
-					this.makeUID();
-					console.warn('LOCAL STORAGE UUID: ', localStorage.getItem('UID'));
-					// localStorage.setItem('sillyname', "specialorange");
-					// localStorage.setItem('md5pwhash', "-wq9r8aghfoaiuwnrth9puaw4");
-					localStorage.setItem('savedActions', "");
-					localStorage.setItem('unsavedActions', "");
-					localStorage.setItem('action', "");
-					localStorage.setItem('wasSaved', JSON.stringify(true));
-				}
-				else {
+				// If a session does not already exist, initialize localStorage
+				if (!localStorage.getItem('UID')) {
+					this.startNewLocalStorageSession();
+				// If a UID does exist
+				} else {
+					console.warn('LOCAL STORAGE UID: ', localStorage.getItem('UID'));
 					// Check wasSaved and log info if false.
-					console.log("Loading previous session");
 					if (!JSON.parse(localStorage.getItem('wasSaved'))) {
 						console.log("Last session has unsaved data");
 						this.logStorage("Logging unsaved storage");
 					}
-
-					//Clear action lists and login stuff? Or continue with where we left off?
+					//Clear Local Storage
+					this.clearLocalStorageSession();
 				}
 			}
 			else {
@@ -57,8 +47,9 @@ define([
 		logStorage: function(message) {
 			console.log("Logging to server, message: ", message);
 			localStorage.setItem('action', message);
-			//localStorage.setItem('currentState', JSON.stringify(window.csf.stageCollection));		// Currently is always undefined...
-		    localStorage.setItem('wasSaved', JSON.stringify(false));
+			localStorage.setItem('currentState', this.makeReadableStageCollectionJSON());
+		  // Since we are sending another log, we must reset the wasSaved to be false incase something breaks
+		  localStorage.setItem('wasSaved', JSON.stringify(false));
 			console.log(localStorage);
 
 			//Attempt to send localStorage to the server
@@ -72,9 +63,9 @@ define([
 		        UserLoggedIn: 	localStorage.getItem('UserLoggedIn'),
 		        Action: 				localStorage.getItem('action'),				// Current interaction
 		        SavedActions: 	localStorage.getItem('savedActions'),		// Previous interactions that have been logged
-		        UnsavedActions:	localStorage.getItem('unsavedActions'),		// Previous interactions that have not been logged
+		        UnsavedActions:	localStorage.getItem('unsavedActions'),		// Previous unlogged interactions
+		        CurrentStageCollection:	localStorage.getItem('currentState'),
 		        //WasSaved: 			localStorage.getItem('wasSaved'),
-		        //CurrentState:		localStorage.getItem('currentState'),
 		      	footer: "EEEEEEEEEEEEEEEEEEEEE " + this.getTimestamp() + " NNNNNNNNNNNNNNNNNNNNNNNNNNN"
 		      }
 		    })
@@ -114,10 +105,83 @@ define([
 		},
 		// Generate a uniqui id
 		makeUID: function() {
-			localStorage.setItem('UID', NodeUUID());
+			var newID = NodeUUID();
+			localStorage.setItem('UID', newID);
+			console.warn('LOCAL STORAGE UID: ', localStorage.getItem('UID'));
 		},
 		setUserLoggedIn: function(userLoggedIn) {
 			localStorage.setItem('UserLoggedIn', userLoggedIn);
+		},
+		startNewLocalStorageSession: function(){
+			console.log("Starting new LocalStorage");
+			// Just as a failsafe
+			localStorage.clear();
+			this.makeUID();
+			localStorage.setItem('savedActions', "");
+			localStorage.setItem('unsavedActions', "");
+			localStorage.setItem('action', "");
+			localStorage.setItem('wasSaved', JSON.stringify(true));
+		},
+		clearLocalStorageSession: function(){
+			console.log("Clearing LocalStorage");
+			var oldUID = localStorage.getItem("UID");
+			localStorage.clear();
+			localStorage.setItem('UID', oldUID);
+			localStorage.setItem('savedActions', "");
+			localStorage.setItem('unsavedActions', "");
+			localStorage.setItem('action', "");
+			localStorage.setItem('wasSaved', JSON.stringify(true));
+		},
+		sendUnsavedLocalStorage: function() {
+			if (!JSON.parse(localStorage.getItem('wasSaved'))) {
+				console.log("Last session has unsaved data");
+				this.logStorage("Logging unsaved storage");
+			}
+		},
+		makeReadableStageCollectionJSON: function(){
+			var ComputedStageCollection = {};
+				var instruments = [];
+				// Get each of the stage instruments
+				_.each(StageCollection.models, function(instrumentModel){
+					var instrument = {};
+					instrument.label 		 = instrumentModel.get('label');
+					instrument.active 	 = instrumentModel.get('active');
+					instrument.signature = instrumentModel.get('signature');
+					instrument.tempo 		 = instrumentModel.get('tempo');
+					// For each of the measures
+					instrument.measures = [];
+						// debugger;
+					_.each(instrumentModel.get('measures').models, function(measureModel){
+						var measure = {};
+						measure.allMeasureChildRepresentationsTransitioned  = measureModel.get('allMeasureChildRepresentationsTransitioned');
+						// make a beats array
+						measure.beatsArray = [];
+							_.each(measureModel.get('beats').model, function(beat){
+								if(beat.selected){
+									measure.beatsArray.push('ON');
+								} else {
+									measure.beatsArray.push('OFF');
+								}
+							}, this)
+						measure.numberOfBeats = measure.beatsArray.length;
+						// Make a rep array
+						measure.measureRepresentations = [];
+							_.each(measureModel.get('measureRepresentations').models, function(measureRep){
+								var mR = {};
+								mR.currentRepresentationType = measureRep.get('currentRepresentationType');
+								mR.transitions = measureRep.get('transitions');
+								measure.measureRepresentations.push(mR);
+							}, this)
+						
+						instrument.measures.push(measure);
+					}, this)
+
+					// add the instrument to the Stage collection
+					instruments.push(instrument);
+				}, this)
+				ComputedStageCollection.usedInstruments = instruments;
+				ComputedStageCollection.unusedInstrumentsCount = 3 - instruments.length;
+			return JSON.stringify(ComputedStageCollection);
 		}
 	};
 });

@@ -17,7 +17,7 @@ define([
   var MeasureModel = Backbone.Model.extend({
     beats: BeatsCollection,
     measureRepresentations: RepresentationsCollection,
-    transitioned: 0,
+    allMeasureChildRepresentationsTransitioned: 0,
     // defaults: {
     //   originalScale: 1,
     //   previousScale: 1,
@@ -32,7 +32,7 @@ define([
       }
     },
     increaseTransitionCount: function(){
-      this.set({transitioned : this.transitioned+1});
+      this.set({allMeasureChildRepresentationsTransitioned : this.allMeasureChildRepresentationsTransitioned+1});
     },
     // setCurrentScale: function(newScale){
     //   this.set({previousScale : this.get('currentScale')});

@@ -7,6 +7,8 @@ var uuid = require('node-uuid');
 var cookieParser = require('cookie-parser');
 // var cookie = require('cookie');
 
+app.use(express.static(__dirname + '/app'));
+
 app.use(cookieParser());
 
 var Sequelize = require('sequelize'),
@@ -15,11 +17,12 @@ var Sequelize = require('sequelize'),
   logging: function () {} //this says not to log sff w/ db. not a good idea generally
 });
 
-app.use(express.static(__dirname + '/app'));
 
 // for body parser
 // parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
+// app.use(bodyParser.urlencoded({ extended: false }));
 
 // For manual queries
 // var connection = mysql.createConnection({
@@ -245,15 +248,13 @@ var server = app.listen(3000, function() {
 
 app.get('/', function(req, res) {
   console.log('XXXXXX new listener XXXXXX');
-  console.log(req);
   console.log(req.cookies);
   if(req.headers.cookie){ 
     // This parses the cookies into a usable array
-    var incoming_cookies = cookie.parse(req.headers.cookie);
 
     Person.find({
       where: {
-        silly_name: incoming_cookies.silly_name
+        silly_name: req.cookies.silly_name
       },
       include: [
         Song,
@@ -263,12 +264,12 @@ app.get('/', function(req, res) {
       ]
     })
       .then(function(personResults) {
-        if (personResults.rowCount === 0) {
+        if (personResults && personResults.rowCount === 0) {
           console.log('user not found');
           res.status(400).send('user not found');
         } else {
           // if (incoming_cookies.silly_name === req.body.uname) {
-          if (incoming_cookies.silly_name) {
+          if (req.cookies.silly_name) {
             res.cookie('UID', req.body.uid, {maxAge: 10800000});
             res.cookie('silly_name', req.body.uname, {maxAge: 10800000});
             console.log('Starting with a cookie log in');

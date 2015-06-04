@@ -12,6 +12,7 @@ define([
 ], function($, _, Backbone, COLORS, Logging) {
   var RepresentationModel = Backbone.Model.extend({
     defaults: {
+        transitionNumber: 0,
       // Constant Variables throughout the representations
       // General
         originalScale: 1,
@@ -77,7 +78,6 @@ define([
       this.computeRemainingAttributes();
     },
     computeRemainingAttributes: function(){
-      console.error();
       // TODO number of beats....
       this.calculateNumberOfPoints(this.get('sisterBeatsCollection').length);
       this.set({
