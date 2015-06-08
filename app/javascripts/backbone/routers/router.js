@@ -1,4 +1,4 @@
-console.log('Backbone Router started');
+console.info('Backbone Router started');
 // Filename: router.js
 /*
   This is the main router for the backbone framework.
@@ -34,7 +34,7 @@ define([
       '.*'        : 'newSong'
     },
     newSong: function(){
-      console.log('BB routes => new : newSong');
+      console.info('BB routes => new : newSong');
       // var view = new songsViewNew({collection : this.songs});
 
       // top side
@@ -47,16 +47,16 @@ define([
 
       // bottom
       // RemainingInstrumentGeneratorView.render();
-      console.log('BB routes: newSong Finished');
+      console.info('BB routes: newSong Finished');
     },
 
     index: function(){
-      console.log('BB Router => index : index');
+      console.info('BB Router => index : index');
       var view = new songsViewIndex({collection : this.songs});
     },
 
     show: function(id){
-      console.log('BB Router => show : show');
+      console.info('BB Router => show : show');
       // var currentIDSong = window.router.songs.get(id);
       // console.warn(currentIDSong);
       // //left side
@@ -67,7 +67,7 @@ define([
     },
 
     edit: function(id){
-      console.log('BB Router edit');
+      console.info('BB Router edit');
     },
 
   });
@@ -78,7 +78,7 @@ define([
   // (options) == 'assest.js.erb' => App.songs{ songs : <%= Song.all.to_json.html_safe %> }
   // (options) == All the songs in the DB
   var initialize = function(options){
-    console.log("BB Router => Initializing...");
+    console.info("BB Router => Initializing...");
     // var filteredOptions = [];
 
     // console.log('filtering');
@@ -128,7 +128,7 @@ define([
     // It has to be at the bottom
     // TODO : Cannot call Backbone.history.start({pushState: true}) because it will break
     Backbone.history.start({root: '/songs/#new'});
-    console.log('BB Router => Initialized');
+    console.info('BB Router => Initialized');
   };
 
   return {

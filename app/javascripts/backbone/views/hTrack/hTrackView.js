@@ -30,7 +30,7 @@ define([
       being instantiated.
     */
     initialize: function(options){
-      console.log('hTrackView init options: ', options);
+      console.info('hTrackView init options: ', options);
       // Many variables get passed in.  We attach those variable with this function, so for each variable:
       // this.something = options.something; 
       if (options) {
@@ -75,7 +75,7 @@ define([
       this.muteGainNodeList = this.masterAudioContext.createGain();
       if (options.type =='sn'){
         // Trying to reduce the snare instrument's volume
-        console.log('adjusted the snare gain to .2');
+        console.info('adjusted the snare gain to .2');
         this.gainNode.gain.value = 1;
       }
 
@@ -108,7 +108,7 @@ define([
       a new MeasureView which gets rendered instead.
     */
     render: function(options){
-      console.log('hTrackView render start');
+      console.info('hTrackView render start');
 
       var compiledTemplate = _.template(HTrackTemplate);
       $('#instruments-collection').append( compiledTemplate({model: this.model}) );
@@ -152,10 +152,10 @@ define([
       }
     },
     changeInstrument: function(e){
-      console.log('selector changed: ', e);
+      console.info('selector changed: ', e);
       var oldInstrument = $(this.el).closest('.hTrack-container').data().state;
       var newInstrument = $(this.el).find(':selected').val();
-      console.log('oI: '+ oldInstrument + ' | nI: '+ newInstrument);
+      console.info('oI: '+ oldInstrument + ' | nI: '+ newInstrument);
     },
 
     /*
@@ -208,7 +208,7 @@ define([
     },
     // When the conductor tells us to play
     startPlaying: function(maxDurationOfAllInstruments){
-      console.log('hTrack startPlaying');
+      console.info('hTrack startPlaying');
       var tempo = this.model.get('tempo');
       var measures = this.model.get('measures');
       var selectedBeats = 0;
@@ -226,7 +226,7 @@ define([
 
       // we start the playback of audio
       //and trigger an event to start the animation.
-      console.log(this.model.get('label'), ' music: on');
+      console.info(this.model.get('label'), ' music: on');
       console.warn('Tempo:', tempo, '|', 'Measures:', measures.length, '|', selectedBeats, 'beats selected of ', beats, '|', 'instrument duration:', currentInstrumentDuration);
 
       // Play the sound and the animation
@@ -247,7 +247,7 @@ define([
     },
     // When the conductor tells us to stop
     stopPlaying: function(){
-      console.log('hTrack stopPlaying');
+      console.info('hTrack stopPlaying');
       //we set the masterGainNode to zero, which mutes all remaining output.
       this.masterGainNode.gain.value = 0;
       //This stops the Audio interval from recurring
@@ -370,7 +370,7 @@ define([
     // We can load the audio using the Webkit audio
     loadAudio: function(url, bufferList){
       var µthis = this;
-      console.log("Loading...", url);
+      console.info("Loading...", url);
       // Load buffer asynchronously
       var request = new XMLHttpRequest();
       request.open("GET", url, true);
@@ -403,7 +403,7 @@ define([
     removeInstrument: function(e){
       // Add to the Remaining instrument model
       var instrument = $(e.currentTarget).closest('.hTrack').data().state;
-      console.log(instrument);
+      console.info('Removing instrument: ' + instrument);
       RemainingInstrumentGeneratorModel.addInstrument({type:instrument});
       this.close();
 
@@ -423,7 +423,7 @@ define([
       // this.unbind();
 
       _.each(this.childViews, function(childView){
-        console.log('in hTrackView close function, CLOSING CHILDREN');
+        console.info('in hTrackView close function, CLOSING CHILDREN');
         if (childView.close){
           childView.close();
         }

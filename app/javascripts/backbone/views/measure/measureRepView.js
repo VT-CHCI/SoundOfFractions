@@ -491,7 +491,6 @@ define([
     // Making a targeted 'Bead' beat animate
     //dur is half of the beat length
     beadAnimate: function(target, dur) {
-
       var target = d3.select(target);
       var originalCX = parseInt(target.attr('cx'));
       var newCX = originalCX + 10;
@@ -1704,35 +1703,36 @@ define([
       // remove and replace the div in its place to ensure rendering
       // this.trigger('removeReplace', 'test');
 
-      $elemDivs = $(this.el)
-      var originals = [];
-      var dimensions = [];
-      $elemDivs.each(function() {
-        // Clone original, keeping event handlers and any children elements
-        dimensions.push({
-          width: $(this).width(),
-          height: $(this).height()
-        });
-// debugger;
-        originals.push($(this).clone(true)); 
-        // Create placeholder for original content
-        $(this).replaceWith('<div id="original_' + originals.length + '"></div>');
-        // $(this).replaceWith('<div id="original_' + originals.length + '" style="width:'+dimensions[dimensions.length].width+'px; height:'+dimensions[dimensions.length].height+'px"></div>');
-      });
+      // Not sure we need this next block
+        // {
+//       $elemDivs = $(this.el)
+//       var originals = [];
+//       var dimensions = [];
+//       $elemDivs.each(function() {
+//         // Clone original, keeping event handlers and any children elements
+//         dimensions.push({
+//           width: $(this).width(),
+//           height: $(this).height()
+//         });
+// // debugger;
+//         originals.push($(this).clone(true)); 
+//         // Create placeholder for original content
+//         $(this).replaceWith('<div id="original_' + originals.length + '"></div>');
+//         // $(this).replaceWith('<div id="original_' + originals.length + '" style="width:'+dimensions[dimensions.length].width+'px; height:'+dimensions[dimensions.length].height+'px"></div>');
+//       });
 
-      // Replace placeholders with original content
-      // for (var i = 0; i < originals.length; i++) {
-      //  $('#original_' + (i + 1)).replaceWith(originals[i]);
-      // };
+//       // Replace placeholders with original content
+//       // for (var i = 0; i < originals.length; i++) {
+//       //  $('#original_' + (i + 1)).replaceWith(originals[i]);
+//       // };
 
-      setTimeout(function(){
-        // Replace placeholders with original content
-        for (var i = 0; i < originals.length; i++) {
-         $('#original_' + (i + 1)).replaceWith(originals[i]);
-        };
-      }, 1 );
-
-
+//       setTimeout(function(){
+//         // Replace placeholders with original content
+//         for (var i = 0; i < originals.length; i++) {
+//          $('#original_' + (i + 1)).replaceWith(originals[i]);
+//         };
+//       }, 1 );
+        // }
     },
     // This is called when rerender a measureRepView and this way it stays in the same order
     updateDivInfo: function(){

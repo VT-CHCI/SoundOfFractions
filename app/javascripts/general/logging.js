@@ -12,7 +12,7 @@ define([
 	return LocalStorage = {
 		initialize: function(){
 			if (this.checkStorageSupport()) {
-				console.log("Congrats, your browser supports HTML5 local storage!");
+				console.info("Congrats, your browser supports HTML5 local storage!");
 				// If a session does not already exist, initialize localStorage
 				if (!localStorage.getItem('UID')) {
 					this.startNewLocalStorageSession();
@@ -21,7 +21,7 @@ define([
 					console.warn('LOCAL STORAGE UID: ', localStorage.getItem('UID'));
 					// Check wasSaved and log info if false.
 					if (!JSON.parse(localStorage.getItem('wasSaved'))) {
-						console.log("Last session has unsaved data");
+						console.info("Last session has unsaved data");
 						this.logStorage("Logging unsaved storage");
 					}
 					//Clear Local Storage
@@ -123,7 +123,7 @@ define([
 			localStorage.setItem('wasSaved', JSON.stringify(true));
 		},
 		clearLocalStorageSession: function(){
-			console.log("Clearing LocalStorage");
+			console.info("Clearing LocalStorage");
 			var oldUID = localStorage.getItem("UID");
 			localStorage.clear();
 			localStorage.setItem('UID', oldUID);
@@ -134,7 +134,7 @@ define([
 		},
 		sendUnsavedLocalStorage: function() {
 			if (!JSON.parse(localStorage.getItem('wasSaved'))) {
-				console.log("Last session has unsaved data");
+				console.warn("Last session has unsaved data");
 				this.logStorage("Logging unsaved storage");
 			}
 		},

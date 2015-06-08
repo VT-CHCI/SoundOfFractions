@@ -269,7 +269,6 @@ app.post('/api/login', function (req, res) {
       ]
     })
       .then(function(personResults) {
-        console.log('Number of songs: ' + personResults.songs.length);
         if (personResults.rowCount === 0) {
           res.status(400).send('user not found');
         } else {
@@ -288,6 +287,39 @@ app.post('/api/login', function (req, res) {
       });
   } else {
     res.status(400).send('login requires a uname and pwhash');
+  }
+});
+
+app.post('/api/getSongs', function (req, res) {
+  if (req.body.hasOwnProperty('uname')) {
+    Person.find({
+      where: {
+        silly_name: req.body.uname
+      },
+      include: [
+        Song,
+        Role,
+        ClassSection,
+        Setting
+      ]
+    })
+      .then(function(personResults) {
+        if (personResults.rowCount === 0) {
+          res.status(400).send('user not found');
+        } else {
+          // console.log(personResults.songs);
+          console.log('Getting songs at \'/api/getSongs\', and sending a response.');
+          res.status(200).send(personResults);
+          // if they are already logged in from the cookie, reset the cookie date expiration
+        }
+      })
+      .catch(function(error){
+        console.log('Some other error in getting songs in, error: ');
+        console.log(error);
+        res.status(400).send(error);
+      });
+  } else {
+    res.status(400).send('getting songs requires a uname');
   }
 });
 

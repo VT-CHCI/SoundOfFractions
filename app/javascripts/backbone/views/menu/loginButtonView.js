@@ -28,13 +28,13 @@ define([
       "click #logout-button" : "logOut"
     },
     initialize: function() {
-      console.log('LoginView initing...')
+      console.info('LoginView initing...')
       // If the cookie is not empty
       if (!$.isEmptyObject(JQCookie.get())){
         // And has a silly_name
-        if($.cookie('silly_name')){
+        if(JQCookie.get('silly_name')){
           console.info('We got a cookie with a silly name!');
-          this.model = new User({silly_name: $.cookie('silly_name')});
+          this.model = new User({silly_name: JQCookie.get('silly_name')});
           this.listenTo(this.model, 'change:loggedIn', this.render);
         } else {
           console.error('There is no silly_name on the cookie');
@@ -44,7 +44,7 @@ define([
         this.listenTo(this.model, 'change:loggedIn', this.render);
       }
 
-
+      window.csf = this.model;
       this.render();
     },
     modal: function(){
@@ -106,7 +106,7 @@ define([
     logOut: function() {
       var µthis = this;
       console.log('starting to logout');
-      var uname = $.cookie('silly_name');
+      var uname = JQCookie.get('silly_name');
 
       $.ajax({
         url: '/api/logout/',
@@ -134,10 +134,10 @@ define([
         })
     },
     render: function() {
-      console.log('LoginView render');
+      console.info('LoginView render');
       if(this.model.get('loggedIn')){
         $(this.el).html(logoutTemplate);
-        // var SLV = new SongListView(this.model);
+        SongListView.setModel(this.model);
       } else {
         $(this.el).html(loginTemplate);
       }

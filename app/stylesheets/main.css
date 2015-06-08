@@ -3,6 +3,9 @@
   min-height: 1px;
   min-width: 1px;
 }
+.login, .song-list {
+  display: inline-block;
+}
 /*.measureRep-line{
   height: 200px;
   width: 200px;

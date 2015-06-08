@@ -52,7 +52,7 @@ define([
       a log message is sent reflecting the representation change.
     */
     addInstrumentToCompositionAreaByButton: function(e) {
-      console.log('in remainingInstrumentGeneratorView addInstrumentToCompositionArea()');
+      console.info('in remainingInstrumentGeneratorView addInstrumentToCompositionArea()');
       // Instrument type   'sn'|'hh'|'kd'
       var type = $(e.currentTarget).attr('data-type');
       // this.model.addInstrument({type:type});
@@ -69,7 +69,7 @@ define([
       this.render();
     },
     render: function() {
-      console.log('remainingInstrumentGeneratorView RENDER ()')
+      console.info('remainingInstrumentGeneratorView RENDER ()')
 
       var uI = this.model.get('unusedInstruments');
       //compiling our template.

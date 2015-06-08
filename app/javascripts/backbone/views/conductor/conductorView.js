@@ -21,7 +21,7 @@ define([
     },
 
     initialize: function() {
-      console.log('ConductorView initing...')
+      console.info('ConductorView initing...')
       this.conductorModel = ConductorModel;
 
       //registering our stopPlay() method on stopRequest events.
@@ -49,7 +49,7 @@ define([
       if(!this.conductorModel.get('isPlaying')) {
         
         this.conductorModel.play();
-        console.log('now playing conductor view');
+        console.info('now playing conductor view');
 
         var compiledTemplate = _.template( conductorStopTemplate );
         $(this.el).html( compiledTemplate() );
@@ -63,7 +63,7 @@ define([
         var compiledTemplate = _.template( conductorPlayTemplate );
         $(this.el).html( compiledTemplate );
 
-        console.log('now stopped conductor view');
+        console.info('now stopped conductor view');
 
         log.sendLog([[3, "Stop playing music"]]);
       }
@@ -79,13 +79,13 @@ define([
       } 
     },
     render: function() {
-      console.log('ConductorView render');
+      console.info('ConductorView render');
       $(this.el).html(conductorPlayTemplate);
       //$(this.el).draggable({ axis: "y", containment: "#body-container"/*"#middle-right-column"*/ });
       return this;
     },
     close: function(){
-      console.log('closing Conductor View');
+      console.info('closing Conductor View');
       this.remove();
       this.unbind();
     }

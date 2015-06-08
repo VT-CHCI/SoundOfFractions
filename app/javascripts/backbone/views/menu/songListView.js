@@ -14,25 +14,22 @@ define([
 ], function($, _, Backbone, User, JQCookie, songListTemplate, Logging){
 
   var SongListView = Backbone.View.extend({
-    el : $('.login'), // Specifies the DOM element which this view handles
+    el : $('.song-list'), // Specifies the DOM element which this view handles
 
     events : {
     },
     initialize: function(options) {
       // Options should be the user model
-      console.log('SongListView initing...')
-      if (options){
-        this.model = options;
-      } else {
-        console.error('no model in the init of SongListView');
-      }
+      console.info('SongListView initing...')
       // this.render();
+    },
+    setModel: function(model) {
+      this.model = model;
+      this.listenTo(this.model, 'change:songs', this.render);
     },
     render: function() {
       console.log('SongListView render');
-      if(this.model.get('songs')){
-        $(this.el).html(songListTemplate);
-      }
+      $(this.el).html(songListTemplate);
     },
     close: function(){
       console.log('closing Login View');
@@ -40,6 +37,8 @@ define([
       this.unbind();
     }
   });
+  // This is a not a Singleton
+  // return SongListView;
   // This is a Singleton
   return new SongListView();
 });

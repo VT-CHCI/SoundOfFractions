@@ -5,8 +5,9 @@
 */
 define([
   'underscore',
-  'bbone'
-], function(_, Backbone) {
+  'bbone',
+  'js-cookie',
+], function(_, Backbone, JQCookie) {
   var BeatModel = Backbone.Model.extend({
     defaults: {
       silly_name: undefined,
@@ -15,18 +16,45 @@ define([
     },
     initialize: function(options){
       if(options){
-        console.info(options);
+        console.info('User model init options: ', + options);
         this.set('silly_name', options.silly_name);
-        this.set('songs', options.songs);
         this.logIn();
       }
     },
+    getSongs: function() {
+      var µthis = this;
+      // JQ AJAX method to send the data to the approriate url with appropriate HTTP method
+      var UID = localStorage.getItem('UID');
+      var uname = JQCookie.get('silly_name');
+      $.ajax({
+        url: '/api/getSongs/',
+        // method: get/post/etc...
+        type: 'POST',
+        data: {    
+          // uname ie: specialorange
+          uname: uname,
+          uid: UID
+          }
+      })
+        .done(function(data){
+          console.log('Successful getting songs! Returned `data`: ', data);
+          // Update the user model
+          µthis.set('songs', data.songs);
+        })
+        .fail(function(data){
+          console.error('!Failed getting songs! Returned `data`: ', data);
+        })
+
+    },
     setSongs: function(songs) {
+      console.log('setting songs in the user model');
       this.set('songs', songs);
+      console.log(this.get('songs'));
     },
     logIn: function(){
-      console.log('user logged in');
+      console.info('user logged in');
       this.set('loggedIn', true);
+      this.getSongs();
     },
     logOff: function(){
       this.set('loggedIn', false);

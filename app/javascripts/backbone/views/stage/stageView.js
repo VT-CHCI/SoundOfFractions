@@ -27,7 +27,7 @@ define([
     el: $('#sof-stage-area'),
 
     initialize: function(){
-      console.log('stage view initialize')
+      console.info('stage view initialize')
       this.stageCollection = StageCollection;
       // set the song's conductor
       Logging.initialize();
@@ -58,11 +58,11 @@ define([
     },
 
     render: function(){
-      console.log('StageView render start');
+      console.info('StageView render start');
       this.$el.append('<div id="instruments-collection"></div>');
     },
     makeChildHTrack: function(hTrack){
-      console.log('hTrack: ', hTrack);
+      console.info('hTrack: ', hTrack);
       //create a hTrack view.
       var hTrackChildView = new HTrackView({
         model: hTrack,
@@ -80,7 +80,7 @@ define([
     addInstrumentWithPattern: function(options) {
     },
     makeInstrumentFromScratch: function(options) {
-      console.log('makeInstrumentFromScratch options: ', options)
+      console.info('makeInstrumentFromScratch options: ', options)
       // set up the measures, measureReps, and beats for an instruments-collection
       this.setUpMMB();
 
@@ -160,7 +160,7 @@ define([
       $('#sample-messages').html('subre')
     },
     close: function(){
-      console.log('in stageView close function');
+      console.info('in stageView close function');
       this.remove();
       this.unbind();
       // handle other unbinding needs, here
