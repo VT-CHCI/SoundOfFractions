@@ -30,21 +30,16 @@ define([
     initialize: function() {
       console.info('LoginView initing...')
       // If the cookie is not empty
-      if (!$.isEmptyObject(JQCookie.get())){
-        // And has a silly_name
-        if(JQCookie.get('silly_name')){
-          console.info('We got a cookie with a silly name!');
-          this.model = new User({silly_name: JQCookie.get('silly_name')});
-          this.listenTo(this.model, 'change:loggedIn', this.render);
-        } else {
-          console.error('There is no silly_name on the cookie');
-        }
+      if(JQCookie.get('silly_name')){
+        console.info('We got a cookie with a silly name!');
+        this.model = new User({silly_name: JQCookie.get('silly_name')});
+        this.listenTo(this.model, 'change:loggedIn', this.render);
       } else {
+        console.info('We dont have a silly_name!');
         this.model = new User();
         this.listenTo(this.model, 'change:loggedIn', this.render);
       }
 
-      window.csf = this.model;
       this.render();
     },
     modal: function(){
@@ -135,11 +130,15 @@ define([
     },
     render: function() {
       console.info('LoginView render');
-      if(this.model.get('loggedIn')){
-        $(this.el).html(logoutTemplate);
-        SongListView.setModel(this.model);
+      if (this.model){      
+        if(this.model.get('loggedIn')){
+          $(this.el).html(logoutTemplate);
+          SongListView.setModel(this.model);
+        } else {
+          $(this.el).html(loginTemplate);
+        }
       } else {
-        $(this.el).html(loginTemplate);
+        console.error('There is no user model');
       }
     },
     close: function(){
