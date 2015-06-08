@@ -9,9 +9,8 @@ define([
   'backbone/views/label/systemLabelView',
   'text!backbone/templates/label/systemLabelContainerGroup.html',
   'text!backbone/templates/label/systemLabel.html',
-  'text!backbone/templates/label/tempHolder.html',
-  'log'
-], function($, _, Backbone, SystemLabelCollection, SystemLabelView, SystemLabelContainerGroup, SystemLabelTemplate, TempHolderTemplate, log){
+  'text!backbone/templates/label/tempHolder.html'
+], function($, _, Backbone, SystemLabelCollection, SystemLabelView, SystemLabelContainerGroup, SystemLabelTemplate, TempHolderTemplate){
 
   var SystemLabelContainerView = Backbone.View.extend({
     el : $('#system-label-container'), // Specifies the DOM element which this view handles

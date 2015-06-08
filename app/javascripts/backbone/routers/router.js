@@ -12,6 +12,7 @@ define([
   'backbone/views/hTrack/hTrackView',
   'backbone/views/measure/measureView',
   'backbone/views/conductor/conductorView',
+  'backbone/views/menu/loginButtonView',
   'backbone/views/button/wholeMeasureRepresentationView',
   'backbone/views/button/remainingInstrumentGeneratorView',
   'backbone/views/label/systemLabelContainerView',
@@ -19,9 +20,8 @@ define([
   'backbone/views/song/new_view',
   'backbone/views/song/index_view',
   'backbone/views/song/show_view',
-  'backbone/views/song/edit_view',
-  'log'
-], function($, _, Backbone, mainHomeView, StageView, HTrackView, MeasureView, ConductorView, WholeMeasureRepresentationView, RemainingInstrumentGeneratorView, SystemLabelContainerView, songsCollection, songsViewNew, songsViewIndex, songsViewShow, songsViewEdit, log){
+  'backbone/views/song/edit_view'
+], function($, _, Backbone, mainHomeView, StageView, HTrackView, MeasureView, ConductorView, LoginButtonView, WholeMeasureRepresentationView, RemainingInstrumentGeneratorView, SystemLabelContainerView, songsCollection, songsViewNew, songsViewIndex, songsViewShow, songsViewEdit){
 
   var BBRouter = Backbone.Router.extend({
     // songs: {},

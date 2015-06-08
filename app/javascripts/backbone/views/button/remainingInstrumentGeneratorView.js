@@ -10,9 +10,8 @@ define([
   'backbone/models/remainingInstrumentGenerator',
   'backbone/views/stage/stageView',
   'text!backbone/templates/button/remainingInstrumentGenerator.html',
-  'text!backbone/templates/button/remainingInstrumentButton.html',
-  'log'
-], function($, _, Backbone, RemainingInstrumentGeneratorModel, StageView, remainingInstrumentGeneratorTemplate, remainingInstrumentButtonTemplate, log){
+  'text!backbone/templates/button/remainingInstrumentButton.html'
+], function($, _, Backbone, RemainingInstrumentGeneratorModel, StageView, remainingInstrumentGeneratorTemplate, remainingInstrumentButtonTemplate){
 
   var RemainingInstrumentGeneratorView = Backbone.View.extend({
     el: $('#instrument-generator-holder'), // Specifies the DOM element which this view handles

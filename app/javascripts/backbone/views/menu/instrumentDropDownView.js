@@ -8,9 +8,8 @@ define([
   'underscore',
   'bbone',
   'backbone/models/remainingInstrumentGenerator',
-  'text!backbone/templates/menu/instrumentDropDown.html',
-  'log'
-], function($, _, Backbone, RemainingInstrumentGeneratorModel, instrumentDropDownTemplate, log){
+  'text!backbone/templates/menu/instrumentDropDown.html'
+], function($, _, Backbone, RemainingInstrumentGeneratorModel, instrumentDropDownTemplate){
   return Backbone.View.extend({
     //registering backbone's change event to our instrumentChanged() method.
     events : {

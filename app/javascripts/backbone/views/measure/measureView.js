@@ -16,9 +16,8 @@ define([
   'backbone/views/beat/beatView',
   'backbone/views/measure/measureRepView',
   'text!backbone/templates/measure/measure.html',
-  'colors',
-  'log'
-], function($, _, Backbone, BeatsCollection, StageCollection, RepresentationsCollection, MeasureModel, StateModel, RepresentationModel, BeatView, MeasureRepView, MeasureTemplate, COLORS, log){
+  'colors'
+], function($, _, Backbone, BeatsCollection, StageCollection, RepresentationsCollection, MeasureModel, StateModel, RepresentationModel, BeatView, MeasureRepView, MeasureTemplate, COLORS){
   return Backbone.View.extend({
 
     //registering click events to add and remove measures.

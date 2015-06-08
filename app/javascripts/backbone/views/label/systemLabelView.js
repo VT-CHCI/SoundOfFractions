@@ -6,9 +6,8 @@ define([
   'jquery',
   'underscore',
   'bbone',
-  'text!backbone/templates/label/systemLabel.html',
-  'log'
-], function($, _, Backbone, SystemLabelTemplate, log){
+  'text!backbone/templates/label/systemLabel.html'
+], function($, _, Backbone, SystemLabelTemplate){
 
   var SystemLabelView = Backbone.View.extend({
     initialize: function(options) {

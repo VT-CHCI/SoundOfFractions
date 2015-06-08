@@ -8,9 +8,7 @@ define([
     defaults: {
       content: '',
       user: '',
-      title: '',
-      currentFractionRepresentation: '',
-      currentMeasureRepresentation: ''
+      title: ''
     },
     initialize: function(){
     }

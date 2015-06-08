@@ -12,9 +12,8 @@ define([
   'backbone/views/beat/auxBeatView',
   'backbone/views/factory/beatFactoryView',
   'text!backbone/templates/measure/measureRep.html',
-  'colors',
-  'log'
-], function($, _, Backbone, StateModel, BeatsCollection, MeasureModel, RepresentationModel, StateModel, BeatView, AuxBeatView, BeatFactoryView, MeasureRepTemplate, COLORS, log){
+  'colors'
+], function($, _, Backbone, StateModel, BeatsCollection, MeasureModel, RepresentationModel, StateModel, BeatView, AuxBeatView, BeatFactoryView, MeasureRepTemplate, COLORS){
   return Backbone.View.extend({
     //registering click events to add and remove measures.
     events : {
@@ -1455,8 +1454,6 @@ define([
         // //we remove the measureRep and get its model.
         // this.measureRepresentations.remove(measureModelCid);
 
-        //send a log event showing the removal.
-        log.sendLog([[3, 'Removed a measure representation: ' + this.cid]]);
         console.log('Removed measureRep ' + this.cid + ", ");
     },
     // This is triggered by signatureChange events.

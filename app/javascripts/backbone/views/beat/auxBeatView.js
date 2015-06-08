@@ -6,9 +6,8 @@ define([
   'jquery',
   'underscore',
   'bbone',
-  'colors',
-  'log'
-], function($, _, Backbone, COLORS, log){
+  'colors'
+], function($, _, Backbone, COLORS){
   return Backbone.View.extend({
     //The constructor takes options because these views are created
     //by measuresView objects.

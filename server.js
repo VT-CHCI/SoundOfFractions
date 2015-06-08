@@ -5,7 +5,8 @@ var RSVP = require('rsvp');
 var CryptoJS = require('crypto-js');
 var uuid = require('node-uuid');
 var cookieParser = require('cookie-parser');
-// var cookie = require('cookie');
+
+var fs = require('fs');
 
 app.use(express.static(__dirname + '/app'));
 
@@ -19,9 +20,10 @@ var Sequelize = require('sequelize'),
 
 
 // for body parser
-// parse application/x-www-form-urlencoded
+// http://stackoverflow.com/questions/19917401/node-js-express-request-entity-too-large
 app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
+// parse application/x-www-form-urlencoded
 // app.use(bodyParser.urlencoded({ extended: false }));
 
 // For manual queries
@@ -246,57 +248,10 @@ var server = app.listen(3000, function() {
   start();
 });
 
-app.get('/', function(req, res) {
-  console.log('XXXXXX new listener XXXXXX');
-  console.log(req.cookies);
-  if(req.headers.cookie){ 
-    // This parses the cookies into a usable array
-
-    Person.find({
-      where: {
-        silly_name: req.cookies.silly_name
-      },
-      include: [
-        Song,
-        Role,
-        ClassSection,
-        Setting
-      ]
-    })
-      .then(function(personResults) {
-        if (personResults && personResults.rowCount === 0) {
-          console.log('user not found');
-          res.status(400).send('user not found');
-        } else {
-          // if (incoming_cookies.silly_name === req.body.uname) {
-          if (req.cookies.silly_name) {
-            res.cookie('UID', req.body.uid, {maxAge: 10800000});
-            res.cookie('silly_name', req.body.uname, {maxAge: 10800000});
-            console.log('Starting with a cookie log in');
-            res.status(200).send(personResults);
-          } else {
-            console.log('Some other problem with cookies');
-            res.cookie('UID', req.body.uid, {maxAge: 10800000});
-            res.cookie('silly_name', req.body.uname, {maxAge: 10800000});
-            res.status(400).send('Some other problem with cookies');
-          }
-          // res.status(200).send(personResults);
-        }
-      })
-      .catch(function(error){
-          res.status(400).send('some other error in starting, error: ' + error);
-      });
-  } else {
-    res.cookie('UID', req.body.uid, {maxAge: 10800000});
-    res.cookie('silly_name', req.body.uname, {maxAge: 10800000});      
-    res.status(200).send('Starting from scratch.');
-  }
-});
-
 app.post('/api/login', function (req, res) {
   console.log('Getting a login request with a body of: ');
   console.log(req.body);
-  // var lists = cookieParser.JSONCookies(req.headers.cookie);
+  // var lists = cookie.JSONCookies(req.headers.cookie);
   if (req.body.hasOwnProperty('uname') && req.body.hasOwnProperty('pwd')) {
     var pwdHash = CryptoJS.MD5(req.body.pwd); // this is a word grouping of 4 words, and needs to be converted to a string
     pwdHash = pwdHash.toString(CryptoJS.enc.Hex);
@@ -314,9 +269,11 @@ app.post('/api/login', function (req, res) {
       ]
     })
       .then(function(personResults) {
+        console.log('Number of songs: ' + personResults.songs.length);
         if (personResults.rowCount === 0) {
           res.status(400).send('user not found');
         } else {
+          // console.log(personResults.songs);
           console.log('Logging in at \'/api/login\', and sending a cookie.');
           res.cookie('UID', req.body.uid, {maxAge: 10800000});
           res.cookie('silly_name', req.body.uname, {maxAge: 10800000});
@@ -325,31 +282,54 @@ app.post('/api/login', function (req, res) {
         }
       })
       .catch(function(error){
-          res.status(400).send('some other error in logging in, error: ' + error);
+        console.log('Some other error in logging in, error: ');
+        console.log(error);
+        res.status(400).send(error);
       });
   } else {
     res.status(400).send('login requires a uname and pwhash');
   }
 });
 
-app.post('/api/loginwithbox', function (req, res) {
-  console.log('Getting a login request to checkbox with a body of: ');
+app.post('/api/logout', function (req, res) {
+  console.log('Getting a logout request with a body of: ');
   console.log(req.body);
-  if (req.body.hasOwnProperty('uname') && req.body.hasOwnProperty('pwHash') && req.body.hasOwnProperty('chbox')) {
-    var message = {
-      text: 'You checked the box'
-    };
-    res.status(200).send(message);
+  // var lists = cookie.JSONCookies(req.headers.cookie);
+  if (req.body.hasOwnProperty('uname')) {
+    Person.find({
+      where: {
+        silly_name: req.body.uname
+      }
+    })
+      .then(function(personResults) {
+        if (personResults.rowCount === 0) {
+          res.status(400).send('user not found');
+        } else {
+          console.log('Logging out at \'/api/logout\', and sending a delete cookie.');
+          res.status(200).send('LOGOUT');
+        }
+      })
+      .catch(function(error){
+        console.log('Some other error in logging out, error: ');
+        console.log(error);
+        res.status(400).send(error);
+      });
   } else {
-    res.status(400).send('login requires a uname and pwhash and checkbox checked');
+    res.status(400).send('logout requires a uname');
   }
 });
 
-app.post('/api/setstorage', function (req, res) {
-  console.log('Logging request at ' + new Date() + ': ');
+app.post('/api/logging', function (req, res) {
   console.log(req.body);
-  //if (req.body.hasOwnProperty('UID')) {            // What exactly should we check to verify the request?
   if (req.body.hasOwnProperty('Action') && req.body.Action != '') {
+    // Write this to a file 
+    fs.appendFile('app/doc/logData.txt', JSON.stringify(req.body) + '\n', function(err) {
+      if(err) {
+        return console.log(err);
+      }
+      console.log("The file was saved!");
+    }); 
+    // Send a message back to the client that it was saved
     var message = {
       text: 'Saved logging on the server',
       action: req.body.Action
@@ -360,6 +340,21 @@ app.post('/api/setstorage', function (req, res) {
     res.status(400).send(req.body);
   }
 });
+
+// For logging in with a checkbox
+// app.post('/api/loginwithbox', function (req, res) {
+//   console.log('Getting a login request to checkbox with a body of: ');
+//   console.log(req.body);
+//   if (req.body.hasOwnProperty('uname') && req.body.hasOwnProperty('pwHash') && req.body.hasOwnProperty('chbox')) {
+//     var message = {
+//       text: 'You checked the box'
+//     };
+//     res.status(200).send(message);
+//   } else {
+//     res.status(400).send('login requires a uname and pwhash and checkbox checked');
+//   }
+// });
+
 
 // Testing if the login and pwd has is working to get the info from the database
 // app.get('/api/login/:user/:pwHash', function (req, res) {

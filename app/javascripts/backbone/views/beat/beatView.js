@@ -8,9 +8,8 @@ define([
   'underscore',
   'bbone',
   'backbone/models/beat',
-  'colors',
-  'log'
-], function($, _, Backbone, BeatModel, COLORS, log){
+  'colors'
+], function($, _, Backbone, BeatModel, COLORS){
   return Backbone.View.extend({
     // registering backbone's click event to our toggle() function.
     events : {

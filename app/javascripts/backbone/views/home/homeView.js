@@ -8,9 +8,8 @@ define([
   'jquery',
   'underscore',
   'bbone',
-  'text!backbone/templates/home/main.html',
-  'log'
-], function($, _, Backbone, mainHomeTemplate, log){
+  'text!backbone/templates/home/main.html'
+], function($, _, Backbone, mainHomeTemplate){
   var mainHomeView = Backbone.View.extend({
     el: $('.navbar-form button'),
 

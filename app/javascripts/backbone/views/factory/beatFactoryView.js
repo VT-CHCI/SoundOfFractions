@@ -8,9 +8,8 @@ define([
   'underscore',
   'bbone',
   'backbone/models/beat',
-  'colors',
-  'log'
-], function($, _, Backbone, BeatModel, COLORS, log){
+  'colors'
+], function($, _, Backbone, BeatModel, COLORS){
   var BeatFactory = Backbone.View.extend({
     events : {},
     //The constructor takes options because these views are created

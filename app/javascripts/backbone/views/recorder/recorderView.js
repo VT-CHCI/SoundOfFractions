@@ -7,9 +7,8 @@ define([
   'jquery',
   'underscore',
   'bbone',
-  'text!backbone/templates/recorder/recorder.html',
-  'log'
-], function($, _, Backbone, recorderTemplate, log){
+  'text!backbone/templates/recorder/recorder.html'
+], function($, _, Backbone, recorderTemplate){
 
   var RecorderView = Backbone.View.extend({
     el : $('#record'), // Specifies the DOM element which this view handles

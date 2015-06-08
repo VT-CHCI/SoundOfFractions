@@ -14,9 +14,8 @@ define([
   'backbone/collections/representations',
   'backbone/views/measure/measureView',
   'backbone/views/menu/instrumentDropDownView',
-  'text!backbone/templates/hTrack/hTrack.html',
-  'log'
-], function($, _, Backbone, HTrackModel, StateModel, ConductorModel, StageCollection, RemainingInstrumentGeneratorModel, RepresentationsCollection, MeasureView,  InstrumentDropDownView, HTrackTemplate, log){
+  'text!backbone/templates/hTrack/hTrack.html'
+], function($, _, Backbone, HTrackModel, StateModel, ConductorModel, StageCollection, RemainingInstrumentGeneratorModel, RepresentationsCollection, MeasureView,  InstrumentDropDownView, HTrackTemplate){
   return Backbone.View.extend({
     events : {
       // for toggling the hTrack's muted state.

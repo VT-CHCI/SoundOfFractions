@@ -19,7 +19,7 @@ define([
   'backbone/models/remainingInstrumentGenerator',
   'backbone/views/button/remainingInstrumentGeneratorView',
   'backbone/views/hTrack/hTrackView',
-  'lookupInstrument',
+  'general/lookupInstrument',
   'logging',
   'text!backbone/templates/hTrack/hTrack.html'
 ], function($, _, Backbone, BeatsCollection, MeasuresCollection, RepresentationsCollection, StageCollection, BeatModel, MeasureModel, HTrackModel, RepresentationModel, StateModel, ConductorModel, RemainingInstrumentGeneratorModel, RemainingInstrumentGeneratorView, HTrackView, LookupInstrument, Logging, HTrackTemplate){

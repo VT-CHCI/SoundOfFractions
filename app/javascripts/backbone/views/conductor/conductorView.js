@@ -9,9 +9,8 @@ define([
   'bbone',
   'backbone/models/conductor',
   'text!backbone/templates/conductor/play.html',
-  'text!backbone/templates/conductor/stop.html',
-  'log'
-], function($, _, Backbone, ConductorModel, conductorPlayTemplate, conductorStopTemplate, log){
+  'text!backbone/templates/conductor/stop.html'
+], function($, _, Backbone, ConductorModel, conductorPlayTemplate, conductorStopTemplate){
 
   var ConductorView = Backbone.View.extend({
     el : $('#conductor'), // Specifies the DOM element which this view handles

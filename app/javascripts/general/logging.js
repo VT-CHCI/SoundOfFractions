@@ -54,7 +54,7 @@ define([
 
 			//Attempt to send localStorage to the server
 			$.ajax({
-		      url: '/api/setstorage/',
+		      url: '/api/logging/',
 		      type: 'POST',
 		      crossDomain: true,	//Delete for production
 		      data: {
@@ -156,8 +156,8 @@ define([
 						measure.allMeasureChildRepresentationsTransitioned  = measureModel.get('allMeasureChildRepresentationsTransitioned');
 						// make a beats array
 						measure.beatsArray = [];
-							_.each(measureModel.get('beats').model, function(beat){
-								if(beat.selected){
+							_.each(measureModel.get('beats').models, function(beat){
+								if(beat.get('selected')){
 									measure.beatsArray.push('ON');
 								} else {
 									measure.beatsArray.push('OFF');
@@ -182,6 +182,42 @@ define([
 				ComputedStageCollection.usedInstruments = instruments;
 				ComputedStageCollection.unusedInstrumentsCount = 3 - instruments.length;
 			return JSON.stringify(ComputedStageCollection);
+			// {
+			// "usedInstruments":[
+			// 	{
+			// 		"label":"Snare",
+			// 		"active":true,
+			// 		"signature":7,
+			// 		"tempo":120,
+			// 		"measures":[
+			// 		{
+			// 			"allMeasureChildRepresentationsTransitioned":1,
+			// 			"beatsArray":["ON","OFF","OFF","OFF","OFF","ON","OFF"],
+			// 			"numberOfBeats":7,
+			// 			"measureRepresentations":[
+			// 			{
+			// 				"currentRepresentationType":"audio",
+			// 				"transitions":0
+			// 			},{
+			// 				"currentRepresentationType":"line",
+			// 				"transitions":1
+			// 			},{
+			// 				"currentRepresentationType":"line",
+			// 				"transitions":0
+			// 			},{
+			// 				"currentRepresentationType":"pie",
+			// 				"transitions":0
+			// 			},{
+			// 				"currentRepresentationType":"bar",
+			// 				"transitions":0
+			// 			}
+			// 			]
+			// 		}
+			// 		]
+			// 	}
+			// ],
+			// "unusedInstrumentsCount":2
+			// }
 		}
 	};
 });

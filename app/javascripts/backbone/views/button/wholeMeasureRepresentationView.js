@@ -12,9 +12,8 @@ define([
   'backbone/models/repButton',
   'backbone/models/representation',
   'backbone/collections/stage',
-  'text!backbone/templates/button/wholeMeasureRepresentation.html',
-  'log'
-], function($, _, Backbone, RepButtonModel, RepresentationModel, StageCollection, wholeMeasureRepresentationTemplate, log){
+  'text!backbone/templates/button/wholeMeasureRepresentation.html'
+], function($, _, Backbone, RepButtonModel, RepresentationModel, StageCollection, wholeMeasureRepresentationTemplate){
 
   var WholeMeasureRepresentationView = Backbone.View.extend({
     el : $("#measure-representation"), // Specifies the DOM element which this view handles

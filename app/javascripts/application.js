@@ -16,7 +16,7 @@
 //
     // 'jquery': 'vendor/jquery-2.1.3.min',
 
-console.log('Application.js: Started');
+console.info('Application.js: Started');
 
 require.config({
   paths: {
@@ -24,10 +24,14 @@ require.config({
     'bootstrap': ['//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min','vendor/bootstrap.min'],
     'underscore': 'vendor/underscore-min',
     'bbone': 'vendor/backbone-min',
-    'login': 'login',
-    'logging': 'logging',
+    'login': 'general/login',
+    'logging': 'general/logging',
     'crypto-js': 'vendor/crypto-js/crypto-js',
-    'node-uuid': 'vendor/node-uuid/uuid'
+    'node-uuid': 'vendor/node-uuid/uuid',
+    'js-cookie': 'vendor/js-cookie/src/js.cookie',
+    'colors': 'general/colors',
+    'text': 'general/text',
+    'consoleLog': 'general/consoleLog'
   },
   shim: {
     'bootstrap':            { deps: ['jquery'] },
@@ -53,29 +57,15 @@ require([
   'bbone',
   // Load our "app" module and pass it to our definition function
   'SOF'
-
   // Some plugins have to be loaded in order due to their non AMD compliance
   // Because these scripts are not "modules" they do not pass any values to the definition function below
 ], function($, _, Backbone, SOF_Application){
-  console.log("Application.js: initializing SOF_Application...");
+  console.info("Application.js: initializing SOF_Application...");
 
   // The "app" dependency 'SOF' is passed in as "SOF_Application"
   // Again, the other dependencies passed in are not "AMD" therefore don't pass a parameter to this function
   // SOF_Application.initialize(personResults);
   SOF_Application.initialize();
-
-  $(function(){
-    $('#modal-login, #last-close-button, #first-close-button').on('click', function(){
-      $('#my-modal').modal('toggle');
-    })
-    $('#my-modal').on('hidden.bs.modal', function (e) {
-      window.modalOpen = false;
-    })
-    $('#my-modal').on('shown.bs.modal', function (e) {
-      $('#login-name').focus();
-      window.modalOpen = true;
-    })
-  });
 
   console.log("Application.js: SOF_Application Fully initialized");
   console.error('-----BREAK LINE FOR TESTING-----');

@@ -4,7 +4,7 @@
 define([
   'underscore',
   'bbone',
-  'lookupInstrument'
+  'general/lookupInstrument'
 ], function(_, Backbone, LookupInstrument){//, SnareImage, HiHatImage, KickDrumImage, SynthImage) {
   var remainingInstrumentGeneratorModel = Backbone.Model.extend({
     defaults: {
