@@ -1,4 +1,12 @@
 /*Trying to figure out the resizing issue with deleteing reps after transitions*/
+
+#measure-representation-buttons button svg {
+  /*width: 100px;*/
+}
+/*This keeps the remainin measure Reps inline when one is re-rendering in place from a transition*/
+.update-render-temp-holder {
+  display: inline-block;
+}
 .measureRep{
   min-height: 1px;
   min-width: 1px;
@@ -60,6 +68,9 @@
   bottom: 10px;
   left: 5px;
 }
+.cs i{
+  color: green;
+}
 /* for development only
 .navbar .nav > li > a {
   float: left!important;
@@ -72,9 +83,6 @@
 }
 .hTrack .measure-container .measure:first-of-type .remove-measure{
   display: none;
-}
-.cs i{
-  color: green;
 }
 .hover-green{
   color: green;
@@ -114,13 +122,12 @@
   overflow: hidden;
 }
 .measure-rep-container {
-  width: 99%;
   display: inline-block;
   overflow-x: auto;
   white-space: nowrap;
 }
 .measure-container {
-  width: 89%;
+  /*width: 89%;*/
   /*overflow: auto;*/
 }
 .well {
@@ -319,11 +326,11 @@ svg.line {
 .measure {
   /*until we get multiple measures*/
 	/*border: solid 1px grey;*/
+  /*width: 99%;*/
   border-radius: 3px;
-	padding: 0 5px 5px 5px;
-	display: inline-block;
-  margin-bottom: 5px;
-  width: 99%;
+  padding: 0 5px 5px 5px;
+  display: inline-block;
+  margin: 0px 5px 5px 0px;
   display: inline-block;
 }
 .resizable-h {

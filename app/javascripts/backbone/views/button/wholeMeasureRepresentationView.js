@@ -12,8 +12,9 @@ define([
   'backbone/models/repButton',
   'backbone/models/representation',
   'backbone/collections/stage',
-  'text!backbone/templates/button/wholeMeasureRepresentation.html'
-], function($, _, Backbone, RepButtonModel, RepresentationModel, StageCollection, wholeMeasureRepresentationTemplate){
+  'text!backbone/templates/button/wholeMeasureRepresentation.html',
+  'logging'
+], function($, _, Backbone, RepButtonModel, RepresentationModel, StageCollection, wholeMeasureRepresentationTemplate, Logging){
 
   var WholeMeasureRepresentationView = Backbone.View.extend({
     el : $("#measure-representation"), // Specifies the DOM element which this view handles
@@ -48,6 +49,10 @@ define([
         this.addRep(e);
       } else if (trLength == 1) {
         this.transitionRep(e);
+      } else {
+        // Just clicked with no transition or add clicked prior
+        var newRepType = $(e.target).closest('.representation').attr('data-state');
+        Logging.logStorage("Clicked a wmrv without clicking add or transition first.  Clicked: " + newRepType);
       }
     },
     addRep: function(e) {

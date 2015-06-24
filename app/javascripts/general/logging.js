@@ -7,10 +7,14 @@
 
 define([
   'jquery', 'underscore', 'bbone',
-  'backbone/collections/stage', 'node-uuid'
-], function($, _, Backbone, StageCollection, NodeUUID){
+  'backbone/collections/stage',
+  'backbone/views/stage/stageView',
+  'node-uuid'
+], function($, _, Backbone, StageCollection, StageView, NodeUUID){
 	return LocalStorage = {
 		initialize: function(){
+			debugger;
+			// this.stageCollection = stageCollection;
 			if (this.checkStorageSupport()) {
 				console.info("Congrats, your browser supports HTML5 local storage!");
 				// If a session does not already exist, initialize localStorage
@@ -140,48 +144,49 @@ define([
 		},
 		makeReadableStageCollectionJSON: function(){
 			var ComputedStageCollection = {};
-				var instruments = [];
-				// Get each of the stage instruments
-				_.each(StageCollection.models, function(instrumentModel){
-					var instrument = {};
-					instrument.label 		 = instrumentModel.get('label');
-					instrument.active 	 = instrumentModel.get('active');
-					instrument.signature = instrumentModel.get('signature');
-					instrument.tempo 		 = instrumentModel.get('tempo');
-					// For each of the measures
-					instrument.measures = [];
-						// debugger;
-					_.each(instrumentModel.get('measures').models, function(measureModel){
-						var measure = {};
-						measure.allMeasureChildRepresentationsTransitioned  = measureModel.get('allMeasureChildRepresentationsTransitioned');
-						// make a beats array
-						measure.beatsArray = [];
-							_.each(measureModel.get('beats').models, function(beat){
-								if(beat.get('selected')){
-									measure.beatsArray.push('ON');
-								} else {
-									measure.beatsArray.push('OFF');
-								}
-							}, this)
-						measure.numberOfBeats = measure.beatsArray.length;
-						// Make a rep array
-						measure.measureRepresentations = [];
-							_.each(measureModel.get('measureRepresentations').models, function(measureRep){
-								var mR = {};
-								mR.currentRepresentationType = measureRep.get('currentRepresentationType');
-								mR.transitions = measureRep.get('transitions');
-								measure.measureRepresentations.push(mR);
-							}, this)
-						
-						instrument.measures.push(measure);
-					}, this)
-
-					// add the instrument to the Stage collection
-					instruments.push(instrument);
+			var instruments = [];
+			// Get each of the stage instruments
+			_.each(StageCollection.models, function(instrumentModel){
+				var instrument = {};
+				instrument.label 		 = instrumentModel.get('label');
+				instrument.active 	 = instrumentModel.get('active');
+				instrument.signature = instrumentModel.get('signature');
+				instrument.tempo 		 = instrumentModel.get('tempo');
+				// For each of the measures
+				instrument.measures = [];
+				_.each(instrumentModel.get('measures').models, function(measureModel){
+					var measure = {};
+					measure.allMeasureChildRepresentationsTransitioned  = measureModel.get('allMeasureChildRepresentationsTransitioned');
+					// make a beats array
+					measure.beatsArray = [];
+						_.each(measureModel.get('beats').models, function(beat){
+							if(beat.get('selected')){
+								measure.beatsArray.push('ON');
+							} else {
+								measure.beatsArray.push('OFF');
+							}
+						}, this)
+					measure.numberOfBeats = measure.beatsArray.length;
+					// Make a rep array
+					measure.measureRepresentations = [];
+						_.each(measureModel.get('measureRepresentations').models, function(measureRep){
+							var mR = {};
+							mR.currentRepresentationType = measureRep.get('currentRepresentationType');
+							mR.transitions = measureRep.get('transitions');
+							measure.measureRepresentations.push(mR);
+						}, this)
+					
+					instrument.measures.push(measure);
 				}, this)
-				ComputedStageCollection.usedInstruments = instruments;
-				ComputedStageCollection.unusedInstrumentsCount = 3 - instruments.length;
+
+				// add the instrument to the Stage collection
+				instruments.push(instrument);
+			}, this)
+			ComputedStageCollection.usedInstruments = instruments;
+			ComputedStageCollection.unusedInstrumentsCount = 3 - instruments.length;
+			
 			return JSON.stringify(ComputedStageCollection);
+			// A sample of ComputedStageCollection
 			// {
 			// "usedInstruments":[
 			// 	{

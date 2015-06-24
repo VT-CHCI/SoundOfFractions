@@ -30,7 +30,9 @@ define([
       console.info('stage view initialize')
       this.stageCollection = StageCollection;
       // set the song's conductor
+      // debugger;
       Logging.initialize();
+      // Logging.initialize(this.stageCollection);
       this.conductor = ConductorModel;
       this.masterAudioContext = new AudioContext();
       
@@ -121,8 +123,8 @@ define([
       // this creates 1 measure, and addes beats and the representations to itself
       this.manuallyCreatedMeasureBeatsCollection = new BeatsCollection;
       //for each beat - also change signature below
-      for (var i = 0; i < 6; i++) {
-        if (i == 0){
+      for (var i = 0; i < 9; i++) {
+        if (i == 0 || i == 2 || i == 4 || i == 6 || i == 7){
           this.manuallyCreatedMeasureBeatsCollection.add([{selected: true}]);
         } else {
           this.manuallyCreatedMeasureBeatsCollection.add([{selected: false}]);
@@ -138,8 +140,8 @@ define([
       this.manuallyCreatedRepresentationModel = new RepresentationModel({currentRepresentationType:'bead', sisterBeatsCollection:this.manuallyCreatedMeasureBeatsCollection});
       this.manuallyCreatedMeasureRepresentationCollection.add(this.manuallyCreatedRepresentationModel);
       // // add a line rep
-      this.manuallyCreatedRepresentationModel = new RepresentationModel({currentRepresentationType:'line', sisterBeatsCollection:this.manuallyCreatedMeasureBeatsCollection});
-      this.manuallyCreatedMeasureRepresentationCollection.add(this.manuallyCreatedRepresentationModel);
+      // this.manuallyCreatedRepresentationModel = new RepresentationModel({currentRepresentationType:'line', sisterBeatsCollection:this.manuallyCreatedMeasureBeatsCollection});
+      // this.manuallyCreatedMeasureRepresentationCollection.add(this.manuallyCreatedRepresentationModel);
       // // add a pie rep
       // this.manuallyCreatedRepresentationModel = new RepresentationModel({currentRepresentationType:'pie', sisterBeatsCollection:this.manuallyCreatedMeasureBeatsCollection});
       // this.manuallyCreatedMeasureRepresentationCollection.add(this.manuallyCreatedRepresentationModel);

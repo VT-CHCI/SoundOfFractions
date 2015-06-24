@@ -10,8 +10,9 @@ define([
   'backbone/models/remainingInstrumentGenerator',
   'backbone/views/stage/stageView',
   'text!backbone/templates/button/remainingInstrumentGenerator.html',
-  'text!backbone/templates/button/remainingInstrumentButton.html'
-], function($, _, Backbone, RemainingInstrumentGeneratorModel, StageView, remainingInstrumentGeneratorTemplate, remainingInstrumentButtonTemplate){
+  'text!backbone/templates/button/remainingInstrumentButton.html',
+  'logging'
+], function($, _, Backbone, RemainingInstrumentGeneratorModel, StageView, remainingInstrumentGeneratorTemplate, remainingInstrumentButtonTemplate, Logging){
 
   var RemainingInstrumentGeneratorView = Backbone.View.extend({
     el: $('#instrument-generator-holder'), // Specifies the DOM element which this view handles
@@ -38,7 +39,6 @@ define([
       this.listenTo(RemainingInstrumentGeneratorModel, 'removedInstrumentFromUnused', this.render);
       this.listenTo(this.model, 'change:unusedInstruments', this.render);
 
-
       // TODO Replace these events
       // dispatch.on('instrumentChanged.event', this.render, this);
       // dispatch.on('reRenderInstrumentGenerator.event', this.render, this);
@@ -60,9 +60,9 @@ define([
       // update the dropdown menus in each htrack
       // TODO Replace these events
       // dispatch.trigger('reRenderInstrumentDropDown.event', instrument);
-      this.render();
+      Logging.logStorage("Added an instrument to the stage. Clicked: " + type);      
 
-      log.sendLog([[2, "instrument added: "+type]]);
+      this.render();
     },
     addInstrumentToCompositionAreaByCall: function(instrument){
       this.model.removeInstrumentFromUnused(instrument);

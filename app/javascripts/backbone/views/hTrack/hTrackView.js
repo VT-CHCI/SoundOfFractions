@@ -14,8 +14,9 @@ define([
   'backbone/collections/representations',
   'backbone/views/measure/measureView',
   'backbone/views/menu/instrumentDropDownView',
-  'text!backbone/templates/hTrack/hTrack.html'
-], function($, _, Backbone, HTrackModel, StateModel, ConductorModel, StageCollection, RemainingInstrumentGeneratorModel, RepresentationsCollection, MeasureView,  InstrumentDropDownView, HTrackTemplate){
+  'text!backbone/templates/hTrack/hTrack.html',
+  'logging'
+], function($, _, Backbone, HTrackModel, StateModel, ConductorModel, StageCollection, RemainingInstrumentGeneratorModel, RepresentationsCollection, MeasureView,  InstrumentDropDownView, HTrackTemplate, Logging){
   return Backbone.View.extend({
     events : {
       // for toggling the hTrack's muted state.
@@ -193,16 +194,18 @@ define([
     },
     // To add a representation to a measure, we first add the class '.cs' to the htrack to know which measure of which HTrack to add it to
     addRepresentationToHTrack: function(e) {
-      e.srcElement.parentElement.classList.add('cs');
+      e.toElement.parentElement.classList.add('cs');
+      var newRepType = $(e.target).closest('.representation').attr('data-state');
+      Logging.logStorage("Clicked a wmrv without clicking add or transition first.  Clicked: " + newRepType);      
       console.log('clicked the plus sign');
     },
     // Shortcuts a for 'add'
     manuallPress: function(e) {
       // For when the login modal is open
-      if(!$('.modal-body')){      
+      if(!$('.modal-body').is(':visible')){      
         // a = 97
         if (e.keyCode == 97) {
-          $('.icon-plus')[1].parentElement.classList.add('cs');
+          $('.fa-plus')[1].parentElement.classList.add('cs');
         } 
       }
     },
@@ -405,6 +408,8 @@ define([
       var instrument = $(e.currentTarget).closest('.hTrack').data().state;
       console.info('Removing instrument: ' + instrument);
       RemainingInstrumentGeneratorModel.addInstrument({type:instrument});
+      Logging.logStorage("Removed an instrument from the stage.  Removed: " + instrument);
+
       this.close();
 
       // 'this' isn't the clicked element. It will always be the first element in the stage collection, since they all share the same $el.  so we have to find it in the collection and call model.destroy on that.  Then the view will destroy b/c of the listener?

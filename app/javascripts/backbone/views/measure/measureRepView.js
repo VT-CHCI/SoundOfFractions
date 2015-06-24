@@ -65,7 +65,7 @@ define([
       // dispatch.on('resized.event', this.destroy, this);
       this.render();
 
-      this.makeDeleteAndTranisitionButtons();
+      this.makeDeleteAndTransitionButtons();
 
       // make the beats
       this.makeBeats();
@@ -229,7 +229,20 @@ define([
         return this;
       }, this);
     },
-    makeDeleteAndTranisitionButtons: function(){
+    updateDeleteAndTransitionButtons: function(){
+      var button = d3.select('#remove-measure-rep-'+this.model.cid);
+      var crt = this.model.get('currentRepresentationType') ;
+      if (crt === 'line' || crt === 'bar'){
+        var deleteXLocation = this.model.get('linearDivWidth') - this.model.get('horzDivPadding');
+      } else if (crt === 'bead' || crt === 'pie'){
+        var deleteXLocation = this.model.get('circularDivWidth') - this.model.get('horzDivPadding');
+      } else if (crt === 'audio'){
+        var deleteXLocation = this.model.get('circularDivWidth')/3;
+      }
+      button.attr('x', deleteXLocation);
+
+    },
+    makeDeleteAndTransitionButtons: function(){
       var crt = this.model.get('currentRepresentationType') ;
       if (crt === 'line' || crt === 'bar'){
         var deleteXLocation = this.model.get('linearDivWidth') - this.model.get('horzDivPadding');
@@ -242,14 +255,16 @@ define([
       var µthis = this;
       var svgContainer = d3.select('#svg-'+this.model.cid)
       var buttonArea = svgContainer
-          .append('g', ':first-child');
+          .append('g', ':first-child')
+          .attr('class', 'top-rep-buttons')
+          .attr('id', 'top-rep-buttons-' + this.model.cid);
       buttonArea.append('text')
           .attr('class', 'remove-measure-rep')
+          .attr('id', 'remove-measure-rep-'+ this.model.cid)
           .attr('x', deleteXLocation)
           .attr('y', this.model.get('vertDivPadding'))
           .attr('dy', '.35em')
           .text('X')
-          // .on('click', function(){µthis.removeRepresentationModel()})
           .on("mouseover", function(){ return buttonArea.select('text').attr('stroke', 'red');})
           .on("mouseout", function(){ return buttonArea.select('text').attr('stroke', 'black');});
 
@@ -657,6 +672,18 @@ define([
         clearInterval(this.animationIntervalID);
         this.animationIntervalID = null;
     },
+    // reset the groups if they were translated during animations
+    resetSVGGroups: function() {
+      // Primary
+      var primaryBeatHolder = d3.select('#beat-holder-'+this.model.cid)
+        .attr('transform', 'translate(0,0)');
+      // Secondary
+      var secondaryBeatHolder = d3.select('#secondary-beat-holder-'+this.model.cid)
+        .attr('transform', 'translate(0,0)');
+      // Tertiary
+      var tertiaryBeatHolder = d3.select('#tertiary-beat-holder-'+this.model.cid)
+        .attr('transform', 'translate(0,0)');
+    },
     // move the primary set of beats left
     movePrimaryLeft: function() {
       var beatHolder = d3.select('#beat-holder-'+this.model.cid)
@@ -790,6 +817,7 @@ define([
       }, this.model.get('transitionDuration')*(this.model.get('transitionNumberOfPoints')) + this.model.get('animationIntervalDuration')*3 );
       // Fifth Stage
       setTimeout(function(){
+        µthis.resetSVGGroups();
         // rerender everything to get the factory as well
         µthis.updateRender();
       }, this.model.get('transitionDuration')*(this.model.get('transitionNumberOfPoints')) + this.model.get('animationIntervalDuration')*4 );
@@ -831,6 +859,7 @@ define([
       }, this.model.get('transitionDuration')*(this.model.get('transitionNumberOfPoints')) + this.model.get('animationIntervalDuration')*2 );
       // Fourth Stage
       setTimeout(function(){
+        µthis.resetSVGGroups();
         // re-render
         µthis.updateRender();
       }, this.model.get('transitionDuration')*(this.model.get('transitionNumberOfPoints')) + this.model.get('animationIntervalDuration')*3 );
@@ -859,6 +888,7 @@ define([
       }, this.model.get('animationIntervalDuration')*2 );
       // re-render
       setTimeout(function(){
+        µthis.resetSVGGroups();
         // re-render
         µthis.updateRender();
       }, this.model.get('animationIntervalDuration')*3 );
@@ -882,6 +912,7 @@ define([
       }, this.model.get('animationIntervalDuration')*2 );
       // re-render
       setTimeout(function(){
+        µthis.resetSVGGroups();
         // rerender everything to get the factory as well
         µthis.updateRender();
       }, this.model.get('animationIntervalDuration')*3 );
@@ -897,49 +928,49 @@ define([
       // move the entire thing right, to allow for rolling up
       setTimeout(function(){
         µthis.movePrimaryRight();
-
       }, this.model.get('transitionDuration') + this.model.get('animationIntervalDuration') );
       // remove the infinite line
       setTimeout(function(){
-
         µthis.removeInfiniteLine();
       }, this.model.get('transitionDuration') + this.model.get('animationIntervalDuration')*2 );
-      // make the secondary beats
-      setTimeout(function(){
-        µthis.makeBeats({secondary:true, type:'bead'});
-      }, this.model.get('transitionDuration') + this.model.get('animationIntervalDuration')*3 );
-      // remove the line beats
-      setTimeout(function(){
-        lineBeats.remove();
-        // remove the primary bead views
-        // µthis.removeSpecificChildren(µthis.childPrimaryViews);
-      }, this.model.get('transitionDuration') + this.model.get('animationIntervalDuration')*4 );
-      // rollup the beads and path aliong with the beatView event
-      setTimeout(function(){
-        // send the event to the beatView to unroll at the same time
-        µthis.trigger('beatTransition');
+      // // make the secondary beats
+      // setTimeout(function(){
+      //   µthis.makeBeats({secondary:true, type:'bead'});
+      // }, this.model.get('transitionDuration') + this.model.get('animationIntervalDuration')*3 );
+      // // remove the line beats
+      // setTimeout(function(){
+      //   lineBeats.remove();
+      //   // remove the primary bead views
+      //   // µthis.removeSpecificChildren(µthis.childPrimaryViews);
+      // }, this.model.get('transitionDuration') + this.model.get('animationIntervalDuration')*4 );
+      // // rollup the beads and path aliong with the beatView event
+      // setTimeout(function(){
+      //   // send the event to the beatView to unroll at the same time
+      //   µthis.trigger('beatTransition');
 
-        for(i=0; i<µthis.model.get('transitionNumberOfPoints'); i++){
-          µthis.actualMeasureLinePath.data([µthis.model.get('circleStates')[µthis.model.get('transitionNumberOfPoints')-1-i]])
-            .transition()
-              .delay(µthis.model.get('transitionDuration')*i)
-              .duration(µthis.model.get('transitionDuration'))
-              .ease('linear')
-              .attr('d', µthis.pathFunction)
-              .attr('stroke', 'black')
-              .attr('opacity', 1)
-              .attr('class', 'circle')
-              // .attr('transform', 'translate(0,0)')
-              .attr('class', 'circle-path');
-        }
-      }, this.model.get('transitionDuration') + this.model.get('animationIntervalDuration')*5);
-      // re-render
-      setTimeout(function(){
-        // rerender everything to get the factory as well
-        // Change the type of the representation
-        µthis.model.set('currentRepresentationType', 'bead');
-        µthis.updateRender();
-      }, this.model.get('transitionDuration')*(this.model.get('transitionNumberOfPoints')) + this.model.get('animationIntervalDuration')*6 );
+      //   for(i=0; i<µthis.model.get('transitionNumberOfPoints'); i++){
+      //     µthis.actualMeasureLinePath.data([µthis.model.get('circleStates')[µthis.model.get('transitionNumberOfPoints')-1-i]])
+      //       .transition()
+      //         .delay(µthis.model.get('transitionDuration')*i)
+      //         .duration(µthis.model.get('transitionDuration'))
+      //         .ease('linear')
+      //         .attr('d', µthis.pathFunction)
+      //         .attr('stroke', 'black')
+      //         .attr('opacity', 1)
+      //         .attr('class', 'circle')
+      //         // .attr('transform', 'translate(0,0)')
+      //         .attr('class', 'circle-path');
+      //   }
+      // }, this.model.get('transitionDuration') + this.model.get('animationIntervalDuration')*5);
+      // // re-render
+      // setTimeout(function(){
+      //   // rerender everything to get the factory as well
+      //   // Change the type of the representation
+      //   // µthis.model.set('currentRepresentationType', 'bead');
+      //   //  Reset any moved svg group holders
+      //   µthis.resetSVGGroups();
+      //   µthis.updateRender();
+      // }, this.model.get('transitionDuration')*(this.model.get('transitionNumberOfPoints')) + this.model.get('animationIntervalDuration')*6 );
     },
     lineToPie: function(){
       console.log('lti');
@@ -979,6 +1010,7 @@ define([
       }, this.model.get('transitionDuration')*(this.model.get('transitionNumberOfPoints')) + this.model.get('animationIntervalDuration')*6 );
       // re-render
       setTimeout(function(){
+        µthis.resetSVGGroups();
         // rerender everything to get the factory as well
         µthis.updateRender();
       }, this.model.get('transitionDuration')*(this.model.get('transitionNumberOfPoints')) + this.model.get('animationIntervalDuration')*7 );
@@ -1002,6 +1034,7 @@ define([
       }, this.model.get('animationIntervalDuration')*2 );
       // re-render
       setTimeout(function(){
+        µthis.resetSVGGroups();
         // rerender everything to get the factory as well
         µthis.updateRender();
       }, this.model.get('animationIntervalDuration')*3 );      
@@ -1046,8 +1079,8 @@ define([
       }, this.model.get('animationIntervalDuration')*3 ); 
       // re-render
       setTimeout(function(){
-        // TODO Replace these events
-        // dispatch.trigger('reRenderMeasure.event', this);
+        µthis.resetSVGGroups();
+        µthis.updateRender();
       }, this.model.get('transitionDuration')*(this.model.get('transitionNumberOfPoints')) + this.model.get('animationIntervalDuration')*4 );      
     },
     barToPie: function(){
@@ -1085,8 +1118,8 @@ define([
       }, this.model.get('transitionDuration')*(this.model.get('transitionNumberOfPoints')) + this.model.get('animationIntervalDuration')*4 );
       //re-render
       setTimeout(function(){
-        // TODO Replace these events
-        // dispatch.trigger('reRenderMeasure.event', this);
+        µthis.resetSVGGroups();
+        µthis.updateRender();
       }, this.model.get('transitionDuration')*(this.model.get('transitionNumberOfPoints')) + this.model.get('animationIntervalDuration')*5 );     
     },
     pieToBead: function(){
@@ -1113,7 +1146,9 @@ define([
       }, this.model.get('animationIntervalDuration')*3 );
       // re-render
       setTimeout(function(){
+        µthis.resetSVGGroups();
         // rerender everything to get the factory as well
+        console.warn('Not using updateRender, you may want to check that');
         // µthis.updateRender();
       }, this.model.get('animationIntervalDuration')*3 );
     },
@@ -1175,6 +1210,7 @@ define([
         µthis.actualMeasureLinePath = actualMeasureLinePath;
       }, this.model.get('transitionDuration')*(this.model.get('transitionNumberOfPoints')) + this.model.get('animationIntervalDuration')*8 );
       setTimeout(function(){
+        µthis.resetSVGGroups();
         // rerender everything to get the factory as well
         µthis.updateRender();
       }, this.model.get('transitionDuration')*(this.model.get('transitionNumberOfPoints')) + this.model.get('animationIntervalDuration')*9 );
@@ -1215,8 +1251,8 @@ define([
       }, this.model.get('transitionDuration')*(this.model.get('transitionNumberOfPoints')) + this.model.get('animationIntervalDuration')*4 );
       // re-render
       setTimeout(function(){
-        // TODO Replace these events
-        // dispatch.trigger('reRenderMeasure.event', this);
+        µthis.resetSVGGroups();
+        µthis.updateRender();
       }, this.model.get('transitionDuration')*(this.model.get('transitionNumberOfPoints')) + this.model.get('animationIntervalDuration')*5 );
     },
     makeBeadRep: function(){
@@ -1260,6 +1296,7 @@ define([
           .attr('stroke-width', 1)
           .attr('opacity', .5)
       this.infiniteLine = infiniteLine;
+      debugger;
       // Draw the Thicker line representing the measure
       var actualMeasureLinePath = svgContainer
           .insert('path', ':first-child')
@@ -1363,6 +1400,7 @@ define([
         console.warn(this.model.get('linearLineLength'));
       }
 
+      window.csf = this;
       return this;
     },
     // This makes the bead factory in each measureRep
@@ -1501,8 +1539,6 @@ define([
       console.log('in transition func() of measureRepView');
       var PRT = this.model.get('previousRepresentationType');
       var CRT = this.model.get('currentRepresentationType');
-      // Increase the count for this particular representation
-      this.model.set('transitionNumber', this.model.get('transitionNumber') + 1 );
       // Increase the count for the parent measure model
       this.parentMeasureModel.increaseTransitionCount();
       console.log(PRT, CRT);
@@ -1562,7 +1598,7 @@ define([
     // Shortcuts: T for transition
     manualPress: function(e) {
       // t = 116, d = 100, w = 119, r = 114
-      if (e.keyCode == 116) {
+      if (e.keyCode === 116) {
         if(!$('.measureRep:nth-child(2)').hasClass('transition-rep')){      
           $('.measureRep:nth-child(2)').addClass('transition-rep')
         } else {
@@ -1699,6 +1735,7 @@ define([
       this.makeBeatFactory();
       // update the classes and the data-representation type
       this.updateDivInfo();
+      this.updateDeleteAndTransitionButtons();
       // remove and replace the div in its place to ensure rendering
       // this.trigger('removeReplace', 'test');
 
@@ -1715,7 +1752,7 @@ define([
         });
         originals.push($(this).clone(true)); 
         // Create placeholder for original content
-        $(this).replaceWith('<div id="original_' + originals.length + '"></div>');
+        $(this).replaceWith('<div id="original_' + originals.length + '" class="update-render-temp-holder"></div>');
         // $(this).replaceWith('<div id="original_' + originals.length + '" style="width:'+dimensions[dimensions.length].width+'px; height:'+dimensions[dimensions.length].height+'px"></div>');
       });
 
@@ -1730,6 +1767,7 @@ define([
          $('#original_' + (i + 1)).replaceWith(originals[i]);
         };
       }, 1 );
+      window.csd = this;
 // To here
 
     },

@@ -50,6 +50,7 @@ define([
             console.warn('removing Instrument: '+ removedInstrument.type + ' from generatorModel');
             this.trigger('removedInstrumentFromUnused', {type: removedInstrument.type});
             found = true;
+    
             break;
         } else {
           console.warn('Looking for: ' + removedInstrument + ' ...');

@@ -12,7 +12,6 @@ define([
 ], function($, _, Backbone, COLORS, Logging) {
   var RepresentationModel = Backbone.Model.extend({
     defaults: {
-        transitionNumber: 0,
       // Constant Variables throughout the representations
       // General
         originalScale: 1,
