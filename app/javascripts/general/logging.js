@@ -13,7 +13,6 @@ define([
 ], function($, _, Backbone, StageCollection, StageView, NodeUUID){
 	return LocalStorage = {
 		initialize: function(){
-			debugger;
 			// this.stageCollection = stageCollection;
 			if (this.checkStorageSupport()) {
 				console.info("Congrats, your browser supports HTML5 local storage!");

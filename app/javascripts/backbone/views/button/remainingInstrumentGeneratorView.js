@@ -66,7 +66,7 @@ define([
     },
     addInstrumentToCompositionAreaByCall: function(instrument){
       this.model.removeInstrumentFromUnused(instrument);
-      this.render();
+      // this.render();
     },
     render: function() {
       console.info('remainingInstrumentGeneratorView RENDER ()')
