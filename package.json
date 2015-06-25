@@ -17,6 +17,7 @@
     "node-cache": "^1.1.0",
     "node-uuid": "^1.4.3",
     "rsvp": "^3.0.17",
-    "sequelize": "^2.0.3"
+    "sequelize": "^2.0.3",
+    "winston": "^1.0.0"
   }
 }

@@ -5,6 +5,7 @@ var RSVP = require('rsvp');
 var CryptoJS = require('crypto-js');
 var uuid = require('node-uuid');
 var cookieParser = require('cookie-parser');
+var winston = require('winston');
 
 var fs = require('fs');
 
@@ -17,6 +18,24 @@ var Sequelize = require('sequelize'),
   sequelize = new Sequelize('sof',        'sof',      'sof', {
   logging: function () {} //this says not to log sff w/ db. not a good idea generally
 });
+
+// Configure the logger for `category1`
+winston.loggers.add('basicLogger', {
+  console: {
+    level: 'silly',
+    colorize: true,
+    label: 'basic'
+  },
+  file: {
+    filename: 'app/doc/logData.txt'
+  }
+});
+
+var basicLogger = winston.loggers.get('basicLogger');
+
+//
+// Configure the logger for `category2`
+//
 
 
 // for body parser
@@ -355,12 +374,17 @@ app.post('/api/logging', function (req, res) {
   console.log(req.body);
   if (req.body.hasOwnProperty('Action') && req.body.Action != '') {
     // Write this to a file 
-    fs.appendFile('app/doc/logData.txt', JSON.stringify(req.body) + '\n', function(err) {
-      if(err) {
-        return console.log(err);
-      }
-      console.log("The file was saved!");
-    }); 
+    // fs.appendFile('app/doc/logData.txt', JSON.stringify(req.body) + '\n', function(err) {
+    //   if(err) {
+    //     return console.log(err);
+    //   }
+    //   console.log("The file was saved!");
+    // }); 
+    basicLogger.info(JSON.stringify(req.body));
+    //
+    // Grab your preconfigured logger
+    //
+
     // Send a message back to the client that it was saved
     var message = {
       text: 'Saved logging on the server',
