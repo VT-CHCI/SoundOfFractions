@@ -72,7 +72,7 @@ define([
       console.info('remainingInstrumentGeneratorView RENDER ()')
 
       var uI = this.model.get('unusedInstruments');
-      //compiling our template.
+      //compiling the area template.
       this.$el.html('');
       if (uI.length>0){
         var compiledTemplate = _.template(remainingInstrumentGeneratorTemplate);
@@ -80,10 +80,12 @@ define([
       } else {
         this.$el.html('');
       }
+      // Compiling each button
       for(var i = 0; i<uI.length; i++){
         var unused = uI[i];
+        // debugger;
         var compiledButtonTemplate = _.template(remainingInstrumentButtonTemplate);
-        $('#remaining-instrument-generator').append( compiledButtonTemplate({type: unused.type, label:unused.label}));
+        $('#remaining-instrument-generator').append( compiledButtonTemplate({type: unused.type, label:unused.label, imgURL: this.model.instrumentLookup.getDefault(unused.type, 'image') }));
       }
       return this;
     },

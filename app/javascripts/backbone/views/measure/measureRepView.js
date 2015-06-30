@@ -52,9 +52,6 @@ define([
       this.childTertiaryViews = [];
       this.childFactoryViews = [];
 
-      //Dispatch listeners
-      // TODO Replace these events
-
       this.listenTo(this.parentHTrackView, 'toggleAnimation', this.toggleAnimation);
       // this.parentMeasureModel.get('beats').on('add', this.updateRender, this);
       // this.parentMeasureModel.get('beats').on('remove', this.updateRender, this);
@@ -1296,7 +1293,6 @@ define([
           .attr('stroke-width', 1)
           .attr('opacity', .5)
       this.infiniteLine = infiniteLine;
-      debugger;
       // Draw the Thicker line representing the measure
       var actualMeasureLinePath = svgContainer
           .insert('path', ':first-child')

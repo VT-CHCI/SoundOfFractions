@@ -1,4 +1,17 @@
-/*Trying to figure out the resizing issue with deleteing reps after transitions*/
+#conductor .play {
+  background-image: linear-gradient(to bottom,#fff 0,#7DBD80 100%);
+}
+#conductor .play:hover{
+  background-color: #7DBD80;
+}
+.spinner {
+  height: 30px;
+  display: inline-block;
+}
+
+.addMeasureRep.cs :hover{
+  color: gray;
+}
 
 #measure-representation-buttons button svg {
   /*width: 100px;*/
@@ -44,6 +57,9 @@
   margin-right: 10px;
 }
 .new-instrument-btn{
+  padding: 0px!important;
+}
+.new-instrument-btn{
   margin-left: 10px;
   margin-right: 10px;
 }
@@ -71,15 +87,15 @@
 .cs i{
   color: green;
 }
+.measure .measureRep.measureRep-audio:not(:first-of-type) .record-button{
+  display: none;
+}
 /* for development only
 .navbar .nav > li > a {
   float: left!important;
 }
 .measure .measureRep:first-of-type .remove-measure-rep{
   visibility: hidden;
-}
-.measure .measureRep.measureRep-audio:not(:first-of-type) .record-button{
-  display: none;
 }
 .hTrack .measure-container .measure:first-of-type .remove-measure{
   display: none;
@@ -195,7 +211,7 @@
   padding: 1px  3px;
 }
 .hTrack.well { 
-  padding: 10px;
+  padding: 10px 10px 0px 10px;
   margin-bottom: 10px;
   min-height: 164px;
 }
@@ -328,9 +344,9 @@ svg.line {
 	/*border: solid 1px grey;*/
   /*width: 99%;*/
   border-radius: 3px;
-  padding: 0 5px 5px 5px;
+  /*padding: 0 5px 5px 5px;*/
   display: inline-block;
-  margin: 0px 5px 5px 0px;
+  /*margin: 0px 5px 5px 0px;*/
   display: inline-block;
 }
 .resizable-h {
@@ -361,11 +377,8 @@ svg.line {
   color: grey;
 	display: inline-block;
 	vertical-align: bottom;
-	padding: 0 5px;
-	font-size: 30px;
   cursor: pointer;
 }
-
 .addMeasureRep:hover {
   color: green;
 }
@@ -427,13 +440,14 @@ svg.line {
   font-size: 45px;
   font-weight: bold;
   /*left: 85px;*/
+}
+.fa-volume-up {
+  color: rgba(5, 5, 5, .25);
   cursor: pointer;
 }
-.unmute {
-  color: rgba(5, 5, 5, .25);
-}
 
-.unmute:hover {
+.fa-volume-up:hover {
+  cursor: pointer;
   color: red;
   opacity: .75;
 }

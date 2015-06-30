@@ -16,8 +16,14 @@ app.use(cookieParser());
 var Sequelize = require('sequelize'),
                           // ('database', 'username', 'password');
   sequelize = new Sequelize('sof',        'sof',      'sof', {
-  logging: function () {} //this says not to log sff w/ db. not a good idea generally
-});
+    logging: function () {}, //this says not to log sff w/ db. not a good idea generally
+    dialect: 'mysql',
+    pool: {
+      max: 5,
+      min: 0,
+      idle: 10000
+    }
+  });
 
 // Configure the logger for `category1`
 winston.loggers.add('basicLogger', {
@@ -72,6 +78,10 @@ var UID = sequelize.define('uid', {
   name: Sequelize.STRING
 });
 
+var Logging = sequelize.define('assignment', {
+  action: Sequelize.STRING
+});
+
 var Assignment = sequelize.define('assignment', {
   name: Sequelize.STRING,
   goal: Sequelize.STRING,
@@ -121,6 +131,9 @@ var PersonRole = sequelize.define('person_role',{
 Person.belongsToMany(Role, {through: PersonRole});
 Role.belongsToMany(Person, {through: PersonRole});
 
+UID.belongsTo(Logging);
+Logging.hasMany(UID);
+
 Setting.belongsTo(Person);
 Person.hasOne(Setting);
 
@@ -132,6 +145,9 @@ function start() {
     return Person.sync()
       .then(function() {
         return UID.sync();
+      })
+      .then(function() {
+        return Logging.sync();
       })
       .then(function() {
         return Role.sync();
@@ -381,6 +397,16 @@ app.post('/api/logging', function (req, res) {
     //   console.log("The file was saved!");
     // }); 
     basicLogger.info(JSON.stringify(req.body));
+    Logging
+      .findOrCreate({
+        where: {
+          action: JSON.stringify(req.body)
+        }
+      })
+        .spread(function(logging, created){
+          console.log('created in the db: ');
+          console.log(created);
+        })
     //
     // Grab your preconfigured logger
     //

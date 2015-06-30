@@ -1,2 +1,45 @@
-make a trial task to make one rep and have the students match a separate different representation
+Needed:
+  Students
+    2 students per group
+      Try and 'randomize' as best as possible 
+  Computer
+    the cookies and session need to be cleared in between students for logging, since we may not have separate computers
 
+Talking points
+  Introduce the students as an intro session to what it means to be an HCientist
+    Explain what HCI is
+    Explain the user study, and the importance of being able to accomplish a task
+    Explain that they will be given two tasks, and we will ask a few questions towards the end
+    Explain they should talk aloud, and discuss with each other.
+    Explain they should refrain from asking the researcher questions, and they should discuss it with each other.  The researcher may add to it.
+  Ask them to perform the two tasks
+  Ask some questions
+    What did you find easy?
+    What did you find difficult?
+    What would you change?
+    What did your partner help you with?
+  Congratulate them on helping with the study and learning about HCI
+  Return them to the class
+
+Task
+  Setup SoF to have two instruments, the first instrument has the bead representation, with 9 beats, in the order of I O O I O O I O O.
+  Allow them to play with it for a few minutes.
+  ASK: Add an instrument
+    This should be easy, since the text "add an instrument" is beside the buttons.  This will hopefully give them some confidence.
+    The new instrument will have populate with an audio representation, and no other representation, but will have 3 beats on it.
+  ASK: Make a representation in the new instrument that looks different, but has the same rhythm.
+    They will have to add a representation first, before adding any beats.   It is possible that they could record the new rhythm pattern on the second instrument, then add the representation, but this is unlikely, as the record button would not have been discussed and is not labeled.
+
+The actions that must be able to be recorded would be
+  add a beat
+  remove a beat
+  add a rep
+  remove a beat
+  add an instrument
+  remove an instrument
+  click of every 'button'
+    in particular, some interesting ones are
+      play
+      pause
+      the rep types
+  toggle a beat

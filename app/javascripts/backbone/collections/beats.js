@@ -10,6 +10,7 @@ define([
   var BeatsCollection = Backbone.Collection.extend({
     model: BeatModel,
     initialize: function(){
+      this.name= 'collection-beats';
     }
   });
   return BeatsCollection;

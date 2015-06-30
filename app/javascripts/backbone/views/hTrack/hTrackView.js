@@ -20,9 +20,11 @@ define([
   return Backbone.View.extend({
     events : {
       // for toggling the hTrack's muted state.
-      'click .control' : 'toggleMuteDisplay',
+      'click .fa-volume-up' : 'toggleMuteDisplay',
+      'click .fa-volume-off' : 'toggleMuteDisplay',
+      'click .fa-ban' : 'toggleMuteDisplay',
       // for setting this hTrack in focus (or selected).
-      'click .addMeasureRep' : 'addRepresentationToHTrack',
+      'click .fa-plus' : 'toggleAddRepresentationToHTrack',
       // when the delete instrument button is clicked, remove this hTrack
       'click .delete-instrument' : 'removeInstrument'
     },
@@ -178,26 +180,55 @@ define([
         this.gainNode.gain.value = 0;
         // Show it
         $(this.el).find('.control').removeClass('unmute').addClass('mute');
-        $(this.el+ ' .control').html('<i class="icon-volume-off"></i>');
+        $(this.el).find('.control').html('<i class="fa fa-volume-off fa-stack-1x"></i><i class="fa fa-ban fa-stack-1x"></i>');
         // Log it
-        log.sendLog([[2, "hTrack muted: "+"hTrack"+this.model.cid]]);
+        Logging.logStorage("Htrack muted: "+ this.model.get('label'));
       // it is muted
       } else {
         // Unmute it
         this.gainNode.gain.value = 1;
         // Show it
         $(this.el).find('.control').removeClass('mute').addClass('unmute');
-        $(this.el+ ' .control').html('<i class="icon-volume-up"></i>');
+        $(this.el).find('.control').html('<i class="fa fa-volume-up fa-stack-1x"></i>');
         // log it
-        log.sendLog([[2, "hTrack unmuted: "+"hTrack"+this.model.cid]]);
+        Logging.logStorage("Htrack UNmuted : "+ this.model.get('label'));
       }
     },
     // To add a representation to a measure, we first add the class '.cs' to the htrack to know which measure of which HTrack to add it to
-    addRepresentationToHTrack: function(e) {
-      e.toElement.parentElement.classList.add('cs');
-      var newRepType = $(e.target).closest('.representation').attr('data-state');
-      Logging.logStorage("Clicked a wmrv without clicking add or transition first.  Clicked: " + newRepType);      
-      console.log('clicked the plus sign');
+    toggleAddRepresentationToHTrack: function(e) {
+      // If it is already clicked
+      if(e.toElement.parentElement.classList.contains('cs')) {
+        e.toElement.parentElement.classList.remove('cs');
+        console.info('clicked the plus sign to turn it off');
+        this.set('awaitingAdd', false);
+      // If it is not clicked
+      } else if(!e.toElement.parentElement.classList.contains('cs')) {
+        // remove all other plus signs
+        $('.cs').removeClass('cs'); 
+        $('.spinner').remove(); 
+
+        e.toElement.parentElement.classList.add('cs');
+        var newRepType = $(e.target).closest('.representation').attr('data-state');
+        // add the spinning image
+        var spinner = '<img class="spinner" alt="spinner" src="images/spinner.gif"/>'
+        $(e.toElement.parentElement).append(spinner);
+
+        Logging.logStorage("Clicked a wmrv without clicking add or transition first.  Clicked: " + newRepType); 
+        console.info('clicked the plus sign');
+        
+        var µthis = this;
+        this.model.set('awaitingAdd', true);
+        setTimeout(function(){
+          // If they failed to click the correct button to add a rep in 6 seconds, reset it
+          if(µthis.model.get('awaitingAdd')){          
+            $('.cs').removeClass('cs'); 
+            $('.spinner').remove(); 
+            Logging.logStorage('Clicked a plus, but failed to add a rep in 6 secs.'); 
+          }
+        },6000)
+      } else {
+        console.error('Clicked the plus sign and shouldn\'t be here');
+      }
     },
     // Shortcuts a for 'add'
     manuallPress: function(e) {

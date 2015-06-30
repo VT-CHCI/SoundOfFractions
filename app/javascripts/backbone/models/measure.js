@@ -24,9 +24,11 @@ define([
     //   currentScale: 1
     // },
     initialize: function(){
-      this.listenTo(this.get('beats'), 'add remove', this.toggle);
+      this.name = 'model-measure';
+      this.listenTo(this.get('beats'), 'add remove', this.turnPlayingOff);
+      this.listenTo(this.get('beats'), 'remove', this.logRemoval);
     },
-    toggle: function(){
+    turnPlayingOff: function(){
       if(ConductorModel.get('isPlaying')){
         ConductorModel.stop();
       }
@@ -38,12 +40,16 @@ define([
     //   this.set({previousScale : this.get('currentScale')});
     //   this.set({currentScale : newScale});
     // },
+    logRemoval: function(beatModel, newBeatsCollection, indexOfRemovedBeat){
+      debugger;
+      Logging.logStorage("Removed a beat.  It was at index: " + indexOfRemovedBeat.index);
+    },
     // This is used by the Beat Factory when a new beat is added in a specific position
     addBeatToBeatsCollection: function(newBeat, newIndex){
       console.log('in measure model, a beat is getting added at index: ', newIndex);
       this.get('beats').add(newBeat, {at:newIndex});
       // interaction log
-     Logging.logStorage("Added a beat");
+     Logging.logStorage("Added a beat.  At index: " + newIndex);
     }
   });
   return MeasureModel;

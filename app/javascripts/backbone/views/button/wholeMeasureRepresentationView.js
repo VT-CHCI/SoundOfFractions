@@ -64,10 +64,13 @@ define([
       var hTrackID = $('.cs').closest('.hTrack').attr('id');
       var cid = hTrackID.slice(7);
       $('.cs').removeClass('cs'); 
+      $('.spinner').remove(); 
       //trigger the Measure representation addition
       var sisterBeatsCollection = StageCollection.get(cid).get('measures').models[0].get('beats');
       var representationModel = new RepresentationModel({currentRepresentationType: newRepType, sisterBeatsCollection: sisterBeatsCollection});
       console.log('adding to the instrument/measure/measureRep');
+      // updating the awaitingAdd to false, so the timeout reset of the cs doesn't get called
+      StageCollection.get(cid).set('awaitingAdd', false);   
       // Currently forcing it to add to the first measure
       StageCollection.get(cid).get('measures').models[0].get('measureRepresentations').add(representationModel);   
       // dispatch.trigger('addMeasureRepresentation.event', { newRepType: newRepType, hTrackID: hTrackID, hTrack: cid} );
