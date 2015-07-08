@@ -12,8 +12,10 @@ define([
   'backbone/views/beat/auxBeatView',
   'backbone/views/factory/beatFactoryView',
   'text!backbone/templates/measure/measureRep.html',
-  'colors'
-], function($, _, Backbone, StateModel, BeatsCollection, MeasureModel, RepresentationModel, StateModel, BeatView, AuxBeatView, BeatFactoryView, MeasureRepTemplate, COLORS){
+  'general/lookupInstrument',
+  'colors',
+  'logging'
+], function($, _, Backbone, StateModel, BeatsCollection, MeasureModel, RepresentationModel, StateModel, BeatView, AuxBeatView, BeatFactoryView, MeasureRepTemplate, LookupInstrument, COLORS, Logging){
   return Backbone.View.extend({
     //registering click events to add and remove measures.
     events : {
@@ -1662,21 +1664,56 @@ define([
     },
     addDroppable: function(){
       // JQ Droppable
+      var parentµthis = this;
       $(this.el).droppable({
         accept: '.stamp',
+        tolerance: 'fit', //Make sure the label is entirely in the measureRep
         drop: function(event, ui) {
           var µthis = this;
+          var type = this.dataset.representation;
+          var label = ui.draggable.text();
+          var left = ui.offset.left-this.offsetLeft-1;
+          var top = ui.offset.top-this.offsetTop-116;
+          var instrument = LookupInstrument.getDefault($(this).parent().parent().parent().parent().data().state, 'label');
+          Logging.logStorage('Added a label to a measureRep of type: ' + type + ' on instrument: '+ instrument +', Label: ' + label + ' to : left: ' + left + ' , top: ' + top);
+
+
+          // Create a new div, that can also be dragged around within the measureRep
           var newDiv = $('<div class="dbtn stamped dropped"></div>')
             .text(ui.draggable.text())
-            .draggable({
-              stop: function(event0, ui0) {
+            //Allow it to be dragged again
+            .draggable({ 
+              // When it drags
+              drag: function(dragEvent, dragUI){
+                //  to the left            to the right                           to the top          to the bottom
                 if (this.offsetLeft < 0 || this.offsetLeft > µthis.offsetWidth || this.offsetTop < 0 || this.offsetTop > µthis.offsetHeight) {
+                  console.info('Dragged a label already in the mR outside of the mR');  
+                  var instrument = LookupInstrument.getDefault($(this).parent().parent().parent().parent().parent().data().state, 'label');
+                  var type = $(this).parent().data().representation;
+                  Logging.logStorage('Removed a label already in the mR : Instrument: '+ instrument+' , Label: ' + this.textContent+' , type: '+type);
                   this.remove();
+                  this.removed = true;
+                }
+              },
+              // When it stops
+              stop: function(stopEvent, stopUI) {
+                if(!this.removed){
+                  Logging.logStorage('Adjusted a label already in the mR.  Label: ' + this.textContent + ' to : left: ' + this.offsetLeft + ' , top: ' + this.offsetTop);
                 }
               }
             })
             .appendTo(this)
-            .css({position:"absolute", left:ui.offset.left-this.offsetLeft, top:ui.offset.top-this.offsetTop});
+            // the good is at 122L  77T
+            // the bad is at  110L 135T
+            // at this point, there are two labels, the helper (good) which is still tied to the System-Label div
+            // There is also the new one we just created, and we need to offset it properly
+                                                                            // Not sure why there is an extra 1 pixel needed
+            .css({position:"absolute", left:ui.offset.left-this.offsetLeft  -1})
+                                                                        // I think 116 is the offset between the row and the htrack height
+            .css({position:"absolute", top:ui.offset.top-this.offsetTop -116})
+
+            // .css({position:"absolute", left:ui.offset.left-this.offsetLeft-10});
+            // .css({position:"absolute", left:ui.offset.left-this.offsetLeft-10, top:ui.offset.top-this.offsetTop});
         }
       });
     },

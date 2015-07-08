@@ -1,0 +1,33 @@
+Application.js Started
+SOF.js started
+initializing the hTrackModel with these options:  
+Object {label: "Snare", type: "sn", img: "snare.png", sample: "808_sn.m4a", gain: 1…}
+SOF_Application initializing...
+SOF => In Initialize, initializing Router:
+BB Router => Initializing...
+filtering
+BB Router => Initialized
+BB routes => new : newSong
+New View initializing...
+New View rendering...
+New View rendered
+StageView render start
+render: stageView.js
+here it is:
+Object {hTrack: child, el: "#hTrack-c20", unusedInstrumentsModel: child, type: "sn", masterAudioContext: AudioContext}
+adjusted the snare gain to .2
+hTrackView render from scratch
+child {cid: "view46", el: "#hTrack-c20", $el: jQuery.fn.jQuery.init[1], hTrack: child, unusedInstrumentsModel: child…}
+child {cid: "c20", attributes: Object, collection: child, _changing: false, _previousAttributes: Object…}
+got the measures model
+m render with scale of: undefined
+mR render
+beat:  0
+beatView render
+beat:  1
+beatView render
+beat:  2
+beatView render
+beat:  3
+beatView render
+beat:  4

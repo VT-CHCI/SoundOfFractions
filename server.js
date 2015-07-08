@@ -397,16 +397,16 @@ app.post('/api/logging', function (req, res) {
     //   console.log("The file was saved!");
     // }); 
     basicLogger.info(JSON.stringify(req.body));
-    Logging
-      .findOrCreate({
-        where: {
-          action: JSON.stringify(req.body)
-        }
-      })
-        .spread(function(logging, created){
-          console.log('created in the db: ');
-          console.log(created);
-        })
+    // Logging
+    //   .findOrCreate({
+    //     where: {
+    //       action: JSON.stringify(req.body)
+    //     }
+    //   })
+    //     .spread(function(logging, created){
+    //       console.log('created in the db: ');
+    //       console.log(created);
+    //     })
     //
     // Grab your preconfigured logger
     //

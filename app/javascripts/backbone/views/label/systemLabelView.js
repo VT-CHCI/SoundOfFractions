@@ -6,8 +6,9 @@ define([
   'jquery',
   'underscore',
   'bbone',
-  'text!backbone/templates/label/systemLabel.html'
-], function($, _, Backbone, SystemLabelTemplate){
+  'text!backbone/templates/label/systemLabel.html',
+  'logging'
+], function($, _, Backbone, SystemLabelTemplate, Logging){
 
   var SystemLabelView = Backbone.View.extend({
     initialize: function(options) {
@@ -33,6 +34,19 @@ define([
 
       // JQuery-UI draggable
       $('.stamp').draggable({
+        start: function( event, ui ) {
+          // console.log('oX: ' + event.offsetX);
+          // console.log('oY: ' + event.offsetY);
+        },
+        drag: function(event, ui){
+          // console.log('ui.offset.top : ' + ui.offset.top);
+          // console.log('ui.offset.left: ' + ui.offset.left);
+        },
+        stop: function(event, ui){
+          // console.log('stopping');
+          // console.log('ui.offset.top : ' + ui.offset.top);
+          // console.log('ui.offset.left: ' + ui.offset.left);
+        },
         revert: 'invalid',
         helper: 'clone'
       });
