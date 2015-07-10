@@ -59,7 +59,6 @@ define([
       // TODO Replace these events
       // dispatch.on('deleteAudioContext.event', this.deleteAudioContext, this);
 
-      // dispatch.on('conductor.event', this.togglePlay, this);
       this.listenTo(ConductorModel, 'conductorStart', this.togglePlaying);
       this.listenTo(ConductorModel, 'conductorStop', this.togglePlaying);
 

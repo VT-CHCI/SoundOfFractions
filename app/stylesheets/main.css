@@ -14,7 +14,7 @@
 }
 
 #measure-representation-buttons button svg {
-  /*width: 100px;*/
+  width: 100px;
 }
 /*This keeps the remainin measure Reps inline when one is re-rendering in place from a transition*/
 .update-render-temp-holder {
@@ -143,8 +143,8 @@
   white-space: nowrap;
 }
 .measure-container {
-  /*width: 89%;*/
-  /*overflow: auto;*/
+  width: 89%;
+  overflow: auto;
 }
 .well {
   padding: 5px;
@@ -169,22 +169,23 @@
 }
 /*For the top row*/
 .representation[data-state="line"] svg {
-  margin-left: -100px;
+  margin-left: -91px;
+  width: 146px!important;
 }
 .representation[data-state="pie"] svg {
   margin-left: 15px;
 }
-.representation[data-state="bead"] svg {
+/*.representation[data-state="bead"] svg {
   margin-left: 10px;
-}
+}*/
 .representation[data-state="audio"] svg {
   margin-left: 5px;
 }
 
 .resize-measure-pull{
-  /*visibility: hidden; 
-  /*position: relative;
-  /*top: -40px;
+  visibility: hidden; 
+  position: relative;
+  top: -40px;
   -webkit-transform: rotate(90deg); 
   -moz-transform: rotate(90deg);
   -o-transform: rotate(90deg);
@@ -198,7 +199,8 @@
   padding: 3px;
 }
 #measure-representation-buttons button {
-  font-size: 10px;
+  /*font-size: 10px;*/
+  width: 146px;
   /*padding-left: 5px;*/
 }
 #system-label-group {
@@ -376,7 +378,7 @@ svg.line {
 .addMeasureRep {
   color: grey;
 	display: inline-block;
-	vertical-align: bottom;
+	vertical-align: top;
   cursor: pointer;
 }
 .addMeasureRep:hover {
@@ -499,11 +501,6 @@ svg.line {
   border: 1px solid #e3e3e3
 }
 
-#fraction-representation button {
-  width: 20%;
-}
-
-
 #system-label-container {
   /*margin: 0px auto 10px auto;*/
   text-align: center;
@@ -529,16 +526,13 @@ svg.line {
   background-color: whitesmoke;
   border: 1px solid #e3e3e3
 }
-#measure-transformation button {
+/*#measure-transformation button {
   width: 20%;
 }
-#fraction-representation-buttons {
-  width: 100%;
-}
-
 #measure-representation button {
   width: 20%;
 }
+*/
 
 #tap-tempo-container {
   padding-top: 20px;

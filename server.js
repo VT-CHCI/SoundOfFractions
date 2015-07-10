@@ -78,8 +78,9 @@ var UID = sequelize.define('uid', {
   name: Sequelize.STRING
 });
 
-var Logging = sequelize.define('assignment', {
-  action: Sequelize.STRING
+var Logging = sequelize.define('logging', {
+  action: Sequelize.STRING,
+  currentStageCollection: Sequelize.STRING
 });
 
 var Assignment = sequelize.define('assignment', {
@@ -131,8 +132,11 @@ var PersonRole = sequelize.define('person_role',{
 Person.belongsToMany(Role, {through: PersonRole});
 Role.belongsToMany(Person, {through: PersonRole});
 
-UID.belongsTo(Logging);
-Logging.hasMany(UID);
+UID.hasMany(Logging);
+Logging.belongsTo(UID);
+
+Person.hasMany(UID);
+UID.belongsTo(Person);
 
 Setting.belongsTo(Person);
 Person.hasOne(Setting);
@@ -142,37 +146,39 @@ Person.hasMany(Song);
 
 function start() {
   var promise = new RSVP.Promise(function (resolve, reject) {
-    return Person.sync()
-      .then(function() {
-        return UID.sync();
-      })
-      .then(function() {
-        return Logging.sync();
-      })
-      .then(function() {
-        return Role.sync();
-      })
-      .then(function() {
-        return PersonRole.sync();
-      })
-      .then(function() {
-        return Assignment.sync();
-      })
-      .then(function() {
-        return ClassSection.sync();
-      })
-      .then(function() {
-        return AssignmentClass.sync();
-      })
-      .then(function() {
-        return ClassPerson.sync();
-      })
-      .then(function() {
-        return Setting.sync();
-      })
-      .then(function() {
-        return Song.sync();
-      })
+    // return sequelize.sync({force: true})
+    return sequelize.sync()
+    // return Person.sync()
+    //   .then(function() {
+    //     return UID.sync();
+    //   })
+    //   .then(function() {
+    //     return Logging.sync();
+    //   })
+    //   .then(function() {
+    //     return Role.sync();
+    //   })
+    //   .then(function() {
+    //     return PersonRole.sync();
+    //   })
+    //   .then(function() {
+    //     return Assignment.sync();
+    //   })
+    //   .then(function() {
+    //     return ClassSection.sync();
+    //   })
+    //   .then(function() {
+    //     return AssignmentClass.sync();
+    //   })
+    //   .then(function() {
+    //     return ClassPerson.sync();
+    //   })
+    //   .then(function() {
+    //     return Setting.sync();
+    //   })
+    //   .then(function() {
+    //     return Song.sync();
+    //   })
       .then(function () {
         // Setting
         return Setting.findOrCreate({
@@ -307,6 +313,18 @@ app.post('/api/login', function (req, res) {
         if (personResults.rowCount === 0) {
           res.status(400).send('user not found');
         } else {
+          console.log('\n\n\n\personresultsid', personResults.get('id'));
+          UID.findOrCreate({where: {name: req.body.uid, personId: personResults.get('id')}})
+            .then(function (newlySavedUIDObj) {
+              // personResults.addUID(newlySavedUIDObj);
+              // personResults.save()
+              //   .then(function (idk) {
+              //     console.log('saved person with uid', idk);
+              //   })
+              //   .catch(function (error) {
+              //     console.error('problem saving person with uid', error);
+              //   });
+            });
           // console.log(personResults.songs);
           console.log('Logging in at \'/api/login\', and sending a cookie.');
           res.cookie('UID', req.body.uid, {maxAge: 10800000});
@@ -387,36 +405,33 @@ app.post('/api/logout', function (req, res) {
 });
 
 app.post('/api/logging', function (req, res) {
-  console.log(req.body);
-  if (req.body.hasOwnProperty('Action') && req.body.Action != '') {
-    // Write this to a file 
-    // fs.appendFile('app/doc/logData.txt', JSON.stringify(req.body) + '\n', function(err) {
-    //   if(err) {
-    //     return console.log(err);
-    //   }
-    //   console.log("The file was saved!");
-    // }); 
-    basicLogger.info(JSON.stringify(req.body));
-    // Logging
-    //   .findOrCreate({
-    //     where: {
-    //       action: JSON.stringify(req.body)
-    //     }
-    //   })
-    //     .spread(function(logging, created){
-    //       console.log('created in the db: ');
-    //       console.log(created);
-    //     })
-    //
-    // Grab your preconfigured logger
-    //
+  if (req.body.hasOwnProperty('Action') && req.body.Action && req.body.CurrentStageCollection != '' && req.body.hasOwnProperty('UID') ) {
+    UID.findOrCreate({
+      where: {
+        name: req.body.UID
+      }
+    }).spread(function (uidObj) {
+      Logging.create({
+        action: req.body.Action,
+        currentStageCollection: req.body.CurrentStageCollection,
+        uidId: uidObj.get('id')
+      })
+        .then(function (newLogEntry) {
+          // Send a message back to the client that it was saved
+          var message = {
+            text: 'Saved logging on the server',
+            action: req.body.Action
+          };
+          // Winston logger
+          // basicLogger.info(JSON.stringify(req.body));
+          res.status(200).send(message);
+        });
+      
+    });
 
-    // Send a message back to the client that it was saved
-    var message = {
-      text: 'Saved logging on the server',
-      action: req.body.Action
-    };
-    res.status(200).send(message);
+  // If The logging message doesn't have a UID for some reason
+  } else if(req.body.hasOwnProperty('Action') && req.body.Action != '') {
+    res.status(400).send(req.body);
   } else {
     //res.status(400).send('bad data for local storage');
     res.status(400).send(req.body);

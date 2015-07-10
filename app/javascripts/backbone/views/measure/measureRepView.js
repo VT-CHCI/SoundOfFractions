@@ -57,6 +57,8 @@ define([
       this.listenTo(this.parentHTrackView, 'toggleAnimation', this.toggleAnimation);
       // this.parentMeasureModel.get('beats').on('add', this.updateRender, this);
       // this.parentMeasureModel.get('beats').on('remove', this.updateRender, this);
+      
+      this.listenTo(this.parentHTrackModel.get('measures').models[0], 'change:beats', this.updateRender);
 
       this.listenTo(this.model, 'change:currentRepresentationType', this.transition, this);
       // this.listenTo(this.model, 'destroy', this.close, this);
@@ -1398,7 +1400,6 @@ define([
         console.warn(this.model.get('linearLineLength'));
       }
 
-      window.csf = this;
       return this;
     },
     // This makes the bead factory in each measureRep
@@ -1617,7 +1618,12 @@ define([
     recordMeasure: function(button) {
       console.log('Record clicked');
       if(!this.isTapping) {
-        // StateModel.recordTempoAndPatternByTapping();
+        // This is for recording by tapping on the desk...
+        // We need to know which instrument was being recorded
+        StateModel.recordTempoAndPatternByTapping(this.parentHTrackModel.get('type'));
+        
+        // I think this is for recording by tapping on the keyboard keys...
+        // Nope, still dont know what this is for
         StateModel.turnIsWaitingOn();
         this.isTapping = true;
       }
@@ -1786,7 +1792,6 @@ define([
         originals.push($(this).clone(true)); 
         // Create placeholder for original content
         $(this).replaceWith('<div id="original_' + originals.length + '" class="update-render-temp-holder"></div>');
-        // $(this).replaceWith('<div id="original_' + originals.length + '" style="width:'+dimensions[dimensions.length].width+'px; height:'+dimensions[dimensions.length].height+'px"></div>');
       });
 
       // Replace placeholders with original content

@@ -13,17 +13,21 @@ define([
 ], function($, _, Backbone, StageCollection, StageView, NodeUUID){
 	return LocalStorage = {
 		initialize: function(){
-			// this.stageCollection = stageCollection;
+			// Check for localStorage capabilities
 			if (this.checkStorageSupport()) {
 				console.info("Congrats, your browser supports HTML5 local storage!");
 				// If a session does not already exist, initialize localStorage
 				if (!localStorage.getItem('UID')) {
 					this.startNewLocalStorageSession();
+					// Send a message that we have a new UID, that may log in later
+					this.logStorage('NEW USER SESSION - Starting with a UID : ' + localStorage.getItem('UID'));
 				// If a UID does exist
 				} else {
+					// Send a message they have a UID
+					this.logStorage('RETURNING USER SESSION with a UID : ' + localStorage.getItem('UID'));
 					console.warn('LOCAL STORAGE UID: ', localStorage.getItem('UID'));
 					// Check wasSaved and log info if false.
-					if (!JSON.parse(localStorage.getItem('wasSaved'))) {
+					if (!JSON.parse(localStorage.getItem('wasSaved')) && (localStorage.getItem('unsavedActions') !== '') ) {
 						console.info("Last session has unsaved data");
 						this.logStorage("Logging unsaved storage");
 					}
@@ -51,7 +55,7 @@ define([
 			console.log("Logging to server, message: ", message);
 			localStorage.setItem('action', message);
 			localStorage.setItem('currentState', this.makeReadableStageCollectionJSON());
-		  // Since we are sending another log, we must reset the wasSaved to be false incase something breaks
+		  // Since we are sending another log, we must reset the wasSaved to be false in case something breaks
 		  localStorage.setItem('wasSaved', JSON.stringify(false));
 			console.log(localStorage);
 
@@ -74,7 +78,6 @@ define([
 		    })
 		      .done(function(data){
 		        console.log('Success sending to log message to the server');
-		        console.log(data);
 
 		        if (localStorage.getItem('savedActions') != '') {
 		        	localStorage.setItem('savedActions', localStorage.getItem('savedActions') + ', ');
@@ -92,11 +95,12 @@ define([
 		        console.error('FAILURE sending to log message to the server');
 		        console.log(data);
 
-		        if (localStorage.getItem('unsavedActions') != '') {
-		        	localStorage.setItem('unsavedActions', localStorage.getItem('unsavedActions') + ', ');
-		        }
+		        // if (localStorage.getItem('unsavedActions') !== '') {
+		        // 	localStorage.setItem('unsavedActions', localStorage.getItem('unsavedActions') + ', ');
+		        // }
 		        // Log the interaction as unsaved
-		        localStorage.setItem('unsavedActions', localStorage.getItem('unsavedActions') + localStorage.getItem('action'));
+		        // localStorage.setItem('unsavedActions', localStorage.getItem('unsavedActions') + localStorage.getItem('action'));
+		        localStorage.setItem('unsavedActions', localStorage.getItem('unsavedActions').push(localStorage.getItem('action')) );
 		        localStorage.setItem('action', '');
 		      })
 		},

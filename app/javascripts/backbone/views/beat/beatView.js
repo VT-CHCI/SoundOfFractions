@@ -8,8 +8,9 @@ define([
   'underscore',
   'bbone',
   'backbone/models/beat',
-  'colors'
-], function($, _, Backbone, BeatModel, COLORS){
+  'colors',
+  'logging'
+], function($, _, Backbone, BeatModel, COLORS, Logging){
   return Backbone.View.extend({
     // registering backbone's click event to our toggle() function.
     events : {
@@ -383,9 +384,11 @@ define([
       5. triggers a beatClicked event.
     */
     toggleModel: function(){
-      console.log('Getting in the TOGGLE MODEL!!!!!!');
+      console.log('Toggling the beat view model');
       //switch the selected boolean value on the model
       this.model.set('selected', !this.model.get('selected'));
+      var state = this.model.get('selected') ? 'ON' : 'OFF';
+      Logging.logStorage('Toggling the beat view model. Turning: ' + state + ' . Beat index (0-based): ' +this.beatIndex + ' on the index (0-based) representation: ' + $(this.parentMeasureRepView.$el).index() + ' of type: ' + this.parentMeasureRepView.measureRepModel.get('currentRepresentationType') + ' on this instrument: ' + this.parentMeasureRepView.parentHTrackModel.get('label') );
       // log.sendLog([[1, "beat" + this.model.cid + " toggled: "+!bool]]);
     },
     toggleOpacity: function() {

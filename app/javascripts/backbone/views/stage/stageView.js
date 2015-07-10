@@ -40,7 +40,7 @@ define([
 
       // TODO Replace these events
       // dispatch.on('instrumentDeletedFromCompositionArea.event', this.deleteInstrument, this);
-      // dispatch.on('newInstrumentTempoRecorded', this.addInstrument, this);
+      StateModel.on('instrumentTempoRecorded', this.replaceInstrumentWithRecordedPattern, this);
 
       StateModel.set('stageCollection', this.stageCollection);
       
@@ -81,7 +81,18 @@ define([
       }, this);
     },
     // addInstrument With Pattern
-    addInstrumentWithPattern: function(options) {
+    replaceInstrumentWithRecordedPattern: function(options) {
+      console.log(options);
+      var µthis = this;
+      _.each(this.stageCollection.collection.models, function(htrackModel){
+        if(htrackModel.get('type') === options.instrument){
+          console.log('gh');
+          // Make a beatsCollection
+          µthis.setUpManualBeatsCollection(options);
+          htrackModel.get('measures').models[0].set('beats', µthis.manuallyCreatedMeasureBeatsCollection)
+          window.csf = htrackModel;
+        }
+      })
     },
     makeInstrumentFromScratch: function(options) {
       console.info('makeInstrumentFromScratch options: ', options)
@@ -178,7 +189,21 @@ define([
           beats: this.secondManuallyCreatedMeasureBeatsCollection, measureRepresentations: this.manuallyCreatedMeasureRepresentationCollection});
 
     },
-    // We want to delete an instrument form the view, as well as from the instrument generator
+    // This is for replaceing a beats collection when it is recorded
+    setUpManualBeatsCollection: function(options){
+      // this creates 1 measure, and adds beats and the representations to itself
+      this.manuallyCreatedMeasureBeatsCollection = new BeatsCollection;
+      //for each beat - also change signature below
+      for (var i = 0; i < options.beatPattern.length; i++) {
+        if (options.beatPattern[i] == 'ON'){
+          this.manuallyCreatedMeasureBeatsCollection.add([{selected: true}]);
+        } else {
+          this.manuallyCreatedMeasureBeatsCollection.add([{selected: false}]);
+          // this.manuallyCreatedMeasureBeatsCollection.add();
+        }
+      }
+    },
+    // We want to delete an instrument from the view, as well as add it to the instrument generator
     deleteInstrument: function(instrument) {
     },
     subRender: function() {
@@ -189,6 +214,9 @@ define([
       console.info('in stageView close function');
       this.remove();
       this.unbind();
+      this.closeChildren();
+    },
+    closeChildren: function(){
       // handle other unbinding needs, here
       _.each(this.childViews, function(childView){
         console.log('in measureView close function, CLOSING CHILDREN');

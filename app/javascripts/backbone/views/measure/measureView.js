@@ -16,8 +16,9 @@ define([
   'backbone/views/beat/beatView',
   'backbone/views/measure/measureRepView',
   'text!backbone/templates/measure/measure.html',
-  'colors'
-], function($, _, Backbone, BeatsCollection, StageCollection, RepresentationsCollection, MeasureModel, StateModel, RepresentationModel, BeatView, MeasureRepView, MeasureTemplate, COLORS){
+  'colors',
+  'logging'
+], function($, _, Backbone, BeatsCollection, StageCollection, RepresentationsCollection, MeasureModel, StateModel, RepresentationModel, BeatView, MeasureRepView, MeasureTemplate, COLORS, Logging){
   return Backbone.View.extend({
 
     //registering click events to add and remove measures.
@@ -84,6 +85,7 @@ define([
       } else {
         console.log('Measure View add child');
         var addedModel = this.model.get('measureRepresentations').last();
+        Logging.logStorage('Adding a measureRep of type: ' + this.model.get('measureRepresentations').last().get('currentRepresentationType') + ' to the instrument: ' + this.parentHTrackModel.get('label') );
       }
 
       // get parameters for the template for a measure

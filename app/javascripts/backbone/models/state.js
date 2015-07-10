@@ -49,7 +49,6 @@ define([
       this.on('recordTempoAndPattern', this.recordTempoAndPattern, this);
       // dispatch.on('recordClicked.event', this.recordButtonClicked, this);
       // dispatch.on('tappingTempo.event', this.tapTempoClicked, this);
-      // dispatch.on('stopRecording.event', this.stopRecording, this);
       // dispatch.on('tempoDetected.event', this.stopRecording, this);
     },
     turnIsWaitingOn: function(){
@@ -59,11 +58,12 @@ define([
     turnIsWaitingOff: function(){
       this.set('isTapping', false);
     },
-    recordTempoAndPatternByTapping: function() {
+    recordTempoAndPatternByTapping: function(instrument) {
       console.log('recordTempoAndPatternByTapping function in state');
-      if(this.TransportModel.isPlaying) {
-        // TODO Replace these events
-        // dispatch.trigger('togglePlay.event');
+      console.log('Instrument type: '+ instrument);
+      this.set('instrumentTypeBeingRecorded', instrument);
+      if(TransportModel.get('isPlaying')) {
+        TransportModel.stop();
       }
       this.isTapping = true;
       if(window.tapIntervalID) {
@@ -166,6 +166,7 @@ define([
             window.clearInterval(window.waitIntervalID);
             this.waitCount = 0;
           }
+
           var µthis = this;
           window.waitIntervalID = window.setInterval(function() {
             // If the user stops beating for *n* times, we stop listening to the tapping automatically
@@ -218,24 +219,21 @@ define([
               console.log(diffBeats);
 
               // TODO Replace these events
-              // dispatch.trigger('signatureChange.event', µthis.signature);
+              // µthis.trigger('signatureChange.event', µthis.signature);
 
               //show the BPM
               var bpm = 1000 / µthis.average * 60;
 
-              // TODO Replace these events
-              // dispatch.trigger('newInstrumentTempoRecorded', {instrument:'hh', beatPattern:diffBeats, bpm:bpm});
+              µthis.trigger('instrumentTempoRecorded', {instrument:µthis.get('instrumentTypeBeingRecorded'), beatPattern:diffBeats, bpm:bpm});
+              // debugger;
 
               µthis.isTapping = false;
               µthis.countIn = 1;
               µthis.set('baseTempo', bpm);
               // µthis.set('tempo', bpm);
               µthis.set('signature', µthis.signature);
-              // $('#tap-tempo').click();
-              $('#tempo-slider-input').val(1);
 
-              // TODO Replace these events
-              // dispatch.trigger('stopRecording.event');
+              µthis.stopRecording();
 
               window.clearInterval(waitIntervalID);
             }
@@ -364,7 +362,7 @@ define([
               var bpm = 1000 / µthis.average * 60;
 
               // TODO Replace these events
-              // dispatch.trigger('newInstrumentTempoRecorded', {instrument:'hh', beatPattern:diffBeats, bpm:bpm});
+              // dispatch.trigger('instrumentTempoRecorded', {instrument:'hh', beatPattern:diffBeats, bpm:bpm});
 
               µthis.isTapping = false;
               µthis.countIn = 1;
@@ -374,10 +372,7 @@ define([
               // $('#tap-tempo').click();
               $('#tempo-slider-input').val(1);
 
-
-              // TODO Replace these events
-              // µthis.stopRecording();
-              // dispatch.trigger('stopRecording.event');
+              µthis.stopRecording();
 
               window.clearInterval(waitIntervalID);
             }

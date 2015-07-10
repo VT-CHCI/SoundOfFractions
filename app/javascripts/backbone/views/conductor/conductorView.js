@@ -9,8 +9,9 @@ define([
   'bbone',
   'backbone/models/conductor',
   'text!backbone/templates/conductor/play.html',
-  'text!backbone/templates/conductor/stop.html'
-], function($, _, Backbone, ConductorModel, conductorPlayTemplate, conductorStopTemplate){
+  'text!backbone/templates/conductor/stop.html',
+  'logging'
+], function($, _, Backbone, ConductorModel, conductorPlayTemplate, conductorStopTemplate, Logging){
 
   var ConductorView = Backbone.View.extend({
     el : $('#conductor'), // Specifies the DOM element which this view handles
@@ -54,7 +55,9 @@ define([
         var compiledTemplate = _.template( conductorStopTemplate );
         $(this.el).html( compiledTemplate() );
 
-        log.sendLog([[3, "Started playing music: "]]);
+        this.startTime = new Date();
+
+        Logging.logStorage('Started playing music');
       // If playing
       } else {
         this.conductorModel.stop();
@@ -65,7 +68,9 @@ define([
 
         console.info('now stopped conductor view');
 
-        log.sendLog([[3, "Stop playing music"]]);
+        this.endTime = new Date();
+        this.elapsedTime = (this.endTime - this.startTime)/1000;
+        Logging.logStorage('Stopped playing music.  Duration of playback in seconds: ' + this.elapsedTime);
       }
 
     },
