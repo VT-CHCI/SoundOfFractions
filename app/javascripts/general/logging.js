@@ -30,9 +30,10 @@ define([
 					if (!JSON.parse(localStorage.getItem('wasSaved')) && (localStorage.getItem('unsavedActions') !== '') ) {
 						console.info("Last session has unsaved data");
 						this.logStorage("Logging unsaved storage");
+					} else {
+						//Clear Local Storage
+						this.clearLocalStorageSession();						
 					}
-					//Clear Local Storage
-					this.clearLocalStorageSession();
 				}
 			}
 			else {
