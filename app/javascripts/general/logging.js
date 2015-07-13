@@ -63,6 +63,7 @@ define([
 			$.ajax({
 		      url: '/api/logging/',
 		      type: 'POST',
+		      timeout: 5000,
 		      crossDomain: true,	//Delete for production
 		      data: {
 		      	header: "SSSSSSSSSSSSSSSSSSSSS " + this.getTimestamp() + " TTTTTTTTTTTTTTTTTTTTTTTTTTT",
