@@ -95,12 +95,12 @@ define([
 		        console.error('FAILURE sending to log message to the server');
 		        console.log(data);
 
-		        // if (localStorage.getItem('unsavedActions') !== '') {
-		        // 	localStorage.setItem('unsavedActions', localStorage.getItem('unsavedActions') + ', ');
-		        // }
+		        if (localStorage.getItem('unsavedActions') !== '') {
+		        	localStorage.setItem('unsavedActions', localStorage.getItem('unsavedActions') + ', ');
+		        }
 		        // Log the interaction as unsaved
-		        // localStorage.setItem('unsavedActions', localStorage.getItem('unsavedActions') + localStorage.getItem('action'));
-		        localStorage.setItem('unsavedActions', localStorage.getItem('unsavedActions').push(localStorage.getItem('action')) );
+		        localStorage.setItem('unsavedActions', localStorage.getItem('unsavedActions') + localStorage.getItem('action'));
+		        // localStorage.setItem('unsavedActions', localStorage.getItem('unsavedActions').push(localStorage.getItem('action')) );
 		        localStorage.setItem('action', '');
 		      })
 		},
