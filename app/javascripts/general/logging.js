@@ -88,14 +88,16 @@ define([
 		      .done(function(data){
 		        console.log('Success sending to log message to the server');
 
-		        if (localStorage.getItem('savedActions') != '') {
-		        	localStorage.setItem('savedActions', localStorage.getItem('savedActions') + ', ');
-		        }
-		        if (localStorage.getItem('unsavedActions') != '') {
-		        	localStorage.setItem('unsavedActions', localStorage.getItem('unsavedActions') + ', ');
-		        }
+		        // if (localStorage.getItem('savedActions') != '') {
+		        // 	localStorage.setItem('savedActions', localStorage.getItem('savedActions') + ', ');
+		        // }
+		        // if (localStorage.getItem('unsavedActions') != '') {
+		        // 	localStorage.setItem('unsavedActions', localStorage.getItem('unsavedActions') + ', ');
+		        // }
+
 		        // Save the action list
-		        localStorage.setItem('savedActions', localStorage.getItem('savedActions') + localStorage.getItem('unsavedActions') + localStorage.getItem('action'));
+		        // localStorage.setItem('savedActions', localStorage.getItem('savedActions') + localStorage.getItem('unsavedActions') + localStorage.getItem('action'));
+
 		        localStorage.setItem('unsavedActions', '');
 		        localStorage.setItem('action', '');
 		        localStorage.setItem('wasSaved', JSON.stringify(true));
