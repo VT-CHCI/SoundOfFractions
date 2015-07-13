@@ -146,8 +146,8 @@ Person.hasMany(Song);
 
 function start() {
   var promise = new RSVP.Promise(function (resolve, reject) {
-    return sequelize.sync({force: true})
-    // return sequelize.sync()
+    // return sequelize.sync({force: true})
+    return sequelize.sync()
     // return Person.sync()
     //   .then(function() {
     //     return UID.sync();
