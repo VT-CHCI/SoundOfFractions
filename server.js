@@ -405,6 +405,8 @@ app.post('/api/logout', function (req, res) {
 });
 
 app.post('/api/logging', function (req, res) {
+  console.log('api logging');
+  console.log(req.body);
   if (req.body.hasOwnProperty('Action') && req.body.Action && req.body.CurrentStageCollection != '' && req.body.hasOwnProperty('UID') ) {
     UID.findOrCreate({
       where: {
