@@ -80,7 +80,6 @@ define([
 			console.log("You clicked the set storage button");
 
 			shouldSucceed ? localStorage.setItem('action', 'Clicked set storage button') : localStorage.setItem('action', 'Clicked failed storage button');
-			//localStorage.setItem('currentState', JSON.stringify(window.csf.stageCollection));		// Currently is always undefined...
 		    localStorage.setItem('wasSaved', JSON.stringify(false));
 			console.log(localStorage);
 

@@ -41,7 +41,6 @@ define([
     //   this.set({currentScale : newScale});
     // },
     logRemoval: function(beatModel, newBeatsCollection, indexOfRemovedBeat){
-      debugger;
       Logging.logStorage("Removed a beat.  It was at index: " + indexOfRemovedBeat.index);
     },
     // This is used by the Beat Factory when a new beat is added in a specific position

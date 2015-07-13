@@ -11,8 +11,9 @@ define([
   'backbone/views/stage/stageView',
   'text!backbone/templates/button/remainingInstrumentGenerator.html',
   'text!backbone/templates/button/remainingInstrumentButton.html',
+  'general/lookupInstrument',
   'logging'
-], function($, _, Backbone, RemainingInstrumentGeneratorModel, StageView, remainingInstrumentGeneratorTemplate, remainingInstrumentButtonTemplate, Logging){
+], function($, _, Backbone, RemainingInstrumentGeneratorModel, StageView, remainingInstrumentGeneratorTemplate, remainingInstrumentButtonTemplate, LookupInstrument, Logging){
 
   var RemainingInstrumentGeneratorView = Backbone.View.extend({
     el: $('#instrument-generator-holder'), // Specifies the DOM element which this view handles
@@ -60,7 +61,7 @@ define([
       // update the dropdown menus in each htrack
       // TODO Replace these events
       // dispatch.trigger('reRenderInstrumentDropDown.event', instrument);
-      Logging.logStorage("Added an instrument to the stage. Clicked: " + type);      
+      Logging.logStorage("Added an instrument to the stage. Clicked: " + LookupInstrument.getDefault(type, 'label'));      
 
       this.render();
     },

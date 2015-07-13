@@ -23,13 +23,13 @@ define([
 
     initialize: function() {
       console.info('ConductorView initing...')
-      this.conductorModel = ConductorModel;
+      this.model = ConductorModel;
 
       //registering our stopPlay() method on stopRequest events.
 
       // TODO Replace these events
       // dispatch.on('measureRepresentation.event', this.stopPlay, this);
-      // dispatch.on('stopRequest.event', this.stopPlay, this);
+      this.listenTo(this.model, 'conductorStop', this.changeButtonToStop);
 
       // allow the letter p to click the first plus sign
       _.bindAll(this, 'manuallPress');
@@ -37,7 +37,10 @@ define([
 
       this.render();
     },
-
+    changeButtonToStop: function(){
+      var compiledTemplate = _.template( conductorPlayTemplate );
+      $(this.el).html( compiledTemplate );
+    },
     /*
       This toggles the imaage of the Transport button
       and triggers togglePlay events.
@@ -47,9 +50,9 @@ define([
     */
     instruct: function() {
       // If stoppped
-      if(!this.conductorModel.get('isPlaying')) {
+      if(!this.model.get('isPlaying')) {
         
-        this.conductorModel.play();
+        this.model.play();
         console.info('now playing conductor view');
 
         var compiledTemplate = _.template( conductorStopTemplate );
@@ -60,7 +63,7 @@ define([
         Logging.logStorage('Started playing music');
       // If playing
       } else {
-        this.conductorModel.stop();
+        this.model.stop();
         console.log('now stopping conductor view');
 
         var compiledTemplate = _.template( conductorPlayTemplate );

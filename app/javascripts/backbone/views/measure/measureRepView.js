@@ -479,27 +479,29 @@ define([
     audioAnimate: function(target, dur, selected) {
       // console.log('Audio animate target: ', target);
       var d3Target = d3.select(target);
-      var originalFillColor = 'none';
-      if(selected == true){
-        var newFillColor = COLORS.hexColors[5];
-      } else {
-        var newFillColor = originalFillColor;
-      }
-      // var originalOpacity = target.getAttribute('opacity');
+      // var originalFillColor = 'none';
+      var originalOpacity = 'none';
       // if(selected == true){
-      //   var newOpacity = 1;
+      //   var newFillColor = COLORS.hexColors[5];
       // } else {
-      //   var newOpacity = originalOpacity;
+      //   var newFillColor = originalFillColor;
       // }
+      var originalOpacity = target.getAttribute('fill-opacity');
+      if(selected == true){
+        var newOpacity = 1;
+      } else {
+        var newOpacity = originalOpacity;
+      }
       d3Target.transition()
-        .attr('fill', newFillColor )
-        .duration(dur)
+        .attr('fill-opacity', newOpacity)
+        // .attr('fill', newFillColor )
+        .duration(0)
         .each('end',function() {                   // as seen above
           d3.select(this).                         // this is the object 
             transition()                           // a new transition!
-              .attr('fill', originalFillColor )   // we could have had another
-              // .delay(dur)
-              .duration(dur);                      // .each("end" construct here.
+              // .attr('fill', originalFillColor )   // we could have had another
+              .attr('fill-opacity', originalOpacity )   // we could have had another
+              .duration(dur*2);                      // .each("end" construct here.
               // .delay(dur-1)
               // .duration(1);                      // .each("end" construct here.
          });
@@ -1768,6 +1770,7 @@ define([
         this.$el.width(this.model.get('circularDivWidth'));
         this.$el.height(this.model.get('circularDivHeight'));
       }
+      // debugger;
       // make the beats
       this.makeBeats();
       // make a beat factory
@@ -1799,12 +1802,12 @@ define([
       //  $('#original_' + (i + 1)).replaceWith(originals[i]);
       // };
 
-      setTimeout(function(){
+      // setTimeout(function(){
         // Replace placeholders with original content
         for (var i = 0; i < originals.length; i++) {
          $('#original_' + (i + 1)).replaceWith(originals[i]);
         };
-      }, 1 );
+      // }, 1 );
       window.csd = this;
 // To here
 

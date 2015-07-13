@@ -126,26 +126,26 @@ define([
       all the durations get recalculated to reflect this new measure.
     */
     addMeasure: function(){
-        console.log('add a measure');
-        var newMeasure = new BeatsCollection;
+        // console.log('add a measure');
+        // var newMeasure = new BeatsCollection;
 
-        for (var i = 0; i < this.parentHTrackModel.get('signature'); i++) {
-          newMeasure.add();
-        }
+        // for (var i = 0; i < this.parentHTrackModel.get('signature'); i++) {
+        //   newMeasure.add();
+        // }
 
-        this.measuresCollection.add({beats: newMeasure});
+        // this.measuresCollection.add({beats: newMeasure});
 
-        //Logging
-        name = 'measure' + _.last(this.measuresCollection.models).cid + '.';
-        _.each(newMeasure.models, function(beats) {
-          name = name + 'beat'+ beats.cid + '.';
-        }, this);
-        log.sendLog([[3, 'Added a measure: ' + name]]);
+        // //Logging
+        // name = 'measure' + _.last(this.measuresCollection.models).cid + '.';
+        // _.each(newMeasure.models, function(beats) {
+        //   name = name + 'beat'+ beats.cid + '.';
+        // }, this);
+        // log.sendLog([[3, 'Added a measure: ' + name]]);
 
-        //Render
-        this.render();
-        //Dispatch
-        // TODO Replace these events
+        // //Render
+        // this.render();
+        // //Dispatch
+        // // TODO Replace these events
         // dispatch.trigger('stopRequest.event', 'off');
     },
 

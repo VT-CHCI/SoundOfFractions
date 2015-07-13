@@ -32,7 +32,6 @@ define([
       // set the song's conductor
       // debugger;
       Logging.initialize();
-      // Logging.initialize(this.stageCollection);
       this.conductor = ConductorModel;
       this.masterAudioContext = new AudioContext();
       
@@ -41,6 +40,7 @@ define([
       // TODO Replace these events
       // dispatch.on('instrumentDeletedFromCompositionArea.event', this.deleteInstrument, this);
       StateModel.on('instrumentTempoRecorded', this.replaceInstrumentWithRecordedPattern, this);
+      // StateModel.on('instrumentTempoRecorded', this.addInstrumentWithRecordedPattern, this);
 
       StateModel.set('stageCollection', this.stageCollection);
       
@@ -53,12 +53,20 @@ define([
       // When an instrument is clicked in the Genrerator, we call this function to compile and add it
       this.listenTo(RemainingInstrumentGeneratorModel, 'removedInstrumentFromUnused', this.addFromGeneratorModel);
 
+      this.listenTo(this.stageCollection, 'add remove', this.turnPlayingOff);
+
       // This kicks off and adds the snare to the 
       RemainingInstrumentGeneratorModel.removeInstrumentFromUnused({type:'sn'});
       // this.makeInstrumentFromScratch({type:'sn'});
       // RemainingInstrumentGeneratorModel.removeInstrumentFromUnused({type:'sn'});
       
       this.makeChildrenHTracks();
+    },
+    turnPlayingOff: function(){
+      if(ConductorModel.get('isPlaying')){
+        ConductorModel.stop();
+        Logging.logStorage('The music was playing when the HTrack was added/deleted');
+      }
     },
 
     render: function(){
@@ -82,7 +90,6 @@ define([
     },
     // addInstrument With Pattern
     replaceInstrumentWithRecordedPattern: function(options) {
-      console.log(options);
       var µthis = this;
       _.each(this.stageCollection.collection.models, function(htrackModel){
         if(htrackModel.get('type') === options.instrument){
@@ -90,9 +97,11 @@ define([
           // Make a beatsCollection
           µthis.setUpManualBeatsCollection(options);
           htrackModel.get('measures').models[0].set('beats', µthis.manuallyCreatedMeasureBeatsCollection)
-          window.csf = htrackModel;
         }
       })
+    },
+    addInstrumentWithRecordedPattern: function(options) {
+      // 
     },
     makeInstrumentFromScratch: function(options) {
       console.info('makeInstrumentFromScratch options: ', options)

@@ -15,8 +15,9 @@ define([
   'backbone/views/measure/measureView',
   'backbone/views/menu/instrumentDropDownView',
   'text!backbone/templates/hTrack/hTrack.html',
+  'general/lookupInstrument',
   'logging'
-], function($, _, Backbone, HTrackModel, StateModel, ConductorModel, StageCollection, RemainingInstrumentGeneratorModel, RepresentationsCollection, MeasureView,  InstrumentDropDownView, HTrackTemplate, Logging){
+], function($, _, Backbone, HTrackModel, StateModel, ConductorModel, StageCollection, RemainingInstrumentGeneratorModel, RepresentationsCollection, MeasureView,  InstrumentDropDownView, HTrackTemplate, LookupInstrument, Logging){
   return Backbone.View.extend({
     events : {
       // for toggling the hTrack's muted state.
@@ -438,7 +439,7 @@ define([
       var instrument = $(e.currentTarget).closest('.hTrack').data().state;
       console.info('Removing instrument: ' + instrument);
       RemainingInstrumentGeneratorModel.addInstrument({type:instrument});
-      Logging.logStorage("Removed an instrument from the stage.  Removed: " + instrument);
+      Logging.logStorage("Removed an instrument from the stage.  Removed: " + LookupInstrument.getDefault(instrument, 'label'));
 
       this.close();
 

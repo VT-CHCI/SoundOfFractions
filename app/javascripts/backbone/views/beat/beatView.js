@@ -330,8 +330,9 @@ define([
             .attr('cx', this.parentMeasureRepModel.get('audioMeasureCx'))
             .attr('cy', this.parentMeasureRepModel.get('audioMeasureCy'))
             .attr('r', this.parentMeasureRepModel.get('audioMeasureR'))
-            .attr('fill', this.parentMeasureRepModel.get('initialColorForAudio'));
-            // .attr('opacity', this.opacityForAudio);
+            // .attr('fill', this.parentMeasureRepModel.get('initialColorForAudio'))
+            .attr('fill', COLORS.hexColors[5])
+            .attr('fill-opacity', 0);
             // .attr('transform', 'translate(0,0)')
       // Draw the bar beats
       } else if (this.parentMeasureRepModel.get('currentRepresentationType') == 'bar'){

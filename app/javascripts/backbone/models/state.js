@@ -223,6 +223,7 @@ define([
 
               //show the BPM
               var bpm = 1000 / µthis.average * 60;
+              µthis.stopRecording();
 
               µthis.trigger('instrumentTempoRecorded', {instrument:µthis.get('instrumentTypeBeingRecorded'), beatPattern:diffBeats, bpm:bpm});
               // debugger;
@@ -233,7 +234,6 @@ define([
               // µthis.set('tempo', bpm);
               µthis.set('signature', µthis.signature);
 
-              µthis.stopRecording();
 
               window.clearInterval(waitIntervalID);
             }
