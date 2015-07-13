@@ -57,6 +57,14 @@ define([
 			localStorage.setItem('currentState', this.makeReadableStageCollectionJSON());
 		  // Since we are sending another log, we must reset the wasSaved to be false in case something breaks
 		  localStorage.setItem('wasSaved', JSON.stringify(false));
+
+      // Log the interaction as unsaved
+      if (localStorage.getItem('unsavedActions') !== '') {
+      	localStorage.setItem('unsavedActions', localStorage.getItem('unsavedActions') + ', ' + message);
+      } else {
+      	localStorage.setItem('unsavedActions', message);
+      }
+
 			console.log(localStorage);
 
 			//Attempt to send localStorage to the server
@@ -96,13 +104,7 @@ define([
 		        console.error('FAILURE sending to log message to the server');
 		        console.log(data);
 
-		        if (localStorage.getItem('unsavedActions') !== '') {
-		        	localStorage.setItem('unsavedActions', localStorage.getItem('unsavedActions') + ', ');
-		        }
-		        // Log the interaction as unsaved
-		        localStorage.setItem('unsavedActions', localStorage.getItem('unsavedActions') + localStorage.getItem('action'));
-		        // localStorage.setItem('unsavedActions', localStorage.getItem('unsavedActions').push(localStorage.getItem('action')) );
-		        localStorage.setItem('action', '');
+      		  localStorage.setItem('wasSaved', JSON.stringify(false));
 		      })
 		},
 		// Return the current date and time as a formatted date object
