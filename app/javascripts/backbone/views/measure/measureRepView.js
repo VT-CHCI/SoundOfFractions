@@ -1795,14 +1795,18 @@ define([
       this.makeMeasureRepParts();
 
       var crt = this.model.get('currentRepresentationType');
-      if (crt === 'line' || crt === 'bar'){
-        this.$el.width(this.model.get('linearDivWidth'));
-        this.$el.height(this.model.get('linearDivHeight'));
-      } else if (crt === 'bead' || crt === 'pie'){
-        this.$el.width(this.model.get('circularDivWidth'));
-        this.$el.height(this.model.get('circularDivHeight'));
-      }
-      // debugger;
+
+      // NOT SURE IF WE NEED THIS
+      // FROM HERE
+      // if (crt === 'line' || crt === 'bar'){
+      //   this.$el.width(this.model.get('linearDivWidth'));
+      //   this.$el.height(this.model.get('linearDivHeight'));
+      // } else if (crt === 'bead' || crt === 'pie'){
+      //   this.$el.width(this.model.get('circularDivWidth'));
+      //   this.$el.height(this.model.get('circularDivHeight'));
+      // }
+      // TO HERE
+
       // make the beats
       this.makeBeats();
       // make a beat factory
@@ -1812,6 +1816,9 @@ define([
       this.updateDeleteAndTransitionButtons();
       // remove and replace the div in its place to ensure rendering
       // this.trigger('removeReplace', 'test');
+
+      // NOT SURE IF WE NEED THIS
+      // FROM HERE
 
       // $elemDivs = $(this.el)
       // var originals = [];
@@ -1839,12 +1846,12 @@ define([
       //   };
       // // }, 1 );
 
+      // TO HERE
     },
     // This is called when rerender a measureRepView and this way it stays in the same order
     updateDivInfo: function(){
       // Since audio reps can't be resized
       if(this.model.get('currentRepresentationType') !== 'audio'){
-        console.log('not audio');
         this.$el.resizable('destroy');      
       }
 

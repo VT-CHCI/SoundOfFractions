@@ -84,7 +84,6 @@ define([
       // Compiling each button
       for(var i = 0; i<uI.length; i++){
         var unused = uI[i];
-        // debugger;
         var compiledButtonTemplate = _.template(remainingInstrumentButtonTemplate);
         $('#remaining-instrument-generator').append( compiledButtonTemplate({type: unused.type, label:unused.label, imgURL: this.model.instrumentLookup.getDefault(unused.type, 'image') }));
       }

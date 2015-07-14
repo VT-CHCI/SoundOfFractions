@@ -226,7 +226,6 @@ define([
               µthis.stopRecording();
 
               µthis.trigger('instrumentTempoRecorded', {instrument:µthis.get('instrumentTypeBeingRecorded'), beatPattern:diffBeats, bpm:bpm});
-              // debugger;
 
               µthis.isTapping = false;
               µthis.countIn = 1;

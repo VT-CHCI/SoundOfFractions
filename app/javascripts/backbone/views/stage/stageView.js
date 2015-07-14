@@ -30,7 +30,6 @@ define([
       console.info('stage view initialize')
       this.stageCollection = StageCollection;
       // set the song's conductor
-      // debugger;
       Logging.initialize();
       this.conductor = ConductorModel;
       this.masterAudioContext = new AudioContext();
