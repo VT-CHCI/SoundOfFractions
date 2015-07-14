@@ -36,10 +36,10 @@ define([
     increaseTransitionCount: function(){
       this.set({allMeasureChildRepresentationsTransitioned : this.allMeasureChildRepresentationsTransitioned+1});
     },
-    // setCurrentScale: function(newScale){
-    //   this.set({previousScale : this.get('currentScale')});
-    //   this.set({currentScale : newScale});
-    // },
+    setCurrentScale: function(newScale){
+      this.set({previousScale : this.get('currentScale')});
+      this.set({currentScale : newScale});
+    },
     logRemoval: function(beatModel, newBeatsCollection, indexOfRemovedBeat){
       Logging.logStorage("Removed a beat.  It was at index: " + indexOfRemovedBeat.index);
     },
