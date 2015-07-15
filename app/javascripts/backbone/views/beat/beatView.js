@@ -108,7 +108,7 @@ define([
         if (this.reverse == true) {
           this.x1 = this.parentMeasureRepModel.get('circleStates')[(this.parentMeasureRepModel.get('transitionNumberOfPoints')-1)][Math.floor((this.beatIndex/this.parentMeasureModel.get('beats').models.length)*(this.parentMeasureRepModel.get('transitionNumberOfPoints')))].x;
         } else {
-          this.x1 = this.parentMeasureRepModel.get('circleStates')[0][Math.floor((this.beatIndex/this.parentMeasureModel.get('beats').models.length)*(this.parentMeasureRepModel.get('transitionNumberOfPoints')))].x;
+          this.x1 = this.parentMeasureRepModel.get('circleStates')[0][Math.floor((this.beatIndex/this.parentMeasureModel.get('beatsCollection').models.length)*(this.parentMeasureRepModel.get('transitionNumberOfPoints')))].x;
         }
       }
       // y center of a bead or first y of a pie piece
@@ -118,7 +118,7 @@ define([
         if (this.reverse == true) {
           this.y1 = this.parentMeasureRepModel.get('circleStates')[this.parentMeasureRepModel.get('transitionNumberOfPoints')-1][Math.floor((this.beatIndex/this.parentMeasureModel.get('beats').models.length)*(this.parentMeasureRepModel.get('transitionNumberOfPoints')))].y;
         } else {
-          this.y1 = this.parentMeasureRepModel.get('circleStates')[0][Math.floor((this.beatIndex/this.parentMeasureModel.get('beats').models.length)*(this.parentMeasureRepModel.get('transitionNumberOfPoints')))].y;
+          this.y1 = this.parentMeasureRepModel.get('circleStates')[0][Math.floor((this.beatIndex/this.parentMeasureModel.get('beatsCollection').models.length)*(this.parentMeasureRepModel.get('transitionNumberOfPoints')))].y;
         }
       }
       // the second x point of a pie piece
@@ -135,7 +135,7 @@ define([
       this.beatUnwindingPaths = [];
       for (i=0; i<this.parentMeasureRepModel.get('circleStates').length; i++){
         var circleState = $.map(Array(this.parentMeasureRepModel.get('transitionNumberOfPoints')), function (d, j) {
-          var cx = (µthis.parentMeasureRepModel.get('circleStates')[i][Math.floor((µthis.beatIndex/µthis.parentMeasureModel.get('beats').models.length)*(µthis.parentMeasureRepModel.get('transitionNumberOfPoints')))].x) + µthis.parentMeasureRepModel.get('circularBeadBeatRadius') * Math.sin(2 * j * Math.PI / (µthis.parentMeasureRepModel.get('transitionNumberOfPoints') - 1));
+          var cx = (µthis.parentMeasureRepModel.get('circleStates')[i][Math.floor((µthis.beatIndex/µthis.parentMeasureModel.get('beatsCollection').models.length)*(µthis.parentMeasureRepModel.get('transitionNumberOfPoints')))].x) + µthis.parentMeasureRepModel.get('circularBeadBeatRadius') * Math.sin(2 * j * Math.PI / (µthis.parentMeasureRepModel.get('transitionNumberOfPoints') - 1));
           var cy = µthis.parentMeasureRepModel.get('circularMeasureCy') - µthis.parentMeasureRepModel.get('circularMeasureR') * Math.cos(2 * j * Math.PI / (µthis.parentMeasureRepModel.get('transitionNumberOfPoints') - 1));
           return { cx: cx, cy: cy };
         });
@@ -173,8 +173,8 @@ define([
       var beatLineToBeadPaths = [];
       for (i=0; i<this.parentMeasureRepModel.get('circleStates').length; i++){
         var beatCoordinatesAlongTransition = [];
-          beatCoordinatesAlongTransition.cx = (this.beatUnwindingPaths[i][Math.floor((this.beatIndex/this.parentMeasureModel.get('beats').models.length)*(this.parentMeasureRepModel.get('transitionNumberOfPoints')))].cx);
-          beatCoordinatesAlongTransition.cy = (this.beatUnwindingPaths[i][Math.floor((this.beatIndex/this.parentMeasureModel.get('beats').models.length)*(this.parentMeasureRepModel.get('transitionNumberOfPoints')))].cy);
+          beatCoordinatesAlongTransition.cx = (this.beatUnwindingPaths[i][Math.floor((this.beatIndex/this.parentMeasureModel.get('beatsCollection').models.length)*(this.parentMeasureRepModel.get('transitionNumberOfPoints')))].cx);
+          beatCoordinatesAlongTransition.cy = (this.beatUnwindingPaths[i][Math.floor((this.beatIndex/this.parentMeasureModel.get('beatsCollection').models.length)*(this.parentMeasureRepModel.get('transitionNumberOfPoints')))].cy);
         beatBeadToLinePaths.push(beatCoordinatesAlongTransition);
         beatLineToBeadPaths.unshift(beatCoordinatesAlongTransition);
       };
@@ -193,7 +193,7 @@ define([
       var dragBar = d3.behavior.drag();
       var dragSlice = d3.behavior.drag();
       // to prevent the dragging of a one beat measure
-      if (this.parentMeasureModel.get('beats').models.length > 1) {
+      if (this.parentMeasureModel.get('beatsCollection').models.length > 1) {
         µthis = this;
         dragBead.on("drag", function(d) {
           // Formula for circle beats, utilizing cx and cy
@@ -209,7 +209,7 @@ define([
           // On: x and y must satisfy (x - center_x)^2 + (y - center_y)^2 == radius^2
           if ( Math.pow(newComputedValX - µthis.parentMeasureRepModel.get('circularMeasureCx'), 2) + Math.pow(newComputedValY - µthis.parentMeasureRepModel.get('circularMeasureCy'), 2) > Math.pow(µthis.parentMeasureRepModel.get('circularMeasureR')+15,2) ) {
             // d3.select(this).remove();
-            µthis.parentMeasureModel.get('beats').remove(µthis.model);
+            µthis.parentMeasureModel.get('beatsCollection').remove(µthis.model);
           }
         });
         dragLine.on('drag', function(d) {
@@ -232,7 +232,7 @@ define([
           if ((newCenterY1 < µthis.parentMeasureRepModel.get('numberLineY') - 20) || (newCenterY1 > µthis.parentMeasureRepModel.get('numberLineY') + 20)) {
             // make an array to find out where the new beat should be added in the beatsCollection of the measure
             d3.select(this).remove();
-            µthis.parentMeasureModel.get('beats').remove(µthis.model);
+            µthis.parentMeasureModel.get('beatsCollection').remove(µthis.model);
           }
         });
         dragBar.on('drag', function(d) {
@@ -249,7 +249,7 @@ define([
           // make an array to find out where the new beat should be added in the beatsCollection of the measure
             d3.select(this).remove();
             console.warn('removed beat on measure');
-            µthis.parentMeasureModel.get('beats').remove(µthis.model);
+            µthis.parentMeasureModel.get('beatsCollection').remove(µthis.model);
           }
         });
         dragSlice.on("drag", function(d) {
@@ -266,7 +266,7 @@ define([
           // x and y must satisfy (x - center_x)^2 + (y - center_y)^2 >= radius^2
           if ( Math.pow(relativeSVGX - µthis.parentMeasureRepModel.get('circularMeasureCx'), 2) + Math.pow(relativeSVGY - µthis.parentMeasureRepModel.get('circularMeasureCy'), 2) >= Math.pow(µthis.parentMeasureRepModel.get('circularMeasureR'), 2) ) {
             d3.select(this).remove();
-            µthis.parentMeasureModel.get('beats').remove(µthis.model);
+            µthis.parentMeasureModel.get('beatsCollection').remove(µthis.model);
           }
         });
       }
@@ -393,8 +393,10 @@ define([
       // log.sendLog([[1, "beat" + this.model.cid + " toggled: "+!bool]]);
     },
     toggleOpacity: function() {
-      // re-rendering all beats, think it should only rerender itself, but w/e
-      d3.select('#beat'+this.cid).style('opacity', this.getOpacityNumber(this.model.get('selected')))
+      // We only want to toggle opacities of non-audio beats.   Audio beats deal with fill-opacity for animating
+      if(this.parentMeasureRepModel.get('currentRepresentationType') !== 'audio') {
+        d3.select('#beat'+this.cid).style('opacity', this.getOpacityNumber(this.model.get('selected')))
+      }
     },
     // manage the transitions from one rep to another
     transition: function(){

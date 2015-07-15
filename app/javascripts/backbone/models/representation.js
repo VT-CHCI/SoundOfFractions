@@ -67,25 +67,25 @@ define([
       this.setDefaults();
       this.set('previousRepresentationType', 'not_yet_defined');
       this.set('currentRepresentationType', options.currentRepresentationType);
-      this.set('sisterBeatsCollection', options.sisterBeatsCollection);
+      this.set('beatsCollection', options.beatsCollection);
       this.updateInformation();
 
-      // When the sster collection of beats changes in length (ie the add or remove a beat in the collection), we need to redo all of the calculations
-      this.listenTo(this.get('sisterBeatsCollection'), 'add remove', this.updateInformation)
+      // When the sister collection of beats changes in length (ie the add or remove a beat in the collection), we need to redo all of the calculations
+      this.listenTo(this.get('beatsCollection'), 'add remove', this.updateInformation)
     },
     updateInformation: function(){
       this.computeRemainingAttributes();
     },
     computeRemainingAttributes: function(){
       // TODO number of beats....
-      this.calculateNumberOfPoints(this.get('sisterBeatsCollection').length);
+      this.calculateNumberOfPoints(this.get('beatsCollection').length);
       this.set({
         //Circular
         circularMeasureCx: this.get('cX')+this.get('horzDivPadding')*this.get('currentScale'),
         circularMeasureCy: this.get('cY')+this.get('vertDivPadding')*this.get('currentScale'),
         circularMeasureR: this.get('initialCircularMeasureR')*this.get('currentScale'),
         // Pie
-        beatAngle: 360/this.get('sisterBeatsCollection').length,
+        beatAngle: 360/this.get('beatsCollection').length,
         // Transition
         firstBeatStart: 0, // in s
         timeIncrement: 500, // in ms
@@ -120,7 +120,7 @@ define([
         // TODO number of beats
         // TODO, set up a listener for this when it changes
         // beatWidth: this.get('linearLineLength')/this.model.get('beats').length;
-        beatWidth: this.get('linearLineLength')/this.get('sisterBeatsCollection').length
+        beatWidth: this.get('linearLineLength')/this.get('beatsCollection').length
 
       });
       // Has to be at the end for all the stuff it uses...

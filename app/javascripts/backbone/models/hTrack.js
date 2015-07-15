@@ -28,13 +28,13 @@ define([
       console.log('initializing the hTrackModel with these options: ', options);
       // I need to listen to the measures collection's beats collection [length] on the measure model of the measure collection
       for (var i = 0; i < this.get('measures').models.length; i++) {
-        this.listenTo(this.get('measures').models[i].get('beats'), 'add remove', this.updateModelSignature);  
+        this.listenTo(this.get('measures').models[i].get('beatsCollection'), 'add remove', this.updateModelSignature);  
       }
     },
     updateModelSignature: function(){
       // TODO, make it stop playing so there isnt the buggy playback or fix the buggy playback
-      console.log('updating htrack signature to '+(this.get('measures').models[0].get('beats').length));
-      var newSignature = this.get('measures').models[0].get('beats').length;
+      console.log('updating htrack signature to '+(this.get('measures').models[0].get('beatsCollection').length));
+      var newSignature = this.get('measures').models[0].get('beatsCollection').length;
       this.set('signature', newSignature);
       // TODO SEND LOG what it was, what it is now
     }

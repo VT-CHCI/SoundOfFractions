@@ -168,7 +168,7 @@ define([
 					measure.allMeasureChildRepresentationsTransitioned  = measureModel.get('allMeasureChildRepresentationsTransitioned');
 					// make a beats array
 					measure.beatsArray = [];
-						_.each(measureModel.get('beats').models, function(beat){
+						_.each(measureModel.get('beatsCollection').models, function(beat){
 							if(beat.get('selected')){
 								measure.beatsArray.push('ON');
 							} else {

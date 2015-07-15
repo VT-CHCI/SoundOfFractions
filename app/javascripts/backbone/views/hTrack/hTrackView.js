@@ -62,6 +62,8 @@ define([
 
       this.listenTo(ConductorModel, 'conductorStart', this.togglePlaying);
       this.listenTo(ConductorModel, 'conductorStop', this.togglePlaying);
+      
+      this.listenTo(this.model, 'resetRepresentations', this.updateRender);
 
       //creating two arrays to hold our gain nodes.
       // for sustained-note sounds,
@@ -248,7 +250,7 @@ define([
       var selectedBeats = 0;
       // Find out how many beats are selected
       _.each(measures.models, function(measure) {
-        _.each(measure.get('beats').models, function(beat) {
+        _.each(measure.get('beatsCollection').models, function(beat) {
           if (beat.get('selected')) {
             selectedBeats ++;
           }
@@ -312,9 +314,20 @@ define([
       var beatTimes = new Array();
 
       _.each(this.model.get('measures').models, function(measure) {
+        // determining the pixels per second
+                          // 320 is ~2PIr   16 is max number of beats we support
+        var pixelsPerMaxwidth = 320/16;
+        //s might need to apply scale factor here
+        var howLong320TakesToPlayLinearly = 8;
+        
+        var beatsDuration = howLong320TakesToPlayLinearly / measure.get('beatsCollection').length;
+
+        // pps should be 40 pixels per second
+        var pps = ( this.model.get('tempo') * pixelsPerMaxwidth ) / 60; //s
+
         //determining the duration for each beat.
         var beatDuration = 60 / this.model.get('tempo');
-        _.each(measure.get('beats').models, function(beat) {
+        _.each(measure.get('beatsCollection').models, function(beat) {
           /* if we need to trigger a sound at this beat
             we push a duration onto the duration array.
             if not, increment our deadSpace variable,
@@ -325,10 +338,11 @@ define([
             //deadspace is a beat that is not getting played
             beatTimes.push(deadSpace);
           }
-          deadSpace += beatDuration;
+          deadSpace += beatsDuration;
         }, this);
       }, this);
       //Lastly, we call playSound() with our completed beatTimes array.
+      console.error(beatTimes);
       this.playSound(beatTimes);
     },
 
@@ -345,7 +359,7 @@ define([
         //which is every activated beat and its associated duration between
         //it and the next activated beat.
 
-        //calulating the duration of one beat. Should be in s, not ms
+        //calculating the duration of one beat. Should be in s, not ms
         var hTrackTempo = this.model.get('tempo');
         var beatDuration =  (60 / hTrackTempo);
 
@@ -464,6 +478,22 @@ define([
           childView.close();
         }
       })
+    },
+    updateRender: function(){
+      window.csf = this;
+      return;
+      _.each(this.childViews, function(childView){
+        console.info('in hTrackView close function, CLOSING CHILDREN');
+        if (childView.close){
+          childView.close();
+        }
+      })
+
+
+      var compiledTemplate = _.template(HTrackTemplate);
+      $(this.$el).replaceWith(compiledTemplate({model:this.model}))
+
+      this.makeChildren();
     }
   });
 });

@@ -15,18 +15,19 @@ define([
   'logging'
 ], function(_, Backbone, BeatModel, ConductorModel, BeatsCollection, RepresentationsCollection, Logging) {
   var MeasureModel = Backbone.Model.extend({
-    beats: BeatsCollection,
+    beatsCollection: BeatsCollection,
     measureRepresentations: RepresentationsCollection,
     allMeasureChildRepresentationsTransitioned: 0,
-    // defaults: {
-    //   originalScale: 1,
-    //   previousScale: 1,
-    //   currentScale: 1
-    // },
+    defaults: {
+      pixelsPerSecond: 40,
+      originalScale: 1,
+      currentScale: 1
+    },
     initialize: function(){
       this.name = 'model-measure';
-      this.listenTo(this.get('beats'), 'add remove', this.turnPlayingOff);
-      this.listenTo(this.get('beats'), 'remove', this.logRemoval);
+      this.listenTo(this.get('beatsCollection'), 'add remove', this.turnPlayingOff);
+      this.listenTo(this.get('beatsCollection'), 'remove', this.logRemoval);
+      // this.listenTo(this.get('currentScale'), 'change', this.updateMeasureLength);
     },
     turnPlayingOff: function(){
       if(ConductorModel.get('isPlaying')){
@@ -40,13 +41,16 @@ define([
       this.set({previousScale : this.get('currentScale')});
       this.set({currentScale : newScale});
     },
+    updateMeasureLength: function() {
+      // this.
+    },
     logRemoval: function(beatModel, newBeatsCollection, indexOfRemovedBeat){
       Logging.logStorage("Removed a beat.  It was at index: " + indexOfRemovedBeat.index);
     },
     // This is used by the Beat Factory when a new beat is added in a specific position
     addBeatToBeatsCollection: function(newBeat, newIndex){
       console.log('in measure model, a beat is getting added at index: ', newIndex);
-      this.get('beats').add(newBeat, {at:newIndex});
+      this.get('beatsCollection').add(newBeat, {at:newIndex});
       // interaction log
      Logging.logStorage("Added a beat.  At index: " + newIndex);
     }

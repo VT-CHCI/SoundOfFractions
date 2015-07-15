@@ -11,10 +11,11 @@ define([
   'bbone',
   'backbone/models/repButton',
   'backbone/models/representation',
+  'backbone/models/conductor',
   'backbone/collections/stage',
   'text!backbone/templates/button/wholeMeasureRepresentation.html',
   'logging'
-], function($, _, Backbone, RepButtonModel, RepresentationModel, StageCollection, wholeMeasureRepresentationTemplate, Logging){
+], function($, _, Backbone, RepButtonModel, RepresentationModel, ConductorModel, StageCollection, wholeMeasureRepresentationTemplate, Logging){
 
   var WholeMeasureRepresentationView = Backbone.View.extend({
     el : $("#measure-representation"), // Specifies the DOM element which this view handles
@@ -66,8 +67,8 @@ define([
       $('.cs').removeClass('cs'); 
       $('.spinner').remove(); 
       //trigger the Measure representation addition
-      var sisterBeatsCollection = StageCollection.get(cid).get('measures').models[0].get('beats');
-      var representationModel = new RepresentationModel({currentRepresentationType: newRepType, sisterBeatsCollection: sisterBeatsCollection});
+      var beatsCollection = StageCollection.get(cid).get('measures').models[0].get('beatsCollection');
+      var representationModel = new RepresentationModel({currentRepresentationType: newRepType, beatsCollection: beatsCollection});
       console.log('adding to the instrument/measure/measureRep');
       // updating the awaitingAdd to false, so the timeout reset of the cs doesn't get called
       StageCollection.get(cid).set('awaitingAdd', false);   
@@ -77,6 +78,9 @@ define([
       // this.isFirstRep();
     },
     transitionRep: function(e){
+      if(ConductorModel.get('isPlaying')) {
+        ConductorModel.stop();
+      }
       console.log('wmrv transitioning');
       var newRepType = $(e.target).closest('.representation').attr('data-state');
       // find the plus sign with the class '.cs' and return the id of its hTrack
@@ -86,7 +90,7 @@ define([
       var measureRepID = $('.transition-rep').closest('.measureRep').attr('id');
       var measureRepCID = measureRepID.slice(12);
       $('.transition-rep').removeClass('transition-rep');
-      var numberOfBeats = StageCollection.get(hTrackCID).get('measures').models[0].get('beats').length;
+      var numberOfBeats = StageCollection.get(hTrackCID).get('measures').models[0].get('beatsCollection').length;
 
       // //TODO: change measure 0 to dynamic
       StageCollection.get(hTrackCID).get('measures').models[0].get('measureRepresentations').get(measureRepCID).transition(newRepType, numberOfBeats);
@@ -111,8 +115,8 @@ define([
         var hTrackID = $('.cs').closest('.hTrack').attr('id');
         var cid = hTrackID.slice(7);
         $('.cs').removeClass('cs'); 
-        var sisterBeatsCollection = StageCollection.get(cid).get('measures').models[0].get('beats');
-        var representationModel = new RepresentationModel({currentRepresentationType: newRepType, sisterBeatsCollection: sisterBeatsCollection});
+        var beatsCollection = StageCollection.get(cid).get('measures').models[0].get('beatsCollection');
+        var representationModel = new RepresentationModel({currentRepresentationType: newRepType, beatsCollection: beatsCollection});
         console.log('MANUALLY adding to the instrument/measure/measureRep');
         // Currently forcing it to add to the first measure
         StageCollection.get(cid).get('measures').models[0].get('measureRepresentations').add(representationModel);

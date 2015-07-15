@@ -52,10 +52,13 @@ define([
           // Get each measure, currently limited to 1
           // TODO Multiple Measures
           var measures = hTrack.get('measures');
+          var pps = hTrack.get('measures').models[0].get('pixelsPerSecond');
+          var scale = hTrack.get('measures').models[0].get('currentScale');
           //  Get the signature - how many beats (denominator)
           var beats = hTrack.get('signature');
           // Determine the amount of time this instrument would play at its tempo with how many beats in the measure and how many measures
-          var currentInstrumentDuration = measures.length*beats/tempo*60.0*1000.0 ;
+          // var currentInstrumentDuration = measures.length*beats/tempo*60.0*1000.0 ;
+          var currentInstrumentDuration = measures.length * 8 * scale * 1000 ;
           // Set it to maxDuration if it is longer than maxDuration
           if (currentInstrumentDuration > maxDuration) {
             maxDuration = currentInstrumentDuration;

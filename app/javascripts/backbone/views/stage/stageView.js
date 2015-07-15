@@ -56,6 +56,7 @@ define([
 
       // This kicks off and adds the snare to the 
       RemainingInstrumentGeneratorModel.removeInstrumentFromUnused({type:'sn'});
+      // RemainingInstrumentGeneratorModel.removeInstrumentFromUnused({type:'hh'});
       // this.makeInstrumentFromScratch({type:'sn'});
       // RemainingInstrumentGeneratorModel.removeInstrumentFromUnused({type:'sn'});
       
@@ -87,18 +88,17 @@ define([
         this.makeChildHTrack(hTrack);
       }, this);
     },
-    // addInstrument With Pattern
     replaceInstrumentWithRecordedPattern: function(options) {
       var µthis = this;
       _.each(this.stageCollection.collection.models, function(htrackModel){
         if(htrackModel.get('type') === options.instrument){
-          console.log('gh');
           // Make a beatsCollection
-          µthis.setUpManualBeatsCollection(options);
-          htrackModel.get('measures').models[0].set('beats', µthis.manuallyCreatedMeasureBeatsCollection)
+          htrackModel.get('measures').models[0].set('beatsCollection', µthis.setUpManualBeatsCollection(options) );
+          htrackModel.trigger('resetRepresentations');
         }
       })
     },
+    // addInstrument With Pattern
     addInstrumentWithRecordedPattern: function(options) {
       // 
     },
@@ -137,7 +137,7 @@ define([
         gain: LookupInstrument.getDefault(options.type, 'gain'),
         sample: LookupInstrument.getDefault(options.type, 'sample'),
         measures: insertedMeasuresCollection,
-        signature: insertedMeasuresCollection.models[0].get('beats').length,
+        signature: insertedMeasuresCollection.models[0].get('beatsCollection').length,
         active: true,
         tempo: 120 //bpm
       };
@@ -151,8 +151,8 @@ define([
         // this creates 1 measure, and addes beats and the representations to itself
         this.manuallyCreatedMeasureBeatsCollection = new BeatsCollection;
         //for each beat - also change signature below
-        for (var i = 0; i < 9; i++) {
-          if (i == 0 || i == 2 || i == 4 || i == 6 || i == 7){
+        for (var i = 0; i < 8; i++) {
+          if (i == 0 || i == 2 || i == 4 || i == 6 ){
             this.manuallyCreatedMeasureBeatsCollection.add([{selected: true}]);
           } else {
             this.manuallyCreatedMeasureBeatsCollection.add([{selected: false}]);
@@ -162,25 +162,25 @@ define([
         //make a collection
         this.manuallyCreatedMeasureRepresentationCollection = new RepresentationsCollection;
         // add an audio rep
-        this.manuallyCreatedRepresentationModel = new RepresentationModel({currentRepresentationType:'audio', sisterBeatsCollection:this.manuallyCreatedMeasureBeatsCollection});
+        this.manuallyCreatedRepresentationModel = new RepresentationModel({currentRepresentationType:'audio', beatsCollection:this.manuallyCreatedMeasureBeatsCollection});
         this.manuallyCreatedMeasureRepresentationCollection.add(this.manuallyCreatedRepresentationModel);
         // add a bead rep
-        this.manuallyCreatedRepresentationModel = new RepresentationModel({currentRepresentationType:'bead', sisterBeatsCollection:this.manuallyCreatedMeasureBeatsCollection});
+        this.manuallyCreatedRepresentationModel = new RepresentationModel({currentRepresentationType:'bead', beatsCollection:this.manuallyCreatedMeasureBeatsCollection});
         this.manuallyCreatedMeasureRepresentationCollection.add(this.manuallyCreatedRepresentationModel);
         // // add a line rep
-        // this.manuallyCreatedRepresentationModel = new RepresentationModel({currentRepresentationType:'line', sisterBeatsCollection:this.manuallyCreatedMeasureBeatsCollection});
+        // this.manuallyCreatedRepresentationModel = new RepresentationModel({currentRepresentationType:'line', beatsCollection:this.manuallyCreatedMeasureBeatsCollection});
         // this.manuallyCreatedMeasureRepresentationCollection.add(this.manuallyCreatedRepresentationModel);
         // // add a pie rep
-        // this.manuallyCreatedRepresentationModel = new RepresentationModel({currentRepresentationType:'pie', sisterBeatsCollection:this.manuallyCreatedMeasureBeatsCollection});
+        // this.manuallyCreatedRepresentationModel = new RepresentationModel({currentRepresentationType:'pie', beatsCollection:this.manuallyCreatedMeasureBeatsCollection});
         // this.manuallyCreatedMeasureRepresentationCollection.add(this.manuallyCreatedRepresentationModel);
         // // add a bar rep
-        // this.manuallyCreatedRepresentationModel = new RepresentationModel({currentRepresentationType:'bar', sisterBeatsCollection:this.manuallyCreatedMeasureBeatsCollection});
+        // this.manuallyCreatedRepresentationModel = new RepresentationModel({currentRepresentationType:'bar', beatsCollection:this.manuallyCreatedMeasureBeatsCollection});
         // this.manuallyCreatedMeasureRepresentationCollection.add(this.manuallyCreatedRepresentationModel);
 
         // Create a Measures Collection, and add the beats and representations
         this.manuallyCreatedMeasuresCollection = new MeasuresCollection;
         this.manuallyCreatedMeasuresCollection.add({
-          beats: this.manuallyCreatedMeasureBeatsCollection, measureRepresentations: this.manuallyCreatedMeasureRepresentationCollection});
+          beatsCollection: this.manuallyCreatedMeasureBeatsCollection, measureRepresentations: this.manuallyCreatedMeasureRepresentationCollection});
       // This is for subsequent instruments when added
         this.secondManuallyCreatedMeasureBeatsCollection = new BeatsCollection;
         //for each beat - also change signature below
@@ -194,10 +194,10 @@ define([
         }
         this.secondManuallyCreatedMeasuresCollection = new MeasuresCollection;
         this.secondManuallyCreatedMeasuresCollection.add({
-          beats: this.secondManuallyCreatedMeasureBeatsCollection, measureRepresentations: this.manuallyCreatedMeasureRepresentationCollection});
+          beatsCollection: this.secondManuallyCreatedMeasureBeatsCollection, measureRepresentations: this.manuallyCreatedMeasureRepresentationCollection});
 
     },
-    // This is for replaceing a beats collection when it is recorded
+    // This is for replacing a beats collection when it is recorded
     setUpManualBeatsCollection: function(options){
       // this creates 1 measure, and adds beats and the representations to itself
       this.manuallyCreatedMeasureBeatsCollection = new BeatsCollection;
@@ -210,13 +210,14 @@ define([
           // this.manuallyCreatedMeasureBeatsCollection.add();
         }
       }
+      return this.manuallyCreatedMeasureBeatsCollection;
     },
     // We want to delete an instrument from the view, as well as add it to the instrument generator
     deleteInstrument: function(instrument) {
     },
     subRender: function() {
       // used if we want to render a portion of this view...
-      $('#sample-messages').html('subre')
+      $('#sample-messages').html('subre');
     },
     close: function(){
       console.info('in stageView close function');

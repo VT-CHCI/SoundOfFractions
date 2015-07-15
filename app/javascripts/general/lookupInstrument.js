@@ -2,9 +2,9 @@ define([
 ], function(){
   return LookupInstrument = {
     instrumentLookup: {
-      sn: {label: 'Snare', type: 'sn', image: 'images/snare.png', sample: 'samples.old/808_sn.m4a', gain: .2 },
+      sn: {label: 'Snare', type: 'sn', image: 'images/snare.png', sample: 'samples.old/808_sn.m4a', gain: 1 },
       hh: {label: 'Hi Hat', type: 'hh', image: 'images/hihat.png', sample: 'samples.old/808_hh.m4a', gain: 1 },
-      kd: {label: 'Kick Drum', type: 'kd', image: 'images/kick.png', sample: 'samples.old/808_kd.m4a', gain: 1 },
+      kd: {label: 'Kick Drum', type: 'kd', image: 'images/kick.png', sample: 'samples.old/808_kd.m4a', gain: .3 },
       sy: {label: 'Synth', type: 'sy', image: 'images/synth.png', sample: 'samples.old/808_.m4a'},
       o1: {label: 'other1', type: 'o1', image: 'images/orange.png', sample: 'samples.old/808_sy.mp3', gain: 1 },
       o2: {label: 'other2', type: 'o2', image: 'images/orange.png', sample: 'samples.old/808_sy.mp3', gain: 1 }

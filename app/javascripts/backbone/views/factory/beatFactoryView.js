@@ -74,12 +74,14 @@ define([
 
           // make an array to find out where the new beat should be added in the beatsCollection of the measure
           var refArray = [];
-          for ( i=0 ; i < µthis.parentMeasureModel.get('beats').models.length ; i++ ) {
-            refArray.push((360/µthis.parentMeasureModel.get('beats').models.length)*i);
+          for ( i=0 ; i < µthis.parentMeasureModel.get('beatsCollection').models.length ; i++ ) {
+            refArray.push((360/µthis.parentMeasureModel.get('beatsCollection').models.length)*i);
           }
           var newIndex = _.sortedIndex(refArray, angleAtNewBeat);
           var newBeat = new BeatModel({selected:true});
           µthis.parentMeasureModel.addBeatToBeatsCollection(newBeat, newIndex);
+          // now that we have a added a beat, we need to detach from the dragging event.   There will still be a dragging end event, but we don't care about that
+          dragCircle.on("drag", null);
         }
       });
       var dragLine = d3.behavior.drag();
@@ -100,13 +102,15 @@ define([
         if ( newComputedValY1 < µthis.parentMeasureRepModel.get('numberLineY') ) {
           // make an array to find out where the new beat should be added in the beatsCollection of the measure
           var refArray = [];
-          for ( i=0 ; i < µthis.parentMeasureModel.get('beats').models.length ; i++ ) {
-            refArray.push((µthis.linearLineLength/µthis.parentMeasureModel.get('beats').models.length)*i);
+          for ( i=0 ; i < µthis.parentMeasureModel.get('beatsCollection').models.length ; i++ ) {
+            refArray.push((µthis.linearLineLength/µthis.parentMeasureModel.get('beatsCollection').models.length)*i);
           }
           console.log(refArray);
           var newIndex = _.sortedIndex(refArray, newComputedValX1);
           var newBeat = new BeatModel({selected:true});
           µthis.parentMeasureModel.addBeatToBeatsCollection(newBeat, newIndex);
+          // now that we have a added a beat, we need to detach from the dragging event.   There will still be a dragging end event, but we don't care about that
+          dragLine.on("drag", null);
         }
       });
       var dragBar = d3.behavior.drag();
@@ -123,14 +127,16 @@ define([
         if ( newComputedValY < µthis.parentMeasureRepModel.get('lbbMeasureLocationY') + µthis.parentMeasureRepModel.get('beatHeight') ) {
           // make an array to find out where the new beat should be added in the beatsCollection of the measure
           var refArray = [];
-          for ( i=0 ; i < µthis.parentMeasureModel.get('beats').models.length ; i++ ) {
-            refArray.push((µthis.parentMeasureRepModel.get('linearLineLength')/µthis.parentMeasureModel.get('beats').models.length)*i+µthis.parentMeasureRepModel.get('beatWidth'));
+          for ( i=0 ; i < µthis.parentMeasureModel.get('beatsCollection').models.length ; i++ ) {
+            refArray.push((µthis.parentMeasureRepModel.get('linearLineLength')/µthis.parentMeasureModel.get('beatsCollection').models.length)*i+µthis.parentMeasureRepModel.get('beatWidth'));
           }
           var newIndex = _.sortedIndex(refArray, parseInt(newComputedValX)+µthis.parentMeasureRepModel.get('beatFactoryBarWidth')/2);
           console.log(refArray);
           console.log(parseInt(newComputedValX)+µthis.parentMeasureRepModel.get('beatFactoryBarWidth')/2);
           var newBeat = new BeatModel({selected:true});
           µthis.parentMeasureModel.addBeatToBeatsCollection(newBeat, newIndex);
+          // now that we have a added a beat, we need to detach from the dragging event.   There will still be a dragging end event, but we don't care about that
+          dragBar.on("drag", null);
         }
       });
       var dragPie = d3.behavior.drag();
@@ -165,12 +171,14 @@ define([
 
           // make an array to find out where the new beat should be added in the beatsCollection of the measure
           var refArray = [];
-          for ( i=0 ; i < µthis.parentMeasureModel.get('beats').models.length ; i++ ) {
-            refArray.push(((360/µthis.parentMeasureModel.get('beats').models.length)*i)+((360/µthis.parentMeasureModel.get('beats').models.length)/2));
+          for ( i=0 ; i < µthis.parentMeasureModel.get('beatsCollection').models.length ; i++ ) {
+            refArray.push(((360/µthis.parentMeasureModel.get('beatsCollection').models.length)*i)+((360/µthis.parentMeasureModel.get('beatsCollection').models.length)/2));
           }
           var newIndex = _.sortedIndex(refArray, angleAtNewBeat);
           var newBeat = new BeatModel({selected:true});
           µthis.parentMeasureModel.addBeatToBeatsCollection(newBeat, newIndex);
+          // now that we have a added a beat, we need to detach from the dragging event.   There will still be a dragging end event, but we don't care about that
+          dragPie.on("drag", null);
         }
       });
 

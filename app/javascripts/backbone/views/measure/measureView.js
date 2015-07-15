@@ -46,9 +46,12 @@ define([
       // this bindall method is thor the remainging listeners, per StackOverflow suggestions
       _.bindAll(this, 'render');
       // when we add or delete a meauserRep
-      this.listenTo(this.model.get('measureRepresentations'), 'remove', _.bind(this.render, this));  
+      // this.listenTo(this.model.get('measureRepresentations'), 'remove', _.bind(this.render, this));  
       this.listenTo(this.model.get('measureRepresentations'), 'add', _.bind(this.addChild, this));  
-      this.listenTo(this.model.get('beats'), 'add remove', _.bind(this.reconfigure, this));  
+
+      // I dont htink we want this. we want each representation to make their own changes
+      // this.listenTo(this.model.get('beatsCollection'), 'add remove', _.bind(this.reconfigure, this));  
+      
       this.model.on('change:scale', _.bind(this.render, this));
 
       // This is for version2, when we add or delete a measure
@@ -65,7 +68,7 @@ define([
       var measureTemplateParameters = {
         mCID: this.model.cid,
         measureCount: this.parentHTrackModel.get('measures').models.length,
-        measureNumberOfBeats: this.model.get('beats').length
+        measureNumberOfBeats: this.model.get('beatsCollection').length
       };
       
       // compile the template
@@ -81,7 +84,7 @@ define([
       // If we are creating the children from the models already present, ie, initial load
       if(options.repIndex > -1) {      
         var addedModel = this.model.get('measureRepresentations').models[options.repIndex];
-      // If we are just adding one, from when a new model is added to the collection, ie they create one
+      // If we are just adding one, from when a new model is added to the collection, ie they create one [last one]
       } else {
         console.log('Measure View add child');
         var addedModel = this.model.get('measureRepresentations').last();

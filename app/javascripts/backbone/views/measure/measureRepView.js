@@ -58,7 +58,8 @@ define([
       // this.parentMeasureModel.get('beats').on('add', this.updateRender, this);
       // this.parentMeasureModel.get('beats').on('remove', this.updateRender, this);
       
-      this.listenTo(this.parentHTrackModel.get('measures').models[0], 'change:beats', this.updateRender);
+      this.listenTo(this.parentMeasureModel.get('beatsCollection'), 'add remove', this.updateRender);
+      this.listenTo(this.parentMeasureModel, 'change:beatsCollection', this.updateRender);
 
       this.listenTo(this.model, 'change:currentRepresentationType', this.transition, this);
       // this.listenTo(this.model, 'destroy', this.close, this);
@@ -85,7 +86,7 @@ define([
       this.measurePassingToBeatViewParameters.parentMeasureRepModel = this.model;
       this.measurePassingToBeatViewParameters.singleBeat = '#beat'+beatModel.cid;
       this.measurePassingToBeatViewParameters.beatIndex = index;
-      this.model.set({beatStartAngle: ((360 / this.parentMeasureModel.get('beats').models.length)*index)});
+      this.model.set({beatStartAngle: ((360 / this.parentMeasureModel.get('beatsCollection').models.length)*index)});
       this.measurePassingToBeatViewParameters.beatStartTime = this.model.get('firstBeatStart')+(index)*(this.model.get('timeIncrement')/1000);
       this.measurePassingToBeatViewParameters.color = index;
       this.measurePassingToBeatViewParameters.circleStates = this.model.get('circleStates');
@@ -94,7 +95,7 @@ define([
       // Linestates must be defined here to propagate through transitions
       var lineStatesUnrolling = [];
       var lineStatesRollup = [];
-      var sliceLength = this.model.get('transitionNumberOfPoints')/this.parentMeasureModel.get('beats').models.length;
+      var sliceLength = this.model.get('transitionNumberOfPoints')/this.parentMeasureModel.get('beatsCollection').models.length;
       for ( var i=0 ; i<this.model.get('transitionNumberOfPoints') ; i++ ){
         var startIndex = (index*sliceLength);// - subtractor;
         var inner = this.model.get('circleStates')[i].slice(startIndex, startIndex+sliceLength);
@@ -147,7 +148,7 @@ define([
       // All beat params
       this.measurePassingToBeatViewParameters.parentMeasureRepModel = this.model;
       this.measurePassingToBeatViewParameters.beatIndex = index;
-      this.model.set({beatStartAngle: ((360 / this.parentMeasureModel.get('beats').models.length)*index)});
+      this.model.set({beatStartAngle: ((360 / this.parentMeasureModel.get('beatsCollection').models.length)*index)});
       this.measurePassingToBeatViewParameters.beatStartTime = this.model.get('firstBeatStart')+(index)*(this.model.get('timeIncrement')/1000);
       this.measurePassingToBeatViewParameters.color = index;
       this.measurePassingToBeatViewParameters.lineStatesUnrolling = lineStatesUnrolling;
@@ -198,7 +199,7 @@ define([
       }
       // for each beat in this measureRep
       µthis = this;
-      _.all(this.parentMeasureModel.get('beats').models, function(beatModel, index) {
+      _.all(this.parentMeasureModel.get('beatsCollection').models, function(beatModel, index) {
         // Make a new set of beats
         if(!options){
           µthis.computeNormalBeatViewParameters(beatModel, index);
@@ -288,7 +289,7 @@ define([
     },
     // These are the parameters for the beatView
     beatViewParameters: function(options){
-      this.model.set({beatAngle: 360/this.parentMeasureModel.get('beats').models.length});
+      this.model.set({beatAngle: 360/this.parentMeasureModel.get('beatsCollection').models.length});
       return {
         //General
         parentMeasureRepView: this,
@@ -578,14 +579,15 @@ define([
       var µthis = this;
 
 //TODO USE signature or beats
-      var signature = this.parentMeasureModel.get('beats').length;
+      var signature = this.parentMeasureModel.get('beatsCollection').length;
       var beats = this.parentHTrackModel.get('signature');
       
       var tempo = this.parentHTrackModel.get('tempo');
       var measuresCount = this.parentHTrackModel.get('measures').length;
-      var currentInstrumentDuration = measuresCount*beats/tempo*60.0*1000.0;
+      var currentInstrumentDuration = measuresCount * beats / tempo * 60.0 * 1000.0;
       //dur is time of one beat.
       var dur = currentInstrumentDuration/measuresCount/beats;
+      var dur = 8000 / beats;
       var calcDur = 1000/(tempo/60);
 
       var totalNumberOfBeats = signature*measuresCount;
@@ -609,7 +611,7 @@ define([
             //TODO 
             var beats = $('#measure-rep-'+this.model.cid).find('.audio-beat');
             // A boolean value if the beat is selected
-            var selected = this.parentMeasureModel.get('beats').models[counter].get('selected');
+            var selected = this.parentMeasureModel.get('beatsCollection').models[counter].get('selected');
             // TODO, find a better way to animate the audio beats
             // Animate the Audio beat
             // console.log('calling from first block');
@@ -644,7 +646,7 @@ define([
                 //TODO 
                 var beats = $('#measure-rep-'+self.model.cid).find('.audio-beat');
                 // A boolean value if the beat is selected
-                var selected = self.parentMeasureModel.get('beats').models[counter].get('selected');
+                var selected = self.parentMeasureModel.get('beatsCollection').models[counter].get('selected');
                 // console.log('calling from second loop');
                 // self.audioAnimate(beats.eq(0)[0], dur/2.0, selected);
                 self.audioAnimate(beats.eq(counter)[0], dur/2.0, selected);
@@ -1433,7 +1435,7 @@ define([
     // This makes the bead factory in each measureRep
     makeBeatFactory: function(){
       // Bead
-      var remainingNumberOfBeats = 16-this.parentMeasureModel.get('beats').models.length;
+      var remainingNumberOfBeats = 16-this.parentMeasureModel.get('beatsCollection').models.length;
       if (this.model.get('currentRepresentationType') == 'bead') {
         for (i = 0 ; i < remainingNumberOfBeats ; i++){
           var index = 15-i;
@@ -1510,6 +1512,8 @@ define([
           return;
         }
         console.log('this.model: ', this.model.cid, this.model);
+
+        this.model.destroy();
         this.close();
 
         console.log('removed representation');
@@ -1782,12 +1786,17 @@ define([
       })
     },
     removeMeasureRepParts: function(){
+      // To prevent stacking of the first audio beat that protects users from clicking the beats
+      if($('#svg-'+this.model.cid+' circle:first-child')) {
+        $('#svg-'+this.model.cid+' circle:first-child').remove();
+      }
       if(this.circlePath){this.circlePath.remove()};
       if(this.infiniteLine){this.infiniteLine.remove()};
       if(this.actualMeasureLinePath){this.actualMeasureLinePath.remove()};
     },
     updateRender: function(){
       console.log('getting to updateRender');
+
       var width = this.$el.width();
       var height = this.$el.height();
       this.closeAllChildren();

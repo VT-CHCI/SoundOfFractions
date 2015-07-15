@@ -96,17 +96,17 @@ define([
       if (this.drawType == 'pie') {
         this.x1 = this.circularMeasureCx + this.circularMeasureR * Math.cos(Math.PI * this.beatStartAngle/180); 
       } else if (this.drawType == 'bead') {
-        this.x1 = this.parentMeasureRepModel.get('circleStates')[(this.parentMeasureRepModel.get('transitionNumberOfPoints')-1)][Math.floor((this.beatIndex/this.parentMeasureModel.get('beats').models.length)*(this.parentMeasureRepModel.get('transitionNumberOfPoints')))].x;
+        this.x1 = this.parentMeasureRepModel.get('circleStates')[(this.parentMeasureRepModel.get('transitionNumberOfPoints')-1)][Math.floor((this.beatIndex/this.parentMeasureModel.get('beatsCollection').models.length)*(this.parentMeasureRepModel.get('transitionNumberOfPoints')))].x;
       } else if (this.drawType == 'beadCircle') {
-        this.x1 = this.parentMeasureRepModel.get('circleStates')[0][Math.floor((this.beatIndex/this.parentMeasureModel.get('beats').models.length)*(this.parentMeasureRepModel.get('transitionNumberOfPoints')))].x;
+        this.x1 = this.parentMeasureRepModel.get('circleStates')[0][Math.floor((this.beatIndex/this.parentMeasureModel.get('beatsCollection').models.length)*(this.parentMeasureRepModel.get('transitionNumberOfPoints')))].x;
       }
       // y center of a bead or first y of a pie piece
       if (this.drawType == 'pie') {
         this.y1 = this.circularMeasureCy + this.circularMeasureR * Math.sin(Math.PI * this.beatStartAngle/180);     
       } else if (this.drawType == 'bead') {
-        this.y1 = this.parentMeasureRepModel.get('circleStates')[this.parentMeasureRepModel.get('transitionNumberOfPoints')-1][Math.floor((this.beatIndex/this.parentMeasureModel.get('beats').models.length)*(this.parentMeasureRepModel.get('transitionNumberOfPoints')))].y;
+        this.y1 = this.parentMeasureRepModel.get('circleStates')[this.parentMeasureRepModel.get('transitionNumberOfPoints')-1][Math.floor((this.beatIndex/this.parentMeasureModel.get('beatsCollection').models.length)*(this.parentMeasureRepModel.get('transitionNumberOfPoints')))].y;
       } else if (this.drawType == 'beadCircle') {
-        this.y1 = this.parentMeasureRepModel.get('circleStates')[0][Math.floor((this.beatIndex/this.parentMeasureModel.get('beats').models.length)*(this.parentMeasureRepModel.get('transitionNumberOfPoints')))].y;
+        this.y1 = this.parentMeasureRepModel.get('circleStates')[0][Math.floor((this.beatIndex/this.parentMeasureModel.get('beatsCollection').models.length)*(this.parentMeasureRepModel.get('transitionNumberOfPoints')))].y;
       }
       // the second x point of a pie piece
       this.x2 = this.circularMeasureCx + this.circularMeasureR * Math.cos(Math.PI * this.beatEndAngle/180);
@@ -122,7 +122,7 @@ define([
       this.beatUnwindingPaths = [];
       for (i=0; i<this.parentMeasureRepModel.get('circleStates').length; i++){
         var circleState = $.map(Array(this.parentMeasureRepModel.get('transitionNumberOfPoints')), function (d, j) {
-          var cx = (µthis.parentMeasureRepModel.get('circleStates')[i][Math.floor((µthis.beatIndex/µthis.parentMeasureModel.get('beats').models.length)*(µthis.parentMeasureRepModel.get('transitionNumberOfPoints')))].x) + µthis.parentMeasureRepModel.get('circularBeadBeatRadius') * Math.sin(2 * j * Math.PI / (µthis.parentMeasureRepModel.get('transitionNumberOfPoints') - 1));
+          var cx = (µthis.parentMeasureRepModel.get('circleStates')[i][Math.floor((µthis.beatIndex/µthis.parentMeasureModel.get('beatsCollection').models.length)*(µthis.parentMeasureRepModel.get('transitionNumberOfPoints')))].x) + µthis.parentMeasureRepModel.get('circularBeadBeatRadius') * Math.sin(2 * j * Math.PI / (µthis.parentMeasureRepModel.get('transitionNumberOfPoints') - 1));
           var cy = µthis.parentMeasureRepModel.get('circularMeasureCy') - µthis.parentMeasureRepModel.get('circularMeasureR') * Math.cos(2 * j * Math.PI / (µthis.parentMeasureRepModel.get('transitionNumberOfPoints') - 1));
           return { cx: cx, cy: cy };
         });
@@ -160,8 +160,8 @@ define([
       var beatLineToBeadPaths = [];
       for (i=0; i<this.parentMeasureRepModel.get('circleStates').length; i++){
         var beatCoordinatesAlongTransition = [];
-          beatCoordinatesAlongTransition.cx = (this.beatUnwindingPaths[i][Math.floor((this.beatIndex/this.parentMeasureModel.get('beats').models.length)*(this.parentMeasureRepModel.get('transitionNumberOfPoints')))].cx);
-          beatCoordinatesAlongTransition.cy = (this.beatUnwindingPaths[i][Math.floor((this.beatIndex/this.parentMeasureModel.get('beats').models.length)*(this.parentMeasureRepModel.get('transitionNumberOfPoints')))].cy);
+          beatCoordinatesAlongTransition.cx = (this.beatUnwindingPaths[i][Math.floor((this.beatIndex/this.parentMeasureModel.get('beatsCollection').models.length)*(this.parentMeasureRepModel.get('transitionNumberOfPoints')))].cx);
+          beatCoordinatesAlongTransition.cy = (this.beatUnwindingPaths[i][Math.floor((this.beatIndex/this.parentMeasureModel.get('beatsCollection').models.length)*(this.parentMeasureRepModel.get('transitionNumberOfPoints')))].cy);
         beatBeadToLinePaths.push(beatCoordinatesAlongTransition);
         beatLineToBeadPaths.unshift(beatCoordinatesAlongTransition);
       };
@@ -223,7 +223,7 @@ define([
       // draw the lines for unrolling
       } else if (this.drawType == 'lineUnrolling'){
         // console.error(this.lineStatesUnrolling);
-        this.beatContainer
+        // this.beatContainer
           // .attr('transform', 'translate('+this.circularMeasureCx+','+this.circularMeasureCy+')')
 
         this.BEAT = this.beatContainer
