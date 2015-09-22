@@ -254,14 +254,13 @@ define([
         var deleteXLocation = this.model.get('circularDivWidth')/3;
       }
 
-      var µthis = this;
       var svgContainer = d3.select('#svg-'+this.model.cid)
       var buttonArea = svgContainer
           .append('g', ':first-child')
-          .attr('class', 'top-rep-buttons')
+          .classed('top-rep-buttons', true)
           .attr('id', 'top-rep-buttons-' + this.model.cid);
       buttonArea.append('text')
-          .attr('class', 'remove-measure-rep')
+          .classed('remove-measure-rep', true)
           .attr('id', 'remove-measure-rep-'+ this.model.cid)
           .attr('x', deleteXLocation)
           .attr('y', this.model.get('vertDivPadding'))
@@ -271,7 +270,7 @@ define([
           .on("mouseout", function(){ return buttonArea.select('text').attr('stroke', 'black');});
 
       buttonArea.append('text')
-          .attr('class', 'delta')
+          .classed('delta', true)
           .attr('x', this.model.get('horzDivPadding'))
           .attr('y', this.model.get('vertDivPadding'))
           .attr('dy', '.35em')
@@ -320,8 +319,9 @@ define([
     // This is to START dragging a circle {pie or bead}
     circleStart: function(e, ui) {
       console.log('circle dragging start');
-      // Set the current circle's opacity lower, and draw another one to be resized
+      // Set the current circle's opacity lower,
       this.circlePath.attr('opacity', .4);
+      // and draw another one to be resized
       var svgContainer = d3.select('#svg-'+this.model.cid);
       var circlePath = svgContainer
           .insert('path', ':first-child')
@@ -329,9 +329,8 @@ define([
           .attr('d', this.pathFunction)
           .attr('stroke', 'black')
           .attr('opacity', 1)
-          .attr('class', 'circle')
-          .attr('class', 'circle-path')
-          .attr('transform', 'scale('+this.model.get('originalScale')+','+this.model.get('originalScale')+')');
+          .classed('temporary-dragging-path circle circle-path', true)
+          .attr('transform', 'scale('+this.parentMeasureModel.get('currentScale')+','+this.parentMeasureModel.get('currentScale')+')');
 
       if(this.oldW === undefined){
         console.log('this.oldW is undefined');
@@ -347,15 +346,18 @@ define([
     },
     // DURING a dragging of a circle
     circleResizeCallback: function( e, ui ) {
-      console.log(this.oldW, this.oldH, ui.size.width, ui.size.height)
+      // console.log('circle dragging resize');
+      // console.log(this.oldW, this.oldH, ui.size.width, ui.size.height)
       // console.log(e, ui)
-      var newW = Math.floor(ui.size.width);
-      var newH = Math.floor(ui.size.height);
-      var deltaWidth = newW - this.oldW;
-      var deltaHeight = newH - this.oldH;
+      var newWidth = Math.floor(ui.size.width);
+      var deltaWidth = newWidth - this.oldW;
+      var newHeight = Math.floor(ui.size.height);
+      // Not really using the height, since its a square, we only base off of the width, but we compute it just in case they get separated?
+      var deltaHeight = newHeight - this.oldH;
       var deltaRatio = deltaWidth/this.oldW;
+
       var svgContainer = d3.select('#svg-'+this.model.cid);
-      console.log(deltaWidth, deltaHeight);
+      // console.log(deltaWidth, deltaHeight);
       // To handle a wierd issue with the svgContainer reducing faster than the resize, we only want to grow the container when the measureRep is increased
       if ( deltaWidth>0 || deltaHeight>0 ){
         svgContainer.attr('width', parseInt(svgContainer.attr('width'))+deltaWidth );
@@ -363,26 +365,27 @@ define([
       }
       if(this.model.get('currentRepresentationType') == 'bead'){
 
-        var circlePath = svgContainer.select('path');
+        var circlePath = svgContainer.select('.temporary-dragging-path');
         var scale = circlePath.attr('transform').slice(6, circlePath.attr('transform').length-1);
+        // debugger;
         // TODO MAybe set this to the new scale on the measureRepModel
-        this.scale = (this.model.get('originalScale')+deltaRatio);
+        this.scale = (this.parentMeasureModel.get('currentScale')+deltaRatio);
         // aspect ratio scale the measure circle, and the beats
         circlePath
             .attr('transform', 'scale(' + this.scale + ',' + this.scale + ')');
-        // svgContainer.selectAll('g')
-              // .attr('transform', 'scale(' + this.scale + ',' + this.scale + ')');
+        svgContainer.select('.beatHolder')
+            .attr('transform', 'scale(' + this.scale + ',' + this.scale + ')');
       } else if (this.model.get('currentRepresentationType') == 'pie'){
-        var circlePath = svgContainer.select('path');
+        var circlePath = svgContainer.select('.temporary-dragging-path');
         var beatSlices = svgContainer.select('g');
         var scale = circlePath.attr('transform').slice(6, circlePath.attr('transform').length-1);
         // TODO MAybe set this to the new scale on the measureRepModel
-        this.scale = (this.model.get('originalScale')+deltaRatio);
+        this.scale = (this.parentMeasureModel.get('currentScale')+deltaRatio);
         // aspect ratio scale the measure circle, and the beats
         circlePath
             .attr('transform', 'scale(' + this.scale + ',' + this.scale + ')');
         beatSlices
-              .attr('transform', 'scale(' + this.scale + ',' + this.scale + ')' + this.pieTranslate);
+            .attr('transform', 'scale(' + this.scale + ',' + this.scale + ')' + this.pieTranslate);
       }
     },
     // AFTER dragging stops on a circle
@@ -393,12 +396,16 @@ define([
       this.oldH = ui.size.height;
       console.log(this.oldW, this.oldH, ui.size.width, ui.size.height);
 
+      // Remove the temporary-dragging-path
+      d3.select('#svg-'+this.model.cid).select('.temporary-dragging-path').remove();
+
       // TODO Replace these events
       // dispatch.trigger('resized.event', { cid: this.parentMeasureModel.cid });
 
+      Logging.logStorage('Scaled a ' + this.model.get('currentRepresentationType') + ' representation with a scale of ' + this.scale);
+
       this.parentMeasureModel.setCurrentScale(this.scale);
-      
-      console.log(this.parent);
+
       //Break css constraints to allow scaling of mRV container
       $('.measureRep').css('height','auto');
     },
@@ -415,8 +422,7 @@ define([
           .attr('d', this.pathFunction)
           .attr('stroke', 'black')
           .attr('opacity', 1)
-          .attr('class', 'line')
-          .attr('class', 'line-path')
+          .classed('line line-path', true)
           .attr('transform', 'scale('+this.model.get('originalScale')+','+this.model.get('originalScale')+')')
           .attr('transform', 'translate('+(this.model.get('circularMeasureR')*-2-10)+',0)');
       if(this.oldW === undefined){
@@ -430,9 +436,8 @@ define([
     linearResizeCallback: function( e, ui ) {
       console.log(this.oldW, this.oldH, ui.size.width, ui.size.height)
       // console.log(e, ui)
-      var newW = ui.size.width;
-      var newH = ui.size.height;
-      var deltaWidth = newW - this.oldW;
+      var newWidth = ui.size.width;
+      var deltaWidth = newWidth - this.oldW;
       var deltaRatio = deltaWidth/this.oldW;
       var svgContainer = d3.select('#svg-'+this.model.cid);
       if ( deltaWidth>0 ){
@@ -449,7 +454,7 @@ define([
         linePath
             .attr('transform', 'scale(' + this.scale + ',' + 1 + ')');
         beatLines
-              .attr('transform', 'scale(' + this.scale + ',' + 1 + ')');
+            .attr('transform', 'scale(' + this.scale + ',' + 1 + ')');
       } else if (this.model.get('currentRepresentationType') == 'bar'){
         var barPath = svgContainer.select('rect');
         var beatBars = svgContainer.select('g');
@@ -471,6 +476,9 @@ define([
       this.oldH = ui.size.height;
       console.log(this.oldW, this.oldH, ui.size.width, ui.size.height)
       this.parentMeasureModel.setCurrentScale(this.scale);
+
+      Logging.logStorage('Scaled a ' + this.model.get('currentRepresentationType') + ' representation with a scale of ' + this.scale);
+
       //Break css constraints to allow scaling of mRV container
       $('.measureRep').css('height','auto');
     },
@@ -757,7 +765,7 @@ define([
       var svgContainer = d3.select('#svg-'+this.model.cid);
       var infiniteLine = svgContainer
         .insert('line', ':first-child')
-        .attr('class', 'infinite-line')
+        .classed('infinite-line', true)
         .attr('x1', -200)
         .attr('y1', this.model.get('numberLineY'))
         .attr('x2', 1000)
@@ -782,10 +790,11 @@ define([
       console.log('btl');
       var µthis = this;
       var svgContainer = d3.select('#svg-'+this.model.cid)
-            .attr('width', this.model.get('linearDivWidth')+this.model.get('circularMeasureR')*2 );
+            .attr('width', this.model.get('linearDivWidth')*this.parentMeasureModel.get('currentScale')+this.model.get('circularMeasureR')*2*this.parentMeasureModel.get('currentScale') );
       var beatHolder = d3.select('#beat-holder-'+this.model.cid);
       var beadBeats = beatHolder.selectAll('.bead-beat');
 
+      $('#measure-rep-'+this.model.cid).width('auto')
       this.removeLabels();
 
       // send the event to the beatView to unroll at the same time
@@ -970,12 +979,12 @@ define([
               .delay(µthis.model.get('transitionDuration')*i)
               .duration(µthis.model.get('transitionDuration'))
               .ease('linear')
+              // For some reason the d3 classed() doesn't work and errors
+              .attr('class', 'circle circle-path')
               .attr('d', µthis.pathFunction)
               .attr('stroke', 'black')
-              .attr('opacity', 1)
-              .attr('class', 'circle')
+              .attr('opacity', 1);
               // .attr('transform', 'translate(0,0)')
-              .attr('class', 'circle-path');
         }
       }, this.model.get('transitionDuration') + this.model.get('animationIntervalDuration')*5);
       // re-render
@@ -1096,8 +1105,7 @@ define([
               .attr('d', µthis.pathFunction)
               .attr('stroke', 'black')
               .attr('opacity', 1)
-              .attr('class', 'circle')
-              .attr('class', 'circle-path');
+              .attr('class', 'circle circle-path');
         }
       }, this.model.get('animationIntervalDuration')*3 ); 
       // re-render
@@ -1232,8 +1240,7 @@ define([
             .attr('d', µthis.pathFunction)
             .attr('stroke', 'black')
             .attr('opacity', 1)
-            .attr('class', 'line')
-            .attr('class', 'line-path')
+            .attr('class', 'line line-path')
             .attr('transform', 'scale('+µthis.model.get('currentScale')+','+µthis.model.get('currentScale')+')')
             .attr('transform', 'translate('+(µthis.model.get('circularMeasureR')*-2-10)+',0)');
         µthis.actualMeasureLinePath = actualMeasureLinePath;
@@ -1289,12 +1296,8 @@ define([
     makeBeadRep: function(){
       // find the svg container
       var svgContainer = d3.select('#svg-'+this.model.cid)
-          .attr('width', this.model.get('circularDivWidth'))
-          .attr('height', this.model.get('circularDivHeight'));
-
-      svgContainer
-          .attr('width', this.model.get('circularDivWidth'))
-          .attr('height', this.model.get('circularDivHeight'));
+          .attr('width', this.model.get('circularDivWidth') * this.parentMeasureModel.get('currentScale'))
+          .attr('height', this.model.get('circularDivHeight') * this.parentMeasureModel.get('currentScale'));
       // add a circle representing the whole measure
       var circlePath = svgContainer
           .insert('path', ':first-child')
@@ -1302,9 +1305,8 @@ define([
           .attr('d', this.pathFunction)
           .attr('stroke', 'black')
           .attr('opacity', 1)
-          .attr('class', 'circle')
-          .attr('class', 'circle-path')
-          .attr('transform', 'scale(' + this.model.get('currentScale') + ',' + this.model.get('currentScale') + ')');
+          .classed('circle circle-path', true)
+          .attr('transform', 'scale(' + this.parentMeasureModel.get('currentScale') + ',' + this.parentMeasureModel.get('currentScale') + ')');
       // Attach it to the view
       this.circlePath = circlePath;
       // Attach the resizable callbacks
@@ -1313,12 +1315,12 @@ define([
     makeLineRep: function(){
       // Find the SVG container
       var svgContainer = d3.select('#svg-'+this.model.cid)
-          .attr('width', this.model.get('linearDivWidth'))
+          .attr('width', this.model.get('linearDivWidth') * this.parentMeasureModel.get('currentScale'))
           .attr('height', this.model.get('linearDivHeight'));
       // add the infinite line
       var infiniteLine = svgContainer
           .insert('line', ':first-child')
-          .attr('class', 'infinite-line')
+          .classed('infinite-line', true)
           .attr('x1', -200)
           .attr('y1', this.model.get('numberLineY'))
           .attr('x2', 2000)
@@ -1334,9 +1336,8 @@ define([
           .attr('d', this.pathFunction)
           .attr('stroke', 'black')
           .attr('opacity', 1)
-          .attr('class', 'line')
-          .attr('class', 'line-path')
-          .attr('transform', 'scale('+this.model.get('currentScale')+','+this.model.get('currentScale')+')')
+          .classed('line line-path', true)
+          .attr('transform', 'scale(' + this.parentMeasureModel.get('currentScale') + ',' + this.parentMeasureModel.get('currentScale') + ')')
           .attr('transform', 'translate('+(this.model.get('circularMeasureR')*-2)+',0)');
       // attach it to the view
       this.actualMeasureLinePath = actualMeasureLinePath;
@@ -1354,8 +1355,7 @@ define([
           .attr('d', this.pathFunction)
           .attr('stroke', 'black')
           .attr('opacity', 1)
-          .attr('class', 'circle')
-          .attr('class', 'circle-path')
+          .classed('circle circle-path', true)
           .attr('transform', 'scale('+this.model.get('currentScale')+','+this.model.get('currentScale')+')')
       // Attach it to the view
       this.circlePath = circlePath;
@@ -1371,7 +1371,7 @@ define([
       // Make a Box that holds the smaller beat bars
       var box = svgContainer
           .insert('rect', ':first-child')
-          .attr('class', 'bar-box')
+          .classed('bar-box', true)
           .attr('x', this.model.get('lbbMeasureLocationX'))
           .attr('y', this.model.get('lbbMeasureLocationY'))
           .attr('width', this.model.get('linearLineLength'))
@@ -1388,8 +1388,7 @@ define([
           .attr('d', this.pathFunction)
           .attr('stroke', 'none')
           .attr('opacity', 1)
-          .attr('class', 'line')
-          .attr('class', 'hidden-line-path')
+          .classed('line hidden-line-path', true)
           .attr('transform', 'scale('+this.model.get('currentScale')+','+this.model.get('currentScale')+')')
           .attr('transform', 'translate('+(this.model.get('circularMeasureR')*-2-10)+',0)');
       // Attach it to the view
@@ -1442,7 +1441,7 @@ define([
           //Base + Math.random() * (max - min) + min;
           //                                                                              |-Added as a buffer -|
           this.measurePassingToBeatFactoryParameters.cX = this.model.get('horzDivPadding') +        10          + (Math.random() * (20) - 10);
-          this.measurePassingToBeatFactoryParameters.cY = (this.model.get('circularDivHeight')-this.model.get('vertDivPadding')-this.model.get('beatFactoryR')) + (Math.random() * (20) - 10);
+          this.measurePassingToBeatFactoryParameters.cY = (this.model.get('circularDivHeight')*this.parentMeasureModel.get('currentScale')-this.model.get('vertDivPadding')-this.model.get('beatFactoryR')) + (Math.random() * (20) - 10);
           this.measurePassingToBeatFactoryParameters.colorIndex = index;
           var newBeadFactory = new BeatFactoryView(this.measurePassingToBeatFactoryParameters);
           this.childFactoryViews.push(newBeadFactory);
@@ -1468,7 +1467,7 @@ define([
           //Base + Math.random() * (max - min) + min;
           //                                                                              |-Added as a buffer -|
           this.measurePassingToBeatFactoryParameters.cX = this.model.get('horzDivPadding') +       15            +(Math.random() * (20) - 10);
-          this.measurePassingToBeatFactoryParameters.cY = (this.model.get('circularDivHeight')-this.model.get('vertDivPadding')*3 - this.model.get('beatFactoryR')) + (Math.random() * (30) - 20);
+          this.measurePassingToBeatFactoryParameters.cY = (this.model.get('circularDivHeight')*this.parentMeasureModel.get('currentScale')-this.model.get('vertDivPadding')*3 - this.model.get('beatFactoryR')) + (Math.random() * (30) - 20);
           this.measurePassingToBeatFactoryParameters.colorIndex = index;
           this.measurePassingToBeatFactoryParameters.circularMeasureCx = this.model.get('circularMeasureCx');
           this.measurePassingToBeatFactoryParameters.circularMeasureCy = this.model.get('circularMeasureCy');
@@ -1681,6 +1680,7 @@ define([
           µthis.circleStart(e, ui);
         },
         resize: function( e, ui ) {
+          µthis.circleResizeCallback(e, ui);
         },
         stop: function(e, ui) {
           µthis.circleStop(e, ui);
@@ -1797,11 +1797,12 @@ define([
     updateRender: function(){
       console.log('getting to updateRender');
 
-      var width = this.$el.width();
-      var height = this.$el.height();
+      // var width = this.$el.width();
+      // var height = this.$el.height();
       this.closeAllChildren();
       this.removeMeasureRepParts();
       this.makeMeasureRepParts();
+      this.updateDeleteButtonPosition();
 
       var crt = this.model.get('currentRepresentationType');
 
@@ -1822,7 +1823,7 @@ define([
       this.makeBeatFactory();
       // update the classes and the data-representation type
       this.updateDivInfo();
-      this.updateDeleteAndTransitionButtons();
+      this.updateDeleteButtonPosition();
       // remove and replace the div in its place to ensure rendering
       // this.trigger('removeReplace', 'test');
 
