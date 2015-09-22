@@ -28,12 +28,10 @@ define([
       }
       this.instrumentLookup = LookupInstrument;
 
-      // dispatch.on('addInstrumentToGeneratorModel.event', this.addInstrument, this);
-      // dispatch.on('removeInstrumentFromGeneratorModel.event', this.removeInstrument, this);
     },
     removeInstrumentFromUnused: function(removedInstrument) {
       console.log('in remainingInstrumentGeneratorModel removeInstrument()');
-      // remove the item from the array
+      // remove the index *from* the array *arr*
       var remove = function(arr, from) {
           // Based on John Resig's article (MIT Licensed)
           // http://ejohn.org/blog/javascript-array-remove/
@@ -48,8 +46,9 @@ define([
         if (this.get('unusedInstruments')[i].type == removedInstrument.type) {
             remove(this.get('unusedInstruments'), i);
             console.warn('removing Instrument: '+ removedInstrument.type + ' from generatorModel');
-            this.trigger('removedInstrumentFromUnused', {type: removedInstrument.type});
             found = true;
+
+            this.trigger('removedInstrumentFromUnused', {type: removedInstrument.type});
     
             break;
         } else {
