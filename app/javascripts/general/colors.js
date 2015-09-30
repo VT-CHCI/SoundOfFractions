@@ -24,7 +24,8 @@ define([
       15: "#8000ff",  //purple
       16: "#4B0082",  //indigo
       17: "#000000",  //black
-      18: "#ffffff"   //white
+      18: "#ffffff",  //white
+      19: "#505050"   //grey
     }
     // ,
     // // Greyscale

@@ -68,7 +68,12 @@ define([
       $('.spinner').remove(); 
       //trigger the Measure representation addition
       var beatsCollection = StageCollection.get(cid).get('measures').models[0].get('beatsCollection');
-      var representationModel = new RepresentationModel({currentRepresentationType: newRepType, beatsCollection: beatsCollection});
+      var representationModel = new RepresentationModel({
+        currentRepresentationType: newRepType,
+        beatsCollection: beatsCollection,
+        parentMeasureModel: StageCollection.get(cid).get('measures').models[0]
+      });
+      representationModel.addParentMeasureModelAfter(StageCollection.get(cid).get('measures').models[0]);
       console.log('adding to the instrument/measure/measureRep');
       // updating the awaitingAdd to false, so the timeout reset of the cs doesn't get called
       StageCollection.get(cid).set('awaitingAdd', false);   
@@ -76,6 +81,9 @@ define([
       StageCollection.get(cid).get('measures').models[0].get('measureRepresentations').add(representationModel);   
       // dispatch.trigger('addMeasureRepresentation.event', { newRepType: newRepType, hTrackID: hTrackID, hTrack: cid} );
       // this.isFirstRep();
+      Logging.logStorage('Adding a measureRep of type: ' + newRepType + ' to the instrument: ' + StageCollection.get(cid).get('label') );
+
+
     },
     transitionRep: function(e){
       if(ConductorModel.get('isPlaying')) {
@@ -116,10 +124,16 @@ define([
         var cid = hTrackID.slice(7);
         $('.cs').removeClass('cs'); 
         var beatsCollection = StageCollection.get(cid).get('measures').models[0].get('beatsCollection');
-        var representationModel = new RepresentationModel({currentRepresentationType: newRepType, beatsCollection: beatsCollection});
+        var representationModel = new RepresentationModel({
+          currentRepresentationType: newRepType,
+          beatsCollection: beatsCollection,
+          parentMeasureModel: StageCollection.get(cid).get('measures').models[0]
+        });
         console.log('MANUALLY adding to the instrument/measure/measureRep');
         // Currently forcing it to add to the first measure
+        // debugger;
         StageCollection.get(cid).get('measures').models[0].get('measureRepresentations').add(representationModel);
+        Logging.logStorage('MANUALLY Adding a measureRep of type: ' + newRepType + ' to the instrument: ' + StageCollection.get(cid).get('label') );
       }
       if ($('.transition-rep').length) {
         console.log('MANUALLY transitioning');

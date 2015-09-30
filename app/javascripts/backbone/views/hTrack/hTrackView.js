@@ -212,22 +212,28 @@ define([
         e.toElement.parentElement.classList.add('cs');
         var newRepType = $(e.target).closest('.representation').attr('data-state');
         // add the spinning image
-        var spinner = '<img class="spinner" alt="spinner" src="images/spinner.gif"/>'
+        var spinner = '<img class="spinner" alt="spinner" src="images/spinner.gif"/><div class="spinner">Please click a representation to add...</div>'
         $(e.toElement.parentElement).append(spinner);
 
-        Logging.logStorage("Clicked a wmrv without clicking add or transition first.  Clicked: " + newRepType); 
-        console.info('clicked the plus sign');
+        Logging.logStorage('clicked the plus sign on the ' + this.model.get('label') + ' instrument.'); 
+        // console.info('clicked the plus sign');
         
         var µthis = this;
         this.model.set('awaitingAdd', true);
         setTimeout(function(){
+          // debugger;
           // If they failed to click the correct button to add a rep in 6 seconds, reset it
           if(µthis.model.get('awaitingAdd')){          
             $('.cs').removeClass('cs'); 
             $('.spinner').remove(); 
-            Logging.logStorage('Clicked a plus, but failed to add a rep in 6 secs.'); 
+            Logging.logStorage('Clicked a plus the on the ' + µthis.model.get('label') + ', but failed to add a rep in 6 secs.'); 
+            var spinner = '<div class="spinner">Oops!! Ran out of time...</div>'
+            $(e.toElement.parentElement).append(spinner);              
+            setTimeout(function(){
+              $('.spinner').remove(); 
+            },1500)
           }
-        },6000)
+        },6000, {e:e, µthis:µthis})
       } else {
         console.error('Clicked the plus sign and shouldn\'t be here');
       }
@@ -290,12 +296,12 @@ define([
       clearInterval(this.intervalID);
       this.intervalID = null;
       // Trigger the animation to stop.
-      this.trigger('toggleAnimation', 'Off');
+      this.trigger('toggleAnimation', {turn:'Off'});
     },
 
     playSoundAndAnimation: function(){
       this.playSoundLoop();
-      this.trigger('toggleAnimation', 'On');
+      this.trigger('toggleAnimation', {turn:'On'});
     },
 
     // WARNING!!!!
@@ -314,19 +320,44 @@ define([
       var beatTimes = new Array();
 
       _.each(this.model.get('measures').models, function(measure) {
+        // measure.get('currentScale')
         // determining the pixels per second
+                          // R is 50
                           // 320 is ~2PIr   16 is max number of beats we support
-        var pixelsPerMaxwidth = 320/16;
-        //s might need to apply scale factor here
-        var howLong320TakesToPlayLinearly = 8;
+                          // Circumference of a circle is equal to a line rep stretched out
+        var standardR = measure.get('measureRepresentations').models[measure.get('measureRepresentations').length-1].get('initialCircularMeasureR'); // 51
+/**x**/ var standardLengthOfRhythmInPixels = 2*Math.PI*standardR; // 320 with a scale of 1
+        var standardPixelsPerBeat = standardLengthOfRhythmInPixels/16; // ~20
+
+        // 320 x 8
+
+        var standardBeatsPerMinute = 120; // 120 bpm
+/**x**/ var standardBeatsPerSecond = standardBeatsPerMinute/60; // 2 beats per second
+
+        var standardPixelsPerSecond = standardBeatsPerSecond * standardPixelsPerBeat; // 20 pixels per beat @ 2 beats per second || 40 pixels per second
+        var standardPixelsPerMinute = standardPixelsPerSecond * 60; // 2400 pixels per minute
+
+
+        var scaledR = measure.get('measureRepresentations').models[measure.get('measureRepresentations').length-1].get('circularMeasureR');
+/**x**/ var scaledLengthOfRhythmInPixels = 2*Math.PI*scaledR; // 320 with a scale of 1
+        var scaledPixelsPerBeat = scaledLengthOfRhythmInPixels/16; // ~20
+
         
-        var beatsDuration = howLong320TakesToPlayLinearly / measure.get('beatsCollection').length;
+        //s might need to apply scale factor here
+        var howLongToPlayFullRhythmLinearly = scaledLengthOfRhythmInPixels/standardPixelsPerSecond; // 8 seconds
+        
+        // var beatsDuration = howLongToPlayFullRhythmLinearly / measure.get('beatsCollection').length;
+        var beatDuration = howLongToPlayFullRhythmLinearly / measure.get('beatsCollection').length;
+        this.beatDuration = beatDuration;
+        console.error('beatDuration');
+        console.error(beatDuration);
 
         // pps should be 40 pixels per second
-        var pps = ( this.model.get('tempo') * pixelsPerMaxwidth ) / 60; //s
+        // var pps = ( this.model.get('tempo') * pixelsPerMaxwidth ) / 60; //s
 
+        // OLD
         //determining the duration for each beat.
-        var beatDuration = 60 / this.model.get('tempo');
+        // var beatDuration = 60 / this.model.get('tempo');
         _.each(measure.get('beatsCollection').models, function(beat) {
           /* if we need to trigger a sound at this beat
             we push a duration onto the duration array.
@@ -338,7 +369,7 @@ define([
             //deadspace is a beat that is not getting played
             beatTimes.push(deadSpace);
           }
-          deadSpace += beatsDuration;
+          deadSpace += beatDuration;
         }, this);
       }, this);
       //Lastly, we call playSound() with our completed beatTimes array.
@@ -354,6 +385,7 @@ define([
       //this is important (check docs for explanation)
       var startTime = this.masterAudioContext.currentTime; 
 
+      var µthis = this;
       _.each(beatTimes, function(beatTime) { // beats or deadspace start times
         //we call play on each hTrack, passing in a lot of information.
         //which is every activated beat and its associated duration between
@@ -361,7 +393,8 @@ define([
 
         //calculating the duration of one beat. Should be in s, not ms
         var hTrackTempo = this.model.get('tempo');
-        var beatDuration =  (60 / hTrackTempo);
+        // var beatDuration =  (60 / hTrackTempo);
+        var beatDuration =  µthis.beatDuration;
 
         play(
           this,
@@ -372,7 +405,7 @@ define([
           this.masterGainNode,
           this.gainNode,
           this.muteGainNodeList,
-          hTrackTempo,
+          hTrackTempo, //I think this is not needed
           beatDuration
         );
       }, this);

@@ -14,7 +14,7 @@ define([
     defaults: {
       // Constant Variables throughout the representations
       // General
-        originalScale: 1,
+        divHeight: 217,
         currentScale: 1,
         vertDivPadding: 10,
         horzDivPadding: 15,
@@ -54,7 +54,7 @@ define([
       // Bar
         //Measure
         lbbMeasureLocationX: 15, // ~5%
-        lbbMeasureLocationY: 40,
+        // lbbMeasureLocationY: 40,
         lbbMeasureHeight: 25,
         //Beat
         linearBeatXPadding: 0,
@@ -68,12 +68,34 @@ define([
       this.set('previousRepresentationType', 'not_yet_defined');
       this.set('currentRepresentationType', options.currentRepresentationType);
       this.set('beatsCollection', options.beatsCollection);
-      this.updateInformation();
+      this.computeRemainingAttributes();
 
       // When the sister collection of beats changes in length (ie the add or remove a beat in the collection), we need to redo all of the calculations
       this.listenTo(this.get('beatsCollection'), 'add remove', this.updateInformation)
+      console.log(options); 
+      if(options.parentMeasureModel){
+// debugger;
+        this.set('parentMeasureModel', options.parentMeasureModel);
+        this.listenTo(this.get('parentMeasureModel'), 'change:currentScale', this.updateScale)
+      }
+    },
+    addParentMeasureModelAfter: function(parentMeasureModel){
+// debugger;
+      this.set('parentMeasureModel', parentMeasureModel);
+      this.listenTo(this.get('parentMeasureModel'), 'change:currentScale', this.updateScale)
+    },
+    updateScale: function(){
+// debugger;
+      this.set('currentScale', this.get('parentMeasureModel').get('currentScale'));
+      this.set('divHeight', this.get('parentMeasureModel').get('divHeight'));
+      
+      this.computeRemainingAttributes();
     },
     updateInformation: function(){
+      this.set('currentScale', this.get('parentMeasureModel').get('currentScale'));
+      if(this.get('parentMeasureModel').get('divHeight')){      
+        this.set('divHeight', this.get('parentMeasureModel').get('divHeight'));
+      }
       this.computeRemainingAttributes();
     },
     computeRemainingAttributes: function(){
@@ -81,8 +103,8 @@ define([
       this.calculateNumberOfPoints(this.get('beatsCollection').length);
       this.set({
         //Circular
-        circularMeasureCx: this.get('cX')+this.get('horzDivPadding')*this.get('currentScale'),
-        circularMeasureCy: this.get('cY')+this.get('vertDivPadding')*this.get('currentScale'),
+        circularMeasureCx: (this.get('cX')+this.get('horzDivPadding'))*this.get('currentScale'),
+        circularMeasureCy: (this.get('cY')+this.get('vertDivPadding'))*this.get('currentScale'),
         circularMeasureR: this.get('initialCircularMeasureR')*this.get('currentScale'),
         // Pie
         beatAngle: 360/this.get('beatsCollection').length,
@@ -91,25 +113,34 @@ define([
         timeIncrement: 500, // in ms
         transitionDuration: 1500/this.get('transitionNumberOfPoints'), // 3000 is default
         // Number Line
-        numberLineY: this.get('vertDivPadding')*this.get('currentScale') + this.get('cY')-this.get('initialCircularMeasureR'),
+                  // var y =  µthis.get('circularMeasureCy') - µthis.get('circularMeasureR');
         beatHeight: this.get('lbbMeasureHeight') - 2*this.get('linearBeatYPadding'),
         beatBBY: this.get('linearBeatYPadding') + this.get('lbbMeasureLocationY')
       });
-      
       this.set({
         // Linear
         linearLineLength: 2 * this.get('circularMeasureR') * Math.PI,
+        numberLineY: this.get('circularMeasureCy')-this.get('circularMeasureR'),
+        lbbMeasureLocationY: this.get('circularMeasureCy')-this.get('circularMeasureR')
       });
+
+      this.set({
+        // Line
+        lineBeatY1: this.get('numberLineY') - this.get('lineHashHeight')/2,
+        lineBeatY2: this.get('numberLineY') + this.get('lineHashHeight')/2
+      });
+
       // These have to be set after the above as they have dependencies, and I am unsure if they fire in order....
       this.set({
         //                 |---- Diameter --------------|   |- horizontal padding on sides ---|  |- center X offset ---|
         circularDivWidth:  2*this.get('circularMeasureR') + 2*this.get('horzDivPadding') +       this.get('cX')*this.get('currentScale'), 
         //Circular
         //                 |---- Diameter --------------|   |- horizontal padding on sides ---|
-        circularDivHeight: 200,
-        // circularDivHeight: 2*this.get('circularMeasureR') + this.get('vertDivPadding') +         this.get('cY')*this.get('currentScale'),
+        // circularDivHeight: 2*this.get('circularMeasureR') + this.get('vertDivPadding'),
+        circularDivHeight: 2*this.get('circularMeasureR') + this.get('vertDivPadding') +         this.get('cY')*this.get('currentScale'),
         // Linear
-        linearDivWidth: this.get('linearLineLength') + this.get('horzDivPadding'),
+                                                      // It needs a bit more, hence the 2x
+        linearDivWidth: this.get('linearLineLength') + 2*this.get('horzDivPadding'),
         linearDivHeight: 200,
         // linearDivHeight: 25 + this.get('vertDivPadding'),
         lineDivision: this.get('linearLineLength')/this.get('transitionNumberOfPoints'),
@@ -128,7 +159,7 @@ define([
     },
     setDefaults: function() {
         this.set({
-          "originalScale": this.defaults.originalScale,
+          "divHeight": this.defaults.divHeight,
           "currentScale": this.defaults.currentScale,
           "vertDivPadding": this.defaults.vertDivPadding,
           "horzDivPadding": this.defaults.horzDivPadding,
@@ -154,7 +185,7 @@ define([
           "circularBeadBeatRadius": this.defaults.circularBeadBeatRadius,
           "lineHashHeight": this.defaults.lineHashHeight,
           "lbbMeasureLocationX": this.defaults.lbbMeasureLocationX,
-          "lbbMeasureLocationY": this.defaults.lbbMeasureLocationY,
+          // "lbbMeasureLocationY": this.defaults.lbbMeasureLocationY,
           "lbbMeasureHeight": this.defaults.lbbMeasureHeight,
           "linearBeatXPadding": this.defaults.linearBeatXPadding,
           "linearBeatYPadding": this.defaults.linearBeatYPadding,
@@ -213,6 +244,7 @@ define([
     // We need to calculate the number of points for animation transitions
     // We want to be above 30 for fluidity, but below 90 to avoid computational and animation delay
     calculateNumberOfPoints: function(n) {
+      // this.set({'transitionNumberOfPoints': 80});
       switch (n){
         case 1:
           this.set({'transitionNumberOfPoints': 40});

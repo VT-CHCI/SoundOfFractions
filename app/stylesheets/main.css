@@ -20,10 +20,11 @@
 .update-render-temp-holder {
   display: inline-block;
 }
-.measureRep{
+/*.measureRep{
   min-height: 1px;
   min-width: 1px;
 }
+*/
 .login, .song-list {
   display: inline-block;
 }
@@ -79,6 +80,9 @@
 [data-representation="audio"] {
   position: relative;
 }
+.record-div:hover {
+  cursor: pointer;
+}
 .record-div {
   position: absolute;
   bottom: 10px;
@@ -90,12 +94,12 @@
 .measure .measureRep.measureRep-audio:not(:first-of-type) .record-button{
   display: none;
 }
+.measure .measureRep:first-of-type .remove-measure-rep{
+  visibility: hidden;
+}
 /* for development only
 .navbar .nav > li > a {
   float: left!important;
-}
-.measure .measureRep:first-of-type .remove-measure-rep{
-  visibility: hidden;
 }
 .hTrack .measure-container .measure:first-of-type .remove-measure{
   display: none;
@@ -130,7 +134,7 @@
   color: red;
 }
 .measureRep {
-  height: 200px;
+  height: auto;
   border: solid 1px grey;
   border-radius: 3px;
   display: inline-block;
@@ -152,16 +156,18 @@
 .delta {
   color: gray;
   padding: 3px;
-  font-size: 17px;
+  font-size: 25px;
 }
 .delta:hover {
+  cursor: pointer;
   stroke: green;
-  font-color: green;
-  color: green;
+  fill: green;
+  /*color: green;*/
   font-weight: bold;
 }
-.transition-rep {
-  color: green;
+.transition-rep .delta {
+  stroke: green;
+  fill: green;
   font-weight: bold;
 }
 .change-instrument {
@@ -191,6 +197,7 @@
   -o-transform: rotate(90deg);
 }
 .remove-measure-rep:hover {
+  cursor: pointer;
   color: red;
 }
 .remove-measure-rep {
@@ -212,11 +219,17 @@
 .stamped {
   padding: 1px  3px;
 }
-.hTrack.well { 
+.hTrack { 
   padding: 10px 10px 0px 10px;
   margin-bottom: 10px;
   min-height: 164px;
+  background-color: whitesmoke;
 }
+/*.hTrack.well { 
+  padding: 10px 10px 0px 10px;
+  margin-bottom: 10px;
+  min-height: 164px;
+}*/
 .delete-instrument {
   margin: 5px;
   width: 11px;
@@ -396,46 +409,6 @@ svg.line {
   /*min-height: 150px;*/
 }
 
-.hTrack-container .count {
-  position: absolute;
-  top: 30px;
-  right: 0;
-  font-size: 50px;
-  height: 50px;
-  width: 7%;
-  text-align: center;
-}
-
-.hTrack-container .count .numerator {
-  display: block;
-  margin: 15px auto 15px auto;
-  border-bottom: 4px solid;
-  padding-bottom: 12px;
-}
-
-.hTrack-container .count .mixedNumerator {
-  display: block;
-  margin: 15px auto 15px auto;
-  border-bottom: 4px solid;
-  padding-bottom: 12px;
-}
-
-.hTrack-container .count .whole {
-  display: block;
-  margin: 15px auto 25px auto;
-  font-size: 80px;
-  margin-bottom: 12px;
-}
-
-.hTrack-container .count .denominator {
-}
-
-.hTrack-container .count .percent, .hTrack-container .count .decimal {
-  margin-top: 65%;
-  display: block;
-  margin-left: -25px;
-  font-size: 40px;
-}
 .control {
   position: relative;
   top: 20px;

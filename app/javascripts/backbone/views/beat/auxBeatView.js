@@ -186,7 +186,7 @@ define([
             .attr('transform', 'translate(0,0)')
             // This is the path that the beat will follow when un/roll is clicked
             .data([this.beatUnwindingPaths[0]])
-            .attr('fill', COLORS.hexColors[this.color])
+            .attr('fill', this.getColor())
             .attr('stroke', 'black')
             .style('opacity', this.getOpacityNumber(this.opacity));
       // Draw the line beat
@@ -196,10 +196,10 @@ define([
             .attr('id', 'beat'+this.cid)
             .attr('class', 'secondaryBeat beat d3 line-beat')
             .attr('x1', this.X1)
-            .attr('y1', this.Y1)
+            .attr('y1', this.lineBeatY1)
             .attr('x2', this.X2)
-            .attr('y2', this.Y2)
-            .attr('stroke', COLORS.hexColors[this.color])
+            .attr('y2', this.lineBeatY2)
+            .attr('stroke', this.getColor())
             .attr('opacity', this.getOpacityNumber(this.opacity))
             .attr('stroke-width', 4);
       // Draw the lines for rolling
@@ -215,10 +215,10 @@ define([
           .data([this.lineStatesUnrolling[this.lineStatesUnrolling.length-1]])
           .attr('d', this.pathFunction)
           // .attr('d', this.lineStatesUnrolling[this.lineStatesUnrolling.length])
-          .attr('stroke', COLORS.hexColors[this.color])
+          .attr('stroke', this.getColor())
           .attr('opacity', this.getOpacityNumber(this.opacity))
           .attr('stroke-width', 4)
-          // .attr('fill', COLORS.hexColors[this.color])
+          // .attr('fill', this.getColor())
           .attr('transform', 'translate(0,0)') ;
       // draw the lines for unrolling
       } else if (this.drawType == 'lineUnrolling'){
@@ -234,10 +234,10 @@ define([
           .data([this.lineStatesRollup[this.lineStatesUnrolling.length-1]])
           .attr('d', this.pathFunction)
           // .attr('d', this.lineStatesUnrolling[this.lineStatesUnrolling.length])
-          .attr('stroke', COLORS.hexColors[this.color])
+          .attr('stroke', this.getColor())
           .attr('opacity', this.getOpacityNumber(this.opacity))
           .attr('stroke-width', 4)
-          // .attr('fill', COLORS.hexColors[this.color])
+          // .attr('fill', this.getColor())
           .attr('transform', 'translate(0,0)') ;
       // Draw the pie slice beats
       } else if (this.drawType == 'pie'){
@@ -256,7 +256,7 @@ define([
           .attr('d', arc)
           .attr('stroke', 'black')
           .attr('opacity', this.getOpacityNumber(this.opacity))
-          .attr('fill', COLORS.hexColors[this.color])
+          .attr('fill', this.getColor())
           .attr('transform', 'translate(0,0)');
       // Draw the audio beat
       } else if (this.drawType == 'audio'){
@@ -285,7 +285,7 @@ define([
             .attr('stroke', 'black')
             .attr('stroke-width', 1)
             .attr('opacity', this.getOpacityNumber(this.opacity))
-            .attr('fill', COLORS.hexColors[this.color]);
+            .attr('fill', this.getColor());
       }
       this.setElement($('#beat'+this.cid));
       return this;
@@ -302,6 +302,23 @@ define([
           // Not-Selected
           return 0.2;
         }
+      }
+    },
+    // sets the opacity between selected and not-selected
+    getColor : function() {
+      if(this.beatColorStyle === 'colors'){
+        return COLORS.hexColors[this.color];
+      } else if (this.beatColorStyle === 'greyscale') {
+        return COLORS.hexColors[19];
+      } else if (this.beatColorStyle === 'greyOff') {
+        if(this.model.get('selected')){
+          return COLORS.hexColors[this.color];
+        } else {
+          return COLORS.hexColors[19];
+        }
+      } else {
+        console.error('shouldn\'t be in here');
+        return COLORS.hexColors[17];
       }
     },
     // manage the transitions from one rep to another

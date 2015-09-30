@@ -1,8 +1,12 @@
-<div id="hTrack-<%= model.cid %>" class="hTrack well container-fluid" data-state="<%= model.get('type') %>">
+<div id="hTrack-<%= model.cid %>" class="hTrack container-fluid" data-state="<%= model.get('type') %>">
   <div class="htrack-info pull-left">
-    <div id="delete-hTrack-<%= model.cid %>"><i class="fa fa-remove delete-instrument"></i></div>
+    <div id="delete-hTrack-<%= model.cid %>">
+      <i class="fa fa-remove delete-instrument" title="Click here to delete this <%= model.get('label') %>"></i>
+    </div>
     <img src="<%= model.get('img')%>" class="img-circle hTrack-image">
-    <div class="control unmute fa-stack"><i class="fa fa-volume-up fa-stack-1x"></i></div>
+    <div class="control unmute fa-stack" title="Click here to mute/unmute this <%= model.get('label') %>">
+        <i class="fa fa-volume-up fa-stack-1x"></i>
+    </div>
     <div id="instrument-selector-<%= model.cid %>" class="change-instrument"></div>
   </div>
   <div id="measure-container-<%= model.cid %>" class="measure-container pull-left">

@@ -44,10 +44,10 @@ define([
       this.childViews = [];
 
       // this bindall method is thor the remainging listeners, per StackOverflow suggestions
-      _.bindAll(this, 'render');
+      // _.bindAll(this, 'render');
       // when we add or delete a meauserRep
       // this.listenTo(this.model.get('measureRepresentations'), 'remove', _.bind(this.render, this));  
-      this.listenTo(this.model.get('measureRepresentations'), 'add', _.bind(this.addChild, this));  
+      this.listenTo(this.model.get('measureRepresentations'), 'add', _.bind(this.reconfigure, this));  
 
       // I dont htink we want this. we want each representation to make their own changes
       // this.listenTo(this.model.get('beatsCollection'), 'add remove', _.bind(this.reconfigure, this));  
@@ -80,6 +80,7 @@ define([
 
       return this;
     },
+    // TODO IMPORNTANT This is structured wrong: it should be adding measure Views, not measureRepViews
     addChild: function(options){
       // If we are creating the children from the models already present, ie, initial load
       if(options.repIndex > -1) {      
@@ -88,7 +89,6 @@ define([
       } else {
         console.log('Measure View add child');
         var addedModel = this.model.get('measureRepresentations').last();
-        Logging.logStorage('Adding a measureRep of type: ' + this.model.get('measureRepresentations').last().get('currentRepresentationType') + ' to the instrument: ' + this.parentHTrackModel.get('label') );
       }
 
       // get parameters for the template for a measure
@@ -103,10 +103,10 @@ define([
         model: addedModel,
         measureRepModel: addedModel
       };
-      //This part is the hack      This is where we create a measureRepView for each one using the paramaters
       var newView = new MeasureRepView(measureRepViewParameters);
+      // newView.model.addParentMeasureModelAfter(this.model);
+
       this.childViews.push(newView);
-      this.listenTo(newView, 'removeReplace', this.removeReplace);  
     },
     makeChildren: function(options){
       // for each rep in the measuresCollection
@@ -156,55 +156,33 @@ define([
       Again, Version 1 should not support multiple measures, but we have it for when we will
       This is called when the user clicks on the minus to remove a measure.
     */
-    removeMeasure: function(ev){
-      console.error('here');
-      if ($('#measure'+this.measuresCollection.models[0].cid).parent()) {
-        //removing the last measure isn't allowed.
-        if(this.measuresCollection.models.length == 1) {
-          console.log('Can\'t remove the last measure!');
-          return;
-        }
-        console.log('remove measure');
+    // removeMeasure: function(ev){
+    //   console.error('here');
+    //   if ($('#measure'+this.measuresCollection.models[0].cid).parent()) {
+    //     //removing the last measure isn't allowed.
+    //     if(this.measuresCollection.models.length == 1) {
+    //       console.log('Can\'t remove the last measure!');
+    //       return;
+    //     }
+    //     console.log('remove measure');
 
-        //we remove the measure and get its model.
-        var model = this.measuresCollection.get($(ev.target).parents('.measure').attr('id').replace('measure',''));
-        this.measuresCollection.remove(model);
+    //     //we remove the measure and get its model.
+    //     var model = this.measuresCollection.get($(ev.target).parents('.measure').attr('id').replace('measure',''));
+    //     this.measuresCollection.remove(model);
 
-        //send a log event showing the removal.
-        log.sendLog([[3, 'Removed a measure: measure' + this.cid]]);
+    //     //send a log event showing the removal.
+    //     log.sendLog([[3, 'Removed a measure: measure' + this.cid]]);
 
-        //re-render the view.
-        this.render();
+    //     //re-render the view.
+    //     this.render();
 
-        //trigger a stop request to stop playback.
-        // TODO Replace these events
-        // dispatch.trigger('stopRequest.event', 'off');
-        // dispatch.trigger('signatureChange.event', this.parentHTrackModel.get('signature'));
-      }
-    },
-    removeReplace: function(msg){
-      // get all the measureReps in this measure
-      // $elemDivs = $(this.el + ' .measureRep')
-      // var originals = [];
-      // $elemDivs.each(function() {
-      //   // Clone original, keeping event handlers and any children elements
-      //   originals.push($(this).clone(true)); 
-      //   // Create placeholder for original content
-      //   $(this).replaceWith('<div id="original_' + originals.length + '"></div>');
-      // });
+    //     //trigger a stop request to stop playback.
+    //     // TODO Replace these events
+    //     // dispatch.trigger('stopRequest.event', 'off');
+    //     // dispatch.trigger('signatureChange.event', this.parentHTrackModel.get('signature'));
+    //   }
+    // },
 
-      // // // Replace placeholders with original content
-      // // for (var i = 0; i < originals.length; i++) {
-      // //  $('#original_' + (i + 1)).replaceWith(originals[i]);
-      // // };
-
-      // setTimeout(function(){
-      //   // Replace placeholders with original content
-      //   for (var i = 0; i < originals.length; i++) {
-      //    $('#original_' + (i + 1)).replaceWith(originals[i]);
-      //   };
-      // }, 1 );
-    },
     // This is called when the signature of a measure is changed
     reconfigure: function(options) {
       console.log('!!!!!! - in measureView re-render - !!!!!!!');

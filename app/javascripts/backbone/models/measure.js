@@ -37,9 +37,16 @@ define([
     increaseTransitionCount: function(){
       this.set({allMeasureChildRepresentationsTransitioned : this.allMeasureChildRepresentationsTransitioned+1});
     },
-    setCurrentScale: function(newScale){
+    setCurrentScaleAndDivDimensions: function(options){
+      // debugger;
+      // if(options.height){
+      // }
+      this.set({divHeight : options.height});
+      // if(options.width){
+      //   this.set({divHeight : this.get('divHeight')*(1+options.width) });
+      // }
       this.set({previousScale : this.get('currentScale')});
-      this.set({currentScale : newScale});
+      this.set({currentScale : options.scale});
     },
     updateMeasureLength: function() {
       // this.

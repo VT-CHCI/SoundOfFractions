@@ -60,9 +60,11 @@ define([
         // Inside: x and y must satisfy (x - center_x)^2 + (y - center_y)^2 < radius^2
         // Outside: x and y must satisfy (x - center_x)^2 + (y - center_y)^2 > radius^2
         // On: x and y must satisfy (x - center_x)^2 + (y - center_y)^2 == radius^2
-        if ( Math.pow(newComputedValX - µthis.parentMeasureRepModel.get('circularMeasureCx'), 2) + Math.pow(newComputedValY - µthis.parentMeasureRepModel.get('circularMeasureCy'), 2) <= Math.pow(µthis.parentMeasureRepModel.get('circularMeasureR'),2) ) {
+        if ( Math.pow(newComputedValX - µthis.parentMeasureRepModel.get('circularMeasureCx'), 2) + Math.pow(newComputedValY - µthis.parentMeasureRepModel.get('circularMeasureCy'), 2) <= Math.pow(µthis.parentMeasureRepModel.get('circularMeasureR'), 2) ) {
           console.log('inside circle');
-          var center = {x: µthis.parentMeasureRepModel.get('circularMeasureCx'), y:µthis.parentMeasureRepModel.get('circularMeasureCy')};
+          var center = {  x: µthis.parentMeasureRepModel.get('circularMeasureCx'),
+                          y:µthis.parentMeasureRepModel.get('circularMeasureCy')
+                       };
           //give it two points, the center, and the new beat location, once it is on or inside the circle
           function angle(center, p1) {
             var p0 = {x: center.x, y: center.y - Math.sqrt(Math.abs(p1.x - center.x) * Math.abs(p1.x - center.x)
@@ -217,7 +219,7 @@ define([
             // This is the path that the beat will follow when un/roll is clicked
             // .attr('d', pathFunction)
             .attr('stroke', this.beatColor)
-            .attr('stroke-width', 4)
+            .attr('stroke-width', 6)
             .attr('opacity', .2)
             .call(dragLine);
       } else if(this.parentMeasureRepModel.get('currentRepresentationType') == 'pie') {

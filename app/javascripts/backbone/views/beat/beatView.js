@@ -34,8 +34,8 @@ define([
         this.opacity = this.getOpacityNumber(options.opacity);
         // this.beatCenterPosition = {};
 
-        _.bindAll(this, 'toggleModel');
-        this.listenTo(this.model, 'change', _.bind(this.toggleOpacity, this));
+        // _.bindAll(this, 'toggleModel');
+        this.listenTo(this.model, 'change', _.bind(this.toggleProperties, this));
 
         this.listenTo(this.parentMeasureRepView, 'beatTransition', this.transition, this);
       } else {
@@ -195,7 +195,12 @@ define([
       // to prevent the dragging of a one beat measure
       if (this.parentMeasureModel.get('beatsCollection').models.length > 1) {
         µthis = this;
-        dragBead.on("drag", function(d) {
+        dragBead.on("dragstart", function(d) {
+          µthis.originalBeadX = +d3.select(this).attr("cx");
+          µthis.originalBeadY = +d3.select(this).attr("cy");
+        })
+        .on("drag", function(d) {
+          // debugger;
           // Formula for circle beats, utilizing cx and cy
           //                        |-----Current Value--------|   |-----Delta value----|
           var newSettingX = parseInt(d3.select(this).attr("cx")) + parseInt(d3.event.dx);
@@ -210,6 +215,18 @@ define([
           if ( Math.pow(newComputedValX - µthis.parentMeasureRepModel.get('circularMeasureCx'), 2) + Math.pow(newComputedValY - µthis.parentMeasureRepModel.get('circularMeasureCy'), 2) > Math.pow(µthis.parentMeasureRepModel.get('circularMeasureR')+15,2) ) {
             // d3.select(this).remove();
             µthis.parentMeasureModel.get('beatsCollection').remove(µthis.model);
+            dragBead.on('dragend', null);
+            // return;
+          }
+        })
+        .on("dragend", function(d) {
+          if (+d3.select(this).attr("cx") == µthis.originalBeadX ){
+            µthis.dragged = false;
+          } else {
+            µthis.dragged = true;
+            d3.select(this).attr("cx", µthis.originalBeadX)
+            d3.select(this).attr("cy", µthis.originalBeadY)
+            d3.event.sourceEvent.stopPropagation();
           }
         });
         dragLine.on('drag', function(d) {
@@ -229,7 +246,7 @@ define([
           // On : newCenterY1 = µthis.numberLineY
           // Below: newCenterY1 > µthis.numberLineY
           // BelowByN: newCenterY1 > µthis.numberLineY + N
-          if ((newCenterY1 < µthis.parentMeasureRepModel.get('numberLineY') - 20) || (newCenterY1 > µthis.parentMeasureRepModel.get('numberLineY') + 20)) {
+          if ((newCenterY1 < µthis.parentMeasureRepModel.get('numberLineY') - µthis.parentMeasureRepModel.get('lineHashHeight')*1.1) || (newCenterY1 > µthis.parentMeasureRepModel.get('numberLineY') + µthis.parentMeasureRepModel.get('lineHashHeight')*1.1 )) {
             // make an array to find out where the new beat should be added in the beatsCollection of the measure
             d3.select(this).remove();
             µthis.parentMeasureModel.get('beatsCollection').remove(µthis.model);
@@ -282,7 +299,7 @@ define([
             .attr('transform', 'translate(0,0)')
             // This is the path that the beat will follow when un/roll is clicked
             .data([this.beatUnwindingPaths[0]])
-            .attr('fill', COLORS.hexColors[this.color])
+            .attr('fill', this.getColor())
             .attr('stroke', 'black')
             .style('opacity', this.getOpacityNumber(this.model.get('selected')))
             .call(dragBead);
@@ -293,11 +310,11 @@ define([
             .attr('id', 'beat'+this.cid)
             .attr('class', 'beat d3 line-beat')
             .attr('x1', this.X1)
-            .attr('y1', this.Y1)
+            .attr('y1', this.lineBeatY1)
             .attr('x2', this.X2)
-            .attr('y2', this.Y2)
+            .attr('y2', this.lineBeatY2)
             .attr('transform', 'translate(0,0)')
-            .attr('stroke', COLORS.hexColors[this.color])
+            .attr('stroke', this.getColor())
             .attr('opacity', this.getOpacityNumber(this.model.get('selected')))
             .attr('stroke-width', 4)
             .call(dragLine);
@@ -318,7 +335,7 @@ define([
           .attr('d', arc)
           .attr('stroke', 'black')
           .attr('opacity', this.getOpacityNumber(this.model.get('selected')))
-          .attr('fill', COLORS.hexColors[this.color])
+          .attr('fill', this.getColor())
           .attr('transform', 'translate(0,0)')
           .call(dragSlice);
       // Draw the audio beat
@@ -347,7 +364,7 @@ define([
             .attr('stroke', 'black')
             .attr('stroke-width', 1)
             .attr('opacity', this.getOpacityNumber(this.model.get('selected')))
-            .attr('fill', COLORS.hexColors[this.color])
+            .attr('fill', this.getColor())
             .call(dragBar);
       }
       // This is so Backbone knows what element it is so when we call close, it removes the appropriate DOM element
@@ -374,6 +391,23 @@ define([
         }
       }
     },
+    // sets the opacity between selected and not-selected
+    getColor : function() {
+      if(this.beatColorStyle === 'colors'){
+        return COLORS.hexColors[this.color];
+      } else if (this.beatColorStyle === 'greyscale') {
+        return COLORS.hexColors[19];
+      } else if (this.beatColorStyle === 'greyOff') {
+        if(this.model.get('selected')){
+          return COLORS.hexColors[this.color];
+        } else {
+          return COLORS.hexColors[19];
+        }
+      } else {
+        console.error('shouldn\'t be in here');
+        return COLORS.hexColors[17];
+      }
+    },
 
     /*
       This is called when a beat is clicked.
@@ -385,17 +419,27 @@ define([
       5. triggers a beatClicked event.
     */
     toggleModel: function(){
-      console.log('Toggling the beat view model');
-      //switch the selected boolean value on the model
-      this.model.set('selected', !this.model.get('selected'));
-      var state = this.model.get('selected') ? 'ON' : 'OFF';
-      Logging.logStorage('Toggling the beat view model. Turning: ' + state + ' . Beat index (0-based): ' +this.beatIndex + ' on the index (0-based) representation: ' + $(this.parentMeasureRepView.$el).index() + ' of type: ' + this.parentMeasureRepView.measureRepModel.get('currentRepresentationType') + ' on this instrument: ' + this.parentMeasureRepView.parentHTrackModel.get('label') );
-      // log.sendLog([[1, "beat" + this.model.cid + " toggled: "+!bool]]);
+      if(!this.dragged){
+        if(this.parentMeasureRepModel.get('currentRepresentationType') !== 'audio'){      
+          console.log('Toggling the beat view model');
+          //switch the selected boolean value on the model
+          this.model.set('selected', !this.model.get('selected'));
+          var state = this.model.get('selected') ? 'ON' : 'OFF';
+          Logging.logStorage('Toggling the beat view model. Turning: ' + state + ' . Beat index (0-based): ' +this.beatIndex + ' on the index (0-based) representation: ' + $(this.parentMeasureRepView.$el).index() + ' of type: ' + this.parentMeasureRepView.measureRepModel.get('currentRepresentationType') + ' on this instrument: ' + this.parentMeasureRepView.parentHTrackModel.get('label') );
+          // log.sendLog([[1, "beat" + this.model.cid + " toggled: "+!bool]]);
+        }
+      }
     },
-    toggleOpacity: function() {
+    toggleProperties: function() {
       // We only want to toggle opacities of non-audio beats.   Audio beats deal with fill-opacity for animating
       if(this.parentMeasureRepModel.get('currentRepresentationType') !== 'audio') {
-        d3.select('#beat'+this.cid).style('opacity', this.getOpacityNumber(this.model.get('selected')))
+        var beat = d3.select('#beat'+this.cid);
+        beat.style('opacity', this.getOpacityNumber(this.model.get('selected')))
+        if(this.parentMeasureRepModel.get('currentRepresentationType') !== 'line') {
+          beat.style('fill', this.getColor());
+        } else {
+          beat.style('stroke', this.getColor());
+        }
       }
     },
     // manage the transitions from one rep to another
@@ -457,7 +501,7 @@ define([
       }
     },
     onClose: function(){
-      this.model.unbind('change', this.toggleOpacity);
+      this.model.unbind('change', this.toggleProperties);
     }
   });
 });

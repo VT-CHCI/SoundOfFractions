@@ -54,6 +54,9 @@ define([
 
       this.listenTo(this.stageCollection, 'add remove', this.turnPlayingOff);
 
+      // allow the letter t to click the first transition
+      $(document).bind('keypress', this.manualPress);
+
       // This kicks off and adds the snare to the 
       RemainingInstrumentGeneratorModel.removeInstrumentFromUnused({type:'sn'});
       // RemainingInstrumentGeneratorModel.removeInstrumentFromUnused({type:'hh'});
@@ -151,8 +154,8 @@ define([
         // this creates 1 measure, and addes beats and the representations to itself
         this.manuallyCreatedMeasureBeatsCollection = new BeatsCollection;
         //for each beat - also change signature below
-        for (var i = 0; i < 8; i++) {
-          if (i == 0 || i == 2 || i == 4 || i == 6 ){
+        for (var i = 0; i < 15; i++) {
+          if (i == 0 || i == 2 || i == 4 || i == 6 || i == 8 || i == 10 || i == 12 || i == 14 ){
             this.manuallyCreatedMeasureBeatsCollection.add([{selected: true}]);
           } else {
             this.manuallyCreatedMeasureBeatsCollection.add([{selected: false}]);
@@ -162,11 +165,17 @@ define([
         //make a collection
         this.manuallyCreatedMeasureRepresentationCollection = new RepresentationsCollection;
         // add an audio rep
-        this.manuallyCreatedRepresentationModel = new RepresentationModel({currentRepresentationType:'audio', beatsCollection:this.manuallyCreatedMeasureBeatsCollection});
+        this.manuallyCreatedRepresentationModel = new RepresentationModel({
+          currentRepresentationType:'audio', 
+          beatsCollection:this.manuallyCreatedMeasureBeatsCollection
+        });
         this.manuallyCreatedMeasureRepresentationCollection.add(this.manuallyCreatedRepresentationModel);
         // add a bead rep
-        this.manuallyCreatedRepresentationModel = new RepresentationModel({currentRepresentationType:'bead', beatsCollection:this.manuallyCreatedMeasureBeatsCollection});
-        this.manuallyCreatedMeasureRepresentationCollection.add(this.manuallyCreatedRepresentationModel);
+        this.secondManuallyCreatedRepresentationModel = new RepresentationModel({
+          currentRepresentationType:'bead',
+          beatsCollection:this.manuallyCreatedMeasureBeatsCollection
+        });
+        this.manuallyCreatedMeasureRepresentationCollection.add(this.secondManuallyCreatedRepresentationModel);
         // // add a line rep
         // this.manuallyCreatedRepresentationModel = new RepresentationModel({currentRepresentationType:'line', beatsCollection:this.manuallyCreatedMeasureBeatsCollection});
         // this.manuallyCreatedMeasureRepresentationCollection.add(this.manuallyCreatedRepresentationModel);
@@ -179,8 +188,13 @@ define([
 
         // Create a Measures Collection, and add the beats and representations
         this.manuallyCreatedMeasuresCollection = new MeasuresCollection;
-        this.manuallyCreatedMeasuresCollection.add({
-          beatsCollection: this.manuallyCreatedMeasureBeatsCollection, measureRepresentations: this.manuallyCreatedMeasureRepresentationCollection});
+        this.parentMeasureModel = new MeasureModel({
+          beatsCollection: this.manuallyCreatedMeasureBeatsCollection,
+          measureRepresentations: this.manuallyCreatedMeasureRepresentationCollection          
+        });
+        this.manuallyCreatedMeasuresCollection.add(this.parentMeasureModel);
+        this.manuallyCreatedRepresentationModel.addParentMeasureModelAfter(this.parentMeasureModel);
+        this.secondManuallyCreatedRepresentationModel.addParentMeasureModelAfter(this.parentMeasureModel);
       // This is for subsequent instruments when added
         this.secondManuallyCreatedMeasureBeatsCollection = new BeatsCollection;
         //for each beat - also change signature below
@@ -221,6 +235,7 @@ define([
     },
     close: function(){
       console.info('in stageView close function');
+      $(document).unbind('keypress', this.manualPress);
       this.remove();
       this.unbind();
       this.closeChildren();
@@ -234,6 +249,16 @@ define([
           childView.close();
         }
       })
+    },
+    manualPress: function(e) {
+      // t = 116, d = 100, w = 119, o = 111
+      if (e.keyCode === 116) {
+        if(!$('.measureRep:nth-child(2)').hasClass('transition-rep')){      
+          $('.measureRep:nth-child(2)').addClass('transition-rep')
+        } else {
+          $('.measureRep:nth-child(2)').removeClass('transition-rep')
+        }
+      }
     }
   });
   // A singleton
