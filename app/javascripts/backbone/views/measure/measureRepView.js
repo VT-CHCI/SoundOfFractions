@@ -353,7 +353,6 @@ define([
       // because I don't know how to compute the arc from a point, I generate the pie slices and then move them as a group.  Thus we have to get the group's transform translate, and store the number, so that when we scale the slices in the next func(), we also translate them the original amount, otherwise when we are scaling it, the slices are not translated, and the origin is 0,0
       if (this.pieTranslate == undefined){
         this.pieTranslate = d3.select('#svg-'+this.model.cid).select('g').attr('transform')
-        console.log(this.pieTranslate);
       }
       console.log(this.oldW, this.oldH, ui.size.width, ui.size.height)
     },
@@ -365,13 +364,14 @@ define([
       var newWidth = Math.floor(ui.size.width);
       var deltaWidth = newWidth - this.oldW;
       var newHeight = Math.floor(ui.size.height);
-      // Not really using the height, since its a square, we only base off of the width, but we compute it just in case they get separated?
+      // Not really using the height, we only base off of the width, but we compute it just in case they get separated?
       var deltaHeight = newHeight - this.oldH;
       var deltaRatio = deltaWidth/this.oldW;
+      console.log(this.oldW, newWidth, newWidth-this.oldW, (newWidth-this.oldW)/this.oldW, 1+((newWidth-this.oldW)/this.oldW));
 
       var svgContainer = d3.select('#svg-'+this.model.cid);
       // console.log(deltaWidth, deltaHeight);
-      // To handle a wierd issue with the svgContainer reducing faster than the resize, we only want to grow the container when the measureRep is increased
+      // To handle a weird issue with the svgContainer reducing faster than the resize, we only want to grow the container when the measureRep is increased
       if ( deltaWidth>0 || deltaHeight>0 ){
         svgContainer.attr('width', parseInt(svgContainer.attr('width'))+deltaWidth );
         svgContainer.attr('height', parseInt(svgContainer.attr('height'))+deltaHeight );
@@ -381,29 +381,32 @@ define([
         var circlePath = svgContainer.select('.temporary-dragging-path');
         // var scale = circlePath.attr('transform').slice(6, circlePath.attr('transform').length-1);
         // TODO MAybe set this to the new scale on the measureRepModel
-        this.scale = (this.parentMeasureModel.get('currentScale')+deltaRatio);
+        // this.scale = (this.parentMeasureModel.get('currentScale')+deltaRatio);
+        this.scale = 1+((newWidth-this.oldW)/this.oldW);
+        // console.log(this.parentMeasureModel.get('currentScale'),deltaRatio,(this.parentMeasureModel.get('currentScale')+deltaRatio));
         // this.actualScale = (this.parentMeasureModel.get('currentScale')+deltaRatio);
         // this.scale = (this.parentMeasureModel.get('originalScale')+deltaRatio);
         // aspect ratio scale the measure circle, and the beats
         circlePath
-            .attr('transform', 'scale(' + this.scale + ',' + this.scale + ')');
+            // .attr('transform', 'scale(' + this.scale + ',' + this.scale + ')');
+            .attr('transform', 'scale(' + (1+deltaRatio) + ',' + (1+deltaRatio) + ')');
         svgContainer.select('.beatHolder')
-            .attr('transform', 'scale(' + this.scale + ',' + this.scale + ')');
+            .attr('transform', 'scale(' + (1+deltaRatio) + ',' + (1+deltaRatio) + ')');
       } else if (this.model.get('currentRepresentationType') == 'pie'){
         var circlePath = svgContainer.select('.temporary-dragging-path');
         var beatSlices = svgContainer.select('g');
         // TODO MAybe set this to the new scale on the measureRepModel
-        this.scale = (this.parentMeasureModel.get('currentScale')+deltaRatio);
+        this.scale = 1+((newWidth-this.oldW)/this.oldW);
         // aspect ratio scale the measure circle, and the beats
         circlePath
-            .attr('transform', 'scale(' + this.scale + ',' + this.scale + ')');
+            .attr('transform', 'scale(' + (1+deltaRatio) + ',' + (1+deltaRatio) + ')');
         beatSlices
-            .attr('transform', 'scale(' + this.scale + ',' + this.scale + ')' + this.pieTranslate);
+            .attr('transform', 'scale(' + (1+deltaRatio) + ',' + (1+deltaRatio) + ')' + this.pieTranslate);
       }
     },
     // AFTER dragging stops on a circle
     circleStop: function(e, ui) {
-      console.log('circle: adjusted scale by : ' + this.scale);
+      console.log('circle: adjusted scale to : ' + this.parentMeasureModel.get('currentScale')*this.scale);
       console.log(this.oldW, this.oldH, ui.size.width, ui.size.height)
       this.oldW = ui.size.width;
       this.oldH = ui.size.height;
@@ -424,10 +427,10 @@ define([
       // TODO Replace these events
       // dispatch.trigger('resized.event', { cid: this.parentMeasureModel.cid });
 
-      Logging.logStorage('Scaled a ' + this.model.get('currentRepresentationType') + ' representation with a scale of ' + this.scale);
+      Logging.logStorage('Scaled a ' + this.model.get('currentRepresentationType') + ' representation by a scale of ' + this.scale + ' to a scale of: ' + this.parentMeasureModel.get('currentScale')*this.scale);
 
-      this.parentMeasureModel.setCurrentScaleAndDivDimensions({ scale:this.scale, 
-                                                   height: ui.size.height});
+      this.parentMeasureModel.setCurrentScaleAndDivDimensions({ scale: this.parentMeasureModel.get('currentScale')*this.scale, 
+                                                                height: ui.size.height});
 
       //Break css constraints to allow scaling of mRV container
       // Dont think we need this?
@@ -470,7 +473,9 @@ define([
       var deltaWidth = newWidth - this.oldW;
       var deltaRatio = deltaWidth/this.oldW;
       var svgContainer = d3.select('#svg-'+this.model.cid);
-      
+
+      console.log(this.oldW, newWidth, newWidth-this.oldW, (newWidth-this.oldW)/this.oldW, 1+((newWidth-this.oldW)/this.oldW));      
+
       if ( deltaWidth>0 ){
         svgContainer.attr('width', parseInt(svgContainer.attr('width'))+deltaWidth*3 );
       }
@@ -480,7 +485,7 @@ define([
         var beatLines = svgContainer.select('g');
         // var scale = linePath.attr('transform').slice(6, linePath.attr('transform').length-1);
         // var linePathCurrentScale = parseInt(scale.slice(0, scale.indexOf(',')));
-        this.scale = (this.model.get('currentScale')+deltaRatio);
+        this.scale = 1+((newWidth-this.oldW)/this.oldW);
         // linearly scale the Line, and the beats
         // This is getting translated and scaled at the same time.  Hence you must translate based on the scale
         linePath
@@ -490,7 +495,7 @@ define([
       } else if (this.model.get('currentRepresentationType') == 'bar'){
         var barPath = svgContainer.select('rect');
         var beatBars = svgContainer.select('g');
-        this.scale = (this.model.get('currentScale')+deltaRatio);
+        this.scale = 1+((newWidth-this.oldW)/this.oldW);
 
         // linearly scale the Line, and the beats
         barPath
@@ -519,9 +524,9 @@ define([
         .select('.beatHolder')
           .attr('transform', 'scale(1,1)');
 
-      Logging.logStorage('Scaled a ' + this.model.get('currentRepresentationType') + ' representation with a scale of ' + newScale);
+      Logging.logStorage('Scaled a ' + this.model.get('currentRepresentationType') + ' representation by a scale of ' + this.scale + ' to a scale of: ' + this.parentMeasureModel.get('currentScale')*this.scale);
 
-      this.parentMeasureModel.setCurrentScaleAndDivDimensions({ scale:this.scale, 
+      this.parentMeasureModel.setCurrentScaleAndDivDimensions({ scale: this.parentMeasureModel.get('currentScale')*this.scale, 
                                                                 height: this.model.get('divHeight')*(1+deltaRatio)});
 
 
@@ -1748,7 +1753,7 @@ define([
       $(this.el).resizable({ 
         aspectRatio: true,
         // To keep the number Math.Floored
-        grid:10,
+        // grid:10,
         minWidth:200,
         // ghost:true,
         // animate: true,
