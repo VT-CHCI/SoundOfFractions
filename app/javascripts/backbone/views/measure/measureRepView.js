@@ -924,6 +924,7 @@ define([
       var beadBeats = beatHolder.selectAll('.bead-beat');
       var circlePath = $('#svg-'+this.model.cid + ' .circle-path');
 
+      $('#measure-rep-'+this.model.cid).width('auto')
       this.removeLabels();
 
       // First stage
@@ -1027,6 +1028,7 @@ define([
       var beatHolder = d3.select('#beat-holder-'+this.model.cid);
       var lineBeats = beatHolder.selectAll('.line-beat');
       
+      $('#measure-rep-'+this.model.cid).width('auto')
       this.removeLabels();
 
       // move the entire thing right, to allow for rolling up
@@ -1087,6 +1089,7 @@ define([
       var lineBeats = beatHolder.selectAll('.line-beat');
       var lineMeasure = svgContainer.selectAll('.line-path');
       
+      $('#measure-rep-'+this.model.cid).width('auto')
       this.removeLabels();
 
       // move the entire thing right to allow for rolling up
@@ -1156,6 +1159,7 @@ define([
         .attr('height', this.model.get('linearDivHeight')+this.model.get('circularMeasureR')*2 );
       var beatHolder = d3.select('#beat-holder-'+this.model.cid);
       
+      $('#measure-rep-'+this.model.cid).width('auto')
       this.removeLabels();
 
       // remove the measure bounding bar box and move the secondary left to align with the new beats
@@ -1202,6 +1206,7 @@ define([
       var beatHolder = d3.select('#beat-holder-'+this.model.cid);
       var barBeats = beatHolder.selectAll('.bar-beat');
 
+      $('#measure-rep-'+this.model.cid).width('auto')
       this.removeLabels();
 
       // remove the measure bounding bar box and move the secondary left to align with the new beats
@@ -1277,6 +1282,7 @@ define([
       var pieBeats = beatHolder.selectAll('.pie-beat');
       var circlePath = svgContainer.selectAll('.circle-path');
 
+      $('#measure-rep-'+this.model.cid).width('auto')
       this.removeLabels();
 
       // make the secondary line-Unrolling beats, and remove the circle measure
@@ -1341,6 +1347,7 @@ define([
       var pieBeats = beatHolder.selectAll('.pie-beat');
       var circlePath = svgContainer.selectAll('.circle-path');
 
+      $('#measure-rep-'+this.model.cid).width('auto')
       this.removeLabels();
 
       // make the secondary line-Unrolling beats, and remove the circle measure
@@ -1396,6 +1403,7 @@ define([
     makeLineRep: function(){
       this.model.updateInformation();
       $('#measure-rep-' + this.model.cid).height(this.model.get('divHeight'));
+      $('#measure-rep-' + this.model.cid).width(this.model.get('linearDivWidth'));
 
       // Find the SVG container
       var svgContainer = d3.select('#svg-'+this.model.cid)
@@ -1455,6 +1463,7 @@ define([
     makeBarRep: function(){
       this.model.updateInformation();
       $('#measure-rep-' + this.model.cid).height(this.model.get('divHeight'));
+      $('#measure-rep-' + this.model.cid).width(this.model.get('linearDivWidth'));
 
       // Find the SVG Container
       var svgContainer = d3.select('#svg-'+this.model.cid)
@@ -1719,7 +1728,7 @@ define([
     manualPress: function(e) {
       // t = 116, d = 100, w = 119, o = 111
       if (e.keyCode == 111) {
-        $('.record-button')[0].click();
+        // $('.record-button')[0].click();
       } else if (e.keyCode == 100) {
         // $('.measureRep')[1].
       } else if (e.keyCode == 119) {

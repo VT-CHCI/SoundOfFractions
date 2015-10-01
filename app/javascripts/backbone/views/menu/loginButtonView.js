@@ -60,7 +60,7 @@ define([
       var µthis = this;
       // TODO Check that the inputs are valid
       var uname = $('#login-name').val();
-      var pwd = $('#pwd').val();
+      // var pwd = $('#pwd').val();
       // var pwdHash = CryptoJS.MD5(pwd);
       // console.log(pwdHash); // this is a word grouping of 4 words, and needs to be converted to a string
       // console.log(pwdHash.toString(CryptoJS.enc.Hex)); // 912ec803b2ce49e4a541068d495ab570
@@ -77,7 +77,7 @@ define([
           // pwd      : asdf
           // pwd hash : 912ec803b2ce49e4a541068d495ab570
           uname: uname,
-          pwd: pwd,
+          // pwd: pwd,
           uid: UID
           }
       })
@@ -132,7 +132,8 @@ define([
       console.info('LoginView render');
       if (this.model){      
         if(this.model.get('loggedIn')){
-          $(this.el).html(logoutTemplate);
+          var compiledTemplate = _.template(logoutTemplate);
+          $(this.el).html( compiledTemplate({sillyname: this.model.get('silly_name')}) );
           SongListView.setModel(this.model);
         } else {
           $(this.el).html(loginTemplate);

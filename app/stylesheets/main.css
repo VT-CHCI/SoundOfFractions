@@ -1,3 +1,6 @@
+.whitesmoke {
+  color: lightgrey;
+}
 #conductor .play {
   background-image: linear-gradient(to bottom,#fff 0,#7DBD80 100%);
 }
@@ -135,6 +138,7 @@
 }
 .measureRep {
   height: auto;
+  width: auto;
   border: solid 1px grey;
   border-radius: 3px;
   display: inline-block;

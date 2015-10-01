@@ -40,14 +40,10 @@ define([
         console.error('Should not be in here: NO Measure!');
       }
       // We use this to make sure we are deleting all the views later
-      // TODO this is buggy. we need to figure out how to delete properly via backbone views
       this.childViews = [];
 
-      // this bindall method is thor the remainging listeners, per StackOverflow suggestions
-      // _.bindAll(this, 'render');
-      // when we add or delete a meauserRep
-      // this.listenTo(this.model.get('measureRepresentations'), 'remove', _.bind(this.render, this));  
-      this.listenTo(this.model.get('measureRepresentations'), 'add', _.bind(this.reconfigure, this));  
+      // when we add a meauserRep
+      this.listenTo(this.model.get('measureRepresentations'), 'add', _.bind(this.addChild, this));  
 
       // I dont htink we want this. we want each representation to make their own changes
       // this.listenTo(this.model.get('beatsCollection'), 'add remove', _.bind(this.reconfigure, this));  
