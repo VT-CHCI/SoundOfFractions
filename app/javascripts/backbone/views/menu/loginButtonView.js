@@ -134,7 +134,6 @@ define([
       console.info('LoginView render');
       if (this.model){      
         if(this.model.get('loggedIn')){
-          debugger;
           var compiledTemplate = _.template(logoutTemplate);
           $(this.el).html( compiledTemplate({sillyname: this.model.get('silly_name')}) );
           SongListView.setModel(this.model);
