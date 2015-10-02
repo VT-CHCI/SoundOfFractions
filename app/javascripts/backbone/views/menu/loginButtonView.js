@@ -33,12 +33,13 @@ define([
       if(JQCookie.get('silly_name')){
         console.info('We got a cookie with a silly name!');
         this.model = new User({silly_name: JQCookie.get('silly_name')});
-        this.listenTo(this.model, 'change:loggedIn', this.render);
       } else {
         console.info('We dont have a silly_name!');
         this.model = new User();
-        this.listenTo(this.model, 'change:loggedIn', this.render);
       }
+      this.listenTo(this.model, 'change:loggedIn', this.render);
+      // allow the enter to click the submit
+      $(document).bind('keypress', this.manualPress);
 
       this.render();
     },
@@ -87,13 +88,14 @@ define([
           $('#first-close-button').click();
           // Update the user model
           µthis.model.setSongs(data.songs);
-          µthis.model.logIn();
+          µthis.model.logIn(data.silly_name);
           // store the data (locally)
           Logging.setUserLoggedIn(data.silly_name);
           Logging.logStorage('Logged in with silly_name: ' + data.silly_name);
           // make a cookie,          
         })
         .fail(function(data){
+          $('#login-error-message').html('Try again.  Check logs for more info: ' + data.statusText)
           console.error('!Failed Login! Returned `data`: ', data);
         })
 
@@ -132,6 +134,7 @@ define([
       console.info('LoginView render');
       if (this.model){      
         if(this.model.get('loggedIn')){
+          debugger;
           var compiledTemplate = _.template(logoutTemplate);
           $(this.el).html( compiledTemplate({sillyname: this.model.get('silly_name')}) );
           SongListView.setModel(this.model);
@@ -144,8 +147,15 @@ define([
     },
     close: function(){
       console.log('closing Login View');
+      $(document).unbind('keypress', this.manualPress);
       this.remove();
       this.unbind();
+    },
+    manualPress: function(e) {
+      // 13 is return 
+      if(e && e.keyCode === 13){
+        $('#login-submit').click();
+      }
     }
   });
   // This is a Singleton

@@ -1727,14 +1727,16 @@ define([
     // Shortcuts: T for transition
     manualPress: function(e) {
       // t = 116, d = 100, w = 119, o = 111
-      if (e.keyCode == 111) {
-        // $('.record-button')[0].click();
-      } else if (e.keyCode == 100) {
-        // $('.measureRep')[1].
-      } else if (e.keyCode == 119) {
-        if(this.isTapping) {        
-          var timeTapped = new Date();
-          StateModel.recordTempoAndPatternByKeyboard(timeTapped.getTime());
+      if(!$('.modal-content:visible').length){
+        if (e.keyCode == 111) {
+          // $('.record-button')[0].click();
+        } else if (e.keyCode == 100) {
+          // $('.measureRep')[1].
+        } else if (e.keyCode == 119) {
+          if(this.isTapping) {        
+            var timeTapped = new Date();
+            StateModel.recordTempoAndPatternByKeyboard(timeTapped.getTime());
+          }
         }
       }
     },

@@ -17,8 +17,7 @@ define([
     initialize: function(options){
       if(options){
         console.info('User model init options: ', + options);
-        this.set('silly_name', options.silly_name);
-        this.logIn();
+        this.logIn(options.silly_name);
       }
     },
     getSongs: function() {
@@ -51,8 +50,9 @@ define([
       this.set('songs', songs);
       console.log(this.get('songs'));
     },
-    logIn: function(){
+    logIn: function(sillyname){
       console.info('user logged in');
+      this.set('silly_name', sillyname);
       this.set('loggedIn', true);
       this.getSongs();
     },

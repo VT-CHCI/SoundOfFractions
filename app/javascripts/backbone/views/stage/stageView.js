@@ -252,11 +252,13 @@ define([
     },
     manualPress: function(e) {
       // t = 116, d = 100, w = 119, o = 111
-      if (e.keyCode === 116) {
-        if(!$('.measureRep:nth-child(2)').hasClass('transition-rep')){      
-          $('.measureRep:nth-child(2)').addClass('transition-rep')
-        } else {
-          $('.measureRep:nth-child(2)').removeClass('transition-rep')
+      if(!$('.modal-content:visible').length){
+        if (e.keyCode === 116) {
+          if(!$('.measureRep:nth-child(2)').hasClass('transition-rep')){      
+            $('.measureRep:nth-child(2)').addClass('transition-rep')
+          } else {
+            $('.measureRep:nth-child(2)').removeClass('transition-rep')
+          }
         }
       }
     }
