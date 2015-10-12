@@ -8,9 +8,9 @@
 define([
   'jquery', 'underscore', 'bbone',
   'backbone/collections/stage',
-  'backbone/views/stage/stageView',
-  'node-uuid'
-], function($, _, Backbone, StageCollection, StageView, NodeUUID){
+  'node-uuid',
+  'js-cookie'
+], function($, _, Backbone, StageCollection, NodeUUID, JQCookie){
 	return LocalStorage = {
 		initialize: function(){
 			// Check for localStorage capabilities
@@ -23,6 +23,11 @@ define([
 					this.logStorage('NEW USER SESSION - Starting with a UID : ' + localStorage.getItem('UID'));
 				// If a UID does exist
 				} else {
+
+					if(!JQCookie.get('silly_name')){
+						this.setUserLoggedIn('');				
+					}
+
 					// Send a message they have a UID
 					this.logStorage('RETURNING USER SESSION with a UID : ' + localStorage.getItem('UID'));
 					console.warn('LOCAL STORAGE UID: ', localStorage.getItem('UID'));

@@ -1,3 +1,4 @@
+var https = require('https');
 var express = require('express');
 var bodyParser = require('body-parser');
 var app = express();
@@ -283,14 +284,26 @@ function start() {
   });
 }
 
-var server = app.listen(3000, function() {
-  var host = server.address().address;
-  var port = server.address().port;
-
-  console.log('App listening at localhost:%s', port);
-  // console.log('Listening on port %d', server.address().port);
-  start();
+var secureServer = https.createServer({
+    key: fs.readFileSync('path/to/key'),
+    cert: fs.readFileSync('path/to/cert'),
+    ca: fs.readFileSync('path/to/ca'),
+    requestCert: true,
+    rejectUnauthorized: false
+}, app).listen('8443', function() {
+    var host = secureServer.address().address;
+    var port = secureServer.address().port;
+    console.log('Secure Express server listening at localhost:%s', port);
+    // start();
 });
+
+// var server = app.listen(3000, function() {
+//     var host = server.address().address;
+//     var port = server.address().port;
+//   // console.log('Listening on port %d', server.address().port);
+//   console.log('App listening at localhost:%s', port);
+//   start();
+// });
 
 app.post('/api/login', function (req, res) {
   console.log('Getting a login request with a body of: ');
@@ -331,8 +344,8 @@ app.post('/api/login', function (req, res) {
             });
           // console.log(personResults.songs);
           console.log('Logging in at \'/api/login\', and sending a cookie.');
-          res.cookie('UID', req.body.uid, {maxAge: 10800000});
-          res.cookie('silly_name', req.body.uname, {maxAge: 10800000});
+          res.cookie('UID', req.body.uid, {maxAge: 21600}); // 6 hours * 60 mins per hour * 60 sec per min
+          res.cookie('silly_name', req.body.uname, {maxAge: 21600}); // 6 hours * 60 mins per hour * 60 sec per min
           res.status(200).send(personResults);
           // if they are already logged in from the cookie, reset the cookie date expiration
         }
