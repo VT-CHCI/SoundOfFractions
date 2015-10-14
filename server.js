@@ -17,7 +17,7 @@ nconf
   .argv()
   .env()
   // To access a value in the file, use nconf.get('key') to return a value
-  .file({ file: './config.json' });
+  .file({ file: '/home/collin/SoundOfFractions/config.json' });
 
 app.use(express.static(__dirname + '/app'));
 
@@ -294,8 +294,8 @@ function start() {
 }
 
 var secureServer = https.createServer({
-    key: fs.readFileSync(nconf.get('key')),
-    cert: fs.readFileSync(nconf.get('cert')),
+    key: fs.readFileSync(nconf.get('key'), 'utf8'),
+    cert: fs.readFileSync(nconf.get('cert'), 'utf8'),
     rejectUnauthorized: false
 }, app).listen(nconf.get('httpsPort'), function() {
     var host = secureServer.address().address;
