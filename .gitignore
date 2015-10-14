@@ -8,3 +8,5 @@ doc/Poster 2014.pdf
 log/development.log
 node_modules/
 doc/PC-afterschool/
+config.json
+ssl/

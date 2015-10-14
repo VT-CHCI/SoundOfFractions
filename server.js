@@ -7,8 +7,17 @@ var CryptoJS = require('crypto-js');
 var uuid = require('node-uuid');
 var cookieParser = require('cookie-parser');
 var winston = require('winston');
-
+var nconf = require('nconf');
 var fs = require('fs');
+
+// First consider command line arguments and environment variables, respectively.
+// So it would be started with something like node server.js --foo bar
+//  and the parameter foo will have a value of bar
+nconf
+  .argv()
+  .env()
+  // To access a value in the file, use nconf.get('key') to return a value
+  .file({ file: './config.json' });
 
 app.use(express.static(__dirname + '/app'));
 
@@ -16,7 +25,7 @@ app.use(cookieParser());
 
 var Sequelize = require('sequelize'),
                           // ('database', 'username', 'password');
-
+  sequelize = new Sequelize(nconf.get('sqlDatabase'), nconf.get('sqlUsername'), nconf.get('sqlPassword'), {
     logging: function () {}, //this says not to log sff w/ db. not a good idea generally
     dialect: 'mysql',
     pool: {
@@ -285,16 +294,13 @@ function start() {
 }
 
 var secureServer = https.createServer({
-    key: fs.readFileSync('path/to/key'),
-    cert: fs.readFileSync('path/to/cert'),
-    ca: fs.readFileSync('path/to/ca'),
-    requestCert: true,
+    key: fs.readFileSync(nconf.get('key')),
+    cert: fs.readFileSync(nconf.get('cert')),
     rejectUnauthorized: false
-}, app).listen('8443', function() {
+}, app).listen(nconf.get('httpsPort'), function() {
     var host = secureServer.address().address;
     var port = secureServer.address().port;
     console.log('Secure Express server listening at localhost:%s', port);
-    // start();
 });
 
 // var server = app.listen(3000, function() {
