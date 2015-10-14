@@ -14,6 +14,7 @@
     "express": "^4.11.2",
     "js-cookie": "^2.0.0-pre",
     "mysql": "^2.5.4",
+    "nconf": "^0.8.2",
     "node-cache": "^1.1.0",
     "node-uuid": "^1.4.3",
     "rsvp": "^3.0.17",
