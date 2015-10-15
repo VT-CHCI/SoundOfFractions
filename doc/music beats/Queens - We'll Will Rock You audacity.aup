@@ -1,0 +1,95 @@
+<?xml version="1.0" standalone="no" ?>
+<!DOCTYPE project PUBLIC "-//audacityproject-1.3.0//DTD//EN" "http://audacity.sourceforge.net/xml/audacityproject-1.3.0.dtd" >
+<project xmlns="http://audacity.sourceforge.net/xml/" projname="Queens - We&apos;ll Will Rock You audacity_data" version="1.3.0" audacityversion="2.1.0" sel0="32.8077041943" sel1="32.8077041943" vpos="0" h="21.0727719962" zoom="71.7513576416" rate="44100.0" snapto="off" selectionformat="hh:mm:ss + milliseconds">
+	<tags>
+		<tag name="GENRE" value="Other"/>
+	</tags>
+	<wavetrack name="Queens - We&apos;ll Will Rock You" channel="0" linked="1" mute="0" solo="0" height="150" minimized="0" isSelected="1" rate="44100" gain="1.0" pan="0.0">
+		<waveclip offset="0.00000000">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="527346">
+				<waveblock start="0">
+					<simpleblockfile filename="e0000a0b.au" len="262144" min="-0.761686" max="0.555241" rms="0.096081"/>
+				</waveblock>
+				<waveblock start="262144">
+					<simpleblockfile filename="e00002ea.au" len="133830" min="-0.504829" max="0.702327" rms="0.081034"/>
+				</waveblock>
+				<waveblock start="395974">
+					<simpleblockfile filename="e0000d7d.au" len="131372" min="-0.493023" max="0.511234" rms="0.081515"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+		<waveclip offset="11.95795363">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="459737">
+				<waveblock start="0">
+					<simpleblockfile filename="e0000867.au" len="193306" min="-0.761686" max="0.469133" rms="0.096006"/>
+				</waveblock>
+				<waveblock start="193306">
+					<simpleblockfile filename="e00002ea.au" len="133830" min="-0.504829" max="0.702327" rms="0.081034"/>
+				</waveblock>
+				<waveblock start="327136">
+					<simpleblockfile filename="e0000cba.au" len="132601" min="-0.493023" max="0.511234" rms="0.081515"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+		<waveclip offset="22.38282891">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="459737">
+				<waveblock start="0">
+					<simpleblockfile filename="e0000867.au" len="193306" min="-0.761686" max="0.469133" rms="0.096006"/>
+				</waveblock>
+				<waveblock start="193306">
+					<simpleblockfile filename="e00002ea.au" len="133830" min="-0.504829" max="0.702327" rms="0.081034"/>
+				</waveblock>
+				<waveblock start="327136">
+					<simpleblockfile filename="e0000cba.au" len="132601" min="-0.493023" max="0.511234" rms="0.081515"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+	</wavetrack>
+	<wavetrack name="Queens - We&apos;ll Will Rock You" channel="1" linked="0" mute="0" solo="0" height="150" minimized="0" isSelected="1" rate="44100" gain="1.0" pan="0.0">
+		<waveclip offset="0.00000000">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="527346">
+				<waveblock start="0">
+					<simpleblockfile filename="e0000a32.au" len="262144" min="-0.564739" max="0.592763" rms="0.091879"/>
+				</waveblock>
+				<waveblock start="262144">
+					<simpleblockfile filename="e0000960.au" len="133830" min="-0.545581" max="0.578" rms="0.081159"/>
+				</waveblock>
+				<waveblock start="395974">
+					<simpleblockfile filename="e0000360.au" len="131372" min="-0.635538" max="0.477719" rms="0.07858"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+		<waveclip offset="11.95795363">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="459737">
+				<waveblock start="0">
+					<simpleblockfile filename="e000048e.au" len="193306" min="-0.564739" max="0.592763" rms="0.096677"/>
+				</waveblock>
+				<waveblock start="193306">
+					<simpleblockfile filename="e0000960.au" len="133830" min="-0.545581" max="0.578" rms="0.081159"/>
+				</waveblock>
+				<waveblock start="327136">
+					<simpleblockfile filename="e0000a23.au" len="132601" min="-0.635538" max="0.477719" rms="0.07858"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+		<waveclip offset="22.38282891">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="459737">
+				<waveblock start="0">
+					<simpleblockfile filename="e000048e.au" len="193306" min="-0.564739" max="0.592763" rms="0.096677"/>
+				</waveblock>
+				<waveblock start="193306">
+					<simpleblockfile filename="e0000960.au" len="133830" min="-0.545581" max="0.578" rms="0.081159"/>
+				</waveblock>
+				<waveblock start="327136">
+					<simpleblockfile filename="e0000a23.au" len="132601" min="-0.635538" max="0.477719" rms="0.07858"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+	</wavetrack>
+</project>
