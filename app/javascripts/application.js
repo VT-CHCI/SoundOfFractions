@@ -20,8 +20,8 @@ console.info('Application.js: Started');
 
 require.config({
   paths: {
-    'jquery': ['//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min','vendor/jquery-2.1.3.min'],
-    'bootstrap': ['//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min','vendor/bootstrap.min'],
+    'jquery': ['vendor/jquery-2.1.3.min', 'https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min'],
+    'bootstrap': ['vendor/bootstrap.min', '//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min'],
     'underscore': 'vendor/underscore-min',
     'bbone': 'vendor/backbone-min',
     'login': 'general/login',
