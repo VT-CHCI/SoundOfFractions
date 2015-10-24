@@ -61,6 +61,7 @@ define([
       this.childFactoryViews = [];
 
       this.listenTo(this.parentHTrackView, 'toggleAnimation', this.toggleAnimation);
+      this.listenTo(StateModel, 'recordingComplete', this.recordStop, this);
       
       this.listenTo(this.parentMeasureModel.get('beatsCollection'), 'add remove', this.updateRender);
 
@@ -569,47 +570,60 @@ define([
     //dur is half of the beat length
     beadAnimate: function(target, dur) {
       var target = d3.select(target);
+      var centerCX = this.model.get('circularMeasureCx');
+      var centerCY = this.model.get('circularMeasureCy');
       var originalCX = parseInt(target.attr('cx'));
-      var newCX = originalCX + 10;
+      var originalCY = parseInt(target.attr('cy'));
+      var deltaCX = originalCX - centerCX;
+      var deltaCY = originalCY - centerCY;
+      var angleInDegrees = Math.atan2(deltaCY, deltaCX) * 180 / Math.PI;
+      var angleInRadians = Math.atan2(deltaCY, deltaCX);
+      console.log(angleInRadians);
+      var diffAngle = angleInDegrees + 90;
+      var newCX = centerCX + (this.model.get('circularMeasureR')+(this.model.get('circularBeadBeatRadius')*2)) * Math.cos(angleInRadians);
+      var newCY = centerCY + (this.model.get('circularMeasureR')+(this.model.get('circularBeadBeatRadius')*2)) * Math.sin(angleInRadians);
+
       target.transition()
         .attr('cx', newCX )
-        .duration(dur/8.0)
-        .each('end',function() {                   // as seen above
-          d3.select(this).                         // this is the object 
-            transition()                           // a new transition!
-              .attr('cx', originalCX )    // we could have had another
-              .duration(dur/8.0);                  // .each("end" construct here.
-              // .duration((dur*7.0)/8.0);                  // .each("end" construct here.
-         });
-        // .each('end',function() {                   // as seen above
-        //   d3.select(this).                         // this is the object 
-        //     transition()                           // a new transition!
-        //       .attr('cx', originalCX )    // we could have had another
-        //       .duration(dur+);                  // .each("end" construct here.
-        //  });
-    },
-    // Making a targeted 'Line' beat animate
-    lineAnimate: function(target, dur) {
-      var target = d3.select(target);
-      var originalX = parseInt(target.attr('x1'));
-      var newX = originalX + 10;
-      target.transition()
-        .attr('x1', newX )
-        .attr('x2', newX )
+        .attr('cy', newCY )
         .duration(dur)
         .each('end',function() {                   // as seen above
           d3.select(this).                         // this is the object 
             transition()                           // a new transition!
-              .attr('x1', originalX )    
-              .attr('x2', originalX )    // we could have had another
+              .attr('cx', originalCX )    // we could have had another
+              .attr('cy', originalCY )    // we could have had another
+              .duration(dur);                  // .each("end" construct here.
+         });
+    },
+    // Making a targeted 'Line' beat animate
+    lineAnimate: function(target, dur) {
+      var target = d3.select(target);
+      var originalY1 = parseInt(target.attr('y1'));
+      var originalY2 = parseInt(target.attr('y2'));
+      // Make the line beat move up by its own height
+      var newY1 = originalY1 - this.model.get('lineHashHeight');
+      var newY2 = originalY2 - this.model.get('lineHashHeight');
+      target.transition()
+        .attr('y1', newY1 )
+        .attr('y2', newY2 )
+        .duration(dur)
+        .each('end',function() {                   // as seen above
+          d3.select(this).                         // this is the object 
+            transition()                           // a new transition!
+              .attr('y1', originalY1 )    
+              .attr('y2', originalY2 )    // we could have had another
               .duration(dur);                  // .each("end" construct here.
          });
     },
     // Making a targeted 'Pie' beat animate
-    pieAnimate: function(target, dur) {
-      var target = d3.select(target);
-      target.transition()
-        .attr('transform', 'translate(10,0)' )
+    pieAnimate: function(target, index, totalNumberOfBeats, dur) {      
+      var d3target = d3.select(target);
+      var angleInRadians = 2*Math.PI/totalNumberOfBeats * index - ( (2*Math.PI/4) - (2*Math.PI/totalNumberOfBeats/2) );
+      var newCX = (this.model.get('circularMeasureR')) * Math.cos(angleInRadians);
+      var newCY = (this.model.get('circularMeasureR')) * Math.sin(angleInRadians);
+
+      d3target.transition()
+        .attr('transform', 'translate(' + newCX + ',' + newCY + ')' )
         .duration(dur)
         .each('end',function() {                               // as seen above
           d3.select(this).                                     // this is the object 
@@ -621,15 +635,16 @@ define([
     // Making a targeted 'Bar' beat animate
     barAnimate: function(target, dur) {
       var target = d3.select(target);
-      var originalX = parseInt(target.attr('x'));
-      var newX = originalX + 10;
+      var originalY = parseInt(target.attr('y'));
+      // Make the bar beat move up by its own height
+      var newY = originalY - this.model.get('lbbMeasureHeight');
       target.transition()
-        .attr('x', newX )
+        .attr('y', newY )
         .duration(dur)
         .each('end',function() {                   // as seen above
           d3.select(this).                         // this is the object 
             transition()                           // a new transition!
-              .attr('x', originalX )    // we could have had another
+              .attr('y', originalY )    // we could have had another
               .duration(dur);                  // .each("end" construct here.
          });
     },
@@ -704,19 +719,19 @@ define([
           } else if (this.retrievedRepresentationType == 'bead'){
             var beats = $('#measure-rep-'+this.model.cid).find('.bead-beat');
             // Animate the Bead beat
-            this.beadAnimate(beats.eq(counter)[0], dur/2.0);
+            this.beadAnimate(beats.eq(counter)[0], dur/2.0/8.0);
           } else if (this.retrievedRepresentationType == 'line'){
             var beats = $('#measure-rep-'+this.model.cid).find('.line-beat');
             // Animate the Line beat
-            this.lineAnimate(beats.eq(counter)[0], dur/2.0);
+            this.lineAnimate(beats.eq(counter)[0], dur/2.0/8.0);
           } else if (this.retrievedRepresentationType == 'pie'){
             var beats = $('#measure-rep-'+this.model.cid).find('.pie-beat');
             // Animate the Pie beat
-            this.pieAnimate(beats.eq(counter)[0], dur/2.0);
+            this.pieAnimate(beats.eq(counter)[0], counter, totalNumberOfBeats, dur/2.0/8.0);
           } else if (this.retrievedRepresentationType == 'bar'){
             var beats = $('#measure-rep-'+this.model.cid).find('.bar-beat');
             // Animate the Bar beat
-            this.barAnimate(beats.eq(counter)[0], dur/2.0);
+            this.barAnimate(beats.eq(counter)[0], dur/2.0/8.0);
           }
           counter ++;
         }
@@ -736,16 +751,16 @@ define([
                 self.audioAnimate(beats.eq(counter)[0], dur/2.0, selected);
               } else if (self.retrievedRepresentationType == 'bead'){
                 var beats = $('#measure-rep-'+self.model.cid).find('.bead-beat');
-                self.beadAnimate(beats.eq(counter)[0], dur/2.0);
+                self.beadAnimate(beats.eq(counter)[0], dur/2.0/8.0);
               } else if (self.retrievedRepresentationType == 'line'){
                 var beats = $('#measure-rep-'+self.model.cid).find('.line-beat');
-                self.lineAnimate(beats.eq(counter)[0], dur/2.0);
+                self.lineAnimate(beats.eq(counter)[0], dur/2.0/8.0);
               } else if (self.retrievedRepresentationType == 'pie'){
                 var beats = $('#measure-rep-'+self.model.cid).find('.pie-beat');
-                self.pieAnimate(beats.eq(counter)[0], dur/2.0);
+                self.pieAnimate(beats.eq(counter)[0], counter, totalNumberOfBeats, dur/2.0/8.0);
               } else if (self.retrievedRepresentationType == 'bar'){
                 var beats = $('#measure-rep-'+self.model.cid).find('.bar-beat');
-                self.barAnimate(beats.eq(counter)[0], dur/2.0);
+                self.barAnimate(beats.eq(counter)[0], dur/2.0/8.0);
               }
               counter ++;
             }
@@ -1742,21 +1757,31 @@ define([
     },
     // Record the measure
     recordMeasure: function(button) {
-      console.log('Record clicked');
       if(!this.isTapping) {
-        // This is for recording by tapping on the desk...
-        // We need to know which instrument was being recorded
-        StateModel.recordTempoAndPatternByTapping(this.parentHTrackModel.get('type'));
-        
-        // I think this is for recording by tapping on the keyboard keys...
-        // Nope, still dont know what this is for
-        StateModel.turnIsWaitingOn();
-        this.isTapping = true;
+        this.recordStart();
+      } else {
+        this.recordStop();
       }
-      else {
-        StateModel.turnIsWaitingOff();
-        this.isTapping = false;
-      }
+    },
+    recordStart: function(){
+      console.log('Recording clicked');
+      // This is for recording by tapping on the desk...
+      // We need to know which instrument was being recorded
+      StateModel.recordTempoAndPatternByTapping(this.parentHTrackModel.get('type'));
+      
+      // I think this is for recording by tapping on the keyboard keys...
+      // Nope, still dont know what this is for
+      StateModel.turnIsWaitingOn();
+
+      // Keep a handle if we are tapping or not
+      this.isTapping = true;
+      // Update the record button to be green to let us know we are recording
+      $('#measure-rep-'+this.model.cid + ' .record-div').addClass('recording')
+    },
+    recordStop: function(){
+      $('#measure-rep-'+this.model.cid + ' .record-div').removeClass('recording')
+      StateModel.turnIsWaitingOff();
+      this.isTapping = false;      
     },
     circleResizable: function() {
       var µthis = this;
