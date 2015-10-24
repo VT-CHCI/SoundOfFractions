@@ -55,11 +55,11 @@ define([
       Logging.logStorage("Removed a beat.  It was at index: " + indexOfRemovedBeat.index);
     },
     // This is used by the Beat Factory when a new beat is added in a specific position
-    addBeatToBeatsCollection: function(newBeat, newIndex){
+    addBeatToBeatsCollection: function(newBeat, newIndex, repType, repIndex, instrumentType){
       console.log('in measure model, a beat is getting added at index: ', newIndex);
       this.get('beatsCollection').add(newBeat, {at:newIndex});
       // interaction log
-     Logging.logStorage("Added a beat.  At index: " + newIndex);
+     Logging.logStorage("Added a beat.  At index: " + newIndex + '.  On type ' + repType + ' at rep index of (1 based): ' + repIndex + ' of the instrument: ' + instrumentType);
     }
   });
   return MeasureModel;

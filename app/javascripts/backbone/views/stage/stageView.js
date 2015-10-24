@@ -49,7 +49,7 @@ define([
       this.render();
 
       // Listeners
-      // When an instrument is clicked in the Genrerator, we call this function to compile and add it
+      // When an instrument is clicked in the Generator, we call this function to compile and add it
       this.listenTo(RemainingInstrumentGeneratorModel, 'removedInstrumentFromUnused', this.addFromGeneratorModel);
 
       this.listenTo(this.stageCollection, 'add remove', this.turnPlayingOff);
@@ -151,7 +151,7 @@ define([
     },
     setUpMMB: function(){
       // This is for the initial instrument to be set up
-        // this creates 1 measure, and addes beats and the representations to itself
+        // this creates 1 measure, and adds beats and the representations to itself
         this.manuallyCreatedMeasureBeatsCollection = new BeatsCollection;
         //for each beat - also change signature below
         for (var i = 0; i < 15; i++) {

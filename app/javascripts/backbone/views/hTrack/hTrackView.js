@@ -226,7 +226,7 @@ define([
           if(µthis.model.get('awaitingAdd')){          
             $('.cs').removeClass('cs'); 
             $('.spinner').remove(); 
-            Logging.logStorage('Clicked a plus the on the ' + µthis.model.get('label') + ', but failed to add a rep in 6 secs.'); 
+            Logging.logStorage('Clicked a plus on the ' + µthis.model.get('label') + ', but failed to add a rep in 6 secs.'); 
             var spinner = '<div class="spinner">Oops!! Ran out of time...</div>'
             $(e.toElement.parentElement).append(spinner);              
             setTimeout(function(){
@@ -337,20 +337,20 @@ define([
         var standardPixelsPerSecond = standardBeatsPerSecond * standardPixelsPerBeat; // 20 pixels per beat @ 2 beats per second || 40 pixels per second
         var standardPixelsPerMinute = standardPixelsPerSecond * 60; // 2400 pixels per minute
 
-
+        // The scale of the circularMeasureR should already be computed on the model
         var scaledR = measure.get('measureRepresentations').models[measure.get('measureRepresentations').length-1].get('circularMeasureR');
 /**x**/ var scaledLengthOfRhythmInPixels = 2*Math.PI*scaledR; // 320 with a scale of 1
         var scaledPixelsPerBeat = scaledLengthOfRhythmInPixels/16; // ~20
 
         
-        //s might need to apply scale factor here
+        // might need to apply scale factor here
         var howLongToPlayFullRhythmLinearly = scaledLengthOfRhythmInPixels/standardPixelsPerSecond; // 8 seconds
         
         // var beatsDuration = howLongToPlayFullRhythmLinearly / measure.get('beatsCollection').length;
         var beatDuration = howLongToPlayFullRhythmLinearly / measure.get('beatsCollection').length;
         this.beatDuration = beatDuration;
-        console.error('beatDuration');
-        console.error(beatDuration);
+        console.warn('single beatDuration');
+        console.warn(beatDuration);
 
         // pps should be 40 pixels per second
         // var pps = ( this.model.get('tempo') * pixelsPerMaxwidth ) / 60; //s
@@ -373,7 +373,8 @@ define([
         }, this);
       }, this);
       //Lastly, we call playSound() with our completed beatTimes array.
-      console.error(beatTimes);
+      console.warn('beatTimes');
+      console.warn(beatTimes);
       this.playSound(beatTimes);
     },
 

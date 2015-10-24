@@ -53,10 +53,11 @@ define([
     },
     turnIsWaitingOn: function(){
       // this.isTapping = true;
-      this.isWaiting = true;
+      this.set('isWaiting',  true);
     },
     turnIsWaitingOff: function(){
-      this.set('isTapping', false);
+      // this.set('isTapping', false);
+      this.set('isWaiting', false);
     },
     recordTempoAndPatternByTapping: function(instrument) {
       console.log('recordTempoAndPatternByTapping function in state');
@@ -135,7 +136,6 @@ define([
           this.startTime = newCurrentTime;
           console.log('Start time: ' + this.startTime);
           this.previousTime = newCurrentTime;
-          console.warn(this.beatTimings);
           this.countIn++;
           this.signature++;
           console.log('Beats in Measure = ' + this.signature);
@@ -223,6 +223,7 @@ define([
 
               //show the BPM
               var bpm = 1000 / µthis.average * 60;
+              
               µthis.stopRecording();
 
               µthis.trigger('instrumentTempoRecorded', {instrument:µthis.get('instrumentTypeBeingRecorded'), beatPattern:diffBeats, bpm:bpm});
@@ -232,7 +233,6 @@ define([
               µthis.set('baseTempo', bpm);
               // µthis.set('tempo', bpm);
               µthis.set('signature', µthis.signature);
-
 
               window.clearInterval(waitIntervalID);
             }
@@ -489,7 +489,6 @@ define([
 
     analyze: function(e){
       var time = e.timeStamp;
-      this.e = e;
       this.waveform = e.inputBuffer.getChannelData(0);
       this.processWaveform(time, this.waveform);
     },
@@ -508,6 +507,9 @@ define([
       if(this.microphone) { this.microphone.disconnect(); }
       if(this.jsNode) { this.jsNode.disconnect(); }
       if(this.micGain) { this.micGain.disconnect(); }
+
+      // Let the measureRepView know that we are stopping so the view can update the microphone button
+      this.trigger('recordingComplete');
 
       // If the waitIntervalID or tapIntervalID exist, clear them
       if(window.waitIntervalID) {

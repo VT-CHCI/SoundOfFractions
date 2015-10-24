@@ -49,7 +49,7 @@ define([
       the entire song and sends it to the logging system.
     */
     instruct: function() {
-      // If stoppped
+      // If stopped
       if(!this.model.get('isPlaying')) {
         
         this.model.play();
@@ -72,8 +72,9 @@ define([
         console.info('now stopped conductor view');
 
         this.endTime = new Date();
-        this.elapsedTime = (this.endTime - this.startTime)/1000;
-        Logging.logStorage('Stopped playing music.  Duration of playback in seconds: ' + this.elapsedTime);
+        this.previousPlayedElapsedTime = (this.endTime - this.startTime)/1000;
+        var songDuration = this.model.calculateMaxDuration()/1000;
+        Logging.logStorage('Stopped playing music.  Duration of playback in seconds: ' + this.previousPlayedElapsedTime + ' and the song lasts ' + songDuration + ' seconds for a total playback number of ' + this.previousPlayedElapsedTime/songDuration + ' times.');
       }
 
     },

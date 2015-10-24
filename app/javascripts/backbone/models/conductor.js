@@ -25,10 +25,8 @@ define([
       console.log('in the conductor model play');
       // Set the model to playing
       this.set('isPlaying', true);
-      // Calculate the longest instrument playing time
-      this.calculateMaxDuration();
       // Trigger all instruments to start
-      this.trigger('conductorStart', this.maxDuration);
+      this.trigger('conductorStart', this.calculateMaxDuration());
       var time = Date.now();
       this.set('startedPlayingTime', time);
       // TODO SEND LOG playing, and include how long the song is (maxDuration)
@@ -66,6 +64,7 @@ define([
       }, this);
       // Set the max Duration on this model
       this.maxDuration = maxDuration;
+      return this.maxDuration;
     }
   });
   
