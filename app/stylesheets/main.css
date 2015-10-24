@@ -76,6 +76,10 @@
 .lineRolling {
   fill: none;
 }
+.recording {
+  color: green;
+  font-weight: bold;
+}
 .record-button:hover {
   color: green;
   font-weight: bold;
@@ -415,10 +419,10 @@ svg.line {
 
 .control {
   position: relative;
-  top: 20px;
+  top: 100px;
   font-size: 45px;
   font-weight: bold;
-  /*left: 85px;*/
+  left: -20px;
 }
 .fa-volume-up {
   color: rgba(5, 5, 5, .25);
