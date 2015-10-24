@@ -578,7 +578,6 @@ define([
       var deltaCY = originalCY - centerCY;
       var angleInDegrees = Math.atan2(deltaCY, deltaCX) * 180 / Math.PI;
       var angleInRadians = Math.atan2(deltaCY, deltaCX);
-      console.log(angleInRadians);
       var diffAngle = angleInDegrees + 90;
       var newCX = centerCX + (this.model.get('circularMeasureR')+(this.model.get('circularBeadBeatRadius')*2)) * Math.cos(angleInRadians);
       var newCY = centerCY + (this.model.get('circularMeasureR')+(this.model.get('circularBeadBeatRadius')*2)) * Math.sin(angleInRadians);
