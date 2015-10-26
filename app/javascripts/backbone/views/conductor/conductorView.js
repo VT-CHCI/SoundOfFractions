@@ -59,8 +59,8 @@ define([
         $(this.el).html( compiledTemplate() );
 
         this.startTime = new Date();
-
-        Logging.logStorage('Started playing music');
+        var songDuration = this.model.calculateMaxDuration()/1000;
+        Logging.logStorage('Started playing music and the song lasts ' + songDuration + ' seconds.');
       // If playing
       } else {
         this.model.stop();

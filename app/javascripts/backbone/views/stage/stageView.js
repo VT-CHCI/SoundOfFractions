@@ -154,7 +154,7 @@ define([
         // this creates 1 measure, and adds beats and the representations to itself
         this.manuallyCreatedMeasureBeatsCollection = new BeatsCollection;
         //for each beat - also change signature below
-        for (var i = 0; i < 15; i++) {
+        for (var i = 0; i < 5; i++) {
           if (i == 0 || i == 2 || i == 4 || i == 6 || i == 8 || i == 10 || i == 12 || i == 14 ){
             this.manuallyCreatedMeasureBeatsCollection.add([{selected: true}]);
           } else {

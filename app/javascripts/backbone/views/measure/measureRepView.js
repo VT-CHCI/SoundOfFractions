@@ -652,7 +652,6 @@ define([
     toggleAnimation: function(state){
       var µthis = this;
 
-
         var standardR = this.model.get('initialCircularMeasureR'); // 51
 /**x**/ var standardLengthOfRhythmInPixels = 2*Math.PI*standardR; // 320 with a scale of 1
         var standardPixelsPerBeat = standardLengthOfRhythmInPixels/16; // ~20
@@ -662,7 +661,8 @@ define([
         var standardBeatsPerMinute = 120; // 120 bpm
 /**x**/ var standardBeatsPerSecond = standardBeatsPerMinute/60; // 2 beats per second
 
-        var standardPixelsPerSecond = standardBeatsPerSecond * standardPixelsPerBeat; // 20 pixels per beat @ 2 beats per second || 40 pixels per second
+        // var standardPixelsPerSecond = standardBeatsPerSecond * standardPixelsPerBeat; // 20 pixels per beat @ 2 beats per second || 40 pixels per second
+        var standardPixelsPerSecond = 100;
         var standardPixelsPerMinute = standardPixelsPerSecond * 60; // 2400 pixels per minute
 
 
@@ -1789,7 +1789,7 @@ define([
         aspectRatio: true,
         // To keep the number Math.Floored
         // grid:10,
-        minWidth:200,
+        // minWidth:200,
         // ghost:true,
         // animate: true,
         start: function(e, ui) {

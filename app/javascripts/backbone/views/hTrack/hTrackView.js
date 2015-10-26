@@ -251,7 +251,6 @@ define([
     // When the conductor tells us to play
     startPlaying: function(maxDurationOfAllInstruments){
       console.info('hTrack startPlaying');
-      var tempo = this.model.get('tempo');
       var measures = this.model.get('measures');
       var selectedBeats = 0;
       // Find out how many beats are selected
@@ -263,13 +262,6 @@ define([
         }, this);
       }, this);
       var beats = this.model.get('signature');
-      // How long this instrument plays for
-      var currentInstrumentDuration = measures.length*beats/tempo*60.0*1000.0 ;
-
-      // we start the playback of audio
-      //and trigger an event to start the animation.
-      console.info(this.model.get('label'), ' music: on');
-      console.warn('Tempo:', tempo, '|', 'Measures:', measures.length, '|', selectedBeats, 'beats selected of ', beats, '|', 'instrument duration:', currentInstrumentDuration);
 
       // Play the sound and the animation
       this.playSoundAndAnimation();
@@ -334,17 +326,20 @@ define([
         var standardBeatsPerMinute = 120; // 120 bpm
 /**x**/ var standardBeatsPerSecond = standardBeatsPerMinute/60; // 2 beats per second
 
-        var standardPixelsPerSecond = standardBeatsPerSecond * standardPixelsPerBeat; // 20 pixels per beat @ 2 beats per second || 40 pixels per second
+        // var standardPixelsPerSecond = standardBeatsPerSecond * standardPixelsPerBeat; // 20 pixels per beat @ 2 beats per second || 40 pixels per second
+        var standardPixelsPerSecond = 100; 
         var standardPixelsPerMinute = standardPixelsPerSecond * 60; // 2400 pixels per minute
 
         // The scale of the circularMeasureR should already be computed on the model
         var scaledR = measure.get('measureRepresentations').models[measure.get('measureRepresentations').length-1].get('circularMeasureR');
+        // debugger;
 /**x**/ var scaledLengthOfRhythmInPixels = 2*Math.PI*scaledR; // 320 with a scale of 1
         var scaledPixelsPerBeat = scaledLengthOfRhythmInPixels/16; // ~20
 
         
         // might need to apply scale factor here
-        var howLongToPlayFullRhythmLinearly = scaledLengthOfRhythmInPixels/standardPixelsPerSecond; // 8 seconds
+        // var howLongToPlayFullRhythmLinearly = scaledLengthOfRhythmInPixels/standardPixelsPerSecond; // 320 / 40 == 8 seconds
+        var howLongToPlayFullRhythmLinearly = scaledLengthOfRhythmInPixels/standardPixelsPerSecond; // 320 / 100 == 3.2 seconds
         
         // var beatsDuration = howLongToPlayFullRhythmLinearly / measure.get('beatsCollection').length;
         var beatDuration = howLongToPlayFullRhythmLinearly / measure.get('beatsCollection').length;
@@ -358,14 +353,14 @@ define([
         // OLD
         //determining the duration for each beat.
         // var beatDuration = 60 / this.model.get('tempo');
-        _.each(measure.get('beatsCollection').models, function(beat) {
+        _.each(measure.get('beatsCollection').models, function(beatModel) {
           /* if we need to trigger a sound at this beat
             we push a duration onto the duration array.
             if not, increment our deadSpace variable,
             by the beat duration,
             which will make subsequent durations longer.
           */
-          if (beat.get('selected')) {
+          if (beatModel.get('selected')) {
             //deadspace is a beat that is not getting played
             beatTimes.push(deadSpace);
           }

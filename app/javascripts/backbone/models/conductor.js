@@ -46,17 +46,29 @@ define([
       // For each instrument
       _.each(this.stage.models, function(hTrack) {
           // Get their Tempo
-          var tempo = hTrack.get('tempo');
+          // var tempo = hTrack.get('tempo');
           // Get each measure, currently limited to 1
           // TODO Multiple Measures
           var measures = hTrack.get('measures');
+          var firstMeasure = hTrack.get('measures').models[0];
           var pps = hTrack.get('measures').models[0].get('pixelsPerSecond');
           var scale = hTrack.get('measures').models[0].get('currentScale');
           //  Get the signature - how many beats (denominator)
           var beats = hTrack.get('signature');
+
+          // This code block should match in htrack view
+          // form here
+          var scaledR = firstMeasure.get('measureRepresentations').models[firstMeasure.get('measureRepresentations').length-1].get('circularMeasureR');
+/**x**/   var scaledLengthOfRhythmInPixels = 2*Math.PI*scaledR; // 320 with a scale of 1
+          var standardPixelsPerSecond = 100; 
+
+          var howLongToPlayFullRhythmLinearly = scaledLengthOfRhythmInPixels/standardPixelsPerSecond; // 320 / 100 == 3.2 seconds
+          // To here
+
           // Determine the amount of time this instrument would play at its tempo with how many beats in the measure and how many measures
           // var currentInstrumentDuration = measures.length*beats/tempo*60.0*1000.0 ;
-          var currentInstrumentDuration = measures.length * 8 * scale * 1000 ;
+          // var currentInstrumentDuration = measures.length * 8 * scale * 1000 ;
+          var currentInstrumentDuration = howLongToPlayFullRhythmLinearly * 1000 ;
           // Set it to maxDuration if it is longer than maxDuration
           if (currentInstrumentDuration > maxDuration) {
             maxDuration = currentInstrumentDuration;
