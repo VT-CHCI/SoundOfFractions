@@ -38,7 +38,7 @@ define([
         audioBeatCx: 50,
         audioBeatCy: 40,
         audioBeatR: 12,
-        colorForAudio: COLORS.hexColors[5],
+        colorForAudio: COLORS.hexColors[4],
         initialColorForAudio: 'none',
       // Pie
         //Measure
