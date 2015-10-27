@@ -28,9 +28,9 @@ define([
 
     initialize: function(){
       console.info('stage view initialize')
+      Logging.initialize();
       this.stageCollection = StageCollection;
       // set the song's conductor
-      Logging.initialize();
       this.conductor = ConductorModel;
       this.masterAudioContext = new AudioContext();
       
