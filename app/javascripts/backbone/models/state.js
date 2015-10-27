@@ -105,7 +105,7 @@ define([
       }
     },
     recordTempoAndPatternByKeyboard: function(time) {
-      console.log('recordTempoAndPatternByTapping function in state');
+      console.log('recordTempoAndPatternByKeyboard function in state');
       if(this.isWaiting){
         this.processKeyboardTapping(time);
       } else {

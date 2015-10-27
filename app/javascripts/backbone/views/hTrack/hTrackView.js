@@ -63,8 +63,6 @@ define([
       this.listenTo(ConductorModel, 'conductorStart', this.togglePlaying);
       this.listenTo(ConductorModel, 'conductorStop', this.togglePlaying);
       
-      this.listenTo(this.model, 'resetRepresentations', this.updateRender);
-
       //creating two arrays to hold our gain nodes.
       // for sustained-note sounds,
       this.gainNode = new Array();
@@ -510,14 +508,12 @@ define([
     },
     updateRender: function(){
       window.csf = this;
-      return;
       _.each(this.childViews, function(childView){
         console.info('in hTrackView close function, CLOSING CHILDREN');
         if (childView.close){
           childView.close();
         }
       })
-
 
       var compiledTemplate = _.template(HTrackTemplate);
       $(this.$el).replaceWith(compiledTemplate({model:this.model}))

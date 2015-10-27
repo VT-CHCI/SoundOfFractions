@@ -59,7 +59,7 @@ define([
       console.log('in measure model, a beat is getting added at index: ', newIndex);
       this.get('beatsCollection').add(newBeat, {at:newIndex});
       // interaction log
-     Logging.logStorage("Added a beat.  At index: " + newIndex + '.  On type ' + repType + ' at rep index of (1 based): ' + repIndex + ' of the instrument: ' + instrumentType);
+      Logging.logStorage("Added a beat.  At index: " + newIndex + '.  On type ' + repType + ' at rep index of (1 based): ' + repIndex + ' of the instrument: ' + instrumentType);
     }
   });
   return MeasureModel;

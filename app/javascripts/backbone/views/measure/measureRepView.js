@@ -669,7 +669,6 @@ define([
         var scaledR = this.model.get('circularMeasureR');
 /**x**/ var scaledLengthOfRhythmInPixels = 2*Math.PI*scaledR; // 320 with a scale of 1
         var scaledPixelsPerBeat = scaledLengthOfRhythmInPixels/16; // ~20
-
         
         //s might need to apply scale factor here
         var howLongToPlayFullRhythmLinearly = scaledLengthOfRhythmInPixels/standardPixelsPerSecond; // 8 seconds
@@ -1808,7 +1807,7 @@ define([
       // this.setElement($('#measure-rep-'+this.model.cid));
       // JQ-UI resizable
       this.$el.resizable({ 
-        minWidth: 310,
+        // minWidth: 310,
         // The min/max height keep it so it only goes scales in the X direction
         minHeight: this.model.get('divHeight'),
         maxHeight: this.model.get('divHeight'),
