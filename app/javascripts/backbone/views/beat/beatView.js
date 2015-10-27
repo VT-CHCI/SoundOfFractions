@@ -262,7 +262,7 @@ define([
           // Above: newComputedValY1 must be above line y
           // On : newComputedValY1 must be on the line y
           // Below: newComputedValY1 must be below the line y
-          if ((newComputedValY < µthis.parentMeasureRepModel.get('lbbMeasureLocationY') - µthis.parentMeasureRepModel.get('beatHeight') - 2) || (newComputedValY > µthis.parentMeasureRepModel.get('lbbMeasureLocationY') + µthis.parentMeasureRepModel.get('beatHeight') + 2)) {
+          if ((newComputedValY < µthis.parentMeasureRepModel.get('lbbMeasureLocationY') - µthis.parentMeasureRepModel.get('beatHeight')*1.3) || (newComputedValY > µthis.parentMeasureRepModel.get('lbbMeasureLocationY') + µthis.parentMeasureRepModel.get('beatHeight')*1.4)) {
           // make an array to find out where the new beat should be added in the beatsCollection of the measure
             d3.select(this).remove();
             console.warn('removed beat on measure');
