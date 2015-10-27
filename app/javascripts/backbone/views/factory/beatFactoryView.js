@@ -85,9 +85,9 @@ define([
           var repType = µthis.parentMeasureRepModel.get('currentRepresentationType');
           var repIndex = µthis.parentMeasureModel.get('measureRepresentations').indexOf(µthis.parentMeasureRepModel)+1;
           var instrumentLabel = LookupInstrument.getDefault($(µthis.el).closest('.hTrack').attr('data-state'), 'label');
-          µthis.parentMeasureModel.addBeatToBeatsCollection(newBeat, newIndex, repType, repIndex, instrumentLabel );
           // now that we have a added a beat, we need to detach from the dragging event.   There will still be a dragging end event, but we don't care about that
           dragCircle.on("drag", null);
+          µthis.parentMeasureModel.addBeatToBeatsCollection( newBeat, newIndex, repType, repIndex, instrumentLabel );
         }
       });
       var dragLine = d3.behavior.drag();
@@ -112,14 +112,14 @@ define([
             refArray.push((µthis.linearLineLength/µthis.parentMeasureModel.get('beatsCollection').models.length)*i);
           }
           console.log(refArray);
-          var newIndex = _.sortedIndex(refArray, angleAtNewBeat);
+          var newIndex = _.sortedIndex(refArray, newComputedValX1);
           var newBeat = new BeatModel({selected:true});
           var repType = µthis.parentMeasureRepModel.get('currentRepresentationType');
           var repIndex = µthis.parentMeasureModel.get('measureRepresentations').indexOf(µthis.parentMeasureRepModel)+1;
           var instrumentLabel = LookupInstrument.getDefault($(µthis.el).closest('.hTrack').attr('data-state'), 'label');
-          µthis.parentMeasureModel.addBeatToBeatsCollection(newBeat, newIndex, repType, repIndex, instrumentLabel );
           // now that we have a added a beat, we need to detach from the dragging event.   There will still be a dragging end event, but we don't care about that
           dragLine.on("drag", null);
+          µthis.parentMeasureModel.addBeatToBeatsCollection(newBeat, newIndex, repType, repIndex, instrumentLabel );
         }
       });
       var dragBar = d3.behavior.drag();
@@ -139,14 +139,14 @@ define([
           for ( i=0 ; i < µthis.parentMeasureModel.get('beatsCollection').models.length ; i++ ) {
             refArray.push((µthis.parentMeasureRepModel.get('linearLineLength')/µthis.parentMeasureModel.get('beatsCollection').models.length)*i+µthis.parentMeasureRepModel.get('beatWidth'));
           }
-          var newIndex = _.sortedIndex(refArray, angleAtNewBeat);
+          var newIndex = _.sortedIndex(refArray, parseInt(newComputedValX)+µthis.parentMeasureRepModel.get('beatFactoryBarWidth')/2);
           var newBeat = new BeatModel({selected:true});
           var repType = µthis.parentMeasureRepModel.get('currentRepresentationType');
           var repIndex = µthis.parentMeasureModel.get('measureRepresentations').indexOf(µthis.parentMeasureRepModel)+1;
           var instrumentLabel = LookupInstrument.getDefault($(µthis.el).closest('.hTrack').attr('data-state'), 'label');
-          µthis.parentMeasureModel.addBeatToBeatsCollection(newBeat, newIndex, repType, repIndex, instrumentLabel );
           // now that we have a added a beat, we need to detach from the dragging event.   There will still be a dragging end event, but we don't care about that
           dragBar.on("drag", null);
+          µthis.parentMeasureModel.addBeatToBeatsCollection(newBeat, newIndex, repType, repIndex, instrumentLabel );
         }
       });
       var dragPie = d3.behavior.drag();
@@ -189,9 +189,9 @@ define([
           var repType = µthis.parentMeasureRepModel.get('currentRepresentationType');
           var repIndex = µthis.parentMeasureModel.get('measureRepresentations').indexOf(µthis.parentMeasureRepModel)+1;
           var instrumentLabel = LookupInstrument.getDefault($(µthis.el).closest('.hTrack').attr('data-state'), 'label');
-          µthis.parentMeasureModel.addBeatToBeatsCollection(newBeat, newIndex, repType, repIndex, instrumentLabel );
           // now that we have a added a beat, we need to detach from the dragging event.   There will still be a dragging end event, but we don't care about that
           dragPie.on("drag", null);
+          µthis.parentMeasureModel.addBeatToBeatsCollection(newBeat, newIndex, repType, repIndex, instrumentLabel );
         }
       });
 
