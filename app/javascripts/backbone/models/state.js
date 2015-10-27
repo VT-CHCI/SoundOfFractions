@@ -9,8 +9,10 @@
 define([
   'underscore',
   'bbone',
-  'backbone/models/conductor'
-], function(_, Backbone, TransportModel) {
+  'backbone/models/conductor',
+  'general/lookupInstrument',
+  'logging'
+], function(_, Backbone, ConductorModel, LookupInstrument, Logging) {
   var State = Backbone.Model.extend({
     defaults: {
       signature: 4,
@@ -31,7 +33,7 @@ define([
       this.beatArray = new Array();
       this.waitCount = 0;
       this.isWaiting = false;
-      this.TransportModel = TransportModel;
+      this.ConductorModel = ConductorModel;
       this.finalMeasureBeatTimeIntervals50 = [];
       this.finalMeasureBeatTimeIntervals100 = [];
       this.finalMeasureBeatTimeIntervals150 = [];
@@ -63,8 +65,8 @@ define([
       console.log('recordTempoAndPatternByTapping function in state');
       console.log('Instrument type: '+ instrument);
       this.set('instrumentTypeBeingRecorded', instrument);
-      if(TransportModel.get('isPlaying')) {
-        TransportModel.stop();
+      if(ConductorModel.get('isPlaying')) {
+        ConductorModel.stop();
       }
       this.isTapping = true;
       if(window.tapIntervalID) {
@@ -402,7 +404,7 @@ define([
 
     tapTempoClicked: function() {
       console.log('Tap Tempo Clicked');
-      if(this.TransportModel.isPlaying) {
+      if(this.ConductorModel.isPlaying) {
         // TODO Replace these events
         // dispatch.trigger('togglePlay.event');
       }
@@ -445,7 +447,7 @@ define([
 
     recordButtonClicked: function() {
       console.log('Tap Tempo Clicked');
-      if(this.TransportModel.isPlaying) {
+      if(this.ConductorModel.isPlaying) {
         // TODO Replace these events
         // dispatch.trigger('togglePlay.event');
       }
