@@ -1,18 +1,14 @@
 //filename: backbone/models/state.js
 /*
-  This maintains two pieces of information that are
-  global to the song.
-  namely, the time signature (# of beats per measure)
-  and the tempo in beats per minute.
+  This is where most of the audio processing happens
 */
 
 define([
   'underscore',
   'bbone',
   'backbone/models/conductor',
-  'general/lookupInstrument',
   'logging'
-], function(_, Backbone, ConductorModel, LookupInstrument, Logging) {
+], function(_, Backbone, ConductorModel, Logging) {
   var State = Backbone.Model.extend({
     defaults: {
       signature: 4,
@@ -33,25 +29,15 @@ define([
       this.beatArray = new Array();
       this.waitCount = 0;
       this.isWaiting = false;
-      this.ConductorModel = ConductorModel;
       this.finalMeasureBeatTimeIntervals50 = [];
       this.finalMeasureBeatTimeIntervals100 = [];
       this.finalMeasureBeatTimeIntervals150 = [];
       this.finalMeasureBeatTimeIntervals200 = [];
       this.finalMeasureBeatTimeIntervals250 = [];
-      if(window.gon) {
-        this.micLevel = gon.micLevel;
-        console.warn('Mic Level = ' + this.micLevel);
-      }
 
       this.context = new window.AudioContext();
 
-      // TODO Replace these events
-      // dispatch.on('doall.event', this.recordTempoAndPattern, this);
       this.on('recordTempoAndPattern', this.recordTempoAndPattern, this);
-      // dispatch.on('recordClicked.event', this.recordButtonClicked, this);
-      // dispatch.on('tappingTempo.event', this.tapTempoClicked, this);
-      // dispatch.on('tempoDetected.event', this.stopRecording, this);
     },
     turnIsWaitingOn: function(){
       // this.isTapping = true;
@@ -113,7 +99,25 @@ define([
       }
       // this.signature = 0;
     },
+    manualWaveform: function(type) {
+      console.log('getting into process manual waveform');
+      var gcmBeatPattern = ["ON", "ON", "ON"];
+      var gcmBeatTimesPattern = [0, 200, 200];
+      this.trigger('instrumentTempoRecorded', {
+        instrument: type,
+        beatPattern: gcmBeatPattern,
+        beatTimesPattern: gcmBeatTimesPattern,
+        bpm: 430.622,
+        totalTimeMeasurePlaysInMilliseconds: 600
+      });
+    },
     processWaveform: function(time, waveform) {
+      if(time - this.startRecordingTime >= 10000) { 
+        this.stopRecording();
+        console.error('need to process what we have');
+        Logging.logStorage('Song was recorded longer than 10 seconds');
+      }
+
       this.totals = 0;
       // Waveform.length = 512  ¿ I think this means we listen to 512 partitions per second?
       for(var i = 0; i < waveform.length; i++) {
@@ -121,8 +125,8 @@ define([
       }
       this.totals = this.totals / waveform.length;
       var RMS = Math.sqrt(this.totals);
-      console.warn(this.prevTime);
       // console.warn('Time: ' + time + ' RMS: ' + RMS);
+      // console.warn(this.prevTime);
 
       // elapsed time since last beat analysis in ms
       var elapsedTime = time - this.prevTime;
@@ -132,14 +136,32 @@ define([
         console.log('RMS = ' + RMS);
         console.log('elapsed time: ' + elapsedTime);
         this.prevTime = time;
+
+        // find the instrument that was recording, and get the metronome tapping circle in the audio representation
+        var target = ($('.recording').parent().find('svg .metronome-tap'));
+        var dur = 200;
+        var d3Target = d3.select(target);
+        var originalOpacity = parseFloat($('.recording').parent().find('svg .metronome-tap').attr('fill-opacity'))
+        var newOpacity = 1;
+
+        d3Target.transition()
+          .duration(dur)
+          .attr('fill-opacity', newOpacity)
+          // .attr('fill', newFillColor )
+          .transition()                               // a new transition!
+            .attr('fill-opacity', originalOpacity )  // we could have had another
+            .duration(dur)
+
         //On the first beat
         if(this.countIn == 1) {
           var newCurrentTime = new Date().getTime();
-          this.startTime = newCurrentTime;
-          console.log('Start time: ' + this.startTime);
+          this.startRecordingTime = newCurrentTime;
+          console.log('Start time: ' + this.startRecordingTime);
           this.previousTime = newCurrentTime;
           this.countIn++;
           this.signature++;
+          
+
           console.log('Beats in Measure = ' + this.signature);
           console.log('average in ms: ' + 'CAN\'T MEASSURE WITH ONE BEAT' + ' || average in BPM: ' + 'CAN\'T MEASSURE WITH ONE BEAT');
         }
@@ -152,10 +174,8 @@ define([
           console.log('Beats in Measure = ' + this.signature);
 
           // BPM in ms and min
-          var currentTime = new Date().getTime();
-          this.timeIntervals.push(currentTime - this.previousTime);
-          this.previousTime = currentTime;
-          this.lastTimeDelta = currentTime - this.previousTime;
+          this.timeIntervals.push(time - this.previousTime);
+          this.previousTime = time;
           var songTotalTimeDuration = 0;
           for(var i = 0; i < this.timeIntervals.length; i++) {
             songTotalTimeDuration += this.timeIntervals[i];
@@ -163,23 +183,33 @@ define([
           this.average = songTotalTimeDuration / this.timeIntervals.length;
           console.log('average in ms: ' + this.average + ' || average in BPM: ' + 60*1000/this.average);
 
-          // Waiting for the listener to stop tapping
+          // If there was already a waitInterval, we need to clear it and reset it for another new recording
           if(window.waitIntervalID) {
             window.clearInterval(window.waitIntervalID);
             this.waitCount = 0;
           }
 
+          // Waiting for the listener to stop tapping
           var µthis = this;
           window.waitIntervalID = window.setInterval(function() {
             // If the user stops beating for *n* times, we stop listening to the tapping automatically
             // *n* is represented by µthis.waitCount
             console.warn('waitCount: ' + µthis.waitCount);
-            if(µthis.waitCount == 2) {
+            // As soon as we have waited 2 times the average beat duration, we stop
+            // Or if the total time is greater than 10 seconds
+            // if(µthis.waitCount == 2 ) {
+            if(µthis.waitCount == 2 || µthis.startRecordingTime-time >= 10000 ) {
               µthis.isWaiting = false;
               µthis.waitCount = 0;
 
               µthis.mainCounter = 0;
               µthis.isRecording = true;
+              µthis.finalMeasureBeatTimeIntervals50 = [];
+              µthis.finalMeasureBeatTimeIntervals100 = [];
+              µthis.finalMeasureBeatTimeIntervals150 = [];
+              µthis.finalMeasureBeatTimeIntervals200 = [];
+              µthis.finalMeasureBeatTimeIntervals250 = [];
+
               for(var i = 0; i < µthis.signature; i++) {
                 µthis.finalMeasureBeatTimeIntervals50.push(µthis.roundTo50(µthis.timeIntervals[i]));
                 µthis.finalMeasureBeatTimeIntervals100.push(µthis.roundTo100(µthis.timeIntervals[i]));
@@ -192,48 +222,80 @@ define([
               console.warn(µthis.finalMeasureBeatTimeIntervals100);
               // [0, 800, 200, 1000, 800, 700] 
               var mdc = function(o){
-                  if(!o.length)
-                      return 0;
-                  for(var r, a, i = o.length - 1, b = o[i]; i;)
-                      for(a = o[--i]; r = a % b; a = b, b = r);
-                  return b;
+                if(!o.length)
+                  return 0;
+                for(var r, a, i = o.length - 1, b = o[i]; i;)
+                  for(a = o[--i]; r = a % b; a = b, b = r);
+                return b;
               };
 
-              var diffBeats = [];
+              var gcmBeatPattern = [];
+              var gcmBeatTimesPattern = [];
               //var beats = [ 0, 800, 200, 1000, 800, 800 ];
-              var beats = µthis.finalMeasureBeatTimeIntervals100;
+              var roundedBeatPatternArray = µthis.finalMeasureBeatTimeIntervals100;
 
               //Greatest Common Divisor of the beats
-              var gcd = mdc(beats);
+              var gcm = mdc(roundedBeatPatternArray);
 
-              for (var i=0 ; i<beats.length ; i++) {
-                  if(i==0){
-                      diffBeats.push('ON');
+              for (var i=0 ; i<roundedBeatPatternArray.length ; i++) {
+                if(i==0){
+                  gcmBeatPattern.push('ON');
+                  gcmBeatTimesPattern.push(0);
+                } else {
+                  // For the middle beats
+                  if(i!==roundedBeatPatternArray.length) {
+                    // count how many rests there are given the GCM of the beat pattern
+                    var rests = (roundedBeatPatternArray[i]/gcm == 0) ? 0 : roundedBeatPatternArray[i]/gcm-1 ;
+                    // For each rest that there is, put a rest beat in its place
+                    for (var j= 0 ; j<rests ; j++) {
+                      gcmBeatPattern.push('OFF');
+                      gcmBeatTimesPattern.push(gcm);
+                    }
+                    // Since we need to add the beat we are on, add it to the end
+                    gcmBeatPattern.push('ON');
+                    gcmBeatTimesPattern.push(gcm);
+                  // For the last beat that we noticed recording in the roundedBeatPatternArray
                   } else {
-                      var rests = (beats[i]/gcd == 0) ? 0 : beats[i]/gcd-1 ;
-                      for (var j= 0 ; j<rests ; j++) {
-                          diffBeats.push('OFF');
-                      }
-                      diffBeats.push('ON');
+                    gcmBeatPattern.push('ON');
+                    gcmBeatTimesPattern.push(gcm);                    
+                    // If we want to add some time to the end of the, we would add it  
+                    // HERE
                   }
+                }
               }
-              diffBeats.splice(16);
-              console.log(diffBeats);
+              console.log('pre:: ', gcmBeatPattern);
+              var postGcmBeatPattern = $.extend(true, [], gcmBeatPattern);
+              // Get the first 16
+              postGcmBeatPattern.length > 16 ? postGcmBeatPattern.length = 16 : postGcmBeatPattern.length = postGcmBeatPattern.length;
+              console.log('post: ', postGcmBeatPattern);
+              console.log(gcmBeatTimesPattern);
+              console.log(gcmBeatPattern.length);;
+              console.log(postGcmBeatPattern.length);
+              if(gcmBeatPattern.length > postGcmBeatPattern.length) {
+                console.log('trimmed down to 16 beats from ' + gcmBeatPattern.length);
+                Logging.logStorage(µthis.timeIntervals.length + ' beats were tapped normalized to ' + gcmBeatPattern.length + ' beats and we trimmed them down to ' + postGcmBeatPattern.length);
+              }
 
-              // TODO Replace these events
-              // µthis.trigger('signatureChange.event', µthis.signature);
+              console.log('gcm: ', gcm);
+              console.log('songTotalTimeDuration: ', songTotalTimeDuration);
+              console.log('totalTimeMeasurePlaysInMilliseconds: ', gcmBeatTimesPattern.length * gcm);
+              Logging.logStorage('Tapped song in Milliseconds: ' + songTotalTimeDuration + ' and total time recording plays in milliseconds: ' + gcmBeatTimesPattern.length * gcm);
+              Logging.logStorage('Recording of song Greatest Common Multiple GCM is: ' + gcm);
 
-              //show the BPM
               var bpm = 1000 / µthis.average * 60;
-              
+              console.log('bpm: ' + bpm);
               µthis.stopRecording();
-
-              µthis.trigger('instrumentTempoRecorded', {instrument:µthis.get('instrumentTypeBeingRecorded'), beatPattern:diffBeats, bpm:bpm});
+              µthis.trigger('instrumentTempoRecorded', {
+                instrument: µthis.get('instrumentTypeBeingRecorded'),
+                beatPattern: postGcmBeatPattern,
+                beatTimesPattern: gcmBeatTimesPattern,
+                bpm:bpm,
+                totalTimeMeasurePlaysInMilliseconds: gcmBeatTimesPattern.length * gcm
+              });
 
               µthis.isTapping = false;
               µthis.countIn = 1;
-              µthis.set('baseTempo', bpm);
-              // µthis.set('tempo', bpm);
+              µthis.set('tempo', bpm);
               µthis.set('signature', µthis.signature);
 
               window.clearInterval(waitIntervalID);
@@ -356,18 +418,12 @@ define([
               diffBeats.splice(16);
               console.log(diffBeats);
 
-              // TODO Replace these events
-              // dispatch.trigger('signatureChange.event', µthis.signature);
-
               //show the BPM
               var bpm = 1000 / µthis.average * 60;
 
-              // TODO Replace these events
-              // dispatch.trigger('instrumentTempoRecorded', {instrument:'hh', beatPattern:diffBeats, bpm:bpm});
-
               µthis.isTapping = false;
               µthis.countIn = 1;
-              µthis.set('baseTempo', bpm);
+              µthis.set('tempo', bpm);
               // µthis.set('tempo', bpm);
               µthis.set('signature', µthis.signature);
               // $('#tap-tempo').click();
@@ -401,94 +457,6 @@ define([
         }, this);
       }
     },
-
-    tapTempoClicked: function() {
-      console.log('Tap Tempo Clicked');
-      if(this.ConductorModel.isPlaying) {
-        // TODO Replace these events
-        // dispatch.trigger('togglePlay.event');
-      }
-      this.isTapping = true;
-      if(window.tapIntervalID) {
-        window.clearInterval(tapIntervalID);
-      }
-      for(var i = 0; i < window.signature; i++) {
-        window.beatArray[i] = 0;
-      }
-      this.isWaiting = true;
-      this.signature = 0;
-
-      if (this.hasGetUserMedia()) {
-        console.log("we do have user media access.");
-        var µthis = this;
-        navigator.webkitGetUserMedia({audio: true}, function(stream) {
-          var microphone = µthis.context.createMediaStreamSource(stream);
-          µthis.microphone = microphone;
-          µthis.micGain = µthis.context.createGain();
-          µthis.micGain.gain = µthis.micLevel;
-          µthis.jsNode = µthis.context.createScriptProcessor(512, 2, 2);
-          µthis.microphone.connect(µthis.micGain);
-          µthis.microphone.connect(µthis.context.destination);   
-          µthis.micGain.connect(µthis.jsNode);
-          µthis.jsNode.connect(µthis.context.destination);
-          µthis.prevTime = new Date().getTime();
-          µthis.jsNode.onaudioprocess = (function() {
-            return function(e) {
-              µthis.analyze(e);
-            };
-          }());
-          µthis.waveform = new Float32Array(µthis.jsNode.bufferSize);   
-        }, this.onFailSoHard);
-      } 
-      else {
-        alert('getUserMedia() is not supported in your browser');
-      }
-    },
-
-    recordButtonClicked: function() {
-      console.log('Tap Tempo Clicked');
-      if(this.ConductorModel.isPlaying) {
-        // TODO Replace these events
-        // dispatch.trigger('togglePlay.event');
-      }
-      $('#conductor').click();
-      this.isTapping = true;
-      if(window.tapIntervalID) {
-        window.clearInterval(tapIntervalID);
-      }
-      for(var i = 0; i < window.signature; i++) {
-        window.beatArray[i] = 0;
-      }
-      this.isWaiting = false;
-      this.isRecording = true;
-
-      if (this.hasGetUserMedia()) {
-        console.log("we do have user media access.");
-        var µthis = this;
-        navigator.webkitGetUserMedia({audio: true}, function(stream) {
-          var microphone = µthis.context.createMediaStreamSource(stream);
-          µthis.microphone = microphone;
-          µthis.micGain = µthis.context.createGain();
-          µthis.micGain.gain = µthis.micLevel;
-          µthis.jsNode = µthis.context.createScriptProcessor(512, 2, 2);
-          µthis.microphone.connect(µthis.micGain);
-          µthis.microphone.connect(µthis.context.destination);
-          µthis.micGain.connect(µthis.jsNode);
-          µthis.jsNode.connect(µthis.context.destination);
-          µthis.prevTime = new Date().getTime();
-          µthis.jsNode.onaudioprocess = (function() {
-            return function(e) {
-              µthis.analyze(e);
-            };
-          }());
-          µthis.waveform = new Float32Array(µthis.jsNode.bufferSize);   
-        }, this.onFailSoHard);
-      } 
-      else {
-        alert('getUserMedia() is not supported in your browser');
-      } 
-    },
-
     analyze: function(e){
       var time = e.timeStamp;
       this.waveform = e.inputBuffer.getChannelData(0);

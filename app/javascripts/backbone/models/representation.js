@@ -39,7 +39,6 @@ define([
         audioBeatCy: 40,
         audioBeatR: 12,
         colorForAudio: COLORS.hexColors[4],
-        initialColorForAudio: 'none',
       // Pie
         //Measure
         measureStartAngle: 0,
@@ -177,7 +176,6 @@ define([
           "audioBeatCy": this.defaults.audioBeatCy,
           "audioBeatR": this.defaults.audioBeatR,
           "audioBeatR": this.defaults.audioBeatR,
-          "initialColorForAudio": this.defaults.initialColorForAudio,
           "measureStartAngle": this.defaults.measureStartAngle,
           "beatStartAngle": this.defaults.beatStartAngle,
           "beatEndAngle": this.defaults.beatEndAngle,

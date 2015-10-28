@@ -19,9 +19,11 @@ define([
     measureRepresentations: RepresentationsCollection,
     allMeasureChildRepresentationsTransitioned: 0,
     defaults: {
-      pixelsPerSecond: 40,
+      pixelsPerSecond: 100,
       originalScale: 1,
-      currentScale: 1
+      currentScale: 1,
+      totalTimeMeasurePlaysInMilliseconds: 3204,
+      baseTimeMeasurePlaysInMilliseconds: 3204
     },
     initialize: function(){
       this.name = 'model-measure';
@@ -48,8 +50,18 @@ define([
       this.set({previousScale : this.get('currentScale')});
       this.set({currentScale : options.scale});
     },
-    updateMeasureLength: function() {
-      // this.
+    updateBeatsCollection: function(options) {
+      this.get('beatsCollection').reset();
+      // Passing silent true to avoid the hTrack model from listening to it;
+      this.get('beatsCollection').set(options.beatsCollection.models, {silent: true});
+    },
+    updateCurrentScale: function(options) {
+      this.set({previousScale : this.get('currentScale')});
+      this.set({currentScale : options.scale});
+    },
+    updateTotalTime: function(options) {
+      this.set({totalTimeMeasurePlaysInMilliseconds : options.totalTimeMeasurePlaysInMilliseconds});
+      this.updateCurrentScale( { scale : this.get('totalTimeMeasurePlaysInMilliseconds')/this.get('baseTimeMeasurePlaysInMilliseconds') } );
     },
     logRemoval: function(beatModel, newBeatsCollection, indexOfRemovedBeat){
       Logging.logStorage("Removed a beat.  It was at index: " + indexOfRemovedBeat.index);

@@ -32,7 +32,7 @@ define([
       }
     },
     updateModelSignature: function(){
-      // TODO, make it stop playing so there isnt the buggy playback or fix the buggy playback
+      // TODO Try and figure out a waty to listen to individual beats getting added or removed, but not the collection reset
       console.log('updating htrack signature to '+(this.get('measures').models[0].get('beatsCollection').length));
       var newSignature = this.get('measures').models[0].get('beatsCollection').length;
       this.set('signature', newSignature);

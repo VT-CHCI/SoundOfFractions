@@ -21,6 +21,7 @@ define([
       'click .remove-measure-rep' : 'removeRepresentationModel',
       'click .delta' : 'transitionRepresentation',
       'click .record-button' : 'recordMeasure'
+      // 'click .record-button' : 'manualForcedRecording'
     },
     initialize : function(options){
       //if we're being created by a MeasureView, we are passed in options. Otherwise we create a single
@@ -67,6 +68,7 @@ define([
 
       this.listenTo(this.model, 'change:currentRepresentationType', this.transition, this);
       this.listenTo(this.parentMeasureModel, 'change:currentScale', this.updateRender);
+      // this.listenTo(this.parentMeasureModel, 'change:totalTimeMeasurePlaysInMilliseconds', this.updateRender);
       // this.listenTo(this.model, 'destroy', this.close, this);
 
       // dispatch.on('resized.event', this.destroy, this);
@@ -542,7 +544,7 @@ define([
       // var originalFillColor = 'none';
       var originalOpacity = 'none';
       // if(selected == true){
-      //   var newFillColor = COLORS.hexColors[5];
+      //   var newFillColor = this.model.get('colorForAudio');
       // } else {
       //   var newFillColor = originalFillColor;
       // }
@@ -618,8 +620,8 @@ define([
     pieAnimate: function(target, index, totalNumberOfBeats, dur) {      
       var d3target = d3.select(target);
       var angleInRadians = 2*Math.PI/totalNumberOfBeats * index - ( (2*Math.PI/4) - (2*Math.PI/totalNumberOfBeats/2) );
-      var newCX = (this.model.get('circularMeasureR')) * Math.cos(angleInRadians);
-      var newCY = (this.model.get('circularMeasureR')) * Math.sin(angleInRadians);
+      var newCX = (this.model.get('circularMeasureR')) * Math.cos(angleInRadians)/1.5;
+      var newCY = (this.model.get('circularMeasureR')) * Math.sin(angleInRadians)/1.5;
 
       d3target.transition()
         .attr('transform', 'translate(' + newCX + ',' + newCY + ')' )
@@ -649,7 +651,7 @@ define([
     },
     // This toggles the animation, not the sound
     // The state is passed in from the toggleAnimation.event
-    toggleAnimation: function(state){
+    toggleAnimation: function(options){
       var µthis = this;
 
         var standardR = this.model.get('initialCircularMeasureR'); // 51
@@ -662,8 +664,8 @@ define([
 /**x**/ var standardBeatsPerSecond = standardBeatsPerMinute/60; // 2 beats per second
 
         // var standardPixelsPerSecond = standardBeatsPerSecond * standardPixelsPerBeat; // 20 pixels per beat @ 2 beats per second || 40 pixels per second
-        var standardPixelsPerSecond = 100;
-        var standardPixelsPerMinute = standardPixelsPerSecond * 60; // 2400 pixels per minute
+/**x**/ var standardPixelsPerSecond = this.parentMeasureModel.get('pixelsPerSecond');; 
+        var standardPixelsPerMinute = standardPixelsPerSecond * 60; // 6000 pixels per minute
 
 
         var scaledR = this.model.get('circularMeasureR');
@@ -675,31 +677,28 @@ define([
 
 
 //TODO USE signature or beats
-      var signature = this.parentMeasureModel.get('beatsCollection').length;
-      var beats = this.parentHTrackModel.get('signature');
-      
+      var signature = this.parentMeasureModel.get('beatsCollection').length;      
       // var tempo = this.parentHTrackModel.get('tempo');
       var measuresCount = this.parentHTrackModel.get('measures').length;
       // var currentInstrumentDuration = measuresCount * beats / tempo * 60.0 * 1000.0;
       //dur is time of one beat.
-      var dur = howLongToPlayFullRhythmLinearly/beats*1000;
+      var dur = this.parentMeasureModel.get('totalTimeMeasurePlaysInMilliseconds')/signature;
       // var dur = 8000 / beats;
-      // var dur = state.beatDuration *1000;
+      // var dur = options.beatDuration *1000;
       // var calcDur = 1000/(tempo/60);
 
       var totalNumberOfBeats = signature*measuresCount;
       // go through the measure(s) first without animation
       var counter = 0;
       var measureCounter = 0;
-
       this.retrievedRepresentationType = this.model.get('currentRepresentationType');
       //when playing is stopped we stop the animation.
-      if (state.turn === 'Off') {
+      if (options.turn === 'Off') {
         console.log('stopped animation');
         clearInterval(this.animationIntervalID);
         this.animationIntervalID = null;
       // When playing is started, we start the animation
-      } else if(state.turn === 'On') {
+      } else if(options.turn === 'On') {
         console.log('in toggle animation starting');
         // If there are beats to be animated, play each in sequence, keeping a count as we go along
         // The first set is play the song from the get go
@@ -709,27 +708,24 @@ define([
             var beats = $('#measure-rep-'+this.model.cid).find('.audio-beat');
             // A boolean value if the beat is selected
             var selected = this.parentMeasureModel.get('beatsCollection').models[counter].get('selected');
-            // TODO, find a better way to animate the audio beats
             // Animate the Audio beat
-            // console.log('calling from first block');
-            // this.audioAnimate(beats.eq(0)[0], dur/2.0, selected);
-            this.audioAnimate(beats.eq(counter)[0], dur/2.0, selected);
+            this.audioAnimate(beats.eq(0)[0], dur/2.0, selected);
           } else if (this.retrievedRepresentationType == 'bead'){
             var beats = $('#measure-rep-'+this.model.cid).find('.bead-beat');
             // Animate the Bead beat
-            this.beadAnimate(beats.eq(counter)[0], dur/2.0/8.0);
+            this.beadAnimate(beats.eq(0)[0], dur/2.0/8.0);
           } else if (this.retrievedRepresentationType == 'line'){
             var beats = $('#measure-rep-'+this.model.cid).find('.line-beat');
             // Animate the Line beat
-            this.lineAnimate(beats.eq(counter)[0], dur/2.0/8.0);
+            this.lineAnimate(beats.eq(0)[0], dur/2.0/8.0);
           } else if (this.retrievedRepresentationType == 'pie'){
             var beats = $('#measure-rep-'+this.model.cid).find('.pie-beat');
             // Animate the Pie beat
-            this.pieAnimate(beats.eq(counter)[0], counter, totalNumberOfBeats, dur/2.0/8.0);
+            this.pieAnimate(beats.eq(0)[0], 0, totalNumberOfBeats, dur/2.0/8.0);
           } else if (this.retrievedRepresentationType == 'bar'){
             var beats = $('#measure-rep-'+this.model.cid).find('.bar-beat');
             // Animate the Bar beat
-            this.barAnimate(beats.eq(counter)[0], dur/2.0/8.0);
+            this.barAnimate(beats.eq(0)[0], dur/2.0/8.0);
           }
           counter ++;
         }
@@ -766,7 +762,7 @@ define([
         })(this), dur); //duration should be set to something else
       } else {
         console.error('ERROR, Should Not be in here: measureRepView.js.  State:');
-        console.error(state)
+        console.error(options)
       }
     },
     // This clears the intervals to both stop the animations, and prevent the browser from crashing after stopping
@@ -1525,6 +1521,7 @@ define([
           .attr('r', this.model.get('audioMeasureR'))
           .attr('fill', this.model.get('colorForAudio'))
           .attr('fill-opacity', 0.2)
+          .classed('metronome-tap', true)
           .attr('stroke', 'black');
     },
     render: function(){
@@ -1543,10 +1540,6 @@ define([
       this.setElement($('#measure-rep-'+this.model.cid));
 
       this.makeMeasureRepParts();
-
-      if(this.model.get('currentRepresentationType') === 'line'){
-        console.warn(this.model.get('linearLineLength'));
-      }
 
       return this;
     },
@@ -1761,6 +1754,17 @@ define([
         this.recordStop();
       }
     },
+    manualForcedRecording: function(){
+      console.log('getting into manual forced');
+      if(!this.isTapping) {
+        StateModel.processManualWaveform(this.parentHTrackModel.get('type'));
+        StateModel.turnIsWaitingOn();
+        this.isTapping = true;
+        $('#measure-rep-'+this.model.cid + ' .record-div').addClass('recording')
+      } else {
+        this.recordStop();
+      }
+    },
     recordStart: function(){
       console.log('Recording clicked');
       // This is for recording by tapping on the desk...
@@ -1825,7 +1829,7 @@ define([
     },
     addDroppable: function(){
       // JQ Droppable
-      var parentµthis = this;
+      var µthis = this;
       $(this.el).droppable({
         accept: '.stamp',
         tolerance: 'fit', //Make sure the label is entirely in the measureRep

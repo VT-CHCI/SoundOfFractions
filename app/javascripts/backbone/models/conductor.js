@@ -9,8 +9,9 @@
 define([
   'underscore',
   'bbone',
-  'backbone/collections/stage' //Singleton
-], function(_, Backbone, StageCollection) {
+  'backbone/collections/stage', //Singleton
+  'logging'
+], function(_, Backbone, StageCollection, Logging) {
   var conductorModel = Backbone.Model.extend({
     defaults: {
       isPlaying: false,
@@ -26,53 +27,41 @@ define([
       // Set the model to playing
       this.set('isPlaying', true);
       // Trigger all instruments to start
-      this.trigger('conductorStart', this.calculateMaxDuration());
+
       var time = Date.now();
       this.set('startedPlayingTime', time);
-      // TODO SEND LOG playing, and include how long the song is (maxDuration)
+      var songDuration = this.calculateMaxDuration();
+
+      this.trigger('conductorStart', songDuration);
+      Logging.logStorage('Started playing music and the song lasts ' + songDuration/1000 + ' seconds.');
     },
     stop: function() {
       console.log('in the conductor model stop');
+
       // Set the model to not playing
       this.set('isPlaying', false);
       // Trigger all instruments to stop
       this.trigger('conductorStop', 'Stop');
-      // Calculate how long they played the song
-      var totalTimePlayed = Date.now() - this.startedPlayingTime;
-      // TODO SEND LOG stopped, how long they played, and how many times they played the full meaure (ie .8x or 3.2x)
+
+      var time = Date.now();
+      this.set('endTime', time);
+      this.set('previousPlayedElapsedTime', (this.get('endTime') - this.get('startedPlayingTime'))/1000 );
+      var songDuration = this.calculateMaxDuration()/1000;
+      Logging.logStorage('Stopped playing music.  Duration of playback in seconds: ' + this.get('previousPlayedElapsedTime') + ' and the song lasts ' + songDuration + ' seconds for a total playback number of ' + this.get('previousPlayedElapsedTime')/songDuration + ' times.');
     },
     calculateMaxDuration: function() {
       var maxDuration = 0;
       // For each instrument
       _.each(this.stage.models, function(hTrack) {
-          // Get their Tempo
-          // var tempo = hTrack.get('tempo');
-          // Get each measure, currently limited to 1
-          // TODO Multiple Measures
-          var measures = hTrack.get('measures');
-          var firstMeasure = hTrack.get('measures').models[0];
-          var pps = hTrack.get('measures').models[0].get('pixelsPerSecond');
-          var scale = hTrack.get('measures').models[0].get('currentScale');
-          //  Get the signature - how many beats (denominator)
-          var beats = hTrack.get('signature');
-
-          // This code block should match in htrack view
-          // form here
-          var scaledR = firstMeasure.get('measureRepresentations').models[firstMeasure.get('measureRepresentations').length-1].get('circularMeasureR');
-/**x**/   var scaledLengthOfRhythmInPixels = 2*Math.PI*scaledR; // 320 with a scale of 1
-          var standardPixelsPerSecond = 100; 
-
-          var howLongToPlayFullRhythmLinearly = scaledLengthOfRhythmInPixels/standardPixelsPerSecond; // 320 / 100 == 3.2 seconds
-          // To here
-
-          // Determine the amount of time this instrument would play at its tempo with how many beats in the measure and how many measures
-          // var currentInstrumentDuration = measures.length*beats/tempo*60.0*1000.0 ;
-          // var currentInstrumentDuration = measures.length * 8 * scale * 1000 ;
-          var currentInstrumentDuration = howLongToPlayFullRhythmLinearly * 1000 ;
-          // Set it to maxDuration if it is longer than maxDuration
+        // Get each measure, currently limited to 1
+        _.each(hTrack.get('measures').models, function(measureModel) {
+          // Check how long it plays against the current maximum
+          var currentInstrumentDuration = measureModel.get('totalTimeMeasurePlaysInMilliseconds');
           if (currentInstrumentDuration > maxDuration) {
             maxDuration = currentInstrumentDuration;
           }
+        });        
+
       }, this);
       // Set the max Duration on this model
       this.maxDuration = maxDuration;

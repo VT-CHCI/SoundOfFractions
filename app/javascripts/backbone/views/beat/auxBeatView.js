@@ -267,7 +267,7 @@ define([
             .attr('cx', this.parentMeasureRepModel.get('audioMeasureCx'))
             .attr('cy', this.parentMeasureRepModel.get('audioMeasureCy'))
             .attr('r', this.parentMeasureRepModel.get('audioMeasureR'))
-            .attr('fill', this.parentMeasureRepModel.get('initialColorForAudio'));
+            .attr('fill', this.parentMeasureRepModel.get('colorForAudio'));
             // .attr('opacity', this.opacityForAudio);
             // .attr('transform', 'translate(0,0)')
             // NO click handler to prevent the user from editing in the audio Rep

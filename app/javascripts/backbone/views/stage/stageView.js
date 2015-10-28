@@ -34,15 +34,7 @@ define([
       this.conductor = ConductorModel;
       this.masterAudioContext = new AudioContext();
       
-      // Dispatch handlers
-
-      // TODO Replace these events
-      // dispatch.on('instrumentDeletedFromCompositionArea.event', this.deleteInstrument, this);
-      StateModel.on('instrumentTempoRecorded', this.replaceInstrumentWithRecordedPattern, this);
-      // StateModel.on('instrumentTempoRecorded', this.addInstrumentWithRecordedPattern, this);
-
-      StateModel.set('stageCollection', this.stageCollection);
-      
+      StateModel.set('stageCollection', this.stageCollection);      
       // Per SO? http://stackoverflow.com/questions/9522845/backbone-js-remove-all-sub-views
       this.childViews = [];
 
@@ -60,10 +52,10 @@ define([
       // This kicks off and adds the snare to the 
       RemainingInstrumentGeneratorModel.removeInstrumentFromUnused({type:'sn'});
       // RemainingInstrumentGeneratorModel.removeInstrumentFromUnused({type:'hh'});
-      // this.makeInstrumentFromScratch({type:'sn'});
-      // RemainingInstrumentGeneratorModel.removeInstrumentFromUnused({type:'sn'});
       
       this.makeChildrenHTracks();
+
+      window.stageView = this;
     },
     turnPlayingOff: function(){
       if(ConductorModel.get('isPlaying')){
@@ -90,20 +82,6 @@ define([
       _.each(this.stageCollection.models, function(hTrack) {
         this.makeChildHTrack(hTrack);
       }, this);
-    },
-    replaceInstrumentWithRecordedPattern: function(options) {
-      var µthis = this;
-      _.each(this.stageCollection.collection.models, function(htrackModel){
-        if(htrackModel.get('type') === options.instrument){
-          // Make a beatsCollection
-          htrackModel.get('measures').models[0].set('beatsCollection', µthis.setUpManualBeatsCollection(options) );
-          htrackModel.trigger('resetRepresentations');
-        }
-      })
-    },
-    // addInstrument With Pattern
-    addInstrumentWithRecordedPattern: function(options) {
-      // 
     },
     makeInstrumentFromScratch: function(options) {
       console.info('makeInstrumentFromScratch options: ', options)
@@ -172,13 +150,16 @@ define([
         this.manuallyCreatedMeasureRepresentationCollection.add(this.manuallyCreatedRepresentationModel);
         // add a bead rep
         this.secondManuallyCreatedRepresentationModel = new RepresentationModel({
-          currentRepresentationType:'bead',
-          beatsCollection:this.manuallyCreatedMeasureBeatsCollection
+          currentRepresentationType: 'bead',
+          beatsCollection: this.manuallyCreatedMeasureBeatsCollection
         });
         this.manuallyCreatedMeasureRepresentationCollection.add(this.secondManuallyCreatedRepresentationModel);
         // // add a line rep
-        // this.manuallyCreatedRepresentationModel = new RepresentationModel({currentRepresentationType:'line', beatsCollection:this.manuallyCreatedMeasureBeatsCollection});
-        // this.manuallyCreatedMeasureRepresentationCollection.add(this.manuallyCreatedRepresentationModel);
+        this.thirdManuallyCreatedRepresentationModel = new RepresentationModel({
+          currentRepresentationType: 'line',
+          beatsCollection: this.manuallyCreatedMeasureBeatsCollection
+        });
+        this.manuallyCreatedMeasureRepresentationCollection.add(this.thirdManuallyCreatedRepresentationModel);
         // // add a pie rep
         // this.manuallyCreatedRepresentationModel = new RepresentationModel({currentRepresentationType:'pie', beatsCollection:this.manuallyCreatedMeasureBeatsCollection});
         // this.manuallyCreatedMeasureRepresentationCollection.add(this.manuallyCreatedRepresentationModel);
@@ -190,11 +171,12 @@ define([
         this.manuallyCreatedMeasuresCollection = new MeasuresCollection;
         this.parentMeasureModel = new MeasureModel({
           beatsCollection: this.manuallyCreatedMeasureBeatsCollection,
-          measureRepresentations: this.manuallyCreatedMeasureRepresentationCollection          
+          measureRepresentations: this.manuallyCreatedMeasureRepresentationCollection
         });
         this.manuallyCreatedMeasuresCollection.add(this.parentMeasureModel);
         this.manuallyCreatedRepresentationModel.addParentMeasureModelAfter(this.parentMeasureModel);
         this.secondManuallyCreatedRepresentationModel.addParentMeasureModelAfter(this.parentMeasureModel);
+        this.thirdManuallyCreatedRepresentationModel.addParentMeasureModelAfter(this.parentMeasureModel);
       // This is for subsequent instruments when added
         this.secondManuallyCreatedMeasureBeatsCollection = new BeatsCollection;
         //for each beat - also change signature below
@@ -210,21 +192,6 @@ define([
         this.secondManuallyCreatedMeasuresCollection.add({
           beatsCollection: this.secondManuallyCreatedMeasureBeatsCollection, measureRepresentations: this.manuallyCreatedMeasureRepresentationCollection});
 
-    },
-    // This is for replacing a beats collection when it is recorded
-    setUpManualBeatsCollection: function(options){
-      // this creates 1 measure, and adds beats and the representations to itself
-      this.manuallyCreatedMeasureBeatsCollection = new BeatsCollection;
-      //for each beat - also change signature below
-      for (var i = 0; i < options.beatPattern.length; i++) {
-        if (options.beatPattern[i] == 'ON'){
-          this.manuallyCreatedMeasureBeatsCollection.add([{selected: true}]);
-        } else {
-          this.manuallyCreatedMeasureBeatsCollection.add([{selected: false}]);
-          // this.manuallyCreatedMeasureBeatsCollection.add();
-        }
-      }
-      return this.manuallyCreatedMeasureBeatsCollection;
     },
     // We want to delete an instrument from the view, as well as add it to the instrument generator
     deleteInstrument: function(instrument) {

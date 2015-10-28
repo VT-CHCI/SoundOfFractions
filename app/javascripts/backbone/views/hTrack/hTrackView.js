@@ -248,7 +248,7 @@ define([
     },
     // When the conductor tells us to play
     startPlaying: function(maxDurationOfAllInstruments){
-      console.info('hTrack startPlaying');
+      console.info('hTrack startPlaying with maxDurationOfAllInstruments of: ', maxDurationOfAllInstruments);
       var measures = this.model.get('measures');
       var selectedBeats = 0;
       // Find out how many beats are selected
@@ -263,8 +263,6 @@ define([
 
       // Play the sound and the animation
       this.playSoundAndAnimation();
-      
-      //TODO Potentially put playLoop and playSoundAndAnimation up here until the setInterval starts
       // after each loop duration of maxDurationOfAllInstruments, play itself again
       this.intervalID = setInterval((function(self) {
       // ConductorModel.addInterval( setInterval((function(self) {
@@ -282,7 +280,8 @@ define([
       console.info('hTrack stopPlaying');
       //we set the masterGainNode to zero, which mutes all remaining output.
       this.masterGainNode.gain.value = 0;
-      //This stops the Audio interval from recurring
+      // TODO, erase the remaining loop beats so a song that is stopped prior to finish and then immediately played, we don't hear the song from the previous version
+      //This stops the interval from recurring
       clearInterval(this.intervalID);
       this.intervalID = null;
       // Trigger the animation to stop.
@@ -316,21 +315,20 @@ define([
                           // 320 is ~2PIr   16 is max number of beats we support
                           // Circumference of a circle is equal to a line rep stretched out
         var standardR = measure.get('measureRepresentations').models[measure.get('measureRepresentations').length-1].get('initialCircularMeasureR'); // 51
-/**x**/ var standardLengthOfRhythmInPixels = 2*Math.PI*standardR; // 320 with a scale of 1
+        var standardLengthOfRhythmInPixels = 2*Math.PI*standardR; // 320 with a scale of 1
         var standardPixelsPerBeat = standardLengthOfRhythmInPixels/16; // ~20
 
         // 320 x 8
 
         var standardBeatsPerMinute = 120; // 120 bpm
-/**x**/ var standardBeatsPerSecond = standardBeatsPerMinute/60; // 2 beats per second
+        var standardBeatsPerSecond = standardBeatsPerMinute/60; // 2 beats per second
 
         // var standardPixelsPerSecond = standardBeatsPerSecond * standardPixelsPerBeat; // 20 pixels per beat @ 2 beats per second || 40 pixels per second
-        var standardPixelsPerSecond = 100; 
+/**x**/ var standardPixelsPerSecond = this.model.get('measures').models[0].get('pixelsPerSecond');; 
         var standardPixelsPerMinute = standardPixelsPerSecond * 60; // 2400 pixels per minute
 
         // The scale of the circularMeasureR should already be computed on the model
-        var scaledR = measure.get('measureRepresentations').models[measure.get('measureRepresentations').length-1].get('circularMeasureR');
-        // debugger;
+/**x**/ var scaledR = measure.get('measureRepresentations').models[measure.get('measureRepresentations').length-1].get('circularMeasureR');
 /**x**/ var scaledLengthOfRhythmInPixels = 2*Math.PI*scaledR; // 320 with a scale of 1
         var scaledPixelsPerBeat = scaledLengthOfRhythmInPixels/16; // ~20
 
@@ -420,25 +418,25 @@ define([
 
       function play(self, context, buffer, time, gainNode, specGainNode, muteGainNode, hTrackTempo, beatDuration) {
         //a buffer source is what can actually generate audio.
-        source = context.createBufferSource();
-        source.buffer = buffer;
+        self.source = context.createBufferSource();
+        self.source.buffer = buffer;
         /* here we make a series of connections to set up the signal flow
            of the audio through each of the three gain nodes.
            the final result looks like:
 
            source->specGainNode->muteGainNode->masterGainNode->your ears
         */
-        source.connect(specGainNode);
+        self.source.connect(specGainNode);
         specGainNode.connect(muteGainNode);
         muteGainNode.connect(gainNode);
         gainNode.connect(context.destination);
         // specGainNode.gain.value = 1;
 
         //start causes the playback to start.
-        source.start(time, 0, beatDuration);
+        self.source.start(time, 0, beatDuration);
 
         //we call stop to stop the sound after the beatDuration of one beat.
-        source.stop(time + beatDuration);
+        self.source.stop(time + beatDuration);
       }
 
     },

@@ -43,12 +43,11 @@ define([
       this.childViews = [];
 
       // when we add a meauserRep
-      this.listenTo(this.model.get('measureRepresentations'), 'add', _.bind(this.addChild, this));  
+      this.listenTo(this.model.get('measureRepresentations'), 'add', _.bind(this.addChildRepresentationView, this));  
 
-      // I dont htink we want this. we want each representation to make their own changes
-      // this.listenTo(this.model.get('beatsCollection'), 'add remove', _.bind(this.reconfigure, this));  
+      this.listenTo(StateModel, 'instrumentTempoRecorded', this.replaceInstrumentWithRecordedPattern);
       
-      this.model.on('change:scale', _.bind(this.render, this));
+      // this.model.on('change:currentScale', _.bind(this.reconfigure, this));
 
       // This is for version2, when we add or delete a measure
       // this.parentHTrackModel.get('measures').on('add', _.bind(this.render, this));
@@ -57,6 +56,35 @@ define([
       this.render();
 
       this.makeChildren();
+    },
+    replaceInstrumentWithRecordedPattern: function(options) {
+      if(this.parentHTrackModel.get('type') === options.instrument){
+        // Make a beatsCollection and update the model
+        this.model.updateBeatsCollection( {beatsCollection: this.setUpManualBeatsCollection(options)} );
+        // set the scale so it will redraw again with the correct scale
+        this.model.updateTotalTime( {totalTimeMeasurePlaysInMilliseconds: options.totalTimeMeasurePlaysInMilliseconds} );
+        // based on 320 : 2*PI*R -> 2*PI*51 => 320 pixels at 100 pps is 3.2 seconds
+
+        // Calling reconfigure doesn't adjust the height's correctly of the mrvs, so we will hold off using that for now
+        // this.reconfigure();
+      }
+    },
+    // This is for replacing a beats collection when it is recorded
+    setUpManualBeatsCollection: function(options){
+      // this creates 1 measure, and adds beats and the representations to itself
+      this.manuallyCreatedMeasureBeatsCollection = new BeatsCollection;
+      //for each beat - also change signature below
+      for (var i = 0; i < options.beatPattern.length; i++) {
+        if (options.beatPattern[i] == 'ON'){
+          this.manuallyCreatedMeasureBeatsCollection.add([{selected: true}]);
+        } else if (options.beatPattern[i] == 'OFF') {
+          this.manuallyCreatedMeasureBeatsCollection.add([{selected: false}]);
+          // this.manuallyCreatedMeasureBeatsCollection.add();
+        } else {
+          console.warn('still getting the wrong error.   Must look into why the collection isn\'t getting reset');
+        }
+      }
+      return this.manuallyCreatedMeasureBeatsCollection;
     },
     render: function(){
       // Make a template for the measure and append the MeasureTemplate to the measure area in the hTrack
@@ -77,7 +105,7 @@ define([
       return this;
     },
     // TODO IMPORNTANT This is structured wrong: it should be adding measure Views, not measureRepViews
-    addChild: function(options){
+    addChildRepresentationView: function(options){
       // If we are creating the children from the models already present, ie, initial load
       if(options.repIndex > -1) {      
         var addedModel = this.model.get('measureRepresentations').models[options.repIndex];
@@ -94,7 +122,7 @@ define([
         parentHTrackView: this.parentHTrackView,
         // Measure
         parentMeasureModel: this.model,
-        parent: this,
+        parentMeasureView: this,
         measureRepContainer: '#measure-rep-container-'+this.model.cid,
         model: addedModel,
         measureRepModel: addedModel
@@ -108,82 +136,15 @@ define([
       // for each rep in the measuresCollection
       var µthis = this;
       _.each(this.model.get('measureRepresentations').models, function(rep, repIndex) {
-        µthis.addChild({rep: rep, repIndex: repIndex});
+        µthis.addChildRepresentationView({rep: rep, repIndex: repIndex});
       }, this);
     },
 
-    /*
-      Version 1 should not support multiple measures, but we have it for when we will
-
-      This is called when the user clicks on the plus to add a new measure.
-
-      It creates a new measure and adds it to the hTrack.
-      It generates a string representing the id of the measure and the ids of
-      its beats and logs the creation.
-
-      Lastly, it triggers a stopRequest, because we can't continue playing until
-      all the durations get recalculated to reflect this new measure.
-    */
-    addMeasure: function(){
-        // console.log('add a measure');
-        // var newMeasure = new BeatsCollection;
-
-        // for (var i = 0; i < this.parentHTrackModel.get('signature'); i++) {
-        //   newMeasure.add();
-        // }
-
-        // this.measuresCollection.add({beats: newMeasure});
-
-        // //Logging
-        // name = 'measure' + _.last(this.measuresCollection.models).cid + '.';
-        // _.each(newMeasure.models, function(beats) {
-        //   name = name + 'beat'+ beats.cid + '.';
-        // }, this);
-        // log.sendLog([[3, 'Added a measure: ' + name]]);
-
-        // //Render
-        // this.render();
-        // //Dispatch
-        // // TODO Replace these events
-        // dispatch.trigger('stopRequest.event', 'off');
-    },
-
-    /*
-      Again, Version 1 should not support multiple measures, but we have it for when we will
-      This is called when the user clicks on the minus to remove a measure.
-    */
-    // removeMeasure: function(ev){
-    //   console.error('here');
-    //   if ($('#measure'+this.measuresCollection.models[0].cid).parent()) {
-    //     //removing the last measure isn't allowed.
-    //     if(this.measuresCollection.models.length == 1) {
-    //       console.log('Can\'t remove the last measure!');
-    //       return;
-    //     }
-    //     console.log('remove measure');
-
-    //     //we remove the measure and get its model.
-    //     var model = this.measuresCollection.get($(ev.target).parents('.measure').attr('id').replace('measure',''));
-    //     this.measuresCollection.remove(model);
-
-    //     //send a log event showing the removal.
-    //     log.sendLog([[3, 'Removed a measure: measure' + this.cid]]);
-
-    //     //re-render the view.
-    //     this.render();
-
-    //     //trigger a stop request to stop playback.
-    //     // TODO Replace these events
-    //     // dispatch.trigger('stopRequest.event', 'off');
-    //     // dispatch.trigger('signatureChange.event', this.parentHTrackModel.get('signature'));
-    //   }
-    // },
-
     // This is called when the signature of a measure is changed
     reconfigure: function(options) {
-      console.log('!!!!!! - in measureView re-render - !!!!!!!');
+      console.log('!!!!!! - in measureView reconfigure - !!!!!!!');
       this.closeChildren();
-      this.render();
+      // this.render();
       this.makeChildren();
     },
     closeChildren: function(){
@@ -206,6 +167,13 @@ define([
           childView.close();
         }
       })
+    },
+    /*
+      Version 1 will not support multiple measures, but we have it for when we will
+    */
+    addMeasure: function(){
+    },
+    removeMeasure: function(){
     }
   });
 });
