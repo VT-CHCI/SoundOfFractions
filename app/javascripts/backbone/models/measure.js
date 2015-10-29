@@ -23,7 +23,8 @@ define([
       originalScale: 1,
       currentScale: 1,
       totalTimeMeasurePlaysInMilliseconds: 3204,
-      baseTimeMeasurePlaysInMilliseconds: 3204
+      baseTimeMeasurePlaysInMilliseconds: 3204,
+      timesRecorded: 0
     },
     initialize: function(){
       this.name = 'model-measure';
@@ -51,6 +52,7 @@ define([
       this.set({currentScale : options.scale});
     },
     updateBeatsCollection: function(options) {
+      this.set('timesRecorded', this.get('timesRecorded')+1);
       this.get('beatsCollection').reset();
       // Passing silent true to avoid the hTrack model from listening to it;
       this.get('beatsCollection').set(options.beatsCollection.models, {silent: true});

@@ -554,6 +554,20 @@ define([
       } else {
         var newOpacity = originalOpacity;
       }
+
+      if(this.parentMeasureModel.get('timesRecorded') !== 0) {
+      d3Target
+        .attr('fill-opacity', newOpacity);
+
+        setTimeout(function(){
+          d3Target
+            .attr('fill-opacity', originalOpacity);
+        }, dur);
+      // Otherwise we use the standard method
+      } else {      
+
+      }
+
       d3Target.transition()
         .attr('fill-opacity', newOpacity)
         // .attr('fill', newFillColor )
@@ -571,11 +585,12 @@ define([
     // Making a targeted 'Bead' beat animate
     //dur is half of the beat length
     beadAnimate: function(target, dur) {
-      var target = d3.select(target);
+      var d3target = d3.select(target);
+
       var centerCX = this.model.get('circularMeasureCx');
       var centerCY = this.model.get('circularMeasureCy');
-      var originalCX = parseInt(target.attr('cx'));
-      var originalCY = parseInt(target.attr('cy'));
+      var originalCX = parseInt(d3target.attr('cx'));
+      var originalCY = parseInt(d3target.attr('cy'));
       var deltaCX = originalCX - centerCX;
       var deltaCY = originalCY - centerCY;
       var angleInDegrees = Math.atan2(deltaCY, deltaCX) * 180 / Math.PI;
@@ -584,17 +599,31 @@ define([
       var newCX = centerCX + (this.model.get('circularMeasureR')+(this.model.get('circularBeadBeatRadius')*2)) * Math.cos(angleInRadians);
       var newCY = centerCY + (this.model.get('circularMeasureR')+(this.model.get('circularBeadBeatRadius')*2)) * Math.sin(angleInRadians);
 
-      target.transition()
-        .attr('cx', newCX )
-        .attr('cy', newCY )
-        .duration(dur)
-        .each('end',function() {                   // as seen above
-          d3.select(this).                         // this is the object 
-            transition()                           // a new transition!
-              .attr('cx', originalCX )    // we could have had another
-              .attr('cy', originalCY )    // we could have had another
-              .duration(dur);                  // .each("end" construct here.
-         });
+      // If the have recorded their own rhythm, then we have to use a setTimeout function for some reason.
+      if(this.parentMeasureModel.get('timesRecorded') !== 0) {
+        d3target
+          .attr('cx', newCX )
+          .attr('cy', newCY )
+
+        setTimeout(function(){
+          d3target
+            .attr('cx', originalCX )
+            .attr('cy', originalCY )
+        }, dur);
+      // Otherwise we use the standard method
+      } else {      
+        d3target.transition()
+          .attr('cx', newCX )
+          .attr('cy', newCY )
+          .duration(dur)
+          .each('end',function() {                   // as seen above
+            d3.select(this).                         // this is the object 
+              transition()                           // a new transition!
+                .attr('cx', originalCX )    // we could have had another
+                .attr('cy', originalCY )    // we could have had another
+                .duration(dur);                  // .each("end" construct here.
+           });
+      }
     },
     // Making a targeted 'Line' beat animate
     lineAnimate: function(target, dur) {
@@ -604,17 +633,31 @@ define([
       // Make the line beat move up by its own height
       var newY1 = originalY1 - this.model.get('lineHashHeight');
       var newY2 = originalY2 - this.model.get('lineHashHeight');
-      target.transition()
-        .attr('y1', newY1 )
-        .attr('y2', newY2 )
-        .duration(dur)
-        .each('end',function() {                   // as seen above
-          d3.select(this).                         // this is the object 
-            transition()                           // a new transition!
-              .attr('y1', originalY1 )    
-              .attr('y2', originalY2 )    // we could have had another
-              .duration(dur);                  // .each("end" construct here.
-         });
+
+      if(this.parentMeasureModel.get('timesRecorded') !== 0) {
+        target
+          .attr('y1', newY1 )
+          .attr('y2', newY2 );
+
+        setTimeout(function(){
+          target
+            .attr('y1', originalY1 )    
+            .attr('y2', originalY2 )    // we could have had another
+        }, dur);
+      // Otherwise we use the standard method
+      } else {      
+        target.transition()
+          .attr('y1', newY1 )
+          .attr('y2', newY2 )
+          .duration(dur)
+          .each('end',function() {                   // as seen above
+            d3.select(this).                         // this is the object 
+              transition()                           // a new transition!
+                .attr('y1', originalY1 )    
+                .attr('y2', originalY2 )    // we could have had another
+                .duration(dur);                  // .each("end" construct here.
+           });
+      }
     },
     // Making a targeted 'Pie' beat animate
     pieAnimate: function(target, index, totalNumberOfBeats, dur) {      
@@ -623,15 +666,27 @@ define([
       var newCX = (this.model.get('circularMeasureR')) * Math.cos(angleInRadians)/1.5;
       var newCY = (this.model.get('circularMeasureR')) * Math.sin(angleInRadians)/1.5;
 
-      d3target.transition()
-        .attr('transform', 'translate(' + newCX + ',' + newCY + ')' )
-        .duration(dur)
-        .each('end',function() {                               // as seen above
-          d3.select(this).                                     // this is the object 
-            transition()                                       // a new transition!
-              .attr('transform', 'translate(0,0)' )
-              .duration(dur);                                 // .each("end" construct here.
-         });
+      if(this.parentMeasureModel.get('timesRecorded') !== 0) {
+        d3target
+          .attr('transform', 'translate(' + newCX + ',' + newCY + ')' );
+          
+        setTimeout(function(){
+          d3target
+            .attr('transform', 'translate(0,0)' )
+        }, dur);
+      // Otherwise we use the standard method
+      } else {      
+        d3target.transition()
+          .attr('transform', 'translate(' + newCX + ',' + newCY + ')' )
+          .duration(dur)
+          .each('end',function() {                               // as seen above
+            d3.select(this).                                     // this is the object 
+              transition()                                       // a new transition!
+                .attr('transform', 'translate(0,0)' )
+                .duration(dur);                                 // .each("end" construct here.
+           });
+      }
+
     },
     // Making a targeted 'Bar' beat animate
     barAnimate: function(target, dur) {
@@ -639,15 +694,28 @@ define([
       var originalY = parseInt(target.attr('y'));
       // Make the bar beat move up by its own height
       var newY = originalY - this.model.get('lbbMeasureHeight');
-      target.transition()
-        .attr('y', newY )
-        .duration(dur)
-        .each('end',function() {                   // as seen above
-          d3.select(this).                         // this is the object 
-            transition()                           // a new transition!
-              .attr('y', originalY )    // we could have had another
-              .duration(dur);                  // .each("end" construct here.
-         });
+
+      if(this.parentMeasureModel.get('timesRecorded') !== 0) {
+        target
+          .attr('y', newY )
+
+        setTimeout(function(){
+          target
+            .attr('y', originalY )
+        }, dur);
+      // Otherwise we use the standard method
+      } else {      
+        target.transition()
+          .attr('y', newY )
+          .duration(dur)
+          .each('end',function() {                   // as seen above
+            d3.select(this).                         // this is the object 
+              transition()                           // a new transition!
+                .attr('y', originalY )    // we could have had another
+                .duration(dur);                  // .each("end" construct here.
+           });
+      }
+
     },
     // This toggles the animation, not the sound
     // The state is passed in from the toggleAnimation.event
