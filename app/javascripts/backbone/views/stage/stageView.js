@@ -149,11 +149,11 @@ define([
         });
         this.manuallyCreatedMeasureRepresentationCollection.add(this.manuallyCreatedRepresentationModel);
         // add a bead rep
-        this.secondManuallyCreatedRepresentationModel = new RepresentationModel({
-          currentRepresentationType: 'bead',
-          beatsCollection: this.manuallyCreatedMeasureBeatsCollection
-        });
-        this.manuallyCreatedMeasureRepresentationCollection.add(this.secondManuallyCreatedRepresentationModel);
+        // this.secondManuallyCreatedRepresentationModel = new RepresentationModel({
+        //   currentRepresentationType: 'bead',
+        //   beatsCollection: this.manuallyCreatedMeasureBeatsCollection
+        // });
+        // this.manuallyCreatedMeasureRepresentationCollection.add(this.secondManuallyCreatedRepresentationModel);
         // // add a line rep
         // this.thirdManuallyCreatedRepresentationModel = new RepresentationModel({
         //   currentRepresentationType: 'line',
@@ -175,7 +175,7 @@ define([
         });
         this.manuallyCreatedMeasuresCollection.add(this.parentMeasureModel);
         this.manuallyCreatedRepresentationModel.addParentMeasureModelAfter(this.parentMeasureModel);
-        this.secondManuallyCreatedRepresentationModel.addParentMeasureModelAfter(this.parentMeasureModel);
+        // this.secondManuallyCreatedRepresentationModel.addParentMeasureModelAfter(this.parentMeasureModel);
         // this.thirdManuallyCreatedRepresentationModel.addParentMeasureModelAfter(this.parentMeasureModel);
       // This is for subsequent instruments when added
         this.secondManuallyCreatedMeasureBeatsCollection = new BeatsCollection;
