@@ -155,11 +155,11 @@ define([
         });
         this.manuallyCreatedMeasureRepresentationCollection.add(this.secondManuallyCreatedRepresentationModel);
         // // add a line rep
-        this.thirdManuallyCreatedRepresentationModel = new RepresentationModel({
-          currentRepresentationType: 'line',
-          beatsCollection: this.manuallyCreatedMeasureBeatsCollection
-        });
-        this.manuallyCreatedMeasureRepresentationCollection.add(this.thirdManuallyCreatedRepresentationModel);
+        // this.thirdManuallyCreatedRepresentationModel = new RepresentationModel({
+        //   currentRepresentationType: 'line',
+        //   beatsCollection: this.manuallyCreatedMeasureBeatsCollection
+        // });
+        // this.manuallyCreatedMeasureRepresentationCollection.add(this.thirdManuallyCreatedRepresentationModel);
         // // add a pie rep
         // this.manuallyCreatedRepresentationModel = new RepresentationModel({currentRepresentationType:'pie', beatsCollection:this.manuallyCreatedMeasureBeatsCollection});
         // this.manuallyCreatedMeasureRepresentationCollection.add(this.manuallyCreatedRepresentationModel);
@@ -176,7 +176,7 @@ define([
         this.manuallyCreatedMeasuresCollection.add(this.parentMeasureModel);
         this.manuallyCreatedRepresentationModel.addParentMeasureModelAfter(this.parentMeasureModel);
         this.secondManuallyCreatedRepresentationModel.addParentMeasureModelAfter(this.parentMeasureModel);
-        this.thirdManuallyCreatedRepresentationModel.addParentMeasureModelAfter(this.parentMeasureModel);
+        // this.thirdManuallyCreatedRepresentationModel.addParentMeasureModelAfter(this.parentMeasureModel);
       // This is for subsequent instruments when added
         this.secondManuallyCreatedMeasureBeatsCollection = new BeatsCollection;
         //for each beat - also change signature below
