@@ -18,16 +18,38 @@ define([
   'backbone/models/conductor',
   'backbone/models/remainingInstrumentGenerator',
   'backbone/views/button/remainingInstrumentGeneratorView',
+  'backbone/views/button/resetStageView',
   'backbone/views/hTrack/hTrackView',
   'general/lookupInstrument',
   'logging',
   'text!backbone/templates/hTrack/hTrack.html'
-], function($, _, Backbone, BeatsCollection, MeasuresCollection, RepresentationsCollection, StageCollection, BeatModel, MeasureModel, HTrackModel, RepresentationModel, StateModel, ConductorModel, RemainingInstrumentGeneratorModel, RemainingInstrumentGeneratorView, HTrackView, LookupInstrument, Logging, HTrackTemplate){
+], function($, _, Backbone, BeatsCollection, MeasuresCollection, RepresentationsCollection, StageCollection, BeatModel, MeasureModel, HTrackModel, RepresentationModel, StateModel, ConductorModel, RemainingInstrumentGeneratorModel, RemainingInstrumentGeneratorView, ResetStageView, HTrackView, LookupInstrument, Logging, HTrackTemplate){
   var StageView = Backbone.View.extend({
     el: $('#sof-stage-area'),
 
     initialize: function(){
       console.info('stage view initialize')
+
+      this.initialSetup();
+
+      this.render();
+
+      this.addListeners();
+
+      this.secondarySetup();
+
+      window.stageView = this;
+    },
+    addListeners: function(){
+      // Listeners
+      this.listenTo(ResetStageView, 'resetStage', this.resetStage);
+      this.listenTo(RemainingInstrumentGeneratorModel, 'removedInstrumentFromUnused', this.addFromGeneratorModel);
+      this.listenTo(this.stageCollection, 'add remove', this.turnPlayingOff);
+
+      // allow the letter t to click the first transition
+      $(document).bind('keypress', this.manualPress);      
+    },
+    initialSetup: function(){
       Logging.initialize();
       this.stageCollection = StageCollection;
       // set the song's conductor
@@ -36,26 +58,36 @@ define([
       
       StateModel.set('stageCollection', this.stageCollection);      
       // Per SO? http://stackoverflow.com/questions/9522845/backbone-js-remove-all-sub-views
-      this.childViews = [];
-
-      this.render();
-
-      // Listeners
-      // When an instrument is clicked in the Generator, we call this function to compile and add it
-      this.listenTo(RemainingInstrumentGeneratorModel, 'removedInstrumentFromUnused', this.addFromGeneratorModel);
-
-      this.listenTo(this.stageCollection, 'add remove', this.turnPlayingOff);
-
-      // allow the letter t to click the first transition
-      $(document).bind('keypress', this.manualPress);
-
+      this.childViews = [];      
+    },
+    secondarySetup: function(){
       // This kicks off and adds the snare to the 
       RemainingInstrumentGeneratorModel.removeInstrumentFromUnused({type:'sn'});
       // RemainingInstrumentGeneratorModel.removeInstrumentFromUnused({type:'hh'});
       
       this.makeChildrenHTracks();
+    },
+    resetStage: function(){
+      Backbone.history.navigate('');
+      window.location.reload();
 
-      window.stageView = this;
+      // Until I can get all the reset working correctly
+      // RemainingInstrumentGeneratorModel.resetInstrumentGenerator();
+      // debugger;
+      // this.close();
+      // this.destroyEverything();
+      // this.initialSetup();
+      // this.render();
+      // this.addListeners();
+      // this.secondarySetup();
+    },
+    destroyEverything: function(){
+      delete this.stageCollection;
+      delete this.conductor;
+      delete this.masterAudioContext;
+      delete StateModel;
+      delete childViews;
+      delete RemainingInstrumentGeneratorModel;
     },
     turnPlayingOff: function(){
       if(ConductorModel.get('isPlaying')){
@@ -63,7 +95,6 @@ define([
         Logging.logStorage('The music was playing when the HTrack was added/deleted');
       }
     },
-
     render: function(){
       console.info('StageView render start');
       this.$el.append('<div id="instruments-collection"></div>');

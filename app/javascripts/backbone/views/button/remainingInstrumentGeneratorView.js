@@ -36,8 +36,9 @@ define([
       _.bindAll(this, 'manuallPress');
       $(document).bind('keypress', this.manuallPress);
 
+      this.listenTo(this.model, 'deleteGeneratorModel', this.resetModel);
       this.listenTo(this.model, 'addInstrumentToCompositionAreaByCall', this.addInstrumentToCompositionAreaByCall);
-      this.listenTo(RemainingInstrumentGeneratorModel, 'removedInstrumentFromUnused', this.render);
+      this.listenTo(this.model, 'removedInstrumentFromUnused', this.render);
       this.listenTo(this.model, 'change:unusedInstruments', this.render);
 
       // TODO Replace these events
@@ -64,6 +65,15 @@ define([
       Logging.logStorage("Added an instrument to the stage. Clicked: " + LookupInstrument.getDefault(type, 'label'));      
 
       this.render();
+    },
+    resetModel: function(){
+      this.stopListening();
+      delete this.model;
+      this.model = RemainingInstrumentGeneratorModel;
+      this.listenTo(this.model, 'deleteGeneratorModel', this.resetModel);
+      this.listenTo(this.model, 'addInstrumentToCompositionAreaByCall', this.addInstrumentToCompositionAreaByCall);
+      this.listenTo(this.model, 'removedInstrumentFromUnused', this.render);
+      this.listenTo(this.model, 'change:unusedInstruments', this.render);
     },
     addInstrumentToCompositionAreaByCall: function(instrument){
       this.model.removeInstrumentFromUnused(instrument);

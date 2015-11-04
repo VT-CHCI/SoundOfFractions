@@ -57,6 +57,9 @@ define([
       }
       if (!found) { console.error('none found!'); }
     },
+    resetInstrumentGenerator: function(){
+      this.trigger('deleteGeneratorModel');
+    },
     addInstrument: function(addedInstrument) {
       // Get the label name of the instrument to be added back to the generator
       var newLabel = LookupInstrument.getDefault(addedInstrument.type, 'label');

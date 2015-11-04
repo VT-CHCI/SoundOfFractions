@@ -4,8 +4,9 @@
       <i class="fa fa-remove delete-instrument" title="Click here to delete this <%= model.get('label') %>"></i>
     </div>
     <img src="<%= model.get('img')%>" class="img-circle hTrack-image">
+    <div class="htrack-instrument-label"><%= model.get('label') %></div>
     <div class="control unmute" title="Click here to mute/unmute this <%= model.get('label') %>">
-        <i class="fa fa-volume-up fa-stack-1x"></i>
+        <i class="mute-symbol fa fa-volume-up fa-stack-1x"></i>
     </div>
     <div id="instrument-selector-<%= model.cid %>" class="change-instrument"></div>
   </div>

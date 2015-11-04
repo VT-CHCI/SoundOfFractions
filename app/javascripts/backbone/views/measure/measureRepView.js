@@ -556,8 +556,8 @@ define([
       }
 
       if(this.parentMeasureModel.get('timesRecorded') !== 0) {
-      d3Target
-        .attr('fill-opacity', newOpacity);
+        d3Target
+          .attr('fill-opacity', newOpacity);
 
         setTimeout(function(){
           d3Target
@@ -598,6 +598,7 @@ define([
       var diffAngle = angleInDegrees + 90;
       var newCX = centerCX + (this.model.get('circularMeasureR')+(this.model.get('circularBeadBeatRadius')*2)) * Math.cos(angleInRadians);
       var newCY = centerCY + (this.model.get('circularMeasureR')+(this.model.get('circularBeadBeatRadius')*2)) * Math.sin(angleInRadians);
+
 
       // If the have recorded their own rhythm, then we have to use a setTimeout function for some reason.
       if(this.parentMeasureModel.get('timesRecorded') !== 0) {
@@ -1723,14 +1724,52 @@ define([
     },
     // Part of the transistion process, when a user clicks the 'delta'
     transitionRepresentation: function(e){
-      if(!$('#measure-rep-'+this.model.cid).hasClass('transition-rep')){      
+      // Starting A transition
+      if(!$('#measure-rep-'+this.model.cid).hasClass('transition-rep')){
         console.log('transitioning a rep');
+        this.model.set('awaitingTransition', true);
+        // Bold the delta to green
         $('#measure-rep-'+this.model.cid).addClass('transition-rep');
-        // e.srcElement.classList.add('transition-rep');
+        // add the message about directions of what to do
+        d3.select(e.toElement.parentElement).append('text').attr('x',35).attr('y',20).classed('transition-message transition-message-top', true).text('Click a representation')
+        d3.select(e.toElement.parentElement).append('text').attr('x',35).attr('y',40).classed('transition-message transition-message-bottom', true).text('to transition to...')
+
+        d3.select(e.toElement.parentElement).append('image')
+          .attr("xlink:href", "images/spinner.gif")
+          .attr("x", 140)
+          .attr("y", 22)
+          .classed('transition-spinner', true)
+          .attr("width", 20)
+          .attr("height", 20);
+
+        var µthis = this;
+        setTimeout(function(){
+          // If they failed to click the correct button to transition a rep in 6 seconds, reset it
+          if(µthis.model.get('awaitingTransition')){          
+            // remove the bold green
+            $('.transition-rep').removeClass('transition-rep'); 
+            // remove any spinner
+            $('#measure-rep-'+µthis.model.cid + ' svg .top-rep-buttons .transition-spinner').remove(); 
+            // remove the message about directions
+            $('#measure-rep-'+µthis.model.cid + ' svg .top-rep-buttons text.transition-message').remove()
+            // Make a message about not clicking in time
+            d3.select(e.toElement.parentElement).append('text').attr('x',35).attr('y',20).classed('transition-message transition-message-top', true).text('Oops!! Ran out of time...')
+
+            Logging.logStorage('Clicked a plus on the ' + µthis.model.get('label') + ', but failed to add a rep in 6 secs.'); 
+            setTimeout(function(){
+              // Remove the message about not getting it in time
+              $('#measure-rep-'+µthis.model.cid + ' svg .top-rep-buttons text.transition-message').remove()
+            },1500)
+          }
+        },6000, {e:e, µthis:µthis})
+
+      // Unclicking A transition
       } else {
         console.log('un clicking transitioning a rep');
+        this.model.set('awaitingTransition', false);
+        $('#measure-rep-'+this.model.cid + ' svg .top-rep-buttons text.transition-message').remove()
         $('#measure-rep-'+this.model.cid).removeClass('transition-rep');
-        // e.srcElement.classList.remove('transition-rep');
+        $('.transition-spinner').remove(); 
       }
     },
     // Manages the transition paths

@@ -65,7 +65,7 @@ define([
       var hTrackID = $('.cs').closest('.hTrack').attr('id');
       var cid = hTrackID.slice(7);
       $('.cs').removeClass('cs'); 
-      $('.spinner').remove(); 
+      $('.rep-spinner').remove(); 
       //trigger the Measure representation addition
       var beatsCollection = StageCollection.get(cid).get('measures').models[0].get('beatsCollection');
       var representationModel = new RepresentationModel({
@@ -100,6 +100,12 @@ define([
       $('.transition-rep').removeClass('transition-rep');
       var numberOfBeats = StageCollection.get(hTrackCID).get('measures').models[0].get('beatsCollection').length;
 
+      // remove the direction messages
+      $('#measure-rep-'+measureRepCID + ' svg .top-rep-buttons text.transition-message').remove()      
+      // remove the spinner
+      $('#measure-rep-'+measureRepCID + ' svg .top-rep-buttons .transition-spinner').remove(); 
+      // Update the rep so the timeout function doesn't run, not that anything should happen anyway....
+      StageCollection.get(hTrackCID).get('measures').models[0].get('measureRepresentations').get(measureRepCID).set('awaitingTransition', false);
       // //TODO: change measure 0 to dynamic
       StageCollection.get(hTrackCID).get('measures').models[0].get('measureRepresentations').get(measureRepCID).transition(newRepType, numberOfBeats);
     },

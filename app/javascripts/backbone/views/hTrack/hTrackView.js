@@ -200,35 +200,33 @@ define([
       if(e.toElement.parentElement.classList.contains('cs')) {
         e.toElement.parentElement.classList.remove('cs');
         console.info('clicked the plus sign to turn it off');
-        this.set('awaitingAdd', false);
+        this.model.set('awaitingAdd', false);
       // If it is not clicked
       } else if(!e.toElement.parentElement.classList.contains('cs')) {
         // remove all other plus signs
         $('.cs').removeClass('cs'); 
-        $('.spinner').remove(); 
+        $('.rep-spinner').remove(); 
 
         e.toElement.parentElement.classList.add('cs');
         var newRepType = $(e.target).closest('.representation').attr('data-state');
         // add the spinning image
-        var spinner = '<img class="spinner" alt="spinner" src="images/spinner.gif"/><div class="spinner">Please click a representation to add...</div>'
-        $(e.toElement.parentElement).append(spinner);
+        var repSpinner = '<img class="rep-spinner" alt="rep-spinner" src="images/spinner.gif"/><div class="rep-spinner">Please click a representation to add...</div>'
+        $(e.toElement.parentElement).append(repSpinner);
 
         Logging.logStorage('clicked the plus sign on the ' + this.model.get('label') + ' instrument.'); 
-        // console.info('clicked the plus sign');
         
         var µthis = this;
         this.model.set('awaitingAdd', true);
         setTimeout(function(){
-          // debugger;
           // If they failed to click the correct button to add a rep in 6 seconds, reset it
           if(µthis.model.get('awaitingAdd')){          
             $('.cs').removeClass('cs'); 
-            $('.spinner').remove(); 
+            $('.rep-spinner').remove(); 
             Logging.logStorage('Clicked a plus on the ' + µthis.model.get('label') + ', but failed to add a rep in 6 secs.'); 
-            var spinner = '<div class="spinner">Oops!! Ran out of time...</div>'
-            $(e.toElement.parentElement).append(spinner);              
+            var outOfTime = '<div class="out-of-time">Oops!! Ran out of time...</div>'
+            $(e.toElement.parentElement).append(outOfTime);              
             setTimeout(function(){
-              $('.spinner').remove(); 
+              $('.out-of-time').remove(); 
             },1500)
           }
         },6000, {e:e, µthis:µthis})

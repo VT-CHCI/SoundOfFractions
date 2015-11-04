@@ -1,3 +1,18 @@
+#reset-stage {
+  margin-top: 75px;
+}
+.control i {
+  width: 150px!important;
+}
+.htrack-instrument-label {
+  display: block;
+  clear: left;
+  padding-left: 25px;
+}
+.new-instrument-label {
+  display: block;
+  clear: left;
+}
 .whitesmoke {
   color: lightgrey;
 }
@@ -7,7 +22,7 @@
 #conductor .play:hover{
   background-color: #7DBD80;
 }
-.spinner {
+.rep-spinner {
   height: 30px;
   display: inline-block;
 }
@@ -418,11 +433,12 @@ svg.line {
 }
 
 .control {
-  position: relative;
-  top: 100px;
+  /*position: relative;*/
+  /*top: 100px;*/
   font-size: 45px;
   font-weight: bold;
-  left: -20px;
+  padding-left: 25px;
+  /*left: -20px;*/
 }
 .fa-volume-up {
   color: rgba(5, 5, 5, .25);

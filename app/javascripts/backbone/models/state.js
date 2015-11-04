@@ -141,16 +141,23 @@ define([
         var target = ($('.recording').parent().find('svg .metronome-tap'));
         var dur = 200;
         var d3Target = d3.select(target);
-        var originalOpacity = parseFloat($('.recording').parent().find('svg .metronome-tap').attr('fill-opacity'))
+        // Should be 0.2
+        var originalOpacity = parseFloat($('.recording').parent().find('svg .metronome-tap').attr('fill-opacity'));
         var newOpacity = 1;
 
-        d3Target.transition()
-          .duration(dur)
+        // Make the light representation blink when you record.
+        d3Target[0][0]
           .attr('fill-opacity', newOpacity)
+        setTimeout(function(){
+          d3Target[0][0]
+            .attr('fill-opacity', originalOpacity);
+        }, dur);
+
+
           // .attr('fill', newFillColor )
-          .transition()                               // a new transition!
-            .attr('fill-opacity', originalOpacity )  // we could have had another
-            .duration(dur)
+          // .transition()                               // a new transition!
+          //   .attr('fill-opacity', originalOpacity )  // we could have had another
+          //   .duration(dur)
 
         //On the first beat
         if(this.countIn == 1) {
