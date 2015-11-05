@@ -599,21 +599,11 @@ define([
       var newCX = centerCX + (this.model.get('circularMeasureR')+(this.model.get('circularBeadBeatRadius')*2)) * Math.cos(angleInRadians);
       var newCY = centerCY + (this.model.get('circularMeasureR')+(this.model.get('circularBeadBeatRadius')*2)) * Math.sin(angleInRadians);
 
-
-      // If the have recorded their own rhythm, then we have to use a setTimeout function for some reason.
-      if(this.parentMeasureModel.get('timesRecorded') !== 0) {
         d3target
-          .attr('cx', newCX )
-          .attr('cy', newCY )
-
-        setTimeout(function(){
-          d3target
-            .attr('cx', originalCX )
-            .attr('cy', originalCY )
-        }, dur);
-      // Otherwise we use the standard method
-      } else {      
-        d3target.transition()
+        // with or without these it will work with or without recording....
+          // .attr('cx', originalCX )
+          // .attr('cy', originalCY )
+          .transition()
           .attr('cx', newCX )
           .attr('cy', newCY )
           .duration(dur)
@@ -624,7 +614,32 @@ define([
                 .attr('cy', originalCY )    // we could have had another
                 .duration(dur);                  // .each("end" construct here.
            });
-      }
+
+      // // If the have recorded their own rhythm, then we have to use a setTimeout function for some reason.
+      // if(this.parentMeasureModel.get('timesRecorded') !== 0) {
+      //   d3target
+      //     .attr('cx', newCX )
+      //     .attr('cy', newCY )
+
+      //   setTimeout(function(){
+      //     d3target
+      //       .attr('cx', originalCX )
+      //       .attr('cy', originalCY )
+      //   }, dur);
+      // // Otherwise we use the standard method
+      // } else {      
+      //   d3target.transition()
+      //     .attr('cx', newCX )
+      //     .attr('cy', newCY )
+      //     .duration(dur)
+      //     .each('end',function() {                   // as seen above
+      //       d3.select(this).                         // this is the object 
+      //         transition()                           // a new transition!
+      //           .attr('cx', originalCX )    // we could have had another
+      //           .attr('cy', originalCY )    // we could have had another
+      //           .duration(dur);                  // .each("end" construct here.
+      //      });
+      // }
     },
     // Making a targeted 'Line' beat animate
     lineAnimate: function(target, dur) {
